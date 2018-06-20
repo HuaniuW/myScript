@@ -86,13 +86,23 @@ public class QiYue : MonoBehaviour {
     bool isRun = false;
     bool isRuning = false;
 
-    bool isInAir = false;
+   
     bool isInAiring = false;
     bool isDowning = false;
 
     bool isJump = false;
     bool isJumping = false;
     bool isQiTiao = false;
+
+    void resetAll() {
+        isRun = false;
+        isRuning = false;
+        isInAiring = false;
+        isDowning = false;
+        isJump = false;
+        isJumping = false;
+        isQiTiao = false;
+    }
 
 
     void inAir()
@@ -101,7 +111,7 @@ public class QiYue : MonoBehaviour {
         if (isInAiring)
         {
            // print("-------------------> " + newSpeed.y);
-            if (newSpeed.y <= 0)
+            if (newSpeed.y < 0)
             {
                 isJumping = true;
                 if (!isDowning)
@@ -120,6 +130,7 @@ public class QiYue : MonoBehaviour {
                     //做动画的时候  下落动画第一帧就是 起跳最后一帧
                     qiyue.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                     qiyue.animation.Stop();
+                    isDowning = false;
                 }
             }
 
@@ -188,7 +199,7 @@ public class QiYue : MonoBehaviour {
         this.transform.localScale = tt;
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
 
-        if (!IsGround || (qiyue.animation.lastAnimationName == JUMPUP || 
+        if (isInAiring || (qiyue.animation.lastAnimationName == JUMPUP || 
             qiyue.animation.lastAnimationName == JUMPDOWN
             )) {
             return;
@@ -224,7 +235,6 @@ public class QiYue : MonoBehaviour {
 
         if (qiyue.animation.lastAnimationName == JUMPDOWN&&IsGround)
         {
-           
             //落地动作
             if (qiyue.animation.lastAnimationName != DOWNONGROUND)qiyue.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
         }
