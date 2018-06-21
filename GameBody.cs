@@ -34,11 +34,28 @@ public class GameBody : MonoBehaviour {
     [Header("侦测地板的射线起点")]
     public UnityEngine.Transform groundCheck;
 
+
+    [Header("感应与面前墙的距离")]
+    [Range(0, 1)]
+    public float distanceMQ;
+
+    [Header("侦测面前墙的射线起点")]
+    public UnityEngine.Transform qianmian;
+
+    [Header("当前动作名字")]
+    public string CurrentAcName;
+
     [Header("地面图层")]
     public LayerMask groundLayer;
 
     [Header("是否着地")]
     public bool grounded;
+
+    [Header("是否碰到面前的墙")]
+    public bool hidWalled;
+
+    [Header("停下后X方向的剩余滑动速度")]
+    public float slideNum = 3;
 
 
 
@@ -53,7 +70,6 @@ public class GameBody : MonoBehaviour {
     bool isInAiring = false;
     bool isDowning = false;
 
-    bool isJump = false;
     bool isJumping = false;
     //起跳
     bool isQiTiao = false;
@@ -65,8 +81,9 @@ public class GameBody : MonoBehaviour {
         isRunRighting = false;
         isInAiring = false;
         isDowning = false;
-        isJump = false;
         isJumping = false;
+        isJumping2 = false;
+        isJump2 = false;
         isQiTiao = false;
     }
 
@@ -79,6 +96,7 @@ public class GameBody : MonoBehaviour {
     const string JUMPDOWN = "jumpDown_1";
     const string JUMPHITWALL = "jumpHitWall_1";
     const string DOWNONGROUND = "downOnGround_1";
+    const string JUMP2DUAN = "jump2Duan_1";
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
     bool IsGround
@@ -90,6 +108,19 @@ public class GameBody : MonoBehaviour {
             Debug.DrawLine(start, end, Color.blue);
             grounded = Physics2D.Linecast(start, end, groundLayer);
             return grounded;
+        }
+    }
+
+
+    bool IsHitMQWall
+    {
+        get
+        {
+            Vector2 start = qianmian.position;
+            Vector2 end = new Vector2(start.x - distanceMQ*bodyScale.x, start.y);
+            Debug.DrawLine(start, end, Color.red);
+            hidWalled = Physics2D.Linecast(start, end, groundLayer);
+            return hidWalled;
         }
     }
 
@@ -136,7 +167,7 @@ public class GameBody : MonoBehaviour {
 
     void run()
     {
-        if (isJumping||isInAiring) return;
+        if (isJumping||isInAiring|| isDowning) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
@@ -147,14 +178,39 @@ public class GameBody : MonoBehaviour {
         }
     }
 
+    bool isJump2 = false;
+    bool isJumping2 = false;
     public void getJump()
     {
-        isJumping = true;
+        if (!isJumping)
+        {
+            isJumping = true;
+        }
+        else
+        {
+            if (!isJumping2)
+            {
+                isJump2 = true;
+                isJumping2 = true;
+            }
+        }
     }
     void jump()
     {
+        if (isInAiring)
+        {
+            if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
+            {
+                isJump2 = false;
+                DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
+                newSpeed.y = 0;
+                playerRigidbody2D.velocity = newSpeed;
+                playerRigidbody2D.AddForce(Vector2.up * yForce);
+                return;
+            }
+        }
         
-        if (IsGround&& DBBody.animation.lastAnimationName != DOWNONGROUND && DBBody.animation.lastAnimationName != JUMPUP) DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+        if (IsGround&& DBBody.animation.lastAnimationName!= JUMP2DUAN&& DBBody.animation.lastAnimationName != DOWNONGROUND && DBBody.animation.lastAnimationName != JUMPUP) DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
 
         if (IsGround &&!isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
         {
@@ -167,6 +223,14 @@ public class GameBody : MonoBehaviour {
     void inAir()
     {
 
+        
+        isInAiring = !IsGround;
+
+        if (IsHitMQWall&&isInAiring)
+        {
+            if (DBBody.animation.lastAnimationName != JUMPHITWALL) DBBody.animation.GotoAndPlayByFrame(JUMPHITWALL,0,1);
+        }
+
         if (DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
             if (DBBody.animation.isCompleted)
@@ -174,19 +238,20 @@ public class GameBody : MonoBehaviour {
                 //print("luodidongzuo zuowan");
                 isDowning = false;
                 isJumping = false;
+                isJumping2 = false;
                 isQiTiao = false;
             }
             return;
         }
 
 
-        if (DBBody.animation.lastAnimationName == JUMPDOWN && IsGround)
+        if ((DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && IsGround)
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND) DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
         }
 
-        isInAiring = !IsGround;
+        
         if (isInAiring)
         {
             if (newSpeed.y < 0)
@@ -201,6 +266,7 @@ public class GameBody : MonoBehaviour {
             }
             else
             {
+                if (isJumping2 && DBBody.animation.lastAnimationName == JUMP2DUAN && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
                     //print("shangsheng");
@@ -214,9 +280,7 @@ public class GameBody : MonoBehaviour {
         }
     }
 
-    //移动后的滑动速度
-    [Header("停下后X方向的剩余滑动速度")]
-    public float slideNum = 3;
+   
     void stand()
     {
         if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
@@ -244,6 +308,7 @@ public class GameBody : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //print(DBBody.animation.lastAnimationName);
+        CurrentAcName = DBBody.animation.lastAnimationName;
         ControlSpeed();
         inAir();
         if (isJumping)

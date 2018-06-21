@@ -20,7 +20,7 @@ public class MyController : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            print("jump");
+            //print("jump");
             _body.getJump();
         }
 
