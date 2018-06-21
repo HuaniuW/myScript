@@ -228,7 +228,7 @@ public class GameBody : MonoBehaviour {
                     this.transform.localPosition = newPosition;
                 }
                 isJumping2 = true;
-                print("???????????");
+                //print("???????????");
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
                 newSpeed.y = 0;
                 playerRigidbody2D.velocity = newSpeed;
@@ -253,7 +253,7 @@ public class GameBody : MonoBehaviour {
     void inAir()
     {
 
-        print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+       // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         isInAiring = !IsGround;
 
        
@@ -300,7 +300,7 @@ public class GameBody : MonoBehaviour {
                 {
                     //下降
                     isDowning = true;
-                    print("xj");
+                   // print("xj");
                     //print("-------------------> " + newSpeed.y);
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
@@ -310,7 +310,7 @@ public class GameBody : MonoBehaviour {
                 if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
-                    print("ss");
+                    //print("ss");
                     //上升
                     //print("shangsheng");
                     //newSpeed.y >0 的时候是上升  这个是起跳动作完成后 上升的时候 停留在下降的最后一帧 
