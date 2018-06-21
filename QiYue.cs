@@ -58,7 +58,7 @@ public class QiYue : MonoBehaviour {
     public bool grounded;
 
 
-
+    //移动后的滑动速度
     float slideNum = 4;
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
@@ -83,7 +83,8 @@ public class QiYue : MonoBehaviour {
         }
     }
 
-    bool isRun = false;
+    //float jumpTimes = 2;
+    //bool isRun = false;
     bool isRuning = false;
 
    
@@ -95,7 +96,7 @@ public class QiYue : MonoBehaviour {
     bool isQiTiao = false;
 
     void resetAll() {
-        isRun = false;
+        //isRun = false;
         isRuning = false;
         isInAiring = false;
         isDowning = false;
@@ -113,14 +114,12 @@ public class QiYue : MonoBehaviour {
            // print("-------------------> " + newSpeed.y);
             if (newSpeed.y < 0)
             {
-                isJumping = true;
+                //isJumping = true;
                 if (!isDowning)
                 {
                     isDowning = true;
                     qiyue.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
-                }
-                
-
+                }               
             }
             else
             {
@@ -133,8 +132,6 @@ public class QiYue : MonoBehaviour {
                     isDowning = false;
                 }
             }
-
-           
         }
     }
 
@@ -184,7 +181,7 @@ public class QiYue : MonoBehaviour {
 
     void run()
     {
-
+        //print(qiyue.animation.lastAnimationName + "    isInAiring   " + isInAiring + "  isDowning  " + isDowning + "     IsGround    " + IsGround + "isJumping  " + isJumping + " isRuning  " + isRuning);
         if (isJumping && qiyue.animation.lastAnimationName == DOWNONGROUND) return;
 
         if (horizontalDirection > 0)
@@ -242,11 +239,19 @@ public class QiYue : MonoBehaviour {
 
        
 
-        if (!isQiTiao&& IsGround && qiyue.animation.lastAnimationName == JUMPUP&& qiyue.animation.isCompleted)
+        if (!isInAiring&&!isQiTiao&& IsGround && qiyue.animation.lastAnimationName == JUMPUP&& qiyue.animation.isCompleted)
         {
-            isQiTiao = true;
+            if(!isInAiring)isQiTiao = true;
+           //jumpTimes--;
             playerRigidbody2D.AddForce(Vector2.up * yForce);
+            return;
         }
+
+        //if (isInAiring&&jumpTimes!=0)
+        //{
+        //    jumpTimes--;
+        //    playerRigidbody2D.AddForce(Vector2.up * yForce);
+        //}
     }
 
     void stand()
