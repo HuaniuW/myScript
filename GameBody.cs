@@ -37,7 +37,7 @@ public class GameBody : MonoBehaviour {
 
     [Header("感应与面前墙的距离")]
     [Range(0, 1)]
-    public float distanceMQ;
+    public float distanceMQ=0.13f;
 
     [Header("侦测面前墙的射线起点")]
     public UnityEngine.Transform qianmian;
@@ -56,6 +56,11 @@ public class GameBody : MonoBehaviour {
 
     [Header("停下后X方向的剩余滑动速度")]
     public float slideNum = 3;
+
+    [Header("反弹跳X方向的力")]
+    public float wallJumpXNum = 800;
+
+    Vector3 newPosition;
 
 
 
@@ -202,6 +207,28 @@ public class GameBody : MonoBehaviour {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
             {
                 isJump2 = false;
+                if (DBBody.animation.lastAnimationName == JUMPHITWALL) {
+                    newPosition = this.transform.localPosition;
+                    if (bodyScale.x == 1)
+                    {
+                        //bodyScale.x = -1;
+                        newPosition.x += 0.1f;
+                        playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
+                    }
+                    else
+                    {
+                        //bodyScale.x = 1;
+                        newPosition.x -= 0.1f;
+                        playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
+                    }
+                    //this.transform.localScale = bodyScale;
+
+
+                    
+                    this.transform.localPosition = newPosition;
+                }
+                isJumping2 = true;
+                print("???????????");
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
                 newSpeed.y = 0;
                 playerRigidbody2D.velocity = newSpeed;
@@ -210,7 +237,10 @@ public class GameBody : MonoBehaviour {
             }
         }
         
-        if (IsGround&& DBBody.animation.lastAnimationName!= JUMP2DUAN&& DBBody.animation.lastAnimationName != DOWNONGROUND && DBBody.animation.lastAnimationName != JUMPUP) DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+        if (IsGround&& DBBody.animation.lastAnimationName != JUMPHITWALL && 
+            DBBody.animation.lastAnimationName!= JUMP2DUAN && 
+            DBBody.animation.lastAnimationName != DOWNONGROUND && 
+            DBBody.animation.lastAnimationName != JUMPUP) DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
 
         if (IsGround &&!isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
         {
@@ -223,15 +253,12 @@ public class GameBody : MonoBehaviour {
     void inAir()
     {
 
-        
+        print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         isInAiring = !IsGround;
 
-        if (IsHitMQWall&&isInAiring)
-        {
-            if (DBBody.animation.lastAnimationName != JUMPHITWALL) DBBody.animation.GotoAndPlayByFrame(JUMPHITWALL,0,1);
-        }
+       
 
-        if (DBBody.animation.lastAnimationName == DOWNONGROUND)
+        if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
             if (DBBody.animation.isCompleted)
             {
@@ -245,30 +272,46 @@ public class GameBody : MonoBehaviour {
         }
 
 
-        if ((DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && IsGround)
+        if (IsGround&&(DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND) DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
         }
 
+        if (IsHitMQWall && isInAiring)
+        {
+            //碰到墙
+            if (DBBody.animation.lastAnimationName != JUMPHITWALL) DBBody.animation.GotoAndPlayByFrame(JUMPHITWALL, 0, 1);
+            //isJump2 = false;
+            isJumping2 = false;
+            isDowning = false;
+            return;
+        }
         
+
+
         if (isInAiring)
         {
+            
             if (newSpeed.y < 0)
             {
                 //isJumping = true;
                 if (!isDowning)
                 {
+                    //下降
                     isDowning = true;
+                    print("xj");
                     //print("-------------------> " + newSpeed.y);
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
             }
             else
             {
-                if (isJumping2 && DBBody.animation.lastAnimationName == JUMP2DUAN && !DBBody.animation.isCompleted) return;
+                if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
+                    print("ss");
+                    //上升
                     //print("shangsheng");
                     //newSpeed.y >0 的时候是上升  这个是起跳动作完成后 上升的时候 停留在下降的最后一帧 
                     //做动画的时候  下落动画第一帧就是 起跳最后一帧
