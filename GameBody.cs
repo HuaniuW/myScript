@@ -84,12 +84,14 @@ public class GameBody : MonoBehaviour {
         //isRun = false;
         isRunLefting = false;
         isRunRighting = false;
-        isInAiring = false;
+        //isInAiring = false;
         isDowning = false;
         isJumping = false;
         isJumping2 = false;
         isJump2 = false;
         isQiTiao = false;
+        isAtk = false;
+        isAtking = false;
     }
 
 
@@ -102,6 +104,7 @@ public class GameBody : MonoBehaviour {
     const string JUMPHITWALL = "jumpHitWall_1";
     const string DOWNONGROUND = "downOnGround_1";
     const string JUMP2DUAN = "jump2Duan_1";
+    const string ATK = "atk_";
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
     bool IsGround
@@ -145,6 +148,7 @@ public class GameBody : MonoBehaviour {
 
     public void runLeft(float horizontalDirection)
     {
+        if (isAtking) return;
         isRunLefting = true;
         isRunRighting = false;
         bodyScale.x = 1;
@@ -156,6 +160,8 @@ public class GameBody : MonoBehaviour {
 
     public void runRight(float horizontalDirection)
     {
+        if (isAtking) return;
+        //print("right:  "+Vector2.right*xForce+"  >> "+xForce);
         isRunRighting = true;
         isRunLefting = false;
         bodyScale.x = -1;
@@ -200,8 +206,30 @@ public class GameBody : MonoBehaviour {
             }
         }
     }
+
+    void moveXByPosition(float xDistance)
+    {
+        newPosition.x += xDistance;
+        this.transform.localPosition = newPosition;
+    }
+
+
+    void moveVX(float vx)
+    {
+        var _vx = Mathf.Abs(vx);
+        if (vx > 0)
+        {
+            playerRigidbody2D.AddForce(Vector2.right * _vx);
+        }
+        else if (vx < 0)
+        {
+            playerRigidbody2D.AddForce(Vector2.left * _vx);
+        }
+    }
+
     void jump()
     {
+        if (isAtking) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -212,20 +240,21 @@ public class GameBody : MonoBehaviour {
                     if (bodyScale.x == 1)
                     {
                         //bodyScale.x = -1;
-                        newPosition.x += 0.1f;
+                      
+                        moveXByPosition(0.1f);
                         playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
                     }
                     else
                     {
                         //bodyScale.x = 1;
-                        newPosition.x -= 0.1f;
+                        moveXByPosition(-0.1f);
                         playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
                     }
                     //this.transform.localScale = bodyScale;
 
 
                     
-                    this.transform.localPosition = newPosition;
+                    //this.transform.localPosition = newPosition;
                 }
                 isJumping2 = true;
                 //print("???????????");
@@ -340,10 +369,56 @@ public class GameBody : MonoBehaviour {
         playerRigidbody2D.velocity = newSpeed;
     }
 
+    float atkNums = 1;
+    bool isAtk = false;
+    bool isAtking = false;
+    
+    public void getAtk()
+    {
+        if (!isAtk)
+        {
+            isAtk = true;
+            isAtking = true;
+            //print(DataZS.atk_1[0]);
+            
+            if (DBBody.animation.lastAnimationName != ATK + atkNums) DBBody.animation.GotoAndPlayByFrame((ATK + atkNums),0,1);
+            //print(DBBody.animation.animations);
+           
+        }
+      
+    }
+
+    void test(string type, EventObject eventObject)
+    {
+        print(type+" ???time  "+eventObject);
+    }
+
+    float jisuqi = 0;
+
+    void atk()
+    {
+        if (DBBody.animation.lastAnimationName == (ATK + atkNums) && DBBody.animation.isPlaying) jisuqi++;
+        if (DBBody.animation.lastAnimationName == (ATK + atkNums) && DBBody.animation.isCompleted)
+        {
+            isAtking = false;
+            isAtk = false;
+            print("jisuqi  "+jisuqi);
+            jisuqi = 0;
+            if (atkNums <= 3)
+            {
+                atkNums++;
+            }
+            if (atkNums == 4) atkNums = 1;
+        }
+    }
+
     // Use this for initialization
     void Start () {
+        //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
+        //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
+        DBBody.AddDBEventListener("atks", this.test);
         bodyScale = new Vector3(1, 1, 1);
         this.transform.localScale = bodyScale;
     }
@@ -353,12 +428,21 @@ public class GameBody : MonoBehaviour {
         //print(DBBody.animation.lastAnimationName);
         CurrentAcName = DBBody.animation.lastAnimationName;
         ControlSpeed();
+
+        
+
         inAir();
+
+        if (isAtking)
+        {
+            atk();
+        }
+
         if (isJumping)
         {
             jump();
         }
-        if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping)
+        if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking)
         {
             stand();
         }

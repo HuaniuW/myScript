@@ -24,6 +24,10 @@ public class MyController : MonoBehaviour {
             _body.getJump();
         }
 
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            _body.getAtk();
+        }
+
         horizontalDirection = Input.GetAxis(HORIZONTAL);
         if (horizontalDirection > 0) {
             _body.runRight(horizontalDirection);
