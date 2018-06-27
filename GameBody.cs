@@ -161,7 +161,6 @@ public class GameBody : MonoBehaviour {
     public void runRight(float horizontalDirection)
     {
         if (isAtking) return;
-        //print("right:  "+Vector2.right*xForce+"  >> "+xForce);
         isRunRighting = true;
         isRunLefting = false;
         bodyScale.x = -1;
@@ -191,6 +190,7 @@ public class GameBody : MonoBehaviour {
 
     bool isJump2 = false;
     bool isJumping2 = false;
+    //bool isQiTiao = false;
     public void getJump()
     {
         if (!isJumping)
@@ -219,12 +219,10 @@ public class GameBody : MonoBehaviour {
         var _vx = Mathf.Abs(vx);
         if (bodyScale.x < 0)
         {
-            //print("<  "+Vector2.right * -_vx);
             playerRigidbody2D.AddForce(Vector2.right * _vx);
         }
         else if (bodyScale.x > 0)
         {
-            //print(">  " + Vector2.right * _vx);
             playerRigidbody2D.AddForce(Vector2.left * _vx);
         }
         playerRigidbody2D.velocity = newSpeed;
@@ -284,8 +282,8 @@ public class GameBody : MonoBehaviour {
 
        // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         isInAiring = !IsGround;
+        
 
-       
 
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
@@ -301,12 +299,21 @@ public class GameBody : MonoBehaviour {
             return;
         }
 
+       
 
-        if (IsGround&&(DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+
+        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
-            if (DBBody.animation.lastAnimationName != DOWNONGROUND) DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
+            if (DBBody.animation.lastAnimationName != DOWNONGROUND)
+            {
+                DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
+                isAtking = false;
+                isAtk = false;
+            }
         }
+
+        if (isAtking) return;
 
         if (IsHitMQWall && isInAiring)
         {
@@ -325,13 +332,10 @@ public class GameBody : MonoBehaviour {
             
             if (newSpeed.y < 0)
             {
-                //isJumping = true;
                 if (!isDowning)
                 {
                     //下降
                     isDowning = true;
-                   // print("xj");
-                    //print("-------------------> " + newSpeed.y);
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
             }
@@ -340,7 +344,6 @@ public class GameBody : MonoBehaviour {
                 if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
-                    //print("ss");
                     //上升
                     //print("shangsheng");
                     //newSpeed.y >0 的时候是上升  这个是起跳动作完成后 上升的时候 停留在下降的最后一帧 
@@ -375,7 +378,7 @@ public class GameBody : MonoBehaviour {
     bool isAtking = false;
     string[] atkMsg;
     VOAtk vOAtk;
-    Dictionary<string, string> atkZS;
+    Dictionary<string, string>[] atkZS;
 
     public void getAtk()
     {
@@ -384,21 +387,21 @@ public class GameBody : MonoBehaviour {
             isAtk = true;
             isAtking = true;
             yanchi = 0;
-            //print(DataZS.atk_1[0]);
-            //atkMsg = DataZS.atkZS[(int)(atkNums - 1)];
+    
             if (isInAiring)
             {
-                atkZS = null;
-                return;
+                atkZS = DataZS.jumpAtkZS;
             }
             else
             {
-                atkZS = DataZS.atkZS[(int)atkNums];
+                atkZS = DataZS.atkZS;
             }
             
-            vOAtk.getVO(atkZS);
+            vOAtk.getVO(atkZS[(int)atkNums]);
             if (DBBody.animation.lastAnimationName != vOAtk.atkName)
             {
+                newSpeed.y = 0;
+                playerRigidbody2D.velocity = newSpeed;
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
                 moveVX(vOAtk.xF);
                 moveVY(vOAtk.yF);
@@ -435,11 +438,11 @@ public class GameBody : MonoBehaviour {
             yanchi++;
             if (yanchi == 1)
             {
-                if (atkNums <= 3)
+                if (atkNums <= atkZS.Length)
                 {
                     atkNums++;
                 }
-                if (atkNums == DataZS.atkZS.Length) atkNums = 0;
+                if (atkNums == atkZS.Length) atkNums = 0;
             }
             if(yanchi>= vOAtk.yanchi)
             {
@@ -465,7 +468,6 @@ public class GameBody : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //print(DBBody.animation.lastAnimationName);
         CurrentAcName = DBBody.animation.lastAnimationName;
         ControlSpeed();
 

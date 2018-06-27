@@ -22,7 +22,7 @@ public class VOAtk : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
-        print("");
+        //print("");
 	}
 
     public void getVO(Dictionary<string,string> dict)
