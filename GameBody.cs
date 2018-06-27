@@ -400,11 +400,15 @@ public class GameBody : MonoBehaviour {
             vOAtk.getVO(atkZS[(int)atkNums]);
             if (DBBody.animation.lastAnimationName != vOAtk.atkName)
             {
-                newSpeed.y = 0;
-                playerRigidbody2D.velocity = newSpeed;
+                
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
                 moveVX(vOAtk.xF);
-                moveVY(vOAtk.yF);
+                if (newSpeed.y < 0)
+                {
+                    newSpeed.y = 0;
+                    playerRigidbody2D.velocity = newSpeed;
+                    moveVY(vOAtk.yF);
+                }
             }
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
