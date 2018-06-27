@@ -37,6 +37,10 @@ public class Tools : MonoBehaviour {
     //如果设置了为2 ，那么就是 30 帧。
     // print(Application.targetFrameRate);  获取帧率 默认-1
 
+    //**  测试可用  float.Parse(str),
+    //或者float.TryParse(str,out value);
+    //或者Convert.ToFloat（string）
+
 
 
 

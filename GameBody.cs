@@ -217,14 +217,23 @@ public class GameBody : MonoBehaviour {
     void moveVX(float vx)
     {
         var _vx = Mathf.Abs(vx);
-        if (vx > 0)
+        if (bodyScale.x < 0)
         {
+            //print("<  "+Vector2.right * -_vx);
             playerRigidbody2D.AddForce(Vector2.right * _vx);
         }
-        else if (vx < 0)
+        else if (bodyScale.x > 0)
         {
+            //print(">  " + Vector2.right * _vx);
             playerRigidbody2D.AddForce(Vector2.left * _vx);
         }
+        playerRigidbody2D.velocity = newSpeed;
+    }
+
+    void moveVY(float vy)
+    {
+        playerRigidbody2D.AddForce(Vector2.up*vy);
+        playerRigidbody2D.velocity = newSpeed;
     }
 
     void jump()
@@ -239,25 +248,16 @@ public class GameBody : MonoBehaviour {
                     newPosition = this.transform.localPosition;
                     if (bodyScale.x == 1)
                     {
-                        //bodyScale.x = -1;
-                      
                         moveXByPosition(0.1f);
                         playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
                     }
                     else
                     {
-                        //bodyScale.x = 1;
                         moveXByPosition(-0.1f);
                         playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
                     }
-                    //this.transform.localScale = bodyScale;
-
-
-                    
-                    //this.transform.localPosition = newPosition;
                 }
                 isJumping2 = true;
-                //print("???????????");
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
                 newSpeed.y = 0;
                 playerRigidbody2D.velocity = newSpeed;
@@ -296,6 +296,7 @@ public class GameBody : MonoBehaviour {
                 isJumping = false;
                 isJumping2 = false;
                 isQiTiao = false;
+                isJump2 = false;
             }
             return;
         }
@@ -369,19 +370,40 @@ public class GameBody : MonoBehaviour {
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    float atkNums = 1;
+    float atkNums = 0;
     bool isAtk = false;
     bool isAtking = false;
-    
+    string[] atkMsg;
+    VOAtk vOAtk;
+    Dictionary<string, string> atkZS;
+
     public void getAtk()
     {
         if (!isAtk)
         {
             isAtk = true;
             isAtking = true;
+            yanchi = 0;
             //print(DataZS.atk_1[0]);
+            //atkMsg = DataZS.atkZS[(int)(atkNums - 1)];
+            if (isInAiring)
+            {
+                atkZS = null;
+                return;
+            }
+            else
+            {
+                atkZS = DataZS.atkZS[(int)atkNums];
+            }
             
-            if (DBBody.animation.lastAnimationName != ATK + atkNums) DBBody.animation.GotoAndPlayByFrame((ATK + atkNums),0,1);
+            vOAtk.getVO(atkZS);
+            if (DBBody.animation.lastAnimationName != vOAtk.atkName)
+            {
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+                moveVX(vOAtk.xF);
+                moveVY(vOAtk.yF);
+            }
+            //获取XY方向的推力 
             //print(DBBody.animation.animations);
            
         }
@@ -394,21 +416,38 @@ public class GameBody : MonoBehaviour {
     }
 
     float jisuqi = 0;
+    float yanchi = 0;
 
     void atk()
     {
-        if (DBBody.animation.lastAnimationName == (ATK + atkNums) && DBBody.animation.isPlaying) jisuqi++;
-        if (DBBody.animation.lastAnimationName == (ATK + atkNums) && DBBody.animation.isCompleted)
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
         {
-            isAtking = false;
-            isAtk = false;
-            print("jisuqi  "+jisuqi);
-            jisuqi = 0;
-            if (atkNums <= 3)
-            {
-                atkNums++;
+            jisuqi++;
+            //特效出现时间
+            if(jisuqi == vOAtk.showTXFrame){
+                
             }
-            if (atkNums == 4) atkNums = 1;
+        }
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
+        {
+            jisuqi = 0;
+            isAtk = false;
+            yanchi++;
+            if (yanchi == 1)
+            {
+                if (atkNums <= 3)
+                {
+                    atkNums++;
+                }
+                if (atkNums == DataZS.atkZS.Length) atkNums = 0;
+            }
+            if(yanchi>= vOAtk.yanchi)
+            {
+                //超过延迟时间 失去连击
+                isAtking = false;
+                yanchi = 0;
+                atkNums = 0;
+            }
         }
     }
 
@@ -420,6 +459,7 @@ public class GameBody : MonoBehaviour {
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
         DBBody.AddDBEventListener("atks", this.test);
         bodyScale = new Vector3(1, 1, 1);
+        vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
     }
 	
