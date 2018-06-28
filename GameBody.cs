@@ -85,11 +85,11 @@ public class GameBody : MonoBehaviour {
         isRunLefting = false;
         isRunRighting = false;
         //isInAiring = false;
-        isDowning = false;
+        //isDowning = false;
         isJumping = false;
         isJumping2 = false;
         isJump2 = false;
-        isQiTiao = false;
+        //isQiTiao = false;
         isAtk = false;
         isAtking = false;
     }
@@ -128,6 +128,7 @@ public class GameBody : MonoBehaviour {
             Vector2 end = new Vector2(start.x - distanceMQ*bodyScale.x, start.y);
             Debug.DrawLine(start, end, Color.red);
             hidWalled = Physics2D.Linecast(start, end, groundLayer);
+            if (IsGround) hidWalled = false;
             return hidWalled;
         }
     }
@@ -263,11 +264,17 @@ public class GameBody : MonoBehaviour {
                 return;
             }
         }
-        
-        if (IsGround&& DBBody.animation.lastAnimationName != JUMPHITWALL && 
-            DBBody.animation.lastAnimationName!= JUMP2DUAN && 
-            DBBody.animation.lastAnimationName != DOWNONGROUND && 
-            DBBody.animation.lastAnimationName != JUMPUP) DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+
+       
+        if (IsGround &&!isAtking&& DBBody.animation.lastAnimationName != JUMPHITWALL &&
+            DBBody.animation.lastAnimationName != JUMP2DUAN &&
+            DBBody.animation.lastAnimationName != DOWNONGROUND &&
+            DBBody.animation.lastAnimationName != JUMPUP)
+        {
+            print("?????>>>   "+DBBody.animation.lastAnimationName+"     "+isQiTiao);
+            isQiTiao = false;
+            DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+        }
 
         if (IsGround &&!isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
         {
@@ -295,6 +302,8 @@ public class GameBody : MonoBehaviour {
                 isJumping2 = false;
                 isQiTiao = false;
                 isJump2 = false;
+                //落地还原 不然 地上攻击会累加
+                atkNums = 0;
             }
             return;
         }
@@ -302,7 +311,7 @@ public class GameBody : MonoBehaviour {
        
 
 
-        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround&&isDowning&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -336,6 +345,8 @@ public class GameBody : MonoBehaviour {
                 {
                     //下降
                     isDowning = true;
+                    //还原落地攻击的BUG
+                    isQiTiao = true;
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
             }
@@ -384,6 +395,7 @@ public class GameBody : MonoBehaviour {
     {
         if (!isAtk)
         {
+            resetAll();
             isAtk = true;
             isAtking = true;
             yanchi = 0;
