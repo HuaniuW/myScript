@@ -28,6 +28,14 @@ public class MyController : MonoBehaviour {
             _body.getAtk();
         }
 
+       
+        if (Input.GetKeyDown(KeyCode.J)) {
+            //print("zuhejianJJJJJ");
+            _body.getDodge1();
+        }
+
+       
+
         horizontalDirection = Input.GetAxis(HORIZONTAL);
         if (horizontalDirection > 0) {
             _body.runRight(horizontalDirection);

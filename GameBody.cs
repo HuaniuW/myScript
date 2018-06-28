@@ -37,7 +37,7 @@ public class GameBody : MonoBehaviour {
 
     [Header("感应与面前墙的距离")]
     [Range(0, 1)]
-    public float distanceMQ=0.13f;
+    public float distanceMQ = 0.13f;
 
     [Header("侦测面前墙的射线起点")]
     public UnityEngine.Transform qianmian;
@@ -92,6 +92,7 @@ public class GameBody : MonoBehaviour {
         //isQiTiao = false;
         isAtk = false;
         isAtking = false;
+        atkNums = 0;
     }
 
 
@@ -105,6 +106,49 @@ public class GameBody : MonoBehaviour {
     const string DOWNONGROUND = "downOnGround_1";
     const string JUMP2DUAN = "jump2Duan_1";
     const string ATK = "atk_";
+    const string DODGE1 = "dodge_1";
+    const string DODGE2 = "dodge_2";
+
+    bool isDodge = false;
+    bool isDodgeing = false;
+
+    public void getDodge1()
+    {
+        if (isInAiring) return;
+        if (!isDodge)
+        {
+            resetAll();
+            isDodge = true;
+            isDodgeing = true;
+            //print("-->x  " + playerRigidbody2D.velocity.x);
+            if (playerRigidbody2D.velocity.x >= 0)
+            {
+                if (DBBody.animation.lastAnimationName != DODGE2)
+                {
+                    DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
+                    moveVX(800);
+                }
+            }
+            else if (playerRigidbody2D.velocity.x < 0)
+            {
+                if (DBBody.animation.lastAnimationName != DODGE2)
+                {
+                    DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
+                    moveVX(800);
+                }
+            }
+        }
+    }
+
+
+    void dodge1()
+    {
+        if ((DBBody.animation.lastAnimationName == DODGE1|| DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
+        {
+            isDodge = false;
+            isDodgeing = false;
+        }
+    }
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
     bool IsGround
@@ -125,7 +169,7 @@ public class GameBody : MonoBehaviour {
         get
         {
             Vector2 start = qianmian.position;
-            Vector2 end = new Vector2(start.x - distanceMQ*bodyScale.x, start.y);
+            Vector2 end = new Vector2(start.x - distanceMQ * bodyScale.x, start.y);
             Debug.DrawLine(start, end, Color.red);
             hidWalled = Physics2D.Linecast(start, end, groundLayer);
             if (IsGround) hidWalled = false;
@@ -149,7 +193,8 @@ public class GameBody : MonoBehaviour {
 
     public void runLeft(float horizontalDirection)
     {
-        if (isAtking) return;
+        if (isAtking || isDodgeing) return;
+        //resetAll();
         isRunLefting = true;
         isRunRighting = false;
         bodyScale.x = 1;
@@ -161,7 +206,8 @@ public class GameBody : MonoBehaviour {
 
     public void runRight(float horizontalDirection)
     {
-        if (isAtking) return;
+        if (isAtking || isDodgeing) return;
+        //resetAll();
         isRunRighting = true;
         isRunLefting = false;
         bodyScale.x = -1;
@@ -178,7 +224,7 @@ public class GameBody : MonoBehaviour {
 
     void run()
     {
-        if (isJumping||isInAiring|| isDowning) return;
+        if (isJumping || isInAiring || isDowning || isDodgeing) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
@@ -194,6 +240,7 @@ public class GameBody : MonoBehaviour {
     //bool isQiTiao = false;
     public void getJump()
     {
+        if (isDodgeing) return;
         if (!isJumping)
         {
             isJumping = true;
@@ -215,9 +262,12 @@ public class GameBody : MonoBehaviour {
     }
 
 
-    void moveVX(float vx)
+    void moveVX(float vx,bool isNoAbs = false)
     {
+        
         var _vx = Mathf.Abs(vx);
+        if (isNoAbs) _vx = vx;
+        newSpeed.x = 0;
         if (bodyScale.x < 0)
         {
             playerRigidbody2D.AddForce(Vector2.right * _vx);
@@ -231,13 +281,13 @@ public class GameBody : MonoBehaviour {
 
     void moveVY(float vy)
     {
-        playerRigidbody2D.AddForce(Vector2.up*vy);
+        playerRigidbody2D.AddForce(Vector2.up * vy);
         playerRigidbody2D.velocity = newSpeed;
     }
 
     void jump()
     {
-        if (isAtking) return;
+        if (isAtking|| isDodgeing) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -271,7 +321,7 @@ public class GameBody : MonoBehaviour {
             DBBody.animation.lastAnimationName != DOWNONGROUND &&
             DBBody.animation.lastAnimationName != JUMPUP)
         {
-            print("?????>>>   "+DBBody.animation.lastAnimationName+"     "+isQiTiao);
+           // print("?????>>>   "+DBBody.animation.lastAnimationName+"     "+isQiTiao);
             isQiTiao = false;
             DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
         }
@@ -286,12 +336,8 @@ public class GameBody : MonoBehaviour {
 
     void inAir()
     {
-
        // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         isInAiring = !IsGround;
-        
-
-
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
             if (DBBody.animation.isCompleted)
@@ -393,6 +439,7 @@ public class GameBody : MonoBehaviour {
 
     public void getAtk()
     {
+        if (isDodgeing) return;
         if (!isAtk)
         {
             //resetAll();
@@ -486,10 +533,13 @@ public class GameBody : MonoBehaviour {
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;
         ControlSpeed();
-
-        
-
         inAir();
+
+        if (isDodgeing)
+        {
+            dodge1();
+            return;
+        }
 
         if (isAtking)
         {
@@ -500,7 +550,7 @@ public class GameBody : MonoBehaviour {
         {
             jump();
         }
-        if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking)
+        if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing)
         {
             stand();
         }
