@@ -339,7 +339,7 @@ public class GameBody : MonoBehaviour {
         if (isInAiring)
         {
             
-            if (newSpeed.y < 0)
+            if (newSpeed.y <= 0)
             {
                 if (!isDowning)
                 {
