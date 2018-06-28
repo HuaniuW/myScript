@@ -311,7 +311,7 @@ public class GameBody : MonoBehaviour {
        
 
 
-        if (IsGround&&isDowning&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -395,7 +395,7 @@ public class GameBody : MonoBehaviour {
     {
         if (!isAtk)
         {
-            resetAll();
+            //resetAll();
             isAtk = true;
             isAtking = true;
             yanchi = 0;
