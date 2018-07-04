@@ -5,6 +5,10 @@ using DragonBones;
 
 public class GameBody : MonoBehaviour {
 
+    public ParticleSystem tx_1;
+    public ParticleSystem tx_2;
+    public ParticleSystem tx_3;
+    public ParticleSystem tx_4;
 
     [Header("水平速度")]
     public float speedX;
@@ -126,7 +130,7 @@ public class GameBody : MonoBehaviour {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    moveVX(800);
+                    moveVX(2200);
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -134,7 +138,7 @@ public class GameBody : MonoBehaviour {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    moveVX(800);
+                    moveVX(2200);
                 }
             }
         }
@@ -267,7 +271,7 @@ public class GameBody : MonoBehaviour {
         
         var _vx = Mathf.Abs(vx);
         if (isNoAbs) _vx = vx;
-        newSpeed.x = 0;
+        //newSpeed.x = 0;
         if (bodyScale.x < 0)
         {
             playerRigidbody2D.AddForce(Vector2.right * _vx);
@@ -446,6 +450,7 @@ public class GameBody : MonoBehaviour {
             isAtk = true;
             isAtking = true;
             yanchi = 0;
+            jisuqi = 0;
     
             if (isInAiring)
             {
@@ -481,6 +486,17 @@ public class GameBody : MonoBehaviour {
         print(type+" ???time  "+eventObject);
     }
 
+    //特效方向
+    void TXPlay(ParticleSystem tx) {
+        tx.Stop();
+        Vector3 ttt = new Vector3(0, 0, 0);
+        ttt = tx.transform.localScale;
+        ttt.x = Mathf.Abs(tx.transform.localScale.x);
+        ttt.x *= this.transform.localScale.x;
+        tx.transform.localScale = ttt;
+        tx.Play();
+    }
+
     float jisuqi = 0;
     float yanchi = 0;
 
@@ -489,9 +505,28 @@ public class GameBody : MonoBehaviour {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
         {
             jisuqi++;
+            //print("jisuqi "+jisuqi+"    ??    "+ vOAtk.showTXFrame);
             //特效出现时间
             if(jisuqi == vOAtk.showTXFrame){
+                //this["tx_1"].play();
+                //(ParticleSystem)this.vOAtk.txName.Play();
+                //print("vOAtk.txName  "+ vOAtk.txName);
+
+                if (vOAtk.txName == "tx_1")
+                {
+                    TXPlay(tx_1);
+                } else if (vOAtk.txName == "tx_2") {
+                    TXPlay(tx_2);
+                } else if (vOAtk.txName == "tx_3") {
+                    TXPlay(tx_3);
+                } else if (vOAtk.txName == "tx_4") {
+                    TXPlay(tx_4);
+                }
                 
+                //print("sx " + dg1.transform.localScale.x + " --   " + this.transform.localScale.x);
+               
+               
+                    
             }
         }
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
