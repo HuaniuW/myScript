@@ -41,7 +41,12 @@ public class Tools : MonoBehaviour {
     //或者float.TryParse(str,out value);
     //或者Convert.ToFloat（string）
 
+    //动态取资源
+    //Transform tf = this.transform.Find(nIndex.ToString());
 
+    //层级 order  -1  ---  -10  近景
+    //地板 0-3
+    //前景 4-10
 
 
 }

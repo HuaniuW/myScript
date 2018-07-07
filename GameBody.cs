@@ -118,7 +118,7 @@ public class GameBody : MonoBehaviour {
 
     public void getDodge1()
     {
-        if (isInAiring) return;
+        if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND) return;
         if (!isDodge)
         {
             resetAll();
