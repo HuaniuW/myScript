@@ -51,5 +51,7 @@ public class Tools : MonoBehaviour {
     //Mathf.Lerp(x, x2, t);  从 x 到x2 中间插值 t 接近x2
     //Mathf.Clamp(x, min, max);  限制
 
+    //box collider  设置不参与碰撞 is Trigger 和 use by effector √上  
+
 
 }
