@@ -48,5 +48,8 @@ public class Tools : MonoBehaviour {
     //地板 0-3
     //前景 4-10
 
+    //Mathf.Lerp(x, x2, t);  从 x 到x2 中间插值 t 接近x2
+    //Mathf.Clamp(x, min, max);  限制
+
 
 }
