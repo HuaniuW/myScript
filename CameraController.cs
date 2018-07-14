@@ -27,6 +27,10 @@ public class CameraController : MonoBehaviour
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
+
+       
+
+        //print(obj.transform.position);
     }
 
     void Update()
@@ -66,7 +70,7 @@ public class CameraController : MonoBehaviour
     }
 
     bool isYuan = false;
-    void getCameraZ()
+    void GetCameraZ()
     {
         var z = transform.position.z;
         if (isYuan)

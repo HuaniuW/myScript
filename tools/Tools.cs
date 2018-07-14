@@ -11,7 +11,7 @@ public class Tools : MonoBehaviour {
     }
 
     //输出系统时间 可用于玩家数量统计
-    public static void timeData()
+    public static void TimeData()
     {
         DateTime dt = new DateTime();
         dt = System.DateTime.Now;
@@ -45,13 +45,32 @@ public class Tools : MonoBehaviour {
     //Transform tf = this.transform.Find(nIndex.ToString());
 
     //层级 order  -1  ---  -10  近景
-    //地板 0-3
-    //前景 4-10
+    //地板 0-10 给予足够图层空间 特效之类的乱七八糟的东西
+    //前景 11-10
 
     //Mathf.Lerp(x, x2, t);  从 x 到x2 中间插值 t 接近x2
     //Mathf.Clamp(x, min, max);  限制
 
-    //box collider  设置不参与碰撞 is Trigger 和 use by effector √上  
+    //box collider  设置不参与碰撞 is Trigger  √上  
+
+    //public static Object Instantiate(Object original, Vector3 position, Quaternion rotation);
+
+    //TransformDirection 将一个方向从局部坐标系转换到世界坐标系
+    //InverseTransformDirection 将一个方向从世界坐标系转换到局部坐标系
+    //TransformPoint 将一个点从局部坐标系转换到世界坐标系
+    //InverseTransformPoint 将一个点从世界坐标系转换到局部坐标系
+
+    //在Resources文件夹 动态获取 Prefab（翻译:预制） 预制资源
+    //GameObject obj = Resources.Load("fk") as GameObject;
+    //obj = Instantiate(obj);
+
+
+    //Vector3 s = new Vector3((float)1.5, 1, 0);
+    //obj.transform.position = s;  改变位置
+    //obj.transform.localScale = s;  缩放
+
+    // public IEnumerator IEDestory(GameObject gameObject, float time)  协程 伪进程
+    //StartCoroutine(ObjectPools.GetInstance().IEDestory(hitBar,2f));  执行 协程
 
 
 }

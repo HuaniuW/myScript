@@ -21,30 +21,30 @@ public class MyController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //print("jump");
-            _body.getJump();
+            _body.GetJump();
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow)) {
-            _body.getAtk();
+            _body.GetAtk();
         }
 
        
         if (Input.GetKeyDown(KeyCode.J)) {
             //print("zuhejianJJJJJ");
-            _body.getDodge1();
+            _body.GetDodge1();
         }
 
        
 
         horizontalDirection = Input.GetAxis(HORIZONTAL);
         if (horizontalDirection > 0) {
-            _body.runRight(horizontalDirection);
+            _body.RunRight(horizontalDirection);
         } else if(horizontalDirection<0) {
-            _body.runLeft(horizontalDirection);
+            _body.RunLeft(horizontalDirection);
         }
         else
         {
-            _body.reSetLR();
+            _body.ReSetLR();
         }
         
        

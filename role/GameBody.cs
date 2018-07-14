@@ -83,7 +83,7 @@ public class GameBody : MonoBehaviour {
     //起跳
     bool isQiTiao = false;
 
-    void resetAll()
+    void ResetAll()
     {
         //isRun = false;
         isRunLefting = false;
@@ -116,12 +116,12 @@ public class GameBody : MonoBehaviour {
     bool isDodge = false;
     bool isDodgeing = false;
 
-    public void getDodge1()
+    public void GetDodge1()
     {
         if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND) return;
         if (!isDodge)
         {
-            resetAll();
+            ResetAll();
             isDodge = true;
             isDodgeing = true;
             //print("-->x  " + playerRigidbody2D.velocity.x);
@@ -130,7 +130,7 @@ public class GameBody : MonoBehaviour {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    moveVX(2200);
+                    MoveVX(2200);
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -138,14 +138,14 @@ public class GameBody : MonoBehaviour {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    moveVX(2200);
+                    MoveVX(2200);
                 }
             }
         }
     }
 
 
-    void dodge1()
+    void Dodge1()
     {
         if ((DBBody.animation.lastAnimationName == DODGE1|| DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
         {
@@ -195,7 +195,7 @@ public class GameBody : MonoBehaviour {
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    public void runLeft(float horizontalDirection)
+    public void RunLeft(float horizontalDirection)
     {
         if (isAtking || isDodgeing) return;
         //resetAll();
@@ -204,11 +204,11 @@ public class GameBody : MonoBehaviour {
         bodyScale.x = 1;
         this.transform.localScale = bodyScale;
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
-        run();
+        Run();
 
     }
 
-    public void runRight(float horizontalDirection)
+    public void RunRight(float horizontalDirection)
     {
         if (isAtking || isDodgeing) return;
         //resetAll();
@@ -217,16 +217,16 @@ public class GameBody : MonoBehaviour {
         bodyScale.x = -1;
         this.transform.localScale = bodyScale;
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
-        run();
+        Run();
     }
 
-    public void reSetLR()
+    public void ReSetLR()
     {
         isRunRighting = false;
         isRunLefting = false;
     }
 
-    void run()
+    void Run()
     {
         if (isJumping || isInAiring || isDowning || isDodgeing) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
@@ -242,7 +242,7 @@ public class GameBody : MonoBehaviour {
     bool isJump2 = false;
     bool isJumping2 = false;
     //bool isQiTiao = false;
-    public void getJump()
+    public void GetJump()
     {
         if (isDodgeing) return;
         if (!isJumping)
@@ -259,14 +259,14 @@ public class GameBody : MonoBehaviour {
         }
     }
 
-    void moveXByPosition(float xDistance)
+    void MoveXByPosition(float xDistance)
     {
         newPosition.x += xDistance;
         this.transform.localPosition = newPosition;
     }
 
 
-    void moveVX(float vx,bool isNoAbs = false)
+    void MoveVX(float vx,bool isNoAbs = false)
     {
         
         var _vx = Mathf.Abs(vx);
@@ -283,13 +283,13 @@ public class GameBody : MonoBehaviour {
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    void moveVY(float vy)
+    void MoveVY(float vy)
     {
         playerRigidbody2D.AddForce(Vector2.up * vy);
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    void jump()
+    void Jump()
     {
         if (isAtking|| isDodgeing) return;
         if (isInAiring)
@@ -301,12 +301,12 @@ public class GameBody : MonoBehaviour {
                     newPosition = this.transform.localPosition;
                     if (bodyScale.x == 1)
                     {
-                        moveXByPosition(0.1f);
+                        MoveXByPosition(0.1f);
                         playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
                     }
                     else
                     {
-                        moveXByPosition(-0.1f);
+                        MoveXByPosition(-0.1f);
                         playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
                     }
                 }
@@ -338,7 +338,7 @@ public class GameBody : MonoBehaviour {
         }
     }
 
-    void inAir()
+    void InAir()
     {
        // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         isInAiring = !IsGround;
@@ -418,7 +418,7 @@ public class GameBody : MonoBehaviour {
     }
 
    
-    void stand()
+    void Stand()
     {
         if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
@@ -441,7 +441,7 @@ public class GameBody : MonoBehaviour {
     VOAtk vOAtk;
     Dictionary<string, string>[] atkZS;
 
-    public void getAtk()
+    public void GetAtk()
     {
         if (isDodgeing) return;
         if (!isAtk)
@@ -466,12 +466,12 @@ public class GameBody : MonoBehaviour {
             {
                 
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-                moveVX(vOAtk.xF);
+                MoveVX(vOAtk.xF);
                 if (newSpeed.y < 0)
                 {
                     newSpeed.y = 0;
                     playerRigidbody2D.velocity = newSpeed;
-                    moveVY(vOAtk.yF);
+                    MoveVY(vOAtk.yF);
                 }
             }
             //获取XY方向的推力 
@@ -481,7 +481,7 @@ public class GameBody : MonoBehaviour {
       
     }
 
-    void test(string type, EventObject eventObject)
+    void Test(string type, EventObject eventObject)
     {
         print(type+" ???time  "+eventObject);
     }
@@ -500,7 +500,18 @@ public class GameBody : MonoBehaviour {
     float jisuqi = 0;
     float yanchi = 0;
 
-    void atk()
+    public object GetPropertyValue(Dictionary<string, object> _values,string propertyName)
+    {
+       
+        if (_values.ContainsKey(propertyName) == true)
+        {
+            return _values[propertyName];
+        }
+        return null;
+    }
+    /// <summary
+
+    void Atk()
     {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
         {
@@ -511,6 +522,14 @@ public class GameBody : MonoBehaviour {
                 //this["tx_1"].play();
                 //(ParticleSystem)this.vOAtk.txName.Play();
                 //print("vOAtk.txName  "+ vOAtk.txName);
+                //[vOAtk.atkName+"_v"]
+
+                //print("gongjishuzhi "+DataZS.getInstance().Test("atk_1_v"));
+                //DataZS.getInstance().getTest();
+                AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
+                atkVVo.getValue(DataZS.atk_1_v);
+                atkVVo.team = this.GetComponent<RoleDate>().team;
+                this.GetComponent<GetHitKuai>().GetKuai(atkVVo);
 
                 if (vOAtk.txName == "tx_1")
                 {
@@ -558,7 +577,7 @@ public class GameBody : MonoBehaviour {
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
-        DBBody.AddDBEventListener("atks", this.test);
+        DBBody.AddDBEventListener("atks", this.Test);
         bodyScale = new Vector3(1, 1, 1);
         vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
@@ -568,26 +587,26 @@ public class GameBody : MonoBehaviour {
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;
         ControlSpeed();
-        inAir();
+        InAir();
 
         if (isDodgeing)
         {
-            dodge1();
+            Dodge1();
             return;
         }
 
         if (isAtking)
         {
-            atk();
+            Atk();
         }
 
         if (isJumping)
         {
-            jump();
+            Jump();
         }
         if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing)
         {
-            stand();
+            Stand();
         }
         
     }
