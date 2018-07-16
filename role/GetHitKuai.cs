@@ -13,13 +13,18 @@ public class GetHitKuai : MonoBehaviour {
     GameObject hitBar;
     //发射物
     GameObject fashewu;
-    public void GetKuai(AtkAttributesVO atkVVo)
+    public void GetKuai(string jn_name = "fk",string moshi = "ljxs")
     {
-        hitBar = Resources.Load("fk") as GameObject;
+        //hitBar = Resources.Load(jn_name) as GameObject;
        
         //fashewu = GameObject.Find("player");
+        
+        hitBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load(jn_name) as GameObject);
         hitBar.transform.position = this.transform.position;
-        hitBar = ObjectPools.GetInstance().SwpanObject(hitBar);
+        AtkAttributesVO atkVVo = hitBar.GetComponent<AtkAttributesVO>();
+        atkVVo.team = this.transform.GetComponent<RoleDate>().team;
+        atkVVo.getValue(DataZS.atk_1_v);
+        print("id2    "+hitBar.GetInstanceID());
         //print("id    "+hitBar.GetInstanceID());
         if (atkVVo !=null)
         {
@@ -30,12 +35,15 @@ public class GetHitKuai : MonoBehaviour {
             xdp.x = this.transform.localScale.x == 1? xdp.x + atkVVo._xdx: xdp.x - atkVVo._xdx;
             xdp.y += atkVVo._xdy;
             hitBar.transform.position = xdp;
-            hitBar.GetComponent<HitKuai>().getAtkVVo(atkVVo);
         }
         
         //print("hi");
         //ObjectPools.GetInstance().IEDestory(hitBar, 1f);
-        StartCoroutine(ObjectPools.GetInstance().IEDestory(hitBar,2f));
+        if(moshi == "ljxs")
+        {
+            StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitBar, 2f));
+        }
+        
         //IEtest();
         //ObjectPools.GetInstance().DestoryObject(hitBar);
     }

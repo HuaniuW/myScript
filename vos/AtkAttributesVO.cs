@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AtkAttributesVO {
+public class AtkAttributesVO : MonoBehaviour
+{
     [Header("攻击力")]
     public float atkPower;
     [Header("相对位置x")]
@@ -24,12 +25,6 @@ public class AtkAttributesVO {
     void Start () {
 		
 	}
-
-    static AtkAttributesVO instance;
-    static public AtkAttributesVO getInstance() {
-        if (instance == null) instance = new AtkAttributesVO();
-        return instance;
-    }
 
     public void getValue(Dictionary<string, float> dict)
     {

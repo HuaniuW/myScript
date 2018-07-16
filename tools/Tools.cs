@@ -73,4 +73,10 @@ public class Tools : MonoBehaviour {
     //StartCoroutine(ObjectPools.GetInstance().IEDestory(hitBar,2f));  执行 协程
 
 
+    //创建一个A.cs脚本挂载在空物体B上，
+    //在.cs文件中输入this表示的是当前的脚本，就是脚本A
+    //transform当前物体的transform组件，也就是空物体B的transform组件
+    //gameObject当前物体的GameObjectB，也就是空物体B
+
+    //OnEnable  每次进场会触发这个函数 有点像 onStage()
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DragonBones;
+using System;
 
 public class GameBody : MonoBehaviour {
 
@@ -45,6 +46,8 @@ public class GameBody : MonoBehaviour {
 
     [Header("侦测面前墙的射线起点")]
     public UnityEngine.Transform qianmian;
+
+    
 
     [Header("当前动作名字")]
     public string CurrentAcName;
@@ -112,6 +115,25 @@ public class GameBody : MonoBehaviour {
     const string ATK = "atk_";
     const string DODGE1 = "dodge_1";
     const string DODGE2 = "dodge_2";
+
+
+    bool isSkill = false;
+    bool isSkilling = false;
+    internal void GetSkill1()
+    {
+        if (!isSkill)
+        {
+            isSkill = false;
+        }
+        print("释放技能");
+        
+        this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
+      
+        
+        
+        
+    }
+
 
     bool isDodge = false;
     bool isDodgeing = false;
@@ -526,10 +548,10 @@ public class GameBody : MonoBehaviour {
 
                 //print("gongjishuzhi "+DataZS.getInstance().Test("atk_1_v"));
                 //DataZS.getInstance().getTest();
-                AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
-                atkVVo.getValue(DataZS.atk_1_v);
-                atkVVo.team = this.GetComponent<RoleDate>().team;
-                this.GetComponent<GetHitKuai>().GetKuai(atkVVo);
+                //AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
+                //atkVVo.getValue(DataZS.atk_1_v);
+                //atkVVo.team = this.GetComponent<RoleDate>().team;
+                this.GetComponent<GetHitKuai>().GetKuai();
 
                 if (vOAtk.txName == "tx_1")
                 {

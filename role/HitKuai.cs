@@ -12,10 +12,7 @@ public class HitKuai : MonoBehaviour {
 
     AtkAttributesVO _atkVVo;
     //GameObject的位置  攻击属性  相对位置x y  尺寸   是否立即消失
-    public void getAtkVVo(AtkAttributesVO atkVVo)
-    {
-        _atkVVo = atkVVo;
-    }
+   
 	
 	// Update is called once per frame
 	void Update () {
@@ -24,8 +21,12 @@ public class HitKuai : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
-       
-        if(Coll.GetComponent<RoleDate>()&& Coll.GetComponent<RoleDate>().team != _atkVVo.team)
+        _atkVVo = this.GetComponent<AtkAttributesVO>();
+        print(Coll.name);
+        //print("   _atkVVo.team   " + (_atkVVo == null));
+        //print(Coll.name+"   team  "+ Coll.GetComponent<RoleDate>().team+ "   _atkVVo.team   "+ _atkVVo.team);
+        
+        if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != _atkVVo.team)
         {
             if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().beHit(_atkVVo);
         }

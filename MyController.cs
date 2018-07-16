@@ -34,7 +34,13 @@ public class MyController : MonoBehaviour {
             _body.GetDodge1();
         }
 
-       
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            //print("zuhejianJJJJJ");
+            _body.GetSkill1();
+        }
+
+
 
         horizontalDirection = Input.GetAxis(HORIZONTAL);
         if (horizontalDirection > 0) {

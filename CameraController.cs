@@ -44,10 +44,11 @@ public class CameraController : MonoBehaviour
                 //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
                 //用插值会抖动 不知道是不是计算过快 来回找不到值？ 让在范围内=角色位置
                 //小于0.3会抖动 估计是角色 跑过摄像机 场景移动慢导致的视觉差 避免抖动 不用这种缓动跟随
-                x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
+                //x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
                 //防止摄像机抖动
-                if(Mathf.Abs(x - player.position.x)<0.3) x = player.position.x;
+                //if(Mathf.Abs(x - player.position.x)<0.3)
 
+                x = player.position.x;
                 //x = (player.position.x-x)*(float)0.5;
             }
             if (Mathf.Abs(y - player.position.y) > Margin.y)
