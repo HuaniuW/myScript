@@ -47,7 +47,6 @@ public class GameBody : MonoBehaviour {
     [Header("侦测面前墙的射线起点")]
     public UnityEngine.Transform qianmian;
 
-    
 
     [Header("当前动作名字")]
     public string CurrentAcName;
@@ -126,14 +125,27 @@ public class GameBody : MonoBehaviour {
             isSkill = false;
         }
         print("释放技能");
-        
         this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
-      
-        
-        
-        
     }
 
+
+    internal void GetSkill2()
+    {
+        print("释放技能2");
+        ShowSkillByNum(1);
+    }
+
+    public void ShowSkillByNum(int n=1) {
+        //根据技能槽 安装的徽章技能来释放 相应技能
+        // 取得技能槽 徽章技能名称
+        string hzSkillName =  GetHZSkillName(n);
+        GetComponent<ShowOutSkill>().ShowOutSkillByName(hzSkillName);
+    }
+
+    private string GetHZSkillName(int n)
+    {
+        return "jn_shan";
+    }
 
     bool isDodge = false;
     bool isDodgeing = false;
@@ -633,5 +645,5 @@ public class GameBody : MonoBehaviour {
         
     }
 
-
 }
+

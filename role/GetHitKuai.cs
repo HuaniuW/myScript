@@ -41,7 +41,7 @@ public class GetHitKuai : MonoBehaviour {
         //ObjectPools.GetInstance().IEDestory(hitBar, 1f);
         if(moshi == "ljxs")
         {
-            StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitBar, 2f));
+            StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitBar));
         }
         
         //IEtest();

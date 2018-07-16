@@ -99,7 +99,7 @@ public class ObjectPools
         //获取到当前对象的ID（每个游戏对象都有各自的ID）
         int key = gameObject.GetInstanceID();
         //print(key);
-        Debug.Log(key);
+        Debug.Log("创建id "+key);
         //如果池中包含key当前游戏对象的key值（游戏对象的ID）
         if (pools2.ContainsKey(key))
         {
@@ -168,9 +168,8 @@ public class ObjectPools
     /// <param name="gameObject">隐藏的游戏对象</param>
     /// <param name="time">隐藏的时间间隔</param>
     /// <returns></returns>
-    public IEnumerator IEDestory2(GameObject gameObject, float time)
+    public IEnumerator IEDestory2(GameObject gameObject)
     {
-        //yield return new WaitForSeconds(time);
         yield return new WaitForFixedUpdate();
         GetInstance().DestoryObject2(gameObject);
     }

@@ -30,14 +30,17 @@ public class MyController : MonoBehaviour {
 
        
         if (Input.GetKeyDown(KeyCode.J)) {
-            //print("zuhejianJJJJJ");
             _body.GetDodge1();
         }
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            //print("zuhejianJJJJJ");
             _body.GetSkill1();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            _body.GetSkill2();
         }
 
 

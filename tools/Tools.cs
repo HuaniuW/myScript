@@ -78,5 +78,5 @@ public class Tools : MonoBehaviour {
     //transform当前物体的transform组件，也就是空物体B的transform组件
     //gameObject当前物体的GameObjectB，也就是空物体B
 
-    //OnEnable  每次进场会触发这个函数 有点像 onStage()
+    //OnEnable  每次进场会触发这个函数 有点像 onStage() 
 }
