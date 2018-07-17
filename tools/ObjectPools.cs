@@ -98,8 +98,6 @@ public class ObjectPools
     {
         //获取到当前对象的ID（每个游戏对象都有各自的ID）
         int key = gameObject.GetInstanceID();
-        //print(key);
-        Debug.Log("创建id "+key);
         //如果池中包含key当前游戏对象的key值（游戏对象的ID）
         if (pools2.ContainsKey(key))
         {
@@ -110,6 +108,8 @@ public class ObjectPools
                 GameObject result = pools2[key][0];
                 result.SetActive(true); //激活显示当前对象
                 pools2[key].Remove(result); //从池中清除对象游戏对象
+                result.transform.position = Vector3.zero; //设置初始位置
+                //result.transform.rotation = rotation; //设置初始旋转
                 return result; //返回提取的游戏对象
             }
         }
@@ -120,6 +120,8 @@ public class ObjectPools
         //返回场景的游戏对象
         return res;
     }
+
+   
 
 
     /// <summary>
@@ -132,7 +134,7 @@ public class ObjectPools
         gameObject.SetActive(false);
         //获取当前游戏对象的key值，转换成int类型
         int key = int.Parse(gameObject.name);
-        Debug.Log("回收id  "+key);
+        //Debug.Log("回收id  "+key);
         //如果池中不包含key值对应的游戏对象
         if (!pools2.ContainsKey(key))
         {

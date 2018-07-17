@@ -9,7 +9,7 @@ public class Yishan : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         _atkVVo = GetComponent<AtkAttributesVO>();
-        _atkVVo.getValue(DataZS.atk_1_v);
+        _atkVVo.GetValue(DataZS.atk_1_v);
 	}
 
     void OnEnable() {

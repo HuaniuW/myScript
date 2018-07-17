@@ -11,8 +11,8 @@ public class JN_shan : MonoBehaviour {
 
     private void OnEnable()
     {
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2(GetComponent<JN_base>().hitKuai));
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, 1f));
+        //StartCoroutine(ObjectPools.GetInstance().IEDestory2(GetComponent<JN_base>().hitKuai));
+        //StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, 1f));
     }
 
    

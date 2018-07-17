@@ -26,7 +26,7 @@ public class AtkAttributesVO : MonoBehaviour
 		
 	}
 
-    public void getValue(Dictionary<string, float> dict)
+    public void GetValue(Dictionary<string, float> dict)
     {
         
         this.atkPower = dict["atkPower"];

@@ -22,10 +22,10 @@ public class HitKuai : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D Coll)
     {
         _atkVVo = this.GetComponent<AtkAttributesVO>();
-        print("w " + _atkVVo._scaleW);
-        print("name  " + gameObject.name);
+        //print("w " + _atkVVo._scaleW);
+        //print("name  " + gameObject.name);
         //this.transform.position = this.transform.parent.transform.position;
-        print(Coll.name);
+        //print(Coll.name);
         //print("   _atkVVo.team   " + (_atkVVo == null));
         //print(Coll.name+"   team  "+ Coll.GetComponent<RoleDate>().team+ "   _atkVVo.team   "+ _atkVVo.team);
         

@@ -9,10 +9,10 @@ public class JN_positionAndTeam : MonoBehaviour {
 		
 	}
 
-    public void getPositionAndTeam(Vector3 _position, float team)
+    public void GetPositionAndTeam(Vector3 _position, float team)
     {
         this.transform.position = _position;
-        GetComponent<JN_base>().hitKuai.GetComponent<AtkAttributesVO>().team = team;
-        GetComponent<JN_base>().hitKuai.transform.position = _position;
+        //GetComponent<JN_base>().hitKuai.GetComponent<AtkAttributesVO>().team = team;
+        //GetComponent<JN_base>().hitKuai.transform.position = _position;
     }
 }
