@@ -42,13 +42,13 @@ public class GetHitKuai : MonoBehaviour {
             xdp.y += atkVVo._xdy;
             hitBar.transform.position = xdp;
         }
-        hitBar.transform.position = this.transform.position;
+       
 
         //print("hi");
         //ObjectPools.GetInstance().IEDestory(hitBar, 1f);
         if (moshi == "ljxs")
         {
-            StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(hitBar,2f));
+            StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitBar));
         }
         
         //IEtest();

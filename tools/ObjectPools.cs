@@ -109,6 +109,7 @@ public class ObjectPools
                 result.SetActive(true); //激活显示当前对象
                 pools2[key].Remove(result); //从池中清除对象游戏对象
                 result.transform.position = Vector3.zero; //设置初始位置
+                result.transform.localScale = Vector3.one;
                 //result.transform.rotation = rotation; //设置初始旋转
                 return result; //返回提取的游戏对象
             }
