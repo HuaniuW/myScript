@@ -109,13 +109,14 @@ public class ObjectPools
                 result.SetActive(true); //激活显示当前对象
                 pools2[key].Remove(result); //从池中清除对象游戏对象
                 result.transform.position = Vector3.zero; //设置初始位置
-                result.transform.localScale = Vector3.one;
+                //Debug.Log("result.transform.localScale  "+ result.transform.localScale);
                 //result.transform.rotation = rotation; //设置初始旋转
                 return result; //返回提取的游戏对象
             }
         }
         //否则，实例化对象并接收
         GameObject res = GameObject.Instantiate(gameObject) as GameObject;
+        //res.transform.localScale = new Vector3(-1, 1, 1);
         //储存游戏对象的ID，转换成字符串
         res.name = gameObject.GetInstanceID().ToString();
         //返回场景的游戏对象

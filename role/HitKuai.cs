@@ -21,18 +21,28 @@ public class HitKuai : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
-        _atkVVo = this.GetComponent<AtkAttributesVO>();
+        _atkVVo = this.transform.parent.GetComponent<AtkAttributesVO>();
         //print("w " + _atkVVo._scaleW);
         //print("name  " + gameObject.name);
         //this.transform.position = this.transform.parent.transform.position;
         //print(Coll.name);
         //print("   _atkVVo.team   " + (_atkVVo == null));
         //print(Coll.name+"   team  "+ Coll.GetComponent<RoleDate>().team+ "   _atkVVo.team   "+ _atkVVo.team);
-        
+
+        JN_Date jn_date = gameObject.transform.parent.GetComponent<JN_Date>();
+
         if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != _atkVVo.team)
         {
-            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().beHit(_atkVVo);
+            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(_atkVVo);
+            if (jn_date != null && jn_date._type == "3")
+            {
+                //if (gameObject) ObjectPools.GetInstance().DestoryObject2(gameObject);     
+                transform.parent.GetComponent<JN_base>().disObj();
+            }
         }
+
+       
+        
         
         
     }

@@ -125,7 +125,8 @@ public class GameBody : MonoBehaviour {
             isSkill = false;
         }
         print("释放技能");
-        this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
+        //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
+        GetComponent<ShowOutSkill>().ShowOutSkillByName("jn_yueguang");
     }
 
 
@@ -140,6 +141,9 @@ public class GameBody : MonoBehaviour {
         // 取得技能槽 徽章技能名称
         string hzSkillName =  GetHZSkillName(n);
         GetComponent<ShowOutSkill>().ShowOutSkillByName(hzSkillName);
+        //GameObject t = Resources.Load("ttt") as GameObject;
+        //t = GameObject.Instantiate(t);
+        //t.transform.position = this.transform.position;
     }
 
     private string GetHZSkillName(int n)
@@ -563,7 +567,8 @@ public class GameBody : MonoBehaviour {
                 //AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
                 //atkVVo.getValue(DataZS.atk_1_v);
                 //atkVVo.team = this.GetComponent<RoleDate>().team;
-                this.GetComponent<GetHitKuai>().GetKuai();
+                //this.GetComponent<GetHitKuai>().GetKuai();
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
 
                 if (vOAtk.txName == "tx_1")
                 {

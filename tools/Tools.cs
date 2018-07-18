@@ -79,4 +79,6 @@ public class Tools : MonoBehaviour {
     //gameObject当前物体的GameObjectB，也就是空物体B
 
     //OnEnable  每次进场会触发这个函数 有点像 onStage() 
+
+    //当无法改变 localScale 的时候找一下 是否在哪设置了 scale将其拉回去了
 }
