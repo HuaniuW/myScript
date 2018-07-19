@@ -25,7 +25,7 @@ public class VOAtk : MonoBehaviour {
         //print("");
 	}
 
-    public void getVO(Dictionary<string,string> dict)
+    public void GetVO(Dictionary<string,string> dict)
     {
         this.atkName = dict["atkName"];
         this.xF = float.Parse(dict["xF"]);

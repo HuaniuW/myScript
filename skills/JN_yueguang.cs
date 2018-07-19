@@ -12,7 +12,7 @@ public class JN_yueguang : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponentInChildren<AtkAttributesVO>().GetValue(DataZS.atk_1_v);
+       // GetComponentInChildren<AtkAttributesVO>().GetValue(DataZS.atk_1_v);
         
     }
 
@@ -24,7 +24,7 @@ public class JN_yueguang : MonoBehaviour
     public void GetPositionAndTeam(Vector3 _position, float team)
     {
         this.transform.position = _position;
-        GetComponentInChildren<AtkAttributesVO>().team = team;
+        GetComponentInChildren<JN_Date>().team = team;
         //hitKuai.GetComponent<AtkAttributesVO>().team = team;
         //hitKuai.transform.position = _position;
     }

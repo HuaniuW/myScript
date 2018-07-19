@@ -499,7 +499,7 @@ public class GameBody : MonoBehaviour {
                 atkZS = DataZS.atkZS;
             }
             
-            vOAtk.getVO(atkZS[(int)atkNums]);
+            vOAtk.GetVO(atkZS[(int)atkNums]);
             if (DBBody.animation.lastAnimationName != vOAtk.atkName)
             {
                 

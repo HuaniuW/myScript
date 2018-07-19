@@ -10,7 +10,7 @@ public class HitKuai : MonoBehaviour {
         //print(this.transform);
 	}
 
-    AtkAttributesVO _atkVVo;
+
     //GameObject的位置  攻击属性  相对位置x y  尺寸   是否立即消失
    
 	
@@ -21,7 +21,6 @@ public class HitKuai : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
-        _atkVVo = this.transform.parent.GetComponent<AtkAttributesVO>();
         //print("w " + _atkVVo._scaleW);
         //print("name  " + gameObject.name);
         //this.transform.position = this.transform.parent.transform.position;
@@ -31,13 +30,13 @@ public class HitKuai : MonoBehaviour {
 
         JN_Date jn_date = gameObject.transform.parent.GetComponent<JN_Date>();
 
-        if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != _atkVVo.team)
+        if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != jn_date.team)
         {
-            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(_atkVVo);
+            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date);
             if (jn_date != null && jn_date._type == "3")
             {
                 //if (gameObject) ObjectPools.GetInstance().DestoryObject2(gameObject);     
-                transform.parent.GetComponent<JN_base>().disObj();
+                transform.parent.GetComponent<JN_base>().DisObj();
             }
         }
 
