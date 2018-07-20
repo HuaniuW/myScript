@@ -7,6 +7,7 @@ public class JN_base : MonoBehaviour
 
     GameObject hitKuai;
     JN_Date jn_date;
+    public GameObject atkObj;
 
         // Use this for initialization
     void Start()
@@ -25,8 +26,10 @@ public class JN_base : MonoBehaviour
 	
     }
 
-	public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX)
+	public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj)
     {
+        atkObj = obj;
+
         jn_date = GetComponent<JN_Date>();
        
         jn_date.team = team;

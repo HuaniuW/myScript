@@ -14,6 +14,11 @@ public class RoleDate : MonoBehaviour {
     public float atk = 100;
     // Use this for initialization
 
+    [Header("硬直")]
+    public float yingzhi = 100;
+
+    public bool isCanBeHit = true;
+
     public float team = 1;
     void Start () {
 		

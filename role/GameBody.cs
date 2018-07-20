@@ -350,7 +350,7 @@ public class GameBody : MonoBehaviour {
                 }
                 isJumping2 = true;
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
-                newSpeed.y = 0;
+                newSpeed.y = 0.1f;
                 playerRigidbody2D.velocity = newSpeed;
                 playerRigidbody2D.AddForce(Vector2.up * yForce);
                 return;
@@ -628,6 +628,8 @@ public class GameBody : MonoBehaviour {
         ControlSpeed();
         InAir();
 
+        Yanmu();
+
         if (isDodgeing)
         {
             Dodge1();
@@ -649,6 +651,62 @@ public class GameBody : MonoBehaviour {
         }
         
     }
+
+    public ParticleSystem _yanmu;
+    public ParticleSystem _yanmu2;
+    void Yanmu()
+    {
+        if (IsGround && !isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
+        {
+            _yanmu.Play();
+            return;
+        }
+
+
+        if(IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
+        {
+            _yanmu.Play();
+            return;
+        }
+
+        if (IsGround && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > 5)
+        {
+            _yanmu.Play();
+        }
+        else
+        {
+            _yanmu.Stop();
+        }
+
+
+        //if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
+        //{
+          //  _yanmu2.Play();
+            //return;
+        //}
+
+        if (IsHitMQWall && isInAiring&& DBBody.animation.lastAnimationName == JUMPHITWALL&& !DBBody.animation.isCompleted) {
+            //碰到墙
+            _yanmu2.Play();
+            return;
+        }
+
+
+       // print("y " + GetComponent<Rigidbody2D>().velocity.y);
+
+        if (IsHitMQWall && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > 3) {
+            
+            _yanmu2.Play();
+        }
+        else
+        {
+            _yanmu2.Stop();
+        }
+    }
+
+    
+
+
 
 }
 

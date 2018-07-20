@@ -18,7 +18,7 @@ public class ShowOutSkill : MonoBehaviour {
     internal void ShowOutSkillByName(string hzSkillName)
     {
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
-        skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x);
+        skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject);
         //取到技能vo
         //AtkAttributesVO _atkVVo = skill.GetComponent<AtkAttributesVO>();
     }

@@ -19,8 +19,12 @@ public class HitKuai : MonoBehaviour {
 		
 	}
 
+    GameObject atkObj;
+   
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        atkObj = gameObject.transform.parent.GetComponent<JN_base>().atkObj;
         //print("w " + _atkVVo._scaleW);
         //print("name  " + gameObject.name);
         //this.transform.position = this.transform.parent.transform.position;
@@ -32,7 +36,16 @@ public class HitKuai : MonoBehaviour {
 
         if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != jn_date.team)
         {
-            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date);
+            //print("击中的2Dbox  "+Coll.GetComponent<BoxCollider2D>().transform.position);
+            float _roleScaleX = gameObject.transform.parent.transform.localScale.x;
+            if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
+            //力作用
+            //Coll.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+            //判断作用力与反作用力  硬直判断
+
+            //atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-100 * _roleScaleX, 0));
+            Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(300* _roleScaleX, 0));
+            //如果是碰撞就消失 调用消失方法
             if (jn_date != null && jn_date._type == "3")
             {
                 //if (gameObject) ObjectPools.GetInstance().DestoryObject2(gameObject);     

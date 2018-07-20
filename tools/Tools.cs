@@ -81,4 +81,29 @@ public class Tools : MonoBehaviour {
     //OnEnable  每次进场会触发这个函数 有点像 onStage() 
 
     //当无法改变 localScale 的时候找一下 是否在哪设置了 scale将其拉回去了
+
+    //if (hit.rigidbody) hit.rigidbody.AddForceAtPosition(force * direction, hitInfo.point);  z作用于点的 力  离中心越远 力越小
+
+    /**
+     * https://blog.csdn.net/f786587718/article/details/49208023
+     * 
+        5.爆炸的局部空间动力效果的实现。首先获取在爆炸点的某个球体半径范围内的所有碰撞体：
+        Collider[] colliders = Physics.OverlapSphere( transform.position,explosionRadius );
+        此函数除了包含位置，半径外还有默认参数遮罩层级（进行碰撞器筛选）。
+        接着对所有碰撞体施加力，unity内置了添加爆炸力函数：
+        foreach (Collider hit in colliders) {   if (!hit)   continue;  //防止碰撞体不存在？貌似多余？ 
+        //防止碰撞体hit不存在rigidbody程序出错，只对存在刚体属性的碰撞体添加爆炸作用力。通过这个区别也可以设置一些不受爆炸影响的物体（比如terrain）。
+        if (hit.rigidbody) hit.rigidbody.AddExplosionForce(explosionPower, explosionPos,explosionRadius);
+        //此函数还含有第四个参数upwardsModifier（正数n代表虚拟爆炸点在物体中心的下方n米处），可适当设置以增加一个物体下方的虚拟爆炸力，炸飞效果更酷。参数要适当大，否则虚拟爆炸点在物体内部效果有点奇怪。
+        附注：AddExplosionForce也可以用于制作球形范围内的引力，只要设置了负的作用力。
+
+        6.在5中的情况，如果除了有爆炸作用力还需要计算按距离衰减的爆炸杀伤力，首先需要计算每个物体离爆炸点最近的表面点坐标：
+        Vector3 closestPoint = hit.rigidbody.ClosestPointOnBounds(explosionPosition);
+        坐标与爆炸中心距离：float distance = Vector3.Distance(closestPoint, explosionPos);
+        最后依照爆炸威力随距离衰减的原则计算物体所受伤害占爆炸总伤害的百分比：
+        float damage = (1.0F - Mathf.Clamp01(distance /  explosionRadius))*explosionDamage;
+     */
+
+
+    //float distance = Vector3.Distance(closestPoint, explosionPos);  计算距离
 }
