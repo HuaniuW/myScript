@@ -26,7 +26,7 @@ public class Tools : MonoBehaviour {
 	}
 
 
-    //限制帧率  没什么卵用
+    //限制帧率  关闭垂直同步 有效  edit - project settings - quality
     //Application.targetFrameRate = 30;
     //-1 代表不限定帧率
     //Application.targetFrameRate = -1;
@@ -106,4 +106,10 @@ public class Tools : MonoBehaviour {
 
 
     //float distance = Vector3.Distance(closestPoint, explosionPos);  计算距离
+
+    //float.Parse  ------Parse强制转换
+
+    //dict.ContainsKey("atkDistance")  Dictionary是否包含键
+
+
 }

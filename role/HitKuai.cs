@@ -44,6 +44,7 @@ public class HitKuai : MonoBehaviour {
             //判断作用力与反作用力  硬直判断
 
             //atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-100 * _roleScaleX, 0));
+            //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 300));
             Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(300* _roleScaleX, 0));
             //如果是碰撞就消失 调用消失方法
             if (jn_date != null && jn_date._type == "3")

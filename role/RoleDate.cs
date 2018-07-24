@@ -19,6 +19,9 @@ public class RoleDate : MonoBehaviour {
 
     public bool isCanBeHit = true;
 
+    public bool isBeHit = false;
+    public bool isBeHiting = false;
+
     public float team = 1;
     void Start () {
 		

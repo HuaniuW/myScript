@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BeHit : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+    RoleDate roleDate;
+    GameBody gameBody;
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -17,9 +18,15 @@ public class BeHit : MonoBehaviour {
     public void GetBeHit(JN_Date jn_date,float sx)
     {
         print("被击中 !! "+this.transform.name+"   攻击力 "+ jn_date.atkPower+"  我的防御力 "+this.GetComponent<RoleDate>().def);
-        
-        RoleDate roleDate = GetComponent<RoleDate>();
+        gameBody = GetComponent<GameBody>();
+        roleDate = GetComponent<RoleDate>();
         if (!roleDate.isCanBeHit) return;
+       
+        if (gameBody != null)
+        {
+            //判断是否破防
+            gameBody.HasBeHit();
+        }
 
 
 

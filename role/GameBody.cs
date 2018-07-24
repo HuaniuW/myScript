@@ -72,6 +72,10 @@ public class GameBody : MonoBehaviour {
 
     Rigidbody2D playerRigidbody2D;
     UnityArmatureComponent DBBody;
+    public UnityArmatureComponent GetDB()
+    {
+        return DBBody;
+    }
     Vector3 bodyScale;
 
     bool isRunLefting = false;
@@ -92,14 +96,17 @@ public class GameBody : MonoBehaviour {
         isRunRighting = false;
         //isInAiring = false;
         //isDowning = false;
-        isJumping = false;
-        isJumping2 = false;
-        isJump2 = false;
+        //在空中被击中 如果关闭跳跃bool会有落地bug
+        //isJumping = false;
+        // isJumping2 = false;
+        //isJump2 = false;
         //isQiTiao = false;
         isAtk = false;
         isAtking = false;
         atkNums = 0;
     }
+
+    RoleDate roleDate;
 
 
     const string RUN = "run_3";
@@ -114,12 +121,14 @@ public class GameBody : MonoBehaviour {
     const string ATK = "atk_";
     const string DODGE1 = "dodge_1";
     const string DODGE2 = "dodge_2";
+    const string BEHIT = "beHit_1";
 
 
     bool isSkill = false;
     bool isSkilling = false;
     internal void GetSkill1()
     {
+        if (roleDate.isBeHiting) return;
         if (!isSkill)
         {
             isSkill = false;
@@ -132,6 +141,7 @@ public class GameBody : MonoBehaviour {
 
     internal void GetSkill2()
     {
+        if (roleDate.isBeHiting) return;
         print("释放技能2");
         ShowSkillByNum(1);
     }
@@ -156,12 +166,14 @@ public class GameBody : MonoBehaviour {
 
     public void GetDodge1()
     {
+        if (roleDate.isBeHiting) return;
         if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND) return;
         if (!isDodge)
         {
             ResetAll();
             isDodge = true;
             isDodgeing = true;
+            roleDate.isCanBeHit = false;
             //print("-->x  " + playerRigidbody2D.velocity.x);
             if (playerRigidbody2D.velocity.x >= 0)
             {
@@ -189,6 +201,7 @@ public class GameBody : MonoBehaviour {
         {
             isDodge = false;
             isDodgeing = false;
+            roleDate.isCanBeHit = true;
         }
     }
 
@@ -235,6 +248,7 @@ public class GameBody : MonoBehaviour {
 
     public void RunLeft(float horizontalDirection)
     {
+        if (roleDate.isBeHiting) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
         isRunLefting = true;
@@ -248,6 +262,7 @@ public class GameBody : MonoBehaviour {
 
     public void RunRight(float horizontalDirection)
     {
+        if (roleDate.isBeHiting) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
         isRunRighting = true;
@@ -266,7 +281,8 @@ public class GameBody : MonoBehaviour {
 
     void Run()
     {
-        if (isJumping || isInAiring || isDowning || isDodgeing) return;
+        //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
+        if (isJumping || isInAiring || isDowning || isDodgeing ||roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
@@ -282,6 +298,7 @@ public class GameBody : MonoBehaviour {
     //bool isQiTiao = false;
     public void GetJump()
     {
+        if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
         if (!isJumping)
         {
@@ -329,7 +346,7 @@ public class GameBody : MonoBehaviour {
 
     void Jump()
     {
-        if (isAtking|| isDodgeing) return;
+        if (isAtking|| isDodgeing||roleDate.isBeHiting) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -358,7 +375,7 @@ public class GameBody : MonoBehaviour {
         }
 
        
-        if (IsGround &&!isAtking&& DBBody.animation.lastAnimationName != JUMPHITWALL &&
+        if (IsGround &&!roleDate.isBeHiting&&!isAtking&& DBBody.animation.lastAnimationName != JUMPHITWALL &&
             DBBody.animation.lastAnimationName != JUMP2DUAN &&
             DBBody.animation.lastAnimationName != DOWNONGROUND &&
             DBBody.animation.lastAnimationName != JUMPUP)
@@ -396,10 +413,10 @@ public class GameBody : MonoBehaviour {
             return;
         }
 
-       
 
+        //print("isqitiao  "+isQiTiao);
 
-        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -426,7 +443,7 @@ public class GameBody : MonoBehaviour {
 
         if (isInAiring)
         {
-            
+            if(roleDate.isBeHiting)return;
             if (newSpeed.y <= 0)
             {
                 if (!isDowning)
@@ -474,13 +491,14 @@ public class GameBody : MonoBehaviour {
 
     float atkNums = 0;
     bool isAtk = false;
-    bool isAtking = false;
+    public bool isAtking = false;
     string[] atkMsg;
     VOAtk vOAtk;
     Dictionary<string, string>[] atkZS;
 
-    public void GetAtk()
+    public void GetAtk(string atkName = null)
     {
+        if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
         if (!isAtk)
         {
@@ -499,19 +517,28 @@ public class GameBody : MonoBehaviour {
                 atkZS = DataZS.atkZS;
             }
             
-            vOAtk.GetVO(atkZS[(int)atkNums]);
-            if (DBBody.animation.lastAnimationName != vOAtk.atkName)
+            if(atkName == null)
             {
-                
+                vOAtk.GetVO(atkZS[(int)atkNums]);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+            else
+            {
+                string[] a = atkName.Split('_');
+                //vOAtk.GetVO(atkZS[(int)atkName.Split("_")]);
+                //print(">>??>>??  "+ int.Parse(a[1]));
+                vOAtk.GetVO(atkZS[int.Parse(a[1])-1]);
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+            
                 MoveVX(vOAtk.xF);
                 if (newSpeed.y < 0)
                 {
-                    newSpeed.y = 0;
+                    newSpeed.y = 1;
                     playerRigidbody2D.velocity = newSpeed;
                     MoveVY(vOAtk.yF);
                 }
-            }
+            
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
            
@@ -521,7 +548,7 @@ public class GameBody : MonoBehaviour {
 
     void Test(string type, EventObject eventObject)
     {
-        print(type+" ???time  "+eventObject);
+        //print(type+" ???time  "+eventObject);
     }
 
     //特效方向
@@ -582,9 +609,6 @@ public class GameBody : MonoBehaviour {
                 }
                 
                 //print("sx " + dg1.transform.localScale.x + " --   " + this.transform.localScale.x);
-               
-               
-                    
             }
         }
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
@@ -615,6 +639,7 @@ public class GameBody : MonoBehaviour {
         //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
+        roleDate = GetComponent<RoleDate>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
         DBBody.AddDBEventListener("atks", this.Test);
         bodyScale = new Vector3(1, 1, 1);
@@ -625,10 +650,20 @@ public class GameBody : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;
-        ControlSpeed();
-        InAir();
+       
 
         Yanmu();
+        
+       
+
+        if (roleDate.isBeHiting)
+        {
+            GetBeHit();
+            return;
+        }
+
+        ControlSpeed();
+        InAir();
 
         if (isDodgeing)
         {
@@ -645,11 +680,26 @@ public class GameBody : MonoBehaviour {
         {
             Jump();
         }
-        if (!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing)
+        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing)
         {
             Stand();
         }
         
+    }
+
+    public void HasBeHit()
+    {
+        if (DBBody.animation.lastAnimationName == DODGE1) return;
+        ResetAll();
+        roleDate.isBeHiting = true;
+        DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+    }
+
+    private void GetBeHit()
+    {
+        if(DBBody.animation.lastAnimationName == BEHIT && DBBody.animation.isCompleted) {
+            roleDate.isBeHiting = false;
+        }
     }
 
     public ParticleSystem _yanmu;
@@ -669,7 +719,7 @@ public class GameBody : MonoBehaviour {
             return;
         }
 
-        if (IsGround && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > 5)
+        if (IsGround && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > 3)
         {
             _yanmu.Play();
         }

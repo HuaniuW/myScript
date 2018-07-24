@@ -27,8 +27,9 @@ public class CameraController : MonoBehaviour
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
+        Application.targetFrameRate = 60;
 
-       
+
 
         //print(obj.transform.position);
     }

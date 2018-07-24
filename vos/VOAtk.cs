@@ -19,6 +19,8 @@ public class VOAtk : MonoBehaviour {
     //动作结束延迟时间
     public float yanchi;
 
+    public float atkDistance;
+
     
     // Use this for initialization
     void Start () {
@@ -35,6 +37,7 @@ public class VOAtk : MonoBehaviour {
         this.ox = float.Parse(dict["ox"]);
         this.oy = float.Parse(dict["oy"]);
         this.yanchi = float.Parse(dict["yanchi"]);
+        if (dict.ContainsKey("atkDistance")) this.atkDistance = float.Parse(dict["atkDistance"]);
     }
 	
 	
