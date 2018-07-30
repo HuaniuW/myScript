@@ -68,7 +68,7 @@ public class CameraController : MonoBehaviour
 
        
         //isYuan = player.position.x >= 10 ? true : false;
-        //getCameraZ();
+        //GetCameraZ();
     }
 
     bool isYuan = false;

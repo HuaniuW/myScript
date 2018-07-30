@@ -17,9 +17,15 @@ public class BeHit : MonoBehaviour {
 
     public void GetBeHit(JN_Date jn_date,float sx)
     {
-        print("被击中 !! "+this.transform.name+"   攻击力 "+ jn_date.atkPower+"  我的防御力 "+this.GetComponent<RoleDate>().def);
+        //print("被击中 !! "+this.transform.name+"   攻击力 "+ jn_date.atkPower+"  我的防御力 "+this.GetComponent<RoleDate>().def);
+
+
         gameBody = GetComponent<GameBody>();
         roleDate = GetComponent<RoleDate>();
+
+        roleDate.live -= (jn_date.atkPower - this.GetComponent<RoleDate>().def);
+        if (roleDate.live < 0) roleDate.live = 0;
+        //print("live "+ roleDate.live);
         if (!roleDate.isCanBeHit) return;
        
         if (gameBody != null)
@@ -41,6 +47,7 @@ public class BeHit : MonoBehaviour {
         Bloods(_psScaleX);
     }
 
+    //击中特效
     void Bloods(float psScaleX)
     {
         //print("fx:   "+psScaleX);

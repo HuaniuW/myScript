@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RoleDate : MonoBehaviour {
-
+    float _maxLive;
+    [Header("最大生命值")]
+    public float maxLive = 1000;
+    
     [Header("生命值")]
     public float live = 1000;
 

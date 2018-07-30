@@ -107,9 +107,19 @@ public class Tools : MonoBehaviour {
 
     //float distance = Vector3.Distance(closestPoint, explosionPos);  计算距离
 
-    //float.Parse  ------Parse强制转换
+    //float.yan  ------Parse强制转换
 
     //dict.ContainsKey("atkDistance")  Dictionary是否包含键
 
 
 }
+//延迟调用 StartCoroutine(IEnumerator)    IEnumerator类型的方法
+
+
+//设置 UI  Image 的宽高
+//1. var rt = loadingBar.GetComponent<RectTransform>();  取到RectTransform
+//2. rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 100);   宽
+//   rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20);     高
+//拖入图片要先 设置 sprite editor  设置九宫格border  否则拖入到Image后 无法设置九宫格
+//  图片设置九宫格  Image 拖入图片后  设置为 sliced 
+   

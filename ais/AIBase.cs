@@ -80,7 +80,7 @@ public class AIBase : MonoBehaviour {
             //重新开始
             lie = -1;
         }
-        print("zs  "+zs);
+        //print("zs  "+zs);
         return zs;
     }
 
@@ -157,7 +157,7 @@ public class AIBase : MonoBehaviour {
         if (!isAtking && NearRoleInDistance(atkDistance))
         {
             isAtking = true;
-            print("??? atking");
+            //print("??? atking");
             GetAtk();
         }
 
