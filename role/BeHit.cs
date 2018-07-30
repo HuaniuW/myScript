@@ -23,14 +23,16 @@ public class BeHit : MonoBehaviour {
         gameBody = GetComponent<GameBody>();
         roleDate = GetComponent<RoleDate>();
 
-        roleDate.live -= (jn_date.atkPower - this.GetComponent<RoleDate>().def);
+        float addxue = jn_date.atkPower - this.GetComponent<RoleDate>().def;
+        addxue = addxue > 0 ? addxue : 1;
+        roleDate.live -= addxue;
         if (roleDate.live < 0) roleDate.live = 0;
         //print("live "+ roleDate.live);
         if (!roleDate.isCanBeHit) return;
        
         if (gameBody != null)
         {
-            //判断是否破防
+            //判断是否破防   D 代办事项 
             gameBody.HasBeHit();
         }
 

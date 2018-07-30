@@ -36,6 +36,10 @@ public class JN_Date : MonoBehaviour {
     void Start () {
         //this.transform.localScale = new Vector3(xzScaleX, transform.localScale.y, transform.localScale.z);
 	}
+
+    public void setDateVO(Dictionary<string,string> dict) {
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {

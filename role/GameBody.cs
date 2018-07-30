@@ -524,20 +524,22 @@ public class GameBody : MonoBehaviour {
             }
             else
             {
-                string[] a = atkName.Split('_');
-                //vOAtk.GetVO(atkZS[(int)atkName.Split("_")]);
-                //print(">>??>>??  "+ int.Parse(a[1]));
-                vOAtk.GetVO(atkZS[int.Parse(a[1])-1]);
+                //string[] a = atkName.Split('_');
+                //vOAtk.GetVO(atkZS[int.Parse(a[1]) - 1]);
+
+
+                
+                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
             
-                MoveVX(vOAtk.xF);
-                if (newSpeed.y < 0)
-                {
-                    newSpeed.y = 1;
-                    playerRigidbody2D.velocity = newSpeed;
-                    MoveVY(vOAtk.yF);
-                }
+            MoveVX(vOAtk.xF);
+            if (newSpeed.y < 0)
+            {
+                newSpeed.y = 1;
+                playerRigidbody2D.velocity = newSpeed;
+                MoveVY(vOAtk.yF);
+            }
             
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
@@ -596,6 +598,7 @@ public class GameBody : MonoBehaviour {
                 //atkVVo.team = this.GetComponent<RoleDate>().team;
                 //this.GetComponent<GetHitKuai>().GetKuai();
                 GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+                //如果直接按名称来 这里改为 拿技能的 资源 pro资源  下面就可以不要了
 
                 if (vOAtk.txName == "tx_1")
                 {
@@ -651,11 +654,8 @@ public class GameBody : MonoBehaviour {
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;
        
-
         Yanmu();
         
-       
-
         if (roleDate.isBeHiting)
         {
             GetBeHit();

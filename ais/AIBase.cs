@@ -15,13 +15,17 @@ public class AIBase : MonoBehaviour {
         //DataZS d = DataZS.GetInstance();
         Type myType = typeof(DataZS);
         PropertyInfo myPropInfo = myType.GetProperty("tt");
-       // print("-------------------->  "+ (myPropInfo == null)+"  >  "+ myPropInfo+"   length "+ arrays.Length);
+        //print("-------------------->  "+ (myPropInfo == null)+"  >  "+ myPropInfo+"   length "+ arrays.Length);
 
     }
 
     // Update is called once per frame
     void Update () {
         //NearRoleInDistance(4);
+        //被攻击没有重置 isAtk所以不能继续攻击了
+
+
+
         GetAtkFS();
     }
     //选中行为 攻击招式 攻击距离范围 移动 攻击 攻击完成   
@@ -32,7 +36,7 @@ public class AIBase : MonoBehaviour {
     //string[] zsarr1 = { "atk_1", "atk_2", "atk_1", "atk_3" };
     //string[] zsarr2 = { "atk_1", "atk_2", "atk_3", "atk_3" };
     //string[] zsarr3 = { "atk_1", "atk_1", "atk_1", "atk_3" };
-    string[][] arrays = { new string[]{ "atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_3" } };
+    string[][] arrays = { new string[]{ "atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
 
     //string[,] arrays = { { "atk_1", "atk_2", "atk_1", "atk_3" } };
 
