@@ -37,7 +37,7 @@ public class JN_Date : MonoBehaviour {
         //this.transform.localScale = new Vector3(xzScaleX, transform.localScale.y, transform.localScale.z);
 	}
 
-    public void setDateVO(Dictionary<string,string> dict) {
+    public void SetDateVO(Dictionary<string,string> dict) {
         
     }
 	

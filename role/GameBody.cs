@@ -4,7 +4,7 @@ using UnityEngine;
 using DragonBones;
 using System;
 
-public class GameBody : MonoBehaviour {
+public class GameBody : MonoBehaviour,IRole{
 
     public ParticleSystem tx_1;
     public ParticleSystem tx_2;
@@ -567,15 +567,7 @@ public class GameBody : MonoBehaviour {
     float jisuqi = 0;
     float yanchi = 0;
 
-    public object GetPropertyValue(Dictionary<string, object> _values,string propertyName)
-    {
-       
-        if (_values.ContainsKey(propertyName) == true)
-        {
-            return _values[propertyName];
-        }
-        return null;
-    }
+    
     /// <summary
 
     void Atk()
@@ -754,9 +746,34 @@ public class GameBody : MonoBehaviour {
         }
     }
 
-    
+    //动作控制流程
+    int acNums = 0;
+    bool isAcing = false;
+    public string GetAcMsg(string acName)
+    {
+        if (!DBBody.animation.HasAnimation(acName)) return null;
 
 
+        if (DBBody.animation.HasAnimation(acName)&&DBBody.animation.lastAnimationName!=acName)
+        {
+            DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
+            acNums = 0;
+            isAcing = true;
+            return "start";
+        }
+        
+        if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isPlaying)
+        {
+            return "playing_"+acName;
+        }
 
+        if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
+        {
+            isAcing = false;
+            return "completed";
+        }
+        
+        return null;
+    }
 }
 
