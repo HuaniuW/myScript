@@ -60,7 +60,7 @@ public class AIShanxian : MonoBehaviour, ISkill
         //obj 接口 播动画 是否播完 播到哪一帧的 接口 或者方法
         // 变换自身位置
         //动画
-        //完成
+        //完成 这是新的吗
         if (obj.GetComponent<GameBody>().GetAcMsg("")==null)
         {
             //说明没有动作 直接切换位置
