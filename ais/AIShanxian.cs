@@ -26,7 +26,7 @@ public class AIShanxian : MonoBehaviour, ISkill
 
     // Use this for initialization
     void Start () {
-        obj = this.transform.Find("Armature");
+        obj = this.transform;
         print("obj "+obj);
     }
 	
