@@ -249,6 +249,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void RunLeft(float horizontalDirection)
     {
         if (roleDate.isBeHiting) return;
+		if (isAcing) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
         isRunLefting = true;
@@ -263,6 +264,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void RunRight(float horizontalDirection)
     {
         if (roleDate.isBeHiting) return;
+		if (isAcing) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
         isRunRighting = true;
@@ -502,6 +504,7 @@ public class GameBody : MonoBehaviour,IRole{
         if (isDodgeing) return;
         if (!isAtk)
         {
+			//print(">>>>>>>>>>>>>>>???   "+atkName+"   >>     "+isAcing);
             //resetAll();
             isAtk = true;
             isAtking = true;
@@ -657,6 +660,11 @@ public class GameBody : MonoBehaviour,IRole{
         ControlSpeed();
         InAir();
 
+		if(isAcing){
+			GetAcMsg(_acName);
+			return;
+		}
+
         if (isDodgeing)
         {
             Dodge1();
@@ -749,22 +757,27 @@ public class GameBody : MonoBehaviour,IRole{
     //动作控制流程
     int acNums = 0;
     bool isAcing = false;
+	string _acName;
     public string GetAcMsg(string acName)
     {
-        if (!DBBody.animation.HasAnimation(acName)) return null;
-
-
+		//print("------------------------------------------------------------------  "+acName);
+		if (!DBBody.animation.HasAnimation(acName)) return null;
+		//print("------------------------------------------------------------------22  " + acName);
+            
         if (DBBody.animation.HasAnimation(acName)&&DBBody.animation.lastAnimationName!=acName)
         {
             DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
             acNums = 0;
             isAcing = true;
+			_acName = acName;
             return "start";
         }
         
         if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isPlaying)
         {
-            return "playing_"+acName;
+			//print("acName "+_acName);
+			acNums ++;
+			return "playing_"+acNums;
         }
 
         if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
@@ -775,5 +788,17 @@ public class GameBody : MonoBehaviour,IRole{
         
         return null;
     }
+
+	public void SpeedXStop()
+	{
+		if (playerRigidbody2D != null) playerRigidbody2D.velocity = Vector3.zero;
+		//throw new NotImplementedException();
+	}
+
+	public void SetACingfalse()
+	{
+		isAcing = false;
+		//throw new NotImplementedException();
+	}
 }
 

@@ -36,7 +36,7 @@ public class AIBase : MonoBehaviour {
     //string[] zsarr1 = { "atk_1", "atk_2", "atk_1", "atk_3" };
     //string[] zsarr2 = { "atk_1", "atk_2", "atk_3", "atk_3" };
     //string[] zsarr3 = { "atk_1", "atk_1", "atk_1", "atk_3" };
-    string[][] arrays = { new string[]{ "atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
+    string[][] arrays = { new string[]{"shanxian","atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
 
     //string[,] arrays = { { "atk_1", "atk_2", "atk_1", "atk_3" } };
 
@@ -72,6 +72,7 @@ public class AIBase : MonoBehaviour {
         if (atkNum < carr.Length)
         {
             zs = carr[atkNum];
+			print(lie+"     "+zs);
             if (isAddN) atkNum++;
         }
         else
@@ -111,8 +112,7 @@ public class AIBase : MonoBehaviour {
         }
         else
         {
-            //print(gameBody.GetDB().animation.lastAnimationName);
-
+			//print(gameBody.GetDB().animation.lastAnimationName);
             //进入范围
             //gameBody.GetAtk();
             return true;
@@ -126,6 +126,7 @@ public class AIBase : MonoBehaviour {
     void GetAtk()
     {
         string zs = GetZS(true);
+		//print("zs   "+zs);
         if(zs == "")
         {
             isAtk = false;
@@ -142,20 +143,74 @@ public class AIBase : MonoBehaviour {
         }
         return false;
     }
+
+
+    //招式名称
+	string zsName = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
     void GetAtkFS()
     {
-        //int r = Random.Range(0, 100);
-        //print(r);
+		//int r = Random.Range(0, 100);
+		//print(r);
+		if(!isAtk){
+			isAtk = true;
+			zsName = GetZS();
+			//print("zsName  "+zsName);
+			if (zsName == "shanxian")
+            {
+                aisx = GetComponent<AIShanxian>();
+                atkDistance = aisx.sxDistance;
+                return;
+            }
 
-        if (!isAtk)
-        {
-            isAtk = true;
-            
-            //print("zs  "+GetZS());
-            atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
-        }
+			atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
+
+		}
+
+		if(zsName == "shanxian"){
+			getShanXian();
+			return;
+		}
+
+		if(zsName !="shanxian"){
+			//print("???????????????");
+			ptAtk();	
+		}
+
+
+
+    }
+
+	AIShanxian aisx;
+	void getShanXian(){
+		//print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
+
+		if(!aisx.isStart && NearRoleInDistance(atkDistance)){
+			aisx.ReSet();
+			aisx.isStart = true;
+			//print("oooooo");
+			GetComponent<AIShanxian>().getTheEnemyPos(gameObj);
+			return;
+		}
+
+		if(aisx.isOver){
+			atkNum++;
+			GetComponent<GameBody>().SetACingfalse();
+			aisx.isStart = false;
+            isAtk = false;
+		}
+
+	}
+
+    //一般攻击
+	void ptAtk(){
+		//if (!isAtk)
+        //{
+        //    isAtk = true;
+        //    print("zs  "+GetZS());
+        //    atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
+        //}
 
         //这种如果再次超出攻击距离会再追踪
         if (!isAtking && NearRoleInDistance(atkDistance))
@@ -172,8 +227,7 @@ public class AIBase : MonoBehaviour {
                 isAtking = false;
             }
         }
-
-    }
+	}
 
  
 
