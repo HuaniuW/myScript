@@ -633,10 +633,12 @@ public class GameBody : MonoBehaviour,IRole{
     }
 
     // Use this for initialization
-    void Start () {
+    protected void Start () {
         //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
+		//DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
+		DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.testO);
         roleDate = GetComponent<RoleDate>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
         DBBody.AddDBEventListener("atks", this.Test);
@@ -644,7 +646,16 @@ public class GameBody : MonoBehaviour,IRole{
         vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
     }
-	
+
+	private void testO(string type, EventObject eventObject)
+	{
+		if(eventObject.name == "atk"){
+			print("event atk!!!!");			
+		}
+	}
+
+
+
 	// Update is called once per frame
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;

@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class AIBase : MonoBehaviour {
+public class AIBase2 : MonoBehaviour
+{
 
     GameBody gameBody;
     public GameObject gameObj;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         gameBody = GetComponent<GameBody>();
-      
+
         //DataZS d = DataZS.GetInstance();
         Type myType = typeof(DataZS);
         PropertyInfo myPropInfo = myType.GetProperty("tt");
@@ -20,7 +22,8 @@ public class AIBase : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         //NearRoleInDistance(4);
         //被攻击没有重置 isAtk所以不能继续攻击了
 
@@ -30,20 +33,20 @@ public class AIBase : MonoBehaviour {
     }
     //选中行为 攻击招式 攻击距离范围 移动 攻击 攻击完成   
     //动画的对照 是否播完 来判断下一步  全局化 攻击动作的 静态常量？
-    
+
 
     //   切换招式组
     //string[] zsarr1 = { "atk_1", "atk_2", "atk_1", "atk_3" };
     //string[] zsarr2 = { "atk_1", "atk_2", "atk_3", "atk_3" };
     //string[] zsarr3 = { "atk_1", "atk_1", "atk_1", "atk_3" };
-    string[][] arrays = { new string[]{"shanxian","atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
+    string[][] arrays = { new string[] { "shanxian", "atk_1", "atk_2", "atk_1", "atk_3" }, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
 
     //string[,] arrays = { { "atk_1", "atk_2", "atk_1", "atk_3" } };
 
     //1 找到招式组
-    
-    
-   
+
+
+
     //根据招式名称 获取招式数据
     VOAtk atkvo;
     VOAtk GetAtkVOByName(string _name, System.Object obj)
@@ -54,15 +57,15 @@ public class AIBase : MonoBehaviour {
         return atkvo;
     }
 
-    
+
     int atkNum = 0;
     //随机获取列
     int lie = -1;
     int GetLie()
     {
-		int i = (int)UnityEngine.Random.Range(0, arrays.Length);
-		print("随机 " + i);
-		return i;//(int)UnityEngine.Random.Range(0, arrays.Rank-1); 
+        int i = (int)UnityEngine.Random.Range(0, arrays.Length);
+        print("随机 " + i);
+        return i;//(int)UnityEngine.Random.Range(0, arrays.Rank-1); 
     }
 
     //获取招式
@@ -70,12 +73,12 @@ public class AIBase : MonoBehaviour {
     {
         if (lie == -1) lie = GetLie();
         string[] carr = arrays[lie];
-        string zs = ""; 
+        string zs = "";
         //isZSOver = false;
         if (atkNum < carr.Length)
         {
             zs = carr[atkNum];
-			//print(lie+"     "+zs);
+            //print(lie+"     "+zs);
             if (isAddN) atkNum++;
         }
         else
@@ -115,7 +118,7 @@ public class AIBase : MonoBehaviour {
         }
         else
         {
-			//print(gameBody.GetDB().animation.lastAnimationName);
+            //print(gameBody.GetDB().animation.lastAnimationName);
             //进入范围
             //gameBody.GetAtk();
             return true;
@@ -129,8 +132,8 @@ public class AIBase : MonoBehaviour {
     void GetAtk()
     {
         string zs = GetZS(true);
-		//print("zs   "+zs);
-        if(zs == "")
+        //print("zs   "+zs);
+        if (zs == "")
         {
             isAtk = false;
             return;
@@ -149,63 +152,70 @@ public class AIBase : MonoBehaviour {
 
 
     //招式名称
-	string zsName = "";
+    string zsName = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
     void GetAtkFS()
     {
-		//int r = Random.Range(0, 100);
-		//print(r);
-		if(!isAtk){
-			isAtk = true;
-			zsName = GetZS();
-			//print("zsName  "+zsName);
-			if (zsName == "shanxian")
+        //int r = Random.Range(0, 100);
+        //print(r);
+        if (!isAtk)
+        {
+            isAtk = true;
+            zsName = GetZS();
+            //print("zsName  "+zsName);
+            if (zsName == "shanxian")
             {
                 aisx = GetComponent<AIShanxian>();
                 atkDistance = aisx.sxDistance;
                 return;
             }
 
-			atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
+            atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
 
-		}
+        }
 
-		if(zsName == "shanxian"){
-			getShanXian();
-			return;
-		}
+        if (zsName == "shanxian")
+        {
+            getShanXian();
+            return;
+        }
 
-		if(zsName !="shanxian"){
-			//print("???????????????");
-			ptAtk();	
-		}      
+        if (zsName != "shanxian")
+        {
+            //print("???????????????");
+            ptAtk();
+        }
     }
 
-	AIShanxian aisx;
-	void getShanXian(){
-		//print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
+    AIShanxian aisx;
+    void getShanXian()
+    {
+        //print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
 
-		if(!aisx.isStart && NearRoleInDistance(atkDistance)){
-			aisx.ReSet();
-			aisx.isStart = true;
-			//print("oooooo");
-			GetComponent<AIShanxian>().getTheEnemyPos(gameObj);
-			return;
-		}
+        if (!aisx.isStart && NearRoleInDistance(atkDistance))
+        {
+            aisx.ReSet();
+            aisx.isStart = true;
+            //print("oooooo");
+            GetComponent<AIShanxian>().getTheEnemyPos(gameObj);
+            return;
+        }
 
-		if(aisx.isOver){
-			atkNum++;
-			GetComponent<GameBody>().SetACingfalse();
-			aisx.isStart = false;
+        if (aisx.isOver)
+        {
+            atkNum++;
+            GetComponent<GameBody>().SetACingfalse();
+            aisx.isStart = false;
             isAtk = false;
-		}
+        }
 
-	}
+    }
 
     //一般攻击
-	void ptAtk(){
-		//if (!isAtk)
+    void ptAtk()
+    {
+        //if (!isAtk)
         //{
         //    isAtk = true;
         //    print("zs  "+GetZS());
@@ -227,9 +237,9 @@ public class AIBase : MonoBehaviour {
                 isAtking = false;
             }
         }
-	}
+    }
 
- 
+
 
 
 }
