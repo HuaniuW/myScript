@@ -177,19 +177,19 @@ public class AIBase2 : MonoBehaviour
 
         if (zsName == "shanxian")
         {
-            getShanXian();
+            GetShanXian();
             return;
         }
 
         if (zsName != "shanxian")
         {
             //print("???????????????");
-            ptAtk();
+            PtAtk();
         }
     }
 
     AIShanxian aisx;
-    void getShanXian()
+    void GetShanXian()
     {
         //print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
 
@@ -198,7 +198,7 @@ public class AIBase2 : MonoBehaviour
             aisx.ReSet();
             aisx.isStart = true;
             //print("oooooo");
-            GetComponent<AIShanxian>().getTheEnemyPos(gameObj);
+            GetComponent<AIShanxian>().GetTheEnemyPos(gameObj);
             return;
         }
 
@@ -213,7 +213,7 @@ public class AIBase2 : MonoBehaviour
     }
 
     //一般攻击
-    void ptAtk()
+    void PtAtk()
     {
         //if (!isAtk)
         //{

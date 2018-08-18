@@ -27,9 +27,15 @@ public class JN_Date : MonoBehaviour {
     public int xzScaleX = 1;
     [Header("特效类型")]
     public string _type = "1";
-
     [Header("技能动作")]
     public string _skillAC = "";
+
+    [Header("是否延迟")]
+    public bool isYanchi = false;
+    [Header("延迟时间")]
+    public int yanchiNum = 0;
+    [Header("变招计数尺度")]
+    public int bianzhaochidu = 0;
 
     //public Dictionary<string, float> atk_date = new Dictionary<string, float> { { "atkPower", 100 },{ "_xdx", -1.5f }, { "_xdy", 0f },{ "_scaleW", 2f }, { "_scaleH", 1.8f }, { "_disTime", 1 }};
     // Use this for initialization

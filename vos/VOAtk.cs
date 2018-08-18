@@ -21,7 +21,13 @@ public class VOAtk : MonoBehaviour {
 
     public float atkDistance;
 
-    
+    public bool isYanchi = false;
+
+    public int yanchiNum = 0;
+
+    public int bianzhaochidu = 0;
+
+
     // Use this for initialization
     void Start () {
         //print("");
@@ -38,6 +44,11 @@ public class VOAtk : MonoBehaviour {
         this.oy = float.Parse(dict["oy"]);
         this.yanchi = float.Parse(dict["yanchi"]);
         if (dict.ContainsKey("atkDistance")) this.atkDistance = float.Parse(dict["atkDistance"]);
+        if (dict.ContainsKey("isYanchi")) {
+            this.isYanchi = dict["isYanchi"] == "true" ? true : false;
+        }
+        if (dict.ContainsKey("yanchiNum")) this.yanchiNum = int.Parse(dict["yanchiNum"]);
+        if(dict.ContainsKey("bianzhaochidu"))this.bianzhaochidu = int.Parse(dict["bianzhaochidu"]);
     }
 	
 	

@@ -42,24 +42,24 @@ public class AIShanxian : MonoBehaviour, ISkill
 	bool isChanged = false;
 
     //触发闪现
-	public void getTheEnemyPos(GameObject obj){
+	public void GetTheEnemyPos(GameObject obj){
 		if(obj!=null)enemyObj = obj;
 		this.transform.GetComponent<GameBody>().GetAcMsg("stand2");
 		this.transform.GetComponent<GameBody>().SpeedXStop();
 		shanxianToPos = GetEnemyPos();
-        getScaleX();
+        GetScaleX();
 		isStart = true;
 	}
 
 
 
-	void getScaleX(){
+	void GetScaleX(){
 		//print("缩小");
-		iTween.ScaleBy(obj, iTween.Hash("x", 0.1f, "time", 0.2f, "easeType", iTween.EaseType.easeInOutExpo,"oncomplete","sx"));
+		iTween.ScaleBy(obj, iTween.Hash("x", 0.1f, "time", 0.2f, "easeType", iTween.EaseType.easeInOutExpo,"oncomplete","Sx"));
 
     }
 
-	void sx(){
+	void Sx(){
 		ChangePos();
 	}
 		
@@ -75,15 +75,15 @@ public class AIShanxian : MonoBehaviour, ISkill
         {
             isChanged = true;
             this.transform.position = shanxianToPos;
-			setScaleX();
+			SetScaleX();
 			//obj.transform.localScale = Vector3.one;
 			//fd();
-			iTween.ScaleBy(obj, iTween.Hash("x", 1f, "time", 0.1f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "fd"));
+			iTween.ScaleBy(obj, iTween.Hash("x", 1f, "time", 0.1f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
             return true;
         }
         return false;
     }
-	void fd(){
+	void Fd(){
 		isOver = true;
 	}
 
@@ -104,7 +104,7 @@ public class AIShanxian : MonoBehaviour, ISkill
     }
 
     //设置落点位置时候朝向 保证面朝敌人
-	void setScaleX(){
+	void SetScaleX(){
 		if (this.transform.localPosition.x > enemyObj.transform.localPosition.x)
         {
 			this.transform.localScale = new Vector3(1, this.transform.localScale.y, this.transform.localScale.z);

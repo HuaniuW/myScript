@@ -104,6 +104,7 @@ public class GameBody : MonoBehaviour,IRole{
         isAtk = false;
         isAtking = false;
         atkNums = 0;
+        isAtkYc = false;
     }
 
     RoleDate roleDate;
@@ -252,6 +253,7 @@ public class GameBody : MonoBehaviour,IRole{
 		if (isAcing) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
+        isAtkYc = false;
         isRunLefting = true;
         isRunRighting = false;
         bodyScale.x = 1;
@@ -267,6 +269,7 @@ public class GameBody : MonoBehaviour,IRole{
 		if (isAcing) return;
         if (isAtking || isDodgeing) return;
         //resetAll();
+        isAtkYc = false;
         isRunRighting = true;
         isRunLefting = false;
         bodyScale.x = -1;
@@ -409,6 +412,7 @@ public class GameBody : MonoBehaviour,IRole{
                 isJumping2 = false;
                 isQiTiao = false;
                 isJump2 = false;
+                isAtkYc = false;
                 //落地还原 不然 地上攻击会累加
                 atkNums = 0;
             }
@@ -424,6 +428,7 @@ public class GameBody : MonoBehaviour,IRole{
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
             {
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
+                isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
             }
@@ -491,146 +496,7 @@ public class GameBody : MonoBehaviour,IRole{
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    float atkNums = 0;
-    bool isAtk = false;
-    public bool isAtking = false;
-    string[] atkMsg;
-    VOAtk vOAtk;
-    Dictionary<string, string>[] atkZS;
-
-    public void GetAtk(string atkName = null)
-    {
-        if (roleDate.isBeHiting) return;
-        if (isDodgeing) return;
-        if (!isAtk)
-        {
-			//print(">>>>>>>>>>>>>>>???   "+atkName+"   >>     "+isAcing);
-            //resetAll();
-            isAtk = true;
-            isAtking = true;
-            yanchi = 0;
-            jisuqi = 0;
     
-            if (isInAiring)
-            {
-                atkZS = DataZS.jumpAtkZS;
-            }
-            else
-            {
-                atkZS = DataZS.atkZS;
-            }
-            
-            if(atkName == null)
-            {
-                vOAtk.GetVO(atkZS[(int)atkNums]);
-                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-            }
-            else
-            {
-                //string[] a = atkName.Split('_');
-                //vOAtk.GetVO(atkZS[int.Parse(a[1]) - 1]);
-
-
-                
-                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
-                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-            }
-            
-            MoveVX(vOAtk.xF);
-            if (newSpeed.y < 0)
-            {
-                newSpeed.y = 1;
-                playerRigidbody2D.velocity = newSpeed;
-                MoveVY(vOAtk.yF);
-            }
-            
-            //获取XY方向的推力 
-            //print(DBBody.animation.animations);
-           
-        }
-      
-    }
-
-    void Test(string type, EventObject eventObject)
-    {
-        //print(type+" ???time  "+eventObject);
-    }
-
-    //特效方向
-    void TXPlay(ParticleSystem tx) {
-        tx.Stop();
-        Vector3 ttt = new Vector3(0, 0, 0);
-        ttt = tx.transform.localScale;
-        ttt.x = Mathf.Abs(tx.transform.localScale.x);
-        ttt.x *= this.transform.localScale.x;
-        tx.transform.localScale = ttt;
-        tx.Play();
-    }
-
-    float jisuqi = 0;
-    float yanchi = 0;
-
-    
-    /// <summary
-
-    void Atk()
-    {
-        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
-        {
-            jisuqi++;
-            //print("jisuqi "+jisuqi+"    ??    "+ vOAtk.showTXFrame);
-            //特效出现时间
-            if(jisuqi == vOAtk.showTXFrame){
-                //this["tx_1"].play();
-                //(ParticleSystem)this.vOAtk.txName.Play();
-                //print("vOAtk.txName  "+ vOAtk.txName);
-                //[vOAtk.atkName+"_v"]
-
-                //print("gongjishuzhi "+DataZS.getInstance().Test("atk_1_v"));
-                //DataZS.getInstance().getTest();
-                //AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
-                //atkVVo.getValue(DataZS.atk_1_v);
-                //atkVVo.team = this.GetComponent<RoleDate>().team;
-                //this.GetComponent<GetHitKuai>().GetKuai();
-                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
-                //如果直接按名称来 这里改为 拿技能的 资源 pro资源  下面就可以不要了
-
-                if (vOAtk.txName == "tx_1")
-                {
-                    TXPlay(tx_1);
-                } else if (vOAtk.txName == "tx_2") {
-                    TXPlay(tx_2);
-                } else if (vOAtk.txName == "tx_3") {
-                    TXPlay(tx_3);
-                } else if (vOAtk.txName == "tx_4") {
-                    TXPlay(tx_4);
-                }
-                
-                //print("sx " + dg1.transform.localScale.x + " --   " + this.transform.localScale.x);
-            }
-        }
-        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
-        {
-            jisuqi = 0;
-            isAtk = false;
-            yanchi++;
-            if (yanchi == 1)
-            {
-                if (atkNums <= atkZS.Length)
-                {
-                    atkNums++;
-                }
-                if (atkNums == atkZS.Length) atkNums = 0;
-            }
-            if(yanchi>= vOAtk.yanchi)
-            {
-                //超过延迟时间 失去连击
-                isAtking = false;
-                yanchi = 0;
-                atkNums = 0;
-            }
-        }
-    }
 
     // Use this for initialization
     protected void Start () {
@@ -638,7 +504,7 @@ public class GameBody : MonoBehaviour,IRole{
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
 		//DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
-		DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.testO);
+		DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         roleDate = GetComponent<RoleDate>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
         DBBody.AddDBEventListener("atks", this.Test);
@@ -647,12 +513,7 @@ public class GameBody : MonoBehaviour,IRole{
         this.transform.localScale = bodyScale;
     }
 
-	private void testO(string type, EventObject eventObject)
-	{
-		if(eventObject.name == "atk"){
-			print("event atk!!!!");			
-		}
-	}
+	
 
 
 
@@ -691,7 +552,7 @@ public class GameBody : MonoBehaviour,IRole{
         {
             Jump();
         }
-        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing)
+        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing&&!isAtkYc)
         {
             Stand();
         }
@@ -713,6 +574,7 @@ public class GameBody : MonoBehaviour,IRole{
         }
     }
 
+    
     public ParticleSystem _yanmu;
     public ParticleSystem _yanmu2;
     void Yanmu()
@@ -765,16 +627,59 @@ public class GameBody : MonoBehaviour,IRole{
         }
     }
 
+
+
+    //1.动作名 调用 函数  动作名 和 特效名字
+    //2.获取VO信息  包含 位置 相对位置（给每个角色基本信息加宽高补偿 缩放补偿） 是否需要补偿释放（有些技能特效不需要 寻找相对位置和缩放）
+    //2.判断是否包含动作 有一类技能无动作可以直接释放
+    //3.
+
+
+
+
+    //一个是延迟 一个是连击的给出时间  连击给出时间还是得在延迟内   给个时间差做减法 在减法内 不能控制 超过减法可以接连招 跑完回复站立
+
+
     //动作控制流程
     int acNums = 0;
+    //是否在动作延迟
+    bool isYanchi = false;
+    //动作滞留延迟
+    int yanchiNum = 10;
+    int yanchiMaxNum = 20;
+    //延迟行动尺度
+    public int canMoveNums = 100;
     bool isAcing = false;
 	string _acName;
     public string GetAcMsg(string acName)
     {
-		//print("------------------------------------------------------------------  "+acName);
-		if (!DBBody.animation.HasAnimation(acName)) return null;
-		//print("------------------------------------------------------------------22  " + acName);
-            
+
+        //获取技能VO
+        GetSkillVOByName(acName);
+        //print("------------------------------------------------------------------  "+acName);
+        if (!DBBody.animation.HasAnimation(acName)) return null;
+        //print("------------------------------------------------------------------22  " + acName);
+
+        
+
+        
+        if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
+        {
+            acNums++;
+            isYanchi = true;
+            if (acNums > yanchiNum)
+            {
+                //可以切换招式
+            }
+
+            if (acNums > yanchiMaxNum) {
+                isAcing = false;
+                isYanchi = false;
+                return "completed";
+            }
+            return "acYanChi";
+        }
+
         if (DBBody.animation.HasAnimation(acName)&&DBBody.animation.lastAnimationName!=acName)
         {
             DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
@@ -787,20 +692,20 @@ public class GameBody : MonoBehaviour,IRole{
         if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isPlaying)
         {
 			//print("acName "+_acName);
-			acNums ++;
 			return "playing_"+acNums;
-        }
-
-        if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
-        {
-            isAcing = false;
-            return "completed";
         }
         
         return null;
     }
 
-	public void SpeedXStop()
+    private void GetSkillVOByName(string acName)
+    {
+        //throw new NotImplementedException();
+    }
+
+    
+
+    public void SpeedXStop()
 	{
 		if (playerRigidbody2D != null) playerRigidbody2D.velocity = Vector3.zero;
 		//throw new NotImplementedException();
@@ -811,5 +716,199 @@ public class GameBody : MonoBehaviour,IRole{
 		isAcing = false;
 		//throw new NotImplementedException();
 	}
+
+
+    float atkNums = 0;
+    bool isAtk = false;
+    public bool isAtking = false;
+    string[] atkMsg;
+    VOAtk vOAtk;
+    Dictionary<string, string>[] atkZS;
+
+    public void GetAtk(string atkName = null)
+    {
+        if (roleDate.isBeHiting) return;
+        if (isDodgeing) return;
+        if (!isAtk)
+        {
+            
+            isAtk = true;
+            isAtking = true;
+            isAtkYc = true;
+            yanchi = 0;
+            jisuqi = 0;
+
+            if (isInAiring)
+            {
+                atkZS = DataZS.jumpAtkZS;
+            }
+            else
+            {
+                atkZS = DataZS.atkZS;
+            }
+
+            if (atkName == null)
+            {
+                vOAtk.GetVO(atkZS[(int)atkNums]);
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+            else
+            {
+                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+
+            MoveVX(vOAtk.xF);
+            if (newSpeed.y < 0)
+            {
+                newSpeed.y = 1;
+                playerRigidbody2D.velocity = newSpeed;
+                MoveVY(vOAtk.yF);
+            }
+
+            //获取XY方向的推力 
+            //print(DBBody.animation.animations);
+
+        }
+
+    }
+
+    void Test(string type, EventObject eventObject)
+    {
+        //print(type+" ???time  "+eventObject);
+    }
+
+    //特效方向
+    void TXPlay(ParticleSystem tx)
+    {
+        tx.Stop();
+        Vector3 ttt = new Vector3(0, 0, 0);
+        ttt = tx.transform.localScale;
+        ttt.x = Mathf.Abs(tx.transform.localScale.x);
+        ttt.x *= this.transform.localScale.x;
+        tx.transform.localScale = ttt;
+        tx.Play();
+    }
+
+
+    //显示动作特效
+    private void ShowACTX(string type, EventObject eventObject)
+    {
+        //print("type:  "+type);
+        if (eventObject.name == "ac")
+        {
+            GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+        }
+    }
+
+    float jisuqi = 0;
+    float yanchi = 0;
+
+    //动作延迟  在延迟内 将isAtk=false 可以控制人物 而不会一直在动作尾不受控制
+    bool isAtkYc = false;
+    
+    void Atk()
+    {
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
+        {
+
+        }
+
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
+        {
+            jisuqi = 0;
+            yanchi++;
+            if(yanchi> vOAtk.yanchi - canMoveNums) isAtk = false;
+
+            if (yanchi == 1)
+            {
+                if (atkNums <= atkZS.Length)
+                {
+                    atkNums++;
+                }
+                if (atkNums == atkZS.Length) atkNums = 0;
+            }
+            if (yanchi >= vOAtk.yanchi)
+            {
+                //超过延迟时间 失去连击
+                isAtking = false;
+                yanchi = 0;
+                atkNums = 0;
+            }
+        }
+    }
+
+    public bool IsAtkOver()
+    {
+        return !isAtk;
+    }
+
+    /// <summary
+
+    void Atk2()
+    {
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
+        {
+            jisuqi++;
+            //print("jisuqi "+jisuqi+"    ??    "+ vOAtk.showTXFrame);
+            //特效出现时间
+            if (jisuqi == vOAtk.showTXFrame)
+            {
+                //this["tx_1"].play();
+                //(ParticleSystem)this.vOAtk.txName.Play();
+                //print("vOAtk.txName  "+ vOAtk.txName);
+                //[vOAtk.atkName+"_v"]
+
+                //print("gongjishuzhi "+DataZS.getInstance().Test("atk_1_v"));
+                //DataZS.getInstance().getTest();
+                //AtkAttributesVO atkVVo = AtkAttributesVO.getInstance();
+                //atkVVo.getValue(DataZS.atk_1_v);
+                //atkVVo.team = this.GetComponent<RoleDate>().team;
+                //this.GetComponent<GetHitKuai>().GetKuai();
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+                //如果直接按名称来 这里改为 拿技能的 资源 pro资源  下面就可以不要了
+
+                if (vOAtk.txName == "tx_1")
+                {
+                    TXPlay(tx_1);
+                }
+                else if (vOAtk.txName == "tx_2")
+                {
+                    TXPlay(tx_2);
+                }
+                else if (vOAtk.txName == "tx_3")
+                {
+                    TXPlay(tx_3);
+                }
+                else if (vOAtk.txName == "tx_4")
+                {
+                    TXPlay(tx_4);
+                }
+
+                //print("sx " + dg1.transform.localScale.x + " --   " + this.transform.localScale.x);
+            }
+        }
+        if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
+        {
+            jisuqi = 0;
+            isAtk = false;
+            yanchi++;
+            if (yanchi == 1)
+            {
+                if (atkNums <= atkZS.Length)
+                {
+                    atkNums++;
+                }
+                if (atkNums == atkZS.Length) atkNums = 0;
+            }
+            if (yanchi >= vOAtk.yanchi)
+            {
+                //超过延迟时间 失去连击
+                isAtking = false;
+                yanchi = 0;
+                atkNums = 0;
+            }
+        }
+    }
 }
 

@@ -22,7 +22,7 @@ public class AIBase : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         //NearRoleInDistance(4);
-        //被攻击没有重置 isAtk所以不能继续攻击了
+        //被攻击没有重置 isAction所以不能继续攻击了
 
 
 
@@ -36,7 +36,7 @@ public class AIBase : MonoBehaviour {
     //string[] zsarr1 = { "atk_1", "atk_2", "atk_1", "atk_3" };
     //string[] zsarr2 = { "atk_1", "atk_2", "atk_3", "atk_3" };
     //string[] zsarr3 = { "atk_1", "atk_1", "atk_1", "atk_3" };
-    string[][] arrays = { new string[]{"shanxian","atk_1", "atk_2", "atk_1", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
+    string[][] arrays = { new string[]{"atk_1", "atk_2", "atk_3"}, new string[] { "atk_1", "atk_2", "atk_3", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
 
     //string[,] arrays = { { "atk_1", "atk_2", "atk_1", "atk_3" } };
 
@@ -61,13 +61,15 @@ public class AIBase : MonoBehaviour {
     int GetLie()
     {
 		int i = (int)UnityEngine.Random.Range(0, arrays.Length);
-		print("随机 " + i);
+        //i = 0;
+		//print("随机 " + i);
 		return i;//(int)UnityEngine.Random.Range(0, arrays.Rank-1); 
     }
 
     //获取招式
     string GetZS(bool isAddN = false)
     {
+        //if (lie == 1000) return null;
         if (lie == -1) lie = GetLie();
         string[] carr = arrays[lie];
         string zs = ""; 
@@ -77,16 +79,18 @@ public class AIBase : MonoBehaviour {
             zs = carr[atkNum];
 			//print(lie+"     "+zs);
             if (isAddN) atkNum++;
+            //print(">>>?????????????   "+atkNum);
         }
         else
         {
             //归零
             atkNum = 0;
             //isZSOver = true;
-            isAtk = false;
-            isAtking = false;
+            //isAction = false;
+            //isActioning = false;
             //重新开始
             lie = -1;
+            //lie = 1000;
         }
         //print("zs  "+zs);
         return zs;
@@ -122,8 +126,8 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    bool isAtking = false;
-    bool isAtk = false;
+    bool isActioning = false;
+    bool isAction = false;
 
     //4.攻击
     void GetAtk()
@@ -132,7 +136,7 @@ public class AIBase : MonoBehaviour {
 		//print("zs   "+zs);
         if(zs == "")
         {
-            isAtk = false;
+            isAction = false;
             return;
         }
         gameBody.GetAtk(zs);
@@ -140,27 +144,22 @@ public class AIBase : MonoBehaviour {
     //5判断攻击是否完成
     bool IsAtkOver()
     {
-        if (gameBody.isAtking)
-        {
-            if (gameBody.GetDB().animation.isCompleted) return true;
-        }
-        return false;
+        return gameBody.IsAtkOver();
     }
 
 
-    //招式名称
-	string zsName = "";
+    //动作名称
+	string acName = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
     void GetAtkFS()
     {
-		//int r = Random.Range(0, 100);
-		//print(r);
-		if(!isAtk){
-			isAtk = true;
-			zsName = GetZS();
-			//print("zsName  "+zsName);
-			if (zsName == "shanxian")
+		if(!isAction){
+			isAction = true;
+			acName = GetZS();
+          //  Debug.Log("atkName "+acName);
+          
+			if (acName == "shanxian")
             {
                 aisx = GetComponent<AIShanxian>();
                 atkDistance = aisx.sxDistance;
@@ -171,26 +170,26 @@ public class AIBase : MonoBehaviour {
 
 		}
 
-		if(zsName == "shanxian"){
-			getShanXian();
+		if(acName == "shanxian"){
+			GetShanXian();
 			return;
 		}
 
-		if(zsName !="shanxian"){
+		if(acName !="shanxian"){
 			//print("???????????????");
-			ptAtk();	
+			PtAtk();	
 		}      
     }
 
 	AIShanxian aisx;
-	void getShanXian(){
+	void GetShanXian(){
 		//print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
 
 		if(!aisx.isStart && NearRoleInDistance(atkDistance)){
 			aisx.ReSet();
 			aisx.isStart = true;
 			//print("oooooo");
-			GetComponent<AIShanxian>().getTheEnemyPos(gameObj);
+			GetComponent<AIShanxian>().GetTheEnemyPos(gameObj);
 			return;
 		}
 
@@ -198,33 +197,29 @@ public class AIBase : MonoBehaviour {
 			atkNum++;
 			GetComponent<GameBody>().SetACingfalse();
 			aisx.isStart = false;
-            isAtk = false;
+            isAction = false;
 		}
 
 	}
 
     //一般攻击
-	void ptAtk(){
-		//if (!isAtk)
-        //{
-        //    isAtk = true;
-        //    print("zs  "+GetZS());
-        //    atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
-        //}
+	void PtAtk(){
 
         //这种如果再次超出攻击距离会再追踪
-        if (!isAtking && NearRoleInDistance(atkDistance))
+        if (!isActioning && NearRoleInDistance(atkDistance))
         {
-            isAtking = true;
+            isActioning = true;
             //print("??? atking");
             GetAtk();
         }
 
-        if (isAtking)
+        if (isActioning)
         {
             if (IsAtkOver())
             {
-                isAtking = false;
+               // print("??>>>");
+                isActioning = false;
+                isAction = false;
             }
         }
 	}
