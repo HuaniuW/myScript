@@ -54,8 +54,8 @@ public class AIShanxian : MonoBehaviour, ISkill
 
 	void GetScaleX(){
 		//print("缩小");
-		iTween.ScaleBy(obj, iTween.Hash("x", 0.1f, "time", 0.2f, "easeType", iTween.EaseType.easeInOutExpo,"oncomplete","Sx"));
-
+		iTween.ScaleBy(obj, iTween.Hash("x", 0.1f, "time", 0.1f, "easeType", iTween.EaseType.easeInOutExpo,"oncomplete","Sx"));
+        //播放声音 和特效
     }
 
 	void Sx(){

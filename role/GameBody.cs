@@ -672,6 +672,7 @@ public class GameBody : MonoBehaviour,IRole{
                 //可以切换招式
             }
 
+            //这里的延迟 将来会改到 vo里面直接取  招式切换也是 这个Ac主要针对 非攻击Ac
             if (acNums > yanchiMaxNum) {
                 isAcing = false;
                 isYanchi = false;

@@ -67,8 +67,8 @@ public class CameraController : MonoBehaviour
         transform.position = new Vector3(x, y, transform.position.z);//改变相机的位置
 
        
-        isYuan = player.position.x >= 10 ? true : false;
-        GetCameraZ();
+        //isYuan = player.position.x >= 10 ? true : false;
+        //GetCameraZ();
     }
 
     bool isYuan = false;
