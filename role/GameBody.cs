@@ -105,6 +105,7 @@ public class GameBody : MonoBehaviour,IRole{
         isAtking = false;
         atkNums = 0;
         isAtkYc = false;
+        isYanchi = false;
     }
 
     RoleDate roleDate;
@@ -249,6 +250,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     public void RunLeft(float horizontalDirection)
     {
+        //print("r "+isAtking);
         if (roleDate.isBeHiting) return;
 		if (isAcing) return;
         if (isAtking || isDodgeing) return;
@@ -265,6 +267,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     public void RunRight(float horizontalDirection)
     {
+        //print("l " + isAtking);
         if (roleDate.isBeHiting) return;
 		if (isAcing) return;
         if (isAtking || isDodgeing) return;
@@ -655,13 +658,10 @@ public class GameBody : MonoBehaviour,IRole{
     {
 
         //获取技能VO
-        GetSkillVOByName(acName);
+        //GetSkillVOByName(acName);
         //print("------------------------------------------------------------------  "+acName);
         if (!DBBody.animation.HasAnimation(acName)) return null;
         //print("------------------------------------------------------------------22  " + acName);
-
-        
-
         
         if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
         {
@@ -727,11 +727,12 @@ public class GameBody : MonoBehaviour,IRole{
 
     public void GetAtk(string atkName = null)
     {
+
+        //print(" atkName " + atkName+"    "+isAtking);
         if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
         if (!isAtk)
         {
-            
             isAtk = true;
             isAtking = true;
             isAtkYc = true;
@@ -755,6 +756,7 @@ public class GameBody : MonoBehaviour,IRole{
             else
             {
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
+               
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
 
@@ -835,6 +837,14 @@ public class GameBody : MonoBehaviour,IRole{
                 yanchi = 0;
                 atkNums = 0;
             }
+        }
+
+        //保险措施 
+        if(DBBody.animation.lastAnimationName != vOAtk.atkName)
+        {
+            isAtking = false;
+            yanchi = 0;
+            atkNums = 0;
         }
     }
 
