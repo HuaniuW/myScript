@@ -18,6 +18,8 @@ public class MyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (Globals.isInPlot) return;
+
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //print("jump");

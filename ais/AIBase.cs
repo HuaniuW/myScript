@@ -64,7 +64,7 @@ public class AIBase : MonoBehaviour {
     int GetLie()
     {
 		int i = (int)UnityEngine.Random.Range(0, arrays.Length);
-        i = 0;
+        i = 1;
 		//print("随机 " + i);
 		return i;//(int)UnityEngine.Random.Range(0, arrays.Rank-1); 
     }

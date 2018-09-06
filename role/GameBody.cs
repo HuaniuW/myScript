@@ -71,12 +71,24 @@ public class GameBody : MonoBehaviour,IRole{
 
 
     Rigidbody2D playerRigidbody2D;
+    public Rigidbody2D GetPlayerRigidbody2D()
+    {
+        if(!playerRigidbody2D) playerRigidbody2D = GetComponent<Rigidbody2D>();
+        return playerRigidbody2D;
+    }
+
     UnityArmatureComponent DBBody;
     public UnityArmatureComponent GetDB()
     {
+        if(!DBBody) DBBody = GetComponentInChildren<UnityArmatureComponent>();
         return DBBody;
     }
+
     Vector3 bodyScale;
+    public Vector3 GetBodyScale()
+    {
+        return bodyScale;
+    }
 
     bool isRunLefting = false;
 
@@ -169,7 +181,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void GetDodge1()
     {
         if (roleDate.isBeHiting) return;
-        if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND) return;
+        if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND|| DBBody.animation.lastAnimationName == JUMPUP) return;
         if (!isDodge)
         {
             ResetAll();
@@ -508,6 +520,7 @@ public class GameBody : MonoBehaviour,IRole{
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
 		//DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
 		DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
+        DBBody.AddDBEventListener(DragonBones.EventObject.SOUND_EVENT, this.ShowACTX);
         roleDate = GetComponent<RoleDate>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
         DBBody.AddDBEventListener("atks", this.Test);
@@ -523,8 +536,11 @@ public class GameBody : MonoBehaviour,IRole{
 	// Update is called once per frame
 	void Update () {
         CurrentAcName = DBBody.animation.lastAnimationName;
+
        
         Yanmu();
+
+        if (Globals.isInPlot) return;
         
         if (roleDate.isBeHiting)
         {
@@ -732,6 +748,7 @@ public class GameBody : MonoBehaviour,IRole{
         //print(" atkName " + atkName+"    "+isAtking);
         if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (!isAtk)
         {
             isAtk = true;
@@ -798,10 +815,20 @@ public class GameBody : MonoBehaviour,IRole{
     private void ShowACTX(string type, EventObject eventObject)
     {
         //print("type:  "+type);
-        if (eventObject.name == "ac")
+        if (type == EventObject.SOUND_EVENT)
         {
-            GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+
         }
+
+
+        if (type == EventObject.FRAME_EVENT)
+        {
+            if (eventObject.name == "ac")
+            {
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+            }
+        }
+        
     }
 
     float jisuqi = 0;
@@ -835,6 +862,7 @@ public class GameBody : MonoBehaviour,IRole{
             {
                 //超过延迟时间 失去连击
                 isAtking = false;
+                isAtkYc = false;
                 yanchi = 0;
                 atkNums = 0;
             }

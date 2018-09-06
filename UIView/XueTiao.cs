@@ -105,7 +105,14 @@ public class XueTiao : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         //print(_cLive);
-        
+        //if(gameObj.transform.localScale.x >0)
+        //{
+        //    this.transform.localScale = new Vector3(1, 1, 1);
+        //}
+        //else 
+        //{
+        //    this.transform.localScale = new Vector3(-1, 1, 1);
+        //}
         XueChange();
         if (isChage)Xue2W();
     }

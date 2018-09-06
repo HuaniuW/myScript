@@ -20,6 +20,11 @@ public class CameraController : MonoBehaviour
     private float cameraZ = 0;
     private float yuanCameraZ = 0;
 
+
+
+    protected bool isXLocked = false;
+    protected bool isYLocked = false;
+
     void Start()
     {
         _min = Bounds.bounds.min;//初始化边界最小值(边界左下角)
@@ -28,6 +33,7 @@ public class CameraController : MonoBehaviour
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
         Application.targetFrameRate = 60;
+        oldPosition = transform.position;
 
 
 
@@ -40,6 +46,19 @@ public class CameraController : MonoBehaviour
         var y = transform.position.y;
         if (IsFollowing)
         {
+            float xNew = transform.position.x;
+            if (!isXLocked)
+            {
+                xNew = Mathf.Lerp(transform.position.x, player.position.x, Time.deltaTime * smoothing.x);
+            }
+
+            float yNew = transform.position.y;
+            if (!isYLocked)
+            {
+                yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
+            }
+
+            //print(">>>>>>???");
             if (Mathf.Abs(x - player.position.x) > Margin.x)
             {
                 //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
@@ -58,6 +77,8 @@ public class CameraController : MonoBehaviour
                 if (Mathf.Abs(y - player.position.y) < 0.3) y = player.position.y;
                 //y = player.position.y;
             }
+
+            
         }
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
         //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
@@ -66,31 +87,52 @@ public class CameraController : MonoBehaviour
         y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
         transform.position = new Vector3(x, y, transform.position.z);//改变相机的位置
 
-       
-        //isYuan = player.position.x >= 10 ? true : false;
-        //GetCameraZ();
+
+        if (setNewPosition) SetCameraNewPosition();
     }
 
-    bool isYuan = false;
-    void GetCameraZ()
+   
+    Vector3 newPositon;
+    bool setNewPosition = false;
+    public void SetNewPosition(Vector3 pos)
     {
-        var z = transform.position.z;
-        if (isYuan)
+        newPositon = pos;
+        setNewPosition = true;
+    }
+
+
+    void SetCameraNewPosition()
+    {
+        if (transform.position.z == newPositon.z)
         {
-            if(z> yuanCameraZ)
-            {
-                z = Mathf.Lerp(z, yuanCameraZ, 2 * Time.deltaTime);
-                transform.position = new Vector3(transform.position.x, transform.position.y, z);
-            }
-        }
-        else
-        {
-            if (z < cameraZ)
-            {
-                z = Mathf.Lerp(z, cameraZ, 2 * Time.deltaTime);
-                transform.position = new Vector3(transform.position.x, transform.position.y, z);
-            }
+            //transform.position = newPositon;
+            setNewPosition = false;
+            return;
         }
 
+        var x = transform.position.x;
+        var y = transform.position.y;
+        var z = transform.position.z;
+        //x = Mathf.Abs(transform.position.x - newPositon.x) < 0.5 ? newPositon.x : Mathf.Lerp(x, newPositon.x, 2 * Time.deltaTime);
+        //print("y>  "+y);
+        //print("---- "+ Mathf.Abs(transform.position.y - newPositon.y));
+        //y = Mathf.Abs(transform.position.y - newPositon.y) < 0.02 ? newPositon.y: y+= (newPositon.y - transform.position.y) * 0.02f;
+
+        //拉扯超出 和角色的 摄像头跟随的范围导致不停抖动
+        y = Mathf.Abs(transform.position.y - newPositon.y) < 0.02 ? newPositon.y : Mathf.Lerp(y, newPositon.y, 2 * Time.deltaTime);
+        z = Mathf.Abs(transform.position.z - newPositon.z) < 0.02 ? newPositon.z : Mathf.Lerp(z, newPositon.z, 2 * Time.deltaTime);
+       
+        transform.position = new Vector3(x, y, z);
+        
+        
     }
+
+    Vector3 oldPosition;
+
+    public void BackOldPosition()
+    {
+        SetNewPosition(oldPosition);
+    }
+
+
 }

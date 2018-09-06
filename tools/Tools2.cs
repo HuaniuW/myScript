@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Tools : MonoBehaviour {
+public class Tools2 : MonoBehaviour {
     //UNITY  帧率 跟龙骨帧率同步就OK   1:1    目前unity默认是60帧  只要龙骨是60帧 就可以1:1取到帧数
     // Use this for initialization
     void Start () {
@@ -43,6 +43,7 @@ public class Tools : MonoBehaviour {
 
     //动态取资源
     //Transform tf = this.transform.Find(nIndex.ToString());
+    //var cubeF = GameObject.Find("/MainCamera");   记得加“/”获取全部资源可以
 
     //层级 order  -1  ---  -10  近景
     //地板 0-10 给予足够图层空间 特效之类的乱七八糟的东西
@@ -122,4 +123,4 @@ public class Tools : MonoBehaviour {
 //   rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20);     高
 //拖入图片要先 设置 sprite editor  设置九宫格border  否则拖入到Image后 无法设置九宫格
 //  图片设置九宫格  Image 拖入图片后  设置为 sliced 
-   
+
