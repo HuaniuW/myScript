@@ -415,7 +415,8 @@ public class GameBody : MonoBehaviour,IRole{
 
     void InAir()
     {
-       // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+        // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+        if (isDodgeing) return;
         isInAiring = !IsGround;
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
