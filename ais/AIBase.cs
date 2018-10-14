@@ -8,10 +8,12 @@ public class AIBase : MonoBehaviour {
 
     GameBody gameBody;
     public GameObject gameObj;
+    AIQiShou aiQishou;
 	// Use this for initialization
 	void Start () {
         gameBody = GetComponent<GameBody>();
-        Type myType = typeof(DataZS);
+        if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
+         Type myType = typeof(DataZS);
         PropertyInfo myPropInfo = myType.GetProperty("tt");
         myPosition = this.transform.position;
     }
@@ -24,12 +26,24 @@ public class AIBase : MonoBehaviour {
     bool IsFindEnemy()
     {
         if (isFindEnemy) return true;
-        if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance)
+        if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(gameObj.transform.position.y - transform.position.y) < findEnemyDistance)
         {
             isFindEnemy = true;
+            //isPatrol = false;
             return true;
         }
         return false;
+    }
+
+    public float outDistance = 15;
+    void IsEnemyOutAtkDistance()
+    {
+        if (!isActioning&&(Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance))
+        {
+            isFindEnemy = false;
+            if (aiQishou) aiQishou.isQishouAtk = false;
+            //gameBody.GetStand();
+        }
     }
 
     //是巡逻 还是站地警戒  
@@ -64,12 +78,23 @@ public class AIBase : MonoBehaviour {
         }
     }
 
+    public bool isEndXXXXX;
+    bool IsHitWallOrNoWay
+    {
+        get
+        {
+            isEndXXXXX = gameBody.IsEndGround;
+            return gameBody.IsEndGround;
+        }
+        
+    }
+
     
     // Update is called once per frame
     void Update () {
 
         //print("myPosition    "+ myPosition);
-
+        if (!gameObj) return;
 
         if (gameObj.GetComponent<RoleDate>().isDie)
         {
@@ -85,15 +110,27 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        
+
         if (isPatrol&& !IsFindEnemy())
         {
             Patrol();
         }
 
-        if (!IsFindEnemy()) return;
-
-        if (!gameObj) return;
+      
+        if (!isActioning && IsHitWallOrNoWay)
+        {
+            isFindEnemy = false;
+            AIReSet();
+            gameBody.GetStand();
+            return;
+        }
         
+
+        //超出追击范围
+        IsEnemyOutAtkDistance();
+
+        if (!IsFindEnemy()) return;
 
         //NearRoleInDistance(4);
         
@@ -148,7 +185,14 @@ public class AIBase : MonoBehaviour {
         int i = (int)UnityEngine.Random.Range(0, GetComponent<AITheWay_dcr>().GetZSArrLength());
         //调试用
         i = 1;
-        carr = GetComponent<AITheWay_dcr>().GetZSArrays(i);
+        if (aiQishou && aiQishou.isQishouAtk)
+        {
+            carr = aiQishou.qishouAtkArr;
+        }
+        else
+        {
+            carr = GetComponent<AITheWay_dcr>().GetZSArrays(i);
+        }
         return i;
     }
 
@@ -178,13 +222,14 @@ public class AIBase : MonoBehaviour {
     {
         if (atkNum >= carr.Length)
         {
+            if (aiQishou && aiQishou.isQishouAtk) aiQishou.isQishouAtk = false;
             atkNum = 0;
             lie = -1;
         }
     }
 
     //2.招式组第一个攻击动作的攻击距离  位移技能也可以直接取距离
-    float atkDistance;
+    float atkDistance = 0;
 
     //3 靠近 达到攻击距离
     bool NearRoleInDistance(float distance)
@@ -204,7 +249,6 @@ public class AIBase : MonoBehaviour {
         }
         else
         {
-           
             return true;
         }
     }
@@ -216,7 +260,6 @@ public class AIBase : MonoBehaviour {
         {
             //目标在右
             gameBody.RunRight(0.3f);
-           
         }
         else
         {
@@ -281,6 +324,20 @@ public class AIBase : MonoBehaviour {
             }
 			atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
 		}
+
+        if(aiQishou&&aiQishou.isQishouAtk&&!aiQishou.isFirstAtked)
+        {
+            if (atkDistance == 0f)
+            {
+                aiQishou.isFirstAtked = true;
+            }
+            else
+            {
+                if(Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
+            }
+
+            return;
+        }
 
         if (acName == "walkBack")
         {
@@ -420,6 +477,7 @@ public class AIBase : MonoBehaviour {
         lie = -1;
         atkNum = 0;
         acName = "";
+        if (aiQishou) aiQishou.isQishouAtk = false;
 
         //isZSOver = false;
     }
