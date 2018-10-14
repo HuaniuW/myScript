@@ -22,7 +22,7 @@ public class MyController : MonoBehaviour {
 
         if (Input.anyKey)
         {//得到按下什么键
-            print("anyKey  " + Input.inputString);
+            //print("anyKey  " + Input.inputString);
         }
 
 

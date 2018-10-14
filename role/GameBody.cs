@@ -285,6 +285,7 @@ public class GameBody : MonoBehaviour,IRole{
         }
     }
 
+
     //在玩家底部是一条短射线 碰到地板说明落到地面 
     bool IsGround
     {
