@@ -22,6 +22,7 @@ public class BeHit : MonoBehaviour {
 
         gameBody = GetComponent<GameBody>();
         roleDate = GetComponent<RoleDate>();
+        if (roleDate.isDie) return;
 
         float addxue = jn_date.atkPower - this.GetComponent<RoleDate>().def;
         addxue = addxue > 0 ? addxue : 1;
@@ -33,6 +34,10 @@ public class BeHit : MonoBehaviour {
         if (gameBody != null)
         {
             //判断是否破防   D 代办事项 
+            if(jn_date.atkPower - roleDate.yingzhi>0)
+            {
+
+            }
             gameBody.HasBeHit();
         }
 

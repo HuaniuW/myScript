@@ -64,7 +64,7 @@ public class Tools2 : MonoBehaviour {
     //在Resources文件夹 动态获取 Prefab（翻译:预制） 预制资源
     //GameObject obj = Resources.Load("fk") as GameObject;
     //obj = Instantiate(obj);
-
+    
 
     //Vector3 s = new Vector3((float)1.5, 1, 0);
     //obj.transform.position = s;  改变位置
@@ -124,3 +124,23 @@ public class Tools2 : MonoBehaviour {
 //拖入图片要先 设置 sprite editor  设置九宫格border  否则拖入到Image后 无法设置九宫格
 //  图片设置九宫格  Image 拖入图片后  设置为 sliced 
 
+
+
+/**
+ 3、用单个字符来分隔：
+string str="aaajbbbjccc";
+string[] sArray=str.Split('j');
+foreach(string i in sArray) Response.Write(i.ToString() + "<br>");
+输出结果：
+aaa
+bbb
+ccc
+    */
+
+
+/**
+ if (Input.anyKey)
+    {//得到按下什么键
+        print("anyKey  " + Input.inputString);
+    }
+ */

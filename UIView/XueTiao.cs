@@ -24,6 +24,12 @@ public class XueTiao : MonoBehaviour {
         GetXueNum(0);
     }
 
+    
+    public void Show(bool isAddOnStage)
+    {
+        this.gameObject.SetActive(isAddOnStage);
+    }
+
     RoleDate roleDate;
     void GetGameObj()
     {
@@ -82,8 +88,8 @@ public class XueTiao : MonoBehaviour {
     {
         if (_w2 > _w)
         {
-            _w2 += (_w - _w2) * 0.1f;
-            if (_w2 - _w < -5)
+            _w2 += (_w - _w2) * 0.04f;
+            if (_w2 - _w < -2)
             {
                 _w2 = _w;
             }
@@ -113,6 +119,7 @@ public class XueTiao : MonoBehaviour {
         //{
         //    this.transform.localScale = new Vector3(-1, 1, 1);
         //}
+        if (!gameObj) return;
         XueChange();
         if (isChage)Xue2W();
     }

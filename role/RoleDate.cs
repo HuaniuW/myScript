@@ -5,10 +5,10 @@ using UnityEngine;
 public class RoleDate : MonoBehaviour {
     float _maxLive;
     [Header("最大生命值")]
-    public float maxLive = 1000;
+    public float maxLive = 10000;
     
     [Header("生命值")]
-    public float live = 1000;
+    public float live = 10000;
 
     [Header("防御力")]
     public float def = 50;
@@ -24,6 +24,11 @@ public class RoleDate : MonoBehaviour {
 
     public bool isBeHit = false;
     public bool isBeHiting = false;
+
+    public bool isDie = false;
+
+    [Header("测试")]
+    public string[] testArr;
 
     public float team = 1;
     void Start () {

@@ -20,6 +20,12 @@ public class MyController : MonoBehaviour {
 	void Update () {
         if (Globals.isInPlot) return;
 
+        if (Input.anyKey)
+        {//得到按下什么键
+            print("anyKey  " + Input.inputString);
+        }
+
+
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //print("jump");
@@ -27,6 +33,8 @@ public class MyController : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            //|| Input.GetKeyUp("joystick2Button2")
+            //values.GetValue(x).ToString()
             _body.GetAtk();
         }
 
