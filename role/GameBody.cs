@@ -121,7 +121,6 @@ public class GameBody : MonoBehaviour,IRole{
         isAtkYc = false;
         isYanchi = false;
         isBackUping = false;
-        isDownOnGround = false;
     }
 
     RoleDate roleDate;
@@ -485,7 +484,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     void Jump()
     {
-        if (isAtking|| isDodgeing||roleDate.isBeHiting|| isDownOnGround) return;
+        if (isAtking|| isDodgeing||roleDate.isBeHiting) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -532,19 +531,16 @@ public class GameBody : MonoBehaviour,IRole{
         }
     }
 
-
-    bool isDownOnGround = false;
     void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         if (isDodgeing) return;
         isInAiring = !IsGround;
-        if (IsGround&& isDownOnGround)
+        if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
             //print("???????????");
             if (DBBody.animation.isCompleted)
             {
-                isDownOnGround = false;
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -567,7 +563,6 @@ public class GameBody : MonoBehaviour,IRole{
             {
                 //print("1");
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
-                isDownOnGround = true;
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
@@ -624,8 +619,9 @@ public class GameBody : MonoBehaviour,IRole{
    
     void Stand()
     {
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
-        //if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
@@ -746,7 +742,7 @@ public class GameBody : MonoBehaviour,IRole{
         }
 
       
-        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing&&!isAtkYc&& !isDownOnGround)
+        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing&&!isAtkYc&& DBBody.animation.lastAnimationName != DOWNONGROUND)
         {
             Stand();
         }
@@ -791,7 +787,7 @@ public class GameBody : MonoBehaviour,IRole{
 
         if(IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
-            print("wokao!!!!!");
+
             _yanmu.Play();
             return;
         }
