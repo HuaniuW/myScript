@@ -110,6 +110,9 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        //被打下地面时候的bug（需要更好的解决方案 判断是否有空中攻击）
+        if (!gameBody.IsGround) return;
+
         
 
         if (isPatrol&& !IsFindEnemy())
@@ -327,13 +330,17 @@ public class AIBase : MonoBehaviour {
 
         if(aiQishou&&aiQishou.isQishouAtk&&!aiQishou.isFirstAtked)
         {
+            gameBody.GetStand();
             if (atkDistance == 0f)
             {
                 aiQishou.isFirstAtked = true;
             }
             else
             {
-                if(Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
+                if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance)
+                {
+                    aiQishou.isFirstAtked = true;
+                }
             }
 
             return;
