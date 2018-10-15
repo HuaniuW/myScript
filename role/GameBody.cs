@@ -304,6 +304,7 @@ public class GameBody : MonoBehaviour,IRole{
             Vector2 end = new Vector2(start.x, start.y - distance);
             Debug.DrawLine(start, end, Color.blue);
             grounded = Physics2D.Linecast(start, end, groundLayer);
+            //print("????????  "+ grounded);
             return grounded;
         }
     }
@@ -539,7 +540,6 @@ public class GameBody : MonoBehaviour,IRole{
         {
             if (DBBody.animation.isCompleted)
             {
-                //print("luodidongzuo zuowan");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -586,12 +586,14 @@ public class GameBody : MonoBehaviour,IRole{
             if(roleDate.isBeHiting)return;
             if (newSpeed.y <= 0)
             {
+                //print("woqu");
                 if (!isDowning)
                 {
                     //下降
                     isDowning = true;
                     //还原落地攻击的BUG
                     isQiTiao = true;
+                    
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
             }
@@ -615,8 +617,8 @@ public class GameBody : MonoBehaviour,IRole{
    
     void Stand()
     {
-        if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
