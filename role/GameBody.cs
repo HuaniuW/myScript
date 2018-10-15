@@ -121,6 +121,7 @@ public class GameBody : MonoBehaviour,IRole{
         isAtkYc = false;
         isYanchi = false;
         isBackUping = false;
+        isDownOnGround = false;
     }
 
     RoleDate roleDate;
@@ -484,7 +485,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     void Jump()
     {
-        if (isAtking|| isDodgeing||roleDate.isBeHiting) return;
+        if (isAtking|| isDodgeing||roleDate.isBeHiting|| isDownOnGround) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -531,15 +532,19 @@ public class GameBody : MonoBehaviour,IRole{
         }
     }
 
+
+    bool isDownOnGround = false;
     void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         if (isDodgeing) return;
         isInAiring = !IsGround;
-        if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
+        if (IsGround&& isDownOnGround)
         {
+            //print("???????????");
             if (DBBody.animation.isCompleted)
             {
+                isDownOnGround = false;
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -560,7 +565,9 @@ public class GameBody : MonoBehaviour,IRole{
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
             {
+                //print("1");
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
+                isDownOnGround = true;
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
@@ -617,8 +624,8 @@ public class GameBody : MonoBehaviour,IRole{
    
     void Stand()
     {
-        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
+        //if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
@@ -635,7 +642,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         ResetAll();
         Stand();
-        playerRigidbody2D.velocity = Vector3.zero;
+        playerRigidbody2D.velocity = Vector2.zero;
     }
 
     
@@ -739,7 +746,7 @@ public class GameBody : MonoBehaviour,IRole{
         }
 
       
-        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing&&!isAtkYc)
+        if (!roleDate.isBeHiting&&!isInAiring&&!isDowning && !isRunLefting && !isRunRighting&&!isJumping&&!isAtking&&!isDodgeing&&!isAtkYc&& !isDownOnGround)
         {
             Stand();
         }
@@ -776,6 +783,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         if (IsGround && !isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
         {
+            //print("wokao!!!!!");
             _yanmu.Play();
             return;
         }
@@ -783,6 +791,7 @@ public class GameBody : MonoBehaviour,IRole{
 
         if(IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
+            print("wokao!!!!!");
             _yanmu.Play();
             return;
         }
