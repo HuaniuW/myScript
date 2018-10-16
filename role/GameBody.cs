@@ -554,7 +554,6 @@ public class GameBody : MonoBehaviour,IRole{
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
             {
-                //if (roleDate.isBeHiting) return;
                 //print("1");
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
                 isAtkYc = false;
@@ -759,7 +758,6 @@ public class GameBody : MonoBehaviour,IRole{
     {
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
             roleDate.isBeHiting = false;
-            //GetStand();
         }
     }
 
