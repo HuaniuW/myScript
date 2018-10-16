@@ -30,7 +30,6 @@ public class HitKuai : MonoBehaviour {
 
         gameBody = Coll.GetComponent<GameBody>();
         roleDate = Coll.GetComponent<RoleDate>();
-        if (!roleDate.isCanBeHit) return;
 
         atkObj = gameObject.transform.parent.GetComponent<JN_base>().atkObj;
         //print("w " + _atkVVo._scaleW);

@@ -215,7 +215,6 @@ public class GameBody : MonoBehaviour,IRole{
     public void GetDodge1()
     {
         if (roleDate.isBeHiting) return;
-        //if (isAtking) return;
         if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND|| DBBody.animation.lastAnimationName == JUMPUP) return;
         if (!isDodge)
         {
@@ -229,8 +228,7 @@ public class GameBody : MonoBehaviour,IRole{
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    VXGetZero();
-                    MoveVX(400);
+                    MoveVX(2200);
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -238,17 +236,10 @@ public class GameBody : MonoBehaviour,IRole{
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    VXGetZero();
-                    MoveVX(400);
+                    MoveVX(2200);
                 }
             }
         }
-    }
-
-    //x方向速度清零
-    void VXGetZero()
-    {
-        playerRigidbody2D.velocity = new Vector2(0, playerRigidbody2D.velocity.y);
     }
 
 
@@ -296,7 +287,7 @@ public class GameBody : MonoBehaviour,IRole{
 
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
-    public bool IsGround
+    bool IsGround
     {
         get
         {
@@ -639,7 +630,9 @@ public class GameBody : MonoBehaviour,IRole{
     {
         ResetAll();
         Stand();
+
         playerRigidbody2D.velocity = Vector2.zero;
+
     }
 
     
@@ -701,10 +694,10 @@ public class GameBody : MonoBehaviour,IRole{
        
 
         if (Globals.isInPlot) return;
-
-        if (isDodgeing)
+        
+        if (roleDate.isBeHiting)
         {
-            Dodge1();
+            GetBeHit();
             return;
         }
 
@@ -714,14 +707,6 @@ public class GameBody : MonoBehaviour,IRole{
             return;
         }
 
-        if (roleDate.isBeHiting)
-        {
-            GetBeHit();
-            return;
-        }
-
-       
-
         ControlSpeed();
         InAir();
 
@@ -730,7 +715,11 @@ public class GameBody : MonoBehaviour,IRole{
 			return;
 		}
 
-        
+        if (isDodgeing)
+        {
+            Dodge1();
+            return;
+        }
 
         if (isJumping)
         {
