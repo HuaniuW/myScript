@@ -47,7 +47,8 @@ public class HitKuai : MonoBehaviour {
             
             if (Coll.GetComponent<RoleDate>().isDie) return;
             if (!Coll.GetComponent<RoleDate>().isCanBeHit) return;
-            float _roleScaleX = gameObject.transform.parent.transform.localScale.x;
+            //取到施展攻击角色的方向
+            float _roleScaleX = -atkObj.transform.localScale.x;
 
 
             //这个已经不需要了 

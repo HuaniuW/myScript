@@ -21,7 +21,7 @@ public class MyParticlesScale : MonoBehaviour {
 
     public void SetParticlesScale(float _sx)
     {
-        print(transform.localEulerAngles);
+        //print(transform.localEulerAngles);
         if (_sx>0)
         {
             //transform.localEulerAngles = new Vector3(0, 0, 0);
