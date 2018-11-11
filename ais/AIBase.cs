@@ -59,6 +59,7 @@ public class AIBase : MonoBehaviour {
     public bool isPatrol = false;
     void Patrol()
     {
+        //print("hi");
         if (isRunLeft)
         {
             gameBody.RunLeft(-0.2f);
@@ -110,10 +111,16 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
-        
+        if (!gameBody.IsGround)
+        {
+            return;
+        }
+
+
 
         if (isPatrol&& !IsFindEnemy())
         {
+            AIReSet();
             Patrol();
         }
 
@@ -297,6 +304,8 @@ public class AIBase : MonoBehaviour {
 		if(!isAction){
 			isAction = true;
 			acName = GetZS();
+
+            //print(atkNum + "    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
            
@@ -304,7 +313,7 @@ public class AIBase : MonoBehaviour {
 
             if (acName == "backUp")
             {
-                gameBody.GetBackUpOver();
+                gameBody.GetBackUp();
                 return;
             }
 
@@ -362,8 +371,10 @@ public class AIBase : MonoBehaviour {
 			return;
 		}
 
-		if(acName !="shanxian"){
-			PtAtk();	
+
+        PtAtk();
+        if (acName !="shanxian"){
+				
 		}      
     }
 
@@ -415,6 +426,7 @@ public class AIBase : MonoBehaviour {
         {
             if (gameBody.GetBackUpOver())
             {
+                acName = "";
                 isActioning = false;
                 isAction = false;
             }
@@ -495,6 +507,7 @@ public class AIBase : MonoBehaviour {
 
         if (isActioning)
         {
+            //print("???   "+ IsAtkOver());
             if (IsAtkOver())
             {
                 isActioning = false;

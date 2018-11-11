@@ -46,6 +46,7 @@ public class HitKuai : MonoBehaviour {
             //print("击中的2Dbox  "+Coll.GetComponent<BoxCollider2D>().transform.position);
             
             if (Coll.GetComponent<RoleDate>().isDie) return;
+            if (!Coll.GetComponent<RoleDate>().isCanBeHit) return;
             float _roleScaleX = gameObject.transform.parent.transform.localScale.x;
 
 
@@ -117,19 +118,13 @@ public class HitKuai : MonoBehaviour {
 
        
         if (roleDate.isDie) return;
-
+        if (!roleDate.isCanBeHit) return;
         float addxue = jn_date.atkPower - roleDate.def;
         addxue = addxue > 0 ? addxue : 1;
         roleDate.live -= addxue;
         if (roleDate.live < 0) roleDate.live = 0;
         //print("live "+ roleDate.live);
-        if (!roleDate.isCanBeHit) return;
-
-       
-
-
-
-
+        
         //判断是否在躲避阶段  无法被攻击
         //判断击中特效播放位置
         //击退 判断方向
@@ -144,12 +139,14 @@ public class HitKuai : MonoBehaviour {
     void Bloods(float psScaleX)
     {
         //print("fx:   "+psScaleX);
+        //GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
         GameObject blood = Resources.Load("BloodSplatCritical2D1") as GameObject;
         blood = ObjectPools.GetInstance().SwpanObject2(blood);
         blood.transform.position = this.transform.position;
         blood.transform.localScale = new Vector3(1, 1, psScaleX);
 
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(blood, 0.5f));
+        //print("blood  "+ blood);
+        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(blood, 10f));
 
     }
 

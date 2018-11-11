@@ -10,6 +10,7 @@ public class GameBody : MonoBehaviour,IRole{
     public ParticleSystem tx_2;
     public ParticleSystem tx_3;
     public ParticleSystem tx_4;
+    //增加到十个特效 或者更多 看需求
 
     [Header("水平速度")]
     public float speedX;
@@ -96,10 +97,10 @@ public class GameBody : MonoBehaviour,IRole{
 
     bool isRunRighting = false;
 
-    bool isInAiring = false;
-    bool isDowning = false;
+    public bool isInAiring = false;
+    public bool isDowning = false;
 
-    bool isJumping = false;
+    public bool isJumping = false;
     //起跳
     bool isQiTiao = false;
 
@@ -145,28 +146,42 @@ public class GameBody : MonoBehaviour,IRole{
     const string WALK = "walk_1";
     const string BEHITINAIR = "beHitInAir_1";
 
-
+    bool isBackUp = false;
     bool isBackUping = false;
-    public bool GetBackUpOver()
+    public void GetBackUp()
     {
-        if (roleDate.isBeHiting) return true;
-        if (!DBBody.animation.HasAnimation(BACKUP)) return true;
-        if(DBBody.animation.lastAnimationName != BACKUP)
+        if (roleDate.isBeHiting) return;
+        if (!DBBody.animation.HasAnimation(BACKUP)) return;
+        if(!isBackUp&&IsGround&&!isBackUping)
         {
-            DBBody.animation.GotoAndPlayByFrame(BACKUP, 0, 1);
+            isBackUp = true;
+            if(DBBody.animation.lastAnimationName != BACKUP) DBBody.animation.GotoAndPlayByFrame(BACKUP, 0, 1);
             isBackUping = true;
             roleDate.isCanBeHit = false;
+            newSpeed.x = 0;
+            newSpeed.y = 0;
+            playerRigidbody2D.velocity = newSpeed;
+            //print("huitiao");
             BackJumpVX(500);
-            MoveVY(300);
-
+            //打开有bug
+            //MoveVY(200);
         }
-        if (DBBody.animation.lastAnimationName == BACKUP&& DBBody.animation.isCompleted)
+      
+    }
+
+    void GetBackUping()
+    {
+        if (DBBody.animation.lastAnimationName == BACKUP && DBBody.animation.isCompleted)
         {
             isBackUping = false;
+            isBackUp = false;
             roleDate.isCanBeHit = true;
-            return true;
         }
-        return false;
+    }
+
+    public bool GetBackUpOver()
+    {
+        return !isBackUping;
     }
 
 
@@ -287,7 +302,7 @@ public class GameBody : MonoBehaviour,IRole{
 
 
     //在玩家底部是一条短射线 碰到地板说明落到地面 
-    bool IsGround
+    public bool IsGround
     {
         get
         {
@@ -330,6 +345,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void RunLeft(float horizontalDirection,bool isWalk = false)
     {
         //print("r "+isAtking);
+        isBackUping = false;
         if (roleDate.isBeHiting) return;
 		if (isAcing) return;
         if (isDodgeing) return;
@@ -356,6 +372,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void RunRight(float horizontalDirection, bool isWalk = false)
     {
         //print("l " + isAtking);
+        isBackUping = false;
         if (roleDate.isBeHiting) return;
 		if (isAcing) return;
         if (isDodgeing) return;
@@ -387,6 +404,7 @@ public class GameBody : MonoBehaviour,IRole{
     void Run()
     {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (isJumping || isInAiring || isDowning || isDodgeing ||roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
         {
@@ -468,6 +486,8 @@ public class GameBody : MonoBehaviour,IRole{
 
     void MoveVY(float vy)
     {
+        //Vector2 v2 = playerRigidbody2D.velocity;
+        //playerRigidbody2D.velocity = new Vector2(v2.x,0);
         playerRigidbody2D.AddForce(Vector2.up * vy);
         playerRigidbody2D.velocity = newSpeed;
     }
@@ -549,7 +569,7 @@ public class GameBody : MonoBehaviour,IRole{
 
         //print("isqitiao  "+isQiTiao);
 
-        if (IsGround&&(isQiTiao || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround&&!isBackUping&&(isQiTiao || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -592,7 +612,7 @@ public class GameBody : MonoBehaviour,IRole{
             }
             else
             {
-                if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL) && !DBBody.animation.isCompleted) return;
+                if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL|| DBBody.animation.lastAnimationName == RUNBEGIN) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
                     //上升
@@ -612,7 +632,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
-        
+        isDowning = false;
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
@@ -629,9 +649,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         ResetAll();
         Stand();
-
         playerRigidbody2D.velocity = Vector2.zero;
-
     }
 
     
@@ -702,7 +720,7 @@ public class GameBody : MonoBehaviour,IRole{
 
         if (isBackUping)
         {
-            GetBackUpOver();
+            GetBackUping();
             return;
         }
 
@@ -758,6 +776,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
             roleDate.isBeHiting = false;
+            if (IsGround) GetStand();
         }
     }
 
@@ -776,7 +795,6 @@ public class GameBody : MonoBehaviour,IRole{
 
         if(IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
-
             _yanmu.Play();
             return;
         }
@@ -918,7 +936,11 @@ public class GameBody : MonoBehaviour,IRole{
         //print(" atkName " + atkName+"    "+isAtking);
         if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
+        //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>11111   "+ DBBody.animation.lastAnimationName);
+        //阻止了快落地攻击时候的bug
+        //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!!!222222222");
         if (!isAtk)
         {
             isAtk = true;
@@ -929,6 +951,7 @@ public class GameBody : MonoBehaviour,IRole{
 
             if (isInAiring)
             {
+                //print("??????????????????");
                 atkZS = DataZS.jumpAtkZS;
             }
             else
@@ -944,7 +967,7 @@ public class GameBody : MonoBehaviour,IRole{
             else
             {
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
-               
+                //print("??????????????????    "+ vOAtk.atkName);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
 
@@ -995,11 +1018,15 @@ public class GameBody : MonoBehaviour,IRole{
         {
             if (eventObject.name == "ac")
             {
-                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+                //GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.atkName);
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("jn_shan");
+                //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
             }
         }
         
     }
+
+    
 
     float jisuqi = 0;
     float yanchi = 0;
@@ -1024,7 +1051,6 @@ public class GameBody : MonoBehaviour,IRole{
         {
 
         }
-
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
         {
             jisuqi = 0;
@@ -1060,7 +1086,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     public bool IsAtkOver()
     {
-        return !isAtk;
+        return !isAtking;
     }
 
     /// <summary

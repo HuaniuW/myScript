@@ -144,3 +144,12 @@ ccc
         print("anyKey  " + Input.inputString);
     }
  */
+
+
+/**
+ 改变物体的 rotation
+由于transform.rotation是 Quaternion类型,并不能像transform.position一样通过直接给rotation赋值Vector3(X,Y,Z)，
+    但是通过transform.localEulerAngles我们可以直接改变rotation的值，如
+    transform.localEulerAngles = new Vector3(X, Y, Z);
+    其中X,Y,Z代表角度。
+ */

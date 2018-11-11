@@ -37,9 +37,30 @@ public class JN_base : MonoBehaviour
         _position = new Vector3(_position.x + jn_date._xdx * _sacaleX, _position.y + jn_date._xdy, _position.z);
         //指定特效位置
         this.transform.position = _position;
-        gameObject.transform.localScale = new Vector3(-_sacaleX, transform.localScale.y, transform.localScale.z);
-
+        this.transform.localScale = new Vector3(-_sacaleX, transform.localScale.y, transform.localScale.z);
         
+
+        //改变粒子scale
+        if (_sacaleX > 0) {
+            GetComponent<MyParticlesScale>().SetParticlesScale(1);
+        }
+        else
+        {
+            GetComponent<MyParticlesScale>().SetParticlesScale(-1);
+        }
+
+       // print(this.transform.localRotation);
+        //this.transform.localRotation = new Quaternion(0,180,0,1);
+        /**
+        if (_sacaleX >0)
+        {
+            this.transform.localRotation = new Quaternion(0, 0, 0, 1);
+        }
+        else
+        {
+            this.transform.localRotation = new Quaternion(0, 180, 0, 1);
+        }
+        */
 
         if (jn_date._type == "2"|| jn_date._type == "3") {
             //2 持续型

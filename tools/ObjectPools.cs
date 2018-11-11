@@ -98,6 +98,7 @@ public class ObjectPools
     {
         //获取到当前对象的ID（每个游戏对象都有各自的ID）
         int key = gameObject.GetInstanceID();
+        //Debug.Log("key "+key);
         //如果池中包含key当前游戏对象的key值（游戏对象的ID）
         if (pools2.ContainsKey(key))
         {
@@ -182,6 +183,7 @@ public class ObjectPools
     {
         yield return new WaitForSeconds(time);
         //yield return new WaitForFixedUpdate();
+        //Debug.Log(">>   "+ gameObject);
         GetInstance().DestoryObject2(gameObject);
     }
     #endregion
