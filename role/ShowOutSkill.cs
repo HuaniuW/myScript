@@ -25,6 +25,7 @@ public class ShowOutSkill : MonoBehaviour {
         string[] strArr = hzSkillName.Split('_');
         string topStr = strArr[0];
         //print(jnbs);
+       
         if (topStr == "pg")
         {
             skill.transform.parent = this.transform;

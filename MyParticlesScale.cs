@@ -10,7 +10,7 @@ public class MyParticlesScale : MonoBehaviour {
     void Start () {
         particles = GetComponentsInChildren<ParticleSystem>(true);
         particlesLength = particles.Length;
-        print("length   "+ particlesLength);
+        //print("length   "+ particlesLength);
         if (particlesLength == 0)
         {
             return;
@@ -21,18 +21,17 @@ public class MyParticlesScale : MonoBehaviour {
 
     public void SetParticlesScale(float _sx)
     {
-
+        print(transform.localEulerAngles);
         if (_sx>0)
         {
-            //this.transform.rotation = new Vector3(0, 0, 0);
-            //print(this.transform.rotation);
-            //print(this.transform.root.name);
-            transform.localEulerAngles = new Vector3(0, 0, 0);
+            //transform.localEulerAngles = new Vector3(0, 0, 0);
+            this.transform.localRotation = new Quaternion(0, 0, 0, 1);
         }
         else
         {
-            //改变 物体的 rotation  用localEulerAngles
-            transform.localEulerAngles = new Vector3(0, 180, 0);
+            //改变 物体的 rotation  可以用localEulerAngles
+            //transform.localEulerAngles = new Vector3(0, 180, 0);
+            this.transform.localRotation = new Quaternion(0, 180, 0, 1);
         }
 
         return;

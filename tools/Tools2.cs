@@ -153,3 +153,16 @@ ccc
     transform.localEulerAngles = new Vector3(X, Y, Z);
     其中X,Y,Z代表角度。
  */
+ //下面这种改变角度 也可以用
+// print(this.transform.localRotation);
+//this.transform.localRotation = new Quaternion(0,180,0,1);
+/**
+if (_sacaleX >0)
+{
+    this.transform.localRotation = new Quaternion(0, 0, 0, 1);
+}
+else
+{
+    this.transform.localRotation = new Quaternion(0, 180, 0, 1);
+}
+*/
