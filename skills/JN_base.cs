@@ -85,6 +85,10 @@ public class JN_base : MonoBehaviour
             gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed,jn_date.moveYSpeed);
             //print(transform.GetComponent<Rigidbody2D>().velocity);
         }
+        else
+        {
+            TX_gensui();
+        }
     }
 
     void TX_gensui()

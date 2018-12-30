@@ -18,7 +18,6 @@ public class ShowOutSkill : MonoBehaviour {
     internal void ShowOutSkillByName(string hzSkillName)
     {
       
-
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
         skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject);
         //判断是否是普通攻击

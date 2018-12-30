@@ -154,8 +154,10 @@ public class GameBody : MonoBehaviour,IRole{
         if (!DBBody.animation.HasAnimation(BACKUP)) return;
         if(!isBackUp&&IsGround&&!isBackUping)
         {
+            ResetAll();
             isBackUp = true;
             if(DBBody.animation.lastAnimationName != BACKUP) DBBody.animation.GotoAndPlayByFrame(BACKUP, 0, 1);
+
             isBackUping = true;
             roleDate.isCanBeHit = false;
             newSpeed.x = 0;
@@ -1019,7 +1021,7 @@ public class GameBody : MonoBehaviour,IRole{
             if (eventObject.name == "ac")
             {
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.atkName);
-                GetComponent<ShowOutSkill>().ShowOutSkillByName("jn_shan");
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_001");
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
             }
         }

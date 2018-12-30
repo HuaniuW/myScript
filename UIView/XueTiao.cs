@@ -37,6 +37,7 @@ public class XueTiao : MonoBehaviour {
         {
             roleDate = gameObj.GetComponent<RoleDate>();
             _maxLive = roleDate.maxLive;
+            roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
             _cLive = roleDate.live;
         }
     }
