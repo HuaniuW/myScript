@@ -18,6 +18,7 @@ public class ObjectPools
     /// 以字典的方式储存对象到池中，int类型key，集合类型的value
     /// </summary>
     Dictionary<int, List<GameObject>> pools2;
+    Dictionary<int, Vector3> poolsV3;
 
     //单例
     private static ObjectPools instance;
@@ -40,6 +41,7 @@ public class ObjectPools
     {
         pools1 = new List<GameObject>();
         pools2 = new Dictionary<int, List<GameObject>>();
+        poolsV3 = new Dictionary<int, Vector3>();
     }
 
     #endregion
@@ -110,6 +112,7 @@ public class ObjectPools
                 result.SetActive(true); //激活显示当前对象
                 pools2[key].Remove(result); //从池中清除对象游戏对象
                 result.transform.position = Vector3.zero; //设置初始位置
+                result.transform.localEulerAngles = poolsV3[key];
                 //Debug.Log("result.transform.localScale  "+ result.transform.localScale);
                 //result.transform.rotation = rotation; //设置初始旋转
                 return result; //返回提取的游戏对象
@@ -120,6 +123,11 @@ public class ObjectPools
         //res.transform.localScale = new Vector3(-1, 1, 1);
         //储存游戏对象的ID，转换成字符串
         res.name = gameObject.GetInstanceID().ToString();
+        if (!poolsV3.ContainsKey(key))
+        {
+            //几率特效初始角度
+            poolsV3.Add(key, res.transform.localEulerAngles);
+        }
         //返回场景的游戏对象
         return res;
     }

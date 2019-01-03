@@ -1021,7 +1021,7 @@ public class GameBody : MonoBehaviour,IRole{
             if (eventObject.name == "ac")
             {
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.atkName);
-                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_001");
+                GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_002");
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
             }
         }

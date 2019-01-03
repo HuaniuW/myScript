@@ -29,6 +29,8 @@ public class JN_base : MonoBehaviour
 
     public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj)
     {
+        //print(obj.transform.position.y + "  -  " + GameObject.Find("/MainCamera").transform.position.y);
+
         atkObj = obj;
         jn_date = GetComponent<JN_Date>();
         jn_date.team = team;

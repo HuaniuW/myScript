@@ -20,15 +20,7 @@ public class ShowOutSkill : MonoBehaviour {
       
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
         skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject);
-        //判断是否是普通攻击
-        string[] strArr = hzSkillName.Split('_');
-        string topStr = strArr[0];
-        //print(jnbs);
-       
-        if (topStr == "pg")
-        {
-            skill.transform.parent = this.transform;
-        }
+        
         
         //TXPlay2(skill);
         //取到技能vo
