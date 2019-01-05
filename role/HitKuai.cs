@@ -23,6 +23,7 @@ public class HitKuai : MonoBehaviour {
 
     RoleDate roleDate;
     GameBody gameBody;
+    Rigidbody2D rigidbody2D;
 
 
     void OnTriggerEnter2D(Collider2D Coll)
@@ -30,6 +31,7 @@ public class HitKuai : MonoBehaviour {
 
         gameBody = Coll.GetComponent<GameBody>();
         roleDate = Coll.GetComponent<RoleDate>();
+        rigidbody2D = Coll.GetComponent<Rigidbody2D>();
 
         atkObj = gameObject.transform.parent.GetComponent<JN_base>().atkObj;
         //print("w " + _atkVVo._scaleW);
@@ -41,12 +43,12 @@ public class HitKuai : MonoBehaviour {
 
         JN_Date jn_date = gameObject.transform.parent.GetComponent<JN_Date>();
 
-        if (Coll.GetComponent<RoleDate>()!=null&& Coll.GetComponent<RoleDate>().team != jn_date.team)
+        if (roleDate != null&& roleDate.team != jn_date.team)
         {
             //print("击中的2Dbox  "+Coll.GetComponent<BoxCollider2D>().transform.position);
             
-            if (Coll.GetComponent<RoleDate>().isDie) return;
-            if (!Coll.GetComponent<RoleDate>().isCanBeHit) return;
+            if (roleDate.isDie) return;
+            if (!roleDate.isCanBeHit) return;
             //取到施展攻击角色的方向
             float _roleScaleX = -atkObj.transform.localScale.x;
 
@@ -55,8 +57,8 @@ public class HitKuai : MonoBehaviour {
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
             GetBeHit(jn_date, _roleScaleX);
             //力作用  这个可以防止 推力重叠 导致任务飞出去
-            Vector3 tempV3 = Coll.GetComponent<Rigidbody2D>().velocity;
-            Coll.GetComponent<Rigidbody2D>().velocity = new Vector3(0,tempV3.y, tempV3.z);
+            Vector3 tempV3 = rigidbody2D.velocity;
+            rigidbody2D.velocity = new Vector3(0,tempV3.y, tempV3.z);
 
             if (jn_date != null &&gameBody != null)
             {
@@ -141,13 +143,14 @@ public class HitKuai : MonoBehaviour {
     {
         //print("fx:   "+psScaleX);
         //GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
+        //GameObject blood = ObjectPools.GetInstance().SwpanObject2(Resources.Load("BloodSplatCritical2D1") as GameObject);
         GameObject blood = Resources.Load("BloodSplatCritical2D1") as GameObject;
         blood = ObjectPools.GetInstance().SwpanObject2(blood);
         blood.transform.position = this.transform.position;
         blood.transform.localScale = new Vector3(1, 1, psScaleX);
 
         //print("blood  "+ blood);
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(blood, 10f));
+        //StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(blood.gameObject, 0.7f));
 
     }
 
