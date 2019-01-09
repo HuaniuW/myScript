@@ -694,6 +694,12 @@ public class GameBody : MonoBehaviour,IRole{
     }
 
 
+    public void GetPause()
+    {
+        DBBody.animation.Stop();
+        print(DBBody.animation.isPlaying);
+    }
+
 
     // Update is called once per frame
     void Update () {
@@ -701,6 +707,7 @@ public class GameBody : MonoBehaviour,IRole{
 
        //脚下的烟幕
         Yanmu();
+
         if (roleDate.isDie)
         {
             GetDie();
@@ -714,6 +721,9 @@ public class GameBody : MonoBehaviour,IRole{
 
         if (Globals.isInPlot) return;
         
+
+
+
         if (roleDate.isBeHiting)
         {
             GetBeHit();
@@ -726,8 +736,16 @@ public class GameBody : MonoBehaviour,IRole{
             return;
         }
 
+
+        if()
+
         ControlSpeed();
+
+
+
         InAir();
+
+
 
 		if(isAcing){
 			GetAcMsg(_acName);
@@ -969,7 +987,6 @@ public class GameBody : MonoBehaviour,IRole{
             else
             {
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
-                //print("??????????????????    "+ vOAtk.atkName);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
 
@@ -980,6 +997,8 @@ public class GameBody : MonoBehaviour,IRole{
                 playerRigidbody2D.velocity = newSpeed;
                 MoveVY(vOAtk.yF);
             }
+
+            //print(newSpeed.y);
 
             //获取XY方向的推力 
             //print(DBBody.animation.animations);

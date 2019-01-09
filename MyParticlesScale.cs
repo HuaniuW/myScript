@@ -35,14 +35,14 @@ public class MyParticlesScale : MonoBehaviour {
         //rx = 130;
         //print("rx222  " + rx+(rx is float));
         
+        //特效 对摄像机的角度修正
         var y = GameObject.Find("/MainCamera").transform.position.y;
         var z = GameObject.Find("/MainCamera").transform.position.z;
-
         var _y2 = this.transform.position.y;
         var _z2 = this.transform.position.z;
-
         var du = Mathf.Atan2((_y2 - y), (_z2 - z));
         var jiaodu = du * 180 / Mathf.PI;
+
         //print(">  "+jiaodu);
         //return;
         if (_sx>0)

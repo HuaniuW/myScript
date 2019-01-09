@@ -21,9 +21,11 @@ public class JN_base : MonoBehaviour
 
 
 
+
+
     private void OnEnable()
     {
-	
+        //transform.Find("jn_fk").GetComponent<HitKuai>().CanHit();
     }
     float sacaleX;
 
@@ -39,7 +41,10 @@ public class JN_base : MonoBehaviour
         _position = new Vector3(_position.x + jn_date._xdx * _sacaleX, _position.y + jn_date._xdy, _position.z);
         //指定特效位置
         this.transform.position = _position;
- 
+        //TX_weizhiyupan();
+        ShowHitFK();
+
+
         if (_sacaleX > 0) {
             GetComponent<MyParticlesScale>().SetParticlesScale(1);
         }
@@ -55,10 +60,22 @@ public class JN_base : MonoBehaviour
             jn_date.moveXSpeed *= -_sacaleX;
             //StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(hitKuai,jn_date._disTime));
         }
+
         //GetKuai(_atkVVo, _position);
         //StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitKuai));
         StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, jn_date.TXDisTime));
     }
+
+    //显示碰撞方块
+    void ShowHitFK()
+    {
+        GameObject hitFK = ObjectPools.GetInstance().SwpanObject2(Resources.Load("hit_fk") as GameObject);
+        hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject);
+        Vector3 nv3 = new Vector3(this.transform.position.x - 0.8f * sacaleX, this.transform.position.y, this.transform.position.z);
+        hitFK.transform.position = nv3;
+
+    }
+
 
     public void DisObj()
     {
@@ -90,6 +107,24 @@ public class JN_base : MonoBehaviour
         else
         {
             TX_gensui();
+        }
+    }
+
+
+    public bool isYuPan = true;
+    void TX_weizhiyupan()
+    {
+
+        print(atkObj.GetComponent<Rigidbody2D>().velocity);
+        //return;
+        if (isYuPan&&atkObj)
+        {
+            Vector3 np = atkObj.transform.position;
+            double vx = atkObj.GetComponent<Rigidbody2D>().velocity.x*0.01;
+            double vy = atkObj.GetComponent<Rigidbody2D>().velocity.y * 0.3;
+            Vector3 _position = new Vector3(np.x + jn_date._xdx * sacaleX + (float)vx, np.y + jn_date._xdy+ (float)vy, np.z);
+            //指定特效位置
+            this.transform.position = _position;
         }
     }
 

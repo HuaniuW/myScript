@@ -71,7 +71,7 @@ public class PlotControl : MonoBehaviour {
         {
             return true;
         }
-        return false;
+        //return false;
     }
 
    

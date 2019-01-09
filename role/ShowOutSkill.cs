@@ -19,6 +19,7 @@ public class ShowOutSkill : MonoBehaviour {
     {
       
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
+
         skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject);
         
         
