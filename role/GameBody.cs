@@ -654,15 +654,17 @@ public class GameBody : MonoBehaviour,IRole{
         playerRigidbody2D.velocity = Vector2.zero;
     }
 
-    
+
+    TheTimer _theTimer;
 
     // Use this for initialization
     protected void Start () {
         //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
-		//DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
-		DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
+        _theTimer = GetComponent<TheTimer>();
+        //DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
+        DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         DBBody.AddDBEventListener(DragonBones.EventObject.SOUND_EVENT, this.ShowACTX);
         roleDate = GetComponent<RoleDate>();
         //DBBody.AddDBEventListener(EventObject.FRAME_EVENT, this.test);
@@ -696,8 +698,8 @@ public class GameBody : MonoBehaviour,IRole{
 
     public void GetPause()
     {
-        DBBody.animation.Stop();
-        print(DBBody.animation.isPlaying);
+        //DBBody.animation.timeScale = 0.01f;
+        //if(_theTimer) _theTimer.GetStopByTime(0.1f);
     }
 
 
@@ -720,8 +722,16 @@ public class GameBody : MonoBehaviour,IRole{
        
 
         if (Globals.isInPlot) return;
-        
 
+        /**
+        if (_theTimer != null && !_theTimer.IsPauseTimeOver())
+        {
+            return;
+        }
+        else
+        {
+            DBBody.animation.timeScale = 1;
+        }*/
 
 
         if (roleDate.isBeHiting)
@@ -737,7 +747,12 @@ public class GameBody : MonoBehaviour,IRole{
         }
 
 
-        if()
+        //print(_theTimer);
+        
+       
+      
+        
+       
 
         ControlSpeed();
 
