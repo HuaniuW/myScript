@@ -153,7 +153,7 @@ ccc
     transform.localEulerAngles = new Vector3(X, Y, Z);
     其中X,Y,Z代表角度。
  */
- //下面这种改变角度 也可以用
+//下面这种改变角度 也可以用
 // print(this.transform.localRotation);
 //this.transform.localRotation = new Quaternion(0,180,0,1);
 /**
@@ -166,3 +166,34 @@ else
     this.transform.localRotation = new Quaternion(0, 180, 0, 1);
 }
 */
+
+/**
+ iTween  缓动 好像无法控制 UGUI的透明度
+   iTween.ScaleBy(obj, iTween.Hash("x", 1f, "time", 0.1f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
+   iTween.FadeTo(this.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
+*/
+
+
+/**  隐藏对象
+ GameObject.renderer.enabled   
+//是控制一个物体是否在屏幕上渲染或显示  而物体实际还是存在的 只是想当于隐身 而物体本身的碰撞体还依然存在的  
+
+GameObject.Destroy()    
+//表示移除物体或物体上的组件 代表销毁该物体  实际上该物体的内存并没有立即释放，而是等到这一帧的结束才会真正销毁
+
+GameObject.SetActive()     
+//是否在场景中停用该物体,设置gameObject.SetActive(false)，则你在场景中用find找不到该物体    
+//如果该物体有子物体 你要用SetActiveRecursively(false) 来控制是否在场景中停用该物体（递归的）
+//SetActive(false)的时候，物体不再渲染，释放占用资源
+
+Camera.cullingMask
+//设置相机的渲染层次，在不需要某个物体的时候，cullingMask中将此物体的layer去掉，但是前提是要规划好layer，不能影响其他不希望隐藏掉的物体。
+
+GameObject.transform.position = FAR_AWAY
+//设置一个无限远的位置，再不需要的时候就将物体移动至这个位置，但是这样物体并没有释放，占用的所有资源都会继续占用
+ */
+
+
+// 动态加载预制资源 prefab 需要将prefab放在resources文件夹内 首字母大小写不限
+
+//FieldInfo 映射 动态获取属性

@@ -16,6 +16,14 @@ public class AIBase : MonoBehaviour {
          Type myType = typeof(DataZS);
         PropertyInfo myPropInfo = myType.GetProperty("tt");
         myPosition = this.transform.position;
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
+    }
+
+    public void GetEnemyObj(UEvent e)
+    {
+        
+        gameObj = GlobalTools.FindObjByName("player");
+        print("???????????  "+gameObj);
     }
 
     [Header("是否发现敌人")]
@@ -62,7 +70,7 @@ public class AIBase : MonoBehaviour {
         //print("hi");
         if (isRunLeft)
         {
-            gameBody.RunLeft(-0.2f);
+            gameBody.RunLeft(-0.4f);
             if (this.transform.position.x - myPosition.x<-patrolDistance|| gameBody.IsEndGround||gameBody.IsHitWall)
             {
                 isRunLeft = false;
@@ -70,7 +78,7 @@ public class AIBase : MonoBehaviour {
             }
         }else if (isRunRight)
         {
-            gameBody.RunRight(0.2f);
+            gameBody.RunRight(0.4f);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 isRunLeft = true;
@@ -95,7 +103,11 @@ public class AIBase : MonoBehaviour {
     void Update () {
 
         //print("myPosition    "+ myPosition);
-        if (!gameObj) return;
+        if (!gameObj)
+        {
+            gameObj = GlobalTools.FindObjByName("player");
+            return;
+        }
 
         if (gameObj.GetComponent<RoleDate>().isDie)
         {

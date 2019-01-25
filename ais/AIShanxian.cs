@@ -15,7 +15,7 @@ public class AIShanxian : MonoBehaviour, ISkill
 	// Use this for initialization
 	void Start()
 	{
-		
+	    
 	}
 
 	public float sxDistance = 15;

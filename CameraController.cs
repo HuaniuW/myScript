@@ -30,21 +30,56 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        _min = Bounds.bounds.min;//初始化边界最小值(边界左下角)
-        _max = Bounds.bounds.max;//初始化边界最大值(边界右上角)
+        if (Bounds)
+        {
+            getBoundsMinMax();
+        }
+        
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
         Application.targetFrameRate = 60;
         oldPosition = transform.position;
-
-
-
         //print(obj.transform.position);
     }
 
+    public void GetBounds(BoxCollider2D bounds) {
+        if (bounds)
+        {
+            Bounds = bounds;
+            getBoundsMinMax();
+        }
+    }
+
+    void getBoundsMinMax()
+    {
+        _min = Bounds.bounds.min;//初始化边界最小值(边界左下角)
+        _max = Bounds.bounds.max;//初始化边界最大值(边界右上角)
+    }
+
+    void GetPlayer()
+    {
+        if (player)
+        {
+            transform.position = new Vector3(player.position.x, player.position.x, transform.position.z);
+        }
+        else
+        {
+            transform.position = new Vector3(0, 0, transform.position.z);
+        }
+    }
+    
+    //获取焦点角色
+    public void GetTargetObj(Transform obj) {
+        if (obj) player = obj;
+    }
+
+    public bool IsOutY = false;
+    public bool IsOutY2 = false;
+
     void Update()
     {
+        if (!player) return;
         var x = transform.position.x;
         var y = transform.position.y;
         if (IsFollowing)
@@ -83,20 +118,22 @@ public class CameraController : MonoBehaviour
             }*/
 
             if (y - player.position.y > Margin.y|| y - player.position.y < -Margin.y) {
+                //IsOutY = false;
+                //if (IsOutY2)return;
                 if (y - player.position.y> maxPlayerCameraYDistanceDown) {
                     y = player.position.y + maxPlayerCameraYDistanceDown;
+                    IsOutY = false;
+                   
                 }
                 else
                 {
+                    IsOutY = true;
+                    //print("抖");
+                    //if (IsOutY2) return;
                     y = Mathf.Lerp(y, player.position.y, smoothing.y * Time.deltaTime);
                     if (Mathf.Abs(y - player.position.y) < 0.3) y = player.position.y;
                 }
-
-
-               
             }
-
-
             
         }
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)

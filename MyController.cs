@@ -19,6 +19,7 @@ public class MyController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (Globals.isInPlot) return;
+        if (GlobalSetDate.instance.IsChangeScreening) return;
 
         if (Input.anyKey)
         {//得到按下什么键

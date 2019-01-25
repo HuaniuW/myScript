@@ -24,10 +24,19 @@ public class XueTiao : MonoBehaviour {
         GetXueNum(0);
     }
 
-    
+    //是否激活
     public void Show(bool isAddOnStage)
     {
         this.gameObject.SetActive(isAddOnStage);
+    }
+
+    public void GetTargetObj(GameObject obj)
+    {
+        if (obj) gameObj = obj;
+        //print(gameObj);
+        
+        //print(gameObj);
+
     }
 
     RoleDate roleDate;
@@ -120,7 +129,16 @@ public class XueTiao : MonoBehaviour {
         //{
         //    this.transform.localScale = new Vector3(-1, 1, 1);
         //}
-        if (!gameObj) return;
+        //print("gameObj   " + gameObj);
+        if (!gameObj)
+        {
+            gameObj = GlobalTools.FindObjByName("player");
+            GetGameObj();
+            SetXueTiao2();
+            //_w2 = _w;
+            GetXueNum(0);
+            return;
+        }
         XueChange();
         if (isChage)Xue2W();
     }

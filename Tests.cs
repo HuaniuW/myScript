@@ -9,6 +9,12 @@ public class Tests : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        //iTween.ScaleBy(obj, iTween.Hash("x", 1f, "time", 0.1f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
+        //iTween.FadeTo(this.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
+
+
+        return;
         MyClass m = new MyClass();
         Type type1 = m.GetType();
         Type type2 = typeof(MyClass);

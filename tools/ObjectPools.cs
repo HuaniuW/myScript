@@ -44,6 +44,12 @@ public class ObjectPools
         poolsV3 = new Dictionary<int, Vector3>();
     }
 
+    public void delAll()
+    {
+        pools2.Clear();
+        poolsV3.Clear();
+    }
+
     #endregion
 
     #region 储存单个游戏对象到池中
@@ -109,6 +115,11 @@ public class ObjectPools
             {
                 //提取第一个对象（key就是ID（ID就是相对应的游戏对象），0代表的是这个key中第一个对象）
                 GameObject result = pools2[key][0];
+                //切换场景的时候出现特效没收回被 销毁 这里重新生成一个
+                if (result == null)
+                {
+                    return getNewObj(gameObject,key);
+                }
                 result.SetActive(true); //激活显示当前对象
                 pools2[key].Remove(result); //从池中清除对象游戏对象
                 result.transform.position = Vector3.zero; //设置初始位置
@@ -119,6 +130,21 @@ public class ObjectPools
             }
         }
         //否则，实例化对象并接收
+        GameObject res = GameObject.Instantiate(gameObject) as GameObject;
+        //res.transform.localScale = new Vector3(-1, 1, 1);
+        //储存游戏对象的ID，转换成字符串
+        res.name = gameObject.GetInstanceID().ToString();
+        if (!poolsV3.ContainsKey(key))
+        {
+            //几率特效初始角度
+            poolsV3.Add(key, res.transform.localEulerAngles);
+        }
+        //返回场景的游戏对象
+        return res;
+    }
+
+    GameObject getNewObj(GameObject gameObject,int key)
+    {
         GameObject res = GameObject.Instantiate(gameObject) as GameObject;
         //res.transform.localScale = new Vector3(-1, 1, 1);
         //储存游戏对象的ID，转换成字符串

@@ -71,6 +71,8 @@ public class HitKuai : MonoBehaviour {
 
             if (jn_date != null &&gameBody != null)
             {
+
+                //gameBody.GetPause(0.2f);
                 //判断是否破防   D 代办事项 
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
@@ -133,7 +135,7 @@ public class HitKuai : MonoBehaviour {
        
         if (roleDate.isDie) return;
         if (!roleDate.isCanBeHit) return;
-        float addxue = jn_date.atkPower - roleDate.def;
+        float addxue = atkObj.GetComponent<RoleDate>().atk+ jn_date.atkPower - roleDate.def;
         addxue = addxue > 0 ? addxue : 1;
         roleDate.live -= addxue;
         if (roleDate.live < 0) roleDate.live = 0;
@@ -147,16 +149,20 @@ public class HitKuai : MonoBehaviour {
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
         HitTX(_psScaleX, "BloodSplatCritical2D1");
-        HitTX(_psScaleX,"jizhong");
+        HitTX(_psScaleX,"jizhong",roleDate.beHitVudio);
     }
 
     //击中特效
-    void HitTX(float psScaleX,string txName)
+    void HitTX(float psScaleX,string txName,string hitVudio = "")
     {
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         hitTx.transform.position = gameBody.transform.position;
         hitTx.transform.localScale = new Vector3(1, 1, psScaleX);
+        if (hitVudio != "")
+        {
+            hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
+        }
     }
 
   

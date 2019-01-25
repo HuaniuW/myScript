@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TheTimer : MonoBehaviour {
-
+    //控制慢动作用的计时器
 	// Use this for initialization
 	void Start () {
 		

@@ -26,8 +26,12 @@ public class MyParticlesScale : MonoBehaviour {
     {
         //print(transform.localEulerAngles);
         //print(transform.localRotation);
-        
+        //切换场景的时候 特效还在 这里判断摄像机
+        if (GameObject.Find("/MainCamera") == null) return;
+
         var rx = transform.localEulerAngles.x;
+        var ry = transform.localEulerAngles.y;
+        ry = 0;
         if (transform.localRotation.x >= 0.7) rx = 180 - rx;
         //rx = 1;  rx不能=0；不然不能翻转
         if (rx == 0 || rx == 180) rx = 1;
@@ -38,12 +42,17 @@ public class MyParticlesScale : MonoBehaviour {
         //特效 对摄像机的角度修正
         var y = GameObject.Find("/MainCamera").transform.position.y;
         var z = GameObject.Find("/MainCamera").transform.position.z;
+        var x = GameObject.Find("/MainCamera").transform.position.x;
         var _y2 = this.transform.position.y;
         var _z2 = this.transform.position.z;
+        var _x2 = this.transform.position.x;
         var du = Mathf.Atan2((_y2 - y), (_z2 - z));
         var jiaodu = du * 180 / Mathf.PI;
 
-        //print(">  "+jiaodu);
+        var duy = Mathf.Atan2((_x2 - x), (_z2 - z));
+        var jiaoduy = duy * 180 / Mathf.PI;
+
+        //print(">  "+jiaoduy);
         //return;
         if (_sx>0)
         {
@@ -51,7 +60,8 @@ public class MyParticlesScale : MonoBehaviour {
                 rx += 180;
             }
             rx -= jiaodu;
-            transform.localEulerAngles = new Vector3(rx, 0, 0);
+            ry += jiaoduy;
+            transform.localEulerAngles = new Vector3(rx, ry, 0);
             //this.transform.localRotation = new Quaternion(80, 0, 0, 1);
             this.transform.localScale = new Vector3(1, 1, 1);
         }
@@ -62,8 +72,9 @@ public class MyParticlesScale : MonoBehaviour {
                 rx -= 180; 
             }
             rx -= jiaodu;
+            ry += jiaoduy;
             //改变 物体的 rotation  可以用localEulerAngles
-            transform.localEulerAngles = new Vector3(rx, 0, 0);
+            transform.localEulerAngles = new Vector3(rx, ry, 0);
             //this.transform.localRotation = new Quaternion(0, 0, 0, 1);
             this.transform.localScale = new Vector3(-1, -1, -1);
         }
