@@ -25,8 +25,8 @@ public class StartScreen : MonoBehaviour {
        
 
         GlobalSetDate.instance.DoSomeThings();
-        GlobalSetDate.instance.screenName = "test_1";
-        GlobalSetDate.instance.playerPosition = "14_-2";
+        GlobalSetDate.instance.screenName = "guan1_1";
+        GlobalSetDate.instance.playerPosition = "47_-29";
         //iTween.FadeTo(btn1.transform.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
         //iTween.MoveFrom(this.gameObject, iTween.Hash("x", -10f, "time", 3f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fds"));
         //btn1.Component.CrossFadeAlpha

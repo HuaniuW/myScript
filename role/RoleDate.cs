@@ -38,6 +38,13 @@ public class RoleDate : MonoBehaviour {
 		
 	}
 	
+
+    public void GetInit()
+    {
+        isCanBeHit = true;
+        isBeHit = false;
+        isBeHiting = false;
+    }
 	// Update is called once per frame
 	void Update () {
 		

@@ -6,15 +6,19 @@ using UnityEngine;
 
 public class AIBase : MonoBehaviour {
 
-    GameBody gameBody;
+    protected GameBody gameBody;
     public GameObject gameObj;
-    AIQiShou aiQishou;
+    protected AIQiShou aiQishou;
 	// Use this for initialization
 	void Start () {
+        GetStart();
+    }
+
+    protected void GetStart()
+    {
         gameBody = GetComponent<GameBody>();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
-         Type myType = typeof(DataZS);
-        PropertyInfo myPropInfo = myType.GetProperty("tt");
+        Type myType = typeof(DataZS);
         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
     }
@@ -23,7 +27,6 @@ public class AIBase : MonoBehaviour {
     {
         
         gameObj = GlobalTools.FindObjByName("player");
-        print("???????????  "+gameObj);
     }
 
     [Header("是否发现敌人")]
@@ -31,7 +34,7 @@ public class AIBase : MonoBehaviour {
     [Header("发现敌人的距离")]
     public float findEnemyDistance = 10;
 
-    bool IsFindEnemy()
+    protected bool IsFindEnemy()
     {
         if (isFindEnemy) return true;
         if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(gameObj.transform.position.y - transform.position.y) < findEnemyDistance)
@@ -44,7 +47,7 @@ public class AIBase : MonoBehaviour {
     }
 
     public float outDistance = 15;
-    void IsEnemyOutAtkDistance()
+    protected void IsEnemyOutAtkDistance()
     {
         if (!isActioning&&(Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance))
         {
@@ -57,17 +60,23 @@ public class AIBase : MonoBehaviour {
     //是巡逻 还是站地警戒  
 
 
-    bool isRunLeft = true;
-    bool isRunRight = false;
+    protected bool isRunLeft = true;
+    protected bool isRunRight = false;
     public float patrolDistance = 6;
     Vector3 myPosition;
    
 
     [Header("巡逻")]
     public bool isPatrol = false;
-    void Patrol()
+    protected void Patrol()
     {
         //print("hi");
+        //print("hi    " + this.transform.position.x + "    "+myPosition.x+"     "+ patrolDistance);
+        //gameBody.RunLeft(-0.4f);
+        //return;
+
+        //print(gameBody.IsEndGround +"    "+ gameBody.IsHitWall);
+
         if (isRunLeft)
         {
             gameBody.RunLeft(-0.4f);
@@ -88,7 +97,7 @@ public class AIBase : MonoBehaviour {
     }
 
     public bool isEndXXXXX;
-    bool IsHitWallOrNoWay
+    protected bool IsHitWallOrNoWay
     {
         get
         {
@@ -101,8 +110,11 @@ public class AIBase : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
+        GetUpdate();
+    }
 
-        //print("myPosition    "+ myPosition);
+    protected virtual void GetUpdate()
+    {
         if (!gameObj)
         {
             gameObj = GlobalTools.FindObjByName("player");
@@ -123,20 +135,20 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
-        if (!gameBody.IsGround)
+        if (gameBody.tag != "AirEnemy" && !gameBody.IsGround)
         {
             return;
         }
 
 
 
-        if (isPatrol&& !IsFindEnemy())
+        if (isPatrol && !IsFindEnemy())
         {
             AIReSet();
             Patrol();
         }
 
-      
+
         if (!isActioning && IsHitWallOrNoWay)
         {
             isFindEnemy = false;
@@ -144,50 +156,18 @@ public class AIBase : MonoBehaviour {
             gameBody.GetStand();
             return;
         }
-        
+
 
         //超出追击范围
         IsEnemyOutAtkDistance();
 
         if (!IsFindEnemy()) return;
-
-        //NearRoleInDistance(4);
-        
-        
         GetAtkFS();
     }
-    //选中行为 攻击招式 攻击距离范围 移动 攻击 攻击完成   
-    //动画的对照 是否播完 来判断下一步  全局化 攻击动作的 静态常量？
 
-
-    //   切换招式组
-    //string[] zsarr1 = { "atk_1", "atk_2", "atk_1", "atk_3" };
-    //string[] zsarr2 = { "atk_1", "atk_2", "atk_3", "atk_3" };
-    //string[] zsarr3 = { "atk_1", "atk_1", "atk_1", "atk_3","atk_3" };
-    //string[,] az2 = { zsarr1,zsarr2 };
-    /**
-    Array[] atkArrs = new Array[] {};
-    string[] GetZSArrays()
-    {
-        Array[] atkArrs = { zsarr1, zsarr2, zsarr3 };
-        //print("a: "+ atkArrs.Length);
-        string[] zss = (string[])atkArrs[0];
-        print(zss[0]);
-        return zss;
-    }
-    */
-
-    //string[][] arrays = { new string[]{"shanxian","atk_1", "atk_2", "atk_3"}, new string[] { "walkBack", "atk_1","backUp","atk_2", "atk_3", "rest_1", "atk_3" }, new string[] { "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_1", "atk_3" } };
-
-    //string[,] arrays = { { "atk_1", "atk_2", "atk_1", "atk_3" } };
-
-    //1 找到招式组
-    
-    
-   
     //根据招式名称 获取招式数据
-    VOAtk atkvo;
-    VOAtk GetAtkVOByName(string _name, System.Object obj)
+    protected VOAtk atkvo;
+    protected VOAtk GetAtkVOByName(string _name, System.Object obj)
     {
         Dictionary<string, string> dict = GetDateByName.GetInstance().GetDicSSByName(_name, obj);
         atkvo = new VOAtk();
@@ -195,11 +175,11 @@ public class AIBase : MonoBehaviour {
         return atkvo;
     }
 
-    
-    int atkNum = 0;
+
+    protected int atkNum = 0;
     //随机获取列
-    int lie = -1;
-    int GetLie()
+    protected int lie = -1;
+    protected int GetLie()
     {
         int i = (int)UnityEngine.Random.Range(0, GetComponent<AITheWay_dcr>().GetZSArrLength());
         //调试用
@@ -216,9 +196,9 @@ public class AIBase : MonoBehaviour {
     }
 
 
-    string[] carr;
+    protected string[] carr;
     //获取招式
-    string GetZS(bool isAddN = false)
+    protected string GetZS(bool isAddN = false)
     {
         if (lie == -1) lie = GetLie();
         string zs = "";
@@ -228,6 +208,8 @@ public class AIBase : MonoBehaviour {
             zs = carr[atkNum];
             if (isAddN)
             {
+                string[] _zs = zs.Split('_');
+                if (_zs[0] == "lz") zs = _zs[1] + "_" + _zs[2];
                 atkNum++;
                 GetAtkNumReSet();
             }
@@ -237,7 +219,7 @@ public class AIBase : MonoBehaviour {
     }
 
     //重置攻击招式的次数位置  非进攻招式放最后面会不重置导致错误
-    void GetAtkNumReSet()
+    protected void GetAtkNumReSet()
     {
         if (atkNum >= carr.Length)
         {
@@ -248,12 +230,12 @@ public class AIBase : MonoBehaviour {
     }
 
     //2.招式组第一个攻击动作的攻击距离  位移技能也可以直接取距离
-    float atkDistance = 0;
+    protected float atkDistance = 0;
 
     //3 靠近 达到攻击距离
-    bool NearRoleInDistance(float distance)
+    protected virtual bool NearRoleInDistance(float distance)
     {
-        
+        if (DontNear) return true;
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
@@ -273,7 +255,7 @@ public class AIBase : MonoBehaviour {
     }
 
     //转向
-    void ZhuanXiang()
+    protected void ZhuanXiang()
     {
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
@@ -286,11 +268,11 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    bool isActioning = false;
-    bool isAction = false;
+    protected bool isActioning = false;
+    protected bool isAction = false;
 
     //4.攻击
-    void GetAtk()
+    protected void GetAtk()
     {
         string zs = GetZS(true);
         if(zs == "")
@@ -301,17 +283,17 @@ public class AIBase : MonoBehaviour {
         gameBody.GetAtk(zs);
     }
     //5判断攻击是否完成
-    bool IsAtkOver()
+    protected bool IsAtkOver()
     {
         return gameBody.IsAtkOver();
     }
 
 
     //动作名称
-	string acName = "";
+    protected string acName = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
-    void GetAtkFS()
+    protected void GetAtkFS()
     {
 		if(!isAction){
 			isAction = true;
@@ -320,14 +302,25 @@ public class AIBase : MonoBehaviour {
             //print(atkNum + "    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
-           
 
+            if (strArr[0] == "lz")
+            {
+                //不需要转向
+                DontNear = true;
+                return;
+            }
+            else
+            {
+                DontNear = false;
+            }
 
             if (acName == "backUp")
             {
                 gameBody.GetBackUp();
                 return;
             }
+
+            
 
 
             if (strArr[0]=="rest")
@@ -391,7 +384,7 @@ public class AIBase : MonoBehaviour {
     }
 
     public float walkDistance = 3;
-    void GetWalkBack()
+    protected void GetWalkBack()
     {
         if (!isActioning)
         {
@@ -426,7 +419,7 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    void GetBackUp()
+    protected void GetBackUp()
     {
         if (!isActioning)
         {
@@ -445,10 +438,11 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    void GetRest()
+    protected void GetRest()
     {
         if (!isActioning)
         {
+            print(">>>>");
             isActioning = true;
             gameBody.GetStand();
             atkNum++;
@@ -465,8 +459,8 @@ public class AIBase : MonoBehaviour {
         
     }
 
-	AIShanxian aisx;
-	void GetShanXian(){
+    protected AIShanxian aisx;
+    protected void GetShanXian(){
 		if(!isActioning && NearRoleInDistance(atkDistance)){
             isActioning = true;
             aisx.ReSet();
@@ -487,14 +481,14 @@ public class AIBase : MonoBehaviour {
 
 	}
 
-    void AIBeHit()
+    protected void AIBeHit()
     {
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         AIReSet();
     }
 
-    void AIReSet()
+    protected void AIReSet()
     {
         isAction = false;
         isActioning = false;
@@ -506,14 +500,17 @@ public class AIBase : MonoBehaviour {
         //isZSOver = false;
     }
 
-    //一般攻击
-	void PtAtk(){
+    //用于连招的时候 可以连续动作打完再做其他普通攻击动作 注意前面+"lz"  攻击动作只能写成 "lz_xxx_x"或者"xxx_xx"
+    protected bool DontNear = false;
 
+    //一般攻击
+    protected void PtAtk(){
         //这种如果再次超出攻击距离会再追踪
-        if (!isActioning && NearRoleInDistance(atkDistance))
+        if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
         {
+
             isActioning = true;
-            ZhuanXiang();
+            if(!DontNear) ZhuanXiang();
             GetAtk();
         }
 

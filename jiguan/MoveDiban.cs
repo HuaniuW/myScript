@@ -11,8 +11,8 @@ public class MoveDiban : MonoBehaviour {
     [Header("移动的地板")]
     public GameObject diban;
 
-    [Header("是否优先上移动")]
-    public bool IsFristUp = true;
+    [Header("是否优先上或者左移动")]
+    public bool IsFristUpOrLeft = true;
 
     [Header("移动速度")]
     public float mspeed = 0.1f;
@@ -25,12 +25,19 @@ public class MoveDiban : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        if (!IsFristUp) mspeed *= -1;
+        if (!IsFristUpOrLeft) mspeed *= -1;
 
     }
+
+    [Header("停顿时间差 用于错开各个地板移动时间")]
+    public float stopTime = 0;
 	
 	// Update is called once per frame
 	void Update () {
+        if (stopTime > 0) {
+            stopTime--;
+            return;
+        }
         if (!diban) return;
         if (!IsMoveY)
         {

@@ -7,4 +7,5 @@ public interface IRole{
     string GetAcMsg(string acName);
 	void SpeedXStop();
 	void SetACingfalse();
+    void TestsI();
 }

@@ -27,7 +27,8 @@ public class ScreenChange : MonoBehaviour {
 	
     void ChangeScreen()
     {
-
+        GameObject playerUI = GlobalTools.FindObjByName("PlayerUI");
+        playerUI.GetComponent<DontDistoryObj>().HideSelf();
         //ObjectPools.GetInstance().delAll();//解决切换场景时候特效没回收被销毁导致再取取不出来的问题  但是这样销毁会导致卡顿很长的切换速度 已用重新创建解决
         SetPlayerPositionAndScreen();
         SceneManager.LoadScene("loads");
@@ -43,6 +44,7 @@ public class ScreenChange : MonoBehaviour {
         //print(Coll.tag + "  --  " + Coll.transform.tag);
         if(Coll.tag == "Player")
         {
+            if (Coll.transform.GetComponent<RoleDate>().isDie) return;
             ChangeScreen();
         }
     }

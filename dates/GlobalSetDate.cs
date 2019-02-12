@@ -16,7 +16,7 @@ public class GlobalSetDate : MonoBehaviour {
         //print("?????");
     }
 
-    public string playerPosition = "5_4";
+    public string playerPosition = "";
     public string screenName = "";
     public bool IsChangeScreening = false;
 
@@ -26,7 +26,7 @@ public class GlobalSetDate : MonoBehaviour {
     {
         string[] sArray = playerPosition.Split('_');
         playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]), 0);
-        print("位置   "+ playerInScreenPosition);
+        //print("位置   "+ playerInScreenPosition);
         return playerInScreenPosition;
     }
 
@@ -74,7 +74,7 @@ public class GlobalSetDate : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,""),this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"3"),this);
         }
 
     }

@@ -33,12 +33,16 @@ public class DontDistoryObj : MonoBehaviour {
     }
 
     public void HideSelf() {
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+        //this.gameObject.renderer.enabled = false;
+        //this.gameObject.GetComponent<Renderer>().enabled = false;
+        //this.gameObject.transform.position = new Vector3(0, -1000, 0);
     }
 
     public void ShowSelf()
     {
         this.gameObject.SetActive(true);
+        //this.gameObject.GetComponent<Renderer>().enabled = true;
     }
 
     public void RemoveSelf()

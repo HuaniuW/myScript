@@ -61,6 +61,8 @@ public class MyParticlesScale : MonoBehaviour {
             }
             rx -= jiaodu;
             ry += jiaoduy;
+            //ry = 0;
+            //print(ry + "  >  " + jiaoduy);
             transform.localEulerAngles = new Vector3(rx, ry, 0);
             //this.transform.localRotation = new Quaternion(80, 0, 0, 1);
             this.transform.localScale = new Vector3(1, 1, 1);
@@ -73,6 +75,8 @@ public class MyParticlesScale : MonoBehaviour {
             }
             rx -= jiaodu;
             ry += jiaoduy;
+            //ry = -40;
+            //print(ry+"    "+jiaoduy);
             //改变 物体的 rotation  可以用localEulerAngles
             transform.localEulerAngles = new Vector3(rx, ry, 0);
             //this.transform.localRotation = new Quaternion(0, 0, 0, 1);

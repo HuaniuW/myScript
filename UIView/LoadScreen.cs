@@ -13,7 +13,7 @@ public class LoadScreen : MonoBehaviour {
 	void Start () {
         loadTxt.text = "加载场景";
 
-        //AsyncOperation op = SceneManager.LoadSceneAsync("screen_11");
+        //AsyncOperation op = SceneManager.LoadSceneAsync("guan1_1");
 
         
         //print("hello");
@@ -98,7 +98,7 @@ public class LoadScreen : MonoBehaviour {
         if (!IsOnLoad)
         {
             IsOnLoad = true;
-            print(GlobalSetDate.instance.screenName);
+            //print(GlobalSetDate.instance.screenName);
             StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
         }
 	}

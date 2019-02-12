@@ -77,6 +77,18 @@ public class CameraController : MonoBehaviour
     public bool IsOutY = false;
     public bool IsOutY2 = false;
 
+    public void GetHitCameraKuaiY(float _y) {
+        IsHitCameraKuai = true;
+        CameraKuaiY = _y;
+    }
+    public void OutHitCameraKuaiY()
+    {
+        IsHitCameraKuai = false;
+    }
+
+    float CameraKuaiY = 0;
+    bool IsHitCameraKuai = false;
+
     void Update()
     {
         if (!player) return;
@@ -91,10 +103,21 @@ public class CameraController : MonoBehaviour
             }
 
             float yNew = transform.position.y;
-            if (!isYLocked)
+            if (IsHitCameraKuai)
             {
-                yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
+                //yNew = CameraKuaiY;
+                //print("??????????");
+                yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
             }
+            else
+            {
+                if (!isYLocked)
+                {
+                    yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
+                }
+            }
+            
+           
 
             //print(">>>>>>???");
             if (Mathf.Abs(x - player.position.x) > Margin.x)
@@ -117,23 +140,34 @@ public class CameraController : MonoBehaviour
                 //y = player.position.y;
             }*/
 
-            if (y - player.position.y > Margin.y|| y - player.position.y < -Margin.y) {
-                //IsOutY = false;
-                //if (IsOutY2)return;
-                if (y - player.position.y> maxPlayerCameraYDistanceDown) {
-                    y = player.position.y + maxPlayerCameraYDistanceDown;
-                    IsOutY = false;
-                   
-                }
-                else
+            if (!IsHitCameraKuai)
+            {
+                if (y - player.position.y > Margin.y || y - player.position.y < -Margin.y)
                 {
-                    IsOutY = true;
-                    //print("抖");
-                    //if (IsOutY2) return;
-                    y = Mathf.Lerp(y, player.position.y, smoothing.y * Time.deltaTime);
-                    if (Mathf.Abs(y - player.position.y) < 0.3) y = player.position.y;
+                    //IsOutY = false;
+                    //if (IsOutY2)return;
+                    if (y - player.position.y > maxPlayerCameraYDistanceDown)
+                    {
+                        y = player.position.y + maxPlayerCameraYDistanceDown;
+                        IsOutY = false;
+
+                    }
+                    else
+                    {
+                        IsOutY = true;
+                        //print("抖");
+                        //if (IsOutY2) return;
+                        y = Mathf.Lerp(y, player.position.y, smoothing.y * Time.deltaTime);
+                        if (Mathf.Abs(y - player.position.y) < 0.3) y = player.position.y;
+                    }
                 }
             }
+            else
+            {
+                y = Mathf.Lerp(y, CameraKuaiY, smoothing.y * Time.deltaTime);
+                if (Mathf.Abs(y - CameraKuaiY) < 0.1) y = CameraKuaiY;
+            }
+           
             
         }
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
@@ -141,7 +175,7 @@ public class CameraController : MonoBehaviour
         var cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
         //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
         x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
-        y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
+        if(!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
         transform.position = new Vector3(x, y, transform.position.z);//改变相机的位置
 
 

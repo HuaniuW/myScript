@@ -7,8 +7,8 @@ public class BeHit : MonoBehaviour {
     GameBody gameBody;
     // Use this for initialization
     void Start () {
-		
-	}
+        IRole Role = GetComponent<IRole>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -21,6 +21,7 @@ public class BeHit : MonoBehaviour {
 
 
         gameBody = GetComponent<GameBody>();
+       
         roleDate = GetComponent<RoleDate>();
         if (roleDate.isDie) return;
 

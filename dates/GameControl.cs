@@ -49,8 +49,8 @@ public class GameControl : MonoBehaviour {
             player.GetComponent<DontDistoryObj>().ShowSelf();
         }
         //设置玩家进场位置
-        player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
-        player.GetComponent<GameBody>().GetStand();
+        if(GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        player.GetComponent<GameBody>().SetV0();
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());
         //player.transform.localScale = new Vector3(1, 1, 1);
@@ -75,7 +75,7 @@ public class GameControl : MonoBehaviour {
     //摄像头定焦 和找到敌人
     void GetTargetPlayer()
     {
-        print("hi");
+        //print("hi");
         this.GetComponent<CameraController>().GetTargetObj(FindObjByName("player").transform);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ENEMY), null);
     }

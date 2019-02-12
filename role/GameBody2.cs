@@ -177,8 +177,8 @@ public class GameBody2 : MonoBehaviour, IRole
         return "jn_shan";
     }
 
-    bool isDodge = false;
-    bool isDodgeing = false;
+    protected bool isDodge = false;
+    protected bool isDodgeing = false;
 
     public void GetDodge1()
     {
@@ -894,7 +894,10 @@ public class GameBody2 : MonoBehaviour, IRole
     }
 
     /// <summary
-
+    public void TestsI()
+    {
+        print("hi22222");
+    }
     void Atk2()
     {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
@@ -959,6 +962,8 @@ public class GameBody2 : MonoBehaviour, IRole
                 atkNums = 0;
             }
         }
+
+       
     }
 }
 
