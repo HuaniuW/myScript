@@ -16,7 +16,12 @@ public class GlobalSetDate : MonoBehaviour {
         //print("?????");
     }
 
-    public string playerPosition = "";
+    private void OnDestroy()
+    {
+        //print("??????????????????销毁了？");
+    }
+
+    public string playerPosition = "-9.6_-1.9";
     public string screenName = "";
     public bool IsChangeScreening = false;
 
@@ -31,6 +36,7 @@ public class GlobalSetDate : MonoBehaviour {
     }
 
 
+    //声音调控
     float SoundEffect = 1f;
     public float GetSoundEffectValue()
     {
@@ -48,9 +54,118 @@ public class GlobalSetDate : MonoBehaviour {
     }
 
 
+    string _GuankaStr;
+    //关卡记录
+    public string GuanKaStr()
+    {
+        
+        return _GuankaStr;
+    }
+
+	//当前存档位
+	public string CurrentSaveDateName = "UnityUserData";
+    //全局总关卡的临时数据
+    public string TempZGuanKaStr;
+    //启动游戏的时候 调用存档数据先  对比当前关卡数据是否有变动 
+    //每关都要对比加到临时数据
+
+    //匹配存档中的关卡记录
+    public void GetGuanKaStr()
+    {
+        //获取当前关卡的数据
+
+        //是否有存档
+        if (GameSaveDate.GetInstance().IsHasSaveDate())
+        {
+            print("!!!!!!!!!!!!!!!!!!有存档记录");
+            //找到总的关卡记录
+            if (GameSaveDate.GetInstance().IsHasSaveDateByName(CurrentSaveDateName)) {
+                //print(GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName));
+                TempZGuanKaStr = GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName).guankajilu;
+                //print("TempZGuanKaStr  "+ TempZGuanKaStr);
+            }
+            else
+            {
+                //print("没有当前存档的记录");
+            }
+            
+        }
+        else
+        {
+            print("没有存档记录");
+			//记录当前关卡的记录  这里一般是新开游戏
+			//TempZGuanKaStr = "";
+        }
+        //获取存档的关卡记录
+    }
+
+    public string currentGKDate;
+    //获取关卡名的关卡数据 并且在原数据中删除
+    public string GetGuanKaStrByGKNameAndRemoveIt(string GKName)
+    {
+        if (TempZGuanKaStr == null) return null;
+        currentGKDate = null;
+        print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
+        string gkStr = "";
+        string[] arr = TempZGuanKaStr.Split('|');
+        for(var i = 0; i < arr.Length; i++)
+        {
+            string[] arr2 = arr[i].Split(':');
+            string curGKName = arr2[0];
+            print("curGKName  "+ curGKName);
+            if (curGKName != ""&& curGKName == GKName)
+            {
+                
+                currentGKDate = arr2[1];
+                print("当前关卡的数据  "+ currentGKDate);
+            }
+            else
+            {
+                if(arr[i]!="") gkStr += arr[i] + '|';
+            }
+           
+        }
+        //print("进场景取数据  "+ gkStr);
+        TempZGuanKaStr = gkStr;
+        //print("取完数据后的全局数据  "+ TempZGuanKaStr);
+        return currentGKDate;
+    }
+
+    public void SetChangeThisGKInZGKTempDate(string GKDate)
+    {
+        print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
+        print(" 当前全局的数据  "+ TempZGuanKaStr);
+        TempZGuanKaStr += GKDate+"|";
+        print("加完后的全局数据！！！ " + TempZGuanKaStr);
+    }
+
+    public void GetSave()
+    {
+        //储存玩家所有数据
+        print("save " + TempZGuanKaStr);
+    }
+
+    /**
+	public void RemoveCurrentGKDateByName(string GKName){
+		if (TempZGuanKaStr == null) return;
+		string gkStr = "";
+		string[] arr = TempZGuanKaStr.Split('|');
+		for (var i = 0; i < TempZGuanKaStr.Length; i++)
+		{
+			string[] arr2 = arr[i].Split(':');
+			if (arr2[0] == GKName) {
+				continue;
+			}
+			gkStr += arr[i]+'|';
+		}
+        TempZGuanKaStr =  gkStr;
+	}*/
+
+
     void Start()
     {
         //Debug.Log("Start");
+        GetGuanKaStr();
     }
 
     public void DoSomeThings()

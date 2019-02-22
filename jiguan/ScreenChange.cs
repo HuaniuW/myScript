@@ -29,6 +29,7 @@ public class ScreenChange : MonoBehaviour {
     {
         GameObject playerUI = GlobalTools.FindObjByName("PlayerUI");
         playerUI.GetComponent<DontDistoryObj>().HideSelf();
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_SCREEN, null), this);
         //ObjectPools.GetInstance().delAll();//解决切换场景时候特效没回收被销毁导致再取取不出来的问题  但是这样销毁会导致卡顿很长的切换速度 已用重新创建解决
         SetPlayerPositionAndScreen();
         SceneManager.LoadScene("loads");

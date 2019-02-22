@@ -17,6 +17,12 @@ public class DontDistoryObj : MonoBehaviour {
         //print("awake");
     }
 
+    private void OnDestroy()
+    {
+        //print("OnDestroy!!!!!!");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, ChangeScreen);
+    }
+
     void ChangeScreen(UEvent uEvent)
     {
 

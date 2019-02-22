@@ -197,3 +197,7 @@ GameObject.transform.position = FAR_AWAY
 // 动态加载预制资源 prefab 需要将prefab放在resources文件夹内 首字母大小写不限
 
 //FieldInfo 映射 动态获取属性
+
+    /****************************
+     * 凡是加了事件侦听的地方 要么1次的直接 取消侦听 要么 在OnDeStory()函数里面统一移除侦听 否则会重复侦听
+     * **/

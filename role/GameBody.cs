@@ -654,7 +654,12 @@ public class GameBody : MonoBehaviour,IRole{
     void Stand()
     {
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        if (DBBody.animation.lastAnimationName != STAND) DBBody.animation.GotoAndPlayByFrame(STAND);
+        //print(">  "+DBBody.animation.lastAnimationName);
+        if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
+            //print("--");
+            DBBody.animation.GotoAndPlayByFrame(STAND);
+        }
+        
         isDowning = false;
         if (newSpeed.x > slideNum)
         {

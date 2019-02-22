@@ -23,6 +23,11 @@ public class AIBase : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
     }
 
+    private void OnDestroy()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
+    }
+
     public void GetEnemyObj(UEvent e)
     {
         

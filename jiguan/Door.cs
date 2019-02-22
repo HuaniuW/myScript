@@ -21,13 +21,28 @@ public class Door : MonoBehaviour {
     // Use this for initialization
     void Start () {
         //这里做判断是否使用 如果使用了调用HsaOpen()
+        chushiY = men.transform.position.y;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
-	}
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CLOSE_DOOR, CloseDoor);
+    }
 
     public void HasOpen()
     {
         //当门以及打开 返回场景时候调用
         men.transform.position = new Vector3(men.transform.position.x, moveToY.transform.position.y, men.transform.position.z);
+    }
+    float chushiY;
+    public void Chushi()
+    {
+        men.transform.position = new Vector3(men.transform.position.x, chushiY, men.transform.position.z);
+    }
+
+    bool isClose = false;
+    //关门
+    public void Guanbi()
+    {
+        isClose = true;
+        isOpen = false;
     }
 
     bool isOpen = false;
@@ -36,12 +51,64 @@ public class Door : MonoBehaviour {
     {
         if (DoorNum !=  uEvent.eventParams.ToString()) return;
         isOpen = true;
+        isClose = false;
         //print(uEvent.eventParams);
+        
         if (openDoor) openDoor.Play();
     }
-	// Update is called once per frame
-	void Update () {
+    public void CloseDoor(UEvent uEvent)
+    {
+        if (DoorNum != uEvent.eventParams.ToString()) return;
+        Guanbi();
+        //print(uEvent.eventParams);
+        
+        if (openDoor) openDoor.Play();
+    }
 
+    private void OnDestroy()
+    {
+        //print("men");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, CloseDoor);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        if (isClose)
+        {
+
+            if (!IsToDown)
+            {
+                if (men && men.transform.position.y > chushiY)
+                {
+                    float moveY = men.transform.position.y - moveSpeed;
+                    men.transform.position = new Vector3(men.transform.position.x, moveY, men.transform.position.z);
+                    Gensui();
+                }
+                else
+                {
+                    string zt = this.name + "-0";
+                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt),this);
+                    isClose = false;
+                    if (openDoor) openDoor.Stop();
+                }
+                return;
+            }
+            if (men && men.transform.position.y > chushiY)
+            {
+                float moveY = men.transform.position.y + moveSpeed;
+                men.transform.position = new Vector3(men.transform.position.x, moveY, men.transform.position.z);
+                Gensui();
+            }
+            else
+            {
+                string zt = this.name + "-0";
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
+                isClose = false;
+                if (openDoor) openDoor.Stop();
+            }
+        }
         
         if (isOpen)
         {
@@ -55,6 +122,8 @@ public class Door : MonoBehaviour {
                 }
                 else
                 {
+                    string zt = this.name + "-1";
+                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
                     isOpen = false;
                     if (openDoor) openDoor.Stop();
                 }
@@ -68,6 +137,9 @@ public class Door : MonoBehaviour {
             }
             else
             {
+                string zt = this.name + "-1";
+                print("????????????????????");
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
                 isOpen = false;
                 if (openDoor) openDoor.Stop();
             }
