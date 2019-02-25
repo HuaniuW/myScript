@@ -198,6 +198,32 @@ GameObject.transform.position = FAR_AWAY
 
 //FieldInfo 映射 动态获取属性
 
-    /****************************
-     * 凡是加了事件侦听的地方 要么1次的直接 取消侦听 要么 在OnDeStory()函数里面统一移除侦听 否则会重复侦听
-     * **/
+/****************************
+ * 凡是加了事件侦听的地方 要么1次的直接 取消侦听 要么 在OnDeStory()函数里面统一移除侦听 否则会重复侦听
+ * **/
+
+
+
+
+
+////很好用的排序方法  适用list和array
+//public static int Min(int[] array)
+//{
+//    if (array == null) throw new Exception("数组空异常");
+//    int value = 0;
+//    bool hasValue = false;
+//    foreach (int x in array)
+//    {
+//        if (hasValue)
+//        {
+//            if (x < value) value = x;
+//        }
+//        else
+//        {
+//            value = x;
+//            hasValue = true;
+//        }
+//    }
+//    if (hasValue) return value;
+//    throw new Exception("没找到");
+//}

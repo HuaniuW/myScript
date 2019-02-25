@@ -22,6 +22,7 @@ public class XueTiao : MonoBehaviour {
         SetXueTiao2();
         //_w2 = _w;
         GetXueNum(0);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
     }
 
     //是否激活
@@ -48,7 +49,15 @@ public class XueTiao : MonoBehaviour {
             _maxLive = roleDate.maxLive;
             roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
             _cLive = roleDate.live;
+            GetXueNum(0);
+            print("in");
+            //isChage = true;
         }
+    }
+
+    void LiveChange(UEvent e)
+    {
+        GetGameObj();
     }
 
     public void SetXueTiao(float w, float maxLive, float h = 10)

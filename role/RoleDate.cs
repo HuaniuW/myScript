@@ -34,6 +34,20 @@ public class RoleDate : MonoBehaviour {
     public string[] testArr;
 
     public float team = 1;
+
+    public string BeHitVudio
+    {
+        get
+        {
+            return beHitVudio;
+        }
+
+        set
+        {
+            beHitVudio = value;
+        }
+    }
+
     void Start () {
 		
 	}

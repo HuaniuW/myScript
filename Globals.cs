@@ -6,8 +6,10 @@ public class Globals : MonoBehaviour {
 
     //是否进入情节 plot（情节）
     public static bool isInPlot = false;
-	// Use this for initialization
-	void Start () {
+    //开启状态菜单
+    public const string OPEN_ZTCD = "p";
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

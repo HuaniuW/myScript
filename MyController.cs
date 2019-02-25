@@ -14,11 +14,18 @@ public class MyController : MonoBehaviour {
     void Start () {
         _body = GetComponent<GameBody>();
         //print("body: "+_body.);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ROLECANCONTROL, this.IsRoleCanControl);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    bool _isCanControl = true;
+    void IsRoleCanControl(UEvent e) {
+        _isCanControl = (bool)e.eventParams;
+    }
+
+    // Update is called once per frame
+    void Update () {
         if (Globals.isInPlot) return;
+        if (!_isCanControl) return;
         if (GlobalSetDate.instance.IsChangeScreening) return;
 
         if (Input.anyKey)

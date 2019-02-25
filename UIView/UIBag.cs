@@ -22,6 +22,8 @@ public class UIBag : MonoBehaviour {
         mianbanHide(mianban2);
         mianbanHide(mianban3);
 
+        mianbanHide(this.GetComponent<RectTransform>());
+
     }
 	
     void Click1()
@@ -75,8 +77,25 @@ public class UIBag : MonoBehaviour {
             //offset = imgRect.anchoredPosition - mouseUguiPos;
         //}
     }
+
+    bool IsOpen = false;
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (Input.GetKeyDown(Globals.OPEN_ZTCD))
+        {
+            if (!IsOpen)
+            {
+               //print("KeyCode.P>  " + KeyCode.P);
+                IsOpen = true;
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, false), this);
+                mianbanShow(this.GetComponent<RectTransform>());
+            }
+            else
+            {
+                IsOpen = false;
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+                mianbanHide(this.GetComponent<RectTransform>());
+            }
+        }
+    }
 }
