@@ -186,6 +186,10 @@ GameObject.SetActive()
 //如果该物体有子物体 你要用SetActiveRecursively(false) 来控制是否在场景中停用该物体（递归的）
 //SetActive(false)的时候，物体不再渲染，释放占用资源
 
+    //Destroy(this.gameObject);
+    //立即销毁 并且释放内存  *要是gameObject 才能删除
+    //DestroyImmediate(this.gameObject, true);
+
 Camera.cullingMask
 //设置相机的渲染层次，在不需要某个物体的时候，cullingMask中将此物体的layer去掉，但是前提是要规划好layer，不能影响其他不希望隐藏掉的物体。
 

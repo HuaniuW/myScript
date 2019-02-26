@@ -8,6 +8,8 @@ public class Globals : MonoBehaviour {
     public static bool isInPlot = false;
     //开启状态菜单
     public const string OPEN_ZTCD = "p";
+
+    public static bool isDebug = false;
     // Use this for initialization
     void Start () {
 		

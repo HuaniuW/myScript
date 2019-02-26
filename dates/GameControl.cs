@@ -7,11 +7,13 @@ public class GameControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GameSaveDate.GetInstance().GetTestSave();
+        if(Globals.isDebug)print("游戏关卡控制类 启动");
         //GlobalSetDate.instance.GetGuanKaStr();
     }
 
     private void OnEnable()
     {
+        if (Globals.isDebug) print("游戏关卡控制类OnEnable 启动");
         GetPlayer();
         GetPlayerUI();
         GetTargetPlayer();
@@ -68,7 +70,7 @@ public class GameControl : MonoBehaviour {
     public void GKDateChange(UEvent e)
     {
         //men_1-1 改变门状态
-        print(">>>  "+e.eventParams+"  > "+ TempCurrentGKDate);
+        if (Globals.isDebug) print(">>>  "+e.eventParams+"  > "+ TempCurrentGKDate);
         if (TempCurrentGKDate == "") return;
         string changeDate = e.eventParams.ToString();
         string changeDateName = changeDate.Split('-')[0];//men_1
@@ -81,7 +83,7 @@ public class GameControl : MonoBehaviour {
         {
             string theGKDate = currentGKDateArr[i];
             string dateName = theGKDate.Split('-')[0];
-            print("theGKDate  >  " + theGKDate);
+            if (Globals.isDebug) print("theGKDate  >  " + theGKDate);
             string zt = theGKDate.Split('-')[1];
             if(dateName == changeDateName)
             {
@@ -129,7 +131,7 @@ public class GameControl : MonoBehaviour {
 		if (TempCurrentGKDate == "") return;
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
-        print("TempCurrentGKDate   "+ TempCurrentGKDate);
+        if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
 		//print("GuanKaStr  >>>  "+GuanKaStr);
 		//print(GuanKaStr);
         for (var i = 0; i < strArr.Length; i++)

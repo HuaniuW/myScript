@@ -53,7 +53,7 @@ public class GameSaveDate{
         //Debug.Log(cGKDateName);
         // _fileName = Application.persistentDataPath + "/" + _fileName;
         string str = Application.persistentDataPath + "/" + cGKDateName;
-        //Debug.Log(str);
+        if(Globals.isDebug)Debug.Log(str);
         try
         {
             string strTemp = LoadTextFile(str, false);
@@ -64,7 +64,7 @@ public class GameSaveDate{
         }
         catch
         {
-            Debug.Log("系统读取XML出现错误，请检查");
+            if (Globals.isDebug) Debug.Log("系统读取XML出现错误，请检查");
         }
         return null;
     }

@@ -35,6 +35,7 @@ public class Mianban1 : MonoBehaviour {
         xuanzhong.GetComponent<CanvasGroup>().alpha = 0;
         kuang.position = gezi1.position;
         getRQ = gezi1;
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_OBJ_NAME, this.GetObjByName);
     }
 
    
@@ -46,14 +47,45 @@ public class Mianban1 : MonoBehaviour {
             {
                 string hzName = hzIdList[i].Split('_')[0];
                 int geziNum = int.Parse(hzIdList[i].Split('_')[1]);
-                GameObject obj = Resources.Load(hzName) as GameObject;
-                obj = Instantiate(obj);
-                obj.transform.parent = this.transform;
-                RectTransform hz = obj.GetComponent<RectTransform>();
-                geziArr[geziNum].GetComponent<Gezi>().GetInObj(hz);
+                GetObjByNameInGezi(hzName, geziArr[geziNum]);
             }
         }
     }
+
+    void GetObjByNameInGezi(string ObjName, RectTransform gz)
+    {
+        //GameObject obj = Resources.Load(ObjName) as GameObject;
+        //obj = Instantiate(obj);
+        GameObject obj = GlobalTools.GetGameObjectByName(ObjName);
+        obj.transform.parent = this.transform;
+        RectTransform hz = obj.GetComponent<RectTransform>();
+        gz.GetComponent<Gezi>().GetInObj(hz);
+    }
+
+    void GetObjByName(UEvent e)
+    {
+        //找个空位 装进去 然后在生成全部数据 提交到全局数据
+        //找出最近的 物品栏空位
+        RectTransform gz = GetNearGezi();
+        if (gz != null) {
+            GetObjByNameInGezi(e.eventParams.ToString(), gz);
+            //生成全局数据
+            saveDate();
+        }
+        
+
+    }
+
+    RectTransform GetNearGezi()
+    {
+        foreach(var gz in geziArr)
+        {
+            if (gz.GetComponent<Gezi>().IsHasObj() == null) return gz;
+        }
+        return null;
+    }
+
+ 
 	
 	// Update is called once per frame
 	void Update () {
@@ -248,10 +280,13 @@ public class Mianban1 : MonoBehaviour {
         for (var i = 0; i < geziArr.Count; i++)
         {
             if (geziArr[i].GetComponent<Gezi>().IsHasObj() != null) {
-                saveDateStr += (geziArr[i].GetComponent<Gezi>().IsHasObj().name + "_" + i);
+                string objName = geziArr[i].GetComponent<Gezi>().IsHasObj().name;
+                objName = objName.Split('(')[0];
+                saveDateStr += (objName + "_" + i);
                 if (i != geziArr.Count - 1) saveDateStr += "-";
             }
         }
+        if (Globals.isDebug) print("---saveDateStr  "+ saveDateStr);
         return saveDateStr;
     }
 

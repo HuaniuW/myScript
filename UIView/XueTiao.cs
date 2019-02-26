@@ -50,7 +50,7 @@ public class XueTiao : MonoBehaviour {
             roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
             _cLive = roleDate.live;
             GetXueNum(0);
-            print("in");
+            if (Globals.isDebug) print("in");
             //isChage = true;
         }
     }

@@ -8,6 +8,8 @@ public class HZDate : MonoBehaviour {
     public string id = "";
     [Header("名字")]
     public string HZName;
+    [Header("调用的名字")]
+    public string objName;
     [Header("增加攻击力")]
     public float atk;
     [Header("增加攻击力比例")]

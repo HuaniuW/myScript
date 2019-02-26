@@ -20,4 +20,11 @@ public class GlobalTools : MonoBehaviour {
         if (obj == null) obj = GameObject.Find("/" + _name + "(Clone)") as GameObject;
         return obj;
     }
+
+    public static GameObject GetGameObjectByName(string ObjName)
+    {
+        GameObject obj = Resources.Load(ObjName) as GameObject;
+        obj = Instantiate(obj);
+        return obj;
+    }
 }

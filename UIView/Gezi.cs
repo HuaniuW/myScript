@@ -43,19 +43,13 @@ public class Gezi : MonoBehaviour {
         {
             //&& (this.tag == "zhuangbeilan" && _OldRO.tag != "zhuangbeilan") || (this.tag != "zhuangbeilan" && _OldRO.tag == "zhuangbeilan")
             if (!isOldObjOut) {
-                print("zhuangbeilan  切换属性事件  " + _OldRQ.tag);
+                if (Globals.isDebug) print("zhuangbeilan  切换属性事件  " + _OldRQ.tag);
                 List<RectTransform> HZs = this.transform.parent.GetComponent<Mianban1>().GetInHZListHZ();
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ,HZs), this);
-                
             }
-            
-
         }
-        
         _obj.GetComponent<MyDrag>().OldRQ = this.GetComponent<RectTransform>();
         _obj.transform.position = this.transform.position;
-      
-        
     }
 
    

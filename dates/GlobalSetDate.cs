@@ -23,6 +23,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     public string playerPosition = "-9.6_-1.9";
     public string screenName = "";
+    public string cameraPosition = "";
     public bool IsChangeScreening = false;
 
     Vector3 playerInScreenPosition;
@@ -77,7 +78,7 @@ public class GlobalSetDate : MonoBehaviour {
         //是否有存档
         if (GameSaveDate.GetInstance().IsHasSaveDate())
         {
-            print("!!!!!!!!!!!!!!!!!!有存档记录");
+            if (Globals.isDebug) print("!!!!!!!!!!!!!!!!!!有存档记录");
             //找到总的关卡记录
             if (GameSaveDate.GetInstance().IsHasSaveDateByName(CurrentSaveDateName)) {
                 //print(GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName));
@@ -92,7 +93,7 @@ public class GlobalSetDate : MonoBehaviour {
         }
         else
         {
-            print("没有存档记录");
+            if (Globals.isDebug) print("没有存档记录");
 			//记录当前关卡的记录  这里一般是新开游戏
 			//TempZGuanKaStr = "";
         }
@@ -105,19 +106,19 @@ public class GlobalSetDate : MonoBehaviour {
     {
         if (TempZGuanKaStr == null) return null;
         currentGKDate = null;
-        print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
+        if (Globals.isDebug) print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
         string gkStr = "";
         string[] arr = TempZGuanKaStr.Split('|');
         for(var i = 0; i < arr.Length; i++)
         {
             string[] arr2 = arr[i].Split(':');
             string curGKName = arr2[0];
-            print("curGKName  "+ curGKName);
+            if (Globals.isDebug) print("curGKName  "+ curGKName);
             if (curGKName != ""&& curGKName == GKName)
             {
                 
                 currentGKDate = arr2[1];
-                print("当前关卡的数据  "+ currentGKDate);
+                if (Globals.isDebug) print("当前关卡的数据  "+ currentGKDate);
             }
             else
             {
@@ -131,40 +132,42 @@ public class GlobalSetDate : MonoBehaviour {
         return currentGKDate;
     }
 
+    //将当前关卡数据 加到总关卡数据中
     public void SetChangeThisGKInZGKTempDate(string GKDate)
     {
-        print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
-        print(" 当前全局的数据  "+ TempZGuanKaStr);
+        if (Globals.isDebug) print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
+        if (Globals.isDebug) print(" 当前全局的数据  "+ TempZGuanKaStr);
         TempZGuanKaStr += GKDate+"|";
-        print("加完后的全局数据！！！ " + TempZGuanKaStr);
+        if (Globals.isDebug) print("加完后的全局数据！！！ " + TempZGuanKaStr);
     }
 
     public void GetSave()
     {
         //储存玩家所有数据
-        print("save " + TempZGuanKaStr);
+        if (Globals.isDebug) print("save " + TempZGuanKaStr);
     }
 
-    /**
-	public void RemoveCurrentGKDateByName(string GKName){
-		if (TempZGuanKaStr == null) return;
-		string gkStr = "";
-		string[] arr = TempZGuanKaStr.Split('|');
-		for (var i = 0; i < TempZGuanKaStr.Length; i++)
-		{
-			string[] arr2 = arr[i].Split(':');
-			if (arr2[0] == GKName) {
-				continue;
-			}
-			gkStr += arr[i]+'|';
-		}
-        TempZGuanKaStr =  gkStr;
-	}*/
+    
+	//public void RemoveCurrentGKDateByName(string GKName){
+	//	if (TempZGuanKaStr == null) return;
+	//	string gkStr = "";
+	//	string[] arr = TempZGuanKaStr.Split('|');
+	//	for (var i = 0; i < TempZGuanKaStr.Length; i++)
+	//	{
+	//		string[] arr2 = arr[i].Split(':');
+	//		if (arr2[0] == GKName) {
+	//			continue;
+	//		}
+	//		gkStr += arr[i]+'|';
+	//	}
+ //       TempZGuanKaStr =  gkStr;
+	//}
 
 
     void Start()
     {
         //Debug.Log("Start");
+        if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
         GetGuanKaStr();
     }
 
@@ -179,17 +182,19 @@ public class GlobalSetDate : MonoBehaviour {
     void Update () {
         if (Input.GetKeyDown(KeyCode.B))
         {
+            //音量+
             GetUpSoundEffectValue();
         }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
+            //音量-
             GetDownSoundEffectValue();
         }
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"3"),this);
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"3"),this);
         }
 
     }

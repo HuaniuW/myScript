@@ -17,4 +17,9 @@ public class EventTypeName
 
     //角色是否能操控
     public const string ROLECANCONTROL = "roleCanControl";
+
+    //怪物死亡掉落 不能用 全部没死的怪也会侦听到
+    //public const string GUAI_DIE_OUT = "guai_die_out";
+
+    public const string GET_OBJ_NAME = "get_obj_name";
 }
