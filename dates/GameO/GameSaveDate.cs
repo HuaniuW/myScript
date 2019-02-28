@@ -26,26 +26,32 @@ public class GameSaveDate{
         return instance;
     }
 
-    string _fileName = Application.persistentDataPath + "/UnityUserData";
+    string _fileURL = Application.persistentDataPath + "/date1";
 
 
     // Use this for initialization
     public GameSaveDate()
     {
-      
+        
     }
 
     public void GetTestSave()
     {
-
         UserDate user = new UserDate();
         user.userName = "乐逍遥";
         user.onlyId = 1;
         string s = SerializeObject(user, typeof(UserDate));
         //创建XML文件且写入数据
-        CreateTextFile(_fileName, s, false);
+        CreateTextFile(_fileURL, s, false);
+    }
 
-      
+    public void SaveDateByURLName(string URL,UserDate date)
+    {
+        string _fileURL2 = Application.persistentDataPath + "/" + URL;
+        Debug.Log("_fileURL2> "+ _fileURL2);
+        string s = SerializeObject(date, typeof(UserDate));
+        //创建XML文件且写入数据
+        CreateTextFile(_fileURL2, s, false);
     }
 
     public UserDate GetSaveDateByName(string cGKDateName)
@@ -59,7 +65,7 @@ public class GameSaveDate{
             string strTemp = LoadTextFile(str, false);
             //反序列化对象
             UserDate userD = DeserializeObject(strTemp, typeof(UserDate)) as UserDate;
-            //Debug.Log(userD.guankajilu);
+            Debug.Log(userD.userName);
             return userD;
         }
         catch
@@ -76,7 +82,7 @@ public class GameSaveDate{
         return false;
     }
 
-    string[] dateZu = { "date1", "date2", "UnityUserData" };
+    string[] dateZu = { "date1", "date2", "date3" };
     public bool IsHasSaveDate()
     {
        for(var i = 0; i < dateZu.Length; i++)
@@ -86,6 +92,10 @@ public class GameSaveDate{
         }
         return false;
     }
+
+
+
+
 
     public string SerializeObject(object pObject, System.Type ty)
     {

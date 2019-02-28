@@ -9,7 +9,7 @@ public class Globals : MonoBehaviour {
     //开启状态菜单
     public const string OPEN_ZTCD = "p";
 
-    public static bool isDebug = false;
+    public static bool isDebug = true;
     // Use this for initialization
     void Start () {
 		

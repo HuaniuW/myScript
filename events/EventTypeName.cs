@@ -22,4 +22,6 @@ public class EventTypeName
     //public const string GUAI_DIE_OUT = "guai_die_out";
 
     public const string GET_OBJ_NAME = "get_obj_name";
+
+    public const string ZD_SKILL = "zd_skill";
 }

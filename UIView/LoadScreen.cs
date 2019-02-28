@@ -12,38 +12,11 @@ public class LoadScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         loadTxt.text = "加载场景";
-
         //AsyncOperation op = SceneManager.LoadSceneAsync("guan1_1");
-
-        
-        //print("hello");
-        //StartCoroutine(IEStartLoading("战斗"));
-        //op.allowSceneActivation = false;
-        //print("hello2");
-        GlobalSetDate.instance.DoSomeThings();
-        
-
+        StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
         //GetMainCamera();
     }
-
-    private void OnEnable()
-    {
-        IsOnLoad = false;
-        //print(GlobalSetDate.instance.screenName);
-        //StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
-    }
-
-    public void GetMainCamera()
-    {
-        GameObject mainCamera = Resources.Load("player") as GameObject;
-        //print("..... "+(mainCamera == null));
-        GameObject.Instantiate(mainCamera);
-        //这个位置指定无效 异步了？？？
-        //mainCamera.transform.position = new Vector3(0, 0, mainCamera.transform.position.z);
-        var cubeF = GameObject.Find("/player(Clone)");
-        //print(cubeF);
-    }
-
+    
     public void LoadScreenByName(string screenName)
     {
         StartCoroutine(IEStartLoading(screenName));
@@ -54,6 +27,7 @@ public class LoadScreen : MonoBehaviour {
     {
         int displayProgress = 0;
         int toProgress = 0;
+        if(Globals.isDebug)print("screen>  "+scene);
         AsyncOperation op = SceneManager.LoadSceneAsync(scene);
         //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
         op.allowSceneActivation = false;
@@ -91,15 +65,4 @@ public class LoadScreen : MonoBehaviour {
 
     }
 
-
-    bool IsOnLoad = false;
-	// Update is called once per frame
-	void Update () {
-        if (!IsOnLoad)
-        {
-            IsOnLoad = true;
-            //print(GlobalSetDate.instance.screenName);
-            StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
-        }
-	}
 }

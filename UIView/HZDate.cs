@@ -27,6 +27,7 @@ public class HZDate : MonoBehaviour {
     [Header("抗火")]
     public float kanghuo;
 
+    public string type = "bd";
     void Start () {
 		
 	}

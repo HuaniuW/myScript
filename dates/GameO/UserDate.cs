@@ -11,7 +11,7 @@ public class UserDate{
     public string playerPosition;
     public string cameraPosition;
     //背包数据记录
-    public string bagDate;
+    public string bagDate = "huizhang1_0-huizhang2_2";
     //装备栏记录  id_num
     //public string zblIds;
     //生命
@@ -28,7 +28,7 @@ public class UserDate{
     //是否是最新存档
     //public bool isNewSaveDate = false;
     //地图名字
-    public string mapName;
+    public string screenName;
    
     public UserDate()
     {

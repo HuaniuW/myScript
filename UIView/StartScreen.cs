@@ -15,18 +15,10 @@ public class StartScreen : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //btn1.onClick.AddListener(delegate () { gameStart(btn1.gameObject); });
-        //DontDestroyOnLoad(this);
-        //this.transform.gameObject.SetActive(false);
-        //btn1.transform.gameObject.SetActive(false);
-        //test1();
-
         FindSaveDate();
         GetButton();
 
        
-
-        
         //iTween.FadeTo(btn1.transform.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
         //iTween.MoveFrom(this.gameObject, iTween.Hash("x", -10f, "time", 3f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fds"));
         //btn1.Component.CrossFadeAlpha
@@ -51,7 +43,7 @@ public class StartScreen : MonoBehaviour {
     }
 
    
-
+    //查看是否有存档来显示 继续游戏按钮
     void FindSaveDate()
     {
         if (GameSaveDate.GetInstance().IsHasSaveDate())
@@ -68,11 +60,6 @@ public class StartScreen : MonoBehaviour {
         }
     }
 
-    void GetPlayerDate()
-    {
-        GlobalSetDate.instance.screenName = "guan1_1";
-        GlobalSetDate.instance.playerPosition = "47_-29";
-    }
 
     void test1() {
         Component[] comps = GetComponentsInChildren<Component>();
@@ -104,8 +91,8 @@ public class StartScreen : MonoBehaviour {
     private void GameStart()
     {
         if (UI_Save) return;
-        GetPlayerDate();
-        SceneManager.LoadScene("loads");
+        //SceneManager.LoadScene("loads");
+        GlobalSetDate.instance.GetGameDateStart();
         kuang.transform.position = btn1.transform.position;
         getRQ = btn1;
 

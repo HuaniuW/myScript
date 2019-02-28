@@ -17,7 +17,13 @@ public class SaveUI : MonoBehaviour {
     List<Button> btns = new List<Button>();
     // Use this for initialization
     void Start () {
-        Button[] b = {btn1,btn2,btn3};
+        SetBtn();
+        ShowSaveDateMsg();
+    }
+
+    void SetBtn()
+    {
+        Button[] b = { btn1, btn2, btn3 };
         btns.AddRange(b);
         kuang.transform.position = btn1.transform.position;
         getRQ = btn1;
@@ -27,32 +33,79 @@ public class SaveUI : MonoBehaviour {
         btnX.onClick.AddListener(RemoveSelf);
     }
 
+
+    UserDate date1;
+    UserDate date2;
+    UserDate date3;
+    void ShowSaveDateMsg()
+    {
+        date1 = GameSaveDate.GetInstance().GetSaveDateByName(btn1.name);
+        date2 = GameSaveDate.GetInstance().GetSaveDateByName(btn2.name);
+        date3 = GameSaveDate.GetInstance().GetSaveDateByName(btn3.name);
+        ShowBtnMsg(btn1, date1);
+        ShowBtnMsg(btn2, date2);
+        ShowBtnMsg(btn3, date3);
+    }
+
+    void ShowBtnMsg(Button btn,UserDate date) {
+        Text text = btn.transform.Find("Text").GetComponent<Text>();
+        if (date != null)
+        {
+            text.text = date.userName;
+        }
+        else {
+            text.text = "no date";
+        }
+    }
+
+    void GetSetSaveGameByBtnName(string btnName)
+    {
+        if (isGetDate)
+        {
+            if (GameSaveDate.GetInstance().GetSaveDateByName(btnName) != null)
+            {
+                GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(btnName);
+                UserDate t = GlobalSetDate.instance.CurrentUserDate;
+                print(">>>>>>>>>>>>>>>>>>    "+t.curLive+"   ??  "+t.cameraPosition);
+                GlobalSetDate.instance.isInFromSave = true;
+                //调用进入游戏
+                GlobalSetDate.instance.GetGameDateStart();
+            }
+        }
+        else {
+            if (GlobalSetDate.instance.CurrentUserDate != null)
+            {
+                GameSaveDate.GetInstance().SaveDateByURLName(btnName, GlobalSetDate.instance.CurrentUserDate);
+            }
+            else {
+                //给弹框
+            }
+            
+        }
+        RemoveSelf();
+    }
+
+
     void GetDate1()
     {
         kuang.transform.position = btn1.transform.position;
         getRQ = btn1;
+        GetSetSaveGameByBtnName(btn1.name);
     }
+    
 
     void GetDate2()
     {
         kuang.transform.position = btn2.transform.position;
         getRQ = btn2;
+        GetSetSaveGameByBtnName(btn2.name);
     }
 
     void GetDate3()
     {
         kuang.transform.position = btn3.transform.position;
         getRQ = btn3;
-    }
-
-    void GetDateInGame(string dateNum)
-    {
-
-    }
-
-    void SaveDate(string dateNum)
-    {
-
+        GetSetSaveGameByBtnName(btn3.name);
     }
 
     void RemoveSelf()
@@ -90,9 +143,17 @@ public class SaveUI : MonoBehaviour {
     void GetChoseObj()
     {
         print(getRQ.name);
-        if (getRQ.name == "Button2")
+        if (getRQ.name == "date1")
         {
-            //GetSaveDateUI();
+            GetDate1();
+        }
+        else if (getRQ.name == "date2")
+        {
+            GetDate2();
+        }
+        else if (getRQ.name == "date3")
+        {
+            GetDate3();
         }
     }
 

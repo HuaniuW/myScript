@@ -9,6 +9,7 @@ public class PlayerRoleDate : RoleDate
     float _theMaxLive;
     float _yingzhi;
     float _live;
+    float _lan;
 
 
     // Start is called before the first frame update
@@ -24,6 +25,7 @@ public class PlayerRoleDate : RoleDate
         _def = this.def;
         _theMaxLive = this.maxLive;
         _live = this.live;
+        _lan = this.lan;
         _yingzhi = this.yingzhi;
     }
 
@@ -90,18 +92,25 @@ public class PlayerRoleDate : RoleDate
     void GetHZDate(HZDate hzdate)
     {
         //print(hzdate.HZName);
-        if (hzdate.def != 0) this.def = _def + hzdate.def;
-        if (hzdate.atk != 0) this.atk = _atk + hzdate.atk;
+        
+        if (hzdate.def != 0) this.def += hzdate.def;
+        if (hzdate.atk != 0) this.atk += hzdate.atk;
+        //print(this.atk + "  --   " + hzdate.atk);
         if (hzdate.live != 0)
         {
             //this.live = _live + hzdate.live;
-            this.maxLive = _theMaxLive + hzdate.live;
+            this.maxLive += hzdate.live;
         }
 
         if (hzdate.defP != 0) beishuArr.Add("defP_"+hzdate.defP);
         if (hzdate.atkP != 0) beishuArr.Add("atkP_" + hzdate.atkP);
         if (hzdate.liveP != 0) {
             beishuArr.Add("liveP_" + hzdate.liveP);
+        }
+
+        if (hzdate.skill!=null)
+        {
+
         }
     }
 }

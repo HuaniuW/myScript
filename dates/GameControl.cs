@@ -6,18 +6,20 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GameSaveDate.GetInstance().GetTestSave();
+        //GameSaveDate.GetInstance().GetTestSave();
         if(Globals.isDebug)print("游戏关卡控制类 启动");
         //GlobalSetDate.instance.GetGuanKaStr();
-    }
-
-    private void OnEnable()
-    {
-        if (Globals.isDebug) print("游戏关卡控制类OnEnable 启动");
+       
         GetPlayer();
         GetPlayerUI();
         GetTargetPlayer();
         InitGuanKaDate();
+    }
+
+    private void OnEnable()
+    {
+        //if (Globals.isDebug) print("游戏关卡控制类OnEnable 启动");
+        
     }
 
 
@@ -124,8 +126,13 @@ public class GameControl : MonoBehaviour {
         if (TempCurrentGKDate != null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName+":"+TempCurrentGKDate);
     }
 
+    public string GetSaveZGKDate()
+    {
+        return GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName + ":" + TempCurrentGKDate);
+    }
 
 
+    //匹配记录的机关状态 门是开的还是关的 BOSS有没有杀掉
     void GetPiPei()
     {
 		if (TempCurrentGKDate == "") return;
@@ -213,7 +220,34 @@ public class GameControl : MonoBehaviour {
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());
         //player.transform.localScale = new Vector3(1, 1, 1);
+        FirstInGame();
     }
+
+
+
+
+    void FirstInGame()
+    {
+        if (GlobalSetDate.instance.isFirstInGame)
+        {
+            GlobalSetDate.instance.isFirstInGame = false;
+            //加载背包
+            GlobalTools.GetGameObjectByName("UI_Bag");
+        }
+        //获取玩家状态数据
+        if (GlobalSetDate.instance.isInFromSave)
+        {
+            GlobalSetDate.instance.isInFromSave = false;
+
+
+            //加载地图
+            //加载收藏品
+            //刷新角色数据
+            //print("???     "+ GlobalSetDate.instance.CurrentUserDate.curLive);
+            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
+        }
+    }
+
     //生成UI
     void GetPlayerUI()
     {

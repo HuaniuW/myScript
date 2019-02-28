@@ -21,6 +21,7 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
         imgRect = GetComponent<RectTransform>();
         if (canvas == null)
         {
+            //用于拖拽
             canvas = this.transform.parent.parent as RectTransform; 
         }
     }
@@ -118,8 +119,16 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
                 if (!_geziArr[i].GetComponent<Gezi>().IsOpen) {
                     this.transform.position = OldRQ.transform.position;
                     return;
-                } 
-                if(_geziArr[i].name == OldRQ.name)
+                }
+
+                if ((this.GetComponent<HZDate>().type == "bd" && _geziArr[i].tag == "JN_zhuangbeilan")|| 
+                    this.GetComponent<HZDate>().type == "zd" && _geziArr[i].tag == "zhuangbeilan") {
+                    this.transform.position = OldRQ.transform.position;
+                    return;
+                }
+                
+
+                if (_geziArr[i].name == OldRQ.name)
                 {
                     this.transform.position = OldRQ.transform.position;
                     return;
