@@ -55,7 +55,6 @@ public class GlobalTools : MonoBehaviour {
     {
         if (num > 1) num = 1;
         if (num < 0) num = 0;
-        print("hihihihi     "+num);
         obj.GetComponent<CanvasGroup>().alpha = num;
         obj.GetComponent<CanvasGroup>().interactable = true; //相互作用
         obj.GetComponent<CanvasGroup>().blocksRaycasts = true;

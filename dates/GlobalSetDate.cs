@@ -90,7 +90,6 @@ public class GlobalSetDate : MonoBehaviour {
 
     public Vector3 GetPlayerInScreenPosition()
     {
-        if (Globals.isDebug) print(playerPosition+"     "+ screenName);
         string[] sArray = playerPosition.Split('_');
         playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]), 0);
         //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);

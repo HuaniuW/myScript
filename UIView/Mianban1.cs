@@ -73,7 +73,6 @@ public class Mianban1 : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);
 
         List<RectTransform> HZs2 = GetZDJNList();
-        print("主动技能数组   "+HZs2);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ZD_SKILL, HZs2), this);
         
 
@@ -241,7 +240,7 @@ public class Mianban1 : MonoBehaviour {
         }
         
         GlobalSetDate.instance.CurrentUserDate.bagDate = saveDateStr;
-        if (Globals.isDebug) print("---saveDateStr  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
+        //if (Globals.isDebug) print("---saveDateStr  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
         return saveDateStr;
     }
 

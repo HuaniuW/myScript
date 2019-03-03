@@ -59,13 +59,13 @@ public class GameSaveDate{
         //Debug.Log(cGKDateName);
         // _fileName = Application.persistentDataPath + "/" + _fileName;
         string str = Application.persistentDataPath + "/" + cGKDateName;
-        if(Globals.isDebug)Debug.Log(str);
+        //if(Globals.isDebug)Debug.Log(str);
         try
         {
             string strTemp = LoadTextFile(str, false);
             //反序列化对象
             UserDate userD = DeserializeObject(strTemp, typeof(UserDate)) as UserDate;
-            if (Globals.isDebug) Debug.Log(userD.userName);
+            //if (Globals.isDebug) Debug.Log(userD.userName);
             return userD;
         }
         catch

@@ -66,7 +66,6 @@ public class SaveUI : MonoBehaviour {
             {
                 GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(btnName);
                 UserDate t = GlobalSetDate.instance.CurrentUserDate;
-                print(">>>>>>>>>>>>>>>>>>    "+t.curLive+"   ??  "+t.cameraPosition);
                 GlobalSetDate.instance.isInFromSave = true;
                 //调用进入游戏
                 GlobalSetDate.instance.GetGameDateStart();

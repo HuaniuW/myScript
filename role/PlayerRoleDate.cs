@@ -56,7 +56,7 @@ public class PlayerRoleDate : RoleDate
 
     void GetDiaoLuo(UEvent e)
     {
-        print("------------------------------->>    "+e.eventParams.ToString());
+        //print("------------------------------->>    "+e.eventParams.ToString());
         if(e.eventParams.ToString() == "XuehunXiao")
         {
             this.live += 100;
@@ -109,7 +109,6 @@ public class PlayerRoleDate : RoleDate
 
     void changeHZ(UEvent e)
     {
-        print("徽章切换！！！"+e.eventParams.GetType());
         List<RectTransform> t = (List<RectTransform>)e.eventParams;
         GetCSDate();
         if (t.Count != 0)
