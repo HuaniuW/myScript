@@ -4,7 +4,10 @@ using UnityEngine;
 
 using UnityEngine.UI;
 
-public class XuePingBox : MonoBehaviour {
+using UnityEngine.EventSystems;
+
+public class XuePingBox : CanTouchBox
+{
 
     public Text XP_numText;
     public Image xueping;
@@ -14,6 +17,21 @@ public class XuePingBox : MonoBehaviour {
         if (GlobalSetDate.instance.CurrentUserDate != null) XP_num = GlobalSetDate.instance.CurrentUserDate.xp_nums;
         InitNums();
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_XP, this.GetXP);
+    }
+
+
+
+    //当鼠标按下时调用 接口对应  IPointerDownHandler
+    override public void OnPointerDown(PointerEventData eventData)
+    {
+        this.GetComponent<RectTransform>().localScale = imgReduceScale;
+        UseXuePing();
+    }
+
+    //当鼠标抬起时调用  对应接口  IPointerUpHandler
+    override public void OnPointerUp(PointerEventData eventData)
+    {
+        this.GetComponent<RectTransform>().localScale = imgNormalScale;
     }
 
     public int GetXPNums() {
@@ -46,16 +64,21 @@ public class XuePingBox : MonoBehaviour {
     void Update () {
         if (Input.GetKeyDown(Globals.USE_XP))
         {
-            if (Globals.isInPlot) return;
-            if (GlobalSetDate.instance.IsChangeScreening) return;
-            //FindNearestQR("up");
-            if (XP_num > 0)
-            {
-                XP_num -= 1;
-                InitNums();
-                if (XP_numText != null) XP_numText.text = XP_num.ToString();
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.JIAXUE), this);
-            }
+            UseXuePing();
+        }
+    }
+
+    void UseXuePing()
+    {
+        if (Globals.isInPlot) return;
+        if (GlobalSetDate.instance.IsChangeScreening) return;
+        //FindNearestQR("up");
+        if (XP_num > 0)
+        {
+            XP_num -= 1;
+            InitNums();
+            if (XP_numText != null) XP_numText.text = XP_num.ToString();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.JIAXUE), this);
         }
     }
 

@@ -18,7 +18,7 @@ public class ShowOutSkill : MonoBehaviour {
     internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false)
     {
 
-        if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
+        //if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
         //if (Globals.isDebug)
         //{

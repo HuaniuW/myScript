@@ -52,7 +52,7 @@ public class MyParticlesScale : MonoBehaviour {
         var duy = Mathf.Atan2((_x2 - x), (_z2 - z));
         var jiaoduy = duy * 180 / Mathf.PI;
 
-        if (Globals.isDebug) print(">  "+jiaoduy);
+        //if (Globals.isDebug) print(">  "+jiaoduy);
         //return;
         if (_sx>0)
         {
@@ -83,7 +83,7 @@ public class MyParticlesScale : MonoBehaviour {
             this.transform.localScale = new Vector3(-1, -1, -1);
         }
 
-        if (Globals.isDebug) print("角度   "+ transform.localEulerAngles);
+        //if (Globals.isDebug) print("角度   "+ transform.localEulerAngles);
     }
 	// Update is called once per frame
 	void Update () {

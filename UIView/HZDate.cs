@@ -37,22 +37,25 @@ public class HZDate : MonoBehaviour {
     [Header("是被动技能还是主动技能")]
     public string type = "bd";
     [Header("技能CD")]
-    public float cd = 0;
+    public int cd = 0;
 
     [Header("消耗蓝")]
     public float xyLan = 0;
+
+    [Header("消耗血")]
+    public float xyXue = 0;
 
     void Start () {
         
     }
 
-    public float _cd = 0;
+    int _cd = 0;
     
     public bool IsCDOver()
     {
         if (_cd > 0)
         {
-            _cd--;
+            //_cd--;
             //print("cd  "+_cd);
             return false;
         }
@@ -60,19 +63,41 @@ public class HZDate : MonoBehaviour {
     }
 
 
-    public void isHasCD()
+    public int GetCdNums()
     {
-
+        return _cd;
     }
 
     public void StartCD()
     {
         _cd = cd;
+        Jishi();
+    }
+
+    void Jishi()
+    {
+        if (_cd > 0) StartCoroutine(IETimeBySeconds());
+    }
+
+    public void OnDestroy()
+    {
+        StopCoroutine(IETimeBySeconds());
     }
 
 
-	// Update is called once per frame
-	void Update () {
-        if(_cd>0)IsCDOver();
+
+    public IEnumerator IETimeBySeconds()
+    {
+        yield return new WaitForSeconds(1);
+        if (_cd > 0) {
+            _cd--;
+            Jishi();
+        }
+    }
+
+
+    // Update is called once per frame
+    void Update () {
+        //if(_cd>0)IsCDOver();
     }
 }

@@ -185,12 +185,8 @@ public class GameBody : MonoBehaviour, IRole {
 
 
 
-    internal void GetSkill1()
+    public void GetSkill1()
     {
-        if (IsHitWall) return;
-        if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping) return;
-        //ShowSkill("PlayerUI(Clone)/skill1");
-        //print("  >>>>>>>>>>>>>>   "+ GlobalTools.FindObjByName("PlayerUI/skill"));
         if (GlobalTools.FindObjByName("PlayerUI").name=="PlayerUI")
         {
             ShowSkill("PlayerUI/skill1");
@@ -201,12 +197,8 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
-    internal void GetSkill2()
+    public void GetSkill2()
     {
-        if (IsHitWall) return;
-        if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping) return;
-        //print("释放技能2");
-        //ShowSkill("PlayerUI(Clone)/skill2");
         if (GlobalTools.FindObjByName("PlayerUI").name == "PlayerUI")
         {
             ShowSkill("PlayerUI/skill2");
@@ -221,6 +213,8 @@ public class GameBody : MonoBehaviour, IRole {
     HZDate jn;
     void ShowSkill(string urlName)
     {
+        if (IsHitWall) return;
+        if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping ||isAcing) return;
         //print(" >>>   "+ urlName);
         jn = GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
         if (jn != null)
@@ -228,9 +222,11 @@ public class GameBody : MonoBehaviour, IRole {
             if (jn.IsCDOver())
             {
                 if (roleDate.lan - jn.xyLan < 0) return;
+                if (roleDate.live - jn.xyXue < 1) return;
                 roleDate.lan -= jn.xyLan;
+                roleDate.live -= jn.xyXue;
                 jn.StartCD();
-                if(Globals.isDebug)print("---------------------------> 释放技能！！");
+                //if(Globals.isDebug)print("---------------------------> 释放技能！！");
                 //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
                 if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
                 {

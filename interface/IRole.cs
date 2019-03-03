@@ -8,4 +8,6 @@ public interface IRole{
 	void SpeedXStop();
 	void SetACingfalse();
     void TestsI();
+    void GetSkill1();
+    void GetSkill2();
 }

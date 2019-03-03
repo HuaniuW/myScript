@@ -5,15 +5,14 @@ using System;
 using System.Collections.Generic;
 
 //给空间添加监听事件要实现的一些接口
-public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler,
-    IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class MyDrag : CanTouchBox
 {
 
     public RectTransform canvas;          //得到canvas的ugui坐标
     private RectTransform imgRect;        //得到图片的ugui坐标
     Vector2 offset = new Vector3();    //用来得到鼠标和图片的差值
-    Vector3 imgReduceScale = new Vector3(0.8f, 0.8f, 1);   //设置图片缩放
-    Vector3 imgNormalScale = new Vector3(1, 1, 1);   //正常大小
+    //Vector3 imgReduceScale = new Vector3(0.8f, 0.8f, 1);   //设置图片缩放
+    //Vector3 imgNormalScale = new Vector3(1, 1, 1);   //正常大小
 
     // Use this for initialization
     void Start()
@@ -27,7 +26,7 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     }
 
     //当鼠标按下时调用 接口对应  IPointerDownHandler
-    public void OnPointerDown(PointerEventData eventData)
+    override public void OnPointerDown(PointerEventData eventData)
     {
         this.transform.SetAsLastSibling();
         Vector2 mouseDown = eventData.position;    //记录鼠标按下时的屏幕坐标
@@ -46,7 +45,7 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     }
 
     //当鼠标拖动时调用   对应接口 IDragHandler
-    public void OnDrag(PointerEventData eventData)
+    override public void OnDrag(PointerEventData eventData)
     {
         Vector2 mouseDrag = eventData.position;   //当鼠标拖动时的屏幕坐标
         Vector2 uguiPos = new Vector2();   //用来接收转换后的拖动坐标
@@ -61,7 +60,7 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     }
 
     //当鼠标抬起时调用  对应接口  IPointerUpHandler
-    public void OnPointerUp(PointerEventData eventData)
+    override public void OnPointerUp(PointerEventData eventData)
     {
         //print("鼠标抬起！！！！！");
         CheckNear();
@@ -69,7 +68,7 @@ public class MyDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointer
     }
 
     //当鼠标结束拖动时调用   对应接口  IEndDragHandler
-    public void OnEndDrag(PointerEventData eventData)
+    override public void OnEndDrag(PointerEventData eventData)
     {
         //print("???????结束拖动");
         offset = Vector2.zero;

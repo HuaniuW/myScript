@@ -141,7 +141,7 @@ public class GameBody2 : MonoBehaviour, IRole
 
     bool isSkill = false;
     bool isSkilling = false;
-    internal void GetSkill1()
+    public void GetSkill1()
     {
         if (roleDate.isBeHiting) return;
         if (!isSkill)
@@ -154,7 +154,7 @@ public class GameBody2 : MonoBehaviour, IRole
     }
 
 
-    internal void GetSkill2()
+    public void GetSkill2()
     {
         if (roleDate.isBeHiting) return;
         print("释放技能2");

@@ -234,4 +234,8 @@ GameObject.transform.position = FAR_AWAY
 
 
 
-    //this.transform.SetAsLastSibling();   将obj的显示对象提到父类 最高
+//this.transform.SetAsLastSibling();   将obj的显示对象提到父类 最高
+
+
+
+//public class SkillBox : MonoBehaviour, IPointerDownHandler, IPointerUpHandler  继承点击事件接口
