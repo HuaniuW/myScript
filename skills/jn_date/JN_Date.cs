@@ -36,6 +36,9 @@ public class JN_Date : MonoBehaviour {
     public int yanchiNum = 0;
     [Header("变招计数尺度")]
     public int bianzhaochidu = 0;
+    [Header("技能咏唱时间")]
+    public float yongchangshijian = 0;
+
 
     //public Dictionary<string, float> atk_date = new Dictionary<string, float> { { "atkPower", 100 },{ "_xdx", -1.5f }, { "_xdy", 0f },{ "_scaleW", 2f }, { "_scaleH", 1.8f }, { "_disTime", 1 }};
     // Use this for initialization

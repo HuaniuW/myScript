@@ -231,3 +231,7 @@ GameObject.transform.position = FAR_AWAY
 //    if (hasValue) return value;
 //    throw new Exception("没找到");
 //}
+
+
+
+    //this.transform.SetAsLastSibling();   将obj的显示对象提到父类 最高

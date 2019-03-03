@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class XueTiao : MonoBehaviour {
+public class LanTiao : MonoBehaviour
+{
     public Image xueBg;
     public Image xue1;
     public Image xue2;
 
-    float _cLive = 1000;
-    float _maxLive=1000;
+    float _cLan = 1000;
+    float _maxLan = 1000;
     public float _maxW = 10;
     /// <summary>
     /// 长条的第一层显示
     /// </summary>
-    public float _w=10;
+    public float _w = 10;
     /// <summary>
     /// 长条的第二条显示 缓动跟随_w
     /// </summary>
     float _w2 = 10;
-    public float _h=10;
+    public float _h = 10;
     public GameObject gameObj;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         GetGameObj();
         SetXueTiao2();
         //_w2 = _w;
@@ -35,7 +37,6 @@ public class XueTiao : MonoBehaviour {
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
     }
-    
 
     //是否激活
     public void Show(bool isAddOnStage)
@@ -51,7 +52,7 @@ public class XueTiao : MonoBehaviour {
     //备用 主动控制血条长宽高的方法
     public void SetXueTiao(float w, float maxLive, float h = 10)
     {
-        _maxLive = maxLive;
+        _maxLan = maxLive;
         _w = w;
         _w2 = _w;
         _h = h;
@@ -65,9 +66,9 @@ public class XueTiao : MonoBehaviour {
         if (gameObj != null)
         {
             roleDate = gameObj.GetComponent<RoleDate>();
-            _maxLive = roleDate.maxLive;
-            roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
-            _cLive = roleDate.live;
+            _maxLan = roleDate.maxLan;
+            roleDate.lan = roleDate.lan > roleDate.maxLan ? roleDate.maxLan : roleDate.lan;
+            _cLan = roleDate.lan;
             GetXueNum(0);
             //isChage = true;
         }
@@ -81,33 +82,34 @@ public class XueTiao : MonoBehaviour {
     void SetXueTiao2()
     {
         WhBg(xueBg);
-        Wh(xue1,_w,_h);
-        Wh(xue2,_w2,_h);
+        Wh(xue1, _w, _h);
+        Wh(xue2, _w2, _h);
     }
 
 
     //参数 >= 0的时候 直接跳到结果 可以做为开场预设  +血和预设
     public void GetXueNum(float nums)
     {
-        //_cLive = roleDate.live;
-        _cLive = _cLive+nums > _maxLive?_maxLive: _cLive + nums;
-        if (_cLive < 0) _cLive = 0;
-         _w  = _cLive / _maxLive*_maxW;
+        //_cLan = roleDate.live;
+        _cLan = _cLan + nums > _maxLan ? _maxLan : _cLan + nums;
+        if (_cLan < 0) _cLan = 0;
+        _w = _cLan / _maxLan * _maxW;
         if (_w2 != _w) isChage = true;
         if (nums >= 0) _w2 = _w;
         Wh(xue1, _w, _h);
     }
 
     float lastXue = 0;
-    void XueChange() {
-        _cLive = roleDate.live;
-        if (_cLive == lastXue) return;
-        if (_cLive < 0) _cLive = 0;
-        _w = _cLive / _maxLive * _maxW;
+    void XueChange()
+    {
+        _cLan = roleDate.lan;
+        if (_cLan == lastXue) return;
+        if (_cLan < 0) _cLan = 0;
+        _w = _cLan / _maxLan * _maxW;
         if (_w2 != _w) isChage = true;
         if (_w > _w2) _w2 = _w;
         Wh(xue1, _w, _h);
-        lastXue = _cLive;
+        lastXue = _cLan;
     }
 
 
@@ -123,13 +125,14 @@ public class XueTiao : MonoBehaviour {
                 _w2 = _w;
             }
         }
-        else {
+        else
+        {
             _w2 = _w;
         }
-        
+
         Wh(xue2, _w2, _h);
 
-        if(_w2 == _w)
+        if (_w2 == _w)
         {
             isChage = false;
         }
@@ -138,7 +141,8 @@ public class XueTiao : MonoBehaviour {
 
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (!gameObj)
         {
             gameObj = GlobalTools.FindObjByName("player");
@@ -149,7 +153,7 @@ public class XueTiao : MonoBehaviour {
             return;
         }
         XueChange();
-        if (isChage)Xue2W();
+        if (isChage) Xue2W();
     }
 
 

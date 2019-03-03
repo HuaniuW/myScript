@@ -21,7 +21,9 @@ public class RoleDate : MonoBehaviour {
     public float yingzhi = 100;
 
     [Header("蓝")]
-    public float lan = 100;
+    public float lan = 1000;
+    [Header("最大蓝")]
+    public float maxLan = 1000;
 
     [Header("被击中时发出的声音")]
     public string beHitVudio = "hit1";

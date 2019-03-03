@@ -61,6 +61,11 @@ public class Mianban1 : MonoBehaviour {
         GetInit();
     }
 
+    private void OnDestroy()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_OBJ_NAME, this.GetObjByName);
+    }
+
     void GetInit()
     {
         //初始化 获取 角色背包加成属性数据
@@ -68,8 +73,9 @@ public class Mianban1 : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);
 
         List<RectTransform> HZs2 = GetZDJNList();
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);
-
+        print("主动技能数组   "+HZs2);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ZD_SKILL, HZs2), this);
+        
 
     }
 
@@ -194,10 +200,7 @@ public class Mianban1 : MonoBehaviour {
         foreach (var gezi in HZzhudongjineng)
         {
             RectTransform hz = gezi.GetComponent<Gezi>().IsHasObj();
-            if (hz != null)
-            {
-                HZs.Add(hz);
-            }
+            HZs.Add(hz);
         }
         return HZs;
     }

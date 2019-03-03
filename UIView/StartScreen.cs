@@ -131,7 +131,10 @@ public class StartScreen : MonoBehaviour {
     void GetChoseObj()
     {
         print(getRQ.name);
-        if (getRQ.name == "Button2") {
+        if (getRQ.name == "Button1")
+        {
+            GameStart();
+        }else if (getRQ.name == "Button2") {
             GetSaveDateUI();
         }
     }

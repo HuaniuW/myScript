@@ -12,6 +12,8 @@ public class UserDate{
     public string cameraPosition;
     //背包数据记录
     public string bagDate = "huizhang1_0-huizhang2_2";
+    //记录血瓶数量
+    public int xp_nums = 0;
     //装备栏记录  id_num
     //public string zblIds;
     //生命

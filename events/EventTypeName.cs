@@ -24,4 +24,15 @@ public class EventTypeName
     public const string GET_OBJ_NAME = "get_obj_name";
 
     public const string ZD_SKILL = "zd_skill";
+
+    public const string GET_DIAOLUOWU = "get_diaoluowu";
+
+    /// <summary>
+    /// 血瓶
+    /// </summary>
+    public const string GET_XP = "get_xp";
+    /// <summary>
+    /// 加血
+    /// </summary>
+    public const string JIAXUE = "jiaxue";
 }

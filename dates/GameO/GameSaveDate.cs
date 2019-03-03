@@ -65,7 +65,7 @@ public class GameSaveDate{
             string strTemp = LoadTextFile(str, false);
             //反序列化对象
             UserDate userD = DeserializeObject(strTemp, typeof(UserDate)) as UserDate;
-            Debug.Log(userD.userName);
+            if (Globals.isDebug) Debug.Log(userD.userName);
             return userD;
         }
         catch

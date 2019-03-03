@@ -32,9 +32,17 @@ public class HitKuai : MonoBehaviour {
     
 
     GameObject txObj;
-    public void GetTXObj(GameObject txObj){
-        this.txObj = txObj;
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
+    public void GetTXObj(GameObject txObj,bool isSkill = false){
+        if (txObj != null)
+        {
+            this.txObj = txObj;
+        }
+        else
+        {
+            this.txObj = this.transform.parent.gameObject;
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.name+"     "+this.txObj);
+        }
+        if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
     }
 
 
@@ -45,7 +53,7 @@ public class HitKuai : MonoBehaviour {
         gameBody = Coll.GetComponent<GameBody>();
         roleDate = Coll.GetComponent<RoleDate>();
         _rigidbody2D = Coll.GetComponent<Rigidbody2D>();
-
+        if(this.txObj == null) this.txObj = this.transform.parent.gameObject;
         atkObj = txObj.GetComponent<JN_base>().atkObj;
         //print(atkObj.name);
         
@@ -65,7 +73,7 @@ public class HitKuai : MonoBehaviour {
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
             GetBeHit(jn_date, _roleScaleX);
-            //力作用  这个可以防止 推力重叠 导致任务飞出去
+            //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector3 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y, tempV3.z);
 

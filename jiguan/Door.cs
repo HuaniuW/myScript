@@ -138,7 +138,6 @@ public class Door : MonoBehaviour {
             else
             {
                 string zt = this.name + "-1";
-                print("????????????????????");
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
                 isOpen = false;
                 if (openDoor) openDoor.Stop();

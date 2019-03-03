@@ -17,7 +17,10 @@ public class GlobalSetDate : MonoBehaviour {
     }
     //是否初次开启游戏
     public bool isFirstInGame = true;
-
+    public void Init()
+    {
+        
+    }
 
     //是否是从取档进入
     public bool isInFromSave = false;
@@ -59,6 +62,7 @@ public class GlobalSetDate : MonoBehaviour {
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
     public string mapDate = "";//小地图数据
+    public int xp_nums = 0;
     //切换场景的时候不让 控制  MyController.cs
     public bool IsChangeScreening = false;
     void InNewGame()
@@ -68,6 +72,7 @@ public class GlobalSetDate : MonoBehaviour {
         cameraPosition = "";
         bagDate = "";//背包数据
         mapDate = "";//小地图数据
+        xp_nums = 0;
         IsChangeScreening = false;
         //print("hi!!!!");
     }
@@ -85,10 +90,10 @@ public class GlobalSetDate : MonoBehaviour {
 
     public Vector3 GetPlayerInScreenPosition()
     {
-        print(playerPosition+"     "+ screenName);
+        if (Globals.isDebug) print(playerPosition+"     "+ screenName);
         string[] sArray = playerPosition.Split('_');
         playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]), 0);
-        print("位置   "+ playerInScreenPosition);
+        //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);
         return playerInScreenPosition;
     }
 
@@ -162,19 +167,19 @@ public class GlobalSetDate : MonoBehaviour {
     {
         if (TempZGuanKaStr == null) return null;
         currentGKDate = null;
-        if (Globals.isDebug) print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
+        //if (Globals.isDebug) print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
         string gkStr = "";
         string[] arr = TempZGuanKaStr.Split('|');
         for(var i = 0; i < arr.Length; i++)
         {
             string[] arr2 = arr[i].Split(':');
             string curGKName = arr2[0];
-            if (Globals.isDebug) print("curGKName  "+ curGKName);
+            //if (Globals.isDebug) print("curGKName  "+ curGKName);
             if (curGKName != ""&& curGKName == GKName)
             {
                 
                 currentGKDate = arr2[1];
-                if (Globals.isDebug) print("当前关卡的数据  "+ currentGKDate);
+                //if (Globals.isDebug) print("当前关卡的数据  "+ currentGKDate);
             }
             else
             {
@@ -191,17 +196,17 @@ public class GlobalSetDate : MonoBehaviour {
     //将当前关卡数据 加到总关卡数据中
     public string SetChangeThisGKInZGKTempDate(string GKDate)
     {
-        if (Globals.isDebug) print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
-        if (Globals.isDebug) print(" 当前全局的数据  "+ TempZGuanKaStr);
+        //if (Globals.isDebug) print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
+        //if (Globals.isDebug) print(" 当前全局的数据  "+ TempZGuanKaStr);
         TempZGuanKaStr += GKDate+"|";
-        if (Globals.isDebug) print("加完后的全局数据！！！ " + TempZGuanKaStr);
+        //if (Globals.isDebug) print("加完后的全局数据！！！ " + TempZGuanKaStr);
         return TempZGuanKaStr;
     }
 
     public void GetSave()
     {
         //储存玩家所有数据
-        if (Globals.isDebug) print("save " + TempZGuanKaStr);
+        //if (Globals.isDebug) print("save " + TempZGuanKaStr);
         GameObject player = GlobalTools.FindObjByName("player");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
@@ -210,7 +215,8 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.playerPosition = player.transform.position.x + "_" + player.transform.position.y;
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
-
+        CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
+        CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "我的存档";
         CurrentUserDate.onlyId = 2;
 

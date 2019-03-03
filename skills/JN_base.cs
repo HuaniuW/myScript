@@ -8,6 +8,7 @@ public class JN_base : MonoBehaviour
     GameObject hitKuai;
     JN_Date jn_date;
     public GameObject atkObj;
+    public GameObject _hitKuai;
 
         // Use this for initialization
     void Start()
@@ -29,7 +30,7 @@ public class JN_base : MonoBehaviour
     }
     float sacaleX;
 
-    public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj)
+    public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj,bool isSkill = false)
     {
         //print(obj.transform.position.y + "  -  " + GameObject.Find("/MainCamera").transform.position.y);
 
@@ -42,7 +43,14 @@ public class JN_base : MonoBehaviour
         //指定特效位置
         this.transform.position = _position;
         //TX_weizhiyupan();
-        ShowHitFK();
+        if (!isSkill)
+        {
+            ShowHitFK();
+        }
+        else {
+            if(_hitKuai!=null) _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject,true);
+        }
+        
 
 
         if (_sacaleX > 0) {
@@ -101,7 +109,7 @@ public class JN_base : MonoBehaviour
         {
             //2 持续型
             //3 持续并且碰到就消失
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed,jn_date.moveYSpeed);
+            if(gameObject.GetComponent<Rigidbody2D>()!=null) gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed,jn_date.moveYSpeed);
             //print(transform.GetComponent<Rigidbody2D>().velocity);
         }
         else

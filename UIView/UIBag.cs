@@ -63,7 +63,7 @@ public class UIBag : MonoBehaviour {
     public void OnPointerDown(PointerEventData eventData)
     {
         Vector2 mouseDown = eventData.position;    //记录鼠标按下时的屏幕坐标
-        Vector2 mouseUguiPos = new Vector2();   //定义一个接收返回的ugui坐标
+       // Vector2 mouseUguiPos = new Vector2();   //定义一个接收返回的ugui坐标
         print(mouseDown);
         //RectTransformUtility.ScreenPointToLocalPointInRectangle()：把屏幕坐标转化成ugui坐标
         //canvas：坐标要转换到哪一个物体上，这里img父类是Canvas，我们就用Canvas
@@ -87,13 +87,15 @@ public class UIBag : MonoBehaviour {
             {
                //print("KeyCode.P>  " + KeyCode.P);
                 IsOpen = true;
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, false), this);
+                //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, false), this);
+                GlobalSetDate.instance.IsChangeScreening = true;
                 mianbanShow(this.GetComponent<RectTransform>());
             }
             else
             {
                 IsOpen = false;
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+                GlobalSetDate.instance.IsChangeScreening = false;
+                //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
                 mianbanHide(this.GetComponent<RectTransform>());
             }
         }

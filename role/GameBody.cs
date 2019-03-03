@@ -4,7 +4,7 @@ using UnityEngine;
 using DragonBones;
 using System;
 
-public class GameBody : MonoBehaviour,IRole{
+public class GameBody : MonoBehaviour, IRole {
     //增加到十个特效 或者更多 看需求
 
     [Header("水平速度")]
@@ -71,14 +71,14 @@ public class GameBody : MonoBehaviour,IRole{
     protected Rigidbody2D playerRigidbody2D;
     public Rigidbody2D GetPlayerRigidbody2D()
     {
-        if(!playerRigidbody2D) playerRigidbody2D = GetComponent<Rigidbody2D>();
+        if (!playerRigidbody2D) playerRigidbody2D = GetComponent<Rigidbody2D>();
         return playerRigidbody2D;
     }
 
     protected UnityArmatureComponent DBBody;
     public UnityArmatureComponent GetDB()
     {
-        if(!DBBody) DBBody = GetComponentInChildren<UnityArmatureComponent>();
+        if (!DBBody) DBBody = GetComponentInChildren<UnityArmatureComponent>();
         return DBBody;
     }
 
@@ -117,6 +117,8 @@ public class GameBody : MonoBehaviour,IRole{
         isAtkYc = false;
         isYanchi = false;
         isBackUping = false;
+        isAcing = false;
+        isYanchi = false;
     }
 
     protected RoleDate roleDate;
@@ -147,11 +149,11 @@ public class GameBody : MonoBehaviour,IRole{
     {
         if (roleDate.isBeHiting) return;
         if (!DBBody.animation.HasAnimation(BACKUP)) return;
-        if(!isBackUp&&IsGround&&!isBackUping)
+        if (!isBackUp && IsGround && !isBackUping)
         {
             ResetAll();
             isBackUp = true;
-            if(DBBody.animation.lastAnimationName != BACKUP) DBBody.animation.GotoAndPlayByFrame(BACKUP, 0, 1);
+            if (DBBody.animation.lastAnimationName != BACKUP) DBBody.animation.GotoAndPlayByFrame(BACKUP, 0, 1);
 
             isBackUping = true;
             roleDate.isCanBeHit = false;
@@ -163,7 +165,7 @@ public class GameBody : MonoBehaviour,IRole{
             //打开有bug
             //MoveVY(200);
         }
-      
+
     }
 
     void GetBackUping()
@@ -183,51 +185,93 @@ public class GameBody : MonoBehaviour,IRole{
 
 
 
-
-    bool isSkill = false;
-    bool isSkilling = false;
     internal void GetSkill1()
     {
-        if (roleDate.isBeHiting) return;
-        if (!isSkill)
+        if (IsHitWall) return;
+        if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping) return;
+        //ShowSkill("PlayerUI(Clone)/skill1");
+        //print("  >>>>>>>>>>>>>>   "+ GlobalTools.FindObjByName("PlayerUI/skill"));
+        if (GlobalTools.FindObjByName("PlayerUI").name=="PlayerUI")
         {
-            isSkill = false;
+            ShowSkill("PlayerUI/skill1");
         }
-        print("释放技能");
-        //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
-        GetComponent<ShowOutSkill>().ShowOutSkillByName("jn_yueguang");
+        else
+        {
+            ShowSkill("PlayerUI(Clone)/skill1");
+        }
     }
-
 
     internal void GetSkill2()
     {
-        if (roleDate.isBeHiting) return;
-        print("释放技能2");
-        ShowSkillByNum(1);
+        if (IsHitWall) return;
+        if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping) return;
+        //print("释放技能2");
+        //ShowSkill("PlayerUI(Clone)/skill2");
+        if (GlobalTools.FindObjByName("PlayerUI").name == "PlayerUI")
+        {
+            ShowSkill("PlayerUI/skill2");
+        }
+        else
+        {
+            ShowSkill("PlayerUI(Clone)/skill2");
+        }
     }
+        
 
-    public void ShowSkillByNum(int n=1) {
-        //根据技能槽 安装的徽章技能来释放 相应技能
-        // 取得技能槽 徽章技能名称
-        string hzSkillName =  GetHZSkillName(n);
-        GetComponent<ShowOutSkill>().ShowOutSkillByName(hzSkillName);
-        //GameObject t = Resources.Load("ttt") as GameObject;
-        //t = GameObject.Instantiate(t);
-        //t.transform.position = this.transform.position;
-    }
-
-    private string GetHZSkillName(int n)
+    HZDate jn;
+    void ShowSkill(string urlName)
     {
-        return "jn_shan";
-    }
+        //print(" >>>   "+ urlName);
+        jn = GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
+        if (jn != null)
+        {
+            if (jn.IsCDOver())
+            {
+                if (roleDate.lan - jn.xyLan < 0) return;
+                roleDate.lan -= jn.xyLan;
+                jn.StartCD();
+                if(Globals.isDebug)print("---------------------------> 释放技能！！");
+                //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
+                if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
+                {
+                    //***找到起始特效点 找骨骼动画的点 或者其他办法
+                    GetAcMsg(jn.skillACName);
+                    playerRigidbody2D.velocity = Vector2.zero;
+                    if (jn.ACyanchi > 0)
+                    {
+                        GetPause(jn.ACyanchi);
+                        //***人物闪过去的 动作 +移动速度  还有多发的火球类的特效
+                    }
+                }
+                else {
+                    //测试用 正式的要配动作
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                }
 
+
+                //GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName,true);
+            }
+            else
+            {
+                if (Globals.isDebug) print("技能CD中。。。。。。");
+                //***播放 声音
+            }
+
+        }
+        else
+        {
+            if (Globals.isDebug) print("没有装配技能");
+            //***播放声音
+        }
+    }
+    
     bool isDodge = false;
     protected bool isDodgeing = false;
 
     public void GetDodge1()
     {
-        if (roleDate.isBeHiting) return;
-        if (isInAiring||DBBody.animation.lastAnimationName== DOWNONGROUND|| DBBody.animation.lastAnimationName == JUMPUP) return;
+        if (roleDate.isBeHiting||isAcing) return;
+        if (isInAiring || DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP) return;
         if (!isDodge)
         {
             ResetAll();
@@ -257,7 +301,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     void Dodge1()
     {
-        if ((DBBody.animation.lastAnimationName == DODGE1|| DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
+        if ((DBBody.animation.lastAnimationName == DODGE1 || DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
         {
             isDodge = false;
             isDodgeing = false;
@@ -339,12 +383,12 @@ public class GameBody : MonoBehaviour,IRole{
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    public virtual void RunLeft(float horizontalDirection,bool isWalk = false)
+    public virtual void RunLeft(float horizontalDirection, bool isWalk = false)
     {
         //print("r "+isAtking);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
-		if (isAcing) return;
+        if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
         if (!isWalk && bodyScale.x == -1)
@@ -353,14 +397,14 @@ public class GameBody : MonoBehaviour,IRole{
             this.transform.localScale = bodyScale;
             AtkReSet();
         }
-        
+
         if (isAtking) return;
-        
+
         //resetAll();
         isAtkYc = false;
         isRunLefting = true;
         isRunRighting = false;
-       
+
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
         //print("hihihi");
         Run();
@@ -369,7 +413,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     public void TurnRight()
     {
-        print(">>>>    "+ this.transform.localScale);
+        print(">>>>    " + this.transform.localScale);
         bodyScale.x = -1;
         this.transform.localScale = bodyScale;
         print(">>>>2    " + this.transform.localScale);
@@ -378,7 +422,7 @@ public class GameBody : MonoBehaviour,IRole{
             bodyScale.x = -1;
             this.transform.localScale = bodyScale;
         }
-        
+
     }
 
     public void TurnLeft()
@@ -388,8 +432,8 @@ public class GameBody : MonoBehaviour,IRole{
             bodyScale.x = 1;
             this.transform.localScale = bodyScale;
         }
-            
-        
+
+
     }
 
     public virtual void RunRight(float horizontalDirection, bool isWalk = false)
@@ -397,22 +441,22 @@ public class GameBody : MonoBehaviour,IRole{
         //print("l " + isAtking);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
-		if (isAcing) return;
+        if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
-        if (!isWalk &&bodyScale.x == 1)
+        if (!isWalk && bodyScale.x == 1)
         {
             bodyScale.x = -1;
             this.transform.localScale = bodyScale;
             AtkReSet();
         }
-        
+
         if (isAtking) return;
         //resetAll();
         isAtkYc = false;
         isRunRighting = true;
         isRunLefting = false;
-       
+
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
         Run();
     }
@@ -427,7 +471,7 @@ public class GameBody : MonoBehaviour,IRole{
     {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        if (isJumping || isInAiring || isDowning || isDodgeing ||roleDate.isBeHiting) return;
+        if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
@@ -489,9 +533,9 @@ public class GameBody : MonoBehaviour,IRole{
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    void MoveVX(float vx,bool isNoAbs = false)
+    void MoveVX(float vx, bool isNoAbs = false)
     {
-        
+
         var _vx = Mathf.Abs(vx);
         if (isNoAbs) _vx = vx;
         //newSpeed.x = 0;
@@ -516,7 +560,7 @@ public class GameBody : MonoBehaviour,IRole{
 
     void Jump()
     {
-        if (isAtking|| isDodgeing||roleDate.isBeHiting) return;
+        if (isAtking || isDodgeing || roleDate.isBeHiting) return;
         if (isInAiring)
         {
             if (isJump2 && DBBody.animation.lastAnimationName != JUMP2DUAN)
@@ -544,18 +588,18 @@ public class GameBody : MonoBehaviour,IRole{
             }
         }
 
-       
-        if (IsGround &&!roleDate.isBeHiting&&!isAtking&& DBBody.animation.lastAnimationName != JUMPHITWALL &&
+
+        if (IsGround && !roleDate.isBeHiting && !isAtking && DBBody.animation.lastAnimationName != JUMPHITWALL &&
             DBBody.animation.lastAnimationName != JUMP2DUAN &&
             DBBody.animation.lastAnimationName != DOWNONGROUND &&
             DBBody.animation.lastAnimationName != JUMPUP)
         {
-           // print("?????>>>   "+DBBody.animation.lastAnimationName+"     "+isQiTiao);
+            // print("?????>>>   "+DBBody.animation.lastAnimationName+"     "+isQiTiao);
             isQiTiao = false;
             DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
         }
 
-        if (IsGround &&!isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
+        if (IsGround && !isQiTiao && DBBody.animation.lastAnimationName == JUMPUP && DBBody.animation.isCompleted)
         {
             isQiTiao = true;
             //print(yForce+"   u  "+ Vector2.up);
@@ -567,7 +611,7 @@ public class GameBody : MonoBehaviour,IRole{
     protected virtual void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
-        if (isDodgeing) return;
+        if (isDodgeing||isAcing) return;
         isInAiring = !IsGround;
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
@@ -975,6 +1019,7 @@ public class GameBody : MonoBehaviour,IRole{
             if (acNums > yanchiMaxNum) {
                 isAcing = false;
                 isYanchi = false;
+                _acName = null;
                 return "completed";
             }
             return "acYanChi";
@@ -1033,7 +1078,7 @@ public class GameBody : MonoBehaviour,IRole{
     public void GetAtk(string atkName = null)
     {
         if (roleDate.isBeHiting) return;
-        if (isDodgeing) return;
+        if (isDodgeing||isAcing) return;
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
@@ -1090,7 +1135,7 @@ public class GameBody : MonoBehaviour,IRole{
   
 
 
-    //显示动作特效
+    //显示动作特效 龙骨的侦听事件
     private void ShowACTX(string type, EventObject eventObject)
     {
         //print("type:  "+type);
@@ -1108,7 +1153,14 @@ public class GameBody : MonoBehaviour,IRole{
             if (eventObject.name == "ac")
             {
                 //print("vOAtk.atkName   "+ vOAtk.txName);
-                GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
+                if (isAcing)
+                {
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                }
+                else {
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
+                }
+                
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_002");
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
             }

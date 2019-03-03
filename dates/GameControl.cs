@@ -9,9 +9,11 @@ public class GameControl : MonoBehaviour {
         //GameSaveDate.GetInstance().GetTestSave();
         if(Globals.isDebug)print("游戏关卡控制类 启动");
         //GlobalSetDate.instance.GetGuanKaStr();
-       
+        //GlobalSetDate.instance;
+        //GlobalSetDate.instance.Init();
         GetPlayer();
         GetPlayerUI();
+        GetPlayBag();
         GetTargetPlayer();
         InitGuanKaDate();
     }
@@ -231,8 +233,7 @@ public class GameControl : MonoBehaviour {
         if (GlobalSetDate.instance.isFirstInGame)
         {
             GlobalSetDate.instance.isFirstInGame = false;
-            //加载背包
-            GlobalTools.GetGameObjectByName("UI_Bag");
+            
         }
         //获取玩家状态数据
         if (GlobalSetDate.instance.isInFromSave)
@@ -247,6 +248,18 @@ public class GameControl : MonoBehaviour {
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
         }
     }
+
+
+    void GetPlayBag()
+    {
+        if (FindObjByName("UI_Bag") == null)
+        {
+            //加载背包
+            GlobalTools.GetGameObjectByName("UI_Bag");
+        }
+    }
+
+
 
     //生成UI
     void GetPlayerUI()

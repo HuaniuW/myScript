@@ -9,6 +9,10 @@ public class Diaoluowu : MonoBehaviour {
     
     public Transform up;
     public Transform down;
+    /// <summary>
+    /// 1徽章 2血 3蓝 4血瓶 5收集物
+    /// </summary>
+    public int type = 1;
 
     // Use this for initialization
     void Start () {
@@ -22,7 +26,18 @@ public class Diaoluowu : MonoBehaviour {
             //print("pengzhuang!!");
             //播放动画 什么的 消失啊  声音啊==
             //角色获得物品事件
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
+            if(type == 1)
+            {
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
+            }
+            else if (type == 2) {
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_DIAOLUOWU, this.name), this);
+            }else if (type == 3) {
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_XP, 1), this);
+            }
+            
+          
+            
             if (this.transform.parent != null) {
                 this.transform.parent.GetComponent<Wupinlan>().DistorySelf();
             }

@@ -17,7 +17,71 @@ public class PlayerRoleDate : RoleDate
     {
         InitBaseDate();
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HZ, changeHZ);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JIAXUE, this.JiaXue);
     }
+
+    private void OnDestroy()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_HZ, changeHZ);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JIAXUE, this.JiaXue);
+    }
+
+    void JiaXue(UEvent e)
+    {
+        this.live += 300;
+        GetTX("jiaxue");
+    }
+
+
+    GameObject tx;
+    void GetTX(string txName)
+    {
+        tx = null;
+        tx = GlobalTools.GetGameObjectByName(txName);
+        tx.transform.position = new Vector2(this.transform.position.x, this.transform.position.y-1);//new Vector2(0, -3);
+        tx.transform.parent = this.transform;
+
+        //tx.transform.position = new Vector2(0,-3);
+        //print("position  "+tx.transform.position);
+        StartCoroutine(IEDestory2ByTime(tx, 0.8f));
+    }
+
+    public IEnumerator IEDestory2ByTime(GameObject obj, float time)
+    {
+        yield return new WaitForSeconds(time);
+        DestroyImmediate(obj, true);
+    }
+
+    void GetDiaoLuo(UEvent e)
+    {
+        print("------------------------------->>    "+e.eventParams.ToString());
+        if(e.eventParams.ToString() == "XuehunXiao")
+        {
+            this.live += 100;
+            GetTX("jiaxue");
+        }
+        else if (e.eventParams.ToString() == "XuehunDa")
+        {
+            this.live += 500;
+            GetTX("jiaxue");
+        }
+        else if (e.eventParams.ToString() == "LanhunXiao")
+        {
+            this.lan += 100;
+            GetTX("jialan");
+        }
+        else if (e.eventParams.ToString() == "LanhunDa")
+        {
+            this.lan += 500;
+            GetTX("jialan");
+        }
+        if (live > maxLive) live = maxLive;
+        if (lan > maxLan) lan = maxLan;
+    }
+
+
 
     void InitBaseDate()
     {
@@ -45,7 +109,7 @@ public class PlayerRoleDate : RoleDate
 
     void changeHZ(UEvent e)
     {
-        //print("徽章切换！！！"+e.eventParams.GetType());
+        print("徽章切换！！！"+e.eventParams.GetType());
         List<RectTransform> t = (List<RectTransform>)e.eventParams;
         GetCSDate();
         if (t.Count != 0)
