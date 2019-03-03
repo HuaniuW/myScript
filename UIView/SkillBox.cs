@@ -8,7 +8,6 @@ public class SkillBox : MonoBehaviour {
     // Use this for initialization
     void Start () {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ZD_SKILL,this.GetSkill);
-        print("skillBox");
     }
 
     private void OnDestroy()
@@ -24,9 +23,7 @@ public class SkillBox : MonoBehaviour {
     public RectTransform skill;
 
     void GetSkill(UEvent e) {
-        print("hzs---------------------->   hello  ");
         List<RectTransform> hzs = (List<RectTransform>)e.eventParams;
-        print("hzs---------------------->     " + hzs);
         if (_obj != null) GetSkillOut(_obj);
         skill = null;
         for (var i=0;i<hzs.Count;i++)
@@ -36,7 +33,7 @@ public class SkillBox : MonoBehaviour {
                 if (hzs[i] == null) continue;
                 skill = hzs[i];
                 string jnName = "jn_" + hzs[i].GetComponent<HZDate>().objName;
-                if (Globals.isDebug) print("name  "+jnName+"    "+ hzs[i].GetComponent<HZDate>()._cd);
+                //if (Globals.isDebug) print("name  "+jnName+"    "+ hzs[i].GetComponent<HZDate>()._cd);
                 _obj = GlobalTools.GetGameObjectByName(jnName);
                 GetSkillIn(_obj);
             }

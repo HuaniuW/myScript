@@ -87,7 +87,8 @@ public class UIBag : MonoBehaviour {
             {
                //print("KeyCode.P>  " + KeyCode.P);
                 IsOpen = true;
-                //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, false), this);
+
+                //临时用IsChangeScreening 来控制
                 GlobalSetDate.instance.IsChangeScreening = true;
                 mianbanShow(this.GetComponent<RectTransform>());
             }
