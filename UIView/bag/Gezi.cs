@@ -48,6 +48,7 @@ public class Gezi : MonoBehaviour {
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ,HZs), this);
             }
         }
+        
 
         if (_OldRQ != null && ((this.tag == "JN_zhuangbeilan" && _OldRQ.tag != "JN_zhuangbeilan") || (this.tag != "JN_zhuangbeilan" && _OldRQ.tag == "JN_zhuangbeilan")))
         {

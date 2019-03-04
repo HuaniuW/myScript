@@ -5,11 +5,19 @@ using UnityEngine.UI;
 
 public class XueTiao : MonoBehaviour {
     public Image xueBg;
+    [Header("诅咒血条背景")]
+    public Image zzXueBg;
     public Image xue1;
     public Image xue2;
 
+
+
+    [Header("诅咒血条阻挡")]
+    public Image zzTiao;
+
+
     float _cLive = 1000;
-    float _maxLive=1000;
+    float _maxLive = 1000;
     public float _maxW = 10;
     /// <summary>
     /// 长条的第一层显示
@@ -22,18 +30,40 @@ public class XueTiao : MonoBehaviour {
     public float _h=10;
     public GameObject gameObj;
 
+    public static int n = 1;
     // Use this for initialization
     void Start () {
+        //print("被调用次数   "+n);
+        n++;
+        //print(" zzTiao  "+ zzTiao);
+        //print(" zzXueBg  " + zzXueBg);
+        if(zzTiao) GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
         GetGameObj();
+        //print("--------------------->1");
         SetXueTiao2();
+        
         //_w2 = _w;
         GetXueNum(0);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
     }
 
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
+    }
+
+    void IsHasZZ(UEvent e) {
+        if (zzTiao == null) return;
+        if ((bool)e.eventParams)
+        {
+            GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 1);
+        }
+        else
+        {
+            GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
+        }
     }
     
 
@@ -55,6 +85,7 @@ public class XueTiao : MonoBehaviour {
         _w = w;
         _w2 = _w;
         _h = h;
+        //print("--------------------->3");
         SetXueTiao2();
     }
 
@@ -75,12 +106,15 @@ public class XueTiao : MonoBehaviour {
 
     void LiveChange(UEvent e)
     {
+        //print("xue change!");
         GetGameObj();
     }
 
     void SetXueTiao2()
     {
         WhBg(xueBg);
+        if(zzTiao) WhBg(zzTiao);
+        if(zzXueBg) Wh(zzXueBg,_w*0.3f,_h);
         Wh(xue1,_w,_h);
         Wh(xue2,_w2,_h);
     }
@@ -143,9 +177,10 @@ public class XueTiao : MonoBehaviour {
         {
             gameObj = GlobalTools.FindObjByName("player");
             GetGameObj();
-            SetXueTiao2();
+            //print("--------------------->2");
+            //SetXueTiao2();
             //_w2 = _w;
-            GetXueNum(0);
+            //GetXueNum(0);
             return;
         }
         XueChange();

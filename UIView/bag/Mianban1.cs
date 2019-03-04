@@ -37,6 +37,9 @@ public class Mianban1 : MonoBehaviour {
     List<RectTransform> HZzhuangbeizu = new List<RectTransform>();
     List<RectTransform> HZzhudongjineng = new List<RectTransform>();
 
+    public AudioSource cuowu;
+    public AudioSource chose;
+
     //被选中的物品
     RectTransform beChoseWP = null;
     void Start() {
@@ -343,11 +346,21 @@ public class Mianban1 : MonoBehaviour {
             }
         }
 
-        if (getRQ != null) kuang.position = getRQ.position;
+        if (getRQ != null) {
+            kuang.position = getRQ.position;
+            GlobalTools.PlayAudio("chose", this);
+        }
+
+    }
+
+    public void PlaySoundByName(string sName)
+    {
+        GlobalTools.PlayAudio(sName, this);
     }
 
     void Update()
     {
+        if (this.transform.parent.GetComponent<CanvasGroup>().alpha == 0) return;
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             FindNearestQR("up");

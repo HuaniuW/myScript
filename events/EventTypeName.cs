@@ -35,4 +35,11 @@ public class EventTypeName
     /// 加血
     /// </summary>
     public const string JIAXUE = "jiaxue";
+
+    /// <summary>
+    /// 是否有诅咒装备
+    /// </summary>
+    public const string GET_ZUZHOU = "get_zuzhou";
+
+    public const string DIE_OUT = "die_out";
 }

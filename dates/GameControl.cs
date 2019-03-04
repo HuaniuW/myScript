@@ -217,7 +217,7 @@ public class GameControl : MonoBehaviour {
             player.GetComponent<DontDistoryObj>().ShowSelf();
         }
         //设置玩家进场位置
-        if(GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        if (GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
         player.GetComponent<GameBody>().SetV0();
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());

@@ -31,6 +31,7 @@ public class PlayerRoleDate : RoleDate
     void JiaXue(UEvent e)
     {
         this.live += 300;
+        if(IsHasZZ) if (live > maxLive * 0.3f) live = maxLive * 0.3f;
         GetTX("jiaxue");
     }
 
@@ -53,6 +54,11 @@ public class PlayerRoleDate : RoleDate
         yield return new WaitForSeconds(time);
         DestroyImmediate(obj, true);
     }
+
+
+
+    //是否有诅咒
+    public bool IsHasZZ = false;
 
     void GetDiaoLuo(UEvent e)
     {
@@ -77,7 +83,16 @@ public class PlayerRoleDate : RoleDate
             this.lan += 500;
             GetTX("jialan");
         }
-        if (live > maxLive) live = maxLive;
+        if (!IsHasZZ)
+        {
+            if (live > maxLive) live = maxLive;
+        }
+        else {
+            //print(live+"  max  "+ maxLive);
+            if (live > maxLive*0.3f) live = maxLive*0.3f;
+            //print(live + "  max2222  " + maxLive);
+        }
+        
         if (lan > maxLan) lan = maxLan;
     }
 
@@ -118,8 +133,14 @@ public class PlayerRoleDate : RoleDate
             {
                 GetHZDate(hz.GetComponent<HZDate>());
             }
-
+            GetHZZZ(t);
             GetHZBeishu();
+        }
+        else
+        {
+            //徽章组没有徽章 没有诅咒徽章 清掉锁血
+            IsHasZZ = false;
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE), this);
     }
@@ -133,6 +154,7 @@ public class PlayerRoleDate : RoleDate
             {
                 string s1 = s.Split('_')[0];
                 float nums = float.Parse(s.Split('_')[1]);
+                string _name = s.Split('_')[2];
                 if (s1 == "atkP")
                 {
                     this.atk *= nums;
@@ -143,7 +165,8 @@ public class PlayerRoleDate : RoleDate
                 }
                 else if (s1 == "liveP")
                 {
-                    this.maxLive *= nums;
+                    if(_name!="诅咒宝石") this.maxLive *= nums;
+                    if(IsHasZZ) if (live > maxLive * 0.3f) live = maxLive * 0.3f;
                 }
             }
         }
@@ -165,15 +188,27 @@ public class PlayerRoleDate : RoleDate
             this.maxLive += hzdate.live;
         }
 
-        if (hzdate.defP != 0) beishuArr.Add("defP_"+hzdate.defP);
-        if (hzdate.atkP != 0) beishuArr.Add("atkP_" + hzdate.atkP);
+        if (hzdate.defP != 0) beishuArr.Add("defP_"+hzdate.defP+"_"+hzdate.HZName);
+        if (hzdate.atkP != 0) beishuArr.Add("atkP_" + hzdate.atkP + "_" + hzdate.HZName);
         if (hzdate.liveP != 0) {
-            beishuArr.Add("liveP_" + hzdate.liveP);
+            beishuArr.Add("liveP_" + hzdate.liveP + "_" + hzdate.HZName);
         }
 
-        if (hzdate.skill!=null)
+       
+    }
+    
+    void GetHZZZ(List<RectTransform> t)
+    {
+        foreach (var hz in t)
         {
-
+            if(hz.GetComponent<HZDate>().HZName == "诅咒宝石")
+            {
+                IsHasZZ = true;
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU,true), this);
+                return;
+            }
         }
+        IsHasZZ = false;
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
     }
 }

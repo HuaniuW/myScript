@@ -11,6 +11,7 @@ public class SkillBox : CanTouchBox
     public RectTransform rongqi;
     public RectTransform zz;
     public Text _text;
+    public AudioSource cuowu;
     GameObject _obj;
     // Use this for initialization
     void Start () {
@@ -29,7 +30,14 @@ public class SkillBox : CanTouchBox
     //当鼠标按下时调用 接口对应  IPointerDownHandler
     override public void OnPointerDown(PointerEventData eventData)
     {
-        if (skill != null && !skill.GetComponent<HZDate>().IsCDOver()) return;
+        if (skill != null && !skill.GetComponent<HZDate>().IsCDOver()) {
+            print("播声音！！！");
+            //cuowu.volume =  GlobalSetDate.instance.GetSoundEffectValue();
+            //cuowu.Play();
+            GlobalTools.PlayAudio("cuowu", this);
+            return;
+        }
+        
         IRole _role = this.transform.parent.GetComponent<XueTiao>().gameObj.GetComponent<GameBody>();
         //_role.ShowSkill(skill.GetComponent<HZDate>().TXName);
         if (boxNum == 1)

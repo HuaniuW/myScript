@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Reflection;
+
+using System;
+
 public class GlobalTools : MonoBehaviour {
 
 	// Use this for initialization
@@ -51,12 +55,37 @@ public class GlobalTools : MonoBehaviour {
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="num"></param>
-    public static void CanvasGroupAlpha(CanvasGroup obj,float num)
+    public static void CanvasGroupAlpha(CanvasGroup CGroup,float num)
     {
         if (num > 1) num = 1;
         if (num < 0) num = 0;
-        obj.GetComponent<CanvasGroup>().alpha = num;
-        obj.GetComponent<CanvasGroup>().interactable = true; //相互作用
-        obj.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        bool isTrue = num == 0 ? false : true;
+        CGroup.alpha = num;
+        CGroup.interactable = isTrue;
+        CGroup.blocksRaycasts = isTrue;
+    }
+
+
+
+    public static void PlayAudio(string AudioName, System.Object obj,float _value = 1)
+    {
+        //(this[AudioName] as AudioSource)
+        //print(AudioName);
+        AudioSource cAudio = GetDicSSByName(AudioName, obj);
+        if (cAudio)
+        {
+            cAudio.volume = _value * GlobalSetDate.instance.GetSoundEffectValue();
+            cAudio.Play();
+        }
+
+    }
+
+    public static AudioSource GetDicSSByName(string _name, System.Object obj)
+    {
+        Type type = obj.GetType();
+        FieldInfo fieldInfo = type.GetField(_name);
+        //print("  type " + type+ "    fieldInfo  "+ fieldInfo);
+        if (fieldInfo == null) return null;
+        return fieldInfo.GetValue(obj) as AudioSource;
     }
 }

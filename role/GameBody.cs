@@ -765,7 +765,7 @@ public class GameBody : MonoBehaviour, IRole {
         //对象池无法移除对象 原因不明
         //ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject, 1f);
         //this.gameObject.SetActive(false);
-        
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
         if (isDieRemove)StartCoroutine(IEDieDestory(2f));
     }
 

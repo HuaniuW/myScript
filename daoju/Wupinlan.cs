@@ -6,8 +6,7 @@ public class Wupinlan : MonoBehaviour {
     protected Rigidbody2D playerRigidbody2D;
     // Use this for initialization
     void Start () {
-        if (!playerRigidbody2D) playerRigidbody2D = GetComponent<Rigidbody2D>();
-        playerRigidbody2D.AddForce(Vector2.up * 200);
+       
         //随机方向扩散
     }
 	
@@ -15,6 +14,13 @@ public class Wupinlan : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void GetXFX(float num)
+    {
+        if (!playerRigidbody2D) playerRigidbody2D = GetComponent<Rigidbody2D>();
+        playerRigidbody2D.AddForce(Vector2.right * num);
+        playerRigidbody2D.AddForce(Vector2.up * 200);
+    }
 
     public void DistorySelf()
     {

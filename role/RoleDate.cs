@@ -40,6 +40,7 @@ public class RoleDate : MonoBehaviour {
 
     public float team = 1;
 
+
     public string BeHitVudio
     {
         get
