@@ -6,6 +6,7 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+<<<<<<< Updated upstream
         //GameSaveDate.GetInstance().GetTestSave();
         if(Globals.isDebug)print("游戏关卡控制类 启动");
         //GlobalSetDate.instance.GetGuanKaStr();
@@ -33,12 +34,27 @@ public class GameControl : MonoBehaviour {
 
     //-----------------------------------------------------------------------------关卡数据的存储---------------------------------------------------------
 
+=======
+        GameSaveDate.GetInstance().GetTestSave();
+        GlobalSetDate.instance.GetGuanKaStr();
+    }
+
+    private void OnEnable()
+    {
+        GetPlayer();
+        GetPlayerUI();
+        GetTargetPlayer();
+        PiPeiGuanKaStr();
+    }
+
+>>>>>>> Stashed changes
     [Header("当前关卡名字")]
     public string GuankaName = "";
 
     [Header("记录关卡的动态数据")]
     public string GuanKaStr = "";
 
+<<<<<<< Updated upstream
     string TempCurrentGKDate;
     //初始化关卡数据
     public void InitGuanKaDate()
@@ -124,6 +140,65 @@ public class GameControl : MonoBehaviour {
     {
         //将关卡数据写入全局临时数据
         if (TempCurrentGKDate != null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName+":"+TempCurrentGKDate);
+=======
+
+    public void PiPeiGuanKaStr()
+    {
+        //print(" guankaStr "+GuanKaStr);
+        //查找存档中是否有本关卡的关卡记录
+        //如果有当前关卡名字
+        string gkStr = GlobalSetDate.instance.GetGuanKaStrByGKName(GuankaName);
+        if (gkStr != "")
+        {
+            //有的话直接取过来
+            GuanKaStr = gkStr;
+            GetPiPei();
+            //在总数据中去掉当前关卡的数据
+
+        }
+        else { 
+            //没有的话不做动作
+			//GetPiPei();
+        };
+        
+    }
+
+    void GetPiPei()
+    {
+		if (GuanKaStr == "") return;
+        //开始匹配关卡数据
+        string[] strArr = GuanKaStr.Split(',');
+		//print("GuanKaStr  >>>  "+GuanKaStr);
+		//print(GuanKaStr);
+        for (var i = 0; i < strArr.Length; i++)
+        {
+			//print(strArr[0] + " ?  ");
+            string s = strArr[0].Split('-')[0];
+            string zt = strArr[0].Split('-')[1];
+
+            string sName = s.Split('_')[0];
+            if (sName == "men")
+            {
+                if (zt == "0")
+                {
+					//print("ssss  "+s);
+                    GlobalTools.FindObjByName(s).GetComponent<Door>().Chushi();
+                }
+                else if (zt == "1")
+                {
+                    GlobalTools.FindObjByName(s).GetComponent<Door>().HasOpen();
+                }
+            }
+            else if (sName == "boss")
+            {
+                if (zt == "1")
+                {
+                    //销毁该BOSS
+                    GlobalTools.FindObjByName(s).SetActive(false);
+                }
+            }
+        }
+>>>>>>> Stashed changes
     }
 
     public string GetSaveZGKDate()

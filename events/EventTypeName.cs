@@ -10,6 +10,7 @@ public class EventTypeName
     public const string GET_ENEMY = "GET_ENEMY";
 
     public const string CLOSE_DOOR = "close_door";
+<<<<<<< Updated upstream
     //徽章切换
     public const string CHANGE_HZ = "change_hz";
 
@@ -24,4 +25,6 @@ public class EventTypeName
     public const string GET_OBJ_NAME = "get_obj_name";
 
     public const string ZD_SKILL = "zd_skill";
+=======
+>>>>>>> Stashed changes
 }

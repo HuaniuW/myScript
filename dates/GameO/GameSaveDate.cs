@@ -26,22 +26,35 @@ public class GameSaveDate{
         return instance;
     }
 
+<<<<<<< Updated upstream
     string _fileURL = Application.persistentDataPath + "/date1";
+=======
+    string _fileName = Application.persistentDataPath + "/UnityUserData";
+>>>>>>> Stashed changes
 
 
     // Use this for initialization
     public GameSaveDate()
     {
+<<<<<<< Updated upstream
         
+=======
+      
+>>>>>>> Stashed changes
     }
 
     public void GetTestSave()
     {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         UserDate user = new UserDate();
         user.userName = "乐逍遥";
         user.onlyId = 1;
         string s = SerializeObject(user, typeof(UserDate));
         //创建XML文件且写入数据
+<<<<<<< Updated upstream
         CreateTextFile(_fileURL, s, false);
     }
 
@@ -66,23 +79,52 @@ public class GameSaveDate{
             //反序列化对象
             UserDate userD = DeserializeObject(strTemp, typeof(UserDate)) as UserDate;
             Debug.Log(userD.userName);
+=======
+        CreateTextFile(_fileName, s, false);
+
+      
+    }
+
+    public UserDate GetSaveDateByName(string _fileName)
+    {
+        //Debug.Log(_fileName);
+        try
+        {
+            string strTemp = LoadTextFile(_fileName, false);
+            //反序列化对象
+            UserDate userD = DeserializeObject(strTemp, typeof(UserDate)) as UserDate;
+            //Debug.Log(userD.guankajilu);
+>>>>>>> Stashed changes
             return userD;
         }
         catch
         {
+<<<<<<< Updated upstream
             if (Globals.isDebug) Debug.Log("系统读取XML出现错误，请检查");
+=======
+            Debug.Log("系统读取XML出现错误，请检查");
+>>>>>>> Stashed changes
         }
         return null;
     }
 
     public bool IsHasSaveDateByName(string SaveDateName)
     {
+<<<<<<< Updated upstream
         //string str = Application.persistentDataPath + "/" + SaveDateName;
         if (GetSaveDateByName(SaveDateName) != null) return true;
         return false;
     }
 
     string[] dateZu = { "date1", "date2", "date3" };
+=======
+        string str = Application.persistentDataPath + "/" + SaveDateName;
+        if (GetSaveDateByName(str) != null) return true;
+        return false;
+    }
+
+    string[] dateZu = { "date1", "date2", "UnityUserData" };
+>>>>>>> Stashed changes
     public bool IsHasSaveDate()
     {
        for(var i = 0; i < dateZu.Length; i++)
@@ -93,10 +135,13 @@ public class GameSaveDate{
         return false;
     }
 
+<<<<<<< Updated upstream
 
 
 
 
+=======
+>>>>>>> Stashed changes
     public string SerializeObject(object pObject, System.Type ty)
     {
         string XmlizedString = null;
