@@ -28,11 +28,14 @@ public class Diaoluowu : MonoBehaviour {
             //角色获得物品事件
             if(type == 1)
             {
+                //徽章 等 装进背包
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
             }
             else if (type == 2) {
+                //消耗的掉落物 吃了 直接加血
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_DIAOLUOWU, this.name), this);
             }else if (type == 3) {
+                //血瓶
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_XP, 1), this);
             }
             

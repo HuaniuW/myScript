@@ -41,7 +41,7 @@ public class PlayerRoleDate : RoleDate
     {
         tx = null;
         tx = GlobalTools.GetGameObjectByName(txName);
-        tx.transform.position = new Vector2(this.transform.position.x, this.transform.position.y-1);//new Vector2(0, -3);
+        tx.transform.position = new Vector2(this.transform.position.x, this.transform.position.y-2);//new Vector2(0, -3);
         tx.transform.parent = this.transform;
 
         //tx.transform.position = new Vector2(0,-3);

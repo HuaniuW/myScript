@@ -6,8 +6,13 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        
+    }
+
+    private void Awake()
+    {
         //GameSaveDate.GetInstance().GetTestSave();
-        if(Globals.isDebug)print("游戏关卡控制类 启动");
+        if (Globals.isDebug) print("游戏关卡控制类 启动");
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
         //GlobalSetDate.instance.Init();

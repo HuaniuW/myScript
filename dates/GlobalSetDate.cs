@@ -36,13 +36,18 @@ public class GlobalSetDate : MonoBehaviour {
 
     void Start()
     {
+        
+    }
+
+    private void Awake()
+    {
         //Debug.Log("Start");
         if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
     }
-    
+
     public void GetGameDateStart()
     {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
@@ -100,7 +105,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     //声音调控
-    float SoundEffect = 1f;
+    public float SoundEffect = 1f;
     public float GetSoundEffectValue()
     {
         return SoundEffect;
