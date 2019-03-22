@@ -53,17 +53,24 @@ public class JN_base : MonoBehaviour
         else {
             if(_hitKuai!=null) _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject,true);
         }
-        
+
+        //特效缩放大小
+        //this.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleH, 1);
 
 
+        //特效方向
         if (_sacaleX > 0) {
             GetComponent<MyParticlesScale>().SetParticlesScale(1);
+            this.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleW, jn_date._scaleW);
         }
         else
         {
             GetComponent<MyParticlesScale>().SetParticlesScale(-1);
+            this.transform.localScale = new Vector3(-jn_date._scaleW, -jn_date._scaleW, -jn_date._scaleW);
         }
+
         
+
         if (jn_date._type == "2"|| jn_date._type == "3") {
             //2 持续型
             //GetKuai(jn_date, _position);
@@ -77,12 +84,12 @@ public class JN_base : MonoBehaviour
         StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, jn_date.TXDisTime));
     }
 
-    //显示碰撞方块
+    //显示碰撞方块  开始是将碰撞块放进特效 和特效一起 但是移动会导致 碰撞快 连续撞击 所以动态调用
     void ShowHitFK()
     {
         GameObject hitFK = ObjectPools.GetInstance().SwpanObject2(Resources.Load("hit_fk") as GameObject);
         hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject);
-        Vector3 nv3 = new Vector3(this.transform.position.x - 0.8f * sacaleX, this.transform.position.y, this.transform.position.z);
+        Vector3 nv3 = new Vector3(this.transform.position.x - jn_date._scaleW * sacaleX, this.transform.position.y, this.transform.position.z);
         hitFK.transform.position = nv3;
 
     }
@@ -101,7 +108,7 @@ public class JN_base : MonoBehaviour
         //指定 碰撞块位置
         hitKuai.transform.position = _position;
         //指定 特效方向
-        hitKuai.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleH, hitKuai.transform.localScale.z);
+        hitKuai.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleW, hitKuai.transform.localScale.z);
     }
 
     private void Update()

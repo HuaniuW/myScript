@@ -28,10 +28,19 @@ public class MyController : MonoBehaviour {
     //}
 
     // Update is called once per frame
+
+    bool IsCanControl()
+    {
+        if (Globals.isInPlot) return false;
+        //if (!_isCanControl) return false;
+        if (GlobalSetDate.instance.IsChangeScreening) return false;
+        if (GetComponent<RoleDate>().isDie) return false;
+        return true;
+    }
+
+
     void Update () {
-        if (Globals.isInPlot) return;
-        //if (!_isCanControl) return;
-        if (GlobalSetDate.instance.IsChangeScreening) return;
+       
 
         if (Input.anyKey)
         {//得到按下什么键
@@ -42,41 +51,41 @@ public class MyController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //print("jump");
-            _body.GetJump();
+            if (IsCanControl()) _body.GetJump();
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow)) {
             //|| Input.GetKeyUp("joystick2Button2")
             //values.GetValue(x).ToString()
-            _body.GetAtk();
+            if (IsCanControl()) _body.GetAtk();
         }
 
        
         if (Input.GetKeyDown(KeyCode.J)) {
-            _body.GetDodge1();
+            if (IsCanControl()) _body.GetDodge1();
         }
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            _body.GetSkill1();
+            if (IsCanControl()) _body.GetSkill1();
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            _body.GetSkill2();
+            if (IsCanControl()) _body.GetSkill2();
         }
 
 
 
         horizontalDirection = Input.GetAxis(HORIZONTAL);
         if (horizontalDirection > 0) {
-            _body.RunRight(horizontalDirection);
+            if (IsCanControl()) _body.RunRight(horizontalDirection);
         } else if(horizontalDirection<0) {
-            _body.RunLeft(horizontalDirection);
+            if (IsCanControl()) _body.RunLeft(horizontalDirection);
         }
         else
         {
-            _body.ReSetLR();
+            if (IsCanControl()) _body.ReSetLR();
         }
         
        

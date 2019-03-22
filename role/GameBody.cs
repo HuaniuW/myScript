@@ -124,8 +124,8 @@ public class GameBody : MonoBehaviour, IRole {
     protected RoleDate roleDate;
 
 
-    protected const string RUN = "run_3";
-    protected const string STAND = "stand_1";
+    protected string RUN = "run_3";
+    protected string STAND = "stand_1";
     protected const string RUNBEGIN = "runBegin_1";
     protected const string RUNSTOP = "runStop_1";
     protected const string JUMPUP = "jumpUp_1";
@@ -134,13 +134,13 @@ public class GameBody : MonoBehaviour, IRole {
     protected const string DOWNONGROUND = "downOnGround_1";
     protected const string JUMP2DUAN = "jump2Duan_1";
     protected const string ATK = "atk_";
-    protected const string DODGE1 = "dodge_1";
-    protected const string DODGE2 = "dodge_2";
-    protected const string BEHIT = "beHit_1";
+    protected string DODGE1 = "dodge_1";
+    protected string DODGE2 = "dodge_2";
+    protected string BEHIT = "beHit_1";
     protected const string DIE = "die_1";
     //回跳跃动作
-    protected const string BACKUP = "backUp_1";
-    protected const string WALK = "walk_1";
+    protected string BACKUP = "backUp_1";
+    protected string WALK = "walk_1";
     protected const string BEHITINAIR = "beHitInAir_1";
 
     protected bool isBackUp = false;

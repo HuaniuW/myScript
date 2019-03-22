@@ -76,24 +76,25 @@ public class HitKuai : MonoBehaviour {
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector3 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y, tempV3.z);
-            
             if (jn_date != null &&gameBody != null)
             {
-
+                atkObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
                 //判断是否破防   D 代办事项 
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
+                    //atkObjV3Zero(Coll.gameObject);
                     gameBody.HasBeHit();
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * _roleScaleX, 0));
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
                 }
                 else if (jn_date.atkPower - roleDate.yingzhi > 0)
                 {
+                    //atkObjV3Zero(Coll.gameObject);
                     gameBody.HasBeHit();
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(300 * _roleScaleX, 0));
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX-100, 0));
                     if (atkObj&& jn_date._type == "1")
                     {
-                        atkObjV3Zero();
+                        atkObjV3Zero(atkObj);
                         atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
                     }
                 }
@@ -101,11 +102,14 @@ public class HitKuai : MonoBehaviour {
                 {
                     if (atkObj && jn_date._type == "1")
                     {
-                        atkObjV3Zero();
+                        atkObjV3Zero(atkObj);
                         atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
                     }
                 }
-				gameBody.GetPause(0.2f);
+
+				gameBody.GetPause(jn_date.yingzhishijian);
+
+                //if (Coll.tag != "Player")
 
             }
 
@@ -128,10 +132,10 @@ public class HitKuai : MonoBehaviour {
     }
 
     //攻击者X方向速度清0
-    void atkObjV3Zero()
+    void atkObjV3Zero(GameObject obj)
     {
-        Vector3 v3 = atkObj.GetComponent<Rigidbody2D>().velocity;
-        atkObj.GetComponent<Rigidbody2D>().velocity = new Vector3(0, v3.y, v3.z);
+        Vector3 v3 = obj.GetComponent<Rigidbody2D>().velocity;
+        obj.GetComponent<Rigidbody2D>().velocity = new Vector3(0, v3.y, v3.z);
     }
 
   
@@ -193,7 +197,7 @@ public class HitKuai : MonoBehaviour {
         else
         {
             if (isSJJD) jd = Random.Range(0, -10);
-            hitTx.transform.localEulerAngles = new Vector3(0, 150, jd);
+            hitTx.transform.localEulerAngles = new Vector3(0, 144, jd);
         }
 
     }
