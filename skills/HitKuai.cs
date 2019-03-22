@@ -157,23 +157,45 @@ public class HitKuai : MonoBehaviour {
         //判断是否在空中
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
-        HitTX(_psScaleX, "BloodSplatCritical2D1");
-        HitTX(_psScaleX,"jizhong",roleDate.beHitVudio);
+        HitTX(_psScaleX, "BloodSplatCritical2D1","",2,false,false);
+        HitTX(_psScaleX,"jizhong",roleDate.beHitVudio,3,true);
     }
 
-    //击中特效
-    void HitTX(float psScaleX,string txName,string hitVudio = "")
+    /// <summary>
+    /// 特效
+    /// </summary>
+    /// <param name="psScaleX">角色的方向</param>
+    /// <param name="txName">特效名字（动态取预制资源）</param>
+    /// <param name="hitVudio">播放特效声音</param>
+    /// <param name="isSJJD">是否随机角度</param>
+    /// <param name="isZX">是否需要转向</param>
+    void HitTX(float psScaleX,string txName,string hitVudio = "",float beishu = 3,bool isSJJD = false,bool isZX = true)
     {
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         hitTx.transform.position = gameBody.transform.position;
         //击中特效缩放
-        hitTx.transform.localScale = new Vector3(3, 3, 1);
+        hitTx.transform.localScale = new Vector3(beishu, beishu, 1);
+
+        float jd = 0;
+       
         if (hitVudio != "")
         {
             hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
         }
         //特效方向 
+        if (!isZX) return;
+        if (psScaleX>0)
+        {
+            if(isSJJD)jd = Random.Range(-10, -35);
+            hitTx.transform.localEulerAngles = new Vector3(0, 0, jd);
+        }
+        else
+        {
+            if (isSJJD) jd = Random.Range(0, -10);
+            hitTx.transform.localEulerAngles = new Vector3(0, 150, jd);
+        }
+
     }
 
   

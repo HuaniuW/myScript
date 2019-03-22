@@ -20,7 +20,7 @@ public class JZ_audio : MonoBehaviour {
         //print(AudioName + "       " + cAudio);
         if (cAudio)
         {
-			cAudio.volume = 0.4f * GlobalSetDate.instance.GetSoundEffectValue();
+			cAudio.volume = 0.8f * GlobalSetDate.instance.GetSoundEffectValue();
             //cAudio.PlayOneShot();
             //cAudio.PlayOneShot(cAudio.clip);
             //cAudio.GetComponent<AudioSource>().Play();
