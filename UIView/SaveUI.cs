@@ -62,6 +62,7 @@ public class SaveUI : MonoBehaviour {
     {
         if (isGetDate)
         {
+            //取
             if (GameSaveDate.GetInstance().GetSaveDateByName(btnName) != null)
             {
                 GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(btnName);
@@ -72,6 +73,7 @@ public class SaveUI : MonoBehaviour {
             }
         }
         else {
+            //存
             if (GlobalSetDate.instance.CurrentUserDate != null)
             {
                 GameSaveDate.GetInstance().SaveDateByURLName(btnName, GlobalSetDate.instance.CurrentUserDate);

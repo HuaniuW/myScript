@@ -45,6 +45,35 @@ public class PlayerUI : MonoBehaviour {
         {
             GetTypeMobile();
         }
+
+        btn_zt.onClick.AddListener(GetSetUI);
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+    }
+
+    private void OnDestroy()
+    {
+        if(Globals.isDebug)print("PlayerUI");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+    }
+
+    void RemoveSelf(UEvent e) {
+        DestroyImmediate(this.gameObject,true);
+    }
+
+    GameObject setUI;
+    void GetSetUI()
+    {
+        if(setUI == null)
+        {
+            setUI = GlobalTools.GetGameObjectByName("UI_shezhi");
+            GlobalSetDate.instance.IsChangeScreening = true;
+        }
+        else
+        {
+            GlobalSetDate.instance.IsChangeScreening = false;
+            DestroyImmediate(setUI, true);
+        }
     }
 	
 	// Update is called once per frame

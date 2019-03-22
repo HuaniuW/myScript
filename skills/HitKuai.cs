@@ -40,7 +40,7 @@ public class HitKuai : MonoBehaviour {
         else
         {
             this.txObj = this.transform.parent.gameObject;
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.name+"     "+this.txObj);
+            //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.name+"     "+this.txObj);
         }
         if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
     }
@@ -76,7 +76,7 @@ public class HitKuai : MonoBehaviour {
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector3 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y, tempV3.z);
-
+            
             if (jn_date != null &&gameBody != null)
             {
 
@@ -94,7 +94,7 @@ public class HitKuai : MonoBehaviour {
                     if (atkObj&& jn_date._type == "1")
                     {
                         atkObjV3Zero();
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
+                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
                     }
                 }
                 else
@@ -102,9 +102,10 @@ public class HitKuai : MonoBehaviour {
                     if (atkObj && jn_date._type == "1")
                     {
                         atkObjV3Zero();
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500 * _roleScaleX, 0));
+                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
                     }
                 }
+				gameBody.GetPause(0.2f);
 
             }
 
@@ -166,11 +167,13 @@ public class HitKuai : MonoBehaviour {
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         hitTx.transform.position = gameBody.transform.position;
-        hitTx.transform.localScale = new Vector3(1, 1, psScaleX);
+        //击中特效缩放
+        hitTx.transform.localScale = new Vector3(3, 3, 1);
         if (hitVudio != "")
         {
             hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
         }
+        //特效方向 
     }
 
   

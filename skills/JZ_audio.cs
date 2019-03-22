@@ -11,15 +11,24 @@ public class JZ_audio : MonoBehaviour {
     void Start () {
 		
 	}
-
+    
     public void PlayAudio(string AudioName)
     {
         //(this[AudioName] as AudioSource)
-        //print(AudioName);
+        //AudioName = "hit1";
         AudioSource cAudio = GetDicSSByName(AudioName, this);
+        //print(AudioName + "       " + cAudio);
         if (cAudio)
         {
-            cAudio.volume = 0.4f * GlobalSetDate.instance.GetSoundEffectValue();
+			cAudio.volume = 0.4f * GlobalSetDate.instance.GetSoundEffectValue();
+            //cAudio.PlayOneShot();
+            //cAudio.PlayOneShot(cAudio.clip);
+            //cAudio.GetComponent<AudioSource>().Play();
+            //print("-------->   "+cAudio.name);
+            //cAudio.GetComponent<SoundTest>().APlay();
+            //print("------------------>    "+cAudio.GetComponent<AudioSource>());
+            //cAudio.GetComponent<AudioSource>().Play();
+            //cAudio.Stop();
             cAudio.Play();
         }
 

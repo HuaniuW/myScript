@@ -19,6 +19,7 @@ public class PlayerRoleDate : RoleDate
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HZ, changeHZ);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JIAXUE, this.JiaXue);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
     }
 
     private void OnDestroy()
@@ -26,7 +27,16 @@ public class PlayerRoleDate : RoleDate
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_HZ, changeHZ);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JIAXUE, this.JiaXue);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
     }
+
+
+    void RemoveSelf(UEvent e)
+    {
+        DestroyImmediate(this, true);
+    }
+
+
 
     void JiaXue(UEvent e)
     {
@@ -41,8 +51,19 @@ public class PlayerRoleDate : RoleDate
     {
         tx = null;
         tx = GlobalTools.GetGameObjectByName(txName);
-        tx.transform.position = new Vector2(this.transform.position.x, this.transform.position.y-2);//new Vector2(0, -3);
+        Vector2 v =  this.GetComponent<GameBody>().groundCheck.position;
         tx.transform.parent = this.transform;
+        //print(this.transform.localScale);
+        if (this.transform.localScale.x == -1)
+        {
+            tx.transform.position = new Vector2(v.x, v.y - 0.6f);
+        }
+        else {
+            tx.transform.position = new Vector2(v.x, v.y);
+        }
+        ;//new Vector2(0, -3);
+        //print("tx.transform.position     "+ tx.transform.position);
+        
 
         //tx.transform.position = new Vector2(0,-3);
         //print("position  "+tx.transform.position);

@@ -42,4 +42,6 @@ public class EventTypeName
     public const string GET_ZUZHOU = "get_zuzhou";
 
     public const string DIE_OUT = "die_out";
+
+    public const string GAME_OVER = "game_over";
 }

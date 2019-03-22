@@ -221,6 +221,7 @@ public class GameControl : MonoBehaviour {
             player = FindObjByName("player");
             player.GetComponent<DontDistoryObj>().ShowSelf();
         }
+        
         //设置玩家进场位置
         if (GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
         player.GetComponent<GameBody>().SetV0();
@@ -228,6 +229,8 @@ public class GameControl : MonoBehaviour {
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());
         //player.transform.localScale = new Vector3(1, 1, 1);
         FirstInGame();
+
+        //print("玩家位置   " + player.transform.position);
     }
 
 

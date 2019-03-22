@@ -447,7 +447,7 @@ public class AIBase : MonoBehaviour {
     {
         if (!isActioning)
         {
-            print(">>>>");
+            //print(">>>>");
             isActioning = true;
             gameBody.GetStand();
             atkNum++;

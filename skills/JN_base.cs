@@ -42,6 +42,9 @@ public class JN_base : MonoBehaviour
         _position = new Vector3(_position.x + jn_date._xdx * _sacaleX, _position.y + jn_date._xdy, _position.z);
         //指定特效位置
         this.transform.position = _position;
+		//print("jn_date._scaleW     "+jn_date._scaleW);
+		//print();
+		//this.transform.localScale = new Vector3(jn_date._scaleW,jn_date._scaleH,1);
         //TX_weizhiyupan();
         if (!isSkill)
         {

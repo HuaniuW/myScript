@@ -8,7 +8,9 @@ public class GameSetBar : MonoBehaviour {
     public Button btn_close;
     public RectTransform mianban1;
     public RectTransform mianban2;
+    //移动版
     public Toggle tog1;
+    //非移动版
     public Toggle tog2;
     public Slider sl1;
 
@@ -27,6 +29,7 @@ public class GameSetBar : MonoBehaviour {
     }
 	void RemoveSelf()
     {
+        GlobalSetDate.instance.IsChangeScreening = false;
         DestroyImmediate(this.gameObject, true);
     }
 

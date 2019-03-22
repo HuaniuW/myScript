@@ -776,7 +776,12 @@ public class GameBody : MonoBehaviour, IRole {
         yield return new WaitForSeconds(time);
         //playerRigidbody2D.velocity = Vector2.zero;
         this.gameObject.SetActive(false);
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
+        if(this.tag == "Player")
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_OVER), this);
+        }
+        DestroyImmediate(this, true);
     }
 
 

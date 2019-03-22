@@ -32,11 +32,17 @@ public class GlobalSetDate : MonoBehaviour {
     private void OnDestroy()
     {
         //print("??????????????????销毁了？");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.ReStart);
     }
 
     void Start()
     {
-        
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.ReStart);
+    }
+
+    void ReStart(UEvent e)
+    {
+        GetGameDateStart();
     }
 
     private void Awake()
@@ -53,10 +59,12 @@ public class GlobalSetDate : MonoBehaviour {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
         if (isInFromSave)
         {
+            print("读档游戏");
             GetSaveInGame();
         }
         else
         {
+            print("新游戏");
             InNewGame();
         }
         SceneManager.LoadScene("loads");
@@ -64,7 +72,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     //第一次启动 掉用这里面存储的数据系统
-    public string playerPosition = "-2.3_-2";
+    public string playerPosition = "-2.3_5";
     public string screenName = "guan1_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
