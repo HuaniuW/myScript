@@ -19,7 +19,7 @@ public class Btn_FX : CanTouchBox {
         }
         chushi = btnImg.transform.position;
     }
-
+    
     bool IsDown = false;
     float dx = 0;
     float moveNums = 0.3f;
@@ -27,6 +27,7 @@ public class Btn_FX : CanTouchBox {
 	void Update () {
         if (IsDown)
         {
+            Globals.isXNBtn = true;
             if (dx < 156)
             {
                 playerObj.RunLeft(-moveNums);
@@ -40,7 +41,13 @@ public class Btn_FX : CanTouchBox {
             else
             {
                 btnImg.transform.position = chushi;
+               
             }
+        }
+        else
+        {
+            Globals.isXNBtn = false;
+            playerObj.ReSetLR();
         }
 	}
 

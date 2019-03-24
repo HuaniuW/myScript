@@ -84,14 +84,16 @@ public class HitKuai : MonoBehaviour {
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
                     //atkObjV3Zero(Coll.gameObject);
-                    gameBody.HasBeHit();
+                    
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
+                    gameBody.HasBeHit(jn_date.chongjili);
                 }
                 else if (jn_date.atkPower - roleDate.yingzhi > 0)
                 {
                     //atkObjV3Zero(Coll.gameObject);
-                    gameBody.HasBeHit();
+                   
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX-100, 0));
+                    gameBody.HasBeHit(jn_date.chongjili);
                     if (atkObj&& jn_date._type == "1")
                     {
                         atkObjV3Zero(atkObj);

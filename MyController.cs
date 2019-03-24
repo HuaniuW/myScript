@@ -85,7 +85,7 @@ public class MyController : MonoBehaviour {
         }
         else
         {
-            if (IsCanControl()) _body.ReSetLR();
+            if (IsCanControl()&&!Globals.isXNBtn) _body.ReSetLR();
         }
         
        

@@ -46,6 +46,7 @@ public class AIBase : MonoBehaviour {
         {
             isFindEnemy = true;
             //isPatrol = false;
+            GetComponent<GameBody>().InFightAtk();
             return true;
         }
         return false;

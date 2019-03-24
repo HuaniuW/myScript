@@ -137,7 +137,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected string DODGE1 = "dodge_1";
     protected string DODGE2 = "dodge_2";
     protected string BEHIT = "beHit_1";
-    protected const string DIE = "die_1";
+    protected string DIE = "die_1";
     //回跳跃动作
     protected string BACKUP = "backUp_1";
     protected string WALK = "walk_1";
@@ -267,7 +267,17 @@ public class GameBody : MonoBehaviour, IRole {
     public void GetDodge1()
     {
         if (roleDate.isBeHiting||isAcing) return;
-        if (isInAiring || DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP) return;
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP) return;
+
+        if (isInAiring)
+        {
+            DODGE2 = "shanjin_1";
+        }
+        else
+        {
+            DODGE2 = "dodge_2";
+        }
+
         if (!isDodge)
         {
             ResetAll();
@@ -280,7 +290,7 @@ public class GameBody : MonoBehaviour, IRole {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    MoveVX(2200);
+                    MoveVX(400);
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -288,7 +298,7 @@ public class GameBody : MonoBehaviour, IRole {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    MoveVX(2200);
+                    MoveVX(400);
                 }
             }
         }
@@ -297,11 +307,23 @@ public class GameBody : MonoBehaviour, IRole {
 
     void Dodge1()
     {
+        if (isInAiring)
+        {
+            playerRigidbody2D.gravityScale = 0;
+            playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, -1);
+        }
+        else
+        {
+            playerRigidbody2D.gravityScale = 4.5f;
+        }
+
+
         if ((DBBody.animation.lastAnimationName == DODGE1 || DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
         {
             isDodge = false;
             isDodgeing = false;
             roleDate.isCanBeHit = true;
+            playerRigidbody2D.gravityScale = 4.5f;
         }
     }
 
@@ -468,14 +490,23 @@ public class GameBody : MonoBehaviour, IRole {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
-        if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
+
+        //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
+
+        if (DBBody.animation.lastAnimationName != RUN)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
-        if (DBBody.animation.lastAnimationName != RUNBEGIN && DBBody.animation.lastAnimationName != RUN)
-        {
-            DBBody.animation.GotoAndPlayByFrame(RUNBEGIN, 0, 1);
-        }
+
+
+        //if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
+        //{
+        //    DBBody.animation.GotoAndPlayByFrame(RUN);
+        //}
+        //if (DBBody.animation.lastAnimationName != RUNBEGIN && DBBody.animation.lastAnimationName != RUN)
+        //{
+        //    DBBody.animation.GotoAndPlayByFrame(RUNBEGIN, 0, 1);
+        //}
     }
 
     void Walk()
@@ -526,7 +557,7 @@ public class GameBody : MonoBehaviour, IRole {
         {
             playerRigidbody2D.AddForce(Vector2.right * _vx);
         }
-        playerRigidbody2D.velocity = newSpeed;
+        //playerRigidbody2D.velocity = newSpeed;
     }
 
     void MoveVX(float vx, bool isNoAbs = false)
@@ -534,14 +565,15 @@ public class GameBody : MonoBehaviour, IRole {
 
         var _vx = Mathf.Abs(vx);
         if (isNoAbs) _vx = vx;
+        playerRigidbody2D.velocity = Vector2.zero;
         //newSpeed.x = 0;
         if (bodyScale.x < 0)
         {
-            playerRigidbody2D.AddForce(Vector2.right * _vx);
+            playerRigidbody2D.AddForce(new Vector2(vx, 0));
         }
         else if (bodyScale.x > 0)
         {
-            playerRigidbody2D.AddForce(Vector2.left * _vx);
+            playerRigidbody2D.AddForce(new Vector2(-vx, 0));
         }
         playerRigidbody2D.velocity = newSpeed;
     }
@@ -645,7 +677,19 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
 
-        if (isAtking) return;
+        if (isAtking)
+        {
+            if (isInAiring)
+            {
+                //playerRigidbody2D.gravityScale = 2f;
+                playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x*0.9f , playerRigidbody2D.velocity.y*0.3f);
+            }
+            return;
+        }
+        else {
+            //playerRigidbody2D.gravityScale = 4.5f;
+        }
+        
 
         if (IsHitMQWall && isInAiring)
         {
@@ -844,7 +888,11 @@ public class GameBody : MonoBehaviour, IRole {
         //print(_theTimer);
 
 
-
+        if (isDodgeing)
+        {
+            Dodge1();
+            return;
+        }
 
 
 
@@ -862,11 +910,7 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-        if (isDodgeing)
-        {
-            Dodge1();
-            return;
-        }
+       
 
         if (isJumping)
         {
@@ -892,7 +936,7 @@ public class GameBody : MonoBehaviour, IRole {
         //print("Gamebody!");
     }
 
-    public virtual void HasBeHit()
+    public virtual void HasBeHit(float chongjili = 0)
     {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
@@ -908,7 +952,7 @@ public class GameBody : MonoBehaviour, IRole {
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
     }
 
-    private void GetBeHit()
+    protected virtual void GetBeHit()
     {
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
             roleDate.isBeHiting = false;
@@ -1069,13 +1113,13 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    float atkNums = 0;
+    protected float atkNums = 0;
     bool isAtk = false;
     public bool isAtking = false;
     string[] atkMsg;
     VOAtk vOAtk;
     Dictionary<string, string>[] atkZS;
-
+    
     public void GetAtk(string atkName = null)
     {
         if (roleDate.isBeHiting) return;
@@ -1118,9 +1162,7 @@ public class GameBody : MonoBehaviour, IRole {
                 playerRigidbody2D.velocity = newSpeed;
                 MoveVY(vOAtk.yF);
             }
-
             //print(newSpeed.y);
-
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
 
@@ -1186,6 +1228,11 @@ public class GameBody : MonoBehaviour, IRole {
         atkNums = 0;
     }
 
+    public virtual void InFightAtk()
+    {
+
+    }
+
     void Atk()
     {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
@@ -1216,7 +1263,9 @@ public class GameBody : MonoBehaviour, IRole {
                 isAtkYc = false;
                 yanchi = 0;
                 atkNums = 0;
+                //playerRigidbody2D.gravityScale = 4.5f;
             }
+            InFightAtk();
         }
 
         //保险措施 
@@ -1225,8 +1274,10 @@ public class GameBody : MonoBehaviour, IRole {
             isAtking = false;
             yanchi = 0;
             atkNums = 0;
+            //playerRigidbody2D.gravityScale = 4.5f;
         }
     }
+
 
     public bool IsAtkOver()
     {
