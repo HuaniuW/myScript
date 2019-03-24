@@ -495,6 +495,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (DBBody.animation.lastAnimationName != RUN)
         {
+            print("-------------------------->>   "+ DBBody.animation.lastAnimationName);
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
 

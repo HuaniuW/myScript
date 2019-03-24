@@ -47,7 +47,7 @@ public class Btn_FX : CanTouchBox {
         else
         {
             Globals.isXNBtn = false;
-            playerObj.ReSetLR();
+            //playerObj.ReSetLR();
         }
 	}
 
