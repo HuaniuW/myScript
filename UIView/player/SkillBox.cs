@@ -109,7 +109,8 @@ public class SkillBox : CanTouchBox
     void GetSkillIn(GameObject obj)
     {
         //obj.transform.parent = this.transform.parent;
-        obj.transform.parent = this.rongqi.transform;
+        //obj.transform.parent = this.rongqi.transform;
+        obj.transform.SetParent(this.rongqi.transform);
         //obj.transform.position = Vector2.zero;
         obj.transform.position = this.transform.position;
     }

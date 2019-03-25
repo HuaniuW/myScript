@@ -495,7 +495,6 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (DBBody.animation.lastAnimationName != RUN)
         {
-            print("-------------------------->>   "+ DBBody.animation.lastAnimationName);
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
 
@@ -683,7 +682,7 @@ public class GameBody : MonoBehaviour, IRole {
             if (isInAiring)
             {
                 //playerRigidbody2D.gravityScale = 2f;
-                playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x*0.9f , playerRigidbody2D.velocity.y*0.3f);
+                playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x*0.9f , playerRigidbody2D.velocity.y*0.2f);
             }
             return;
         }
@@ -854,6 +853,7 @@ public class GameBody : MonoBehaviour, IRole {
             GetDie();
             return;
         }
+
         if (roleDate.live <= 0)
         {
             roleDate.isDie = true;

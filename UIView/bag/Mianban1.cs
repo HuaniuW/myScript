@@ -113,7 +113,8 @@ public class Mianban1 : MonoBehaviour {
         //GameObject obj = Resources.Load(ObjName) as GameObject;
         //obj = Instantiate(obj);
         GameObject obj = GlobalTools.GetGameObjectByName(ObjName);
-        obj.transform.parent = this.transform;
+        //obj.transform.parent = this.transform;
+        obj.transform.SetParent(this.transform);
         RectTransform hz = obj.GetComponent<RectTransform>();
         gz.GetComponent<Gezi>().GetInObj(hz);
     }

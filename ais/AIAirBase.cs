@@ -11,7 +11,7 @@ public class AIAirBase : AIBase {
 	
 	// Update is called once per frame
 	void Update () {
-        GetUpdate();
+        GetUpdate2();
 	}
 
     protected override bool NearRoleInDistance(float distance)
@@ -35,7 +35,7 @@ public class AIAirBase : AIBase {
         }
     }
 
-    protected virtual void GetUpdate()
+    protected virtual void GetUpdate2()
     {
         if (!gameObj)
         {

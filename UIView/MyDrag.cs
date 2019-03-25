@@ -75,13 +75,13 @@ public class MyDrag : CanTouchBox
     }
 
     //当鼠标进入图片时调用   对应接口   IPointerEnterHandler
-    public void OnPointerEnter(PointerEventData eventData)
+    override public void OnPointerEnter(PointerEventData eventData)
     {
         //imgRect.localScale = imgReduceScale;   //缩小图片
     }
 
     //当鼠标退出图片时调用   对应接口   IPointerExitHandler
-    public void OnPointerExit(PointerEventData eventData)
+    override public void OnPointerExit(PointerEventData eventData)
     {
         //imgRect.localScale = imgNormalScale;   //回复图片
     }

@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerGameBody : GameBody {
 
 	// Use this for initialization
-	void Start () {
-        GetStart();
-    }
+	//void Start () {
+ //       GetStart();
+ //   }
 	
 	// Update is called once per frame
 	void Update () {

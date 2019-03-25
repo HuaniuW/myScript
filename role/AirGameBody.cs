@@ -6,14 +6,14 @@ using DragonBones;
 public class AirGameBody : GameBody {
 
 	// Use this for initialization
-	void Start () {
+	//void Start () {
         //print(this.DBBody == null);
         //if(DBBody == null) DBBody = GetComponentInChildren<UnityArmatureComponent>();
         //roleDate = GetComponent<RoleDate>();
         //print(this.rigidbody2D)
         //this.TestsI();
-        GetStart();
-    }
+        //GetStart();
+    //}
 	
 	// Update is called once per frame
 	void Update () {

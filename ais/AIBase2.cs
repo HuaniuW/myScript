@@ -15,8 +15,8 @@ public class AIBase2 : MonoBehaviour
         gameBody = GetComponent<GameBody>();
 
         //DataZS d = DataZS.GetInstance();
-        Type myType = typeof(DataZS);
-        PropertyInfo myPropInfo = myType.GetProperty("tt");
+        //Type myType = typeof(DataZS);
+        //PropertyInfo myPropInfo = myType.GetProperty("tt");
         //print("-------------------->  "+ (myPropInfo == null)+"  >  "+ myPropInfo+"   length "+ arrays.Length);
 
     }

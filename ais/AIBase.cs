@@ -18,7 +18,7 @@ public class AIBase : MonoBehaviour {
     {
         gameBody = GetComponent<GameBody>();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
-        Type myType = typeof(DataZS);
+        //Type myType = typeof(DataZS);
         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
     }
@@ -121,6 +121,11 @@ public class AIBase : MonoBehaviour {
 
     protected virtual void GetUpdate()
     {
+        if (GetComponent<RoleDate>().isDie)
+        {
+            return;
+        }
+
         if (!gameObj)
         {
             gameObj = GlobalTools.FindObjByName("player");
@@ -241,6 +246,7 @@ public class AIBase : MonoBehaviour {
     //3 靠近 达到攻击距离
     protected virtual bool NearRoleInDistance(float distance)
     {
+        
         if (DontNear) return true;
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
