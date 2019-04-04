@@ -116,7 +116,10 @@ public class GameBody : MonoBehaviour, IRole {
         atkNums = 0;
         isAtkYc = false;
         isYanchi = false;
+        isBackUp = false;
         isBackUping = false;
+        isQianhua = false;
+        isQianhuaing = false;
         isAcing = false;
         isYanchi = false;
     }
@@ -138,8 +141,11 @@ public class GameBody : MonoBehaviour, IRole {
     protected string DODGE2 = "dodge_2";
     protected string BEHIT = "beHit_1";
     protected string DIE = "die_1";
+    //前滑动
+    protected string QIANHUA = "qianhua_1";
+
     //回跳跃动作
-    protected string BACKUP = "backUp_1";
+    protected string BACKUP = "houshan_1";
     protected string WALK = "walk_1";
     protected const string BEHITINAIR = "beHitInAir_1";
 
@@ -181,6 +187,46 @@ public class GameBody : MonoBehaviour, IRole {
     public bool GetBackUpOver()
     {
         return !isBackUping;
+    }
+
+    protected bool isQianhua = false;
+    protected bool isQianhuaing = false;
+    public void Qianhua()
+    {
+        if (roleDate.isBeHiting) return;
+        if (!DBBody.animation.HasAnimation(QIANHUA)) return;
+        if (!isQianhua && IsGround && !isQianhuaing)
+        {
+            ResetAll();
+            isQianhua = true;
+            if (DBBody.animation.lastAnimationName != QIANHUA) DBBody.animation.GotoAndPlayByFrame(QIANHUA, 0, 1);
+            isQianhuaing = true;
+            roleDate.isCanBeHit = false;
+            newSpeed.x = 0;
+            newSpeed.y = 0;
+            playerRigidbody2D.velocity = newSpeed;
+            //print("huitiao");
+            BackJumpVX(200);
+            MoveVX(1000);
+            //打开有bug
+            //MoveVY(200);
+        }
+    }
+
+
+    void GetQianhuaing()
+    {
+        if (DBBody.animation.lastAnimationName == QIANHUA && DBBody.animation.isCompleted)
+        {
+            isQianhuaing = false;
+            isQianhua = false;
+            roleDate.isCanBeHit = true;
+        }
+    }
+
+    public bool GetQianhuaOver()
+    {
+        return !isQianhuaing;
     }
 
 
@@ -337,6 +383,7 @@ public class GameBody : MonoBehaviour, IRole {
         get
         {
             if (groundCheck2 == null) return false;
+            if (isInAiring) return false;
             Vector2 start = groundCheck2.position;
             Vector2 end = new Vector2(start.x, start.y - 0.7f);
             Debug.DrawLine(start, end, Color.red);
@@ -738,10 +785,19 @@ public class GameBody : MonoBehaviour, IRole {
     void Stand()
     {
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        //print(">  "+DBBody.animation.lastAnimationName);
+        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             //print("--");
-            DBBody.animation.GotoAndPlayByFrame(STAND);
+            if (this.tag == "player") {
+                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+            }
+            else
+            {
+                //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //时间0.01f  0.1秒 慢了会报错（位置错误）
+                DBBody.animation.FadeIn(STAND, 0.01f, 1);
+            }
+            
         }
         
         isDowning = false;
@@ -760,6 +816,7 @@ public class GameBody : MonoBehaviour, IRole {
     public void GetStand()
     {
         ResetAll();
+        //if(DBBody) print("??????????????  "+DBBody.animation.lastAnimationName);
         if(DBBody) Stand();
         if(playerRigidbody2D) playerRigidbody2D.velocity = Vector2.zero;
     }
@@ -879,6 +936,13 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
+        if (isQianhuaing)
+        {
+            GetQianhuaing();
+            return;
+        }
+
+
         if (isBackUping)
         {
             GetBackUping();
@@ -924,10 +988,10 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         //print(this.tag);
-        //if (this.tag != "AirEnemy") print("hi");
-        if (!roleDate.isBeHiting && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isAtking && !isDodgeing && !isAtkYc)
+        //if (this.tag != "diren") print("hi");
+        if (!roleDate.isBeHiting &&!isQianhuaing &&!isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isAtking && !isDodgeing && !isAtkYc&&!isBackUping&&!isQianhuaing)
         {
-            //if (this.tag != "AirEnemy") print("stand"+"  ? "+isRunLefting);
+            //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
             Stand();
         }
     }
@@ -1136,6 +1200,7 @@ public class GameBody : MonoBehaviour, IRole {
             yanchi = 0;
             jisuqi = 0;
 
+
             if (isInAiring)
             {
                 atkZS = DataZS.jumpAtkZS;
@@ -1202,6 +1267,7 @@ public class GameBody : MonoBehaviour, IRole {
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                 }
                 else {
+                    //print("普通攻击的特效名字  "+vOAtk.txName);
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
                 }
                 

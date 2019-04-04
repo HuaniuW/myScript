@@ -11,6 +11,10 @@ public class JN_Date : MonoBehaviour {
     public float _xdy = 0;
     [Header("宽")]
     public float _scaleW = 1;
+    [Header("普通攻击碰撞快的宽的缩放")]
+    public float hitKuaiSW = 1;
+    [Header("普通攻击碰撞快的高的缩放")]
+    public float hitKuaiSH = 1;
     //[Header("高")]
     //public float _scaleH = 1;
     [Header("特效消失时间为下一帧消失")]

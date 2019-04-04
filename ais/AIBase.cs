@@ -213,7 +213,7 @@ public class AIBase : MonoBehaviour {
     {
         if (lie == -1) lie = GetLie();
         string zs = "";
-        
+        //print("atkNum   "+ atkNum+"  length  "+ carr.Length);
         if (atkNum < carr.Length)
         {
             zs = carr[atkNum];
@@ -326,15 +326,19 @@ public class AIBase : MonoBehaviour {
                 DontNear = false;
             }
 
-            if (acName == "backUp")
+
+            if (acName == "qianhua")
+            {
+                gameBody.Qianhua();
+                return;
+            }else if (acName == "backUp")
             {
                 gameBody.GetBackUp();
                 return;
             }
 
             
-
-
+            
             if (strArr[0]=="rest")
             {
                 acName = "rest";
@@ -368,6 +372,12 @@ public class AIBase : MonoBehaviour {
         if (acName == "walkBack")
         {
             GetWalkBack();
+            return;
+        }
+
+        if (acName == "qianhua")
+        {
+            GetQianhua();
             return;
         }
 
@@ -450,14 +460,34 @@ public class AIBase : MonoBehaviour {
         }
     }
 
+
+    protected void GetQianhua()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            atkNum++;
+            GetAtkNumReSet();
+        }
+        if (isActioning)
+        {
+            if (gameBody.GetQianhuaOver())
+            {
+                acName = "";
+                isActioning = false;
+                isAction = false;
+            }
+        }
+    }
+
     protected void GetRest()
     {
         if (!isActioning)
         {
-            //print(">>>>");
             isActioning = true;
             gameBody.GetStand();
             atkNum++;
+            GetAtkNumReSet();
         }
 
         if (isActioning)

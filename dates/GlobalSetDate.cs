@@ -72,7 +72,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     //第一次启动 掉用这里面存储的数据系统
-    public string playerPosition = "-2.3_5";
+    public string playerPosition = "";
     public string screenName = "guan1_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据

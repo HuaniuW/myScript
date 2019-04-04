@@ -89,7 +89,8 @@ public class JN_base : MonoBehaviour
     {
         GameObject hitFK = ObjectPools.GetInstance().SwpanObject2(Resources.Load("hit_fk") as GameObject);
         hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject);
-        Vector3 nv3 = new Vector3(this.transform.position.x - jn_date._scaleW * sacaleX, this.transform.position.y, this.transform.position.z);
+        hitFK.transform.localScale = new Vector3(jn_date.hitKuaiSW, jn_date.hitKuaiSH, 1);
+        Vector3 nv3 = new Vector3(this.transform.position.x - sacaleX, this.transform.position.y, this.transform.position.z);
         hitFK.transform.position = nv3;
 
     }
