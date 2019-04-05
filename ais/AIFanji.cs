@@ -134,6 +134,7 @@ public class AIFanji : MonoBehaviour {
             if (isAddYZ)
             {
                 GetComponent<RoleDate>().hfYZ(addYZNum);
+                isHasAddYZ = false;
             }
             return;
         }
