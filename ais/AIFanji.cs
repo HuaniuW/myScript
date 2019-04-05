@@ -34,6 +34,9 @@ public class AIFanji : MonoBehaviour {
     [Header("反击几率")]
     public int fanjijilv = 0;
 
+
+    //反击是否动作延迟（给与一定反应时间）
+
     public bool IsFanjiing()
     {
         return isFanjiing;

@@ -203,7 +203,7 @@ public class AIBase : MonoBehaviour {
     {
         int i = (int)UnityEngine.Random.Range(0, GetComponent<AITheWay_dcr>().GetZSArrLength());
         //调试用
-        i = 1;
+        //i = 1;
         if (aiQishou && aiQishou.isQishouAtk)
         {
             carr = aiQishou.qishouAtkArr;
