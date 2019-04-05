@@ -9,6 +9,8 @@ public class AIBase : MonoBehaviour {
     protected GameBody gameBody;
     public GameObject gameObj;
     protected AIQiShou aiQishou;
+    protected AIFanji aiFanji;
+
 	// Use this for initialization
 	void Start () {
         GetStart();
@@ -18,6 +20,7 @@ public class AIBase : MonoBehaviour {
     {
         gameBody = GetComponent<GameBody>();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
+        if (!aiFanji) aiFanji = GetComponent<AIFanji>();
         //Type myType = typeof(DataZS);
         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
@@ -59,7 +62,7 @@ public class AIBase : MonoBehaviour {
         {
             isFindEnemy = false;
             if (aiQishou) aiQishou.isQishouAtk = false;
-            //gameBody.GetStand();
+            gameBody.GetStand();
         }
     }
 
@@ -125,6 +128,7 @@ public class AIBase : MonoBehaviour {
         {
             return;
         }
+        
 
         if (!gameObj)
         {
@@ -145,6 +149,7 @@ public class AIBase : MonoBehaviour {
             AIBeHit();
             return;
         }
+
 
         if (gameBody.tag != "AirEnemy" && !gameBody.IsGround)
         {
@@ -173,6 +178,10 @@ public class AIBase : MonoBehaviour {
         IsEnemyOutAtkDistance();
 
         if (!IsFindEnemy()) return;
+
+
+        if (aiFanji != null && aiFanji.IsFanjiing()) return;
+
         GetAtkFS();
     }
 
@@ -523,11 +532,13 @@ public class AIBase : MonoBehaviour {
 
 	}
 
+    
     protected void AIBeHit()
     {
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         AIReSet();
+        aiFanji.GetFanji();
     }
 
     protected void AIReSet()

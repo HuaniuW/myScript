@@ -163,10 +163,11 @@ public class GameBody : MonoBehaviour, IRole {
 
             isBackUping = true;
             roleDate.isCanBeHit = false;
-            newSpeed.x = 0;
-            newSpeed.y = 0;
-            playerRigidbody2D.velocity = newSpeed;
+            //newSpeed.x = 0;
+            //newSpeed.y = 0;
+            //playerRigidbody2D.velocity = newSpeed;
             //print("huitiao");
+            playerRigidbody2D.velocity = Vector2.zero;
             BackJumpVX(500);
             //打开有bug
             //MoveVY(200);
@@ -229,6 +230,11 @@ public class GameBody : MonoBehaviour, IRole {
         return !isQianhuaing;
     }
 
+
+    public bool IsHanAC(string ACname)
+    {
+        return DBBody.animation.HasAnimation(ACname);
+    }
 
 
     public void GetSkill1()
@@ -898,6 +904,8 @@ public class GameBody : MonoBehaviour, IRole {
         GetUpdate();
     }
 
+
+
     protected void GetUpdate()
     {
         CurrentAcName = DBBody.animation.lastAnimationName;
@@ -959,11 +967,9 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-
-
+        
         ControlSpeed();
-
-
+       
 
         InAir();
 
@@ -1001,6 +1007,7 @@ public class GameBody : MonoBehaviour, IRole {
         //print("Gamebody!");
     }
 
+    public int beHitNum = 0;
     public virtual void HasBeHit(float chongjili = 0)
     {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
@@ -1023,6 +1030,13 @@ public class GameBody : MonoBehaviour, IRole {
             roleDate.isBeHiting = false;
             if (IsGround) GetStand();
         }
+    }
+
+    //反击 被攻击动作清零
+    public void FanJiBeHitReSet()
+    {
+        roleDate.isBeHiting = false;
+        roleDate.isBeHit = false;
     }
 
     

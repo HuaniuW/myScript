@@ -136,6 +136,8 @@ public class EnemyGameBody : GameBody {
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+
+        beHitNum++;
     }
 
     override protected void GetBeHit()

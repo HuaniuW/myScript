@@ -241,3 +241,5 @@ GameObject.transform.position = FAR_AWAY
 //public class SkillBox : MonoBehaviour, IPointerDownHandler, IPointerUpHandler  继承点击事件接口
 
 //Time.timeScale = 1;  控制播放速度 =0暂停
+
+//int n = (int)UnityEngine.Random.Range(0,100);随机数

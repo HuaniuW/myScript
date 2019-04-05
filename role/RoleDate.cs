@@ -65,6 +65,21 @@ public class RoleDate : MonoBehaviour {
         isBeHit = false;
         isBeHiting = false;
     }
+
+    float csYZ;
+    public void addYZ(float yzNums)
+    {
+        yingzhi += yzNums;
+    }
+
+    public void hfYZ(float yzNums)
+    {
+        yingzhi -= yzNums;
+    }
+
+
+
+
 	// Update is called once per frame
 	void Update () {
 		
