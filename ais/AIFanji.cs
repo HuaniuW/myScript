@@ -96,18 +96,19 @@ public class AIFanji : MonoBehaviour {
     }
 
 
-    bool isHasAddYZ = false;
+    bool isHasHFYZ = true;
     private void init()
     {
+        if (!isHasHFYZ&& isAddYZ)
+        {
+            isHasHFYZ = true;
+            GetComponent<RoleDate>().hfYZ(addYZNum);
+        }
         isFanji = false;
         isFanjiing = false;
         isGongji = false;
         isGongjiing = false;
-        if (isHasAddYZ)
-        {
-            isHasAddYZ = false;
-            GetComponent<RoleDate>().hfYZ(addYZNum);
-        }
+        
     }
 
     GameBody _gameBody;
@@ -131,11 +132,6 @@ public class AIFanji : MonoBehaviour {
         if (isGongjiing && _gameBody.IsAtkOver())
         {
             init();
-            if (isAddYZ)
-            {
-                GetComponent<RoleDate>().hfYZ(addYZNum);
-                isHasAddYZ = false;
-            }
             return;
         }
 
@@ -160,7 +156,7 @@ public class AIFanji : MonoBehaviour {
                 if (isAddYZ)
                 {
                     GetComponent<RoleDate>().addYZ(addYZNum);
-                    isHasAddYZ = true;
+                    isHasHFYZ = false;
                 }
                
             }
