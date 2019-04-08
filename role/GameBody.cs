@@ -1278,6 +1278,7 @@ public class GameBody : MonoBehaviour, IRole {
                 //print("vOAtk.atkName   "+ vOAtk.txName);
                 if (isAcing)
                 {
+                    //技能释放点
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                 }
                 else {

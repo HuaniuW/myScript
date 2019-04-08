@@ -494,6 +494,7 @@ public class AIBase : MonoBehaviour {
         if (!isActioning)
         {
             isActioning = true;
+            ZhuanXiang();
             gameBody.GetStand();
             atkNum++;
             GetAtkNumReSet();
@@ -538,7 +539,7 @@ public class AIBase : MonoBehaviour {
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         AIReSet();
-        aiFanji.GetFanji();
+        if(aiFanji!=null) aiFanji.GetFanji();
     }
 
     protected void AIReSet()

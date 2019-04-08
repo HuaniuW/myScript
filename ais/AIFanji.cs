@@ -22,11 +22,14 @@ public class AIFanji : MonoBehaviour {
     public bool isAddYZ = false;
 
 
+
+    bool isQianh = false;
+    bool isQhuaing = false;
     [Header("是否增加前滑动作")]
     public bool isQianHua = false;
 
-    [Header("是否是技能攻击反击")]
-    public bool isSkillAtk = false;
+    [Header("是否是技能攻击反击(有名字就是 “”就不是)")]
+    public string skillAtkName = "";
 
     [Header("增加硬直数值")]
     public float addYZNum = 500f;
@@ -34,8 +37,12 @@ public class AIFanji : MonoBehaviour {
     [Header("反击几率")]
     public int fanjijilv = 0;
 
+    [Header("反击几率是否能根据被攻击次数增加")]
+    public bool isJVCanZJ = true;
 
-    //反击是否动作延迟（给与一定反应时间）
+    
+    [Header("反击是否动作延迟（给与一定反应时间）")]
+    public float atkDelayTimes = 0;
 
     public bool IsFanjiing()
     {
@@ -78,7 +85,7 @@ public class AIFanji : MonoBehaviour {
         if (beHitNum == _gameBody.beHitNum) return;
         beHitNum = _gameBody.beHitNum;
         int n = (int)UnityEngine.Random.Range(0, 100);
-        if (!IsBeHitCut())
+        if (isJVCanZJ&&!IsBeHitCut())
         {
             BeHitNum += 5;
             jsNums = 0;
@@ -111,6 +118,9 @@ public class AIFanji : MonoBehaviour {
         isFanjiing = false;
         isGongji = false;
         isGongjiing = false;
+
+        isQianh = false;
+        isQhuaing = false;
         
     }
 
@@ -138,8 +148,29 @@ public class AIFanji : MonoBehaviour {
             return;
         }
 
+
+        if (isQhuaing)
+        {
+            if (_gameBody.GetQianhuaOver())
+            {
+                isQhuaing = false;
+            }
+            return;
+        }
+
+
+
         if (_gameBody && _gameBody.GetBackUpOver())
         {
+            if (isQianHua&&!isQianh)
+            {
+                isQianh = true;
+                isQhuaing = true;
+                //qianhua
+                _gameBody.Qianhua();
+                return;
+            }
+
             
             if (!isGongji)
             {
@@ -152,7 +183,13 @@ public class AIFanji : MonoBehaviour {
                 //    return;
                 //}
                 
+                //判断是否是技能攻击
+
                 _gameBody.GetAtk(FANJI);
+                if (atkDelayTimes!=0)
+                {
+                    _gameBody.GetPause(atkDelayTimes);
+                }
                 isGongjiing = true;
                 //print("-------------------------------------------------------反击");
                 //是否提高硬直
