@@ -25,7 +25,7 @@ public class GameSaveDate{
         if (instance==null) instance = new GameSaveDate();
         return instance;
     }
-
+    
     string _fileURL = Application.persistentDataPath + "/date1";
 
 
@@ -92,11 +92,7 @@ public class GameSaveDate{
         }
         return false;
     }
-
-
-
-
-
+    
     public string SerializeObject(object pObject, System.Type ty)
     {
         string XmlizedString = null;

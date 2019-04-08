@@ -23,7 +23,11 @@ public class Door : MonoBehaviour {
         //这里做判断是否使用 如果使用了调用HsaOpen()
         chushiY = men.transform.position.y;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
+<<<<<<< Updated upstream
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CLOSE_DOOR, CloseDoor);
+=======
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CLOSE_DOOR, OpenDoor);
+>>>>>>> Stashed changes
     }
 
     public void HasOpen()
@@ -61,6 +65,7 @@ public class Door : MonoBehaviour {
         if (DoorNum != uEvent.eventParams.ToString()) return;
         Guanbi();
         //print(uEvent.eventParams);
+<<<<<<< Updated upstream
         
         if (openDoor) openDoor.Play();
     }
@@ -78,6 +83,17 @@ public class Door : MonoBehaviour {
         if (isClose)
         {
 
+=======
+        if (openDoor) openDoor.Play();
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        if (isClose)
+        {
+
+>>>>>>> Stashed changes
             if (!IsToDown)
             {
                 if (men && men.transform.position.y > chushiY)
@@ -88,8 +104,11 @@ public class Door : MonoBehaviour {
                 }
                 else
                 {
+<<<<<<< Updated upstream
                     string zt = this.name + "-0";
                     ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt),this);
+=======
+>>>>>>> Stashed changes
                     isClose = false;
                     if (openDoor) openDoor.Stop();
                 }
@@ -103,8 +122,11 @@ public class Door : MonoBehaviour {
             }
             else
             {
+<<<<<<< Updated upstream
                 string zt = this.name + "-0";
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
+=======
+>>>>>>> Stashed changes
                 isClose = false;
                 if (openDoor) openDoor.Stop();
             }

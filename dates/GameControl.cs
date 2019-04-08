@@ -6,7 +6,6 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
     }
 
     private void Awake()
@@ -45,7 +44,7 @@ public class GameControl : MonoBehaviour {
 
     [Header("记录关卡的动态数据")]
     public string GuanKaStr = "";
-
+    
     string TempCurrentGKDate;
     //初始化关卡数据
     public void InitGuanKaDate()

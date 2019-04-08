@@ -133,6 +133,76 @@ public class GlobalSetDate : MonoBehaviour {
     string _GuankaStr;
     //关卡记录
     public string GuanKaStr()
+<<<<<<< Updated upstream
+=======
+    {
+        
+        return _GuankaStr;
+    }
+
+	//当前存档位
+	public string CurrentSaveDateName;
+	//全局总关卡的临时数据
+	public string TempZGuanKaStr;
+    //启动游戏的时候 调用存档数据先  对比当前关卡数据是否有变动 
+    //每关都要对比加到临时数据
+
+    //匹配存档中的关卡记录
+    public void GetGuanKaStr()
+    {
+        //获取当前关卡的数据
+
+        //是否有存档
+        if (GameSaveDate.GetInstance().IsHasSaveDate())
+        {
+            print("!!!!!!!!!!!!!!!!!!有存档记录");
+			//找到总的关卡记录
+			TempZGuanKaStr = GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName).guankajilu;
+        }
+        else
+        {
+            print("没有存档记录");
+			//记录当前关卡的记录  这里一般是新开游戏
+			//TempZGuanKaStr = "";
+        }
+        //获取存档的关卡记录
+    }
+
+    public string guankaDate;
+    public string GetGuanKaStrByGKName(string GKName)
+    {
+        if (guankaDate == null) return "";
+        string gkStr = guankaDate;
+        string[] arr = gkStr.Split('|');
+        for(var i = 0; i < arr.Length; i++)
+        {
+            string[] arr2 = arr[i].Split(':');
+            if(arr2[0] == GKName)
+            {
+                return arr2[1];
+            }
+        }
+        return "";
+    }
+
+	public string RemoveCurrentGKDateByName(string GKName){
+		if (TempZGuanKaStr == null) return null;
+		string gkStr = "";
+		string[] arr = TempZGuanKaStr.Split('|');
+		for (var i = 0; i < TempZGuanKaStr.Length; i++)
+		{
+			string[] arr2 = arr[i].Split(':');
+			if (arr2[0] == GKName) {
+				continue;
+			}
+			gkStr += arr[i]+'|';
+		}
+		return gkStr;
+	}
+
+
+    void Start()
+>>>>>>> Stashed changes
     {
         
         return _GuankaStr;
