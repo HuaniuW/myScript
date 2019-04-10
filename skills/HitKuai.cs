@@ -74,11 +74,11 @@ public class HitKuai : MonoBehaviour {
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
             GetBeHit(jn_date, _roleScaleX);
             //力作用  这个可以防止 推力重叠 导致人物飞出去
-            Vector3 tempV3 = _rigidbody2D.velocity;
-            _rigidbody2D.velocity = new Vector3(0,tempV3.y, tempV3.z);
+            Vector2 tempV3 = _rigidbody2D.velocity;
+            _rigidbody2D.velocity = new Vector3(0,tempV3.y);
             if (jn_date != null &&gameBody != null)
             {
-                atkObjV3Zero(Coll.gameObject);
+                ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
                 //判断是否破防   D 代办事项 
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
@@ -86,6 +86,8 @@ public class HitKuai : MonoBehaviour {
                     //atkObjV3Zero(Coll.gameObject);
                     
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
+                    //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
+                    //print(Coll.tag);
                     gameBody.HasBeHit(jn_date.chongjili);
                 }
                 else if (jn_date.atkPower - roleDate.yingzhi > 0)
@@ -96,7 +98,7 @@ public class HitKuai : MonoBehaviour {
                     gameBody.HasBeHit(jn_date.chongjili);
                     if (atkObj&& jn_date._type == "1")
                     {
-                        atkObjV3Zero(atkObj);
+                        ObjV3Zero(atkObj);
                         atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
                     }
                 }
@@ -104,7 +106,7 @@ public class HitKuai : MonoBehaviour {
                 {
                     if (atkObj && jn_date._type == "1")
                     {
-                        atkObjV3Zero(atkObj);
+                        ObjV3Zero(atkObj);
                         atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
                     }
                 }
@@ -133,11 +135,11 @@ public class HitKuai : MonoBehaviour {
         }
     }
 
-    //攻击者X方向速度清0
-    void atkObjV3Zero(GameObject obj)
+    //X方向速度清0
+    void ObjV3Zero(GameObject obj)
     {
         Vector3 v3 = obj.GetComponent<Rigidbody2D>().velocity;
-        obj.GetComponent<Rigidbody2D>().velocity = new Vector3(0, v3.y, v3.z);
+        obj.GetComponent<Rigidbody2D>().velocity = new Vector2(0, v3.y);
     }
 
   

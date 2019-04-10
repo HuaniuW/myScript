@@ -23,7 +23,7 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("水平最大速度")]
     public float maxSpeedX;
 
-    Vector2 newSpeed;
+    protected Vector2 newSpeed;
 
     [Header("垂直向上的推力")]
     public float yForce;
@@ -151,7 +151,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected bool isBackUp = false;
     protected bool isBackUping = false;
-    public void GetBackUp()
+    public void GetBackUp(float vx = 15)
     {
         if (roleDate.isBeHiting) return;
         if (!DBBody.animation.HasAnimation(BACKUP)) return;
@@ -168,7 +168,7 @@ public class GameBody : MonoBehaviour, IRole {
             //playerRigidbody2D.velocity = newSpeed;
             //print("huitiao");
             playerRigidbody2D.velocity = Vector2.zero;
-            BackJumpVX(500);
+            BackJumpVX(vx);
             //打开有bug
             //MoveVY(200);
         }
@@ -192,7 +192,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected bool isQianhua = false;
     protected bool isQianhuaing = false;
-    public void Qianhua()
+    public void Qianhua(float vx = 20)
     {
         if (roleDate.isBeHiting) return;
         if (!DBBody.animation.HasAnimation(QIANHUA)) return;
@@ -208,7 +208,7 @@ public class GameBody : MonoBehaviour, IRole {
             playerRigidbody2D.velocity = newSpeed;
             //print("huitiao");
             BackJumpVX(200);
-            MoveVX(1000);
+            MoveVX(vx,true);
             //打开有bug
             //MoveVY(200);
         }
@@ -320,14 +320,16 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (roleDate.isBeHiting||isAcing) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP) return;
-
+        float testSpeed;
         if (isInAiring)
         {
             DODGE2 = "shanjin_1";
+            testSpeed = 20;
         }
         else
         {
             DODGE2 = "dodge_2";
+            testSpeed = 16;
         }
 
         if (!isDodge)
@@ -342,7 +344,7 @@ public class GameBody : MonoBehaviour, IRole {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    MoveVX(400);
+                    MoveVX(testSpeed, true);
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -350,7 +352,7 @@ public class GameBody : MonoBehaviour, IRole {
                 if (DBBody.animation.lastAnimationName != DODGE2)
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
-                    MoveVX(400);
+                    MoveVX(testSpeed, true);
                 }
             }
         }
@@ -441,12 +443,20 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    public void ControlSpeed()
+    public void ControlSpeed(float vx = 0)
     {
         speedX = playerRigidbody2D.velocity.x;
         speedY = playerRigidbody2D.velocity.y;
         //钳制 speedX 被限制在 -maxSpeedX  maxSpeedX 之间
-        float newSpeedX = Mathf.Clamp(speedX, -maxSpeedX, maxSpeedX);
+        float newSpeedX;
+        if (vx == 0) {
+            newSpeedX = Mathf.Clamp(speedX, -maxSpeedX, maxSpeedX);
+        }
+        else
+        {
+            newSpeedX = Mathf.Clamp(speedX, -vx, vx);
+        }
+        
         //if (horizontalDirection == 0) newSpeedX/=10;
         newSpeed.x = newSpeedX;
         newSpeed.y = speedY;
@@ -602,33 +612,57 @@ public class GameBody : MonoBehaviour, IRole {
     void BackJumpVX(float vx)
     {
         var _vx = Mathf.Abs(vx);
+        playerRigidbody2D.velocity = Vector2.zero;
         if (bodyScale.x < 0)
         {
-            playerRigidbody2D.AddForce(Vector2.left * _vx);
+            //playerRigidbody2D.AddForce(Vector2.left * _vx);
+            newSpeed = new Vector2(-_vx, 0);
         }
         else if (bodyScale.x > 0)
         {
-            playerRigidbody2D.AddForce(Vector2.right * _vx);
+            newSpeed = new Vector2(_vx, 0);
+            //playerRigidbody2D.AddForce(Vector2.right * _vx);
         }
-        //playerRigidbody2D.velocity = newSpeed;
+        playerRigidbody2D.velocity = newSpeed;
     }
 
-    void MoveVX(float vx, bool isNoAbs = false)
+    /// <summary>
+    /// X方向的加速度  推力或者 速度
+    /// </summary>
+    /// <param name="vx">速度数值大小</param>
+    /// <param name="isSpeed">是否是速度 否则的话是推力计算</param>
+    /// <param name="isNoAbs">是否去绝对值</param>
+    void MoveVX(float vx, bool isSpeed = false ,bool isNoAbs = false)
     {
 
         var _vx = Mathf.Abs(vx);
         if (isNoAbs) _vx = vx;
         playerRigidbody2D.velocity = Vector2.zero;
         //newSpeed.x = 0;
+        
         if (bodyScale.x < 0)
         {
-            playerRigidbody2D.AddForce(new Vector2(vx, 0));
+            if (isSpeed) {
+                newSpeed = new Vector2(vx, playerRigidbody2D.velocity.y);
+            }
+            else
+            {
+                playerRigidbody2D.AddForce(new Vector2(vx, 0));
+            }
+            
         }
         else if (bodyScale.x > 0)
         {
-            playerRigidbody2D.AddForce(new Vector2(-vx, 0));
+            if (isSpeed) {
+                newSpeed = new Vector2(-vx, playerRigidbody2D.velocity.y);
+            }
+            else
+            {
+                playerRigidbody2D.AddForce(new Vector2(-vx, 0));
+            }
         }
         playerRigidbody2D.velocity = newSpeed;
+        //print("---vx2    " + playerRigidbody2D.velocity);
     }
 
     void MoveVY(float vy)
@@ -787,8 +821,8 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
-   
-    void Stand()
+
+    protected virtual void Stand()
     {
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
@@ -937,22 +971,21 @@ public class GameBody : MonoBehaviour, IRole {
             DBBody.animation.timeScale = 1;
         }
 
-
-        if (roleDate.isBeHiting)
-        {
-            GetBeHit();
-            return;
-        }
+       
+        
 
         if (isQianhuaing)
         {
+            //防止加速过快 限制最大速度
+            ControlSpeed(20);
             GetQianhuaing();
             return;
         }
 
-
+        
         if (isBackUping)
         {
+            ControlSpeed(14);
             GetBackUping();
             return;
         }
@@ -969,7 +1002,14 @@ public class GameBody : MonoBehaviour, IRole {
 
         
         ControlSpeed();
-       
+
+        if (roleDate.isBeHiting)
+        {
+            GetBeHit();
+            return;
+        }
+
+
 
         InAir();
 

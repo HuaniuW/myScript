@@ -89,6 +89,8 @@ public class PlayerUI : MonoBehaviour {
         btn_yaoping.position = b3.transform.position;
         btn_skill1.transform.position = b1.transform.position;
         btn_skill2.transform.position = b2.transform.position;
+
+        btn_fx.gameObject.SetActive(false);
     }
     
     void GetTypeMobile()
@@ -96,6 +98,9 @@ public class PlayerUI : MonoBehaviour {
         btn_a.gameObject.SetActive(true);
         btn_b.gameObject.SetActive(true);
         btn_c.gameObject.SetActive(true);
+
+        btn_fx.gameObject.SetActive(true);
+
         btn_skill1.transform.position = b4.transform.position;
         btn_skill2.transform.position = b5.transform.position;
         btn_yaoping.transform.position = b6.transform.position;

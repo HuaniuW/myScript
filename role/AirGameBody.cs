@@ -30,6 +30,30 @@ public class AirGameBody : GameBody {
         print("222");
     }
 
+    protected override void Stand()
+    {
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
+        if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
+        {
+            DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+            //print("--");
+           
+        }
+
+        isDowning = false;
+        if (newSpeed.x > slideNum)
+        {
+            newSpeed.x = slideNum - 1;
+        }
+        else if (newSpeed.x < -slideNum)
+        {
+            newSpeed.x = -slideNum + 1;
+        }
+
+        playerRigidbody2D.velocity = newSpeed;
+    }
+
     protected override void Run()
     {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);

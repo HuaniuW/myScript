@@ -243,3 +243,16 @@ GameObject.transform.position = FAR_AWAY
 //Time.timeScale = 1;  控制播放速度 =0暂停
 
 //int n = (int)UnityEngine.Random.Range(0,100);随机数
+
+
+   
+
+/*******************
+ * 防止怪物卡墙
+ * 物理 Rigidbody 中设置 属性  Collision Detection （碰撞检测算法，用于防止刚体因快速移动而穿过其他对象）
+ * 默认是 Discrete 离散的 速度快会卡墙
+ * continuous  连续不间断的  不会卡墙 消耗会大一些
+ * 
+ * 
+ * ferr 里面 物理块要勾选填充Fill Collider
+ */

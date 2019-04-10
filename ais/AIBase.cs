@@ -162,6 +162,7 @@ public class AIBase : MonoBehaviour {
         {
             AIReSet();
             Patrol();
+            return;
         }
 
 
@@ -336,13 +337,17 @@ public class AIBase : MonoBehaviour {
             }
 
 
-            if (acName == "qianhua")
+            if (strArr[0] == "qianhua")
             {
-                gameBody.Qianhua();
+                acName = "qianhua";
+                gameBody.Qianhua(float.Parse(strArr[1]));
                 return;
-            }else if (acName == "backUp")
+            }
+            else if (strArr[0] == "backUp")
             {
-                gameBody.GetBackUp();
+                acName = "backUp";
+
+                gameBody.GetBackUp(float.Parse(strArr[1]));
                 return;
             }
 

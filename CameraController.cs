@@ -34,6 +34,11 @@ public class CameraController : MonoBehaviour
         {
             getBoundsMinMax();
         }
+        else
+        {
+            Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
+            getBoundsMinMax();
+        }
         
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
@@ -108,6 +113,19 @@ public class CameraController : MonoBehaviour
                 //yNew = CameraKuaiY;
                 //print("??????????");
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
+
+
+                
+                //if (Mathf.Abs(CameraKuaiY - yNew) < 0.02f)
+                //{
+                    
+                //    yNew = CameraKuaiY;
+                //}
+                //else
+                //{
+                //    yNew += (CameraKuaiY - transform.position.y) * 0.1f;
+                //    if (yNew != CameraKuaiY) print("CameraKuaiY  " + CameraKuaiY + "  ---  " + yNew);
+                //}
             }
             else
             {
