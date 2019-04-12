@@ -144,14 +144,7 @@ public class CameraController : MonoBehaviour
                 }
             }
 
-
-            //print(">>>>>>>>>>>>>>>>>>>  "+player.GetComponent<Rigidbody2D>().velocity.x);
-
-
-
-
-
-            //print(">>>>>>???");
+            
             //if (Mathf.Abs(x - player.position.x) > Margin.x)
             //{
             //    //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
@@ -182,39 +175,24 @@ public class CameraController : MonoBehaviour
 
             if (Mathf.Abs(vx) >= xzX)
             {
-                //if (vx > xzX && x <= player.position.x)
-                //{
-                //    x = player.position.x;
-                //}
-                //else if (vx < -xzX && x >= player.position.x)
-                //{
-                //    x = player.position.x;
-                //}
-
-
-                //if (vx < xzX && x > player.position.x)
-                //{
-                //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
-                //}
-                //else if (vx > xzX && x < player.position.x)
-                //{
-                //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
-                //}
-                
                 x = player.position.x - distanceX;
-
             }
             else
             {
-                if (player.transform.localScale.x > 0)
-                {
-                    x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
-                }
-                else
-                {
-                    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
-                }
                 distanceX = player.position.x - x;
+                if (!player.GetComponent<GameBody>().isInAiring)
+                {
+                    if (player.transform.localScale.x > 0)
+                    {
+                        x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+                    }
+                    else
+                    {
+                        x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                    }
+                }
+                
+                
             }
 
 
