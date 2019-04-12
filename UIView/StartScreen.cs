@@ -92,10 +92,11 @@ public class StartScreen : MonoBehaviour {
     {
         if (UI_Save) return;
         //SceneManager.LoadScene("loads");
+        //如果有存档在这给提示 会删除之前的所有存档
         GlobalSetDate.instance.GetGameDateStart();
         kuang.transform.position = btn1.transform.position;
         getRQ = btn1;
-
+       
     }
 
     private void OutGame()
@@ -144,10 +145,23 @@ public class StartScreen : MonoBehaviour {
     //存取档界面
     void GetSaveDateUI()
     {
-        if (UI_Save) return;
+
+
+        //if (UI_Save) return;
         kuang.transform.position = btn2.transform.position;
         getRQ = btn2;
-        if(!UI_Save) UI_Save = GlobalTools.GetGameObjectByName("UI_Save");
+
+        GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(GlobalSetDate.instance.saveDateName);
+        UserDate t = GlobalSetDate.instance.CurrentUserDate;
+        GlobalSetDate.instance.isInFromSave = true;
+        //调用进入游戏
+        GlobalSetDate.instance.GetGameDateStart();
+
+
+
+        //GlobalSetDate.instance.isInFromSave = true;
+        //GlobalSetDate.instance.GetGameDateStart();
+        //if (!UI_Save) UI_Save = GlobalTools.GetGameObjectByName("UI_Save");
     }
 
 

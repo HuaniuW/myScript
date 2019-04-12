@@ -54,6 +54,7 @@ public class GlobalSetDate : MonoBehaviour {
         //GetGuanKaStr();
     }
 
+    public bool IsNewGame = false;
     public void GetGameDateStart()
     {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
@@ -66,6 +67,7 @@ public class GlobalSetDate : MonoBehaviour {
         {
             print("新游戏");
             InNewGame();
+            IsNewGame = true;
         }
         SceneManager.LoadScene("loads");
     }
@@ -80,10 +82,12 @@ public class GlobalSetDate : MonoBehaviour {
     public int xp_nums = 0;
     //切换场景的时候不让 控制  MyController.cs
     public bool IsChangeScreening = false;
+    //存档的名字
+    public string saveDateName = "maGame";
     void InNewGame()
     {
-        playerPosition = "47_-29";
-        screenName = "guan1_1";
+        playerPosition = "5.67_1.21"; 
+        screenName = "g1_1";
         cameraPosition = "";
         bagDate = "";//背包数据
         mapDate = "";//小地图数据
@@ -91,6 +95,8 @@ public class GlobalSetDate : MonoBehaviour {
         IsChangeScreening = false;
         //print("hi!!!!");
     }
+
+    
 
     void GetSaveInGame()
     {
@@ -155,9 +161,9 @@ public class GlobalSetDate : MonoBehaviour {
         {
             if (Globals.isDebug) print("!!!!!!!!!!!!!!!!!!有存档记录");
             //找到总的关卡记录
-            if (GameSaveDate.GetInstance().IsHasSaveDateByName(CurrentSaveDateName)) {
+            if (GameSaveDate.GetInstance().IsHasSaveDateByName(saveDateName)) {
                 //print(GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName));
-                TempZGuanKaStr = GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName).guankajilu;
+                TempZGuanKaStr = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName).mapDate;
                 //print("TempZGuanKaStr  "+ TempZGuanKaStr);
             }
             else
@@ -181,7 +187,8 @@ public class GlobalSetDate : MonoBehaviour {
     {
         if (TempZGuanKaStr == null) return null;
         currentGKDate = null;
-        //if (Globals.isDebug) print("  GKName " + GKName+ "  TempZGuanKaStr " + TempZGuanKaStr);
+        if (Globals.isDebug) print("  GKName " + GKName + "  TempZGuanKaStr " + TempZGuanKaStr);
+        // |g1_1:men_1-1,men_2-1|
         string gkStr = "";
         string[] arr = TempZGuanKaStr.Split('|');
         for(var i = 0; i < arr.Length; i++)
@@ -201,9 +208,9 @@ public class GlobalSetDate : MonoBehaviour {
             }
            
         }
-        //print("进场景取数据  "+ gkStr); gkStr是去掉当前关卡后的数据
+        print("进场景取数据  "+ gkStr); //gkStr是去掉当前关卡后的数据
         TempZGuanKaStr = gkStr;
-        //print("取完数据后的全局数据  "+ TempZGuanKaStr);
+        print("取完数据后的全局数据  "+ TempZGuanKaStr);
         return currentGKDate;
     }
 
@@ -225,15 +232,15 @@ public class GlobalSetDate : MonoBehaviour {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
         CurrentUserDate.curLan = player.GetComponent<RoleDate>().lan.ToString();
-        CurrentUserDate.screenName = this.screenName;
+        CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
         CurrentUserDate.playerPosition = player.transform.position.x + "_" + player.transform.position.y;
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
         CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
+        //血瓶数量
         CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "我的存档";
         CurrentUserDate.onlyId = 2;
-
 
         //print(CurrentUserDate.curLive);
 
@@ -247,7 +254,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
 
-        GameSaveDate.GetInstance().SaveDateByURLName("date2", CurrentUserDate);
+        GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
     }
 
     

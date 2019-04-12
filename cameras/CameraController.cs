@@ -94,6 +94,15 @@ public class CameraController : MonoBehaviour
     float CameraKuaiY = 0;
     bool IsHitCameraKuai = false;
 
+
+    //private void LateUpdate()
+    //{
+
+    //}
+
+
+    float distanceX = 0;
+
     void Update()
     {
         if (!player) return;
@@ -111,7 +120,7 @@ public class CameraController : MonoBehaviour
             if (IsHitCameraKuai)
             {
                 //yNew = CameraKuaiY;
-                //print("??????????");
+                //print("??????????   "+transform.position.y+"  ---  "+CameraKuaiY);
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
 
 
@@ -134,22 +143,86 @@ public class CameraController : MonoBehaviour
                     yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
                 }
             }
-            
-           
+
+
+            //print(">>>>>>>>>>>>>>>>>>>  "+player.GetComponent<Rigidbody2D>().velocity.x);
+
+
+
+
 
             //print(">>>>>>???");
-            if (Mathf.Abs(x - player.position.x) > Margin.x)
-            {
-                //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
-                //用插值会抖动 不知道是不是计算过快 来回找不到值？ 让在范围内=角色位置
-                //小于0.3会抖动 估计是角色 跑过摄像机 场景移动慢导致的视觉差 避免抖动 不用这种缓动跟随
-                //x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
-                //防止摄像机抖动
-                //if(Mathf.Abs(x - player.position.x)<0.3)
+            //if (Mathf.Abs(x - player.position.x) > Margin.x)
+            //{
+            //    //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
+            //    //用插值会抖动 不知道是不是计算过快 来回找不到值？ 让在范围内=角色位置
+            //    //小于0.3会抖动 估计是角色 跑过摄像机 场景移动慢导致的视觉差 避免抖动 不用这种缓动跟随
+            //    //x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
 
-                x = player.position.x;
-                //x = (player.position.x-x)*(float)0.5;
+            //    //防止摄像机抖动
+            //    //if(Mathf.Abs(x - player.position.x)<0.3)
+
+            //    //x = player.position.x;
+            //    //x += (player.position.x-x)*0.05f;
+            //}
+
+            //print(player.GetComponent<Rigidbody2D>().velocity.x);
+
+            //if (player.transform.localScale.x > 0)
+            //{
+            //    x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+            //}
+            //else
+            //{
+            //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+            //}
+
+            var vx = player.GetComponent<Rigidbody2D>().velocity.x;
+            var xzX = 1.8f;
+
+            if (Mathf.Abs(vx) >= xzX)
+            {
+                //if (vx > xzX && x <= player.position.x)
+                //{
+                //    x = player.position.x;
+                //}
+                //else if (vx < -xzX && x >= player.position.x)
+                //{
+                //    x = player.position.x;
+                //}
+
+
+                //if (vx < xzX && x > player.position.x)
+                //{
+                //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                //}
+                //else if (vx > xzX && x < player.position.x)
+                //{
+                //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                //}
+                
+                x = player.position.x - distanceX;
+
             }
+            else
+            {
+                if (player.transform.localScale.x > 0)
+                {
+                    x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+                }
+                else
+                {
+                    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                }
+                distanceX = player.position.x - x;
+            }
+
+
+
+
+
+
+
             /**
             if (Mathf.Abs(y - player.position.y) > Margin.y)
             {//如果相机与角色的y轴距离超过了最大范围则将x平滑的移动到目标点的y
@@ -195,10 +268,12 @@ public class CameraController : MonoBehaviour
         x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
         if(!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
         transform.position = new Vector3(x, y, transform.position.z);//改变相机的位置
-
+        //print("2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
 
         if (setNewPosition) SetCameraNewPosition();
     }
+
+   
 
    
     Vector3 newPositon;

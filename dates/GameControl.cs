@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameControl : MonoBehaviour {
 
@@ -11,15 +12,21 @@ public class GameControl : MonoBehaviour {
     private void Awake()
     {
         //GameSaveDate.GetInstance().GetTestSave();
-        if (Globals.isDebug) print("游戏关卡控制类 启动");
+        if (Globals.isDebug) print("游戏关卡控制类 启动    "+ SceneManager.GetActiveScene().name);
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
         //GlobalSetDate.instance.Init();
+        GuankaName = SceneManager.GetActiveScene().name;
         GetPlayer();
         GetPlayerUI();
         GetPlayBag();
         GetTargetPlayer();
         InitGuanKaDate();
+        if (GlobalSetDate.instance.IsNewGame)
+        {
+            GlobalSetDate.instance.IsNewGame = false;
+            GlobalSetDate.instance.GetSave();
+        }
     }
 
     private void OnEnable()
@@ -49,11 +56,12 @@ public class GameControl : MonoBehaviour {
     //初始化关卡数据
     public void InitGuanKaDate()
     {
+        GlobalSetDate.instance.GetGuanKaStr();
         //查找存档中是否有本关卡的关卡记录
-        TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(GuankaName);//返回总关卡 或者""
-        //print("关于本关卡的关卡记录>>   "+ TempCurrentGKDate);
+        TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);//返回总关卡 或者""
+        print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
         if (TempCurrentGKDate == null) {
-            TempCurrentGKDate = GuanKaStr;
+            TempCurrentGKDate = ""; //GuanKaStr;
         }
         else
         {
@@ -74,25 +82,52 @@ public class GameControl : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
     }
 
+    //是否包含查找的数据
+    bool IsHasDate(string changeDate, string[] currentGKDateArr)
+    {
+        string name = changeDate.Split('-')[0];
+        for (var i = 0; i < currentGKDateArr.Length; i++)
+        {
+            string date = currentGKDateArr[i];
+            string dateName = date.Split('-')[0];
+            if (name == dateName) return true;
+        }
+        return false;
+    }
+
+
     //记录数据的改变 存入全局临时变量  如果是BOSS死掉 存入文档 捡到boss装备也要自动存档
     public void GKDateChange(UEvent e)
     {
         //men_1-1 改变门状态
         if (Globals.isDebug) print(">>>  "+e.eventParams+"  > "+ TempCurrentGKDate);
-        if (TempCurrentGKDate == "") return;
-        string changeDate = e.eventParams.ToString();
+        //if (TempCurrentGKDate == "") return;
+        string changeDate = e.eventParams.ToString();//men_1-1
         string changeDateName = changeDate.Split('-')[0];//men_1
-        string type = changeDateName.Split('_')[0];
-        string changezt = changeDate.Split('-')[1];
+        string type = changeDateName.Split('_')[0];//men
+        string changezt;
+        if (changeDate.Split('-').Length>1) changezt = changeDate.Split('-')[1];
+
+        if (TempCurrentGKDate == "") {
+            TempCurrentGKDate += changeDate;
+            return;
+        }
+
         //men_1-0,men_2-0,boss_1-0 当前关卡数据长这样
         string[] currentGKDateArr = TempCurrentGKDate.Split(',');
+        //先查找 关卡数据中是否有该数据 有的就变化状态 没有的话就在后面加
+        if (!IsHasDate(changeDate, currentGKDateArr)) {
+            TempCurrentGKDate += changeDate;
+            return;
+        }
+
         string newGKDate = "";
         for(var i = 0; i < currentGKDateArr.Length; i++)
         {
             string theGKDate = currentGKDateArr[i];
             string dateName = theGKDate.Split('-')[0];
             if (Globals.isDebug) print("theGKDate  >  " + theGKDate);
-            string zt = theGKDate.Split('-')[1];
+            //string zt = theGKDate.Split('-')[1];
             if(dateName == changeDateName)
             {
                 if (i != currentGKDateArr.Length - 1)
@@ -116,14 +151,15 @@ public class GameControl : MonoBehaviour {
             }
         }
         TempCurrentGKDate = newGKDate;
-        //print(TempCurrentGKDate);
-        if(type == "boss")
-        {
-            //将关卡数据写入全局临时数据
-            if(TempCurrentGKDate!=null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName + ":" + TempCurrentGKDate);
-            //存档
-            GlobalSetDate.instance.GetSave();
-        }
+
+        print(TempCurrentGKDate);
+        //if(type == "boss")
+        //{
+        //    //将关卡数据写入全局临时数据
+        //    if(TempCurrentGKDate!=null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName + ":" + TempCurrentGKDate);
+        //    //存档
+        //    GlobalSetDate.instance.GetSave();
+        //}
     }
     //将本关卡存入全局临时数据
     public void SetChangeThisGKInZGKTempDate(UEvent e)
@@ -150,30 +186,33 @@ public class GameControl : MonoBehaviour {
         for (var i = 0; i < strArr.Length; i++)
         {
 			//print(strArr[0] + " ?  ");
-            string s = strArr[0].Split('-')[0];
-            string zt = strArr[0].Split('-')[1];
+            string s = strArr[i].Split('-')[0];
+            string zt = "0";
+            if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1];
 
             string sName = s.Split('_')[0];
             if (sName == "men")
             {
                 if (zt == "0")
                 {
-					//print("ssss  "+s);
+                    //print("ssss  "+s);
                     GlobalTools.FindObjByName(s).GetComponent<Door>().Chushi();
                 }
                 else if (zt == "1")
                 {
-                    print("s   "+s);
+                    print("s   " + s);
                     GlobalTools.FindObjByName(s).GetComponent<Door>().HasOpen();
                 }
             }
             else if (sName == "boss")
             {
-                if (zt == "1")
-                {
-                    //销毁该BOSS
-                    GlobalTools.FindObjByName(s).SetActive(false);
-                }
+                GlobalTools.FindObjByName(s).SetActive(false);
+            } else if (sName == "WP") {
+                //GlobalTools.FindObjByName(s).SetActive(false);
+                GlobalTools.FindObjByName(s).GetComponent<Wupinlan>().DistorySelf();
+            }else if (sName == "guai")
+            {
+
             }
         }
     }

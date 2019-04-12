@@ -245,7 +245,7 @@ GameObject.transform.position = FAR_AWAY
 //int n = (int)UnityEngine.Random.Range(0,100);随机数
 
 
-   
+
 
 /*******************
  * 防止怪物卡墙
@@ -256,3 +256,6 @@ GameObject.transform.position = FAR_AWAY
  * 
  * ferr 里面 物理块要勾选填充Fill Collider
  */
+
+//Application.loadedLevelName 获取场景名字(API 过时)
+//SceneManager.GetActiveScene().name  获取场景名字  需要using UnityEngine.SceneManagement;

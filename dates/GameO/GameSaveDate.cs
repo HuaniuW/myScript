@@ -45,6 +45,11 @@ public class GameSaveDate{
         CreateTextFile(_fileURL, s, false);
     }
 
+    public void GetNewGameSave()
+    {
+
+    }
+
     public void SaveDateByURLName(string URL,UserDate date)
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;
@@ -85,11 +90,15 @@ public class GameSaveDate{
     string[] dateZu = { "date1", "date2", "date3" };
     public bool IsHasSaveDate()
     {
-       for(var i = 0; i < dateZu.Length; i++)
-        {
-            string str = dateZu[i];
-            if (IsHasSaveDateByName(str)) return true;
-        }
+        //这个是 多个存档位的版本
+        //for(var i = 0; i < dateZu.Length; i++)
+        // {
+        //     string str = dateZu[i];
+        //     if (IsHasSaveDateByName(str)) return true;
+        // }
+
+        //一个存档位
+        if (IsHasSaveDateByName(GlobalSetDate.instance.saveDateName)) return true;
         return false;
     }
     

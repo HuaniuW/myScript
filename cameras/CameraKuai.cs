@@ -6,10 +6,12 @@ public class CameraKuai : MonoBehaviour {
 
     [Header("碰撞后摄像机的Y距离点")]
     public UnityEngine.Transform cameraY;
+
+    CameraController cm;
     // Use this for initialization
     void Start () {
-		
-	}
+        cm = GameObject.Find("/MainCamera").GetComponent<CameraController>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -23,7 +25,7 @@ public class CameraKuai : MonoBehaviour {
             //print("In");
             //print(GlobalTools.FindObjByName("MainCamera"));
             //print(cameraY.transform.position.y);
-            GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetHitCameraKuaiY(cameraY.transform.position.y);
+            cm.GetHitCameraKuaiY(cameraY.transform.position.y);
         }
     }
 
@@ -32,8 +34,8 @@ public class CameraKuai : MonoBehaviour {
 
         if (Coll.tag == "Player")
         {
-            print("out");
-            GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().OutHitCameraKuaiY();
+            //print("out");
+            cm.OutHitCameraKuaiY();
         }
         //print("Trigger - B");
     }

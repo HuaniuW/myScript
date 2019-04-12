@@ -43,16 +43,19 @@ public class Mianban1 : MonoBehaviour {
     //被选中的物品
     RectTransform beChoseWP = null;
     void Start() {
+        //装备徽章格子+技能徽章格子
         RectTransform[] HZzbz = { gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
         HZzhuangbeizu.AddRange(HZzbz);
-
+        //技能徽章格子（主动技能）
         RectTransform[] HZzdjn = {gezi26, gezi27 };
         HZzhudongjineng.AddRange(HZzdjn);
-
+        //所有格子
         RectTransform[] t = { gezi1, gezi2 ,gezi3,gezi4,gezi5,gezi6, gezi7, gezi8, gezi9, gezi10, gezi11, gezi12, gezi13, gezi14, gezi15, gezi16, gezi17, gezi18, gezi19, gezi20, gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
         geziArr.AddRange(t);
-        string[] t2 = { "huizhang4_1", "huizhang5_6","huizhang1_8", "huizhang2_9" };
-        hzIdList.AddRange(t2);
+        //测试用
+        //string[] t2 = { "huizhang4_1", "huizhang5_6","huizhang1_8", "huizhang2_9" };
+        //hzIdList.AddRange(t2);
+
         //print(geziArr.Count);
         getDate();
         GetInHZ();
@@ -256,6 +259,11 @@ public class Mianban1 : MonoBehaviour {
         string tempDateStr = GlobalSetDate.instance.CurrentUserDate.bagDate;// "huizhang1_0-huizhang2_2";
         getDateStrArr = tempDateStr.Split('-');
         hzIdList.AddRange(getDateStrArr);
+        //hzIdList.Add(getDateStrArr);
+        if (Globals.isDebug) {
+            print("hzIdList list长度 " + hzIdList.Count);
+        } 
+
     }
 
 

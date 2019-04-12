@@ -30,6 +30,9 @@ public class Diaoluowu : MonoBehaviour {
             {
                 //徽章 等 装进背包
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
+                print(this.transform.parent.name);
+                //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, this.transform.parent.name),this);
             }
             else if (type == 2) {
                 //消耗的掉落物 吃了 直接加血

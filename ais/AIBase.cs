@@ -171,6 +171,11 @@ public class AIBase : MonoBehaviour {
             isFindEnemy = false;
             AIReSet();
             gameBody.GetStand();
+            //isAction = true;
+            //isActioning = true;
+            //acName = "backUp";
+            //gameBody.GetBackUp(14);
+            //print("in--------->");
             return;
         }
 
