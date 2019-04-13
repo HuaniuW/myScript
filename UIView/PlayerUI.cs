@@ -21,6 +21,8 @@ public class PlayerUI : MonoBehaviour {
     public Image b5;
     public Image b6;
 
+    public RectTransform saveing;
+
 
     public GameObject player;
     public GameBody playerObj;
@@ -48,13 +50,55 @@ public class PlayerUI : MonoBehaviour {
 
         btn_zt.onClick.AddListener(GetSetUI);
 
+        saveing.GetComponent<CanvasGroup>().alpha = 0;
+
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
     }
 
     private void OnDestroy()
     {
         if(Globals.isDebug)print("PlayerUI");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
+    }
+
+    bool isSaveing = false;
+    void GetSaveing(UEvent e)
+    {
+        isSaveing = true;
+    }
+
+    float alphaNums = 0.01f;
+    int showSaveTxtTimeNums = 0;
+    void ShowSaveing()
+    {
+        showSaveTxtTimeNums++;
+        if (showSaveTxtTimeNums>=200)
+        {
+            HideSaveTxt();
+            return;
+        }
+
+        if (saveing.GetComponent<CanvasGroup>().alpha == 1)
+        {
+            alphaNums = -0.02f;
+        }
+        else if (saveing.GetComponent<CanvasGroup>().alpha <= 0.4f)
+        {
+            alphaNums = 0.02f;
+        }
+
+        saveing.GetComponent<CanvasGroup>().alpha += alphaNums;
+        //if (alphaNums > 1) alphaNums = 1;
+        //if (alphaNums < 0) alphaNums = 0;
+    }
+
+    void HideSaveTxt()
+    {
+        showSaveTxtTimeNums = 0;
+        saveing.GetComponent<CanvasGroup>().alpha = 0;
+        isSaveing = false;
     }
 
     void RemoveSelf(UEvent e) {
@@ -78,7 +122,10 @@ public class PlayerUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (isSaveing)
+        {
+            ShowSaveing();
+        }
 	}
     
     void GetTypePC()

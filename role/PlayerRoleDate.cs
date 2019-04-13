@@ -103,6 +103,11 @@ public class PlayerRoleDate : RoleDate
         {
             this.lan += 500;
             GetTX("jialan");
+        }else if (e.eventParams.ToString() == "C_cundangdian")
+        {
+            print("存档点加血");
+            this.live += 5000;
+            GetTX("jiaxue");
         }
         if (!IsHasZZ)
         {

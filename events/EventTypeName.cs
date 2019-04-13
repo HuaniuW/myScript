@@ -44,4 +44,6 @@ public class EventTypeName
     public const string DIE_OUT = "die_out";
 
     public const string GAME_OVER = "game_over";
+
+    public const string GAME_SAVEING = "game_saveing";
 }
