@@ -39,6 +39,8 @@ public class PlayerUI : MonoBehaviour {
             playerObj = player.GetComponent<GameBody>();
         }
 
+        //this.GetComponent<Canvas>().Get = GlobalTools.FindObjByName("Main Camera"); 
+
         if (Globals.isPC)
         {
             GetTypePC();

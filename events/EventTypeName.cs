@@ -46,4 +46,6 @@ public class EventTypeName
     public const string GAME_OVER = "game_over";
 
     public const string GAME_SAVEING = "game_saveing";
+
+    public const string ADD_MAX_LIVE = "add_max_live";
 }

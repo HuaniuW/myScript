@@ -30,16 +30,10 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        if (Bounds)
-        {
-            getBoundsMinMax();
-        }
-        else
-        {
-            Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
-            getBoundsMinMax();
-        }
-        
+       
+        if(!Bounds) Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
+        getBoundsMinMax();
+
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
@@ -108,6 +102,10 @@ public class CameraController : MonoBehaviour
         if (!player) return;
         var x = transform.position.x;
         var y = transform.position.y;
+        float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
+        //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
+        var cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
+
         if (IsFollowing)
         {
             float xNew = transform.position.x;
@@ -144,7 +142,7 @@ public class CameraController : MonoBehaviour
                 }
             }
 
-            
+
             //if (Mathf.Abs(x - player.position.x) > Margin.x)
             //{
             //    //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
@@ -169,36 +167,37 @@ public class CameraController : MonoBehaviour
             //{
             //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
             //}
-
-            var vx = player.GetComponent<Rigidbody2D>().velocity.x;
-            var xzX = 1.8f;
-
-            if (Mathf.Abs(vx) >= xzX)
+            if (player.position.x <= _min.x + cameraHalfWidth|| player.position.x >= _max.x - cameraHalfWidth)
             {
-                x = player.position.x - distanceX;
+                x = player.position.x;
+                distanceX = 0;
+
             }
             else
             {
-                distanceX = player.position.x - x;
-                if (!player.GetComponent<GameBody>().isInAiring)
+                var vx = player.GetComponent<Rigidbody2D>().velocity.x;
+                var xzX = 1.8f;
+
+                if (Mathf.Abs(vx) >= xzX)
                 {
-                    if (player.transform.localScale.x > 0)
+                    x = player.position.x - distanceX;
+                }
+                else
+                {
+                    distanceX = player.position.x - x;
+                    if (!player.GetComponent<GameBody>().isInAiring)
                     {
-                        x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
-                    }
-                    else
-                    {
-                        x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                        if (player.transform.localScale.x > 0)
+                        {
+                            x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+                        }
+                        else
+                        {
+                            x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                        }
                     }
                 }
-                
-                
             }
-
-
-
-
-
 
 
             /**
@@ -239,9 +238,7 @@ public class CameraController : MonoBehaviour
            
             
         }
-        float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
-        //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
-        var cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
+       
         //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
         x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
         if(!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
