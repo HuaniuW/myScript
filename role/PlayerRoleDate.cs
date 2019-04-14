@@ -212,6 +212,7 @@ public class PlayerRoleDate : RoleDate
         {
             //this.live = _live + hzdate.live;
             this.maxLive += hzdate.live;
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ADD_MAX_LIVE,maxLive), this);
         }
 
         if (hzdate.defP != 0) beishuArr.Add("defP_"+hzdate.defP+"_"+hzdate.HZName);

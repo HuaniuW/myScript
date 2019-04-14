@@ -51,7 +51,6 @@ public class XueTiao : MonoBehaviour {
         GetXueNum(0);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ADD_MAX_LIVE, this.GetAddMaxLive);
         //AddMaxLiveBar(200);
     }
 
@@ -70,12 +69,6 @@ public class XueTiao : MonoBehaviour {
         Wh(xue2, _maxW, _h);
         //是否包含诅咒条 有的话先初始为不显示
         if (zzTiao) GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
-    }
-
-    void GetAddMaxLive(UEvent e) {
-        float newPlayerMaxLive = (float)e.eventParams;
-        float addLive = newPlayerMaxLive - _maxLive;
-        AddMaxLiveBar(addLive);
     }
 
     //角色那边怎么做 如果加生命最大值 
@@ -100,17 +93,10 @@ public class XueTiao : MonoBehaviour {
     }
 
 
-    void AddMaxLive(UEvent e)
-    {
-        float nums = (float)e.eventParams;
-        _maxW += nums;
-    }
-
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.ADD_MAX_LIVE, this.GetAddMaxLive);
     }
 
     void IsHasZZ(UEvent e) {
@@ -170,6 +156,7 @@ public class XueTiao : MonoBehaviour {
     void LiveChange(UEvent e)
     {
         //print("xue change!");
+        if (gameObj.tag == "Player" && roleDate) AddMaxLiveBar(roleDate.maxLive - _maxLive);
         GetGameObj();
     }
 
@@ -191,6 +178,13 @@ public class XueTiao : MonoBehaviour {
     float lastXue = 0;
     // 血效果根据 标的角色数据变化
     void XueChange() {
+        //print("hiiiii     "+_maxLive+ "   roleDate.maxLive   "+roleDate.maxLive);
+        //if (_maxLive != roleDate.maxLive)
+        //{
+        //    print(gameObj.tag);
+        //    if (gameObj.tag == "Player" && roleDate) AddMaxLiveBar(roleDate.maxLive-_maxLive);
+        //}
+        
         //_cLive = testNums;
         _cLive = roleDate.live;
         if (_cLive == lastXue) return;

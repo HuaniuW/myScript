@@ -117,22 +117,7 @@ public class CameraController : MonoBehaviour
             float yNew = transform.position.y;
             if (IsHitCameraKuai)
             {
-                //yNew = CameraKuaiY;
-                //print("??????????   "+transform.position.y+"  ---  "+CameraKuaiY);
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
-
-
-                
-                //if (Mathf.Abs(CameraKuaiY - yNew) < 0.02f)
-                //{
-                    
-                //    yNew = CameraKuaiY;
-                //}
-                //else
-                //{
-                //    yNew += (CameraKuaiY - transform.position.y) * 0.1f;
-                //    if (yNew != CameraKuaiY) print("CameraKuaiY  " + CameraKuaiY + "  ---  " + yNew);
-                //}
             }
             else
             {
@@ -141,32 +126,7 @@ public class CameraController : MonoBehaviour
                     yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
                 }
             }
-
-
-            //if (Mathf.Abs(x - player.position.x) > Margin.x)
-            //{
-            //    //如果相机与角色的x轴距离超过了最大范围则将x平滑的移动到目标点的x
-            //    //用插值会抖动 不知道是不是计算过快 来回找不到值？ 让在范围内=角色位置
-            //    //小于0.3会抖动 估计是角色 跑过摄像机 场景移动慢导致的视觉差 避免抖动 不用这种缓动跟随
-            //    //x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
-
-            //    //防止摄像机抖动
-            //    //if(Mathf.Abs(x - player.position.x)<0.3)
-
-            //    //x = player.position.x;
-            //    //x += (player.position.x-x)*0.05f;
-            //}
-
-            //print(player.GetComponent<Rigidbody2D>().velocity.x);
-
-            //if (player.transform.localScale.x > 0)
-            //{
-            //    x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
-            //}
-            //else
-            //{
-            //    x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
-            //}
+            
             if (player.position.x <= _min.x + cameraHalfWidth|| player.position.x >= _max.x - cameraHalfWidth)
             {
                 x = player.position.x;
