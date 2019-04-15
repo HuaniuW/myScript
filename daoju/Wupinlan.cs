@@ -27,13 +27,6 @@ public class Wupinlan : MonoBehaviour {
 
     public void DistorySelf()
     {
-        //this.gameObject.SetActive(false);
-        //var collider = gameObject.GetComponent<Collider>();
-        //if (collider)
-        //{
-        //    Debug.Log("collider exists");
-        //    Destroy(collider);
-        //}
         StartCoroutine(IEDestoryByEnd(this.gameObject));
     }
     public IEnumerator IEDestoryByEnd(GameObject obj)

@@ -14,11 +14,11 @@ public class MenGuai : MonoBehaviour {
     bool isOpen = false;
 	// Update is called once per frame
 	void Update () {
-        if (this.GetComponent<RoleDate>().isDie&&!isOpen) {
+        if (!isOpen && this.GetComponent<RoleDate>().isDie)
+        {
             isOpen = true;
             //print("men?  "+this.DoorNum);
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, DoorNum), this);
         }
-        
     }
 }

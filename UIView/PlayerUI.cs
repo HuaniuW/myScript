@@ -30,9 +30,6 @@ public class PlayerUI : MonoBehaviour {
     void Start () {
         // GetTypePC();
         //GetTypeMobile();
-
-
-
         if (player == null)
         {
             player = GlobalTools.FindObjByName("player");
@@ -56,6 +53,14 @@ public class PlayerUI : MonoBehaviour {
 
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
+        GetMainCamera();
+    }
+
+
+    void GetMainCamera()
+    {
+        print(GlobalTools.FindObjByName("MainCamera"));
+        //print(this.transform.GetComponent<Canvas>().gameObject.camera);
     }
 
     private void OnDestroy()

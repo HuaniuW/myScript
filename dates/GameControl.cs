@@ -59,7 +59,7 @@ public class GameControl : MonoBehaviour {
         GlobalSetDate.instance.GetGuanKaStr();
         //查找存档中是否有本关卡的关卡记录
         TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);//返回总关卡 或者""
-        print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
+        //print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
         if (TempCurrentGKDate == null) {
             TempCurrentGKDate = ""; //GuanKaStr;
         }
@@ -70,7 +70,7 @@ public class GameControl : MonoBehaviour {
             GetPiPei();
         }
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
     }
 
 
@@ -79,7 +79,7 @@ public class GameControl : MonoBehaviour {
     {
         //print("OnDestroy!!!!!!");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
     }
 
     //是否包含查找的数据
@@ -105,11 +105,13 @@ public class GameControl : MonoBehaviour {
         string changeDate = e.eventParams.ToString();//men_1-1
         string changeDateName = changeDate.Split('-')[0];//men_1
         string type = changeDateName.Split('_')[0];//men
+        print("type  "+type);
         string changezt;
         if (changeDate.Split('-').Length>1) changezt = changeDate.Split('-')[1];
 
         if (TempCurrentGKDate == "") {
-            TempCurrentGKDate += changeDate;
+            TempCurrentGKDate += ","+changeDate;
+            //print("1  "+ TempCurrentGKDate);
             return;
         }
 
@@ -117,7 +119,7 @@ public class GameControl : MonoBehaviour {
         string[] currentGKDateArr = TempCurrentGKDate.Split(',');
         //先查找 关卡数据中是否有该数据 有的就变化状态 没有的话就在后面加
         if (!IsHasDate(changeDate, currentGKDateArr)) {
-            TempCurrentGKDate += changeDate;
+            TempCurrentGKDate += ","+changeDate;
             return;
         }
 
@@ -181,7 +183,7 @@ public class GameControl : MonoBehaviour {
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
         if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
-		//print("GuanKaStr  >>>  "+GuanKaStr);
+		print("GuanKaStr  >>>  "+GuanKaStr);
 		//print(GuanKaStr);
         for (var i = 0; i < strArr.Length; i++)
         {
@@ -191,7 +193,8 @@ public class GameControl : MonoBehaviour {
             if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1];
 
             string sName = s.Split('_')[0];
-            if (sName == "men")
+            //找名字 好像部分大小写
+            if (sName == "Men")
             {
                 if (zt == "0")
                 {
@@ -262,6 +265,8 @@ public class GameControl : MonoBehaviour {
         
         //设置玩家进场位置
         if (GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
+        if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
         player.GetComponent<GameBody>().SetV0();
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());

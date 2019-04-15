@@ -4,71 +4,80 @@ using UnityEngine;
 
 public class Door : MonoBehaviour {
 
-    [Header("移动到的y位置的标点")]
-    public UnityEngine.Transform moveToY;
+    [Header("down标点")]
+    public UnityEngine.Transform downPos;
+
+    [Header("down标点")]
+    public UnityEngine.Transform upPos;
+
     public GameObject men;
 
     [Header("开门声音")]
-    public AudioSource openDoor;
-
-    public string DoorNum = "";
-
-    //使用的id记录 通过记录来查找是否使用
-    public string useId = "";
-
-    public bool IsToDown = true;
+    public AudioSource openDoorAudio;
 
     // Use this for initialization
     void Start () {
-        //这里做判断是否使用 如果使用了调用HsaOpen()
-        chushiY = men.transform.position.y;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CLOSE_DOOR, CloseDoor);
+        if (Mathf.Abs(men.transform.position.y - downPos.position.y) < 1) _zt = "1";
+        if (Mathf.Abs(men.transform.position.y - upPos.position.y) < 1) _zt = "0";
     }
 
+    //是否自动记录---单独记录   men_1-0 位置在上  men_1-1 位置在下   0上1下
+    public bool isSaveBySelf = false;
+
+    //初始化属性
+    //要不要带存档属性？
+    //存档内有记录 门是开着的
+    //进入特定场景（boss战） 关门碰撞
+    //boss战胜利 开门
+    //如果是单独存档 门怪打掉后 还刷不刷？（不刷门怪 怎么记录  刷们怪的画 位置给远一点 不要再存档地点开战）
+
+    //状态-已经是开的门
+    string _zt = "0";
     public void HasOpen()
     {
         //当门以及打开 返回场景时候调用
-        men.transform.position = new Vector3(men.transform.position.x, moveToY.transform.position.y, men.transform.position.z);
+        men.transform.position = downPos.transform.position;
+        _zt = "1";
     }
-    float chushiY;
+    
     public void Chushi()
     {
-        men.transform.position = new Vector3(men.transform.position.x, chushiY, men.transform.position.z);
+        print("?????????");
+        men.transform.position = upPos.transform.position;
+        _zt = "0";
     }
 
     bool isClose = false;
-    //关门
-    public void Guanbi()
-    {
-        isClose = true;
-        isOpen = false;
-    }
-
     bool isOpen = false;
     public float moveSpeed = 0.1f;
-    public void OpenDoor(UEvent uEvent)
+    public void OpenDoor(UEvent e)
     {
-        if (DoorNum !=  uEvent.eventParams.ToString()) return;
-        isOpen = true;
+        string str = e.eventParams.ToString();
+        string _name = str.Split('-')[0];
+        string zt = str.Split('-')[1];
+        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
+        //如果传来的状态一样就返回 没必要改变
+        if (_zt == zt) return;
+        //开门用1 关门用0
+        if (this.name != _name) return;
+        isOpen = false;
         isClose = false;
-        //print(uEvent.eventParams);
-        
-        if (openDoor) openDoor.Play();
-    }
-    public void CloseDoor(UEvent uEvent)
-    {
-        if (DoorNum != uEvent.eventParams.ToString()) return;
-        Guanbi();
-        //print(uEvent.eventParams);
-        
-        if (openDoor) openDoor.Play();
+        if (zt == "1")
+        {
+            isOpen = true;
+            
+        }else if (zt == "0")
+        {
+            isClose = true;
+            //print("关门  "+this.name);
+        }
+        //声音播放
+        if (openDoorAudio) openDoorAudio.Play();
     }
 
     private void OnDestroy()
     {
-        //print("men");
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, CloseDoor);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
     }
 
@@ -77,25 +86,7 @@ public class Door : MonoBehaviour {
 
         if (isClose)
         {
-            
-            if (!IsToDown)
-            {
-                if (men && men.transform.position.y > chushiY)
-                {
-                    float moveY = men.transform.position.y - moveSpeed;
-                    men.transform.position = new Vector3(men.transform.position.x, moveY, men.transform.position.z);
-                    Gensui();
-                }
-                else
-                {
-                    string zt = this.name + "-0";
-                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt),this);
-                    isClose = false;
-                    if (openDoor) openDoor.Stop();
-                }
-                return;
-            }
-            if (men && men.transform.position.y > chushiY)
+            if (men && men.transform.position.y < upPos.transform.position.y)
             {
                 float moveY = men.transform.position.y + moveSpeed;
                 men.transform.position = new Vector3(men.transform.position.x, moveY, men.transform.position.z);
@@ -104,50 +95,37 @@ public class Door : MonoBehaviour {
             else
             {
                 string zt = this.name + "-0";
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
-
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
                 isClose = false;
-                if (openDoor) openDoor.Stop();
+                if (isSaveBySelf) GlobalSetDate.instance.SaveDoor();
+                if (openDoorAudio) openDoorAudio.Stop();
             }
         }
         
         if (isOpen)
         {
-            if (!IsToDown)
-            {
-                if (men && men.transform.position.y < moveToY.transform.position.y)
-                {
-                    float moveY = men.transform.position.y + moveSpeed;
-                    men.transform.position = new Vector3(men.transform.position.x, moveY, men.transform.position.z);
-                    Gensui();
-                }
-                else
-                {
-                    string zt = this.name + "-1";
-                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
-                    isOpen = false;
-                    if (openDoor) openDoor.Stop();
-                }
-                return;
-            }
-            if (men&&men.transform.position.y>moveToY.transform.position.y)
+            if (men&&men.transform.position.y> downPos.transform.position.y)
             {
                 float moveY = men.transform.position.y - moveSpeed;
-                men.transform.position = new Vector3(men.transform.position.x,moveY, men.transform.position.z);
+                men.transform.position = new Vector2(men.transform.position.x,moveY);
                 Gensui();
             }
             else
             {
                 string zt = this.name + "-1";
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CLOSE_DOOR, zt), this);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
                 isOpen = false;
-                if (openDoor) openDoor.Stop();
+                if (isSaveBySelf) GlobalSetDate.instance.SaveDoor();
+                if (openDoorAudio) openDoorAudio.Stop();
             }
         }
-
-       
-
+        
     }
+
+
+
+    //---------------------------跟随--------------------------------------------------------------------------
+
 
     Transform[] tarr = { };
     List<Transform> objList = new List<Transform>();

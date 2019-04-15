@@ -9,7 +9,7 @@ public class EventTypeName
     //获取敌人
     public const string GET_ENEMY = "GET_ENEMY";
 
-    public const string CLOSE_DOOR = "close_door";
+    public const string RECORDOBJ_CHANGE = "recordObj_change";
     //徽章切换
     public const string CHANGE_HZ = "change_hz";
 
@@ -48,4 +48,8 @@ public class EventTypeName
     public const string GAME_SAVEING = "game_saveing";
 
     public const string ADD_MAX_LIVE = "add_max_live";
+
+    //boss出现
+    public const string BOSS_IS_OUT = "boss_is_out";
+    public const string BOSS_IS_DIE = "boss_is_die";
 }

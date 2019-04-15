@@ -54,11 +54,12 @@ public class XueTiao : MonoBehaviour {
         //AddMaxLiveBar(200);
     }
 
-
+    [Header("血条显示误差 默认为50")]
+    public float XueTiaoXianshiWucha = 50;
     void LiveBarInit()
     {
         float xueTiaoDiW = XueTiaoDi.GetComponent<RectTransform>().rect.width;
-        _maxW = xueTiaoDiW - 50;
+        _maxW = xueTiaoDiW - XueTiaoXianshiWucha;
         _w = _w2 = _maxW;
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
         WhBg(xueBg);
@@ -90,6 +91,7 @@ public class XueTiao : MonoBehaviour {
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
         if (zzTiao) WhBg(zzTiao);
         if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
+        WhBg(xueBg);
     }
 
 
@@ -139,8 +141,8 @@ public class XueTiao : MonoBehaviour {
     }
 
     RoleDate roleDate;
-    //初始化 血条的 长度之类的
-    void GetGameObj()
+    //初始化 血条的 长度  数据匹配到链接的角色
+    public void GetGameObj()
     {
         if (gameObj != null)
         {
@@ -156,6 +158,7 @@ public class XueTiao : MonoBehaviour {
     void LiveChange(UEvent e)
     {
         //print("xue change!");
+        if (gameObj == null) return;
         if (gameObj.tag == "Player" && roleDate) AddMaxLiveBar(roleDate.maxLive - _maxLive);
         GetGameObj();
     }
