@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class XueTiao : MonoBehaviour {
+public class EnemyXueTiao : MonoBehaviour
+{
     public Image XueTiaoDi;
     public Image xueBg;
-    [Header("诅咒血条背景")]
-    public Image zzXueBg;
+    //[Header("诅咒血条背景")]
+    //public Image zzXueBg;
     public Image xue1;
     public Image xue2;
 
@@ -15,8 +16,8 @@ public class XueTiao : MonoBehaviour {
 
 
 
-    [Header("诅咒血条阻挡")]
-    public Image zzTiao;
+    //[Header("诅咒血条阻挡")]
+    //public Image zzTiao;
 
 
     float _cLive = 1000;
@@ -28,19 +29,20 @@ public class XueTiao : MonoBehaviour {
     /// <summary>
     /// 长条的第一层显示
     /// </summary>
-    public float _w=10;
+    public float _w = 10;
     /// <summary>
     /// 长条的第二条显示 缓动跟随_w
     /// </summary>
     float _w2 = 10;
-    public float _h=10;
+    public float _h = 10;
     public GameObject gameObj;
 
     public bool isCanAddMaxLiveNum = true;
 
     public static int n = 1;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         //print("被调用次数   "+n);
         n++;
         //初始化 血条显示
@@ -49,8 +51,8 @@ public class XueTiao : MonoBehaviour {
         GetGameObj();
         //初始化 数据显示
         GetXueNum(0);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
         //AddMaxLiveBar(200);
     }
 
@@ -63,13 +65,13 @@ public class XueTiao : MonoBehaviour {
         _w = _w2 = _maxW;
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
         WhBg(xueBg);
-        if (zzTiao) WhBg(zzTiao);
-        if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
-        Wh(zzXueBg, _maxW, _h);
+        //if (zzTiao) WhBg(zzTiao);
+        //if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
+        //Wh(zzXueBg, _maxW, _h);
         Wh(xue1, _maxW, _h);
         Wh(xue2, _maxW, _h);
         //是否包含诅咒条 有的话先初始为不显示
-        if (zzTiao) GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
+        //if (zzTiao) GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
     }
 
     //角色那边怎么做 如果加生命最大值 
@@ -81,39 +83,42 @@ public class XueTiao : MonoBehaviour {
     /// <param name="AddLivesNum">增加的生命上限值</param>
     public void AddMaxLiveBar(float AddLivesNum)
     {
-        
+
         float OldMaxLive = _maxLive;
+        print("OldMaxLive " + OldMaxLive);
         _maxLive += AddLivesNum;
+        print("_maxLive " + _maxLive);
         if (!isCanAddMaxLiveNum) return;
         float NewMaxW = 0;
         NewMaxW = _maxW * _maxLive / OldMaxLive;
         _maxW = NewMaxW;
-        Wh(XueTiaoDi, _maxW+50, XueTiaoDi.GetComponent<RectTransform>().rect.height);
+        Wh(XueTiaoDi, _maxW + 50, XueTiaoDi.GetComponent<RectTransform>().rect.height);
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
-        if (zzTiao) WhBg(zzTiao);
-        if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
+        //if (zzTiao) WhBg(zzTiao);
+        //if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
         WhBg(xueBg);
     }
 
 
     private void OnDestroy()
     {
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
     }
 
-    void IsHasZZ(UEvent e) {
-        if (zzTiao == null) return;
-        if ((bool)e.eventParams)
-        {
-            GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 1);
-        }
-        else
-        {
-            GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
-        }
-    }
-    
+    //void IsHasZZ(UEvent e)
+    //{
+    //    if (zzTiao == null) return;
+    //    if ((bool)e.eventParams)
+    //    {
+    //        GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 1);
+    //    }
+    //    else
+    //    {
+    //        GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
+    //    }
+    //}
+
 
     //是否激活
     public void Show(bool isAddOnStage)
@@ -123,11 +128,12 @@ public class XueTiao : MonoBehaviour {
 
     public void GetTargetObj(GameObject obj)
     {
-        //print("GetTargetObj    "+obj);
-        if (obj) {
+        print("GetTargetObj    " + obj);
+        if (obj)
+        {
             gameObj = obj;
             GetGameObj();
-        } 
+        }
     }
 
     //备用 主动控制血条长宽高的方法
@@ -139,8 +145,8 @@ public class XueTiao : MonoBehaviour {
         _h = h;
         //print("--------------------->3");
         WhBg(xueBg);
-        if (zzTiao) WhBg(zzTiao);
-        if (zzXueBg) Wh(zzXueBg, _w * 0.3f, _h);
+        //if (zzTiao) WhBg(zzTiao);
+        //if (zzXueBg) Wh(zzXueBg, _w * 0.3f, _h);
         Wh(xue1, _w, _h);
         Wh(xue2, _w2, _h);
     }
@@ -165,18 +171,19 @@ public class XueTiao : MonoBehaviour {
         if (gameObj == null)
         {
             gameObj = GlobalTools.FindObjByName("player");
+            print(gameObj);
             roleDate = gameObj.GetComponent<RoleDate>();
             //GetGameObj();
         }
         //print("XT  gameObj>  " + gameObj);
-        //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive+"  _maxLive "+_maxLive+"   传进来数据  "+e.eventParams);
+        //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams);
         if (gameObj == null) return;
         if (gameObj.tag == "Player" && roleDate)
         {
             AddMaxLiveBar((float)e.eventParams - _maxLive);
             GetGameObj();
         }
-        
+
     }
 
 
@@ -184,9 +191,10 @@ public class XueTiao : MonoBehaviour {
     public void GetXueNum(float nums)
     {
         //_cLive = roleDate.live;
-        _cLive = _cLive+nums > _maxLive?_maxLive: _cLive + nums;
+        //print("血条长度控制！！");
+        _cLive = _cLive + nums > _maxLive ? _maxLive : _cLive + nums;
         if (_cLive < 0) _cLive = 0;
-         _w  = _cLive / _maxLive*_maxW;
+        _w = _cLive / _maxLive * _maxW;
         if (_w2 != _w) isChage = true;
         if (nums >= 0) _w2 = _w;
         Wh(xue1, _w, _h);
@@ -196,14 +204,15 @@ public class XueTiao : MonoBehaviour {
 
     float lastXue = 0;
     // 血效果根据 标的角色数据变化
-    void XueChange() {
+    void XueChange()
+    {
         //print("hiiiii     "+_maxLive+ "   roleDate.maxLive   "+roleDate.maxLive);
         //if (_maxLive != roleDate.maxLive)
         //{
         //    print(gameObj.tag);
         //    if (gameObj.tag == "Player" && roleDate) AddMaxLiveBar(roleDate.maxLive-_maxLive);
         //}
-        
+
         //_cLive = testNums;
         _cLive = roleDate.live;
         if (_cLive == lastXue) return;
@@ -230,13 +239,14 @@ public class XueTiao : MonoBehaviour {
                 _w2 = _w;
             }
         }
-        else {
+        else
+        {
             _w2 = _w;
         }
-        
+
         Wh(xue2, _w2, _h);
 
-        if(_w2 == _w)
+        if (_w2 == _w)
         {
             isChage = false;
         }
@@ -245,7 +255,8 @@ public class XueTiao : MonoBehaviour {
 
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         //Test();
         if (!gameObj)
         {
@@ -254,7 +265,7 @@ public class XueTiao : MonoBehaviour {
             return;
         }
         XueChange();
-        if (isChage)Xue2W();
+        if (isChage) Xue2W();
     }
 
     void Test()
@@ -266,9 +277,10 @@ public class XueTiao : MonoBehaviour {
             //_maxW = 450;
             //Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
             //Wh(XueTiaoDi, 500, XueTiaoDi.GetComponent<RectTransform>().rect.height);
-            
+
             //GetXueNum(0);
-        }else if (Input.GetMouseButtonDown(1))
+        }
+        else if (Input.GetMouseButtonDown(1))
         {
             testNums += 100;
             if (testNums > _maxLive) testNums = _maxLive;

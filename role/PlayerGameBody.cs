@@ -182,7 +182,7 @@ public class PlayerGameBody : GameBody {
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
         }
         //Time.timeScale = 0.5f;
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 }

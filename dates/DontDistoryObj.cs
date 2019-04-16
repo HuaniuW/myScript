@@ -57,4 +57,9 @@ public class DontDistoryObj : MonoBehaviour {
         this.gameObject.SetActive(false);
         Destroy(this.gameObject);
     }
+
+    public void DistorySelf()
+    {
+
+    }
 }

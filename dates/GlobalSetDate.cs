@@ -69,6 +69,11 @@ public class GlobalSetDate : MonoBehaviour {
             InNewGame();
             IsNewGame = true;
         }
+        //if (player != null)
+        //{
+        //    player.SetActive(false);
+        //}
+
         SceneManager.LoadScene("loads");
     }
 
@@ -84,6 +89,8 @@ public class GlobalSetDate : MonoBehaviour {
     public bool IsChangeScreening = false;
     //存档的名字
     public string saveDateName = "maGame";
+    //public GameObject player;
+
     void InNewGame()
     {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();

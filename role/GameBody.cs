@@ -824,6 +824,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void Stand()
     {
+        if (DBBody.animation.lastAnimationName == DODGE2) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
@@ -907,7 +908,7 @@ public class GameBody : MonoBehaviour, IRole {
         //ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject, 1f);
         //this.gameObject.SetActive(false);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
-        if (isDieRemove)StartCoroutine(IEDieDestory(2f));
+        if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 
     public IEnumerator IEDieDestory(float time)
@@ -916,13 +917,23 @@ public class GameBody : MonoBehaviour, IRole {
         //yield return new WaitForFixedUpdate();
         yield return new WaitForSeconds(time);
         //playerRigidbody2D.velocity = Vector2.zero;
-        this.gameObject.SetActive(false);
+        
         //Destroy(this.gameObject);
         if(this.tag == "Player")
         {
+            Time.timeScale = 1;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_OVER), this);
+            Globals.isGameOver = true;
+            print("--------------------------------------------------------->player die!!!!");
+            this.gameObject.SetActive(false);
         }
+        else
+        {
+            this.gameObject.SetActive(false);
+        }
+        //this.gameObject.SetActive(false);
         DestroyImmediate(this, true);
+        //Destroy(this);
     }
 
 

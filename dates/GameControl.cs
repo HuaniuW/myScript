@@ -100,12 +100,12 @@ public class GameControl : MonoBehaviour {
     public void GKDateChange(UEvent e)
     {
         //men_1-1 改变门状态
-        if (Globals.isDebug) print(">>>  "+e.eventParams+"  > "+ TempCurrentGKDate);
+        if (Globals.isDebug) print(">>>  " + e.eventParams + "  > " + TempCurrentGKDate);
         //if (TempCurrentGKDate == "") return;
         string changeDate = e.eventParams.ToString();//men_1-1
         string changeDateName = changeDate.Split('-')[0];//men_1
         string type = changeDateName.Split('_')[0];//men
-        print("type  "+type);
+        //print("type  "+type);
         string changezt;
         if (changeDate.Split('-').Length>1) changezt = changeDate.Split('-')[1];
 
@@ -183,7 +183,7 @@ public class GameControl : MonoBehaviour {
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
         if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
-		print("GuanKaStr  >>>  "+GuanKaStr);
+		//print("GuanKaStr  >>>  "+GuanKaStr);
 		//print(GuanKaStr);
         for (var i = 0; i < strArr.Length; i++)
         {
@@ -203,11 +203,11 @@ public class GameControl : MonoBehaviour {
                 }
                 else if (zt == "1")
                 {
-                    print("s   " + s);
+                    //print("s   " + s);
                     GlobalTools.FindObjByName(s).GetComponent<Door>().HasOpen();
                 }
             }
-            else if (sName == "boss")
+            else if (sName == "BOSS")
             {
                 GlobalTools.FindObjByName(s).SetActive(false);
             } else if (sName == "WP") {
@@ -253,6 +253,21 @@ public class GameControl : MonoBehaviour {
     //找到主角 获取主角坐标
     void GetPlayer()
     {
+        //if (GlobalSetDate.instance.player != null)
+        //{
+        //    GlobalSetDate.instance.player.SetActive(true);
+        //    player = GlobalSetDate.instance.player;
+        //    //player.SetActive(true);
+        //    print("player   "+player);
+        //}
+        //else
+        //{
+
+        //    GlobalSetDate.instance.player = player;
+        //}
+
+
+
         if (FindObjByName("player") == null)
         {
             player = InstancePrefabByName("player");
@@ -260,14 +275,16 @@ public class GameControl : MonoBehaviour {
         else
         {
             player = FindObjByName("player");
-            player.GetComponent<DontDistoryObj>().ShowSelf();
         }
-        
+
+
         //设置玩家进场位置
         if (GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
         if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
+        //玩家站立
         player.GetComponent<GameBody>().SetV0();
+        //玩家状态 气血 护甲 
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());
         //player.transform.localScale = new Vector3(1, 1, 1);

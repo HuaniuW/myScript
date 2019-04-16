@@ -31,10 +31,10 @@ public class PlayerRoleDate : RoleDate
     }
 
 
-    void RemoveSelf(UEvent e)
-    {
-        DestroyImmediate(this, true);
-    }
+    //void RemoveSelf(UEvent e)
+    //{
+    //    DestroyImmediate(this, true);
+    //}
 
 
 
@@ -168,7 +168,8 @@ public class PlayerRoleDate : RoleDate
             IsHasZZ = false;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE), this);
+        //print("气血徽章- 事件发送！！！！！");
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
     }
 
     //徽章的倍数变化
@@ -203,7 +204,7 @@ public class PlayerRoleDate : RoleDate
     //徽章的数据加成
     void GetHZDate(HZDate hzdate)
     {
-        //print(hzdate.HZName);
+        print(hzdate.HZName);
         
         if (hzdate.def != 0) this.def += hzdate.def;
         if (hzdate.atk != 0) this.atk += hzdate.atk;
@@ -212,6 +213,7 @@ public class PlayerRoleDate : RoleDate
         {
             //this.live = _live + hzdate.live;
             this.maxLive += hzdate.live;
+            //print("装备最大气血装备  "+ this.maxLive);
             //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ADD_MAX_LIVE,maxLive), this);
         }
 

@@ -22,13 +22,14 @@ public class Boss_LiveBar : MonoBehaviour {
         //this.gameObject.SetActive(true);
         string bossName = e.eventParams.ToString();
         isShowSelf = true;
-        this.GetComponent<XueTiao>().gameObj = GlobalTools.FindObjByName(bossName);
-        this.GetComponent<XueTiao>().GetGameObj();
+        this.GetComponent<EnemyXueTiao>().gameObj = GlobalTools.FindObjByName(bossName);
+        this.GetComponent<EnemyXueTiao>().GetGameObj();
     }
     //boss die事件 隐藏自己
     void HideSelf(UEvent e)
     {
         //this.gameObject.SetActive(true);
+        //string bossName = e.eventParams.ToString();  预留给后面 需要做判断用
         this.GetComponent<CanvasGroup>().alpha = 0;
     }
 

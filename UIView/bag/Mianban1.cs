@@ -261,7 +261,7 @@ public class Mianban1 : MonoBehaviour {
         hzIdList.AddRange(getDateStrArr);
         //hzIdList.Add(getDateStrArr);
         if (Globals.isDebug) {
-            print("hzIdList list长度 " + hzIdList.Count);
+            //print("hzIdList list长度 " + hzIdList.Count);
         } 
 
     }

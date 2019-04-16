@@ -59,7 +59,7 @@ public class PlayerUI : MonoBehaviour {
 
     void GetMainCamera()
     {
-        print(GlobalTools.FindObjByName("MainCamera"));
+        //print(GlobalTools.FindObjByName("MainCamera"));
         //print(this.transform.GetComponent<Canvas>().gameObject.camera);
     }
 
