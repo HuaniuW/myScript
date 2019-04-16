@@ -26,6 +26,7 @@ public class GameControl : MonoBehaviour {
         {
             GlobalSetDate.instance.IsNewGame = false;
             GlobalSetDate.instance.GetSave();
+            GlobalSetDate.instance.isInFromSave = true;
         }
     }
 
@@ -284,11 +285,14 @@ public class GameControl : MonoBehaviour {
         if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
         //玩家站立
         player.GetComponent<GameBody>().SetV0();
-        //玩家状态 气血 护甲 
+        //当前是什么状态 新进游戏（不管是取档 还是新游戏）
+        //或者是 跳场景
+        //玩家状态 当前气血 护甲 （比如玩家身上是什么 徽章的特效 持续事件   负面特效时间）  跳转场景的时候需要用到这些
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("p "+player.GetComponent<GameBody>().GetBodyScale());
         //player.transform.localScale = new Vector3(1, 1, 1);
-        FirstInGame();
+        //玩家状态
+        PlayerStatus();
 
         //print("玩家位置   " + player.transform.position);
     }
@@ -296,13 +300,14 @@ public class GameControl : MonoBehaviour {
 
 
 
-    void FirstInGame()
+    void PlayerStatus()
     {
+        return;
         if (GlobalSetDate.instance.isFirstInGame)
         {
             GlobalSetDate.instance.isFirstInGame = false;
-            
         }
+
         //获取玩家状态数据
         if (GlobalSetDate.instance.isInFromSave)
         {
@@ -315,6 +320,9 @@ public class GameControl : MonoBehaviour {
             //print("???     "+ GlobalSetDate.instance.CurrentUserDate.curLive);
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
         }
+
+       
+        
     }
 
 

@@ -25,7 +25,7 @@ public class GlobalSetDate : MonoBehaviour {
    
 
     //是否是从取档进入
-    public bool isInFromSave = false;
+    public bool isInFromSave = true;
     //现在的全局玩家数据
     public UserDate CurrentUserDate;
 
@@ -61,6 +61,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (isInFromSave)
         {
             print("读档游戏");
+            CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName);
             GetSaveInGame();
         }
         else

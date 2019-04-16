@@ -151,9 +151,9 @@ public class StartScreen : MonoBehaviour {
         kuang.transform.position = btn2.transform.position;
         getRQ = btn2;
 
-        GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(GlobalSetDate.instance.saveDateName);
-        UserDate t = GlobalSetDate.instance.CurrentUserDate;
-        GlobalSetDate.instance.isInFromSave = true;
+        //GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(GlobalSetDate.instance.saveDateName);
+        //UserDate t = GlobalSetDate.instance.CurrentUserDate;
+        //GlobalSetDate.instance.isInFromSave = true;
         //调用进入游戏
         GlobalSetDate.instance.GetGameDateStart();
 

@@ -924,7 +924,6 @@ public class GameBody : MonoBehaviour, IRole {
             Time.timeScale = 1;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_OVER), this);
             Globals.isGameOver = true;
-            print("--------------------------------------------------------->player die!!!!");
             this.gameObject.SetActive(false);
         }
         else
