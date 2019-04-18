@@ -31,7 +31,7 @@ public class UIBag : MonoBehaviour {
     {
         if (Globals.isDebug) print("UI_Bag");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
     }
 
     void RemoveSelf(UEvent e)

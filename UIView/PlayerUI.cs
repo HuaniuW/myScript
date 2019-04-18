@@ -106,7 +106,7 @@ public class PlayerUI : MonoBehaviour {
     {
         if(Globals.isDebug)print("PlayerUI");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
     }
 
