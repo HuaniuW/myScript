@@ -15,7 +15,7 @@ public class Btn_FX : CanTouchBox {
         if (player == null)
         {
             player = GlobalTools.FindObjByName("player");
-            playerObj = player.GetComponent<GameBody>();
+            if(player) playerObj = player.GetComponent<GameBody>();
         }
         chushi = btnImg.transform.position;
     }

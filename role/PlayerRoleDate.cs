@@ -226,6 +226,7 @@ public class PlayerRoleDate : RoleDate
        
     }
     
+    //徽章诅咒
     void GetHZZZ(List<RectTransform> t)
     {
         foreach (var hz in t)

@@ -12,22 +12,22 @@ public class GameControl : MonoBehaviour {
     private void Awake()
     {
         //GameSaveDate.GetInstance().GetTestSave();
-        if (Globals.isDebug) print("游戏关卡控制类 启动    "+ SceneManager.GetActiveScene().name);
+        if (Globals.isDebug) print("游戏关卡控制类 启动 当前场景名字   "+ SceneManager.GetActiveScene().name);
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
         //GlobalSetDate.instance.Init();
         GuankaName = SceneManager.GetActiveScene().name;
         GetPlayer();
+        if (player == null)
+        {
+            print("没有找到主角 游戏中断！");
+            return;
+        }
         GetPlayerUI();
         GetPlayBag();
-        GetTargetPlayer();
+        GetCamersTargetToPlayer();
         InitGuanKaDate();
-        if (GlobalSetDate.instance.IsNewGame)
-        {
-            GlobalSetDate.instance.IsNewGame = false;
-            GlobalSetDate.instance.GetSave();
-            GlobalSetDate.instance.isInFromSave = true;
-        }
+        GetPlayerStatus();
     }
 
     private void OnEnable()
@@ -57,9 +57,9 @@ public class GameControl : MonoBehaviour {
     //初始化关卡数据
     public void InitGuanKaDate()
     {
-        GlobalSetDate.instance.GetGuanKaStr();
-        //查找存档中是否有本关卡的关卡记录
-        TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);//返回总关卡 或者""
+        GlobalSetDate.instance.GetGameAllCunstomStr();
+        //查找存档中是否有本关卡的关卡记录  通过本关卡名字获取本关卡数据
+        TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);
         //print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
         if (TempCurrentGKDate == null) {
             TempCurrentGKDate = ""; //GuanKaStr;
@@ -67,7 +67,6 @@ public class GameControl : MonoBehaviour {
         else
         {
             //如果全局数据中有本关卡数据  清除掉原数据中本关卡数据   匹配本关卡数据
-
             GetPiPei();
         }
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
@@ -213,7 +212,7 @@ public class GameControl : MonoBehaviour {
                 GlobalTools.FindObjByName(s).SetActive(false);
             } else if (sName == "WP") {
                 //GlobalTools.FindObjByName(s).SetActive(false);
-                GlobalTools.FindObjByName(s).GetComponent<Wupinlan>().DistorySelf();
+                if(GlobalTools.FindObjByName(s)!=null) GlobalTools.FindObjByName(s).GetComponent<Wupinlan>().DistorySelf();
             }else if (sName == "guai")
             {
 
@@ -251,36 +250,52 @@ public class GameControl : MonoBehaviour {
     }
 
     GameObject player;
-    //找到主角 获取主角坐标
+    //找到主角
     void GetPlayer()
     {
-        //if (GlobalSetDate.instance.player != null)
-        //{
-        //    GlobalSetDate.instance.player.SetActive(true);
-        //    player = GlobalSetDate.instance.player;
-        //    //player.SetActive(true);
-        //    print("player   "+player);
-        //}
-        //else
-        //{
-
-        //    GlobalSetDate.instance.player = player;
-        //}
-
-
-
         if (FindObjByName("player") == null)
         {
             player = InstancePrefabByName("player");
+            print("??????????????");
         }
         else
         {
             player = FindObjByName("player");
         }
+    }
+
+    
+
+    void GetPlayerStatus()
+    {
+        // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
+        if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
+        {
+            player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
+            GlobalSetDate.instance.GetSave();
+            GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
+        }
+        else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME)
+        {
+            player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
+        }
+        else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN)
+        {
+            print("转场进入游戏");
+            //背包更新
+
+            //指定当前数值
+            GlobalSetDate.instance.GetScreenChangeDate();
+        } else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.TEMP_SCREEN) {
+            print("临时 直接重场景进入的游戏");
+            GlobalSetDate.instance.GetSave();
+            GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
+        }
 
 
-        //设置玩家进场位置
-        if (GlobalSetDate.instance.playerPosition!="") player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        //摄像机位置跟随
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
         if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
         //玩家站立
@@ -288,40 +303,11 @@ public class GameControl : MonoBehaviour {
         //当前是什么状态 新进游戏（不管是取档 还是新游戏）
         //或者是 跳场景
         //玩家状态 当前气血 护甲 （比如玩家身上是什么 徽章的特效 持续事件   负面特效时间）  跳转场景的时候需要用到这些
+        //玩家状态 记录玩家持续的 增益减益等等的 乱七八糟的各种状态
+
+
         GlobalSetDate.instance.IsChangeScreening = false;
-        //print("p "+player.GetComponent<GameBody>().GetBodyScale());
-        //player.transform.localScale = new Vector3(1, 1, 1);
-        //玩家状态
-        PlayerStatus();
-
         //print("玩家位置   " + player.transform.position);
-    }
-
-
-
-
-    void PlayerStatus()
-    {
-        return;
-        if (GlobalSetDate.instance.isFirstInGame)
-        {
-            GlobalSetDate.instance.isFirstInGame = false;
-        }
-
-        //获取玩家状态数据
-        if (GlobalSetDate.instance.isInFromSave)
-        {
-            GlobalSetDate.instance.isInFromSave = false;
-
-
-            //加载地图
-            //加载收藏品
-            //刷新角色数据
-            //print("???     "+ GlobalSetDate.instance.CurrentUserDate.curLive);
-            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
-        }
-
-       
         
     }
 
@@ -349,13 +335,13 @@ public class GameControl : MonoBehaviour {
         {
             playerUI = FindObjByName("PlayerUI");
         }
-        playerUI.GetComponent<DontDistoryObj>().ShowSelf();
+        //playerUI.GetComponent<DontDistoryObj>().ShowSelf();
         playerUI.GetComponent<XueTiao>().GetTargetObj(FindObjByName("player"));
     }
 
 
     //摄像头定焦 和找到敌人
-    void GetTargetPlayer()
+    void GetCamersTargetToPlayer()
     {
         //print("hi");
         this.GetComponent<CameraController>().GetTargetObj(FindObjByName("player").transform);

@@ -5,7 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GlobalSetDate : MonoBehaviour {
     public static GlobalSetDate instance;
-    
+    public const string NEW_GAME = "NewGame";
+    public const string LOAD_GAME = "LoadGame";
+    public const string CHANGE_SCREEN = "ChangeScreen";
+    /// <summary>
+    /// 临时场景
+    /// </summary>
+    public const string TEMP_SCREEN = "TempScreen";
+    public string HowToInGame = TEMP_SCREEN;
     // Use this for initialization
     static GlobalSetDate()
     {
@@ -17,12 +24,6 @@ public class GlobalSetDate : MonoBehaviour {
     }
     //是否初次开启游戏
     public bool isFirstInGame = true;
-    public void Init()
-    {
-        
-    }
-
-   
 
     //是否是从取档进入
     public bool isInFromSave = true;
@@ -31,7 +32,6 @@ public class GlobalSetDate : MonoBehaviour {
 
     private void OnDestroy()
     {
-        //print("??????????????????销毁了？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.ReStart);
     }
 
@@ -53,35 +53,30 @@ public class GlobalSetDate : MonoBehaviour {
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
     }
-
-    public bool IsNewGame = false;
+    
     public void GetGameDateStart()
     {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
         if (isInFromSave)
         {
             print("读档游戏");
+            HowToInGame = LOAD_GAME;
             CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName);
-            GetSaveInGame();
+            GetSaveGame();
         }
         else
         {
             print("新游戏");
+            HowToInGame = NEW_GAME;
             InNewGame();
-            IsNewGame = true;
         }
-        //if (player != null)
-        //{
-        //    player.SetActive(false);
-        //}
-
         SceneManager.LoadScene("loads");
     }
 
 
     //第一次启动 掉用这里面存储的数据系统
     public string playerPosition = "";
-    public string screenName = "guan1_1";
+    public string screenName = "g1_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
     public string mapDate = "";//小地图数据
@@ -117,11 +112,17 @@ public class GlobalSetDate : MonoBehaviour {
 
     
 
-    void GetSaveInGame()
+    void GetSaveGame()
     {
         playerPosition = CurrentUserDate.playerPosition;
         screenName = CurrentUserDate.screenName;
         cameraPosition = CurrentUserDate.cameraPosition;
+    }
+
+
+    void TempScreenGame()
+    {
+
     }
 
 
@@ -131,6 +132,7 @@ public class GlobalSetDate : MonoBehaviour {
     public Vector3 GetPlayerInScreenPosition()
     {
         string[] sArray = playerPosition.Split('_');
+        //print("playerPosition>   " + playerPosition);
         playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]), 0);
         //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);
         return playerInScreenPosition;
@@ -170,8 +172,8 @@ public class GlobalSetDate : MonoBehaviour {
     //启动游戏的时候 调用存档数据先  对比当前关卡数据是否有变动 
     //每关都要对比加到临时数据
 
-    //匹配存档中的关卡记录
-    public void GetGuanKaStr()
+    //匹配存档中的全局关卡记录
+    public void GetGameAllCunstomStr()
     {
         //获取当前关卡的数据
 
@@ -258,9 +260,10 @@ public class GlobalSetDate : MonoBehaviour {
         GameObject player = GlobalTools.FindObjByName("player");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
+        //print("CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
         CurrentUserDate.curLan = player.GetComponent<RoleDate>().lan.ToString();
         CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
-        CurrentUserDate.playerPosition = player.transform.position.x + "_" + player.transform.position.y;
+        CurrentUserDate.playerPosition = player.transform.position.x+2 + "_" + player.transform.position.y;
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
         CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
@@ -282,6 +285,26 @@ public class GlobalSetDate : MonoBehaviour {
 
 
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
+    }
+
+    string screenChangeDate;
+    public void ScreenChangeDateRecord()
+    {
+        RoleDate _roleDate = GlobalTools.FindObjByName("player").GetComponent<RoleDate>();
+        screenChangeDate = "cLive=" +_roleDate.live+","+"cL="+_roleDate.lan;
+    }
+
+    public void GetScreenChangeDate()
+    {
+        //GlobalTools.FindObjByName("player")
+        if (screenChangeDate == null) return;
+        string[] roleDateArr = screenChangeDate.Split(',');
+        for(var i = 0; i < roleDateArr.Length; i++) {
+            string _date = roleDateArr[i];
+            if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
+            if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().lan = float.Parse(_date.Split('=')[1]);
+        }
+        screenChangeDate = null;
     }
 
     

@@ -257,23 +257,23 @@ public class XueTiao : MonoBehaviour {
         if (isChage)Xue2W();
     }
 
-    void Test()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {    //首先判断是否点击了鼠标左键
-            print("游戏开始！");
-            testNums -= 100;
-            //_maxW = 450;
-            //Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
-            //Wh(XueTiaoDi, 500, XueTiaoDi.GetComponent<RectTransform>().rect.height);
+    //void Test()
+    //{
+    //    if (Input.GetMouseButtonDown(0))
+    //    {    //首先判断是否点击了鼠标左键
+    //        print("游戏开始！");
+    //        testNums -= 100;
+    //        //_maxW = 450;
+    //        //Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
+    //        //Wh(XueTiaoDi, 500, XueTiaoDi.GetComponent<RectTransform>().rect.height);
             
-            //GetXueNum(0);
-        }else if (Input.GetMouseButtonDown(1))
-        {
-            testNums += 100;
-            if (testNums > _maxLive) testNums = _maxLive;
-        }
-    }
+    //        //GetXueNum(0);
+    //    }else if (Input.GetMouseButtonDown(1))
+    //    {
+    //        testNums += 100;
+    //        if (testNums > _maxLive) testNums = _maxLive;
+    //    }
+    //}
 
 
 

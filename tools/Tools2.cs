@@ -259,3 +259,6 @@ GameObject.transform.position = FAR_AWAY
 
 //Application.loadedLevelName 获取场景名字(API 过时)
 //SceneManager.GetActiveScene().name  获取场景名字  需要using UnityEngine.SceneManagement;
+
+
+    //鼠标事件失灵  有可能是被image遮挡了  比如 场景过度的黑色渐变

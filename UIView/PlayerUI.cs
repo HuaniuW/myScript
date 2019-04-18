@@ -26,6 +26,9 @@ public class PlayerUI : MonoBehaviour {
 
     public GameObject player;
     public GameBody playerObj;
+
+    public RectTransform screenChangeZZ;
+    public Text screenLoadTxt;
     // Use this for initialization
     void Start () {
         // GetTypePC();
@@ -33,7 +36,7 @@ public class PlayerUI : MonoBehaviour {
         if (player == null)
         {
             player = GlobalTools.FindObjByName("player");
-            playerObj = player.GetComponent<GameBody>();
+            if(player)playerObj = player.GetComponent<GameBody>();
         }
 
         //this.GetComponent<Canvas>().Get = GlobalTools.FindObjByName("Main Camera"); 
@@ -52,8 +55,44 @@ public class PlayerUI : MonoBehaviour {
         saveing.GetComponent<CanvasGroup>().alpha = 0;
 
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
+        
         GetMainCamera();
+
+        screenChangeZZ.gameObject.SetActive(false);
+    }
+
+    void GetScreenChange()
+    {
+        if (!IsScreenChangeing) return;
+        if (this.screenChangeZZ != null)
+        {
+            this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;
+        }
+    }
+
+    float ZZAlphaNums = 0;
+    bool IsScreenChangeing = false;
+    public void GetScreenZZChange(float alphaNum)
+    {
+        screenChangeZZ.gameObject.SetActive(true);
+        ZZAlphaNums = 1;
+        IsScreenChangeing = true;
+    }
+
+    public void ShowLoadProgressNums(float nums)
+    {
+        if(nums == 100)
+        {
+            //IsScreenChangeing = false;
+            //this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
+            ZZAlphaNums = 0;
+            if (this.screenChangeZZ.GetComponent<CanvasGroup>().alpha == 0) IsScreenChangeing = false;
+            //防止遮挡鼠标事件
+            screenChangeZZ.gameObject.SetActive(false);
+        }
+        if (screenLoadTxt != null) screenLoadTxt.text = nums + "%";
     }
 
 
@@ -67,6 +106,7 @@ public class PlayerUI : MonoBehaviour {
     {
         if(Globals.isDebug)print("PlayerUI");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
     }
 
@@ -133,7 +173,10 @@ public class PlayerUI : MonoBehaviour {
         {
             ShowSaveing();
         }
-	}
+
+        GetScreenChange();
+
+    }
     
     void GetTypePC()
     {
