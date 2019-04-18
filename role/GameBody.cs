@@ -897,9 +897,17 @@ public class GameBody : MonoBehaviour, IRole {
         bodyScale = new Vector3(1, 1, 1);
         vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
+       
+        GameOver();
     }
 
-	public virtual void GetDie()
+    public virtual void GameOver()
+    {
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+    }
+
+
+    public virtual void GetDie()
     {
         //print("indie!!!!!!!!!!!!!!!!");
         if(DBBody.animation.lastAnimationName != DIE) DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
@@ -924,14 +932,15 @@ public class GameBody : MonoBehaviour, IRole {
             Time.timeScale = 1;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_OVER), this);
             Globals.isGameOver = true;
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
         else
         {
             this.gameObject.SetActive(false);
+            //DestroyImmediate(this, true);
         }
         //this.gameObject.SetActive(false);
-        DestroyImmediate(this, true);
+        
         //Destroy(this);
     }
 

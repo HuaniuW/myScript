@@ -18,6 +18,17 @@ public class PlayerGameBody : GameBody {
         this.GetUpdate();
     }
 
+    public override void GameOver()
+    {
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+    }
+
+    void RemoveSelf(UEvent e)
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        DestroyImmediate(this.gameObject, true);
+    }
+
     bool isFighting = false;
     //切换站立姿势 切换跑动姿势
     void ChangeStandAndRunAC()

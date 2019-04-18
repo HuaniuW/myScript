@@ -187,7 +187,7 @@ GameObject.SetActive()
 //SetActive(false)的时候，物体不再渲染，释放占用资源
 
     //Destroy(this.gameObject);
-    //立即销毁 并且释放内存  *要是gameObject 才能删除
+    //立即销毁 并且释放内存  *要是gameObject 才能删除  只能在场景切换后才能执行 否则报错
     //DestroyImmediate(this.gameObject, true);
 
 Camera.cullingMask

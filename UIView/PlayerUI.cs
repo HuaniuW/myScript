@@ -55,7 +55,7 @@ public class PlayerUI : MonoBehaviour {
         saveing.GetComponent<CanvasGroup>().alpha = 0;
 
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         
         GetMainCamera();

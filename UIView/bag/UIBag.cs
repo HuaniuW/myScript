@@ -24,7 +24,7 @@ public class UIBag : MonoBehaviour {
 
         mianbanHide(this.GetComponent<RectTransform>());
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
     }
 
     private void OnDestroy()
