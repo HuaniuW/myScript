@@ -824,7 +824,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void Stand()
     {
-        if (DBBody.animation.lastAnimationName == DODGE2) return;
+        if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
@@ -1054,7 +1054,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         //print(this.tag);
         //if (this.tag != "diren") print("hi");
-        if (!roleDate.isBeHiting &&!isQianhuaing &&!isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isAtking && !isDodgeing && !isAtkYc&&!isBackUping&&!isQianhuaing)
+        if (!roleDate.isBeHiting &&!isQianhuaing &&!isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping &&!isJumping2&& !isAtking && !isDodgeing && !isAtkYc&&!isBackUping&&!isQianhuaing)
         {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
             Stand();
