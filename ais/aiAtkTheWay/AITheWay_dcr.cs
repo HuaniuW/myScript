@@ -5,9 +5,9 @@ using System;
 
 public class AITheWay_dcr : MonoBehaviour {
     float theLive;
-    [Header("变招血量下限1")]
+    [Header("下限1")]
     public float bz1 = 0.5f;
-    [Header("变招血量下限2")]
+    [Header("下限2")]
     public float bz2 = 0f;
     // Use this for initialization
     void Start () {
