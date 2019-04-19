@@ -43,7 +43,7 @@ public class Door : MonoBehaviour {
     
     public void Chushi()
     {
-        print("?????????");
+        //print("?????????");
         men.transform.position = upPos.transform.position;
         _zt = "0";
     }
@@ -56,7 +56,7 @@ public class Door : MonoBehaviour {
         string str = e.eventParams.ToString();
         string _name = str.Split('-')[0];
         string zt = str.Split('-')[1];
-        print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
+        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
         //如果传来的状态一样就返回 没必要改变
         if (_zt == zt) return;
         //开门用1 关门用0

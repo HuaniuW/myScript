@@ -194,6 +194,6 @@ public class PlayerGameBody : GameBody {
         }
         //Time.timeScale = 0.5f;
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
-        if (isDieRemove) StartCoroutine(IEDieDestory(2f));
+        if (isDieRemove) StartCoroutine(IEDieDestory(1f));
     }
 }

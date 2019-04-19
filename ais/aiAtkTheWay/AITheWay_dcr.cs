@@ -35,6 +35,6 @@ public class AITheWay_dcr : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        GetZSArrLength();
+        //GetZSArrLength();
     }
 }

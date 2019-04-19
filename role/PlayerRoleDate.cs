@@ -41,6 +41,7 @@ public class PlayerRoleDate : RoleDate
     void JiaXue(UEvent e)
     {
         this.live += 300;
+        if (this.live > maxLive) live = maxLive;
         if(IsHasZZ) if (live > maxLive * 0.3f) live = maxLive * 0.3f;
         GetTX("jiaxue");
     }

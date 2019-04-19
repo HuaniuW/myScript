@@ -29,7 +29,7 @@ public class UIBag : MonoBehaviour {
 
     private void OnDestroy()
     {
-        if (Globals.isDebug) print("UI_Bag");
+        //if (Globals.isDebug) print("UI_Bag");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
     }

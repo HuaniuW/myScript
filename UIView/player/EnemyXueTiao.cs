@@ -51,9 +51,6 @@ public class EnemyXueTiao : MonoBehaviour
         GetGameObj();
         //初始化 数据显示
         GetXueNum(0);
-        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
-        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
-        //AddMaxLiveBar(200);
     }
 
     [Header("血条显示误差 默认为50")]
@@ -94,30 +91,14 @@ public class EnemyXueTiao : MonoBehaviour
         _maxW = NewMaxW;
         Wh(XueTiaoDi, _maxW + 50, XueTiaoDi.GetComponent<RectTransform>().rect.height);
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
-        //if (zzTiao) WhBg(zzTiao);
-        //if (zzXueBg) Wh(zzXueBg, _maxW * 0.3f, _h);
         WhBg(xueBg);
     }
 
 
     private void OnDestroy()
     {
-        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
-        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
     }
-
-    //void IsHasZZ(UEvent e)
-    //{
-    //    if (zzTiao == null) return;
-    //    if ((bool)e.eventParams)
-    //    {
-    //        GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 1);
-    //    }
-    //    else
-    //    {
-    //        GlobalTools.CanvasGroupAlpha(zzTiao.GetComponent<CanvasGroup>(), 0);
-    //    }
-    //}
+    
 
 
     //是否激活
@@ -143,10 +124,7 @@ public class EnemyXueTiao : MonoBehaviour
         _w = w;
         _w2 = _w;
         _h = h;
-        //print("--------------------->3");
         WhBg(xueBg);
-        //if (zzTiao) WhBg(zzTiao);
-        //if (zzXueBg) Wh(zzXueBg, _w * 0.3f, _h);
         Wh(xue1, _w, _h);
         Wh(xue2, _w2, _h);
     }
@@ -162,35 +140,15 @@ public class EnemyXueTiao : MonoBehaviour
             roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
             _cLive = roleDate.live;
             GetXueNum(0);
-            //isChage = true;
         }
     }
 
-    void LiveChange(UEvent e)
-    {
-        if (gameObj == null)
-        {
-            gameObj = GlobalTools.FindObjByName("player");
-            print(gameObj);
-            roleDate = gameObj.GetComponent<RoleDate>();
-            //GetGameObj();
-        }
-        //print("XT  gameObj>  " + gameObj);
-        //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams);
-        if (gameObj == null) return;
-        if (gameObj.tag == "Player" && roleDate)
-        {
-            AddMaxLiveBar((float)e.eventParams - _maxLive);
-            GetGameObj();
-        }
-
-    }
+  
 
 
     //参数 >= 0的时候 直接跳到结果 可以做为开场预设  +血和预设
     public void GetXueNum(float nums)
     {
-        //_cLive = roleDate.live;
         //print("血条长度控制！！");
         _cLive = _cLive + nums > _maxLive ? _maxLive : _cLive + nums;
         if (_cLive < 0) _cLive = 0;
@@ -206,14 +164,6 @@ public class EnemyXueTiao : MonoBehaviour
     // 血效果根据 标的角色数据变化
     void XueChange()
     {
-        //print("hiiiii     "+_maxLive+ "   roleDate.maxLive   "+roleDate.maxLive);
-        //if (_maxLive != roleDate.maxLive)
-        //{
-        //    print(gameObj.tag);
-        //    if (gameObj.tag == "Player" && roleDate) AddMaxLiveBar(roleDate.maxLive-_maxLive);
-        //}
-
-        //_cLive = testNums;
         _cLive = roleDate.live;
         if (_cLive == lastXue) return;
         if (_cLive < 0) _cLive = 0;

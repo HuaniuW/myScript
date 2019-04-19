@@ -30,19 +30,39 @@ public class GlobalSetDate : MonoBehaviour {
     //现在的全局玩家数据
     public UserDate CurrentUserDate;
 
+
+    public bool isGameOver = false;
     private void OnDestroy()
     {
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.ReStart);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.GameOver);
     }
 
     void Start()
     {
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.ReStart);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
     }
 
-    void ReStart(UEvent e)
+    GameObject dieScreen;
+    void GameOver(UEvent e)
     {
-        GetGameDateStart();
+        isGameOver = true;
+        if (dieScreen == null) {
+            print("?????????????????????????");
+            dieScreen = GlobalTools.GetGameObjectByName("DieScreen");
+            dieScreen.GetComponent<DieScreen>().StartAC();
+        }
+        
+        //GetGameDateStart();
+    }
+
+    public void CloseDieScreen()
+    {
+        if (dieScreen != null)
+        {
+            dieScreen.GetComponent<DieScreen>().StopAC();
+            dieScreen.gameObject.SetActive(false);
+            DestroyImmediate(dieScreen.gameObject, true);
+        }
     }
 
     private void Awake()
@@ -70,12 +90,13 @@ public class GlobalSetDate : MonoBehaviour {
             HowToInGame = NEW_GAME;
             InNewGame();
         }
+        isGameOver = false;
         SceneManager.LoadScene("loads");
     }
 
 
     //第一次启动 掉用这里面存储的数据系统
-    public string playerPosition = "";
+    public string playerPosition = "6_-2";
     public string screenName = "g1_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
@@ -263,7 +284,15 @@ public class GlobalSetDate : MonoBehaviour {
         //print("CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
         CurrentUserDate.curLan = player.GetComponent<RoleDate>().lan.ToString();
         CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
-        CurrentUserDate.playerPosition = player.transform.position.x+2 + "_" + player.transform.position.y;
+        if (HowToInGame == TEMP_SCREEN)
+        {
+            CurrentUserDate.playerPosition = player.transform.position.x + "_" + player.transform.position.y;
+        }
+        else
+        {
+            CurrentUserDate.playerPosition = player.transform.position.x + 2 + "_" + player.transform.position.y;
+        }
+        
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
         CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();

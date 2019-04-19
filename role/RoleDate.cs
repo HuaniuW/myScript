@@ -40,6 +40,9 @@ public class RoleDate : MonoBehaviour {
 
     public float team = 1;
 
+    [Header("怪的类型")]
+    public string enemyType = "enemy";
+
 
     public string BeHitVudio
     {

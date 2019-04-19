@@ -20,6 +20,7 @@ public class LoadScreen : MonoBehaviour {
     public void LoadScreenByName(string screenName)
     {
         StartCoroutine(IEStartLoading(screenName));
+        GlobalSetDate.instance.CloseDieScreen();
     }
 
 

@@ -30,7 +30,7 @@ public class Diaoluowu : MonoBehaviour {
             {
                 //徽章 等 装进背包
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
-                print(this.transform.parent.name);
+                //print(this.transform.parent.name);
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.transform.parent.name),this);
             }

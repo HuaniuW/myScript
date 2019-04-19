@@ -71,7 +71,7 @@ public class ScreenChange : MonoBehaviour {
     {
         int displayProgress = 0;
         int toProgress = 0;
-        if (Globals.isDebug) print("screen>  " + scene);
+        //if (Globals.isDebug) print("screen>  " + scene);
         AsyncOperation op = SceneManager.LoadSceneAsync(scene);
         //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
         op.allowSceneActivation = false;

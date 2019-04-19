@@ -44,12 +44,13 @@ public class EventTypeName
     public const string DIE_OUT = "die_out";
 
     public const string GAME_OVER = "game_over";
-
+    public const string GAME_RESTART = "game_restart";
     public const string GAME_SAVEING = "game_saveing";
 
     public const string ADD_MAX_LIVE = "add_max_live";
 
-    //boss出现
+    //boss出现 传入boss链接血条
     public const string BOSS_IS_OUT = "boss_is_out";
     public const string BOSS_IS_DIE = "boss_is_die";
+
 }

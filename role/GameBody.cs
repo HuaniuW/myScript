@@ -936,7 +936,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
         else
         {
-            this.gameObject.SetActive(false);
+            if(this.GetComponent<RoleDate>().enemyType == "enemy")this.gameObject.SetActive(false);
             //DestroyImmediate(this, true);
         }
         //this.gameObject.SetActive(false);

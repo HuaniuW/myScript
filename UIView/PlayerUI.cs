@@ -29,6 +29,7 @@ public class PlayerUI : MonoBehaviour {
 
     public RectTransform screenChangeZZ;
     public Text screenLoadTxt;
+    
     // Use this for initialization
     void Start () {
         // GetTypePC();
@@ -53,11 +54,9 @@ public class PlayerUI : MonoBehaviour {
         btn_zt.onClick.AddListener(GetSetUI);
 
         saveing.GetComponent<CanvasGroup>().alpha = 0;
-
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
         GetMainCamera();
 
         screenChangeZZ.gameObject.SetActive(false);
@@ -69,6 +68,13 @@ public class PlayerUI : MonoBehaviour {
         if (this.screenChangeZZ != null)
         {
             this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;
+            if(ZZAlphaNums == 0&&this.screenChangeZZ.GetComponent<CanvasGroup>().alpha <= 0.2)
+            {
+                this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
+                IsScreenChangeing = false;
+                //防止遮挡鼠标事件
+                screenChangeZZ.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -81,16 +87,14 @@ public class PlayerUI : MonoBehaviour {
         IsScreenChangeing = true;
     }
 
-    public void ShowLoadProgressNums(float nums)
+    public void ShowLoadProgressNums(float nums, bool isHasChangeScreen = false)
     {
         if(nums == 100)
         {
             //IsScreenChangeing = false;
             //this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
             ZZAlphaNums = 0;
-            if (this.screenChangeZZ.GetComponent<CanvasGroup>().alpha == 0) IsScreenChangeing = false;
-            //防止遮挡鼠标事件
-            screenChangeZZ.gameObject.SetActive(false);
+            
         }
         if (screenLoadTxt != null) screenLoadTxt.text = nums + "%";
     }
@@ -104,11 +108,17 @@ public class PlayerUI : MonoBehaviour {
 
     private void OnDestroy()
     {
-        if(Globals.isDebug)print("PlayerUI");
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
-        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
     }
+
+    void RemoveSelfAndRestart(UEvent e)
+    {
+        DestroyImmediate(this.gameObject, true);
+        GlobalSetDate.instance.GetGameDateStart();
+    }
+
+
 
     bool isSaveing = false;
     void GetSaveing(UEvent e)
@@ -148,9 +158,7 @@ public class PlayerUI : MonoBehaviour {
         isSaveing = false;
     }
 
-    void RemoveSelf(UEvent e) {
-        DestroyImmediate(this.gameObject,true);
-    }
+    
 
     GameObject setUI;
     void GetSetUI()

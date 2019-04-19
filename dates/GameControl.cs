@@ -100,7 +100,7 @@ public class GameControl : MonoBehaviour {
     public void GKDateChange(UEvent e)
     {
         //men_1-1 改变门状态
-        if (Globals.isDebug) print(">>>  " + e.eventParams + "  > " + TempCurrentGKDate);
+        //if (Globals.isDebug) print(">>>  " + e.eventParams + "  > " + TempCurrentGKDate);
         //if (TempCurrentGKDate == "") return;
         string changeDate = e.eventParams.ToString();//men_1-1
         string changeDateName = changeDate.Split('-')[0];//men_1
@@ -235,12 +235,12 @@ public class GameControl : MonoBehaviour {
         //print(player.transform.position);
 	}
 
-    GameObject FindObjByName(string _name)
-    {
-        GameObject obj = GameObject.Find("/" + _name) as GameObject;
-        if(obj == null)obj = GameObject.Find("/"+_name+"(Clone)") as GameObject;
-        return obj;
-    }
+    //GameObject FindObjByName(string _name)
+    //{
+    //    GameObject obj = GameObject.Find("/" + _name) as GameObject;
+    //    if(obj == null)obj = GameObject.Find("/"+_name+"(Clone)") as GameObject;
+    //    return obj;
+    //}
 
 
     GameObject InstancePrefabByName(string _name) {
@@ -253,32 +253,31 @@ public class GameControl : MonoBehaviour {
     //找到主角
     void GetPlayer()
     {
-        if (FindObjByName("player") == null)
+        if (GlobalTools.FindObjByName("player") == null)
         {
-            player = InstancePrefabByName("player");
-            print("??????????????");
+            InstancePrefabByName("player");
         }
-        else
-        {
-            player = FindObjByName("player");
-        }
+        player = null;
+        player = GlobalTools.FindObjByName("player");
     }
 
     
 
     void GetPlayerStatus()
     {
+        if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
         {
-            player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+            print("新游戏！");
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
             GlobalSetDate.instance.GetSave();
             GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME)
         {
-            player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+            print("取档进入游戏！");
+            //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN)
@@ -286,6 +285,7 @@ public class GameControl : MonoBehaviour {
             print("转场进入游戏");
             //背包更新
 
+            //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             //指定当前数值
             GlobalSetDate.instance.GetScreenChangeDate();
         } else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.TEMP_SCREEN) {
@@ -293,8 +293,7 @@ public class GameControl : MonoBehaviour {
             GlobalSetDate.instance.GetSave();
             GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
         }
-
-
+        
         //摄像机位置跟随
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
         if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
@@ -314,7 +313,7 @@ public class GameControl : MonoBehaviour {
 
     void GetPlayBag()
     {
-        if (FindObjByName("UI_Bag") == null)
+        if (GlobalTools.FindObjByName("UI_Bag") == null)
         {
             //加载背包
             GlobalTools.GetGameObjectByName("UI_Bag");
@@ -327,16 +326,16 @@ public class GameControl : MonoBehaviour {
     void GetPlayerUI()
     {
         GameObject playerUI;
-        if (FindObjByName("PlayerUI") == null)
+        if (GlobalTools.FindObjByName("PlayerUI") == null)
         {
             playerUI = InstancePrefabByName("PlayerUI");
         }
         else
         {
-            playerUI = FindObjByName("PlayerUI");
+            playerUI = GlobalTools.FindObjByName("PlayerUI");
         }
         //playerUI.GetComponent<DontDistoryObj>().ShowSelf();
-        playerUI.GetComponent<XueTiao>().GetTargetObj(FindObjByName("player"));
+        playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
     }
 
 
@@ -344,7 +343,7 @@ public class GameControl : MonoBehaviour {
     void GetCamersTargetToPlayer()
     {
         //print("hi");
-        this.GetComponent<CameraController>().GetTargetObj(FindObjByName("player").transform);
+        this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ENEMY), null);
     }
 
