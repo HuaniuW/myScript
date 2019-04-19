@@ -69,6 +69,7 @@ public class RoleDate : MonoBehaviour {
         isBeHiting = false;
     }
 
+    //初始硬直
     float csYZ;
     public void addYZ(float yzNums)
     {
