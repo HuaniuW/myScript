@@ -6,9 +6,9 @@ using System;
 public class AITheWay_dcr : MonoBehaviour {
     float theLive;
     [Header("下限1")]
-    public float bz1 = 0.5f;
+    public float bz1 = 0;
     [Header("下限2")]
-    public float bz2 = 0f;
+    public float bz2 = 0;
     // Use this for initialization
     void Start () {
         theLive = this.GetComponent<RoleDate>().live;
