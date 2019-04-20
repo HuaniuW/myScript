@@ -47,7 +47,6 @@ public class GlobalSetDate : MonoBehaviour {
     {
         isGameOver = true;
         if (dieScreen == null) {
-            print("?????????????????????????");
             dieScreen = GlobalTools.GetGameObjectByName("DieScreen");
             dieScreen.GetComponent<DieScreen>().StartAC();
         }
@@ -250,9 +249,9 @@ public class GlobalSetDate : MonoBehaviour {
             }
            
         }
-        print("进场景取数据  "+ gkStr); //gkStr是去掉当前关卡后的数据
+        if (Globals.isDebug) print("进场景取数据  "+ gkStr); //gkStr是去掉当前关卡后的数据
         TempZGuanKaStr = gkStr;
-        print("取完数据后的全局数据  "+ TempZGuanKaStr);
+        if (Globals.isDebug) print("取完数据后的全局数据  "+ TempZGuanKaStr);
         return currentGKDate;
     }
 
@@ -270,7 +269,7 @@ public class GlobalSetDate : MonoBehaviour {
     {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
-        print("CurrentUserDate.mapDate    " + CurrentUserDate.mapDate);
+        if (Globals.isDebug) print("CurrentUserDate.mapDate    " + CurrentUserDate.mapDate);
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
     }
 

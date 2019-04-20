@@ -269,27 +269,27 @@ public class GameControl : MonoBehaviour {
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
         {
-            print("新游戏！");
+            if(Globals.isDebug)print("新游戏！");
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
             GlobalSetDate.instance.GetSave();
             GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME)
         {
-            print("取档进入游戏！");
+            if (Globals.isDebug) print("取档进入游戏！");
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN)
         {
-            print("转场进入游戏");
+            if (Globals.isDebug) print("转场进入游戏");
             //背包更新
 
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             //指定当前数值
             GlobalSetDate.instance.GetScreenChangeDate();
         } else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.TEMP_SCREEN) {
-            print("临时 直接重场景进入的游戏");
+            if (Globals.isDebug) print("临时 直接重场景进入的游戏");
             GlobalSetDate.instance.GetSave();
             GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
         }

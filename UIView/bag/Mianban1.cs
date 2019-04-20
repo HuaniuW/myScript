@@ -74,7 +74,7 @@ public class Mianban1 : MonoBehaviour {
 
     void GetInit()
     {
-        print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
+        if (Globals.isDebug) print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
         //初始化 获取 角色背包加成属性数据
         List<RectTransform> HZs = GetInHZListHZ();
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);

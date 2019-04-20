@@ -82,6 +82,8 @@ public class DieOut : MonoBehaviour {
                 DistorySelf();
                 //派发地图改变事件 标注自己被移除
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.name), this);
+                //还原摄像机的 边界块
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_KUAI_REDUCTION, null), this);
             }
         }
     }

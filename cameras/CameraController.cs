@@ -40,14 +40,46 @@ public class CameraController : MonoBehaviour
         Application.targetFrameRate = 60;
         oldPosition = transform.position;
         //print(obj.transform.position);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CAMERA_KUAI_REDUCTION, this.KiaoReduction);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CAMERA_SHOCK, this.GetShock);
     }
 
-    public void GetBounds(BoxCollider2D bounds) {
+    private void OnDestroy()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CAMERA_KUAI_REDUCTION, this.KiaoReduction);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CAMERA_SHOCK, this.GetShock);
+    }
+
+    void GetShock(UEvent e)
+    {
+        if (e.eventParams.ToString() == "y")
+        {
+            GetShockY();
+        } else if (e.eventParams.ToString() == "z") {
+            GetShockZ();
+        }
+    }
+
+    bool _isChangeKuang = false;
+    public void GetBounds(BoxCollider2D bounds, bool isChangeKuang = false) {
         if (bounds)
         {
             Bounds = bounds;
             getBoundsMinMax();
+            _isChangeKuang = isChangeKuang;
         }
+    }
+
+
+    void KiaoReduction(UEvent e)
+    {
+        if (Bounds.name != "kuang")
+        {
+            Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
+            _isChangeKuang = false;
+            getBoundsMinMax();
+        }
+        if (isChangeByBossAndPlayer) RemoveBoss();
     }
 
     void getBoundsMinMax()
@@ -102,17 +134,21 @@ public class CameraController : MonoBehaviour
         if (!player) return;
         var x = transform.position.x;
         var y = transform.position.y;
+        
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
         //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
         var cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
 
+        //print(cameraHalfWidth + "   wwwwwwwwww   "+ Bounds.size);
+
+
         if (IsFollowing)
         {
-            float xNew = transform.position.x;
-            if (!isXLocked)
-            {
-                xNew = Mathf.Lerp(transform.position.x, player.position.x, Time.deltaTime * smoothing.x);
-            }
+            //float xNew = transform.position.x;
+            //if (!isXLocked)
+            //{
+            //    xNew = Mathf.Lerp(transform.position.x, player.position.x, Time.deltaTime * smoothing.x);
+            //}
 
             float yNew = transform.position.y;
             if (IsHitCameraKuai)
@@ -126,38 +162,42 @@ public class CameraController : MonoBehaviour
                     yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
                 }
             }
-            
-            if (player.position.x <= _min.x + cameraHalfWidth|| player.position.x >= _max.x - cameraHalfWidth)
-            {
-                x = player.position.x;
-                distanceX = 0;
 
-            }
-            else
+            if (!_isChangeKuang)
             {
-                var vx = player.GetComponent<Rigidbody2D>().velocity.x;
-                var xzX = 1.8f;
-
-                if (Mathf.Abs(vx) >= xzX)
+                if (player.position.x <= _min.x + cameraHalfWidth || player.position.x >= _max.x - cameraHalfWidth)
                 {
-                    x = player.position.x - distanceX;
+                    x = player.position.x;
+                    distanceX = 0;
+
                 }
                 else
                 {
-                    distanceX = player.position.x - x;
-                    if (!player.GetComponent<GameBody>().isInAiring)
+                    var vx = player.GetComponent<Rigidbody2D>().velocity.x;
+                    var xzX = 1.8f;
+
+                    if (Mathf.Abs(vx) >= xzX)
                     {
-                        if (player.transform.localScale.x > 0)
+                        x = player.position.x - distanceX;
+                    }
+                    else
+                    {
+                        distanceX = player.position.x - x;
+                        if (!player.GetComponent<GameBody>().isInAiring)
                         {
-                            x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
-                        }
-                        else
-                        {
-                            x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                            if (player.transform.localScale.x > 0)
+                            {
+                                x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+                            }
+                            else
+                            {
+                                x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                            }
                         }
                     }
                 }
             }
+            
 
 
             /**
@@ -195,20 +235,51 @@ public class CameraController : MonoBehaviour
                 y = Mathf.Lerp(y, CameraKuaiY, smoothing.y * Time.deltaTime);
                 if (Mathf.Abs(y - CameraKuaiY) < 0.1) y = CameraKuaiY;
             }
-           
-            
         }
-       
-        //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
-        x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
-        if(!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
-        transform.position = new Vector3(x, y, transform.position.z);//改变相机的位置
+
+        ChangeByBossAndPlayer();
+        if (setNewPosition) SetCameraNewPosition();
+        //float targetX;
+        if (_isChangeKuang)
+        {
+            x = player.position.x;
+            if (x < _min.x + cameraHalfWidth)
+            {
+                if (Mathf.Abs(_min.x + cameraHalfWidth - x) < 0.2f)
+                {
+                    _isChangeKuang = false;
+                }
+
+            }
+            else if (x > _min.x + cameraHalfWidth)
+            {
+                if (Mathf.Abs(_max.x - cameraHalfWidth - x) < 0.2f)
+                {
+                    _isChangeKuang = false;
+                }
+            }
+        }
+        else
+        {
+            //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
+            x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
+        }
+
+        
+
+        if (!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
+
+        if (isShockYing) y = GetShockYing();
+
+        var z = transform.position.z;
+        if (isShockZing) z = GetShockZing();
+
+        transform.position = new Vector3(x, y, z);//改变相机的位置
         //print("2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
 
-        if (setNewPosition) SetCameraNewPosition();
+        
     }
 
-   
 
    
     Vector3 newPositon;
@@ -251,6 +322,172 @@ public class CameraController : MonoBehaviour
     public void BackOldPosition()
     {
         SetNewPosition(oldPosition);
+    }
+
+    //***************************************************************************Z轴根据玩家和BOSS距离变化
+
+    //是否开始自动变距
+    bool isChangeByBossAndPlayer = false;
+    //第一次触发相机变z距 当玩家和boss接近多少触发
+    bool isFirstChange = false;
+    //最大Z的距离点  
+    float MaxMoveToZPos = 20;
+    //Z轴边距距离 需要和初始Z计算
+    float ChangeZDistance;
+    //Y按比例像上移动
+    float MaxYUpDistance = 3;
+    //最小点距离
+    float minPosDistance = 12;
+    //最大点距离
+    float maxPosDistance = 25;
+    //点距离比例限制
+    float PosDistanceLimit;
+    //玩家和BOSS点距离
+    float BossAndPlayerPosDistance;
+
+
+
+    GameObject boss;
+    //获取boss
+    public void GetBossAndMaxZPos(GameObject obj,float MaxZPos = 20) {
+        boss = obj;
+        MaxMoveToZPos = MaxZPos;
+        ChangeZDistance = MaxMoveToZPos - this.transform.position.z;
+        if (ChangeZDistance < 0||boss == null) return;
+        isChangeByBossAndPlayer = true;
+        PosDistanceLimit = maxPosDistance - minPosDistance;
+    }
+
+   
+    //根据玩家与boss x距离 来调整z轴
+    void ChangeByBossAndPlayer()
+    {
+        if (!isChangeByBossAndPlayer) return;
+        if (!isFirstChange)
+        {
+            if (Mathf.Abs(boss.transform.position.x - player.position.x) < 12) {
+                isFirstChange = true;
+            } 
+            return;
+        }
+
+        //计算点距离
+        BossAndPlayerPosDistance = Vector2.Distance(player.position, boss.transform.position);
+        //CameraKuaiZ  = (BossAndPlayerPosDistance - minPosDistance) / PosDistanceLimit* ChangeZDistance;
+        float newZ = oldPosition.z - (BossAndPlayerPosDistance - minPosDistance) / PosDistanceLimit * ChangeZDistance;
+        //float newY;
+        //if (IsHitCameraKuai)
+        //{
+        //    print("??----->      "+(BossAndPlayerPosDistance - minPosDistance) / PosDistanceLimit * MaxYUpDistance);
+        //    newY = CameraKuaiY + (BossAndPlayerPosDistance - minPosDistance) / PosDistanceLimit * MaxYUpDistance;
+        //}
+        //else
+        //{
+        //    newY = oldPosition.y + (BossAndPlayerPosDistance - minPosDistance) / PosDistanceLimit * MaxYUpDistance;
+        //}
+        if (newZ < -20) newZ = -20;
+        if (newZ > oldPosition.z) newZ = oldPosition.z;
+        float _x;
+        if (player.position.x > boss.transform.position.x)
+        {
+            _x = player.position.x - (Mathf.Abs(boss.transform.position.x- player.position.x) * 0.5f)-15;
+        }
+        else
+        {
+            _x = player.position.x + (Mathf.Abs(boss.transform.position.x - player.position.x) * 0.5f)+15;
+        }
+        //_x = boss.transform.position.x;
+        //print("_x    "+_x);
+        Vector3 newPos = new Vector3(_x, this.transform.position.y, newZ);
+        SetNewPosition(newPos);
+       
+
+    }
+
+    //移除boss
+    public void RemoveBoss()
+    {
+        boss = null;
+        isChangeByBossAndPlayer = false;
+        isFirstChange = false;
+        BackOldPosition();
+    }
+
+
+
+    //**********************************************************震动 Y  和 Z
+
+    bool isShockY = false;
+    bool isShockYing = false;
+    float targetY;
+    //弹力系数
+    float spring = 1f;
+    //摩擦力  摩擦力与弹力系数越接近 持续时间越长
+    float friction = 0.9f;
+    float vy = 0;
+
+    float newY2;
+    void GetShockY()
+    {
+        newY2 = this.transform.position.y;
+        if (!isShockY)
+        {
+            isShockY = true;
+            isShockYing = true;
+            targetY = newY2 + 0.5f;
+        }
+    }
+
+
+
+    float GetShockYing()
+    {
+        newY2 = this.transform.position.y;
+        if (isShockYing)
+        {
+            vy += (targetY - newY2) * spring;
+            newY2 += (vy *= friction);
+
+            if(decimal.Round(decimal.Parse(newY2.ToString()), 2) == decimal.Round(decimal.Parse(targetY.ToString()), 2))
+            {
+                isShockYing = false;
+                isShockY = false;
+            }
+        }
+        return newY2;
+    }
+
+    float targetZ;
+    bool isShockZ = false;
+    bool isShockZing = false;
+    float vz = 0;
+    float newZ2;
+    void GetShockZ()
+    {
+        newZ2 = this.transform.position.z;
+        if (!isShockZ)
+        {
+            isShockZ = true;
+            isShockZing = true;
+            targetZ = newZ2 + 2f;
+        }
+    }
+
+    float GetShockZing()
+    {
+        newZ2 = this.transform.position.z;
+        if (isShockZing)
+        {
+            vz += (targetZ - newZ2) * spring;
+            newZ2 += (vz *= friction);
+
+            if (decimal.Round(decimal.Parse(newZ2.ToString()), 2) == decimal.Round(decimal.Parse(targetZ.ToString()), 2))
+            {
+                isShockZing = false;
+                isShockZ = false;
+            }
+        }
+        return newZ2;
     }
 
 

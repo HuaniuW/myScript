@@ -23,6 +23,11 @@ public class JG_BossIn : MonoBehaviour {
     public AudioSource SeeBossAudio;
     [Header("遇见boss背景音乐")]
     public AudioSource SeeBossBGAudio;
+    [Header("改变摄像机边界")]
+    public string ChangeKuaiName = "kuang1";
+
+    [Header("摄像机是否跟随玩家和boss距离改变Z")]
+    public bool IsChangeZByBossAndPlayerDistance = false;
     //防止重复碰撞播放
     bool IsPlayerIn = false;
 
@@ -84,6 +89,10 @@ public class JG_BossIn : MonoBehaviour {
     {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, ShowSelf);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_OUT, BossName), this);
+        //if(IsChangeZByBossAndPlayerDistance) GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBossAndMaxZPos(GlobalTools.FindObjByName(BossName));
+        if(ChangeKuaiName!="kuang1")GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(GlobalTools.FindObjByName(ChangeKuaiName).GetComponent<BoxCollider2D>(),true);
+        
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "y"), this);
     }
 
 

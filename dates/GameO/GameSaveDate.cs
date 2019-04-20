@@ -53,7 +53,7 @@ public class GameSaveDate{
     public void SaveDateByURLName(string URL,UserDate date)
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;
-        Debug.Log("_fileURL2> "+ _fileURL2);
+        if (Globals.isDebug) Debug.Log("_fileURL2> "+ _fileURL2);
         string s = SerializeObject(date, typeof(UserDate));
         //创建XML文件且写入数据
         CreateTextFile(_fileURL2, s, false);

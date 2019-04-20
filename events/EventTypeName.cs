@@ -52,5 +52,8 @@ public class EventTypeName
     //boss出现 传入boss链接血条
     public const string BOSS_IS_OUT = "boss_is_out";
     public const string BOSS_IS_DIE = "boss_is_die";
-
+    //摄像机边界块还原
+    public const string CAMERA_KUAI_REDUCTION = "boss_is_reduction";
+    //摄像机震动
+    public const string CAMERA_SHOCK = "boss_shock";
 }
