@@ -76,7 +76,7 @@ public class PlayerGameBody : GameBody {
     /// </summary>
     void CheckIsHasAC()
     {
-        if (!DBBody.animation.HasAnimation(STAND)) BEHIT = "stand_1";
+        if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_1";
         if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
     }
 

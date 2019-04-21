@@ -270,7 +270,6 @@ public class GameControl : MonoBehaviour {
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
         {
             if(Globals.isDebug)print("新游戏！");
-            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
             GlobalSetDate.instance.GetSave();
             GlobalSetDate.instance.HowToInGame = GlobalSetDate.LOAD_GAME;
         }

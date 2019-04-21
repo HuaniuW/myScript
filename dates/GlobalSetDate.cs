@@ -26,7 +26,7 @@ public class GlobalSetDate : MonoBehaviour {
     public bool isFirstInGame = true;
 
     //是否是从取档进入
-    public bool isInFromSave = true;
+    public bool isInFromSave = false;
     //现在的全局玩家数据
     public UserDate CurrentUserDate;
 
@@ -49,6 +49,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (dieScreen == null) {
             dieScreen = GlobalTools.GetGameObjectByName("DieScreen");
             dieScreen.GetComponent<DieScreen>().StartAC();
+            isInFromSave = true;
         }
         
         //GetGameDateStart();

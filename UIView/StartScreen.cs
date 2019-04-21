@@ -159,7 +159,7 @@ public class StartScreen : MonoBehaviour {
 
 
 
-        //GlobalSetDate.instance.isInFromSave = true;
+        GlobalSetDate.instance.isInFromSave = true;
         //GlobalSetDate.instance.GetGameDateStart();
         //if (!UI_Save) UI_Save = GlobalTools.GetGameObjectByName("UI_Save");
     }

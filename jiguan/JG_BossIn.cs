@@ -92,7 +92,7 @@ public class JG_BossIn : MonoBehaviour {
         //if(IsChangeZByBossAndPlayerDistance) GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBossAndMaxZPos(GlobalTools.FindObjByName(BossName));
         if(ChangeKuaiName!="kuang1")GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(GlobalTools.FindObjByName(ChangeKuaiName).GetComponent<BoxCollider2D>(),true);
         
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "y"), this);
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "y"), this);
     }
 
 

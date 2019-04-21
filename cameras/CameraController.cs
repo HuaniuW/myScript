@@ -162,13 +162,19 @@ public class CameraController : MonoBehaviour
                     yNew = Mathf.Lerp(transform.position.y, player.position.y, Time.deltaTime * smoothing.y);
                 }
             }
-
+            //x = player.position.x;
             if (!_isChangeKuang)
             {
                 if (player.position.x <= _min.x + cameraHalfWidth || player.position.x >= _max.x - cameraHalfWidth)
                 {
-                    x = player.position.x;
-                    distanceX = 0;
+                    //if (player.position.x <= _min.x + cameraHalfWidth) {
+                    //    x = _min.x + cameraHalfWidth;
+                    //} else if(player.position.x >= _max.x - cameraHalfWidth)
+                    //{
+                    //    x = _max.x - cameraHalfWidth;
+                    //}
+
+                    //distanceX = 0;
 
                 }
                 else
@@ -187,17 +193,17 @@ public class CameraController : MonoBehaviour
                         {
                             if (player.transform.localScale.x > 0)
                             {
-                                x = Mathf.Lerp(x, player.position.x - Margin.x, smoothing.x * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
                             }
                             else
                             {
-                                x = Mathf.Lerp(x, player.position.x + Margin.x, smoothing.x * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
                             }
                         }
                     }
                 }
             }
-            
+
 
 
             /**
@@ -434,7 +440,7 @@ public class CameraController : MonoBehaviour
         {
             isShockY = true;
             isShockYing = true;
-            targetY = newY2 + 0.5f;
+            targetY = newY2 + 0.2f;
         }
     }
 
