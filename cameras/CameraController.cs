@@ -180,7 +180,7 @@ public class CameraController : MonoBehaviour
                 else
                 {
                     var vx = player.GetComponent<Rigidbody2D>().velocity.x;
-                    var xzX = 1.8f;
+                    var xzX = 1f;
 
                     if (Mathf.Abs(vx) >= xzX)
                     {
@@ -193,11 +193,11 @@ public class CameraController : MonoBehaviour
                         {
                             if (player.transform.localScale.x > 0)
                             {
-                                x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x - Margin.x, xzX * Time.deltaTime);
                             }
                             else
                             {
-                                x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x + Margin.x, xzX * Time.deltaTime);
                             }
                         }
                     }
