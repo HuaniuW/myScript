@@ -42,6 +42,8 @@ public class MyDrag : CanTouchBox
         {
             //计算图片中心和鼠标点的差值
             offset = imgRect.anchoredPosition - mouseUguiPos;
+            //显示点击徽章的数据
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.HZ_TOUCH, this.GetComponent<HZDate>()), this);
         }
     }
 

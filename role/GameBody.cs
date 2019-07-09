@@ -122,6 +122,8 @@ public class GameBody : MonoBehaviour, IRole {
         isQianhuaing = false;
         isAcing = false;
         isYanchi = false;
+        isSkilling = false;
+        isSkillOut = false;
     }
 
     protected RoleDate roleDate;
@@ -318,8 +320,16 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void GetDodge1()
     {
-        if (roleDate.isBeHiting||isAcing) return;
-        if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP) return;
+
+        if (isInAiring && isDodgeing && DBBody.animation.lastAnimationName == STAND)
+        {
+            print("-------------------------------------------------->BUG!");
+        }
+
+        if (roleDate.isBeHiting||isAcing||isDodgeing) return;
+        
+
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP|| DBBody.animation.lastAnimationName == JUMPHITWALL) return;
         float testSpeed;
         if (isInAiring)
         {
@@ -361,22 +371,39 @@ public class GameBody : MonoBehaviour, IRole {
 
     void Dodge1()
     {
-        if (isInAiring)
+
+        if (isDodgeing && IsHitMQWall && isInAiring)
+        {
+            //碰到墙
+            if (DBBody.animation.lastAnimationName != JUMPHITWALL) DBBody.animation.GotoAndPlayByFrame(JUMPHITWALL, 0, 1);
+            //isJump2 = false;
+            isJumping2 = false;
+            isDowning = false;
+
+            isDodge = false;
+            isDodgeing = false;
+
+            roleDate.isCanBeHit = true;
+            
+            playerRigidbody2D.gravityScale = 4.5f;
+            return;
+        }
+        
+        if ((DBBody.animation.lastAnimationName == DODGE1 || DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
+        {
+            isDodge = false;
+            isDodgeing = false;
+            roleDate.isCanBeHit = true;
+            playerRigidbody2D.gravityScale = 4.5f;
+        }
+
+        if (isInAiring&& isDodgeing)
         {
             playerRigidbody2D.gravityScale = 0;
             playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, -1);
         }
         else
         {
-            playerRigidbody2D.gravityScale = 4.5f;
-        }
-
-
-        if ((DBBody.animation.lastAnimationName == DODGE1 || DBBody.animation.lastAnimationName == DODGE2) && DBBody.animation.isCompleted)
-        {
-            isDodge = false;
-            isDodgeing = false;
-            roleDate.isCanBeHit = true;
             playerRigidbody2D.gravityScale = 4.5f;
         }
     }
@@ -494,16 +521,11 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void TurnRight()
     {
-        print(">>>>    " + this.transform.localScale);
-        bodyScale.x = -1;
-        this.transform.localScale = bodyScale;
-        print(">>>>2    " + this.transform.localScale);
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(0.1f, 0));
-        if (bodyScale.x == 1) {
+        if (bodyScale.x == 1)
+        {
             bodyScale.x = -1;
             this.transform.localScale = bodyScale;
         }
-
     }
 
     public void TurnLeft()
@@ -513,8 +535,6 @@ public class GameBody : MonoBehaviour, IRole {
             bodyScale.x = 1;
             this.transform.localScale = bodyScale;
         }
-
-
     }
 
     public virtual void RunRight(float horizontalDirection, bool isWalk = false)
@@ -539,6 +559,7 @@ public class GameBody : MonoBehaviour, IRole {
         isRunLefting = false;
 
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        //print("right "+ horizontalDirection);
         Run();
     }
 
@@ -726,6 +747,21 @@ public class GameBody : MonoBehaviour, IRole {
     protected virtual void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+
+        if (isDodgeing && IsHitMQWall && isInAiring)
+        {
+            //碰到墙
+            if (DBBody.animation.lastAnimationName != JUMPHITWALL) DBBody.animation.GotoAndPlayByFrame(JUMPHITWALL, 0, 1);
+            //isJump2 = false;
+            isJumping2 = false;
+            isDowning = false;
+            isDodgeing = false;
+            isDodge = false;
+            playerRigidbody2D.gravityScale = 4.5f;
+            return;
+        }
+
+
         if (isDodgeing||isAcing) return;
         isInAiring = !IsGround;
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
@@ -756,11 +792,11 @@ public class GameBody : MonoBehaviour, IRole {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
             {
-                //print("1");
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
+                MoveVX(0);
             }
         }
 
@@ -824,7 +860,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void Stand()
     {
-        if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
+        //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
@@ -899,6 +935,8 @@ public class GameBody : MonoBehaviour, IRole {
         this.transform.localScale = bodyScale;
        
         GameOver();
+
+        //print("----------------------------------------------------------------------------PlayerStart");
     }
 
     public virtual void GameOver()
@@ -936,7 +974,11 @@ public class GameBody : MonoBehaviour, IRole {
         }
         else
         {
-            if(this.GetComponent<RoleDate>().enemyType == "enemy")this.gameObject.SetActive(false);
+            if (this.GetComponent<RoleDate>().enemyType == "enemy") {
+                //Destroy(this);
+                this.gameObject.SetActive(false);
+            }
+            
             //DestroyImmediate(this, true);
         }
         //this.gameObject.SetActive(false);
@@ -1094,6 +1136,8 @@ public class GameBody : MonoBehaviour, IRole {
     //反击 被攻击动作清零
     public void FanJiBeHitReSet()
     {
+        isSkilling = false;
+        isSkillOut = false;
         roleDate.isBeHiting = false;
         roleDate.isBeHit = false;
     }
@@ -1147,12 +1191,12 @@ public class GameBody : MonoBehaviour, IRole {
         if (IsHitMQWall && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > 3) {
             
             _yanmu2.Play();
-            if(GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(true);
+            //if(GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(true);
         }
         else
         {
             _yanmu2.Stop();
-            if (GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(false);
+            //if (GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(false);
         }
     }
 
@@ -1180,6 +1224,7 @@ public class GameBody : MonoBehaviour, IRole {
     public int canMoveNums = 100;
     protected bool isAcing = false;
 	string _acName;
+
     public string GetAcMsg(string acName)
     {
 
@@ -1314,7 +1359,23 @@ public class GameBody : MonoBehaviour, IRole {
         //print(type+" ???time  "+eventObject);
     }
 
-  
+    bool isSkilling = false;
+    public void GetSkillBeginEffect(string skillName) {
+        //判断是否有该技能
+        //获取技能信息 
+        //vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(skillName, DataZS.GetInstance()));
+        isSkilling = true;
+        //播放技能动作
+        vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(skillName, DataZS.GetInstance()));
+
+        //GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName, true);
+        //DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+        //GetAtk(skillName);
+        GetAcMsg(vOAtk.atkName);
+        isSkillOut = true;
+    }
+
+    bool isSkillOut = false;
 
 
     //显示动作特效 龙骨的侦听事件
@@ -1324,6 +1385,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (type == EventObject.SOUND_EVENT)
         {
             //print("eventName:  "+eventObject.name);
+            //if (eventObject.name == "jumpHitWall") return;
             if (eventObject.name == "runG1") return;
             //if(eventObject.name=="run1"|| eventObject.name == "run2") _yanmu.Play();
             GetComponent<RoleAudio>().PlayAudio(eventObject.name);
@@ -1332,13 +1394,29 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (type == EventObject.FRAME_EVENT)
         {
+            if (eventObject.name == "jn_begin") {
+                //释放准备动作的特效
+                if (isSkilling) {
+                    GetComponent<ShowOutSkill>().ShowOutSkillBeginEffectByName(vOAtk.skillBeginEffect);
+                    isSkilling = false;
+                }
+            }
+
+
             if (eventObject.name == "ac")
             {
-                //print("vOAtk.atkName   "+ vOAtk.txName);
                 if (isAcing)
                 {
-                    //技能释放点
-                    GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                    if (isSkillOut) {
+                        GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName, true);
+                        isSkillOut = false;
+                    }
+                    else
+                    {
+                        //技能释放点
+                        GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                    }
+                   
                 }
                 else {
                     //print("普通攻击的特效名字  "+vOAtk.txName);
@@ -1350,6 +1428,11 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
         
+    }
+
+    public bool GetIsACing()
+    {
+        return isAcing;
     }
     
     float jisuqi = 0;

@@ -33,7 +33,7 @@ public class Gezi : MonoBehaviour {
     public void GetInObj(RectTransform obj,bool isChange = false,bool isOldObjOut = false)
     {
         _obj = obj;
-        RectTransform _OldRQ = _obj.GetComponent<MyDrag>().OldRQ;
+        RectTransform _OldRQ = _obj.GetComponent<MyDrag>().OldRQ; 
         if (_OldRQ != null&&!isChange)
         {
             _OldRQ.GetComponent<Gezi>().GetOutObj();
@@ -75,9 +75,14 @@ public class Gezi : MonoBehaviour {
 
         _obj.GetComponent<MyDrag>().OldRQ = this.GetComponent<RectTransform>();
         _obj.transform.position = this.transform.position;
+        //print("--------------------->   "+ this.GetComponent<RectTransform>().sizeDelta.x + "  -------------  "+ this.GetComponent<RectTransform>().sizeDelta.y);
+        //改变徽章大小 与格子大小同步
+        _obj.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
+        //print("????????????????????????????????");
+
     }
 
-   
+
 
 
 }

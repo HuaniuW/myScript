@@ -9,6 +9,13 @@ public class JN_Date : MonoBehaviour {
     public float _xdx = 0;
     [Header("相对位置y")]
     public float _xdy = 0;
+
+    [Header("hitKuai相对位置x")]
+    public float hitKuai_xdx = 0;
+    [Header("hitKuai相对位置y")]
+    public float hitKuai_xdy = 0;
+
+
     [Header("宽")]
     public float _scaleW = 1;
     [Header("普通攻击碰撞快的宽的缩放")]

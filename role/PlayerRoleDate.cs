@@ -171,6 +171,18 @@ public class PlayerRoleDate : RoleDate
         }
         //print("气血徽章- 事件发送！！！！！");
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
+        GetPlayerMsg();
+    }
+
+    //获取玩家数据信息
+    public string GetPlayerMsg()
+    {
+        string str =Globals.language == Globals.CHINESE ? "<color=#FDFEFE>角色信息</color>\n\n" : "<color=#FDFEFE>Player information</color>\n\n";
+        string _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live+"/"+this.maxLive + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "/" + this.maxLive + "</color>\n";
+        string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
+        string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
+        str += _liveStr + _atkStr + _defStr;
+        return str;
     }
 
     //徽章的倍数变化
@@ -198,6 +210,7 @@ public class PlayerRoleDate : RoleDate
                 }
             }
         }
+        GetPlayerMsg();
     }
 
     List<string> beishuArr = new List<string>();

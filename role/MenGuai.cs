@@ -17,6 +17,17 @@ public class MenGuai : MonoBehaviour {
         if (!isOpen && this.GetComponent<RoleDate>().isDie)
         {
             isOpen = true;
+            var strArr = DoorNum.Split(',');
+            if (strArr.Length > 1)
+            {
+                for(var i=0; i< strArr.Length; i++)
+                {
+                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, strArr[i]), this);
+                }
+                return;
+            }
+            //var s = "sss";
+            //print(s.Split(',')[0]);
             //print("men?  "+this.DoorNum);
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, DoorNum), this);
         }

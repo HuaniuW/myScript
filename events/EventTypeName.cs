@@ -56,4 +56,12 @@ public class EventTypeName
     public const string CAMERA_KUAI_REDUCTION = "boss_is_reduction";
     //摄像机震动
     public const string CAMERA_SHOCK = "boss_shock";
+
+
+    public const string GAME_LANGUAGE = "game_language";
+
+    public const string BAG_OPEN = "bag_open";
+
+    //点到徽章时 派发 徽章信息 来刷新 徽章面板信息
+    public const string HZ_TOUCH = "hz_touch";
 }

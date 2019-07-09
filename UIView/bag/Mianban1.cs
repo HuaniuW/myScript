@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Mianban1 : MonoBehaviour {
     public RectTransform gezi1;
@@ -40,6 +41,10 @@ public class Mianban1 : MonoBehaviour {
     public AudioSource cuowu;
     public AudioSource chose;
 
+    public Text HZ_information;
+
+    public Text Player_information;
+
     //被选中的物品
     RectTransform beChoseWP = null;
     void Start() {
@@ -50,7 +55,8 @@ public class Mianban1 : MonoBehaviour {
         RectTransform[] HZzdjn = {gezi26, gezi27 };
         HZzhudongjineng.AddRange(HZzdjn);
         //所有格子
-        RectTransform[] t = { gezi1, gezi2 ,gezi3,gezi4,gezi5,gezi6, gezi7, gezi8, gezi9, gezi10, gezi11, gezi12, gezi13, gezi14, gezi15, gezi16, gezi17, gezi18, gezi19, gezi20, gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
+        //RectTransform[] t = { gezi1, gezi2 ,gezi3,gezi4,gezi5,gezi6, gezi7, gezi8, gezi9, gezi10, gezi11, gezi12, gezi13, gezi14, gezi15, gezi16, gezi17, gezi18, gezi19, gezi20, gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
+        RectTransform[] t = { gezi1, gezi2, gezi3, gezi4, gezi5, gezi6, gezi7, gezi8, gezi9, gezi10, gezi11, gezi12, gezi13, gezi14, gezi15, gezi16, gezi17, gezi18, gezi19, gezi20, gezi21, gezi22, gezi23,  gezi26};
         geziArr.AddRange(t);
         //测试用
         //string[] t2 = { "huizhang4_1", "huizhang5_6","huizhang1_8", "huizhang2_9" };
@@ -65,24 +71,47 @@ public class Mianban1 : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_OBJ_NAME, this.GetObjByName);
         //初始化
         GetInit();
+        getRQ = gezi1;
+        GetHZInformation();
+        if (HZ_information != null) HZ_information.text = "哈哈哈哈哈 \n 我去";
+
     }
 
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_OBJ_NAME, this.GetObjByName);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BAG_OPEN, this.BagOpen);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_HZ, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JIAXUE, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.HZ_TOUCH, ClickGetHZInformation);
     }
 
     void GetInit()
     {
-        if (Globals.isDebug) print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
+        //if (Globals.isDebug) print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
         //初始化 获取 角色背包加成属性数据
         List<RectTransform> HZs = GetInHZListHZ();
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);
 
         List<RectTransform> HZs2 = GetZDJNList();
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ZD_SKILL, HZs2), this);
-        
 
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BAG_OPEN,this.BagOpen);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HZ, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JIAXUE, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, ShowPlayerInformation);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.ShowPlayerInformation);
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.HZ_TOUCH, ClickGetHZInformation);
+
+    }
+
+    void BagOpen(UEvent e)
+    {
+        GetHZInformation();
+        ShowPlayerInformation();
     }
 
    //将背包数据 物品放入背包格子
@@ -270,17 +299,6 @@ public class Mianban1 : MonoBehaviour {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     RectTransform getRQ = null;
     void FindNearestQR(string fx)
     {
@@ -296,7 +314,7 @@ public class Mianban1 : MonoBehaviour {
             //获取在我上方的容器list
             foreach (var rq in geziArr)
             {
-                if (Mathf.Abs(rq.transform.position.x-kuang.transform.position.x)< wcjl && rq.transform.position.y > kuang.transform.position.y)
+                if (Mathf.Abs(rq.transform.position.x-kuang.transform.position.x)< wcjl && (int)rq.transform.position.y > (int)kuang.transform.position.y)
                 {
                     tempList.Add(rq);
                 }
@@ -306,7 +324,7 @@ public class Mianban1 : MonoBehaviour {
         {
             foreach (var rq in geziArr)
             {
-                if (Mathf.Abs(rq.transform.position.x - kuang.transform.position.x) < wcjl && rq.transform.position.y < kuang.transform.position.y)
+                if (Mathf.Abs(rq.transform.position.x - kuang.transform.position.x) < wcjl && (int)rq.transform.position.y < (int)kuang.transform.position.y)
                 {
                     tempList.Add(rq);
                 }
@@ -316,7 +334,7 @@ public class Mianban1 : MonoBehaviour {
         {
             foreach (var rq in geziArr)
             {
-                if (Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl && rq.transform.position.x > kuang.transform.position.x)
+                if (Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl && (int)rq.transform.position.x > (int)kuang.transform.position.x)
                 {
                     tempList.Add(rq);
                 }
@@ -326,7 +344,7 @@ public class Mianban1 : MonoBehaviour {
         {
             foreach (var rq in geziArr)
             {
-                if (Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl && rq.transform.position.x < kuang.transform.position.x)
+                if (Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl && (int)rq.transform.position.x < (int)kuang.transform.position.x)
                 {
                     tempList.Add(rq);
                 }
@@ -358,10 +376,38 @@ public class Mianban1 : MonoBehaviour {
 
         if (getRQ != null) {
             kuang.position = getRQ.position;
+            GetHZInformation();
             GlobalTools.PlayAudio("chose", this);
         }
-
     }
+
+    //获取徽章信息
+    void GetHZInformation()
+    {
+        if (!getRQ) return; 
+        if (getRQ.GetComponent<Gezi>().IsHasObj())
+        {
+            print("徽章名字： " + getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().HZName);
+
+            HZ_information.text = getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().GetHZ_information_str();
+        }
+        else
+        {
+            HZ_information.text = "";
+        }
+    }
+
+    public void ClickGetHZInformation(UEvent e)
+    {
+        HZDate _hzDate = e.eventParams as HZDate;
+        HZ_information.text = _hzDate.GetHZ_information_str();
+    }
+
+    void ShowPlayerInformation(UEvent e = null)
+    {
+        Player_information.text = GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().GetPlayerMsg();
+    }
+
 
     public void PlaySoundByName(string sName)
     {

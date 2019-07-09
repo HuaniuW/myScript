@@ -40,6 +40,7 @@ public class JN_base : MonoBehaviour
         sacaleX = _sacaleX;
         //根据数据 获取新的位置 
         _position = new Vector3(_position.x + jn_date._xdx * _sacaleX, _position.y + jn_date._xdy, _position.z);
+        //print("_position     "+ _position);
         //指定特效位置
         this.transform.position = _position;
 		//print("jn_date._scaleW     "+jn_date._scaleW);
@@ -51,7 +52,14 @@ public class JN_base : MonoBehaviour
             ShowHitFK();
         }
         else {
-            if(_hitKuai!=null) _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject,true);
+            if (_hitKuai != null) {
+                _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject, true);
+            }
+            else
+            {
+                ShowHitFK();
+            }
+            
         }
 
         //特效缩放大小
@@ -69,7 +77,6 @@ public class JN_base : MonoBehaviour
             this.transform.localScale = new Vector3(-jn_date._scaleW, -jn_date._scaleW, -jn_date._scaleW);
         }
 
-        
 
         if (jn_date._type == "2"|| jn_date._type == "3") {
             //2 持续型
@@ -90,7 +97,7 @@ public class JN_base : MonoBehaviour
         GameObject hitFK = ObjectPools.GetInstance().SwpanObject2(Resources.Load("hit_fk") as GameObject);
         hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject);
         hitFK.transform.localScale = new Vector3(jn_date.hitKuaiSW, jn_date.hitKuaiSH, 1);
-        Vector3 nv3 = new Vector3(this.transform.position.x - sacaleX, this.transform.position.y, this.transform.position.z);
+        Vector3 nv3 = new Vector3(this.transform.position.x - sacaleX*jn_date.hitKuai_xdx, this.transform.position.y+jn_date.hitKuai_xdy, this.transform.position.z);
         hitFK.transform.position = nv3;
 
     }
@@ -120,6 +127,7 @@ public class JN_base : MonoBehaviour
         {
             //2 持续型
             //3 持续并且碰到就消失
+            //print("2222222222222222222222222222222222222     "+jn_date.moveXSpeed);
             if(gameObject.GetComponent<Rigidbody2D>()!=null) gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed,jn_date.moveYSpeed);
             //print(transform.GetComponent<Rigidbody2D>().velocity);
         }

@@ -27,6 +27,8 @@ public class VOAtk : MonoBehaviour {
 
     public int bianzhaochidu = 0;
 
+    public string skillBeginEffect;
+
 
     // Use this for initialization
     void Start () {
@@ -49,6 +51,9 @@ public class VOAtk : MonoBehaviour {
         }
         if (dict.ContainsKey("yanchiNum")) this.yanchiNum = int.Parse(dict["yanchiNum"]);
         if(dict.ContainsKey("bianzhaochidu"))this.bianzhaochidu = int.Parse(dict["bianzhaochidu"]);
+        if (dict.ContainsKey("skillBeginEffect")) {
+            this.skillBeginEffect = dict["skillBeginEffect"];
+        }
     }
 	
 	

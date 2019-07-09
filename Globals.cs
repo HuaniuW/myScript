@@ -18,12 +18,18 @@ public class Globals : MonoBehaviour {
 
     public static bool isDebug = true;
 
-    public static bool isPC = true;
+    public static bool isPC = false;
 
     //防止虚拟按键 和键盘按键 冲突 导致虚拟按键跑动出问题
     public static bool isXNBtn = false;
 
     public static bool isGameOver = false;
+
+    //语言 english
+    public static string language = "chinese";
+
+    public const string CHINESE = "chinese";
+    public const string ENGLISH = "english";
     // Use this for initialization
     void Start () {
 		

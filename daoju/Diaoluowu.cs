@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class Diaoluowu : MonoBehaviour {
     public string objName;
 
@@ -40,6 +40,21 @@ public class Diaoluowu : MonoBehaviour {
             }else if (type == 3) {
                 //血瓶
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_XP, 1), this);
+            }else if (type == 4)
+            {
+                //存档测试点
+               
+                print("存档！！！" + this.name);
+                //加血用
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_DIAOLUOWU, "C_cundangdian"), this);
+                //显示存档提示
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_SAVEING, null), this);
+
+                string JGMsg = "JG_"+ SceneManager.GetActiveScene().name + "-" + GlobalTools.FindObjByName("MainCamera").GetComponent<GuaiOutControl>().JGNum.ToString();
+                print("------------------------------------------>>>>临时存档点    "+ JGMsg);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, JGMsg), this);
+
+                GlobalSetDate.instance.GetSave();
             }
             
           

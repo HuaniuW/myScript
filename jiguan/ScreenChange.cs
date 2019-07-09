@@ -54,6 +54,7 @@ public class ScreenChange : MonoBehaviour {
         {
             if (Coll.transform.GetComponent<RoleDate>().isDie) return;
             ChangeScreen();
+            Coll.GetComponent<GameBody>().GetStand();
         }
     }
 

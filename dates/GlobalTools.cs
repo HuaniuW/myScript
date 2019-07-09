@@ -38,6 +38,7 @@ public class GlobalTools : MonoBehaviour {
     /// <returns></returns>
     public static GameObject GetGameObjectByName(string ObjName)
     {
+        //print("ObjName    "+ ObjName);
         GameObject obj = Resources.Load(ObjName) as GameObject;
         obj = Instantiate(obj);
         return obj;
@@ -87,5 +88,34 @@ public class GlobalTools : MonoBehaviour {
         //print("  type " + type+ "    fieldInfo  "+ fieldInfo);
         if (fieldInfo == null) return null;
         return fieldInfo.GetValue(obj) as AudioSource;
+    }
+
+
+    public static bool IsHasDate(string changeDate, string[] currentGKDateArr)
+    {
+        string name = changeDate.Split('-')[0];
+        for (var i = 0; i < currentGKDateArr.Length; i++)
+        {
+            string date = currentGKDateArr[i];
+            string dateName = date.Split('-')[0];
+            if (name == dateName) return true;
+        }
+        return false;
+    }
+
+    public static string GetHasDate(string changeDate, string[] currentGKDateArr)
+    {
+        string getDate = "";
+        string name = changeDate.Split('-')[0];
+        for (var i = 0; i < currentGKDateArr.Length; i++)
+        {
+            string date = currentGKDateArr[i];
+            string dateName = date.Split('-')[0];
+            if (name == dateName) {
+                getDate = date;
+                return getDate;
+            }
+        }
+        return getDate;
     }
 }

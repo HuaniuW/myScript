@@ -229,6 +229,7 @@ public class AIBase : MonoBehaviour {
         if (lie == -1) lie = GetLie();
         string zs = "";
         //print("atkNum   "+ atkNum+"  length  "+ carr.Length);
+        if(atkNum >= carr.Length) GetAtkNumReSet();
         if (atkNum < carr.Length)
         {
             zs = carr[atkNum];
@@ -318,6 +319,7 @@ public class AIBase : MonoBehaviour {
 
     //动作名称
     protected string acName = "";
+    protected string jn_effect = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
     protected void GetAtkFS()
@@ -339,6 +341,11 @@ public class AIBase : MonoBehaviour {
             else
             {
                 DontNear = false;
+            }
+
+            if (strArr[0] == "jn") {
+                jn_effect = acName;
+                acName = "jn";
             }
 
 
@@ -385,6 +392,12 @@ public class AIBase : MonoBehaviour {
                 if(Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
             }
 
+            return;
+        }
+
+        if(acName == "jn")
+        {
+            JNAtk();
             return;
         }
 
@@ -588,5 +601,28 @@ public class AIBase : MonoBehaviour {
             }
         }
 	}
+
+    protected void JNAtk()
+    {
+        //这种如果再次超出攻击距离会再追踪
+        if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
+        {
+
+            isActioning = true;
+            if (!DontNear) ZhuanXiang();
+            GetComponent<GameBody>().GetSkillBeginEffect(jn_effect);
+            atkNum++;
+            //GetAtk();
+        }
+
+        if (isActioning)
+        {
+            if (!GetComponent<GameBody>().GetIsACing())
+            {
+                isActioning = false;
+                isAction = false;
+            }
+        }
+    }
 
 }

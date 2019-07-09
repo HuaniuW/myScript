@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HitKuai2 : MonoBehaviour
 {
+    public bool IsPlayAudio = true;
 
     public int teamNum;
     // Use this for initialization
@@ -110,6 +111,8 @@ public class HitKuai2 : MonoBehaviour
         //判断是否在空中
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
+
+        if (!IsPlayAudio) return;
         HitTX(_psScaleX, "BloodSplatCritical2D1");
         HitTX(_psScaleX, "jizhong", roleDate.beHitVudio);
     }
@@ -121,7 +124,7 @@ public class HitKuai2 : MonoBehaviour
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         hitTx.transform.position = gameBody.transform.position;
         hitTx.transform.localScale = new Vector3(1, 1, psScaleX);
-        if (hitVudio != "")
+        if (IsPlayAudio && hitVudio != "")
         {
             hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
         }

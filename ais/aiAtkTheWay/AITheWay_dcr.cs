@@ -5,9 +5,9 @@ using System;
 
 public class AITheWay_dcr : MonoBehaviour {
     float theLive;
-    [Header("下限1")]
+    [Header("变招下限1")]
     public float bz1 = 0;
-    [Header("下限2")]
+    [Header("变招下限2")]
     public float bz2 = 0;
     // Use this for initialization
     void Start () {
@@ -41,7 +41,6 @@ public class AITheWay_dcr : MonoBehaviour {
         
         //print("a: "+ atkArrs.Length);
         string[] zss = (string[])atkArrs[lie];
-        //print(zss[0]);
         return zss;
     }
 

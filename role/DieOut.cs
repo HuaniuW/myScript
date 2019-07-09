@@ -12,8 +12,23 @@ public class DieOut : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
 	}
 
+    void OnDistory()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+    }
+
+    void OnRemove()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+    }
+
     void DieOutDo(UEvent e)
     {
+        if (this == null)
+        {
+            ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+            return;
+        }
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
             if (IsBoss) {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MyController : MonoBehaviour {
     GameBody _body;
@@ -38,6 +39,42 @@ public class MyController : MonoBehaviour {
         return true;
     }
 
+    private string currentButton;
+    void ShouBing()
+    {
+        var values = Enum.GetValues(typeof(KeyCode));//存储所有的按键
+        for (int x = 0; x < values.Length; x++)
+        {
+            if (Input.GetKeyDown((KeyCode)values.GetValue(x)))
+            {
+                currentButton = values.GetValue(x).ToString();//遍历并获取当前按下的按键
+            }
+        }
+        if (currentButton == "Joystick2Button0")
+        {
+            if (IsCanControl()) _body.GetAtk();
+            currentButton = "";
+        }
+
+        if (currentButton == "Joystick2Button1")
+        {
+            if (IsCanControl()) _body.GetJump();
+            currentButton = "";
+        }
+
+        if (currentButton == "Joystick2Button2")
+        {
+            if (IsCanControl()) _body.GetDodge1();
+            currentButton = "";
+        }
+
+        if (currentButton == "Joystick2Button3")
+        {
+            currentButton = "";
+        }
+
+    }
+
 
     void Update () {
        
@@ -47,6 +84,12 @@ public class MyController : MonoBehaviour {
             //print("anyKey  " + Input.inputString);
         }
 
+        
+        if (Input.inputString == "Joystick2Button0") {
+            //print("atk!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+        ShouBing();
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {

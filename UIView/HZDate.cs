@@ -45,6 +45,12 @@ public class HZDate : MonoBehaviour {
     [Header("消耗血")]
     public float xyXue = 0;
 
+    [Header("徽章介绍")]
+    public string HZ_information = "";
+
+    [Header("主动技能图片介绍")]
+    public string imgName = "";
+
     void Start () {
         
     }
@@ -60,6 +66,65 @@ public class HZDate : MonoBehaviour {
             return false;
         }
         return true;
+    }
+
+
+    public string GetHZ_information_str()
+    {
+        string str = "";
+        string _name = Globals.language == Globals.CHINESE? "<color=#FDFEFE>徽章名字：" + this.HZName+"</color>\n": "<color=#FDFEFE>Badge name：" + this.HZName + "</color>\n";
+        str += _name;
+        string _atkStr = "";
+        if (atk != 0)
+        {
+            _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
+        }
+        str += _atkStr;
+
+        string _atkPStr = "";
+        if (atkP != 0)
+        {
+            _atkPStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力倍数：" + this.atkP + "</color>\n" : "<color=#E74C3C>atk P：" + this.atkP + "</color>\n";
+        }
+        str += _atkPStr;
+
+        string _defStr = "";
+        if (def != 0)
+        {
+            _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
+        }
+        str += _defStr;
+
+        string _defPStr = "";
+        if (defP != 0)
+        {
+            _defPStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力倍数：" + this.defP + "</color>\n" : "<color=#5DADE2>def P：" + this.defP + "</color>\n";
+        }
+        str += _defPStr;
+
+        string _liveStr = "";
+        if (live != 0)
+        {
+            _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "</color>\n";
+        }
+        str += _liveStr;
+
+        string _livePStr = "";
+        if (liveP != 0)
+        {
+            _livePStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值倍数：" + this.liveP + "</color>\n" : "<color=#76D7C4>live P：" + this.liveP + "</color>\n";
+        }
+        str += _livePStr;
+
+
+        string _information = "";
+        if (HZ_information != "")
+        {
+            _information = Globals.language == Globals.CHINESE ? "\n<color=#CCD1D1>" + this.HZ_information + "</color>\n" : "<color=#CCD1D1>" + this.HZ_information + "</color>\n";
+        }
+        str += _information;
+
+        return str;
     }
 
 

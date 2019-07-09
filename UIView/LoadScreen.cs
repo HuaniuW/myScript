@@ -45,10 +45,10 @@ public class LoadScreen : MonoBehaviour {
                 //loadingBar.rectTransform.se
 
                
-                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, displayProgress);
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, displayProgress*1.5f);
                 //rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 20);
 
-                loadTxt.text = displayProgress.ToString();
+                loadTxt.text = "LOADING..." + displayProgress.ToString()+"%";
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -56,8 +56,8 @@ public class LoadScreen : MonoBehaviour {
         while (displayProgress < toProgress)
         {
             ++displayProgress;
-            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, displayProgress);
-            loadTxt.text = displayProgress.ToString();
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, displayProgress*1.5f);
+            loadTxt.text = "LOADING..." + displayProgress.ToString() + "%";
             //SetLoadingPercentage(displayProgress);
             yield return new WaitForEndOfFrame();
         }

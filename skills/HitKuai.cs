@@ -195,12 +195,12 @@ public class HitKuai : MonoBehaviour {
         if (!isZX) return;
         if (psScaleX>0)
         {
-            if(isSJJD)jd = Random.Range(-10, -35);
+            if(isSJJD)jd = Random.Range(-10, -15);
             hitTx.transform.localEulerAngles = new Vector3(0, 0, jd);
         }
         else
         {
-            if (isSJJD) jd = Random.Range(0, -10);
+            if (isSJJD) jd = Random.Range(0, -5);
             hitTx.transform.localEulerAngles = new Vector3(0, 144, jd);
         }
 

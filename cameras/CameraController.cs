@@ -163,6 +163,7 @@ public class CameraController : MonoBehaviour
                 }
             }
             //x = player.position.x;
+            bool isInEdge = false;
             if (!_isChangeKuang)
             {
                 if (player.position.x <= _min.x + cameraHalfWidth || player.position.x >= _max.x - cameraHalfWidth)
@@ -175,33 +176,43 @@ public class CameraController : MonoBehaviour
                     //}
 
                     //distanceX = 0;
-
+                    isInEdge = true;
                 }
                 else
                 {
                     var vx = player.GetComponent<Rigidbody2D>().velocity.x;
-                    var xzX = 1f;
+                    var xzX = 3f;//值小会出现边缘卡顿 原因未理清
 
                     if (Mathf.Abs(vx) >= xzX)
                     {
-                        x = player.position.x - distanceX;
+                        if (isInEdge)
+                        {
+                            distanceX = 0;
+                        }
+                        else
+                        {
+                            x = player.position.x - distanceX;
+                        }
                     }
                     else
                     {
+                        isInEdge = false;
                         distanceX = player.position.x - x;
                         if (!player.GetComponent<GameBody>().isInAiring)
                         {
                             if (player.transform.localScale.x > 0)
                             {
-                                x = Mathf.Lerp(x, player.position.x - Margin.x, xzX * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
                             }
                             else
                             {
-                                x = Mathf.Lerp(x, player.position.x + Margin.x, xzX * Time.deltaTime);
+                                x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
                             }
                         }
                     }
                 }
+
+                //print("vx   " + player.GetComponent<Rigidbody2D>().velocity.x+ "      distanceX    "+ distanceX);
             }
 
 

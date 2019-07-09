@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-
+using System;
 public class UEventListener
 {
     /// <summary>
@@ -19,6 +19,8 @@ public class UEventListener
     {
         if (OnEvent != null)
         {
+            //System.Diagnostics.Debug.Print(this+ "    "+evt);
+            //Console.WriteLine(this + "  event>  " + evt);
             this.OnEvent(evt);
         }
     }

@@ -48,30 +48,34 @@ public class Door : MonoBehaviour {
         _zt = "0";
     }
 
-    bool isClose = false;
-    bool isOpen = false;
+    bool isUp = false;
+    bool isDown = false;
     public float moveSpeed = 0.1f;
     public void OpenDoor(UEvent e)
     {
+        
         string str = e.eventParams.ToString();
         string _name = str.Split('-')[0];
         string zt = str.Split('-')[1];
-        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
+        //print(_zt+" ?  "+this.name + "   " +str+"   name  "+_name);
         //如果传来的状态一样就返回 没必要改变
         if (_zt == zt) return;
         //开门用1 关门用0
         if (this.name != _name) return;
-        isOpen = false;
-        isClose = false;
+        isDown = false;
+        isUp = false;
         if (zt == "1")
         {
-            isOpen = true;
+            //print("Down");
+            isDown = true;
             
         }else if (zt == "0")
         {
-            isClose = true;
-            //print("关门  "+this.name);
+            //print("Up");
+            isUp = true;
+            
         }
+        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
         //声音播放
         if (openDoorAudio) openDoorAudio.Play();
     }
@@ -84,7 +88,7 @@ public class Door : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        if (isClose)
+        if (isUp)
         {
             if (men && men.transform.position.y < upPos.transform.position.y)
             {
@@ -96,14 +100,14 @@ public class Door : MonoBehaviour {
             {
                 string zt = this.name + "-0";
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
-                isClose = false;
+                isUp = false;
                 if (isSaveBySelf) GlobalSetDate.instance.SaveDoor();
                 if (openDoorAudio) openDoorAudio.Stop();
                 _zt = "0";
             }
         }
         
-        if (isOpen)
+        if (isDown)
         {
             if (men&&men.transform.position.y> downPos.transform.position.y)
             {
@@ -115,7 +119,7 @@ public class Door : MonoBehaviour {
             {
                 string zt = this.name + "-1";
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
-                isOpen = false;
+                isDown = false;
                 if (isSaveBySelf) GlobalSetDate.instance.SaveDoor();
                 if (openDoorAudio) openDoorAudio.Stop();
                 _zt = "1";

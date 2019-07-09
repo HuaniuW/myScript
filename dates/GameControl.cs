@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XLua;
 
+[LuaCallCSharp]
 public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+    }
+
+    public void LuaTest(string str)
+    {
+        //print("hello 你好 XLua!"+str);
     }
 
     private void Awake()
@@ -60,7 +67,7 @@ public class GameControl : MonoBehaviour {
         GlobalSetDate.instance.GetGameAllCunstomStr();
         //查找存档中是否有本关卡的关卡记录  通过本关卡名字获取本关卡数据
         TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);
-        //print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
+        print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
         if (TempCurrentGKDate == null) {
             TempCurrentGKDate = ""; //GuanKaStr;
         }
@@ -83,7 +90,7 @@ public class GameControl : MonoBehaviour {
     }
 
     //是否包含查找的数据
-    bool IsHasDate(string changeDate, string[] currentGKDateArr)
+    public bool IsHasDate(string changeDate, string[] currentGKDateArr)
     {
         string name = changeDate.Split('-')[0];
         for (var i = 0; i < currentGKDateArr.Length; i++)
@@ -118,7 +125,7 @@ public class GameControl : MonoBehaviour {
         //men_1-0,men_2-0,boss_1-0 当前关卡数据长这样
         string[] currentGKDateArr = TempCurrentGKDate.Split(',');
         //先查找 关卡数据中是否有该数据 有的就变化状态 没有的话就在后面加
-        if (!IsHasDate(changeDate, currentGKDateArr)) {
+        if (!GlobalTools.IsHasDate(changeDate, currentGKDateArr)) {
             TempCurrentGKDate += ","+changeDate;
             return;
         }
@@ -183,11 +190,14 @@ public class GameControl : MonoBehaviour {
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
         if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
-		//print("GuanKaStr  >>>  "+GuanKaStr);
-		//print(GuanKaStr);
+        //print("GuanKaStr  >>>  "+GuanKaStr);
+        //print(GuanKaStr);
+        print("strArr.Length   "+ strArr.Length);
         for (var i = 0; i < strArr.Length; i++)
         {
-			//print(strArr[0] + " ?  ");
+            //print(strArr[0] + " ?  ");
+            print("关卡信息   " + strArr[i]);
+            if (strArr[i] == "") continue;
             string s = strArr[i].Split('-')[0];
             string zt = "0";
             if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1];
@@ -216,10 +226,22 @@ public class GameControl : MonoBehaviour {
             }else if (sName == "guai")
             {
 
+            }else if (sName == "JG")
+            {
+                //机关记录
+                //JG_screenName-nums(数组位置)
+                string ScreenName = strArr[i].Split('_')[1]+"_"+strArr[i].Split('_')[2].Split('-')[0];
+                print("ScreenName   "+ ScreenName);
+                if(ScreenName == SceneManager.GetActiveScene().name)
+                {
+                    JGNum = int.Parse(strArr[i].Split('-')[1]);
+                    print("----------------------------  匹配！！！");
+                }
             }
         }
     }
 
+    public int JGNum = 0;
     //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -233,7 +255,8 @@ public class GameControl : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         //print(player.transform.position);
-	}
+        //if(player) player.GetComponent<GameBody>().TurnRight();
+    }
 
     //GameObject FindObjByName(string _name)
     //{
@@ -255,10 +278,13 @@ public class GameControl : MonoBehaviour {
     {
         if (GlobalTools.FindObjByName("player") == null)
         {
-            InstancePrefabByName("player");
+            player = InstancePrefabByName("player");
         }
-        player = null;
-        player = GlobalTools.FindObjByName("player");
+        else
+        {
+            player = GlobalTools.FindObjByName("player");
+        }
+       
     }
 
     
@@ -306,7 +332,7 @@ public class GameControl : MonoBehaviour {
 
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("玩家位置   " + player.transform.position);
-        
+        //player.GetComponent<GameBody>().TurnRight();
     }
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XLua;
 
 public class GlobalSetDate : MonoBehaviour {
     public static GlobalSetDate instance;
@@ -39,7 +40,15 @@ public class GlobalSetDate : MonoBehaviour {
 
     void Start()
     {
+        //LuaEnv luaenv = new LuaEnv();
+        //luaenv.DoString("require 'gameMain'");
+        //XLuaTest("lua test  测试");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
+    }
+
+    void XLuaTest(string str)
+    {
+        print(str);
     }
 
     GameObject dieScreen;
@@ -74,21 +83,29 @@ public class GlobalSetDate : MonoBehaviour {
         //GetGuanKaStr();
     }
     
-    public void GetGameDateStart()
+    public void GetGameDateStart(bool isSYS = false)
     {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
         if (isInFromSave)
         {
-            print("读档游戏");
+            //print("读档游戏");
             HowToInGame = LOAD_GAME;
             CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName);
             GetSaveGame();
         }
         else
         {
-            print("新游戏");
+            //print("新游戏");
             HowToInGame = NEW_GAME;
-            InNewGame();
+            if (isSYS)
+            {
+                InNewGame("0.59_-0.54","shiyanshi_1");
+            }
+            else
+            {
+                InNewGame();
+            }
+            
         }
         isGameOver = false;
         SceneManager.LoadScene("loads");
@@ -97,7 +114,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     //第一次启动 掉用这里面存储的数据系统
     public string playerPosition = "6_-2";
-    public string screenName = "g1_1";
+    public string screenName = "g2_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
     public string mapDate = "";//小地图数据
@@ -105,14 +122,14 @@ public class GlobalSetDate : MonoBehaviour {
     //切换场景的时候不让 控制  MyController.cs
     public bool IsChangeScreening = false;
     //存档的名字
-    public string saveDateName = "maGame";
+    public string saveDateName = "myGame";
     //public GameObject player;
 
-    void InNewGame()
+    void InNewGame(string pos = "5.67_1.21",string scrName = "g2_1")
     {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
-        playerPosition = "5.67_1.21"; 
-        screenName = "g1_1";
+        playerPosition = pos; 
+        screenName = scrName;
         cameraPosition = "";
         bagDate = "";//背包数据
         mapDate = "";//小地图数据
@@ -161,7 +178,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     //声音调控
-    public float SoundEffect = 1f;
+    public float SoundEffect = 0.6f;
     public float GetSoundEffectValue()
     {
         return SoundEffect;
@@ -295,7 +312,7 @@ public class GlobalSetDate : MonoBehaviour {
         
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
-        CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
+        if(GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1")!=null) CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
         //血瓶数量
         CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "我的存档";
@@ -307,7 +324,7 @@ public class GlobalSetDate : MonoBehaviour {
         //print(CurrentUserDate.screenName);
         //print(CurrentUserDate.playerPosition);
         //print(CurrentUserDate.cameraPosition);
-        //print(CurrentUserDate.mapDate);
+        print("mapdate---------------------------------------------------------------->   "+CurrentUserDate.mapDate);
         //print(CurrentUserDate.userName);
 
 

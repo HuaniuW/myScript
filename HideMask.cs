@@ -8,7 +8,7 @@ public class HideMask : MonoBehaviour {
 	void Start () {
         Color t = this.GetComponent<SpriteRenderer>().color;
 
-        this.GetComponent<SpriteRenderer>().color = new Color(t.r, t.g, t.b, 0.2f);
+        this.GetComponent<SpriteRenderer>().color = new Color(t.r, t.g, t.b, 0f);
 
     }
 	

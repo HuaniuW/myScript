@@ -30,12 +30,18 @@ public class Boss_LiveBar : MonoBehaviour {
     {
         //this.gameObject.SetActive(true);
         //string bossName = e.eventParams.ToString();  预留给后面 需要做判断用
+        if(this == null)
+        {
+            OnDisable();
+            return;
+        }
         this.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     private void OnDisable()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_OUT, ShowSelf);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_DIE, HideSelf);
     }
 
     // Update is called once per frame
