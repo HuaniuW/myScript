@@ -261,4 +261,18 @@ GameObject.transform.position = FAR_AWAY
 //SceneManager.GetActiveScene().name  获取场景名字  需要using UnityEngine.SceneManagement;
 
 
-    //鼠标事件失灵  有可能是被image遮挡了  比如 场景过度的黑色渐变
+//鼠标事件失灵  有可能是被image遮挡了  比如 场景过度的黑色渐变
+
+
+/*
+ * image 宽高的获取和修改
+ * 
+ 宽：gameObject.GetComponent<RectTransform>().rect.width
+
+高：gameObject.GetComponent<RectTransform>().rect.height
+
+GetComponent<RectTransform>().sizeDelta
+
+或者GetComponent<RectTransform>().rect.size
+     
+     */
