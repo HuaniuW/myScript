@@ -75,7 +75,7 @@ public class GenerateMap : MonoBehaviour {
 
     }
 
-
+    List<string> mapZB; //  1-1 2-1  1-2 1-0  用坐标代替碰撞找位置
 
     void CreateMap(int i)
     {
