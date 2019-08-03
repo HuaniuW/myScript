@@ -38,8 +38,10 @@ public class AITheWay_dcr : MonoBehaviour {
         {
             atkArrs = new Array[] { zsArr1, zsArr2, zsArr3 };
         }
-        
+
         //print("a: "+ atkArrs.Length);
+        //print("lie    "+lie);
+        lie = 0;
         string[] zss = (string[])atkArrs[lie];
         return zss;
     }

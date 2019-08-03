@@ -190,13 +190,8 @@ public class GameControl : MonoBehaviour {
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
         if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
-        //print("GuanKaStr  >>>  "+GuanKaStr);
-        //print(GuanKaStr);
-        print("strArr.Length   "+ strArr.Length);
         for (var i = 0; i < strArr.Length; i++)
         {
-            //print(strArr[0] + " ?  ");
-            print("关卡信息   " + strArr[i]);
             if (strArr[i] == "") continue;
             string s = strArr[i].Split('-')[0];
             string zt = "0";

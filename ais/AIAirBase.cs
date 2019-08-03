@@ -14,7 +14,7 @@ public class AIAirBase : AIBase {
         GetUpdate2();
 	}
 
-    protected override bool NearRoleInDistance(float distance)
+    public override bool NearRoleInDistance(float distance)
     {
         if (DontNear) return true;
         if (gameObj.transform.position.x - transform.position.x > distance)

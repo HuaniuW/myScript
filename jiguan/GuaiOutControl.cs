@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GuaiOutControl : MonoBehaviour {
     //机关的字符串数据
-    public string JGStr = "wait*3:guai*G1_daocaoren2,5,3,-1|guai*G1_daocaoren2,-5,3,1:cundang:boss*BOSS_GGZdaocaoren,5,3,-1:end";
+    public string JGStr = "wait*3:guai*G1_daocaoren2,5,3,-1|guai*G1_daocaoren2,-5,3,1:cundang:wait*2:boss*BOSS_GGZdaocaoren,5,3,-1:cundang:wait*2:boss*BOSS_yanguai,5,3,-1:end";
     //获取关卡名字 来对照匹配 如果是当前关卡 有多少组怪出来  eg:JG_screenName_1
     public int JGNum = 0;
     //是否显示波次

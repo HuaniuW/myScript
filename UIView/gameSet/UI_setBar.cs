@@ -20,6 +20,10 @@ public class UI_setBar : MonoBehaviour {
 
     public Button btn_close;
 
+    public Button btn_inStartScreen;
+
+    public Button btn_outGame;
+
     List<GameObject> labels = new List<GameObject>();
     // Use this for initialization
     float kuangX;
@@ -33,13 +37,29 @@ public class UI_setBar : MonoBehaviour {
         xzUI = "yingliang";
         kuangX = kuang.transform.position.x;
         GlobalSetDate.instance.IsChangeScreening = true;
-        GameObject[] b = { text1.gameObject, text2.gameObject , btn_close.gameObject};
+        GameObject[] b = { text1.gameObject, text2.gameObject , btn_close.gameObject, btn_inStartScreen.gameObject , btn_outGame.gameObject };
         labels.AddRange(b);
 
         GetLuanguage();
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_LANGUAGE, GetLanguageChange);
+        print("start");
     }
 
+    void Awake()
+    {
+        print("Awake");
+        if (SceneManager.GetActiveScene().name == "startScreen")
+        {
+            btn_inStartScreen.gameObject.SetActive(false);
+            btn_outGame.gameObject.SetActive(false);
+        }
+        else
+        {
+            btn_inStartScreen.gameObject.SetActive(true);
+            btn_outGame.gameObject.SetActive(false);
+        }
+        
+    }
 
     void GetLuanguage()
     {
@@ -49,6 +69,15 @@ public class UI_setBar : MonoBehaviour {
             text2.text = "语言";
             tog1.GetComponentInChildren<Text>().text = "中文";
             tog2.GetComponentInChildren<Text>().text = "英文";
+            if (btn_inStartScreen.isActiveAndEnabled)
+            {
+                btn_inStartScreen.GetComponentInChildren<Text>().text = "开始界面";
+            }
+
+            if (btn_outGame.isActiveAndEnabled)
+            {
+                btn_outGame.GetComponentInChildren<Text>().text = "退出游戏";
+            }
 
 
         }
@@ -58,6 +87,15 @@ public class UI_setBar : MonoBehaviour {
             text2.text = "language";
             tog1.GetComponentInChildren<Text>().text = "chinese";
             tog2.GetComponentInChildren<Text>().text = "english";
+            if (btn_inStartScreen.isActiveAndEnabled)
+            {
+                btn_inStartScreen.GetComponentInChildren<Text>().text = "startScreen";
+            }
+
+            if (btn_outGame.isActiveAndEnabled)
+            {
+                btn_outGame.GetComponentInChildren<Text>().text = "outGame";
+            }
         }
     }
 
@@ -75,6 +113,13 @@ public class UI_setBar : MonoBehaviour {
         sl1.onValueChanged.AddListener(SLChange);
 
         btn_close.onClick.AddListener(RemoveSelf);
+        btn_inStartScreen.onClick.AddListener(ToStartScreen);
+    }
+
+    void ToStartScreen()
+    {
+        SceneManager.LoadScene("startScreen");
+        RemoveSelf();
     }
 
     // Update is called once per frame
@@ -126,6 +171,12 @@ public class UI_setBar : MonoBehaviour {
         }else if (xzUI == "close")
         {
             RemoveSelf();
+        }else if (xzUI == "startScreen")
+        {
+
+        }else if (xzUI == "outGame")
+        {
+
         }
        
     }
@@ -189,7 +240,7 @@ public class UI_setBar : MonoBehaviour {
             {
                 if (rq.transform.position.y > kuang.transform.position.y)
                 {
-                    tempList.Add(rq);
+                    if (rq.activeSelf) tempList.Add(rq);
                 }
             }
         }
@@ -199,7 +250,7 @@ public class UI_setBar : MonoBehaviour {
             {
                 if (rq.transform.position.y < kuang.transform.position.y)
                 {
-                    tempList.Add(rq);
+                    if(rq.activeSelf) tempList.Add(rq);
                 }
             }
         }
@@ -263,7 +314,7 @@ public class UI_setBar : MonoBehaviour {
     void PlayVadioByName(string _name)
     {
         GameObject UI_start = GameObject.Find("/UI_Start");
-        GlobalTools.PlayAudio(_name, UI_start.GetComponent<StartScreen>());
+        if(UI_start!=null) GlobalTools.PlayAudio(_name, UI_start.GetComponent<StartScreen>());
     }
 
     string xzUI = "";
@@ -328,6 +379,17 @@ public class UI_setBar : MonoBehaviour {
             GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(60, 60, 80, 80, 0.3f);
             kuang.transform.position = getRQ.transform.position;
 
+        }else if (_txtName == "btn_startScreen")
+        {
+            xzUI = "startScreen";
+            GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(336, 20, 350, 44, 0.3f);
+            kuang.transform.position = getRQ.transform.position;
+        }
+        else if (_txtName == "btn_outGame")
+        {
+            xzUI = "outGame";
+            GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(336, 20, 350, 44, 0.3f);
+            kuang.transform.position = getRQ.transform.position;
         }
         
         GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgAlphaStartSet(0, 0.2f);

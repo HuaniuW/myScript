@@ -25,6 +25,11 @@ public class PlayerGameBody : GameBody {
 
     void RemoveSelf(UEvent e)
     {
+        if(this == null)
+        {
+            ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+            return;
+        }
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         DestroyImmediate(this.gameObject, true);
     }

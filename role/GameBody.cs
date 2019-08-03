@@ -491,6 +491,23 @@ public class GameBody : MonoBehaviour, IRole {
         playerRigidbody2D.velocity = newSpeed;
     }
 
+    /// <summary>
+    /// 临时改变跑步动作和速度
+    /// </summary>
+    /// <param name="runName">跑步动作</param>
+    /// <param name="changeMaxSpeedX">跑步速度</param>
+    public virtual void RunACChange(string runName,float changeMaxSpeedX = 0)
+    {
+        RUN = runName;
+        if (changeMaxSpeedX != 0) maxSpeedX = changeMaxSpeedX;
+    }
+
+
+    public string GetRunName()
+    {
+        return RUN;
+    }
+
     public virtual void RunLeft(float horizontalDirection, bool isWalk = false)
     {
         //print("r "+isAtking);
@@ -559,7 +576,7 @@ public class GameBody : MonoBehaviour, IRole {
         isRunLefting = false;
 
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
-        //print("right "+ horizontalDirection);
+        //print("right "+ horizontalDirection + "  xForce "+xForce);
         Run();
     }
 
@@ -660,7 +677,8 @@ public class GameBody : MonoBehaviour, IRole {
         if (isNoAbs) _vx = vx;
         playerRigidbody2D.velocity = Vector2.zero;
         //newSpeed.x = 0;
-        
+
+
         if (bodyScale.x < 0)
         {
             if (isSpeed) {
@@ -987,9 +1005,9 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    public void GetPause(float pauseTime = 0.1f)
+    public void GetPause(float pauseTime = 0.1f,float scaleN = 0.03f)
     {
-        DBBody.animation.timeScale = 0.03f;
+        DBBody.animation.timeScale = scaleN;
         if(_theTimer) _theTimer.GetStopByTime(pauseTime);
     }
 
@@ -1062,7 +1080,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         
-        ControlSpeed();
+        if(!isAtking)ControlSpeed();
 
         if (roleDate.isBeHiting)
         {
@@ -1318,7 +1336,6 @@ public class GameBody : MonoBehaviour, IRole {
             yanchi = 0;
             jisuqi = 0;
 
-
             if (isInAiring)
             {
                 atkZS = DataZS.jumpAtkZS;
@@ -1335,11 +1352,22 @@ public class GameBody : MonoBehaviour, IRole {
             }
             else
             {
-                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(atkName, DataZS.GetInstance()));
+                //GetPause(0.5f,0.5f);
+                string _atkName = atkName;
+                if (atkName.Split('|').Length != 1)
+                {
+                    _atkName = atkName.Split('|')[0];
+                    float times = float.Parse(atkName.Split('|')[1].Split('-')[0]);
+                    float scales = 0.5f;
+                    if (atkName.Split('|')[1].Split('-').Length!=1) scales = float.Parse(atkName.Split('|')[1].Split('-')[1]);
+                    GetPause(times, scales);
+                    
+                }
+                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
 
-            MoveVX(vOAtk.xF);
+            MoveVX(vOAtk.xF,true);
             if (newSpeed.y < 0)
             {
                 newSpeed.y = 1;
@@ -1420,6 +1448,7 @@ public class GameBody : MonoBehaviour, IRole {
                 }
                 else {
                     //print("普通攻击的特效名字  "+vOAtk.txName);
+                    //GetPause(0.1f);
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
                 }
                 

@@ -54,6 +54,11 @@ public class XueTiao : MonoBehaviour {
         //AddMaxLiveBar(200);
     }
 
+    void OnEable()
+    {
+        
+    }
+
     [Header("血条显示误差 默认为50")]
     public float XueTiaoXianshiWucha = 50;
     void LiveBarInit()
@@ -99,8 +104,17 @@ public class XueTiao : MonoBehaviour {
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
+        //是否有诅咒条
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
     }
+
+
+    public void showUIByAlpha(float alphaNum)
+    {
+        GlobalTools.CanvasGroupAlpha(GetComponent<CanvasGroup>(), alphaNum);
+    }
+
+ 
 
     void IsHasZZ(UEvent e) {
         if (zzTiao == null) return;

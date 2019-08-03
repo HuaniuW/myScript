@@ -64,4 +64,6 @@ public class EventTypeName
 
     //点到徽章时 派发 徽章信息 来刷新 徽章面板信息
     public const string HZ_TOUCH = "hz_touch";
+
+    public const string SHOW_UIBY_ALPHA = "show_uiby_alpha";
 }

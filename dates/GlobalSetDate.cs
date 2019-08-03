@@ -99,6 +99,7 @@ public class GlobalSetDate : MonoBehaviour {
             HowToInGame = NEW_GAME;
             if (isSYS)
             {
+                //实验室
                 InNewGame("0.59_-0.54","shiyanshi_1");
             }
             else
@@ -324,7 +325,7 @@ public class GlobalSetDate : MonoBehaviour {
         //print(CurrentUserDate.screenName);
         //print(CurrentUserDate.playerPosition);
         //print(CurrentUserDate.cameraPosition);
-        print("mapdate---------------------------------------------------------------->   "+CurrentUserDate.mapDate);
+        //print("mapdate---------------------------------------------------------------->   "+CurrentUserDate.mapDate);
         //print(CurrentUserDate.userName);
 
 

@@ -35,7 +35,17 @@ public class Boss_LiveBar : MonoBehaviour {
             OnDisable();
             return;
         }
-        this.GetComponent<CanvasGroup>().alpha = 0;
+
+        //this.GetComponent<CanvasGroup>().alpha = 0;
+        StartCoroutine(IEDestory2ByTime(this.GetComponent<CanvasGroup>(), 1f));
+    }
+
+    IEnumerator IEDestory2ByTime(CanvasGroup obj, float time)
+    {
+        yield return new WaitForSeconds(time);
+        //yield return new WaitForFixedUpdate();
+        //Debug.Log(">>   "+ gameObject);
+        obj.alpha = 0;
     }
 
     private void OnDisable()

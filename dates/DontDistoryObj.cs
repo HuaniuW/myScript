@@ -7,7 +7,17 @@ public class DontDistoryObj : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //print("start");
-        GetDontDistory();
+        //GetDontDistory();
+        //GetDontDistory();
+        /*if (GlobalTools.FindObjByName(this.name) == null)
+        {
+            GetDontDistory();
+        }
+        else
+        {
+            //DistorySelf();
+            Destroy(this);
+        }*/
         //HideSelf();
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, ChangeScreen);
     }
@@ -15,6 +25,15 @@ public class DontDistoryObj : MonoBehaviour {
     private void Awake()
     {
         //print("awake");
+      /*  if (GlobalTools.FindObjByName(this.name) == null)
+        {
+            GetDontDistory();
+        }
+        else
+        {
+            //DistorySelf();
+            Destroy(this);
+        }*/
     }
 
     private void OnDestroy()

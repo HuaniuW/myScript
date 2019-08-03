@@ -224,7 +224,7 @@ public class AIBase : MonoBehaviour {
 
     protected string[] carr;
     //获取招式
-    protected string GetZS(bool isAddN = false)
+    public string GetZS(bool isAddN = false)
     {
         if (lie == -1) lie = GetLie();
         string zs = "";
@@ -260,7 +260,7 @@ public class AIBase : MonoBehaviour {
     protected float atkDistance = 0;
 
     //3 靠近 达到攻击距离
-    protected virtual bool NearRoleInDistance(float distance)
+    public virtual bool NearRoleInDistance(float distance)
     {
         
         if (DontNear) return true;
@@ -378,6 +378,13 @@ public class AIBase : MonoBehaviour {
                 atkDistance = aisx.sxDistance;
                 return;
             }
+
+            if (acName == "runCut")
+            {
+                acName = "runCut";
+                return;
+            }
+
 			atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
 		}
 
@@ -429,6 +436,12 @@ public class AIBase : MonoBehaviour {
 			GetShanXian();
 			return;
 		}
+
+        if (acName == "runCut")
+        {
+            GetRunCut();
+            return;
+        }
 
 
         PtAtk();
@@ -601,6 +614,29 @@ public class AIBase : MonoBehaviour {
             }
         }
 	}
+
+    protected void GetRunCut()
+    {
+        if (isActioning)
+        {
+            if (GetComponent<AIRunCut>().IsAcOver())
+            {
+                isActioning = false;
+                isAction = false;
+                return;
+            }
+        }
+
+        if (!isActioning)
+        {
+            isActioning = true;
+            ZhuanXiang();
+            //gameBody.GetStand();
+            GetComponent<AIRunCut>().GetStart(gameObj);
+            atkNum++;
+            //GetAtkNumReSet();
+        }
+    }
 
     protected void JNAtk()
     {

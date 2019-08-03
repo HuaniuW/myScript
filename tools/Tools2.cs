@@ -71,7 +71,7 @@ public class Tools2 : MonoBehaviour {
     //obj.transform.localScale = s;  缩放
 
     // public IEnumerator IEDestory(GameObject gameObject, float time)  协程 伪进程
-    //StartCoroutine(ObjectPools.GetInstance().IEDestory(hitBar,2f));  执行 协程
+    //StartCoroutine(ObjectPools.GetInstance().IEDestory(hitBar,2f));  执行 协程IEnumerator
 
 
     //创建一个A.cs脚本挂载在空物体B上，

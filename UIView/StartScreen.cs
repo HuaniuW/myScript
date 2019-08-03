@@ -24,7 +24,6 @@ public class StartScreen : MonoBehaviour {
         FindSaveDate();
         GetButton();
 
-       
         //iTween.FadeTo(btn1.transform.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
         //iTween.MoveFrom(this.gameObject, iTween.Hash("x", -10f, "time", 3f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fds"));
         //btn1.Component.CrossFadeAlpha

@@ -165,7 +165,7 @@ public class PlayerUI : MonoBehaviour {
     {
         if(setUI == null)
         {
-            setUI = GlobalTools.GetGameObjectByName("UI_shezhi");
+            setUI = GlobalTools.GetGameObjectByName("UI_set");
             GlobalSetDate.instance.IsChangeScreening = true;
         }
         else
