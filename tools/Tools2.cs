@@ -276,3 +276,8 @@ GetComponent<RectTransform>().sizeDelta
 或者GetComponent<RectTransform>().rect.size
      
      */
+
+
+
+//SetAsFirstSibling(); UI层级提到开始 
+//SetAsLastSibling();  放到最下层 显示在最高层

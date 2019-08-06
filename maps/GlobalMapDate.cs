@@ -14,7 +14,7 @@ public class GlobalMapDate : MonoBehaviour {
 
 
 
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{"testMap1_1-4|testMap1_2-9","","testMap3_1-1"};
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{"5!u-r!jiguan|9!r-d!jiguan","", "6!n!boss|8!n!cundang" };
 
 
 
@@ -26,6 +26,94 @@ public class GlobalMapDate : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    //判断 是否是特殊地图
+    public static bool IsSpeMapByName(string mapName)
+    {
+        if (!IsHasSpecialMap()) return false;
+        string[] speMapArr = GetCSpeicalMapNameArr();
+        string mapName1;
+        for (int i = 0; i < speMapArr.Length; i++)
+        {
+            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            if (mapName1 == mapName) return true;
+        }
+        return false;
+    }
+
+    //获取特殊地图名字 List
+    public static List<string> GetSpeMapNameArr()
+    {
+        if (!IsHasSpecialMap()) return null;
+        List<string> tempMapNameList = new List<string> { };
+        string[] speMapArr = GetCSpeicalMapNameArr();
+        string mapName1;
+        for (int i = 0; i < speMapArr.Length; i++)
+        {
+            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            tempMapNameList.Add(mapName1);
+        }
+        if (tempMapNameList.Count >= 1) return tempMapNameList;
+        return null;
+    }
+
+
+    public static string GetSpeMsgByName(string mapName) {
+        if (!IsHasSpecialMap()) return null;
+        string[] speMapArr = GetCSpeicalMapNameArr();
+        string mapName1;
+        string speMsg;
+        for (int i = 0; i < speMapArr.Length; i++)
+        {
+            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            if (mapName1 == mapName)
+            {
+                speMsg = speMapArr[i].Split('!')[2];
+                return speMsg;
+            }
+        }
+        return null;
+    }
+
+
+    //根据名字 获取方向列表
+    public static List<string> GetFXListByName(string mapName) {
+        if (!IsHasSpecialMap()) return null;
+        string[] speMapArr = GetCSpeicalMapNameArr();
+        string mapName1;
+        string speMapMsg;
+        for (int i = 0; i < speMapArr.Length; i++)
+        {
+            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            if (mapName1 == mapName) {
+                speMapMsg = speMapArr[i];
+                return SGKFXArr(speMapMsg);
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 获取关卡的方向List
+    /// </summary>
+    /// <param name="gkStr"></param>
+    /// <returns></returns>
+    public static List<string> SGKFXArr(string gkStr)
+    {
+        string fxStr = gkStr.Split('!')[1];
+        List<string> FXList = new List<string> { };
+        if (fxStr != "n")
+        {
+            string[] fxArr = fxStr.Split('-');
+            for (int i = 0; i < fxArr.Length; i++)
+            {
+                FXList.Add(fxArr[i]);
+            }
+            return FXList;
+        }
+        return null;
+    }
+
 
     public static bool IsHasSpecialMap()
     {
@@ -43,5 +131,14 @@ public class GlobalMapDate : MonoBehaviour {
     public static string GetCSpeicalMapStr()
     {
         return SpecialMapNameAndNumArr[CCustomNum];
+    }
+
+    
+
+
+    public static bool IsHasGKBYId(int num)
+    {
+
+        return false;
     }
 }
