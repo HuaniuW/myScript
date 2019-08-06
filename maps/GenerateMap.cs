@@ -104,10 +104,10 @@ public class GenerateMap : MonoBehaviour {
         //判断是否是特殊地图
         if (isSepMap)
         {
-            print("特殊地图名字     "+ cZXMapName);
-            tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
+            print("特殊地图名字------------------------------------------------------------->     "+ cZXMapName);
+            //tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             //判断各个方向是否有地图 有的话连接
-
+            return;
         }
         else
         {
@@ -175,8 +175,8 @@ public class GenerateMap : MonoBehaviour {
         }
 
         //获取最大地图的名字
-        int maxI = int.Parse(theMapArr[theMapArr.Count-1].name.Split('-')[1]);
-        CreateMapByKyFXArr(tempKyFXArr, cZXMapName, maxI);
+        maxI = int.Parse(theMapArr[theMapArr.Count-1].name.Split('-')[1]);
+        CreateMapByKyFXArr(tempKyFXArr, cZXMapName);
         return;
 
     }
@@ -226,10 +226,11 @@ public class GenerateMap : MonoBehaviour {
     }
 
 
-    void CreateMapByKyFXArr(List<string> tempKyFXArr,string cZXMapName,int maxI)
+    int maxI = 0;
+
+    void CreateMapByKyFXArr(List<string> tempKyFXArr,string cZXMapName)
     {
         int createMapNums = maxI + 1;
-        //判断 是否是 特殊地图  或者最后的地图
         for (int c = 0; c < tempKyFXArr.Count; c++)
         {
             createMapNums = maxI + 1 + c;
@@ -357,8 +358,91 @@ public class GenerateMap : MonoBehaviour {
     }
 
 
+    List<string> tempFindSpeMapList = new List<string> { };
+    //根据坐标和方向 获取改位置的 地图名字(用于 判断该方向上是否有地图)  返回特殊地图的名字和信息 还有方位
+    string GetMapNameAndMsgByZBAndFX(string zb,string fx)
+    {
+        string getMapName = "";
+        string _zb = GetNewZBByFX(zb,fx);
+        for(int i = 0; i < mapZBArr.Count; i++)
+        {
+            if(mapZBArr[i].Split('!')[1] == _zb)
+            {
+                //判断 如果是特殊地图
+                if (GlobalMapDate.IsSpeMapByName(mapZBArr[i].Split('!')[0])) return  mapZBArr[i]+"="+fx;
+            }
+        }
+        return null;
+    }
+
+    string GetNewZBByFX(string zb, string fx)
+    {
+        string newZB = "";
+        string[] _zb = zb.Split('#');
+        switch (fx)
+        {
+            case "u":
+                newZB = _zb[0] + "#" + (int.Parse(_zb[1]) + 1);
+                break;
+            case "d":
+                newZB = _zb[0] + "#" + (int.Parse(_zb[1]) - 1);
+                break;
+            case "l":
+                newZB = (int.Parse(_zb[0]) - 1) + "#" + _zb[1];
+                break;
+            case "r":
+                newZB = (int.Parse(_zb[0]) + 1) + "#" + _zb[1];
+                break;
+
+        }
+        if (newZB != "") return newZB;
+        return null;
+    }
+
+    int ss = 0;
+    bool IsFXHasSpeMap(string zb,List<string> FXList)
+    {
+        tempFindSpeMapList.Clear();
+        for (int i = 0;i<FXList.Count;i++)
+        {
+            ss++;
+            print("计算次数 哇塞    "+ss);
+            //判断改方向上是否有地图
+            string speMapMsg = GetMapNameAndMsgByZBAndFX(zb, FXList[i]);
+            //判断该地图是否是特殊地图
+            if (speMapMsg != null) tempFindSpeMapList.Add(speMapMsg);
+        }
+        if (tempFindSpeMapList.Count != 0) return true;
+        return false;
+    }
+
     void CreateMapImgByFX(string theCZXMapName,string fx,string newMapName)
     {
+        //判断是否是特殊地图  并找到安防特殊地图的位置
+        if (GlobalMapDate.IsSpeMapByName(newMapName))
+        {
+            //获取这个特殊地图的 位置坐标
+            string zb1 = GetZBByFX(fx, theCZXMapName);
+            //获取特殊地图的方向 List
+            List<string> FXList1 = GlobalMapDate.GetFXListByName(newMapName);
+            //查询坐标 四个方向处是否有特殊地图 有的话 判断是否能相邻    否则就要换位置
+            if (IsFXHasSpeMap(zb1,FXList1))
+            {
+
+            }
+            else
+            {
+                print("------------------------------------------------------------------------>需要延展的方向 周围没有 特殊地图");
+                //找到SMap的方向 判断是否能对上延展的方向  能对上就直接装上
+
+            }
+
+        }
+        //判断改位置 4周是否有其他特殊地图
+        //判断是否会连接其他特殊地图 会的话就要重选位置
+        //是特殊地图的话 比较特殊地图的连接方向 如果特殊地图中方向没有相对的 就要重选位置（往右生成一格）
+
+
         Vector2 pos = new Vector2(0,0);
         if(fx == "u")
         {

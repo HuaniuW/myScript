@@ -117,20 +117,20 @@ public class GlobalMapDate : MonoBehaviour {
 
     public static bool IsHasSpecialMap()
     {
-        if (SpecialMapNameAndNumArr[CCustomNum] != "") return true;
+        if (SpecialMapNameAndNumArr[CCustomNum-1] != "") return true;
         return false;
     }
 
     //获取当前关卡的 特殊关卡的数组
     public static string[] GetCSpeicalMapNameArr()
     {
-        return SpecialMapNameAndNumArr[CCustomNum].Split('|');
+        return SpecialMapNameAndNumArr[CCustomNum-1].Split('|');
     }
 
     //获取当前关卡的 特殊关卡的字符串
     public static string GetCSpeicalMapStr()
     {
-        return SpecialMapNameAndNumArr[CCustomNum];
+        return SpecialMapNameAndNumArr[CCustomNum-1];
     }
 
     
