@@ -35,7 +35,6 @@ public class GenerateMap : MonoBehaviour {
         //有几个小地图组成？ 最少10个 +随机
         int n = (int)UnityEngine.Random.Range(0, 4);
         int mapsNum = 8 + n;
-        print("地图长度--------------------------------------------------->   "+mapsNum);
         //查找 是否有特别地图 以及特别地图位置编号
         string[] smapArr;
         if (GlobalMapDate.IsHasSpecialMap())
@@ -102,7 +101,7 @@ public class GenerateMap : MonoBehaviour {
         //判断是否是特殊地图
         if (isSepMap)
         {
-            print("特殊地图名字------------------------------------------------------------->     "+ cZXMapName);
+            //print("特殊地图名字------------------------------------------------------------->     "+ cZXMapName);
             //tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             //判断各个方向是否有地图 有的话连接
             return;
@@ -115,7 +114,6 @@ public class GenerateMap : MonoBehaviour {
             int jl = (int)UnityEngine.Random.Range(0, 100);
             string[] jvArr = duozhiJL.Split('-');
 
-            print("jl    " + jl);
             //扩展几个边界
             if (jl < int.Parse(jvArr[0]) * (100 - i) / 100)
             {
@@ -126,7 +124,7 @@ public class GenerateMap : MonoBehaviour {
                 fxNums = 2;
             }
 
-            print("扩展数量------->fxNums:   " + fxNums);
+           
 
             //判断周围 看看是否坐标被占用 找出空位比较 空地
             List<string> fxArr = new List<string> { "l", "u", "d", "r" };
@@ -145,8 +143,9 @@ public class GenerateMap : MonoBehaviour {
                 }
             }
 
-            print("剩余方向数maxNum:  " + maxNum + "  扩展方向数fxNums: " + fxNums);
-
+            //print("剩余方向数maxNum:  " + maxNum + "  扩展方向数fxNums: " + fxNums);
+            print("当前中心地图名字 " + cZXMapName);
+            print("扩展数量------->fxNums:   " + fxNums);
             foreach (var stu in kyFXArr)
             {
                 print("  kyFXArr:   " + stu);
@@ -164,24 +163,32 @@ public class GenerateMap : MonoBehaviour {
                 List<string> fxzhi = new List<string> { "l-5", "d-10", "u-15", "r-70" };
                 //随机选取方向 生成方向数组  
                 tempKyFXArr = ChoseFXArr(fxzhi, kyFXArr, fxNums);
+            }
 
-                foreach (var stu2 in tempKyFXArr)
-                {
-                    print("  tempKyFXArr:   " + stu2);
-                }
+
+            
+            foreach (var stu2 in tempKyFXArr)
+            {
+                print("  可以扩展的方向:   " + stu2);
             }
         }
 
         //获取最大地图的名字
-        //maxI = theMapArr.Count;
-        maxI = int.Parse(theMapArr[theMapArr.Count-1].name.Split('-')[1]);
+        maxI = theMapArr.Count;
+        //maxI = int.Parse(theMapArr[theMapArr.Count-1].name.Split('-')[1]);
         CreateMapByKyFXArr(tempKyFXArr, cZXMapName);
         return;
 
     }
 
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fxzhi">分支选中的几率值组</param>
+    /// <param name="kyFXArr">可以选择的方向数组</param>
+    /// <param name="canChoseNums">可以选择的方向数</param>
+    /// <returns></returns>
     List<string> ChoseFXArr(List<string> fxzhi, List<string> kyFXArr,int canChoseNums)
     {
         // fxzhi  "l-5", "d-10", "u-15", "r-70"  方向几率值
@@ -193,6 +200,7 @@ public class GenerateMap : MonoBehaviour {
             float fenmu = 0;
             tempFXJLArr.Clear();
             //获取可用方向数组的 分母值
+            //u,r,l
             for (int s = 0; s < kyFXArr.Count; s++)
             {
                 for (int j=0;j< fxzhi.Count;j++)
@@ -205,20 +213,42 @@ public class GenerateMap : MonoBehaviour {
             }
 
 
+            string choseFX = null;
+
             for (int c =0; c < tempFXJLArr.Count ; c++)
             {
                 if(jl<= int.Parse(tempFXJLArr[c].Split('-')[1])/ fenmu * 100){
-                    choseArr.Add(tempFXJLArr[c].Split('-')[0]);
-                    tempFXJLArr.Remove(tempFXJLArr[c]);
+                    choseFX = tempFXJLArr[c].Split('-')[0];
+                    choseArr.Add(choseFX);
+                    //tempFXJLArr.Remove(tempFXJLArr[c]);
+                    for (int n=0;n< kyFXArr.Count;n++)
+                    {
+                        if(kyFXArr[n]== tempFXJLArr[c].Split('-')[0])
+                        {
+                            kyFXArr.Remove(kyFXArr[n]);
+                        }
+                    }
                     break;
                 }
             }
 
-            if (jl >= int.Parse(tempFXJLArr[tempFXJLArr.Count - 1].Split('-')[1]) / fenmu * 100)
+            if(choseFX == null)
             {
-                choseArr.Add(tempFXJLArr[tempFXJLArr.Count - 1].Split('-')[0]);
-                tempFXJLArr.Remove(tempFXJLArr[tempFXJLArr.Count - 1]);
+                if (jl >= int.Parse(tempFXJLArr[tempFXJLArr.Count - 1].Split('-')[1]) / fenmu * 100)
+                {
+                    choseArr.Add(tempFXJLArr[tempFXJLArr.Count - 1].Split('-')[0]);
+                    //tempFXJLArr.Remove(tempFXJLArr[tempFXJLArr.Count - 1]);
+
+                    for (int n = 0; n < kyFXArr.Count; n++)
+                    {
+                        if (kyFXArr[n] == tempFXJLArr[tempFXJLArr.Count - 1].Split('-')[0])
+                        {
+                            kyFXArr.Remove(kyFXArr[n]);
+                        }
+                    }
+                }
             }
+           
 
         }
         return choseArr;
@@ -230,21 +260,16 @@ public class GenerateMap : MonoBehaviour {
 
     void CreateMapByKyFXArr(List<string> tempKyFXArr,string cZXMapName)
     {
-        print("");
         tempSpeMapList.Clear();
         int createMapNums = maxI + 1;
         for (int c = 0; c < tempKyFXArr.Count; c++)
         {
-            print("maxI>  "+maxI);
-            print("ccccccc   "+c);
-            createMapNums = maxI + 1 + c;
+            maxI = theMapArr.Count;
+            createMapNums = maxI + 1;
             //maxI = theMapArr.Count;
             //createMapNums = maxI+1;
-            print("createMapNums >  "+ createMapNums);
             //获得名字  先查找名字是否被占用
             string _newMapName = "map_" + GlobalMapDate.CCustomNum.ToString() + "-" + createMapNums;
-            print("////////////////////////////////////////////////////////////////////////   cZXMapName   "+ cZXMapName+ "  _newMapName  "+ _newMapName);
-
             //创建地图 生成名字 和坐标 存入两个数组
             CreateMapImgByFX(cZXMapName, tempKyFXArr[c], _newMapName);
         }
@@ -308,10 +333,7 @@ public class GenerateMap : MonoBehaviour {
     string GetZBByFX(string fx,string cZXMapName)
     {
         string currentMapZB = GetCurrentMapZBByName(cZXMapName);
-        print("寻找坐标地图的名字   "+ cZXMapName+"  方向  "+fx);
-        print("是否有地图坐标   currentMapZB "+ currentMapZB);
         string[] zb = currentMapZB.Split('#');
-        print("zb--------------------------->    "+zb);
         string newMapZB = "";
         switch (fx)
         {
@@ -353,17 +375,10 @@ public class GenerateMap : MonoBehaviour {
     {
         GameObject gkImg = GlobalTools.GetGameObjectByName("gkImg");
         gkImg.transform.parent = _canva.transform;
-        //print(gkImg.transform.position);
         gkImg.transform.position = new Vector2(px,py);
-        //print(gkImg.transform.position);
         
-        //gkImg.GetComponent<RectTransform>().position = new Vector2(px,py);
         gkImg.name = _name;
-        //print(gkImg.name);
         return gkImg;
-        //GameObject o = GlobalTools.FindObjByName("MapUI/gkImg");
-        //print(o + "   ?  " + o.transform.position);
-        //gkImg.transform.position = new Vector3(o.transform.position.x+o.GetComponent<RectTransform>().rect.width + 100,o.transform.position.y+200,o.transform.position.z);
     }
 
 
@@ -429,7 +444,7 @@ public class GenerateMap : MonoBehaviour {
         for (int i = 0;i<FXList.Count;i++)
         {
             ss++;
-            print("计算次数 哇塞    "+ss);
+            //print("计算次数 哇塞    "+ss);
             //判断改方向上是否有地图
             string speMapMsg = GetMapNameAndMsgByZBAndFX(zb, FXList[i]);
             //判断该地图是否是特殊地图
@@ -442,21 +457,32 @@ public class GenerateMap : MonoBehaviour {
     void CreateMapImgByFX(string theCZXMapName,string fx,string newMapName)
     {
         tempSpeMapList.Clear();
-        //判断是否是特殊地图  并找到安防特殊地图的位置
-        if (GlobalMapDate.IsSpeMapByName(newMapName))
-        {
-            //如果是特殊地图 存入临时 特殊地图 数组   maxI加一
-            tempSpeMapList.Add(newMapName);
-            maxI++;
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  maxI  " + maxI);
-            //改变当前生成地图的名字
-            newMapName = newMapName.Split('-')[0] + "-" + (int.Parse(newMapName.Split('-')[1]) + 1);
-        }
+        //判断是否是特殊地图  并找到安防特殊地图的位置      --如果是特殊的地图 看能不能对向相连 否则就存入数组
+        newMapName = IsSpeMapAddMaxI(newMapName);
+        print("newMapName    "+ newMapName);
         CreateOutMap(currentMap, fx, newMapName, theCZXMapName);
-        print("?????????????????????????????????????????????????????????   theCZXMapName  "+ theCZXMapName+ "   newMapName    "+ newMapName);
-
+        //print("?????????????????????????????????????????????????????????   theCZXMapName  "+ theCZXMapName+ "   newMapName    "+ newMapName);
+        
         //如果特殊地图数组有数据
         CreateSpeMap();
+    }
+
+
+    string IsSpeMapAddMaxI(string newMapName)
+    {
+        if (GlobalMapDate.IsSpeMapByName(newMapName))
+        {
+            tempSpeMapList.Add(newMapName);
+            maxI++;
+            print(newMapName+  "  ---  maxI -----   " +maxI);
+            newMapName = newMapName.Split('-')[0] + "-" + (maxI+1);
+            if (GlobalMapDate.IsSpeMapByName(newMapName))
+            {
+                return IsSpeMapAddMaxI(newMapName);
+            }
+        }
+        print("生成的名字   "+newMapName);
+        return newMapName;
     }
 
     GameObject CreateOutMap(GameObject _currentMap, string fx, string newMapName, string currentZXMapName)
@@ -562,11 +588,13 @@ public class GenerateMap : MonoBehaviour {
 
                     //获取当前地图对象 _currentMap  根据坐标获取 地图块对象
                     GameObject _currentMap =    GetMapImgObjByZB(_cMapZB);
-                    print("------------------------------------------------------>_currentMap  "+ _currentMap+ "   _currentMapname "+ _currentMap.name+ "   speMapName  " + speMapName+ "  cMapName " + cMapName);
                     //创建地图的特殊地图块
                     GameObject speMapObj =  CreateOutMap(_currentMap, findFX, speMapName, cMapName);
                     speMapObj.GetComponent<gkImgTextTest>().GetText("老子是特殊关卡");
                     //链接特殊地图块的各个方向
+
+
+
                     return null;
 
                 }
@@ -579,7 +607,8 @@ public class GenerateMap : MonoBehaviour {
     void CreateSpeMapFZ(string speMapName,List<string> fxArr,string speMapZB)
     {
         GameObject speMapObj =  GetMapImgObjByZB(speMapZB);
-        maxI = int.Parse(theMapArr[theMapArr.Count - 1].name.Split('-')[1]);
+        //maxI = int.Parse(theMapArr[theMapArr.Count - 1].name.Split('-')[1]);
+        maxI = theMapArr.Count;
         for (int i = 0; i < fxArr.Count; i++)
         {
             //检查 方向坐标上 是否有地图了 有的话连线

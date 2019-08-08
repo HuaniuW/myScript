@@ -14,7 +14,7 @@ public class GlobalMapDate : MonoBehaviour {
 
 
 
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "5!u-r!jiguan|7!u-r!jiguan|9!r-d!jiguan", "", "6!n!boss|8!n!cundang" };
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "5!u-r!jiguan|6!u-r!jiguan|7!r-d!jiguan", "", "6!n!boss|8!n!cundang" };
 
 
 
