@@ -23,6 +23,7 @@ public class DataZS : MonoBehaviour
     //攻击相应数值
     public static Dictionary<string, float> atk_1_v = new Dictionary<string, float> { { "atkPower", 10 }, { "_xdx", -1f }, { "_xdy", 0f }, { "_scaleW", 2f}, { "_scaleH", 1.8f }, { "_disTime", 1 } };
     static public Dictionary<string, string> atk_2 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_002" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    
     static public Dictionary<string, string> atk_3 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_003" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "20" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> atk_4 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "9" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_004" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "25" }, { "atkDistance", "7" } };
     //稻草人高个子
@@ -32,7 +33,8 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_104 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_101" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "8" } };
     static public Dictionary<string, string> atk_105 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_105" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "8" } };
     static public Dictionary<string, string> jumpAtk_1 = new Dictionary<string, string> { { "atkName", "jumpAtk_1" }, { "xF", "3" }, { "yF", "2" }, { "showTXFrame", "10" }, { "txName", "dg_001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }};
-    static public Dictionary<string, string> jumpAtk_2 = new Dictionary<string, string> { { "atkName", "jumpAtk_2" }, { "xF", "3" }, { "yF", "2" }, { "showTXFrame", "10" }, { "txName", "dg_002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "5" }};
+    static public Dictionary<string, string> jumpAtk_2 = new Dictionary<string, string> { { "atkName", "jumpAtk_2" }, { "xF", "3" }, { "yF", "0" }, { "showTXFrame", "10" }, { "txName", "dg_002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "5" }};
+    static public Dictionary<string, string> jumpAtk_21 = new Dictionary<string, string> { { "atkName", "jumpAtk_21" }, { "xF", "3" }, { "yF", "0" }, { "showTXFrame", "10" }, { "txName", "dg_002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "5" } };
     //烟怪
     static public Dictionary<string, string> atk_201 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "3" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_201" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "8" } };
     static public Dictionary<string, string> atk_202 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "3" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_202" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "8" } };
@@ -58,8 +60,20 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_502 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_502" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" } };
 
 
-    static public Dictionary<string, string>[] atkZS = new Dictionary<string, string>[] {atk_1,atk_2,atk_3,atk_4};
-    static public Dictionary<string, string>[] jumpAtkZS = new Dictionary<string, string>[] {jumpAtk_1,jumpAtk_2,atk_4};
+    static public Dictionary<string, string> atk_21 = new Dictionary<string, string> { { "atkName", "atk_21" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_601" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> atk_22 = new Dictionary<string, string> { { "atkName", "atk_22" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_001" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> atk_23 = new Dictionary<string, string> { { "atkName", "atk_23" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_ci_401" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> atk_24 = new Dictionary<string, string> { { "atkName", "atk_24" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_004" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+
+    static public Dictionary<string, string> atk_31 = new Dictionary<string, string> { { "atkName", "atk_31" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_602" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> jumpAtk_31 = new Dictionary<string, string> { { "atkName", "jumpAtk_31" }, { "xF", "7" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_602" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> jumpAtk_32 = new Dictionary<string, string> { { "atkName", "jumpAtk_32" }, { "xF", "7" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_603" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" },{ "fantan","5"} };
+
+    static public Dictionary<string, string>[] atkZS = new Dictionary<string, string>[] {atk_21,atk_22,atk_24};
+    static public Dictionary<string, string>[] atkUpZS = new Dictionary<string, string>[] { atk_31};
+    static public Dictionary<string, string>[] jumpAtkZS = new Dictionary<string, string>[] {jumpAtk_21,jumpAtk_21};
+    static public Dictionary<string, string>[] jumpAtkDownZS = new Dictionary<string, string>[] { jumpAtk_32};
+    static public Dictionary<string, string>[] jumpAtkUpZS = new Dictionary<string, string>[] { jumpAtk_31};
     static public Dictionary<string, string> jn_ci_1 = new Dictionary<string, string> { { "atkName", "atk_4" },{ "skillBeginEffect", "tt"} ,{ "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_ci_1" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "10" } };
     static public Dictionary<string, string> jn_ci_2 = new Dictionary<string, string> { { "atkName", "atk_6" }, { "skillBeginEffect", "tt" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "jn_cizu" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "20" } };
     static public Dictionary<string, string> jn_chongjijian_2 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "skillBeginEffect", "tt" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "jn_chongjijian_2" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "20" } };

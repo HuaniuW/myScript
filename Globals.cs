@@ -31,6 +31,11 @@ public class Globals : MonoBehaviour {
     public const string CHINESE = "chinese";
     public const string ENGLISH = "english";
     // Use this for initialization
+
+    public static bool isKeyUp = false;
+    public static bool isKeyDown = false;
+
+
     void Start () {
 		
 	}

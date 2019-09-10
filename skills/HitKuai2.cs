@@ -63,7 +63,7 @@ public class HitKuai2 : MonoBehaviour
             //print("击中的2Dbox  "+Coll.GetComponent<BoxCollider2D>().transform.position);
 
             if (roleDate.isDie) return;
-            if (!roleDate.isCanBeHit) return;
+            //if (!roleDate.isCanBeHit) return;
             //取到施展攻击角色的方向
             //float _roleScaleX = -atkObj.transform.localScale.x;
 
@@ -97,7 +97,8 @@ public class HitKuai2 : MonoBehaviour
     public void GetBeHit(JN_Date jn_date, float sx)
     {
         if (roleDate.isDie) return;
-        if (!roleDate.isCanBeHit) return;
+        //if (!roleDate.isCanBeHit) return;
+        print("hei woshi ci!!!!!!!!!!!!!!!!!!!!!!!!!   ");
         float addxue = jn_date.atkPower - roleDate.def;
         addxue = addxue > 0 ? addxue : 1;
         roleDate.live -= addxue;

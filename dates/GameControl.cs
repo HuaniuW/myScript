@@ -9,6 +9,14 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        TimeTest();
+    }
+
+    void TimeTest()
+    {
+        float s = 8 * 365;
+        float t = 1000000;
+        print("--------------------------------------------->每个月的收入  " + t / s * 8 * 31+"元"+"  每天价值 "+t/s*8+"  每小时价值 "+t/s);
     }
 
     public void LuaTest(string str)
@@ -214,7 +222,7 @@ public class GameControl : MonoBehaviour {
             }
             else if (sName == "BOSS")
             {
-                GlobalTools.FindObjByName(s).SetActive(false);
+                if(GlobalTools.FindObjByName(s)!=null) GlobalTools.FindObjByName(s).SetActive(false);
             } else if (sName == "WP") {
                 //GlobalTools.FindObjByName(s).SetActive(false);
                 if(GlobalTools.FindObjByName(s)!=null) GlobalTools.FindObjByName(s).GetComponent<Wupinlan>().DistorySelf();

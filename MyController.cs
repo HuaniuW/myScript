@@ -9,8 +9,13 @@ public class MyController : MonoBehaviour {
     [Header("水平方向")]
     public float horizontalDirection;
 
+    [Header("垂直方向")]
+    public float verticalDirection;
+
     //水平方向的按键响应 Input.GetAxis
     const string HORIZONTAL = "Horizontal";
+
+    const string VERTICAL = "Vertical";
     // Use this for initialization
     void Start () {
         _body = GetComponent<GameBody>();
@@ -76,20 +81,114 @@ public class MyController : MonoBehaviour {
     }
 
 
-    void Update () {
-       
 
+    void NewKey()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Globals.isKeyUp = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Globals.isKeyDown = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            Globals.isKeyUp = false;
+        }
+
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            Globals.isKeyDown = false;
+        }
+
+
+
+        if (Input.GetKey(KeyCode.A))
+        {
+
+            if (IsCanControl()) _body.RunLeft(-1f);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            
+            if (IsCanControl()) _body.RunRight(1f);
+        }
+
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
+        }
+
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+
+            if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            if (IsCanControl()) _body.GetAtk();
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (IsCanControl()) _body.GetJump();
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (IsCanControl()) _body.GetSkill1();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (IsCanControl()) _body.GetSkill2();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (IsCanControl()) _body.GetDodge1();
+        }
+
+    }
+
+
+    void Update () {
+
+
+        NewKey();
+
+        ShouBing();
+
+        //OldKey();
+    }
+
+
+    void OldKey()
+    {
         if (Input.anyKey)
         {//得到按下什么键
             //print("anyKey  " + Input.inputString);
         }
 
-        
-        if (Input.inputString == "Joystick2Button0") {
+
+        if (Input.inputString == "Joystick2Button0")
+        {
             //print("atk!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
-        ShouBing();
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            print("new atk!");
+            if (IsCanControl()) _body.GetAtk();
+        }
+
+
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -97,14 +196,16 @@ public class MyController : MonoBehaviour {
             if (IsCanControl()) _body.GetJump();
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
             //|| Input.GetKeyUp("joystick2Button2")
             //values.GetValue(x).ToString()
             if (IsCanControl()) _body.GetAtk();
         }
 
-       
-        if (Input.GetKeyDown(KeyCode.J)) {
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
             if (IsCanControl()) _body.GetDodge1();
         }
 
@@ -121,16 +222,35 @@ public class MyController : MonoBehaviour {
 
 
         horizontalDirection = Input.GetAxis(HORIZONTAL);
-        if (horizontalDirection > 0) {
+
+        verticalDirection = Input.GetAxis(VERTICAL);
+        if (horizontalDirection > 0)
+        {
             if (IsCanControl()) _body.RunRight(horizontalDirection);
-        } else if(horizontalDirection<0) {
+        }
+        else if (horizontalDirection < 0)
+        {
             if (IsCanControl()) _body.RunLeft(horizontalDirection);
         }
         else
         {
-            if (IsCanControl()&&!Globals.isXNBtn) _body.ReSetLR();
+            if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
         }
-        
-       
+
+        if (verticalDirection > 0.1)
+        {
+            Globals.isKeyUp = true;
+            Globals.isKeyDown = false;
+        }
+        else if (horizontalDirection<-0.1)
+        {
+            Globals.isKeyUp = false;
+            Globals.isKeyDown = true;
+        }
+        else
+        {
+            Globals.isKeyUp = false;
+            Globals.isKeyDown = true;
+        }
     }
 }

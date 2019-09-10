@@ -41,7 +41,7 @@ public class AITheWay_dcr : MonoBehaviour {
 
         //print("a: "+ atkArrs.Length);
         //print("lie    "+lie);
-        lie = 0;
+        //lie = 0;
         string[] zss = (string[])atkArrs[lie];
         return zss;
     }

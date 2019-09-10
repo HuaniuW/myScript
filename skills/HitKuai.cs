@@ -114,7 +114,13 @@ public class HitKuai : MonoBehaviour {
 				gameBody.GetPause(jn_date.yingzhishijian);
 
                 //if (Coll.tag != "Player")
+            }
 
+            if (jn_date.fasntuili != 0)
+            {
+                //空中反推力
+                atkObj.GetComponent<GameBody>().SetYSpeedZero();
+                atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jn_date.fasntuili));
             }
 
             atkObj.GetComponent<GameBody>().GetPause();

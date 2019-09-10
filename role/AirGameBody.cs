@@ -30,6 +30,34 @@ public class AirGameBody : GameBody {
         print("222");
     }
 
+    public override void ResetAll()
+    {
+        //isRun = false;
+        isRunLefting = false;
+        isRunRighting = false;
+        //isInAiring = false;
+        isDowning = false;
+        //在空中被击中 如果关闭跳跃bool会有落地bug
+        //isJumping = false;
+        // isJumping2 = false;
+        //isJump2 = false;
+        //isQiTiao = false;
+        isAtk = false;
+        isAtking = false;
+        atkNums = 0;
+        isAtkYc = false;
+        isYanchi = false;
+        isBackUp = false;
+        isBackUping = false;
+        isQianhua = false;
+        isQianhuaing = false;
+        isAcing = false;
+        isYanchi = false;
+        isSkilling = false;
+        isSkillOut = false;
+        if (roleDate) roleDate.isBeHiting = false;
+    }
+
     protected override void Stand()
     {
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;

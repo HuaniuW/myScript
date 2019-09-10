@@ -55,6 +55,10 @@ public class JN_Date : MonoBehaviour {
     public float yingzhishijian = 0.1f;
 
 
+    [Header("空中攻击的反推力")]
+    public float fasntuili = 0;
+
+
     //public Dictionary<string, float> atk_date = new Dictionary<string, float> { { "atkPower", 100 },{ "_xdx", -1.5f }, { "_xdy", 0f },{ "_scaleW", 2f }, { "_scaleH", 1.8f }, { "_disTime", 1 }};
     // Use this for initialization
     void Start () {

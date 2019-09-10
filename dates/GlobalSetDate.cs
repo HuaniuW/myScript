@@ -319,7 +319,6 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.userName = "我的存档";
         CurrentUserDate.onlyId = 2;
 
-        //print(CurrentUserDate.curLive);
 
         //print(CurrentUserDate.curLan);
         //print(CurrentUserDate.screenName);
