@@ -108,17 +108,18 @@ public class MyController : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.A))
         {
-
             if (IsCanControl()) _body.RunLeft(-1f);
         }
-
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
-            
             if (IsCanControl()) _body.RunRight(1f);
         }
+        else
+        {
+            if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
+        }
 
-        if (Input.GetKeyUp(KeyCode.A))
+        /*if (Input.GetKeyUp(KeyCode.A))
         {
             if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
         }
@@ -127,7 +128,7 @@ public class MyController : MonoBehaviour {
         {
 
             if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.J))
         {

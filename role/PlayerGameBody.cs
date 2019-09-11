@@ -439,6 +439,8 @@ public class PlayerGameBody : GameBody {
     protected override void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+        
+
 
         if (isDodgeing && IsHitMQWall && isInAiring)
         {
@@ -458,7 +460,6 @@ public class PlayerGameBody : GameBody {
         isInAiring = !IsGround;
         if (IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
-            //print("???????????");
             if (DBBody.animation.isCompleted)
             {
                 //print("luodidongzuo zuowan");
@@ -479,7 +480,7 @@ public class PlayerGameBody : GameBody {
 
         //print("isqitiao  "+isQiTiao);
 
-        if (IsGround && !isBackUping && (isQiTiao || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN || DBBody.animation.lastAnimationName == JUMP2DUAN || DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround && !isBackUping && (DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN || DBBody.animation.lastAnimationName == JUMP2DUAN || DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -535,7 +536,7 @@ public class PlayerGameBody : GameBody {
             }
             else
             {
-                if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN || DBBody.animation.lastAnimationName == JUMPHITWALL || DBBody.animation.lastAnimationName == RUNBEGIN) && !DBBody.animation.isCompleted) return;
+                if ((DBBody.animation.lastAnimationName == JUMP2DUAN || DBBody.animation.lastAnimationName == JUMPHITWALL || DBBody.animation.lastAnimationName == RUNBEGIN) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
                     //上升
@@ -556,15 +557,17 @@ public class PlayerGameBody : GameBody {
     {
         if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
+       /* print("jump "+jumpNums+"   jump2 "+isJumping2);
+        print(roleDate.isBeHiting + "      " + DBBody.animation.lastAnimationName + "   isOn " + IsGround+" atk "+isAtking+" isAtk "+isAtk);*/
         Jump();
     }
 
 
-
+    
     protected override void Jump()
     {
         if (isDodgeing || isAtk || roleDate.isBeHiting) return;
-
+        jumpNums--;
         if (jumpNums < 0) return;
         if (jumpNums == 0)
         {
@@ -586,7 +589,7 @@ public class PlayerGameBody : GameBody {
                 }
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
                 newSpeed.y = 0.1f;
-                isJumping2 = true;
+                //isJumping2 = true;
                 playerRigidbody2D.velocity = newSpeed;
                 playerRigidbody2D.AddForce(Vector2.up * yForce);
             }
@@ -603,8 +606,6 @@ public class PlayerGameBody : GameBody {
                 playerRigidbody2D.AddForce(Vector2.up * yForce);
             }
         }
-        jumpNums--;
-
     }
 
     protected override void IsCanShanjinAndJump()
@@ -614,8 +615,73 @@ public class PlayerGameBody : GameBody {
             isCanShanjin = true;
         }
 
-        if (IsGround&& DBBody.animation.lastAnimationName == DOWNONGROUND) jumpNums = maxJumpNums;
-        if (IsHitMQWall) jumpNums = 0;
+      /*  if (IsGround && DBBody.animation.lastAnimationName != DOWNONGROUND)
+        {
+            DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
+            isAtkYc = false;
+            isAtking = false;
+            isAtk = false;
+            isJumping2 = false;
+            MoveVX(0);
+        }*/
 
+
+        if (IsGround) {
+            jumpNums = maxJumpNums;
+            isDowning = false;
+        }
+        if (IsHitMQWall) {
+            jumpNums = 1;
+        } 
+
+    }
+
+    protected override void InStand()
+    {
+        //print("?????????????");
+        //print("回到 stand   isatking> " + isAtking + "  isAtk " + isAtk + "  isDown " + isDowning + "  isJump2  " + isJump2 + "  isjumping2 " + isJumping2 + "  isjumping " + isJumping);
+        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
+        {
+            //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
+
+            Stand();
+            
+        }
+    }
+
+
+    protected override void Stand()
+    {
+        //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
+        if (roleDate.isBeHiting) return;
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
+
+
+        if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
+        {
+            if (this.tag == "player")
+            {
+                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+            }
+            else
+            {
+                //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //时间0.01f  0.1秒 慢了会报错（位置错误）
+                DBBody.animation.FadeIn(STAND, 0.01f, 1);
+            }
+
+        }
+        isDowning = false;
+        if (newSpeed.x > slideNum)
+        {
+            newSpeed.x = slideNum - 1;
+        }
+        else if (newSpeed.x < -slideNum)
+        {
+            newSpeed.x = -slideNum + 1;
+        }
+
+        playerRigidbody2D.velocity = newSpeed;
     }
 }

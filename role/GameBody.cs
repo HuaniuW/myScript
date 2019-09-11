@@ -124,6 +124,8 @@ public class GameBody : MonoBehaviour, IRole {
         isYanchi = false;
         isSkilling = false;
         isSkillOut = false;
+        isDodge = false;
+        isDodgeing = false;
         if(roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
     }
@@ -611,29 +613,25 @@ public class GameBody : MonoBehaviour, IRole {
     {
         isRunRighting = false;
         isRunLefting = false;
+        if(DBBody.animation.lastAnimationName == RUN)
+        {
+            //GetStand();
+        }
     }
 
     protected virtual void Run()
     {
-        //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
+        
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        //print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
+        //print("??????   "+isRunLefting +"    "+isRunRighting);
         //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
 
         if (DBBody.animation.lastAnimationName != RUN)
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
-
-
-        //if (DBBody.animation.lastAnimationName == RUNBEGIN && DBBody.animation.isCompleted)
-        //{
-        //    DBBody.animation.GotoAndPlayByFrame(RUN);
-        //}
-        //if (DBBody.animation.lastAnimationName != RUNBEGIN && DBBody.animation.lastAnimationName != RUN)
-        //{
-        //    DBBody.animation.GotoAndPlayByFrame(RUNBEGIN, 0, 1);
-        //}
     }
 
     void Walk()
@@ -654,10 +652,8 @@ public class GameBody : MonoBehaviour, IRole {
         if (isDodgeing) return;
         if (!isJumping)
         {
-            print("wokao  !!!!  ");
             if (isCanJump) {
                 //isCanJump = false;
-                print("------------------------------------->  跳");
                 //Jump();
                 isJumping = true;
             }
@@ -805,6 +801,8 @@ public class GameBody : MonoBehaviour, IRole {
     protected virtual void InAir()
     {
         // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+        print("空中！！！！！！！！！！！！");
+
 
         if (isDodgeing && IsHitMQWall && isInAiring)
         {
@@ -845,7 +843,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         //print("isqitiao  "+isQiTiao);
 
-        if (IsGround&&!isBackUping&&(isQiTiao || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
+        if (IsGround&&!isBackUping&&(DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
@@ -854,6 +852,7 @@ public class GameBody : MonoBehaviour, IRole {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
+                isJumping2 = false;
                 MoveVX(0);
             }
         }
@@ -916,14 +915,15 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
+
     protected virtual void Stand()
     {
         //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
+        print("????");
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
-            //print("--");
             if (this.tag == "player") {
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
             }
@@ -935,7 +935,7 @@ public class GameBody : MonoBehaviour, IRole {
             }
             
         }
-        
+
         isDowning = false;
         if (newSpeed.x > slideNum)
         {
@@ -947,6 +947,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         playerRigidbody2D.velocity = newSpeed;
+
     }
 
     public void GetStand()
@@ -1062,10 +1063,14 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (IsGround || IsHitMQWall) {
             isCanShanjin = true;
-            
-        } 
+            isJumping2 = false;
+        }
 
-        if(IsGround) isCanJump = true;
+        if (IsGround) {
+            isJumping2 = false;
+            isCanJump = true;
+        }
+        
 
     }
 
@@ -1103,7 +1108,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
 
-        IsCanShanjinAndJump();
+        
 
         if (_theTimer != null && !_theTimer.IsPauseTimeOver())
         {
@@ -1119,6 +1124,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (isQianhuaing)
         {
+            //print("isQianhuaing");
             //防止加速过快 限制最大速度
             ControlSpeed(20);
             GetQianhuaing();
@@ -1128,6 +1134,7 @@ public class GameBody : MonoBehaviour, IRole {
         
         if (isBackUping)
         {
+            //print("isBackUping");
             ControlSpeed(14);
             GetBackUping();
             return;
@@ -1139,6 +1146,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (isDodgeing)
         {
+            //print("isDodgeing");
             Dodge1();
             return;
         }
@@ -1151,11 +1159,12 @@ public class GameBody : MonoBehaviour, IRole {
 
 
         InAir();
-
+        IsCanShanjinAndJump();
 
 
         if (isAcing)
         {
+            //print("isAcing");
             GetAcMsg(_acName);
             return;
         }
@@ -1169,15 +1178,29 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (isAtking)
         {
+            //print("isAtking");
             Atk();
         }
 
+
+        //print("isQianhuaing>  " + isQianhuaing+ "/n isDowning "+ isDowning+ " /n isJumping2  "+ isJumping2+ " /n  isJumping  "+ isJumping+"  ");
+
+
+
         //print(this.tag);
         //if (this.tag != "diren") print("hi");
-        if (!roleDate.isBeHiting &&!isQianhuaing &&!isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping &&!isJumping2&& !isAtking && !isDodgeing && !isAtkYc&&!isBackUping&&!isQianhuaing)
+        InStand();
+    }
+
+
+    protected virtual void InStand()
+    {
+        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
         {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
+
             Stand();
+            //print("回到 stand   isatking> " + isAtking + "  isAtk " + isAtk + "  isDown " + isDowning + "  isJump2  " + isJump2 + "  isjumping2 " + isJumping2 + "  isjumping " + isJumping);
         }
     }
 
