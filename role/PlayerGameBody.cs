@@ -573,20 +573,7 @@ public class PlayerGameBody : GameBody {
         {
             if (DBBody.animation.lastAnimationName != JUMP2DUAN)
             {
-                if (DBBody.animation.lastAnimationName == JUMPHITWALL)
-                {
-                    newPosition = this.transform.localPosition;
-                    if (bodyScale.x == 1)
-                    {
-                        MoveXByPosition(0.1f);
-                        playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
-                    }
-                    else
-                    {
-                        MoveXByPosition(-0.1f);
-                        playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
-                    }
-                }
+                JumpHitWall();
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
                 newSpeed.y = 0.1f;
                 //isJumping2 = true;
@@ -596,14 +583,33 @@ public class PlayerGameBody : GameBody {
         }
         else
         {
-            if (!roleDate.isBeHiting && DBBody.animation.lastAnimationName != JUMPHITWALL &&
+            if (!roleDate.isBeHiting &&
                 DBBody.animation.lastAnimationName != JUMP2DUAN &&
                 DBBody.animation.lastAnimationName != DOWNONGROUND &&
                 DBBody.animation.lastAnimationName != JUMPUP)
             {
+                JumpHitWall();
                 playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0);
                 DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
                 playerRigidbody2D.AddForce(Vector2.up * yForce);
+            }
+        }
+    }
+
+    void JumpHitWall()
+    {
+        if (DBBody.animation.lastAnimationName == JUMPHITWALL)
+        {
+            newPosition = this.transform.localPosition;
+            if (bodyScale.x == 1)
+            {
+                MoveXByPosition(0.1f);
+                playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
+            }
+            else
+            {
+                MoveXByPosition(-0.1f);
+                playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
             }
         }
     }

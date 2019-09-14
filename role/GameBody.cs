@@ -35,6 +35,9 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("侦测地板的射线起点")]
     public UnityEngine.Transform groundCheck;
 
+    [Header("侦测地板的射线起点")]
+    public UnityEngine.Transform groundCheck3;
+
 
     [Header("感应与面前墙的距离")]
     [Range(0, 1)]
@@ -480,6 +483,18 @@ public class GameBody : MonoBehaviour, IRole {
             Vector2 end = new Vector2(start.x, start.y - distance);
             Debug.DrawLine(start, end, Color.blue);
             grounded = Physics2D.Linecast(start, end, groundLayer);
+            Vector2 start2;
+            Vector2 end2;
+            if (!grounded&&groundCheck3 != null)
+            {
+                
+                start2 = groundCheck3.position;
+                end2 = new Vector2(start2.x, start2.y - distance);
+                Debug.DrawLine(start2, end2, Color.blue);
+                grounded = Physics2D.Linecast(start2, end2, groundLayer);
+                //print("??????????????????????????????>>  "+ grounded);
+            }
+
             return grounded;
         }
     }
@@ -1501,8 +1516,12 @@ public class GameBody : MonoBehaviour, IRole {
         if (type == EventObject.SOUND_EVENT)
         {
             //print("eventName:  "+eventObject.name);
-            //if (eventObject.name == "jumpHitWall") return;
+            //print(playerRigidbody2D.velocity.x+"  ?    "+this.transform.localScale);
+            if (eventObject.name == "jumpHitWall") {
+                if ((this.transform.localScale.x == 1 && playerRigidbody2D.velocity.x >= 1) || (this.transform.localScale.x == -1 && playerRigidbody2D.velocity.x <= -1)) return;
+            } 
             if (eventObject.name == "runG1") return;
+            if (eventObject.name == "downOnGround" && DBBody.animation.lastAnimationName!=DOWNONGROUND) return;
             //if(eventObject.name=="run1"|| eventObject.name == "run2") _yanmu.Play();
             GetComponent<RoleAudio>().PlayAudio(eventObject.name);
         }

@@ -14,7 +14,7 @@ public class TheTimer : MonoBehaviour {
         if (!isStart) return;
 	}
 
-    bool isStart = false;
+    public bool isStart = false;
 
     public bool IsPauseTimeOver() {
         if (!isStart) return true;

@@ -50,13 +50,24 @@ public class CameraController : MonoBehaviour
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CAMERA_SHOCK, this.GetShock);
     }
 
+
+    float theStillNums = 0;
     void GetShock(UEvent e)
     {
-        if (e.eventParams.ToString() == "y")
+
+        string str = e.eventParams.ToString();
+        string bt = str.Split('-')[0];
+        if (str.Split('-')[1] != null) theStillNums = float.Parse(str.Split('-')[1]);
+
+
+        if (bt == "y")
         {
             GetShockY();
-        } else if (e.eventParams.ToString() == "z") {
+        } else if (bt == "z") {
             GetShockZ();
+        }else if (bt == "z2")
+        {
+            GetShockZ2(theStillNums);
         }
     }
 
@@ -291,6 +302,9 @@ public class CameraController : MonoBehaviour
         var z = transform.position.z;
         if (isShockZing) z = GetShockZing();
 
+        if(isShockZing2) z = GetShockZing2();
+
+
         transform.position = new Vector3(x, y, z);//改变相机的位置
         //print("2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
 
@@ -443,6 +457,8 @@ public class CameraController : MonoBehaviour
     float friction = 0.9f;
     float vy = 0;
 
+    bool IsStillShock = true;
+
     float newY2;
     void GetShockY()
     {
@@ -497,6 +513,7 @@ public class CameraController : MonoBehaviour
         {
             vz += (targetZ - newZ2) * spring;
             newZ2 += (vz *= friction);
+            //if (IsStillShock) newZ2 = vz;
 
             if (decimal.Round(decimal.Parse(newZ2.ToString()), 2) == decimal.Round(decimal.Parse(targetZ.ToString()), 2))
             {
@@ -505,6 +522,69 @@ public class CameraController : MonoBehaviour
             }
         }
         return newZ2;
+    }
+
+
+
+    //持续震动z
+
+    float targetZ2;
+    float targetZ21;
+    float theTargetZ;
+
+    float yuanshiZ;
+
+    bool isShockZ2 = false;
+    bool isShockZing2 = false;
+    float vz2 = 0;
+    float newZ22;
+
+    TheTimer stillTimes = new TheTimer();
+    void GetShockZ2(float stillNums)
+    {
+        newZ22 = this.transform.position.z;
+        if (!isShockZ2)
+        {
+            isShockZ2 = true;
+            isShockZing2 = true;
+            targetZ2 = newZ22 + 0.4f;
+            targetZ21 = newZ22 - 0.4f;
+            theTargetZ = targetZ2;
+
+            yuanshiZ = this.transform.position.z;
+            stillTimes.GetStopByTime(theStillNums);
+        }
+    }
+
+    
+
+
+
+    float GetShockZing2()
+    {
+        newZ22 = this.transform.position.z;
+        if (isShockZing2)
+        {
+            newZ22+= (theTargetZ - newZ22) * 0.4f;
+
+            if (Mathf.Abs(targetZ2 - newZ22)<0.2f)
+            {
+                newZ22 = targetZ2 - 0.22f;
+                theTargetZ = targetZ21;
+            }else if (Mathf.Abs(targetZ21 - newZ22)<0.2f)
+            {
+                newZ22 = targetZ21 + 0.22f;
+                theTargetZ = targetZ2;
+            }
+
+            if (stillTimes.isStart&& stillTimes.IsPauseTimeOver())
+            {
+                isShockZing2 = false;
+                isShockZ2 = false;
+                this.transform.position =new Vector3(this.transform.position.x,this.transform.position.y,yuanshiZ);
+            }
+        }
+        return newZ22;
     }
 
 
