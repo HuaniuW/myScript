@@ -21,7 +21,6 @@ public class HitKuai : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
     }
 
     GameObject atkObj;
@@ -81,33 +80,42 @@ public class HitKuai : MonoBehaviour {
                 ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
                 //判断是否破防   D 代办事项 
-                if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
+
+                if (jn_date.fasntuili == 0)
                 {
-                    //atkObjV3Zero(Coll.gameObject);
-                    atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
-                    //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
-                    //print(Coll.tag);
-                    gameBody.HasBeHit();
-                }
-                else if (jn_date.atkPower - roleDate.yingzhi > 0)
-                {
-                    //atkObjV3Zero(Coll.gameObject);
-                   
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX-100, 0));
-                    gameBody.HasBeHit(jn_date.chongjili);
-                    if (atkObj&& jn_date._type == "1")
+                    if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                     {
-                        ObjV3Zero(atkObj);
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
+                        //atkObjV3Zero(Coll.gameObject);
+                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
+                        Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
+                        //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
+                        //print(Coll.tag);
+                        gameBody.HasBeHit();
                     }
-                }
-                else
-                {
-                    if (atkObj && jn_date._type == "1")
+                    else if (jn_date.atkPower - roleDate.yingzhi > 0)
                     {
-                        ObjV3Zero(atkObj);
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
+                        //atkObjV3Zero(Coll.gameObject);
+
+                        Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX - 100, 0));
+                        gameBody.HasBeHit(jn_date.chongjili);
+                        if (atkObj && jn_date._type == "1")
+                        {
+                            ObjV3Zero(atkObj);
+                            atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
+                        }
+                    }
+                    else
+                    {
+                        if (atkObj && jn_date._type == "1")
+                        {
+                            //被攻击怪硬值过大 被反弹
+                            ObjV3Zero(atkObj);
+                            /* if (!atkObj.GetComponent<GameBody>().isAtkFanTui)
+                             {
+                                 atkObj.GetComponent<GameBody>().isAtkFanTui = true;
+                             }*/
+                            atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
+                        }
                     }
                 }
 
@@ -116,11 +124,17 @@ public class HitKuai : MonoBehaviour {
                 //if (Coll.tag != "Player")
             }
 
+
+           
             if (jn_date.fasntuili != 0)
             {
+                print(">>>>>>>>>??????????????     " + atkObj.GetComponent<GameBody>().isAtkFanTui);
                 //空中反推力
-                atkObj.GetComponent<GameBody>().SetYSpeedZero();
-                atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jn_date.fasntuili));
+                if (!atkObj.GetComponent<GameBody>().isAtkFanTui) {
+                    atkObj.GetComponent<GameBody>().isAtkFanTui = true;
+                    atkObj.GetComponent<GameBody>().SetYSpeedZero();
+                    atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jn_date.fasntuili));
+                }
             }
 
             atkObj.GetComponent<GameBody>().GetPause();

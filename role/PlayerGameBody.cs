@@ -130,6 +130,8 @@ public class PlayerGameBody : GameBody {
         }
     }
 
+    
+
     protected override void Atk()
     {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
@@ -140,6 +142,7 @@ public class PlayerGameBody : GameBody {
         {
             jisuqi = 0;
             yanchi++;
+            isAtkFanTui = false;
             //ljTime.GetStopByTime(0.5f);
             if (yanchi > vOAtk.yanchi - canMoveNums)
             {
@@ -635,6 +638,7 @@ public class PlayerGameBody : GameBody {
         if (IsGround) {
             jumpNums = maxJumpNums;
             isDowning = false;
+            isAtkFanTui = false;
         }
         if (IsHitMQWall) {
             jumpNums = 1;

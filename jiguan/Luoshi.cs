@@ -17,10 +17,10 @@ public class Luoshi : MonoBehaviour {
 
     void HideSelf()
     {
-        if(Mathf.Abs(this.transform.position.y - myY) > 4)
+        if(Mathf.Abs(this.transform.position.y - myY) > 34)
         {
             IsDownBegin = false;
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
     

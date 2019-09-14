@@ -87,7 +87,15 @@ public class HitKuai2 : MonoBehaviour
             if (jn_date != null && gameBody != null)
             {
                 gameBody.HasBeHit();
-                Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * atkScaleX, 0));
+                if (Coll.transform.position.x > this.transform.parent.transform.position.x)
+                {
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * atkScaleX, 0));
+                }
+                else
+                {
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(-400 * atkScaleX, 0));
+                }
+                
             }
             
         }
@@ -98,7 +106,6 @@ public class HitKuai2 : MonoBehaviour
     {
         if (roleDate.isDie) return;
         //if (!roleDate.isCanBeHit) return;
-        print("hei woshi ci!!!!!!!!!!!!!!!!!!!!!!!!!   ");
         float addxue = jn_date.atkPower - roleDate.def;
         addxue = addxue > 0 ? addxue : 1;
         roleDate.live -= addxue;

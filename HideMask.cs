@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class HideMask : MonoBehaviour {
     public Transform hideObj;
-	// Use this for initialization
+    // Use this for initialization
+
+    public bool IsOutShow = true;
 	void Start () {
         Color t = this.GetComponent<SpriteRenderer>().color;
 
@@ -30,7 +32,7 @@ public class HideMask : MonoBehaviour {
         //print("Trigger - B");
         if (Coll.tag == "Player")
         {
-            hideObj.gameObject.SetActive(true);
+            if(IsOutShow) hideObj.gameObject.SetActive(true);
         }
     }
     void OnTriggerStay2D(Collider2D Coll)

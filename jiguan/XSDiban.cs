@@ -46,10 +46,9 @@ public class XSDiban : MonoBehaviour {
 
     void BeStop()
     {
-        print("时间到！！");
         StopYanmu();
         StopSound();
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 
     //其他触发
