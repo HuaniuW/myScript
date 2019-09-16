@@ -128,13 +128,8 @@ public class HitKuai : MonoBehaviour {
            
             if (jn_date.fasntuili != 0)
             {
-                print(">>>>>>>>>??????????????     " + atkObj.GetComponent<GameBody>().isAtkFanTui);
-                //空中反推力
-                if (!atkObj.GetComponent<GameBody>().isAtkFanTui) {
-                    atkObj.GetComponent<GameBody>().isAtkFanTui = true;
-                    atkObj.GetComponent<GameBody>().SetYSpeedZero();
-                    atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jn_date.fasntuili));
-                }
+                atkObj.GetComponent<GameBody>().SetYSpeedZero();
+                atkObj.GetComponent<Rigidbody2D>().velocity = new Vector2(atkObj.GetComponent<Rigidbody2D>().velocity.x, 16);
             }
 
             atkObj.GetComponent<GameBody>().GetPause();

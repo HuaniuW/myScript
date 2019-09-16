@@ -48,7 +48,6 @@ public class JG_chufaCi : MonoBehaviour {
     {
         if (jg_ci.transform.position.y < endPos.position.y)
         {
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             float _y = jg_ci.transform.position.y + ciSpeed;
             jg_ci.transform.position = new Vector3(jg_ci.transform.position.x, _y + jg_ci.transform.position.z);
         }
@@ -100,7 +99,6 @@ public class JG_chufaCi : MonoBehaviour {
     {
         if (Coll.tag == "Player")
         {
-            print(" 刺 chufa !!!!!!!");
             BeStart();
         }
     }

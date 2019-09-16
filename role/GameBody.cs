@@ -103,7 +103,6 @@ public class GameBody : MonoBehaviour, IRole {
     protected bool isQiTiao = false;
 
 
-    public bool isAtkFanTui = false;
     public virtual void ResetAll()
     {
         //isRun = false;
@@ -131,7 +130,6 @@ public class GameBody : MonoBehaviour, IRole {
         isSkillOut = false;
         isDodge = false;
         isDodgeing = false;
-        isAtkFanTui = false;
         if (roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
     }
@@ -935,7 +933,6 @@ public class GameBody : MonoBehaviour, IRole {
         //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        isAtkFanTui = false;
 
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {

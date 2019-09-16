@@ -57,7 +57,7 @@ public class CameraController : MonoBehaviour
 
         string str = e.eventParams.ToString();
         string bt = str.Split('-')[0];
-        if (str.Split('-')[1] != null) theStillNums = float.Parse(str.Split('-')[1]);
+        if (str.Split('-').Length>1&& str.Split('-')[1] != null) theStillNums = float.Parse(str.Split('-')[1]);
 
 
         if (bt == "y")
@@ -68,6 +68,9 @@ public class CameraController : MonoBehaviour
         }else if (bt == "z2")
         {
             GetShockZ2(theStillNums);
+        }else if (bt == "end")
+        {
+            Shock2Stop();
         }
     }
 
@@ -585,6 +588,15 @@ public class CameraController : MonoBehaviour
             }
         }
         return newZ22;
+    }
+
+
+    void Shock2Stop()
+    {
+        stillTimes.End();
+        isShockZing2 = false;
+        isShockZ2 = false;
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, yuanshiZ);
     }
 
 

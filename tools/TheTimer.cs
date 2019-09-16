@@ -11,7 +11,7 @@ public class TheTimer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!isStart) return;
+
 	}
 
     public bool isStart = false;
@@ -27,7 +27,7 @@ public class TheTimer : MonoBehaviour {
         return false;       
     }
 
-    void End()
+    public void End()
     {
         ReSet();
     }
@@ -48,6 +48,5 @@ public class TheTimer : MonoBehaviour {
     public void ReSet()
     {
         isStart = false;
-
     }
 }
