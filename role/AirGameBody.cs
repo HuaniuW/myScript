@@ -202,4 +202,19 @@ public class AirGameBody : GameBody {
         playerRigidbody2D.velocity = Vector2.zero;
     }
 
+    protected override void GetBeHit()
+    {
+
+        if ((DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted)
+        {
+            roleDate.isBeHiting = false;
+            GetPause(0.7f);
+            if (IsGround) GetStand();
+        }
+        else
+        {
+            print(" isBeHiting! 但是没有进入 behit 动作 ");
+        }
+    }
+
 }

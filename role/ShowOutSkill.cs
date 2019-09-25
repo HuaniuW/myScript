@@ -30,8 +30,8 @@ public class ShowOutSkill : MonoBehaviour {
         //    print("this.transform.localScale.x  " + this.transform.localScale.x);
         //    print("this.gameObject  " + this.gameObject);
         //}
-        
 
+        print("攻击时玩家的x周速度  "+this.GetComponent<Rigidbody2D>().velocity.x);
         skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject, isSkill);
         
         

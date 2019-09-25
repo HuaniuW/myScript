@@ -63,6 +63,8 @@ public class PlayerGameBody : GameBody {
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
+
+        if (isTXShow) return;
         if (!isWalk && bodyScale.x == 1)
         {
             bodyScale.x = -1;
@@ -90,6 +92,7 @@ public class PlayerGameBody : GameBody {
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
+        if (isTXShow) return;
         if (!isWalk && bodyScale.x == -1)
         {
             bodyScale.x = 1;
@@ -110,11 +113,27 @@ public class PlayerGameBody : GameBody {
 
     }
 
+    protected override void Run()
+    {
+
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
+        if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
+        print("??????   "+isRunLefting +"    "+isRunRighting);
+        //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
+
+        if (DBBody.animation.lastAnimationName != RUN)
+        {
+            DBBody.animation.GotoAndPlayByFrame(RUN);
+        }
+    }
+
 
 
 
     bool isLJ = false;
     int jishiNum = 0;
+    //连击清零
     void LJJiSHu()
     {
         if (isLJ)
@@ -184,11 +203,27 @@ public class PlayerGameBody : GameBody {
     
     }
 
+    //取消空中闪进
+    void ShanjinStop()
+    {
+        isShanjin = false;
+        isCanShanjin = true;
+        isDodgeing = false;
+        isDodge = false;
+        roleDate.isCanBeHit = true;
+        playerRigidbody2D.gravityScale = gravityScaleNums;
+    }
 
     public override void GetAtk(string atkName = null)
     {
         if (roleDate.isBeHiting) return;
-        if (isDodgeing || isAcing) return;
+        if (isAcing) return;
+
+        if (isDodgeing) {
+            if (!isShanjin) return;
+            ShanjinStop();
+        }
+
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
@@ -196,6 +231,7 @@ public class PlayerGameBody : GameBody {
         {
             isAtk = true;
             isAtking = true;
+            isTXShow = true;
             isAtkYc = true;
             yanchi = 0;
             jisuqi = 0;
@@ -265,7 +301,8 @@ public class PlayerGameBody : GameBody {
             }
 
             MoveVX(vOAtk.xF, true);
-            
+            //MoveVX(0, true);
+
             //print(newSpeed.y);
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
@@ -368,6 +405,7 @@ public class PlayerGameBody : GameBody {
         InFightAtk();
         ChangeStandAndRunAC();
         Time.timeScale = 0.5f;
+        print(" Time.timeScale  "+ Time.timeScale);
         //print("speedX   "+ speedX);
         //print("22--->  "+ playerRigidbody2D.velocity.x);
         if (chongjili > 700)
@@ -386,7 +424,8 @@ public class PlayerGameBody : GameBody {
 
         //print(speedX);
 
-
+        isGetJump = false;
+        isGetJumpOnWall = false;
         if (isInAiring)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))
@@ -396,6 +435,7 @@ public class PlayerGameBody : GameBody {
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+        
     }
 
 
@@ -405,8 +445,9 @@ public class PlayerGameBody : GameBody {
         if (DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR)
         {
             mnum++;
-            if (mnum > 5)
+            if (mnum > 30)
             {
+                mnum = 0;
                 Time.timeScale = 1;
             }
         }
@@ -464,7 +505,7 @@ public class PlayerGameBody : GameBody {
         {
             if (DBBody.animation.isCompleted)
             {
-                //print("luodidongzuo zuowan");
+                print("luodidongzuo zuowan");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -491,6 +532,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
+                //isGetJump = false;
                 MoveVX(0);
             }
         }
@@ -553,7 +595,9 @@ public class PlayerGameBody : GameBody {
         }
     }
 
-    int maxJumpNums = 1;
+
+    bool isGetJump = false;
+    int maxJumpNums = 2;
     int jumpNums = 1;
     public override void GetJump()
     {
@@ -564,19 +608,27 @@ public class PlayerGameBody : GameBody {
         Jump();
     }
 
-
     
     protected override void Jump()
     {
         if (isDodgeing || isAtk || roleDate.isBeHiting) return;
+        
+        if (jumpNums < 1) return;
         jumpNums--;
-        if (jumpNums < 0) return;
+        print("jump num "+jumpNums+ "  isjump "+isJumping+ "  IsGround?  " + IsGround);
+        isGetJump = true;
+        isGetJumpOnWall = true;
+        //return;
         if (jumpNums == 0)
         {
+            //print("zhe shi 0  "+jumpNums+"  好像第一次还是 onGround状态 被拉回来跳了jump1了  "+IsGround);
             if (DBBody.animation.lastAnimationName != JUMP2DUAN)
             {
                 JumpHitWall();
+                
+
                 DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
+
                 newSpeed.y = 0.1f;
                 //isJumping2 = true;
                 playerRigidbody2D.velocity = newSpeed;
@@ -585,12 +637,17 @@ public class PlayerGameBody : GameBody {
         }
         else
         {
+            print("JINGLAIMEI  " + jumpNums);
             if (!roleDate.isBeHiting &&
                 DBBody.animation.lastAnimationName != JUMP2DUAN &&
-                DBBody.animation.lastAnimationName != DOWNONGROUND &&
                 DBBody.animation.lastAnimationName != JUMPUP)
             {
                 JumpHitWall();
+
+                newPosition = this.transform.localPosition;
+                MoveYByPosition(0.4f);
+                //this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + 10f);
+
                 playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0);
                 DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
                 playerRigidbody2D.AddForce(Vector2.up * yForce);
@@ -603,18 +660,24 @@ public class PlayerGameBody : GameBody {
         if (DBBody.animation.lastAnimationName == JUMPHITWALL)
         {
             newPosition = this.transform.localPosition;
+            
             if (bodyScale.x == 1)
             {
-                MoveXByPosition(0.1f);
+                MoveXByPosition(0.4f);
                 playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
             }
             else
             {
-                MoveXByPosition(-0.1f);
+                MoveXByPosition(-0.4f);
                 playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
+                
             }
         }
     }
+
+
+
+
 
     protected override void IsCanShanjinAndJump()
     {
@@ -623,26 +686,52 @@ public class PlayerGameBody : GameBody {
             isCanShanjin = true;
         }
 
-      /*  if (IsGround && DBBody.animation.lastAnimationName != DOWNONGROUND)
+
+
+        if (IsGround)
         {
-            DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
-            isAtkYc = false;
-            isAtking = false;
-            isAtk = false;
-            isJumping2 = false;
-            MoveVX(0);
-        }*/
-
-
-        if (IsGround) {
-            jumpNums = maxJumpNums;
+            print("isStand ");
+            print("isAcing> " + isAcing + " isAtk> " + isAtk + " roleDate.isBeHiting " + roleDate.isBeHiting + " jumpNums> " + jumpNums + " isGetJump> " + isGetJump);
+            //跳之前 位置先移出判断区  解决方法2
+            /*if (isAcing || isAtk || roleDate.isBeHiting) isGetJump = false;
+            if (isGetJump && isDowning) isGetJump = false;
             isDowning = false;
+            if (!isGetJump) jumpNums = maxJumpNums;*/
+
+            isDowning = false;
+            jumpNums = maxJumpNums;
+            print("isGetJump> " + isGetJump + " jumpNums>" + jumpNums);
         }
-        if (IsHitMQWall) {
-            jumpNums = 1;
-        } 
+
+
+        if (IsHitMQWall)
+        {
+            //print(IsGround);
+            if (isAcing || isAtking || roleDate.isBeHiting) isGetJumpOnWall = false;
+            if (isGetJumpOnWall) isGetJumpOnWall = false;
+            if (!isGetJumpOnWall) jumpNums = maxJumpNums;
+            if (!isHitMQWall)
+            {
+                isHitMQWall = true;
+                ClearBodySpeedY();
+            }
+        }
+        else
+        {
+            isHitMQWall = false;
+        }
 
     }
+
+    bool isHitMQWall = false;
+
+
+    protected void ClearBodySpeedY()
+    {
+        GetPlayerRigidbody2D().velocity = Vector2.zero;
+    }
+
+    bool isGetJumpOnWall = false;
 
     protected override void InStand()
     {
@@ -671,6 +760,7 @@ public class PlayerGameBody : GameBody {
             if (this.tag == "player")
             {
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                isGetJump = false;
             }
             else
             {
@@ -681,6 +771,7 @@ public class PlayerGameBody : GameBody {
 
         }
         isDowning = false;
+        
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
@@ -691,5 +782,32 @@ public class PlayerGameBody : GameBody {
         }
 
         playerRigidbody2D.velocity = newSpeed;
+    }
+
+    public override bool IsGround
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - distance);
+            Debug.DrawLine(start, end, Color.blue);
+            grounded = Physics2D.Linecast(start, end, groundLayer);
+
+            
+
+            /*Vector2 start2;
+            Vector2 end2;
+            if (!grounded && groundCheck3 != null)
+            {
+
+                start2 = groundCheck3.position;
+                end2 = new Vector2(start2.x, start2.y - distance);
+                Debug.DrawLine(start2, end2, Color.blue);
+                grounded = Physics2D.Linecast(start2, end2, groundLayer);
+                //print("??????????????????????????????>>  "+ grounded);
+            }*/
+
+            return grounded;
+        }
     }
 }

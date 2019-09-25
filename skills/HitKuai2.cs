@@ -89,11 +89,11 @@ public class HitKuai2 : MonoBehaviour
                 gameBody.HasBeHit();
                 if (Coll.transform.position.x > this.transform.parent.transform.position.x)
                 {
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * atkScaleX, 0));
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 , 0));
                 }
                 else
                 {
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(-400 * atkScaleX, 0));
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(-400 , 0));
                 }
                 
             }

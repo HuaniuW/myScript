@@ -29,11 +29,9 @@ public class JN_base : MonoBehaviour
         //transform.Find("jn_fk").GetComponent<HitKuai>().CanHit();
     }
     float sacaleX;
-
     public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj,bool isSkill = false)
     {
         //print(obj.transform.position.y + "  -  " + GameObject.Find("/MainCamera").transform.position.y);
-
         atkObj = obj;
         jn_date = GetComponent<JN_Date>();
         jn_date.team = team;
@@ -95,7 +93,7 @@ public class JN_base : MonoBehaviour
     void ShowHitFK()
     {
         GameObject hitFK = ObjectPools.GetInstance().SwpanObject2(Resources.Load("hit_fk") as GameObject);
-        hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject);
+        hitFK.GetComponent<HitKuai>().GetTXObj(this.gameObject,false, sacaleX);
         hitFK.transform.localScale = new Vector3(jn_date.hitKuaiSW, jn_date.hitKuaiSH, 1);
         Vector3 nv3 = new Vector3(this.transform.position.x - sacaleX*jn_date.hitKuai_xdx, this.transform.position.y+jn_date.hitKuai_xdy, this.transform.position.z);
         hitFK.transform.position = nv3;

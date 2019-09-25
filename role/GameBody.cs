@@ -63,7 +63,7 @@ public class GameBody : MonoBehaviour, IRole {
     public float slideNum = 3;
 
     [Header("反弹跳X方向的力")]
-    public float wallJumpXNum = 800;
+    public float wallJumpXNum = 700;
 
     protected Vector3 newPosition;
 
@@ -102,6 +102,8 @@ public class GameBody : MonoBehaviour, IRole {
     //起跳
     protected bool isQiTiao = false;
 
+    public bool isTXShow = false;
+
 
     public virtual void ResetAll()
     {
@@ -130,6 +132,7 @@ public class GameBody : MonoBehaviour, IRole {
         isSkillOut = false;
         isDodge = false;
         isDodgeing = false;
+        isTXShow = false;
         if (roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
     }
@@ -484,18 +487,6 @@ public class GameBody : MonoBehaviour, IRole {
             Vector2 end = new Vector2(start.x, start.y - distance);
             Debug.DrawLine(start, end, Color.blue);
             grounded = Physics2D.Linecast(start, end, groundLayer);
-            Vector2 start2;
-            Vector2 end2;
-            if (!grounded&&groundCheck3 != null)
-            {
-                
-                start2 = groundCheck3.position;
-                end2 = new Vector2(start2.x, start2.y - distance);
-                Debug.DrawLine(start2, end2, Color.blue);
-                grounded = Physics2D.Linecast(start2, end2, groundLayer);
-                //print("??????????????????????????????>>  "+ grounded);
-            }
-
             return grounded;
         }
     }
@@ -557,10 +548,14 @@ public class GameBody : MonoBehaviour, IRole {
     {
         //print("r "+isAtking);
         isBackUping = false;
+        
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
+
+        if (isTXShow) return;
+
         if (!isWalk && bodyScale.x == -1)
         {
             bodyScale.x = 1;
@@ -607,6 +602,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
+        if (isTXShow) return;
         if (!isWalk && bodyScale.x == 1)
         {
             bodyScale.x = -1;
@@ -687,6 +683,12 @@ public class GameBody : MonoBehaviour, IRole {
     protected void MoveXByPosition(float xDistance)
     {
         newPosition.x += xDistance;
+        this.transform.localPosition = newPosition;
+    }
+
+    protected void MoveYByPosition(float yDistance)
+    {
+        newPosition.y += yDistance;
         this.transform.localPosition = newPosition;
     }
 
@@ -1168,10 +1170,10 @@ public class GameBody : MonoBehaviour, IRole {
         
         if(!isAtking)ControlSpeed();
 
+
+
+
         
-
-
-
         InAir();
         IsCanShanjinAndJump();
 
@@ -1238,6 +1240,7 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+        
     }
 
     protected virtual void GetBeHit()
@@ -1434,6 +1437,7 @@ public class GameBody : MonoBehaviour, IRole {
         {
             isAtk = true;
             isAtking = true;
+            isTXShow = true;
             isAtkYc = true;
             yanchi = 0;
             jisuqi = 0;
@@ -1549,6 +1553,7 @@ public class GameBody : MonoBehaviour, IRole {
                     {
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                        isTXShow = false;
                     }
                    
                 }
@@ -1556,6 +1561,7 @@ public class GameBody : MonoBehaviour, IRole {
                     //print("普通攻击的特效名字  "+vOAtk.txName);
                     //GetPause(0.1f);
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
+                    isTXShow = false;
                 }
                 
                 //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_002");

@@ -53,8 +53,48 @@ public class MyController : MonoBehaviour {
             if (Input.GetKeyDown((KeyCode)values.GetValue(x)))
             {
                 currentButton = values.GetValue(x).ToString();//遍历并获取当前按下的按键
+                print("手柄按键  "+ currentButton);
             }
         }
+
+
+        horizontalDirection = Input.GetAxis(HORIZONTAL);
+
+        verticalDirection = Input.GetAxis(VERTICAL);
+        if (horizontalDirection > 0)
+        {
+            if (IsCanControl()) _body.RunRight(horizontalDirection);
+        }
+        else if (horizontalDirection < 0)
+        {
+            if (IsCanControl()) _body.RunLeft(horizontalDirection);
+        }
+        else
+        {
+            if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
+        }
+
+        print("verticalDirection    " + verticalDirection);
+
+        if (verticalDirection > 0.6)
+        {
+            Globals.isKeyUp = true;
+            Globals.isKeyDown = false;
+        }
+        else if (verticalDirection < -0.6)
+        {
+            Globals.isKeyUp = false;
+            Globals.isKeyDown = true;
+        }
+        else
+        {
+            Globals.isKeyUp = false;
+            Globals.isKeyDown = false;
+        }
+
+
+
+
         if (currentButton == "Joystick2Button0")
         {
             if (IsCanControl()) _body.GetAtk();
@@ -77,6 +117,9 @@ public class MyController : MonoBehaviour {
         {
             currentButton = "";
         }
+
+
+       
 
     }
 
@@ -162,7 +205,7 @@ public class MyController : MonoBehaviour {
 
         NewKey();
 
-        ShouBing();
+        //ShouBing();
 
         //OldKey();
     }
