@@ -5,7 +5,7 @@ using UnityEngine;
 public class JN_Date : MonoBehaviour {
     [Header("攻击力")]
     public float atkPower;
-    [Header("相对位置x")]
+    [Header("相对位置x 注意这个值是负值就是 角色正面（当时角色都是朝左做的）")]
     public float _xdx = 0;
     [Header("相对位置y")]
     public float _xdy = 0;

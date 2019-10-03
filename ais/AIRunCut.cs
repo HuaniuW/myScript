@@ -12,7 +12,7 @@ public class AIRunCut : MonoBehaviour {
     public float moveSpeedX = 12;
     [Header("增加硬直")]
     public float addYZNum = -300;
-    [Header("攻击动作")]
+    [Header("攻击动作  匹配 是否有技能所需要的动作")]
     public string AtkName = "atk_7";
 
     [Header("攻击动作信息名字")]

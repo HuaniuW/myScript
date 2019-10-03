@@ -117,9 +117,9 @@ public class PlayerGameBody : GameBody {
     {
 
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
+        //print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
-        print("??????   "+isRunLefting +"    "+isRunRighting);
+        //print("??????   "+isRunLefting +"    "+isRunRighting);
         //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
 
         if (DBBody.animation.lastAnimationName != RUN)
@@ -405,7 +405,7 @@ public class PlayerGameBody : GameBody {
         InFightAtk();
         ChangeStandAndRunAC();
         Time.timeScale = 0.5f;
-        print(" Time.timeScale  "+ Time.timeScale);
+        //print(" Time.timeScale  "+ Time.timeScale);
         //print("speedX   "+ speedX);
         //print("22--->  "+ playerRigidbody2D.velocity.x);
         if (chongjili > 700)
@@ -426,7 +426,7 @@ public class PlayerGameBody : GameBody {
 
         isGetJump = false;
         isGetJumpOnWall = false;
-        if (isInAiring)
+        if (!IsGround)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))
             {
@@ -450,6 +450,7 @@ public class PlayerGameBody : GameBody {
                 mnum = 0;
                 Time.timeScale = 1;
             }
+
         }
 
 
@@ -505,7 +506,7 @@ public class PlayerGameBody : GameBody {
         {
             if (DBBody.animation.isCompleted)
             {
-                print("luodidongzuo zuowan");
+                //print("luodidongzuo zuowan");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -690,8 +691,8 @@ public class PlayerGameBody : GameBody {
 
         if (IsGround)
         {
-            print("isStand ");
-            print("isAcing> " + isAcing + " isAtk> " + isAtk + " roleDate.isBeHiting " + roleDate.isBeHiting + " jumpNums> " + jumpNums + " isGetJump> " + isGetJump);
+            //print("isStand ");
+            //print("isAcing> " + isAcing + " isAtk> " + isAtk + " roleDate.isBeHiting " + roleDate.isBeHiting + " jumpNums> " + jumpNums + " isGetJump> " + isGetJump);
             //跳之前 位置先移出判断区  解决方法2
             /*if (isAcing || isAtk || roleDate.isBeHiting) isGetJump = false;
             if (isGetJump && isDowning) isGetJump = false;
@@ -700,7 +701,7 @@ public class PlayerGameBody : GameBody {
 
             isDowning = false;
             jumpNums = maxJumpNums;
-            print("isGetJump> " + isGetJump + " jumpNums>" + jumpNums);
+            //print("isGetJump> " + isGetJump + " jumpNums>" + jumpNums);
         }
 
 

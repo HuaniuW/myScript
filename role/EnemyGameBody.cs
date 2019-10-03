@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DragonBones;
+
+
 
 public class EnemyGameBody : GameBody {
 
@@ -100,6 +103,43 @@ public class EnemyGameBody : GameBody {
         //}
     }
 
+    public override void ResetAll()
+    {
+        //isRun = false;
+        isRunLefting = false;
+        isRunRighting = false;
+        //isInAiring = false;
+        isDowning = false;
+        //在空中被击中 如果关闭跳跃bool会有落地bug
+        //isJumping = false;
+        // isJumping2 = false;
+        //isJump2 = false;
+        //isQiTiao = false;
+        isAtk = false;
+        isAtking = false;
+        atkNums = 0;
+        isAtkYc = false;
+        isYanchi = false;
+        isBackUp = false;
+        isBackUping = false;
+        isQianhua = false;
+        isQianhuaing = false;
+        isAcing = false;
+        isYanchi = false;
+        isSkilling = false;
+        isSkillOut = false;
+        isDodge = false;
+        isDodgeing = false;
+        isTXShow = false;
+        if (roleDate) roleDate.isBeHiting = false;
+        if (playerRigidbody2D != null && playerRigidbody2D.gravityScale != gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
+
+
+        isAcing2 = false;
+        _acName2 = "";
+        _isHasAtkTX = false;
+    }
+
     override public void HasBeHit(float chongjili = 0)
     {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
@@ -148,4 +188,245 @@ public class EnemyGameBody : GameBody {
             if (IsGround) GetStand();
         }
     }
+
+
+    bool isAcing2 = false;
+    //抑制导光特效的 攻击东旭哦事件 是怎么配套特效的？
+    public bool _isHasAtkTX = false;
+    string _acName2 = "";
+    public void GetACByName(string acName,bool isHasAtkTX = false)
+    {
+        if (!isAcing2)
+        {
+            isAcing2 = true;
+            if (!IsHasAC(acName))
+            {
+                isAcing2 = false;
+                _isHasAtkTX = false;
+                _acName2 = "";
+                return;
+            }
+
+            _acName2 = acName;
+            _isHasAtkTX = isHasAtkTX;
+            if (DBBody.animation.HasAnimation(_acName2) && DBBody.animation.lastAnimationName != acName)
+            {
+                DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
+            }
+        }
+    }
+
+    public bool IsHasAC(string acName)
+    {
+        return DBBody.animation.HasAnimation(acName);
+    }
+
+    void ACing()
+    {
+        if (DBBody.animation.lastAnimationName == _acName2&& DBBody.animation.isCompleted)
+        {
+            isAcing2 = false;
+            _isHasAtkTX = false;
+            _acName2 = "";
+        }
+    }
+
+
+
+    protected override void ShowACTX(string type, EventObject eventObject)
+    {
+        //print("type:  "+type);
+        
+        if (type == EventObject.SOUND_EVENT)
+        {
+            //print("eventName:  "+eventObject.name);
+            //print(playerRigidbody2D.velocity.x+"  ?    "+this.transform.localScale);
+            if (eventObject.name == "jumpHitWall")
+            {
+                if ((this.transform.localScale.x == 1 && playerRigidbody2D.velocity.x >= 1) || (this.transform.localScale.x == -1 && playerRigidbody2D.velocity.x <= -1)) return;
+            }
+            if (eventObject.name == "runG1") return;
+            if (eventObject.name == "downOnGround" && DBBody.animation.lastAnimationName != DOWNONGROUND) return;
+            //if(eventObject.name=="run1"|| eventObject.name == "run2") _yanmu.Play();
+            GetComponent<RoleAudio>().PlayAudio(eventObject.name);
+        }
+
+
+        if (type == EventObject.FRAME_EVENT)
+        {
+            if (eventObject.name == "jn_begin")
+            {
+                //释放准备动作的特效
+                if (isSkilling)
+                {
+                    GetComponent<ShowOutSkill>().ShowOutSkillBeginEffectByName(vOAtk.skillBeginEffect);
+                    isSkilling = false;
+                }
+            }
+
+
+            if (eventObject.name == "ac")
+            {
+                if (_isHasAtkTX) return;
+                if (isAcing)
+                {
+                    if (isSkillOut)
+                    {
+                        GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName, true);
+                        isSkillOut = false;
+                    }
+                    else
+                    {
+                        //技能释放点
+                        GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                        isTXShow = false;
+                    }
+
+                }
+                else
+                {
+                    //print("普通攻击的特效名字  "+vOAtk.txName);
+                    //GetPause(0.1f);
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
+                    isTXShow = false;
+                }
+
+                //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_002");
+                //GetComponent<ShowOutSkill>().ShowOutSkillByName("dg_fk");
+            }
+        }
+
+    }
+
+
+
+
+    protected override void GetUpdate()
+    {
+        //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
+
+
+        CurrentAcName = DBBody.animation.lastAnimationName;
+        //脚下的烟幕
+        Yanmu();
+
+        if (roleDate.isDie)
+        {
+            DBBody.animation.timeScale = 1;
+            GetDie();
+            return;
+        }
+
+        if (roleDate.live <= 0)
+        {
+            roleDate.isDie = true;
+        }
+
+
+
+
+        if (Globals.isInPlot) return;
+
+
+        if (roleDate.isBeHiting)
+        {
+            ControlSpeed(20);
+            GetBeHit();
+            return;
+        }
+
+
+
+
+        if (_theTimer != null && !_theTimer.IsPauseTimeOver())
+        {
+            return;
+        }
+        else
+        {
+            DBBody.animation.timeScale = 1;
+        }
+
+
+
+
+        if (isQianhuaing)
+        {
+            //print("isQianhuaing");
+            //防止加速过快 限制最大速度
+            ControlSpeed(20);
+            GetQianhuaing();
+            return;
+        }
+
+
+        if (isBackUping)
+        {
+            //print("isBackUping");
+            ControlSpeed(14);
+            GetBackUping();
+            return;
+        }
+
+
+        //print(_theTimer);
+
+
+        if (isDodgeing)
+        {
+            //print("isDodgeing");
+            Dodge1();
+            return;
+        }
+
+
+        if (!isAtking&&!isAcing2) ControlSpeed();
+
+
+
+
+
+        InAir();
+        IsCanShanjinAndJump();
+
+
+        if (isAcing2)
+        {
+            ACing();
+            return;
+        }
+
+
+        if (isAcing)
+        {
+            //print("isAcing");
+            GetAcMsg(_acName);
+            return;
+        }
+
+
+
+        /* if (isJumping)
+         {
+             Jump();
+         }*/
+
+        if (isAtking)
+        {
+            //print("isAtking");
+            Atk();
+        }
+
+
+        //print("isQianhuaing>  " + isQianhuaing+ "/n isDowning "+ isDowning+ " /n isJumping2  "+ isJumping2+ " /n  isJumping  "+ isJumping+"  ");
+
+
+
+        //print(this.tag);
+        //if (this.tag != "diren") print("hi");
+        InStand();
+    }
+
+
+
 }

@@ -70,7 +70,7 @@ public class HitKuai : MonoBehaviour {
             //float _roleScaleX = this.transform.localScale.x > 0?-1:1 ;  //-atkObj.transform.localScale.x;
             float _roleScaleX = -_atkObjScaleX;
 
-            print(_roleScaleX+"   ??   "+this.transform.localScale);
+            //print(_roleScaleX+"   ??   "+this.transform.localScale);
 
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);

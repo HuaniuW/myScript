@@ -133,6 +133,7 @@ public class GameBody : MonoBehaviour, IRole {
         isDodge = false;
         isDodgeing = false;
         isTXShow = false;
+
         if (roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
     }
@@ -188,7 +189,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
-    void GetBackUping()
+    protected void GetBackUping()
     {
         if (DBBody.animation.lastAnimationName == BACKUP && DBBody.animation.isCompleted)
         {
@@ -228,7 +229,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    void GetQianhuaing()
+    protected void GetQianhuaing()
     {
         if (DBBody.animation.lastAnimationName == QIANHUA && DBBody.animation.isCompleted)
         {
@@ -244,9 +245,9 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    public bool IsHanAC(string ACname)
+    public bool IsHanAC(string ACName)
     {
-        return DBBody.animation.HasAnimation(ACname);
+        return DBBody.animation.HasAnimation(ACName);
     }
 
     public void GetSkill1()
@@ -274,7 +275,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
         
 
-    HZDate jn;
+    protected HZDate jn;
     void ShowSkill(string urlName)
     {
         if (IsHitWall) return;
@@ -382,7 +383,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    void Dodge1()
+    protected void Dodge1()
     {
 
         if (isDodgeing && IsHitMQWall && isInAiring)
@@ -966,12 +967,12 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
-    public void GetStand()
+    public void GetStand(bool isSetSpeedZero = true)
     {
         ResetAll();
         //if(DBBody) print("??????????????  "+DBBody.animation.lastAnimationName);
         if(DBBody) Stand();
-        if(playerRigidbody2D) playerRigidbody2D.velocity = Vector2.zero;
+        if(isSetSpeedZero && playerRigidbody2D) playerRigidbody2D.velocity = Vector2.zero;
     }
 
     public void SetV0()
@@ -986,7 +987,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    TheTimer _theTimer;
+    protected TheTimer _theTimer;
 
     // Use this for initialization
     protected void Start () {
@@ -1090,7 +1091,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
-    protected void GetUpdate()
+    protected virtual void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
 
@@ -1119,6 +1120,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (roleDate.isBeHiting)
         {
+            ControlSpeed(20);
             GetBeHit();
             return;
         }
@@ -1346,7 +1348,7 @@ public class GameBody : MonoBehaviour, IRole {
     //延迟行动尺度
     public int canMoveNums = 100;
     protected bool isAcing = false;
-	string _acName;
+	protected string _acName;
 
     public string GetAcMsg(string acName)
     {
@@ -1511,9 +1513,8 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected bool isSkillOut = false;
 
-
     //显示动作特效 龙骨的侦听事件
-    private void ShowACTX(string type, EventObject eventObject)
+    protected virtual void ShowACTX(string type, EventObject eventObject)
     {
         //print("type:  "+type);
         if (type == EventObject.SOUND_EVENT)
@@ -1532,6 +1533,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (type == EventObject.FRAME_EVENT)
         {
+
             if (eventObject.name == "jn_begin") {
                 //释放准备动作的特效
                 if (isSkilling) {

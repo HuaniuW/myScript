@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AIRest : MonoBehaviour {
-
+    [Header("是否转向")]
+    public bool isZhuanXiang = true;
 	// Use this for initialization
 	void Start () {
 		

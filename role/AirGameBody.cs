@@ -192,7 +192,7 @@ public class AirGameBody : GameBody {
         if (isAtking) return;
         //resetAll();
         isAtkYc = false;
-
+        print("??????????????????????  "+ horizontalDirection+ " yForce   "+ yForce);
         playerRigidbody2D.AddForce(new Vector2(0,yForce * horizontalDirection));
         Run();
     }

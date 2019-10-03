@@ -42,8 +42,11 @@ public class AIBase : MonoBehaviour {
     [Header("发现敌人的距离")]
     public float findEnemyDistance = 10;
 
+    [Header("发现敌人 是否采取攻击")]
+    public bool isNearAtkEnemy = true;
     protected bool IsFindEnemy()
     {
+        if (!isNearAtkEnemy) return false;
         if (isFindEnemy) return true;
         if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(gameObj.transform.position.y - transform.position.y) < findEnemyDistance)
         {
@@ -79,18 +82,21 @@ public class AIBase : MonoBehaviour {
     public bool isPatrol = false;
     protected void Patrol()
     {
-        //print("hi");
-        //print("hi    " + this.transform.position.x + "    "+myPosition.x+"     "+ patrolDistance);
-        //gameBody.RunLeft(-0.4f);
-        //return;
-
-        //print(gameBody.IsEndGround +"    "+ gameBody.IsHitWall);
+        if (isPatrolRest) {
+            PatrolResting();
+            return;
+        }
 
         if (isRunLeft)
         {
             gameBody.RunLeft(-0.4f);
             if (this.transform.position.x - myPosition.x<-patrolDistance|| gameBody.IsEndGround||gameBody.IsHitWall)
             {
+                if (isRunLeft) {
+                    isPatrolRest = true;
+                    PatrolRest(-1);
+                }
+                
                 isRunLeft = false;
                 isRunRight = true;
             }
@@ -99,11 +105,38 @@ public class AIBase : MonoBehaviour {
             gameBody.RunRight(0.4f);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
+                if (isRunRight) {
+                    isPatrolRest = true;
+                    PatrolRest(-1);
+                }
+                
                 isRunLeft = true;
                 isRunRight = false;
             }
         }
     }
+
+    bool isPatrolRest = false;
+    protected virtual void PatrolRest(float restTimes = 1)
+    {
+        if (restTimes == -1)
+        {
+            restTimes = UnityEngine.Random.Range(1, 2);
+        }
+
+        GetComponent<AIRest>().GetRestByTimes(restTimes);
+        gameBody.GetStand();
+
+    }
+
+    protected void PatrolResting() {
+        if (GetComponent<AIRest>().IsOver())
+        {
+            isPatrolRest = false;
+        }
+    }
+
+
 
     public bool isEndXXXXX;
     protected bool IsHitWallOrNoWay
@@ -115,6 +148,10 @@ public class AIBase : MonoBehaviour {
         }
         
     }
+
+
+
+
 
     
     // Update is called once per frame
@@ -166,18 +203,18 @@ public class AIBase : MonoBehaviour {
         }
 
 
-        if (!isActioning && IsHitWallOrNoWay)
-        {
-            isFindEnemy = false;
-            AIReSet();
-            gameBody.GetStand();
-            //isAction = true;
-            //isActioning = true;
-            //acName = "backUp";
-            //gameBody.GetBackUp(14);
-            //print("in--------->");
-            return;
-        }
+        //if (!isActioning && IsHitWallOrNoWay)
+        //{
+        //    isFindEnemy = false;
+        //    AIReSet();
+        //    gameBody.GetStand();
+        //    //isAction = true;
+        //    //isActioning = true;
+        //    //acName = "backUp";
+        //    //gameBody.GetBackUp(14);
+        //    //print("in--------->");
+        //    return;
+        //}
 
 
         //超出追击范围
@@ -217,6 +254,7 @@ public class AIBase : MonoBehaviour {
         else
         {
             carr = GetComponent<AITheWay_dcr>().GetZSArrays(i);
+            if (carr.Length == 0) i = GetLie();//防止空数组
         }
         return i;
     }
@@ -322,7 +360,7 @@ public class AIBase : MonoBehaviour {
     protected string jn_effect = "";
     //加强AI  会判断每次攻击是否在攻击范围内
     //6.开始下一个攻击
-    protected void GetAtkFS()
+    protected virtual void GetAtkFS()
     {
 		if(!isAction){
 			isAction = true;
@@ -341,6 +379,12 @@ public class AIBase : MonoBehaviour {
             else
             {
                 DontNear = false;
+            }
+
+
+            if (acName == "yishan")
+            {
+                return;
             }
 
             if (strArr[0] == "jn") {
@@ -443,6 +487,12 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        if (acName == "yishan")
+        {
+            GetYiShan();
+            return;
+        }
+
 
         PtAtk();
         if (acName !="shanxian"){
@@ -530,7 +580,7 @@ public class AIBase : MonoBehaviour {
         if (!isActioning)
         {
             isActioning = true;
-            ZhuanXiang();
+            if(GetComponent<AIRest>().isZhuanXiang) ZhuanXiang();
             gameBody.GetStand();
             atkNum++;
             GetAtkNumReSet();
@@ -544,7 +594,6 @@ public class AIBase : MonoBehaviour {
                 isAction = false;
             }
         }
-        
     }
 
     protected AIShanxian aisx;
@@ -574,6 +623,8 @@ public class AIBase : MonoBehaviour {
     {
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
+        isPatrolRest = false;
+        isNearAtkEnemy = true;
         AIReSet();
         if(aiFanji!=null) aiFanji.GetFanji();
     }
@@ -582,6 +633,7 @@ public class AIBase : MonoBehaviour {
     {
         isAction = false;
         isActioning = false;
+        
         lie = -1;
         atkNum = 0;
         acName = "";
@@ -636,6 +688,30 @@ public class AIBase : MonoBehaviour {
             atkNum++;
             //GetAtkNumReSet();
         }
+    }
+
+    protected void GetYiShan()
+    {
+        if (isActioning)
+        {
+            if (GetComponent<AIYiShan>() == null||GetComponent<AIYiShan>().IsAcOver())
+            {
+                isActioning = false;
+                isAction = false;
+                return;
+            }
+        }
+
+        if (!isActioning)
+        {
+            isActioning = true;
+            ZhuanXiang();
+            //gameBody.GetStand();
+            GetComponent<AIYiShan>().GetStart();
+            atkNum++;
+            //GetAtkNumReSet();
+        }
+
     }
 
     protected void JNAtk()
