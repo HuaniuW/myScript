@@ -83,13 +83,14 @@ public class HitKuai : MonoBehaviour {
                 ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
                 //判断是否破防   D 代办事项 
-
+                float beHitXFScale = roleDate.beHitXFScale;
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
                     //atkObjV3Zero(Coll.gameObject);
                     atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
                     //Coll.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX, 0));
+                    if (jn_date.fasntuili != 0) beHitXFScale = 1;// 有反推力说明是空中向下攻击
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX* beHitXFScale, 0));
                     //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
                     //print(Coll.tag);
                     gameBody.HasBeHit();

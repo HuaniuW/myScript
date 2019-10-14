@@ -192,8 +192,9 @@ public class AirGameBody : GameBody {
         if (isAtking) return;
         //resetAll();
         isAtkYc = false;
-        print("??????????????????????  "+ horizontalDirection+ " yForce   "+ yForce);
         playerRigidbody2D.AddForce(new Vector2(0,yForce * horizontalDirection));
+        //float spU = horizontalDirection > 0 ? 0.04f : -0.04f;
+        //this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + spU);
         Run();
     }
 
@@ -215,6 +216,60 @@ public class AirGameBody : GameBody {
         {
             print(" isBeHiting! 但是没有进入 behit 动作 ");
         }
+    }
+
+
+
+    public override void GetAtk(string atkName = null)
+    {
+        if (roleDate.isBeHiting) return;
+        if (isDodgeing || isAcing) return;
+        //阻止了快落地攻击时候的bug
+        //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        if (!isAtk)
+        {
+            isAtk = true;
+            isAtking = true;
+            isTXShow = true;
+            isAtkYc = true;
+            yanchi = 0;
+            jisuqi = 0;
+
+            if (isInAiring)
+            {
+                atkZS = DataZS.jumpAtkZS;
+            }
+            else
+            {
+                atkZS = DataZS.atkZS;
+            }
+
+            if (atkName == null)
+            {
+                vOAtk.GetVO(atkZS[(int)atkNums]);
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+            else
+            {
+                //GetPause(0.5f,0.5f);
+                string _atkName = atkName;
+                if (atkName.Split('|').Length != 1)
+                {
+                    _atkName = atkName.Split('|')[0];
+                    float times = float.Parse(atkName.Split('|')[1].Split('-')[0]);
+                    float scales = 0.5f;
+                    if (atkName.Split('|')[1].Split('-').Length != 1) scales = float.Parse(atkName.Split('|')[1].Split('-')[1]);
+                    GetPause(times, scales);
+
+                }
+                vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
+                DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+            }
+
+            MoveVX(vOAtk.xF, true);
+        }
+
     }
 
 }

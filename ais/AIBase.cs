@@ -75,17 +75,18 @@ public class AIBase : MonoBehaviour {
     protected bool isRunLeft = true;
     protected bool isRunRight = false;
     public float patrolDistance = 6;
-    Vector3 myPosition;
+    protected Vector3 myPosition;
    
 
     [Header("巡逻")]
     public bool isPatrol = false;
-    protected void Patrol()
+    protected virtual void Patrol()
     {
         if (isPatrolRest) {
             PatrolResting();
             return;
         }
+
 
         if (isRunLeft)
         {
@@ -96,7 +97,6 @@ public class AIBase : MonoBehaviour {
                     isPatrolRest = true;
                     PatrolRest(-1);
                 }
-                
                 isRunLeft = false;
                 isRunRight = true;
             }
@@ -116,7 +116,7 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    bool isPatrolRest = false;
+    protected bool isPatrolRest = false;
     protected virtual void PatrolRest(float restTimes = 1)
     {
         if (restTimes == -1)
@@ -619,7 +619,7 @@ public class AIBase : MonoBehaviour {
 	}
 
     
-    protected void AIBeHit()
+    protected virtual void AIBeHit()
     {
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
@@ -629,7 +629,7 @@ public class AIBase : MonoBehaviour {
         if(aiFanji!=null) aiFanji.GetFanji();
     }
 
-    protected void AIReSet()
+    protected virtual void AIReSet()
     {
         isAction = false;
         isActioning = false;
