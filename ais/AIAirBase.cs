@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +11,52 @@ public class AIAirBase : AIBase {
 	}
 
 
+    protected override void Patrol()
+    {
+        if (isPatrolRest)
+        {
+            PatrolResting();
+            return;
+        }
+
+
+        if (isRunLeft)
+        {
+            gameBody.RunLeft(-0.4f);
+            if (this.transform.position.x - myPosition.x < -patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+            {
+                if (isRunLeft)
+                {
+                    isPatrolRest = true;
+                    PatrolRest(-1);
+                }
+                isRunLeft = false;
+                isRunRight = true;
+            }
+        }
+        else if (isRunRight)
+        {
+            gameBody.RunRight(0.4f);
+            if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+            {
+                if (isRunRight)
+                {
+                    isPatrolRest = true;
+                    PatrolRest(-1);
+                }
+
+                isRunLeft = true;
+                isRunRight = false;
+            }
+        }
+    }
+
 
     protected override void PatrolRest(float restTimes = 1)
     {
         if (restTimes == -1)
         {
+            print("是否进来 ！！！");
             restTimes = UnityEngine.Random.Range(1, 2);
         }
 
@@ -30,7 +72,32 @@ public class AIAirBase : AIBase {
         GetUpdate2();
 	}
 
-   
+    protected override void AIBeHit()
+    {
+        if (aisx != null) aisx.ReSet();
+        isFindEnemy = true;
+        isPatrolRest = false;
+        isNearAtkEnemy = true;
+        SlowYSpeed(0);
+        AIReSet();
+        if (aiFanji != null) aiFanji.GetFanji();
+    }
+
+    protected override void AIReSet()
+    {
+        isAction = false;
+        isActioning = false;
+        choseNearType = false;
+        nearTypeNums = 0;
+        lie = -1;
+        atkNum = 0;
+        acName = "";
+        if (aiQishou) aiQishou.isQishouAtk = false;
+
+        //isZSOver = false;
+    }
+
+
     protected virtual void GetUpdate2()
     {
         if (!gameObj)
@@ -64,6 +131,7 @@ public class AIAirBase : AIBase {
         {
             AIReSet();
             Patrol();
+            return;
         }
 
 
@@ -119,10 +187,12 @@ public class AIAirBase : AIBase {
 
     bool choseNearType = false;
     int nearTypeNums = 0;
+
+
     public override bool NearRoleInDistance(float distance)
     {
-
-        if (DontNear) return true;
+        //预判策略  是否用策略 （如果 角色和怪之间最近距离有障碍 启用策略   这里只考虑最短路径）
+        //判断X方向是否 有障碍 有的话 下移动 x线没有碰到 y线没碰到
         //靠近的击中方式  1.xy同时进行  2.先X后Y  3.先Y后X  4.绕后   
         
         if (!choseNearType)
@@ -133,35 +203,96 @@ public class AIAirBase : AIBase {
         
         if (nearTypeNums <= 100)
         {
+            return NearByYThanX(distance);
             //同时进行
             return NearByXAndY(distance);
         }
+        else if(nearTypeNums <= 50)
+        {
+            return NearByXThanY(distance);
+        }
+        return false;
+    }
 
 
+    void SlowXSpeed()
+    {
+        gameBody.GetPlayerRigidbody2D().velocity = new Vector2(gameBody.GetPlayerRigidbody2D().velocity.x*0.4f, gameBody.GetPlayerRigidbody2D().velocity.y);
+    }
 
+    void SlowYSpeed(float scaleNum = 0.2f) {
+        gameBody.GetPlayerRigidbody2D().velocity = new Vector2(gameBody.GetPlayerRigidbody2D().velocity.x , gameBody.GetPlayerRigidbody2D().velocity.y * scaleNum);
+    }
+
+    //先x后y
+    private bool NearByXThanY(float distance)
+    {
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
-            gameBody.RunRight(0.9f);
+            gameBody.RunRight(flySpeed);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
-            gameBody.RunLeft(-0.9f);
+            gameBody.RunLeft(-flySpeed);
             return false;
         }
         else
         {
-            return true;
+            SlowXSpeed();
+            if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) >= 0.3f) {
+                float speedY = GetSpeedY(transform, gameObj.transform);
+                this.GetComponent<AirGameBody>().RunY(speedY);
+            }
+            else
+            {
+                SlowYSpeed();
+                choseNearType = false;
+                nearTypeNums = 0;
+                return true;
+            }
+           
         }
+        return false;
     }
 
+    //先y后x
+    private bool NearByYThanX(float distance)
+    {
+        if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) >= 0.3f)
+        {
+            float speedY = GetSpeedY(transform, gameObj.transform);
+            this.GetComponent<AirGameBody>().RunY(speedY);
+            return false;
+        }
 
+        SlowYSpeed();
 
+        if (gameObj.transform.position.x - transform.position.x > distance)
+        {
+            //目标在右
+            gameBody.RunRight(flySpeed);
+            return false;
+        }
+        else if (gameObj.transform.position.x - transform.position.x < -distance)
+        {
+            //目标在左
+            gameBody.RunLeft(-flySpeed);
+            return false;
+        }
+
+        SlowXSpeed();
+        choseNearType = false;
+        nearTypeNums = 0;
+        return true;
+    }
+
+    //x y同时
     bool NearByXAndY(float distance)
     {
-        print("  ------------------------------------------------- ");
+        //print("  ------------------------------------------------- ");
 
         float speedX = GetSpeedX(transform, gameObj.transform);
         float speedY = GetSpeedY(transform, gameObj.transform);
@@ -179,13 +310,35 @@ public class AIAirBase : AIBase {
         }
         else
         {
-            print("  xOK "+ speedY);
-            if(Mathf.Abs(gameObj.transform.position.y - transform.position.y) < 0.3f)
+            SlowXSpeed();
+            //print("  xOK "+ speedY);
+            if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) < 0.3f)
             {
-                return true;
+                SlowYSpeed();
                 choseNearType = false;
+                nearTypeNums = 0;
+                return true;
             }
         }
+
+        return false;
+    }
+
+    bool isRaohou = false;
+    bool isMoveY = false;
+    bool isMoveX = false;
+
+    bool RaoHou(float distance)
+    {
+        //到一定高度 取到高度的点y  如果顶到墙就直接前进
+
+        //渠道角色背后的点x  如果碰到墙就下降
+        if (!isRaohou)
+        {
+            isRaohou = true;
+            //确定Y点
+        }
+
 
         return false;
     }

@@ -43,6 +43,9 @@ public class RoleDate : MonoBehaviour {
     [Header("怪的类型")]
     public string enemyType = "enemy";
 
+    [Header("被击中X方向的推力倍数")]
+    public float beHitXFScale = 1;
+
 
     public string BeHitVudio
     {

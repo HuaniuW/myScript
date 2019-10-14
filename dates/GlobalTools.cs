@@ -118,4 +118,113 @@ public class GlobalTools : MonoBehaviour {
         }
         return getDate;
     }
+
+
+    //-------------------------地图处理 工具函数-------------------------------------------
+
+    //记录 起始点
+
+    //随机数 int 0-100
+    public static int GetRandomNum()
+    {
+        int num = 0;
+        num = (int)UnityEngine.Random.Range(0, 100);
+        return num; 
+    }
+    //距离随机 给一个距离 算出随机的距离
+    public static float GetRandomNums(float disatnce)
+    {
+        float d = UnityEngine.Random.Range(0, disatnce);
+        return d;
+    }
+
+    //设置物体 深度 order
+    public void SetMapObjOrder(GameObject mapObj,int orderNum = 0)
+    {
+        mapObj.GetComponent<SpriteRenderer>().sortingOrder = orderNum;
+    }
+
+
+    //获取物体 深度 order
+    public int GetMapObjOrder(GameObject mapObj)
+    {
+        return mapObj.GetComponent<SpriteRenderer>().sortingOrder;
+    }
+
+
+    //获取 景 物体长度 
+    public static float GetJingW(GameObject mapObj)
+    {
+        return mapObj.GetComponent<SpriteRenderer>().bounds.size.x;
+    }
+    //获取 景 物体 宽度
+    public static float GetJingH(GameObject mapObj)
+    {
+        return mapObj.GetComponent<SpriteRenderer>().bounds.size.y;
+    }
+
+    //获取有 tl 和rd点的物体 宽度 
+    public static float GetHasPointMapObjW(GameObject mapObj)
+    {
+        float w = 0;
+        Transform tl = mapObj.transform.Find("tl");
+        Transform rd = mapObj.transform.Find("rd");
+        w = Math.Abs(tl.transform.position.x - rd.transform.position.x);
+        return w;
+    }
+
+    //获取有 tl 和rd点的物体 高度 
+    public static float GetHasPointMapObjH(GameObject mapObj)
+    {
+        float h = 0;
+        Transform tl = mapObj.transform.Find("tl");
+        Transform rd = mapObj.transform.Find("rd");
+        h = Math.Abs(tl.transform.position.y - rd.transform.position.y);
+        return h;
+    }
+
+
+    //获取中心点位置 全局位置 zxd
+    //获取 点位置 tl rd zxd
+    public static Vector2 GetPointWorldPosByName(GameObject mapObj,String pointName) {
+        Transform pointObj = mapObj.transform.Find(pointName);
+        if(pointObj != null)
+        {
+            //考虑全局转换 这个有没有意义 待定
+            //*****  需要找到该全局 位置的点  这样来 做对接 transform.Localposition
+            //Vector2 p = mapObj.transform.position;
+
+            //相对于父对象的坐标
+            Vector2 p = mapObj.transform.InverseTransformPoint(pointObj.position);
+
+            //世界坐标
+            Vector2 p3 = pointObj.transform.position;
+            return p3;
+        }
+        return Vector2.zero;
+    }
+
+
+    
+    //设置 近景 相对于mapObj x的位置 给出 初始x 超出 就按最大位置来 0 的话直接放第一个位置
+    //根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**
+    public static void SetJinJingPoint(GameObject mapObj,int i)
+    {
+        //获取 物体全局位置
+        //获取 物体 宽度
+
+    }
+
+    //设置物体 全局 位置 xyz
+
+    //上一个生成物体
+    public static GameObject tempRecordMapObj = null;
+    //设置为上一个地图物体 
+    public static void SetTempMapRecordObj(GameObject mapObj)
+    {
+        tempRecordMapObj = mapObj;
+    }
+
+    //获取上一个 物体 的 信息  ？？？？？
+    
 }

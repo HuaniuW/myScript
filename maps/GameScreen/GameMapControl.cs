@@ -42,7 +42,9 @@ public class GameMapControl : MonoBehaviour {
         if (mapDate == null)
         {
             //说明没有存档 要新生成地图
-            GenerateNewMap();
+            //GenerateNewMap();
+
+            GetTest("jing_cao_2");
         }
         else
         {
@@ -51,6 +53,30 @@ public class GameMapControl : MonoBehaviour {
 
 
         }
+    }
+
+    void GetTest(string objName,float _x = 0,float _y =0)
+    {
+        GameObject obj = GlobalTools.GetGameObjectByName(objName);
+        if(obj!=null)obj.transform.position = new Vector3(_x,_y,obj.transform.position.z);
+        //print("_w "+obj.GetComponent<MeshFilter>().mesh.bounds.size.x);
+        SpriteRenderer objRen = obj.GetComponent<SpriteRenderer>();
+        print("w> "+ objRen.bounds.size+"  order  "+ objRen.sortingOrder);
+        objRen.sortingOrder = 28;
+        //objRen.bounds.size = new Vector3(60, 60, 0.2f);
+        print("w2> " + objRen.bounds.size + "  order  " + objRen.sortingOrder);
+
+
+
+        GameObject diban = GlobalTools.FindObjByName("diban1");
+        print(">>>>   "+diban.GetComponent<Terrain>());
+
+        GameObject jing = GlobalTools.FindObjByName("jing_cao_2");
+        print("jing   "+jing);
+        print("-------------->   "+GlobalTools.GetJingW(jing));
+
+        
+        print(GlobalTools.GetPointWorldPosByName(GlobalTools.FindObjByName("yj_shu_1"),"tl"));
     }
 
     void GenerateNewMap()
