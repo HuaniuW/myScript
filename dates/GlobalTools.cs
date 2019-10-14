@@ -133,6 +133,7 @@ public class GlobalTools : MonoBehaviour {
     }
     //距离随机 给一个距离 算出随机的距离
     public static float GetRandomDistanceNums(float disatnce)
+
     {
         float d = UnityEngine.Random.Range(0, disatnce);
         return d;
@@ -183,6 +184,7 @@ public class GlobalTools : MonoBehaviour {
         return h;
     }
 
+
     //获取上一个 地图的连接点  X方向
 	public static Vector2 GetXMapLJDian(GameObject mapObj){
 		Vector2 ljDian = Vector2.zero;
@@ -217,7 +219,7 @@ public class GlobalTools : MonoBehaviour {
 
 	//设置 临近 位置 Y轴位移的范围   通用吗？
 	public static void SetXYLinJin(GameObject mapObj, GameObject mapObj2, string qifu = "no"){
-		float __x = 
+		float __x = 0;
 		if(qifu == "no"){
 			
 		}else if(qifu == "up"){
@@ -234,51 +236,62 @@ public class GlobalTools : MonoBehaviour {
 
     }
 
-    //根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**    x方向上的 景 放置
-	public static void SetJinJingPoint(GameObject mapObj,GameObject jingObj,int i,int nums,string chaoxiang = "up")
-    {
+	//根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**    x方向上的 景 放置
+	public static void SetJinJingPoint(GameObject mapObj, GameObject jingObj, int i, int nums, string chaoxiang = "up")
+	{
 		//获取 物体全局位置
 		Vector2 tlPot = GetPointWorldPosByName(mapObj, "tl");
 		//获取 物体 宽度
 		float w = GetHasPointMapObjW(mapObj);
-        //这里必须保证 景的宽度 小于地板宽度**************
+		//这里必须保证 景的宽度 小于地板宽度**************
 
 		float jingW = GetJingW(jingObj);
 		float jingH = GetJingH(jingObj);
 		float __x = 0;
 		float __y = 0;
 
-		if(nums == 1){
+		if (nums == 1)
+		{
 			float xiuzhengNums = GetRandomNum() >= 50 ? 0.3f : -0.3f;
-			__x = tlPot.x + GetHasPointMapObjW(mapObj) * 0.5f+GetRandomDistanceNums(xiuzhengNums);
-		}else{
+			__x = tlPot.x + GetHasPointMapObjW(mapObj) * 0.5f + GetRandomDistanceNums(xiuzhengNums);
+		}
+		else
+		{
 			if (i == 0)
-            {
-                __x = tlPot.x + jingW * 0.5f + 0.2f;
-            }
-            else if (i == nums - 1)
-            {
-                __x = tlPot.x + jingW * 0.5f + w / nums * i - 0.2f;
-            }
-            else
-            {
-                __x = tlPot.x + jingW * 0.5f + w / nums * i;
-            }
-            
+			{
+				__x = tlPot.x + jingW * 0.5f + 0.2f;
+			}
+			else if (i == nums - 1)
+			{
+				__x = tlPot.x + jingW * 0.5f + w / nums * i - 0.2f;
+			}
+			else
+			{
+				__x = tlPot.x + jingW * 0.5f + w / nums * i;
+			}
+
 		}
 
 		if (chaoxiang == "up")
-            {
-			    __y = tlPot.y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);
-            }
-            else
-            {
-			    __y = tlPot.y - jingH * 0.5f + 0.4f - GetRandomDistanceNums(0.2f);
-                //翻转
-                jingObj.transform.localScale = new Vector3(jingObj.transform.localScale.x, -jingObj.transform.localScale.y, jingObj.transform.localScale.z);
-            }   
-      
+		{
+			__y = tlPot.y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);
+		}
+		else
+		{
+			__y = tlPot.y - jingH * 0.5f + 0.4f - GetRandomDistanceNums(0.2f);
+			//翻转
+			jingObj.transform.localScale = new Vector3(jingObj.transform.localScale.x, -jingObj.transform.localScale.y, jingObj.transform.localScale.z);
+		}
+
 		jingObj.transform.position = new Vector3(__x, __y, jingObj.transform.position.z);
+	}
+    
+    //设置 近景 相对于mapObj x的位置 给出 初始x 超出 就按最大位置来 0 的话直接放第一个位置
+    //根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**
+    public static void SetJinJingPoint(GameObject mapObj,int i)
+    {
+        //获取 物体全局位置
+        //获取 物体 宽度
     }
 
     //设置物体 全局 位置 xyz
