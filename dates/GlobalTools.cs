@@ -183,6 +183,16 @@ public class GlobalTools : MonoBehaviour {
         return h;
     }
 
+    //获取上一个 地图的连接点  X方向
+	public static Vector2 GetXMapLJDian(GameObject mapObj){
+		Vector2 ljDian = Vector2.zero;
+		Transform tl = mapObj.transform.Find("tl");
+		float __x = tl.transform.position.x + GetHasPointMapObjW(mapObj);
+		float __y = tl.transform.position.y;
+		ljDian = new Vector2(__x,__y);
+		return ljDian;
+	}
+
 
     //获取中心点位置 全局位置 zxd
     //获取 点位置 tl rd zxd
@@ -205,9 +215,16 @@ public class GlobalTools : MonoBehaviour {
     }
 
 
-    //设置 临近 位置 Y轴位移的范围   通用吗？
-	public static void SetXYLinJin(){
-		
+	//设置 临近 位置 Y轴位移的范围   通用吗？
+	public static void SetXYLinJin(GameObject mapObj, GameObject mapObj2, string qifu = "no"){
+		float __x = 
+		if(qifu == "no"){
+			
+		}else if(qifu == "up"){
+			
+		}else if(qifu == "down"){
+			
+		}
 	}
     //设置 空中块的位置  设置之间的最大位置  
 
