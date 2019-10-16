@@ -125,10 +125,10 @@ public class GlobalTools : MonoBehaviour {
     //记录 起始点
 
     //随机数 int 0-100
-    public static int GetRandomNum()
+    public static int GetRandomNum(int nums = 100)
     {
         int num = 0;
-        num = (int)UnityEngine.Random.Range(0, 100);
+		num = (int)UnityEngine.Random.Range(0, nums);
         return num; 
     }
     //距离随机 给一个距离 算出随机的距离
@@ -140,14 +140,14 @@ public class GlobalTools : MonoBehaviour {
     }
 
     //设置物体 深度 order
-    public void SetMapObjOrder(GameObject mapObj,int orderNum = 0)
+	public static void SetMapObjOrder(GameObject mapObj,int orderNum = 0)
     {
         mapObj.GetComponent<SpriteRenderer>().sortingOrder = orderNum;
     }
 
 
     //获取物体 深度 order
-    public int GetMapObjOrder(GameObject mapObj)
+	public static int GetMapObjOrder(GameObject mapObj)
     {
         return mapObj.GetComponent<SpriteRenderer>().sortingOrder;
     }
@@ -216,17 +216,25 @@ public class GlobalTools : MonoBehaviour {
         return Vector2.zero;
     }
 
+    
+    //起点地图块 门的位置 和设置
+
 
 	//设置 临近 位置 Y轴位移的范围   通用吗？
-	public static void SetXYLinJin(GameObject mapObj, GameObject mapObj2, string qifu = "no"){
+	public static void SetXYLinJin(GameObject mapObj, GameObject mapObjS, string qifu = "no"){
 		float __x = 0;
+		float __y = 0;
 		if(qifu == "no"){
-			
+			//平行位置
+			__x = GetXMapLJDian(mapObjS).x;
+			__y = GetXMapLJDian(mapObjS).y;
 		}else if(qifu == "up"){
 			
 		}else if(qifu == "down"){
 			
 		}
+
+		mapObj.transform.position = new Vector2(__x,__y);
 	}
     //设置 空中块的位置  设置之间的最大位置  
 
@@ -235,6 +243,66 @@ public class GlobalTools : MonoBehaviour {
 	public static void SetJinJingXY(GameObject mapObj,float _x,float _y){
 
     }
+
+	//通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） 是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样 
+	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false){
+		float jingW = GetJingW(jingObj);
+        float jingH = GetJingH(jingObj);
+        float __x = 0;
+        float __y = 0;
+		float __z = 0;
+        float w = Mathf.Abs(_x2 - _x1);
+
+		if (nums == 1)
+        {
+            float xiuzhengNums = GetRandomNum() >= 50 ? 0.3f : -0.3f;
+			__x = _x1 + w * 0.5f + GetRandomDistanceNums(xiuzhengNums);
+        }
+        else
+        {
+            if (i == 0)
+            {
+                __x = _x1 + jingW * 0.5f + 0.2f;
+            }
+            else if (i == nums - 1)
+            {
+                __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
+            }
+            else
+            {
+                __x = _x1 + jingW * 0.5f + w / nums * i;
+            }
+
+        }
+
+		if(__x + jingW*0.5f > _x2){
+			__x = _x2 - jingW * 0.5f;
+		}
+
+		if (!isDG)
+        {
+            __y = _y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);
+        }
+        else
+        {
+            __y = _y - jingH * 0.5f + 1f - GetRandomDistanceNums(0.2f);
+            //翻转
+            //jingObj.transform.localScale = new Vector3(jingObj.transform.localScale.x, -jingObj.transform.localScale.y, jingObj.transform.localScale.z);
+        }
+
+
+
+		//深度设置
+		//int sdMax = sdfw + 10;
+		int sd = sdfw + i % 10; //(int)UnityEngine.Random.Range(sdfw, sdMax);
+
+		if(_dz!=0)__z = GetRandomNum(100) > 50 ? _z + UnityEngine.Random.Range(0, _dz) : _z - UnityEngine.Random.Range(0, _dz);
+
+		SetMapObjOrder(jingObj,sd);
+
+        jingObj.transform.position = new Vector3(__x, __y, __z);
+	}
+
 
 	//根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**    x方向上的 景 放置
 	public static void SetJinJingPoint(GameObject mapObj, GameObject jingObj, int i, int nums, string chaoxiang = "up")
@@ -306,4 +374,8 @@ public class GlobalTools : MonoBehaviour {
 
     //获取上一个 物体 的 信息  ？？？？？
     
+
+
+
+  
 }
