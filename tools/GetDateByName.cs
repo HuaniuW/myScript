@@ -37,4 +37,14 @@ public class GetDateByName : MonoBehaviour {
         if (fieldInfo == null) return null;
         return fieldInfo.GetValue(obj) as Dictionary<string, float>;
     }
+
+	public List<string> GetListByName(string _name, System.Object obj)
+    {
+        Type type = obj.GetType();
+        FieldInfo fieldInfo = type.GetField(_name);
+        if (fieldInfo == null) return null;
+		return fieldInfo.GetValue(obj) as List<string>;
+    }
+
+
 }

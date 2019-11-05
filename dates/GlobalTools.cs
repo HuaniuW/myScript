@@ -244,10 +244,16 @@ public class GlobalTools : MonoBehaviour {
 
     }
 
-	//通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） 是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样 
-	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false){
-		float jingW = GetJingW(jingObj);
-        float jingH = GetJingH(jingObj);
+	//通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） _dz distance z(z的距离范围随机)   是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样 
+	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false,bool isTree = false){
+		float jingW = 0;
+		float jingH = 0;
+        			
+		if(!isTree){
+			jingW = GetJingW(jingObj);
+            jingH = GetJingH(jingObj);	
+		}
+
         float __x = 0;
         float __y = 0;
 		float __z = 0;
@@ -260,36 +266,68 @@ public class GlobalTools : MonoBehaviour {
         }
         else
         {
-            if (i == 0)
-            {
-                __x = _x1 + jingW * 0.5f + 0.2f;
-            }
-            else if (i == nums - 1)
-            {
-                __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
-            }
-            else
-            {
-                __x = _x1 + jingW * 0.5f + w / nums * i;
-            }
+			if(!isTree){
+				if (i == 0)
+                {
+                    __x = _x1 + jingW * 0.5f + 0.2f;
+                }
+                else if (i == nums - 1)
+                {
+                    __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
+                }
+                else
+                {
+                    __x = _x1 + jingW * 0.5f + w / nums * i;
+                }	
+			}else{
+				__x = _x1 + w / nums * i + w / nums * 0.5f;
+			}
+            
 
         }
 
-		if(__x + jingW*0.5f > _x2){
-			__x = _x2 - jingW * 0.5f;
+        //是否是 树
+		if(!isTree){
+			if (__x + jingW * 0.5f > _x2)
+            {
+                __x = _x2 - jingW * 0.5f;
+            }	
 		}
 
+        //倒挂的景 物件
 		if (!isDG)
         {
-            __y = _y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);
+			//print("---------------------------------------");
+            //print(jingObj.name + "  -w " + jingW + "   -h " + jingH);
+            //if (jingObj.name == "qjd_1_1" || jingObj.name == "qjd_1_2" || jingObj.name == "qjd_1_10")
+            //{
+            //    print(jingObj.name + "  -w " + jingW + "   -h " + jingH);
+            //}
+            //判断 如果是大物件 就限制高度
+            if (jingW >= 12 && jingH >= 3)
+            {
+				__y = _y - 0.4f + GetRandomDistanceNums(0.2f);
+			}else{
+				__y = _y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);	
+			}
+
+            
         }
         else
         {
+			
             __y = _y - jingH * 0.5f + 1f - GetRandomDistanceNums(0.2f);
             //翻转
             //jingObj.transform.localScale = new Vector3(jingObj.transform.localScale.x, -jingObj.transform.localScale.y, jingObj.transform.localScale.z);
         }
 
+        //旋转度数
+		if(xzds!=0){
+			float jd = UnityEngine.Random.Range(0, xzds)*0.1f;
+			float jdpy = GetRandomNum(100) > 50 ? jd : -jd;
+			print("jdpy -------->   "+jdpy);
+			jingObj.transform.rotation = new Quaternion(jingObj.transform.localRotation.x, jingObj.transform.localRotation.y, jdpy,jingObj.transform.localRotation.w);
+		}
 
 
 		//深度设置
@@ -298,10 +336,23 @@ public class GlobalTools : MonoBehaviour {
 
 		if(_dz!=0)__z = GetRandomNum(100) > 50 ? _z + UnityEngine.Random.Range(0, _dz) : _z - UnityEngine.Random.Range(0, _dz);
 
-		SetMapObjOrder(jingObj,sd);
+		if(!isTree)SetMapObjOrder(jingObj,sd);
 
         jingObj.transform.position = new Vector3(__x, __y, __z);
+
+
+		SaveGameObj(jingObj);
+        
 	}
+
+
+
+    //将 生成的 地图 存入数据保存
+	public static void SaveGameObj(GameObject obj){
+		print("---------------------------------------------------------->  " + obj.name);
+		//记录场景布局 加上 位置 和角度 深度
+	}
+
 
 
 	//根据 随机出来的 放置 景的数量来循环  **有个i来比例位置**    x方向上的 景 放置

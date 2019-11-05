@@ -47,6 +47,8 @@ public class HitKuai : MonoBehaviour {
 
     float _atkObjScaleX;
 
+    float txPos = 0;
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
 
@@ -56,7 +58,7 @@ public class HitKuai : MonoBehaviour {
         if(this.txObj == null) this.txObj = this.transform.parent.gameObject;
         atkObj = txObj.GetComponent<JN_base>().atkObj;
         //print(atkObj.name);
-        
+        txPos = -1.2f;
 
         JN_Date jn_date = txObj.GetComponent<JN_Date>();
 
@@ -74,7 +76,7 @@ public class HitKuai : MonoBehaviour {
 
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
-            GetBeHit(jn_date, _roleScaleX);
+            
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector2 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y);
@@ -86,14 +88,17 @@ public class HitKuai : MonoBehaviour {
                 float beHitXFScale = roleDate.beHitXFScale;
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
+                    gameBody.HasBeHit();
                     //atkObjV3Zero(Coll.gameObject);
                     atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
                     //Coll.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     if (jn_date.fasntuili != 0) beHitXFScale = 1;// 有反推力说明是空中向下攻击
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX* beHitXFScale, 0));
+                    txPos = 0.8f;
+                    print("sudu-------------------------------------------<>>>>>>>>>> 11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x+"   || "+Coll.name+"   txPos   "+txPos);
                     //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
                     //print(Coll.tag);
-                    gameBody.HasBeHit();
+                    
                 }
                 else if (jn_date.atkPower - roleDate.yingzhi > 0)
                 {
@@ -106,6 +111,7 @@ public class HitKuai : MonoBehaviour {
                         ObjV3Zero(atkObj);
                         atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-200 * _roleScaleX, 0));
                     }
+                    txPos = 0.4f;
                 }
                 else
                 {
@@ -127,8 +133,8 @@ public class HitKuai : MonoBehaviour {
                 //if (Coll.tag != "Player")
             }
 
+            //print("sudu-------------------------------------------11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x);
 
-           
             if (jn_date.fasntuili != 0)
             {
                 atkObj.GetComponent<GameBody>().SetYSpeedZero();
@@ -149,6 +155,8 @@ public class HitKuai : MonoBehaviour {
                 //if (gameObject) ObjectPools.GetInstance().DestoryObject2(gameObject);     
                 txObj.GetComponent<JN_base>().DisObj();
             }
+
+            GetBeHit(jn_date, _roleScaleX);
 
         }
     }
@@ -183,8 +191,8 @@ public class HitKuai : MonoBehaviour {
         //判断是否在空中
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
-        HitTX(_psScaleX, "BloodSplatCritical2D1","",2,false,false);
-        HitTX(_psScaleX,"jizhong",roleDate.beHitVudio,3,true);
+        HitTX(_psScaleX, "BloodSplatCritical3", "",2,false,false,-txPos);
+        HitTX(_psScaleX,"jizhong",roleDate.beHitVudio,4,true,true);
     }
 
     /// <summary>
@@ -195,13 +203,19 @@ public class HitKuai : MonoBehaviour {
     /// <param name="hitVudio">播放特效声音</param>
     /// <param name="isSJJD">是否随机角度</param>
     /// <param name="isZX">是否需要转向</param>
-    void HitTX(float psScaleX,string txName,string hitVudio = "",float beishu = 3,bool isSJJD = false,bool isZX = true)
+    void HitTX(float psScaleX,string txName,string hitVudio = "",float beishu = 3,bool isSJJD = false,bool isZX = true,float hy = 0)
     {
+        print("hy ------------------------------------------------------>     "+hy);
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
-        hitTx.transform.position = gameBody.transform.position;
+        //print("sudu-------------------------------------------   "+ gameBody.GetComponent<Rigidbody2D>().velocity.x);
+        hitTx.transform.position = new Vector3(gameBody.transform.position.x-hy*psScaleX, gameBody.transform.position.y, gameBody.transform.position.z) ;
         //击中特效缩放
-        hitTx.transform.localScale = new Vector3(beishu, beishu, 1);
+        hitTx.transform.localScale = new Vector3(beishu, beishu, beishu);
+
+        //print(hitTx.transform.localEulerAngles + " 000000000000000000000000000000000 "+hitTx.transform.name);
+
+        if(!isZX)hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x,hitTx.transform.localEulerAngles.y*psScaleX, hitTx.transform.localEulerAngles.z);
 
         float jd = 0;
        
@@ -213,13 +227,14 @@ public class HitKuai : MonoBehaviour {
         if (!isZX) return;
         if (psScaleX>0)
         {
-            if(isSJJD)jd = Random.Range(-10, -15);
-            hitTx.transform.localEulerAngles = new Vector3(0, 0, jd);
+            if(isSJJD)jd = Random.Range(-5, 10);
+            hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y, jd);
+            //print(">>>>>>>>>>>>>>>>>>>>>>>>>左");
         }
         else
         {
-            if (isSJJD) jd = Random.Range(0, -5);
-            hitTx.transform.localEulerAngles = new Vector3(0, 144, jd);
+            if (isSJJD) jd = Random.Range(-5, 10);
+            hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, 180, jd);
         }
 
     }
