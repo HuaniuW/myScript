@@ -45,6 +45,10 @@ public class HitKuai : MonoBehaviour {
         _atkObjScaleX = atkObjScaleX;
     }
 
+
+
+
+
     float _atkObjScaleX;
 
     float txPos = 0;
@@ -55,7 +59,10 @@ public class HitKuai : MonoBehaviour {
         gameBody = Coll.GetComponent<GameBody>();
         roleDate = Coll.GetComponent<RoleDate>();
         _rigidbody2D = Coll.GetComponent<Rigidbody2D>();
-        if(this.txObj == null) this.txObj = this.transform.parent.gameObject;
+        //print("?????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    "+Coll.GetComponent<GameBody>().GetDB().armature.GetBones());
+       
+       
+        if (this.txObj == null) this.txObj = this.transform.parent.gameObject;
         atkObj = txObj.GetComponent<JN_base>().atkObj;
         //print(atkObj.name);
         txPos = -1.2f;
@@ -72,11 +79,17 @@ public class HitKuai : MonoBehaviour {
             //float _roleScaleX = this.transform.localScale.x > 0?-1:1 ;  //-atkObj.transform.localScale.x;
             float _roleScaleX = -_atkObjScaleX;
 
+
+            if(gameBody.tag!="Player")gameBody.BeHitColorChange();
+
+
+
+
             //print(_roleScaleX+"   ??   "+this.transform.localScale);
 
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
-            
+
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector2 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y);

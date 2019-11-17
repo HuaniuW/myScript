@@ -22,8 +22,8 @@ public class CameraKuai : MonoBehaviour {
     {
         if (Coll.tag == "Player")
         {
-            //print("In");
-            //print(GlobalTools.FindObjByName("MainCamera"));
+            print("In");
+            print(GlobalTools.FindObjByName("MainCamera"));
             //print(cameraY.transform.position.y);
             cm.GetHitCameraKuaiY(cameraY.transform.position.y);
         }
@@ -34,7 +34,7 @@ public class CameraKuai : MonoBehaviour {
 
         if (Coll.tag == "Player")
         {
-            //print("out");
+            print("?????????????????????????????????????????out");
             cm.OutHitCameraKuaiY();
         }
         //print("Trigger - B");

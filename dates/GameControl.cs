@@ -14,9 +14,13 @@ public class GameControl : MonoBehaviour {
 
     void TimeTest()
     {
-        float s = 8 * 365;
+        float s = 8 * 365/7*6;
         float t = 1000000;
         print("--------------------------------------------->每个月的收入  " + t / s * 8 * 31+"元"+"  每天价值 "+t/s*8+"  每小时价值 "+t/s);
+
+        float dj = 39*0.7f*0.55f;
+        float zong = 10000000;
+        print("1000万收入 需要卖出多少份   "+zong/dj);
     }
 
     public void LuaTest(string str)

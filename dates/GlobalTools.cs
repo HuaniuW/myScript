@@ -122,6 +122,45 @@ public class GlobalTools : MonoBehaviour {
 
     //-------------------------地图处理 工具函数-------------------------------------------
 
+    //摄像机 控制块的 安放
+    public static void SetCameraKuai(GameObject mapObj,float setY, string type = "none",float setY2 = 0)
+    {
+        GameObject GKuai;
+        GameObject GKuai2;
+        float dibanW = GetHasPointMapObjW(mapObj); 
+        float dibanH = GetHasPointMapObjH(mapObj);
+        float CKuaiW = 0;
+        float CKuaiW2 = 0;
+        Vector2 CKuaiPos = Vector2.zero;
+        if (type == "none"||type == "up")
+        {
+            GKuai = GetGameObjectByName("CameraKSetY");
+            CKuaiW = GKuai.transform.Find("fk").GetComponent<SpriteRenderer>().bounds.size.x;
+            GKuai.transform.localScale = new Vector3(GKuai.transform.lossyScale.x*dibanW/CKuaiW*0.7f, GKuai.transform.lossyScale.y, GKuai.transform.lossyScale.z);
+            GKuai.transform.Find("setY").transform.position = new Vector2(GKuai.transform.Find("setY").transform.position.x, GKuai.transform.Find("setY").transform.position.y+setY);
+            GKuai.transform.position = new Vector2(mapObj.transform.position.x+dibanW*0.5f, mapObj.transform.position.y + dibanH * 0.5f);
+            GKuai.transform.parent = mapObj.transform.parent;
+        }else if (type == "down")
+        {
+            GKuai = GetGameObjectByName("CameraKSetY");
+            GKuai2 = GetGameObjectByName("CameraKSetY");
+            CKuaiW = GKuai.transform.Find("fk").GetComponent<SpriteRenderer>().bounds.size.x;
+            GKuai.transform.localScale = new Vector3(GKuai.transform.lossyScale.x * (dibanW * 2 / 3) / CKuaiW, GKuai.transform.lossyScale.y, GKuai.transform.lossyScale.z);
+            GKuai.transform.Find("setY").transform.position = new Vector2(GKuai.transform.Find("setY").transform.position.x, GKuai.transform.Find("setY").transform.position.y + setY);
+            GKuai.transform.position = new Vector2(mapObj.transform.position.x + dibanW * 2 / 3 * 0.5f, mapObj.transform.position.y + dibanH * 0.5f);
+            GKuai.transform.parent = mapObj.transform.parent;
+
+            GKuai2.transform.localScale = new Vector3(GKuai.transform.lossyScale.x * (dibanW * 1 / 4) / CKuaiW, GKuai.transform.lossyScale.y, GKuai.transform.lossyScale.z);
+            GKuai2.transform.Find("setY").transform.position = new Vector2(GKuai2.transform.Find("setY").transform.position.x, GKuai2.transform.Find("setY").transform.position.y + setY2);
+            GKuai2.transform.position = new Vector2(mapObj.transform.position.x + dibanW * 3 / 3.5f, mapObj.transform.position.y + dibanH * 0.5f);
+            GKuai2.transform.parent = mapObj.transform.parent;
+
+        }
+        //将摄像机块存入地图
+        //SaveGameObj();
+    }
+
+
     //记录 起始点
 
     //随机数 int 0-100
@@ -244,8 +283,34 @@ public class GlobalTools : MonoBehaviour {
 
     }
 
+    public static void SetLizi(GameObject jingObj, float _x1, float _x2, float _y, int i, int nums) {
+        float __x = 0;
+        float __y = 0;
+        float __z = 0;
+        float w = Mathf.Abs(_x2 - _x1);
+
+        if (nums == 1)
+        {
+            float xiuzhengNums = GetRandomNum() >= 50 ? 0.3f : -0.3f;
+            __x = _x1 + w * 0.5f + GetRandomDistanceNums(xiuzhengNums);
+        }
+        else
+        {
+           
+            __x = _x1 + w / nums * i + w / nums * 0.5f;
+
+        }
+
+        __y = _y  + 1f - GetRandomDistanceNums(0.2f);
+
+        jingObj.transform.position = new Vector3(__x, __y, __z);
+
+
+        SaveGameObj(jingObj);
+    }
+
 	//通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） _dz distance z(z的距离范围随机)   是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样 
-	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false,bool isTree = false){
+	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false,bool isTree = false,bool isLBsuoduan = false){
 		float jingW = 0;
 		float jingH = 0;
         			
@@ -270,10 +335,14 @@ public class GlobalTools : MonoBehaviour {
 				if (i == 0)
                 {
                     __x = _x1 + jingW * 0.5f + 0.2f;
+                    __z *= 0.05f;
+                   // if (isLBsuoduan) __x += jingW * 0.2f;
                 }
                 else if (i == nums - 1)
                 {
                     __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
+                    __z *= 0.05f;
+                    //if (isLBsuoduan) __x -= jingW * 0.2f;
                 }
                 else
                 {
@@ -325,7 +394,7 @@ public class GlobalTools : MonoBehaviour {
 		if(xzds!=0){
 			float jd = UnityEngine.Random.Range(0, xzds)*0.1f;
 			float jdpy = GetRandomNum(100) > 50 ? jd : -jd;
-			print("jdpy -------->   "+jdpy);
+			//print("jdpy ***************************************************************************************************-------->   "+jdpy);
 			jingObj.transform.rotation = new Quaternion(jingObj.transform.localRotation.x, jingObj.transform.localRotation.y, jdpy,jingObj.transform.localRotation.w);
 		}
 
@@ -349,8 +418,25 @@ public class GlobalTools : MonoBehaviour {
 
     //将 生成的 地图 存入数据保存
 	public static void SaveGameObj(GameObject obj){
-		print("---------------------------------------------------------->  " + obj.name);
-		//记录场景布局 加上 位置 和角度 深度
+        //print("---------------------------------------------------------->  " + obj.name);
+        if(obj.tag == "men")
+        {
+            print("景储存---->名字   " + obj.name + "   位置   " + obj.transform.position);
+            print("men里面的门位置  "+ obj.transform.Find("men").transform.position);
+            return;
+        }
+
+
+        //记录场景布局 加上 位置 和角度 深度
+        if (obj.transform.GetComponent<SpriteRenderer>() != null) {
+            print("景储存---->名字   " + obj.name + "   位置   " + obj.transform.position + "  缩放 " + obj.transform.localScale + "  深度  " + obj.transform.GetComponent<SpriteRenderer>().sortingOrder + "  旋转角度 " + obj.transform.rotation);
+        }
+        else
+        {
+            print("景储存---->名字   " + obj.name + "   位置   " + obj.transform.position + "  缩放 " + obj.transform.localScale  + "  旋转角度 " + obj.transform.rotation);
+        }
+        
+
 	}
 
 

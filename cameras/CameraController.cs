@@ -163,10 +163,11 @@ public class CameraController : MonoBehaviour
             //{
             //    xNew = Mathf.Lerp(transform.position.x, player.position.x, Time.deltaTime * smoothing.x);
             //}
-
+            //print("shifou jinlai  camera!");
             float yNew = transform.position.y;
             if (IsHitCameraKuai)
             {
+                //print("hit cameraKuai!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CameraKuaiY   " + CameraKuaiY);
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
             }
             else

@@ -402,6 +402,7 @@ public class PlayerGameBody : GameBody {
         ResetAll();
         roleDate.isBeHiting = true;
         inFightNums = 0;
+        mnum = 0;
         InFightAtk();
         ChangeStandAndRunAC();
         Time.timeScale = 0.5f;

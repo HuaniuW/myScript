@@ -85,10 +85,15 @@ public class ScreenDate : MonoBehaviour {
 	public static List<string> men_qjd_1 = new List<string> { "3", "4", "5","6" };
 	public static List<string> qjd_1 = new List<string> { "3", "4", "6","7", "8","5"};
     //较大的 前景 w>13 h>4
-	public static List<string> qjdd_1 = new List<string> { "1", "2", "10"};
+	public static List<string> qjdd_1 = new List<string> { "1"};
 
-	public static List<string> qyj_1 = new List<string> {"1"};
+    //public static List<string> qjdd_1 = new List<string> { "1", "2", "10" };
 
+    public static List<string> qyj_1 = new List<string> {"1"};
 
+    public static List<string> jyj_1 = new List<string> { "1","2","3","4","5","6" };
+    public static List<string> zyj_1 = new List<string> { "1", "2", "3", "4", "5", "6","7" };
+    public static List<string> liziLY_1 = new List<string> { "1" };
+    public static List<string> liziWu_1 = new List<string> { "1" };
 
 }

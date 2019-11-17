@@ -1076,6 +1076,39 @@ public class GameBody : MonoBehaviour, IRole {
         GetUpdate();
     }
 
+    public void GetBoneColorChange(Color color)
+    {
+        List<DragonBones.Bone> bones = GetDB().armature.GetBones();
+        foreach(DragonBones.Bone o in bones)
+        {
+            //print("name:  " + o.GetType()+o.slot);
+            if (o.slot != null)
+            {
+                //if(o.slot.display!=null &&(o.slot.display as GameObject).GetComponent<Renderer>()!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material.color!=null != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = Color.red;
+                if (o.slot.display != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
+                //return;
+            }
+            //print(o.slot._SetColor(DragonBones.ColorTransform));
+        }
+    }
+
+
+    public void BeHitColorChange()
+    {
+        GetBoneColorChange(Color.red);
+        StartCoroutine(IReSetBeHitColor(0.12f));
+    }
+
+
+    public IEnumerator IReSetBeHitColor(float time)
+    {
+        yield return new WaitForSeconds(time);
+        GetBoneColorChange(Color.white);
+    }
+
+
+
+
     protected virtual void IsCanShanjinAndJump()
     {
         if (IsGround || IsHitMQWall) {
