@@ -30,13 +30,13 @@ public class UI_Skill : MonoBehaviour {
     //是否 可以使用技能
     public bool isCanBeUseSkill()
     {
+        if (skillCanUseTimes == 0) return false;
+        skillCanUseTimes--;
+        SetText(skillCanUseTimes.ToString());
         if (skillCanUseTimes == 0) {
             if (NoNumsBeep != null) NoNumsBeep.Play();
-            return false;
+            CDStart();
         }
-        
-        skillCanUseTimes--;
-        SetText(SkillCanUseNums.ToString());
         return true;
     }
 
@@ -49,7 +49,20 @@ public class UI_Skill : MonoBehaviour {
     HZDate _hzDate;
     public void SetHZDate(HZDate hzDate)
     {
+        if (_hzDate != null) return;
         _hzDate = hzDate;
+        //在这根据 信息 初始化
+        SkillCanUseNums = _hzDate.usenums;
+        skillCanUseTimes = SkillCanUseNums;
+        CDTimeNums = _hzDate.cd;
+        GetComponent<TheTimer>().ContinuouslyTimesAdd(CDTimeNums, Intervals, CDCallBack);
+        GetComponent<UIShake>().GetShakeObj(this.gameObject);
+        print("初始化 徽章的 技能信息！！！" + skillCanUseTimes);
+        SetText(skillCanUseTimes.ToString());
+
+
+        //查询 是够有 全局技能使用记录 有的话 从记录开始初始化   数据记录系统 优化
+        
     }
 
     public HZDate GetHZDate()
@@ -82,18 +95,17 @@ public class UI_Skill : MonoBehaviour {
             maxCDDistance = MaskImg.GetComponent<RectTransform>().rect.height;
         }
 
-        skillCanUseTimes = SkillCanUseNums;
+        //skillCanUseTimes = SkillCanUseNums;
         //初始化 技能可用次数的 显示文本
-        SetText(SkillCanUseNums.ToString());
+        //SetText(skillCanUseTimes.ToString());
 
         //设置 默认 遮罩地板颜色
         Color _col = new Color(66 / 255f, 66 / 255f, 66 / 255f, 1);
         SetImgColor(TheMask,_col);
 
         //设置 CD时间
-        GetComponent<TheTimer>().ContinuouslyTimesAdd(CDTimeNums, Intervals, CDCallBack);
-        GetComponent<UIShake>().GetShakeObj(this.gameObject);
-        CDStart();
+       
+        //CDStart();
     }
 
 
@@ -117,6 +129,8 @@ public class UI_Skill : MonoBehaviour {
             SetText(skillCanUseTimes.ToString());
             //SetText("2");
             GetComponent<UIShake>().GetShake();
+            skillCanUseTimes = SkillCanUseNums;
+            SetText(skillCanUseTimes.ToString());
         }
     }
 
@@ -165,6 +179,7 @@ public class UI_Skill : MonoBehaviour {
     {
         if (SkillCanUseNumsText == null) return;
         SkillCanUseNumsText.text = str;
+        print("SkillCanUseNumsText.text --->   "+ SkillCanUseNumsText.text);
         if (SkillCanUseNumsText.text == "1"|| SkillCanUseNumsText.text == "0")
         {
             SkillCanUseNumsText.text = "";

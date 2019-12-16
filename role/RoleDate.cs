@@ -21,7 +21,21 @@ public class RoleDate : MonoBehaviour {
     public float yingzhi = 100;
 
     [Header("蓝")]
-    public float lan = 1000;
+    public float Lan = 1000;
+    public virtual float lan
+    {
+        get
+        {
+            return Lan;
+        }
+        set
+        {
+            Lan = value;
+            if (Lan < 0) Lan = 0;
+        }
+    }
+
+
     [Header("最大蓝")]
     public float maxLan = 1000;
 

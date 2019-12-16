@@ -254,11 +254,11 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (GlobalTools.FindObjByName("PlayerUI").name=="PlayerUI")
         {
-            ShowSkill("PlayerUI/skill1");
+            //ShowSkill("PlayerUI/skill1");
         }
         else
         {
-            ShowSkill("PlayerUI(Clone)/skill1");
+            //ShowSkill("PlayerUI(Clone)/skill1");
         }
     }
 
@@ -266,37 +266,40 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (GlobalTools.FindObjByName("PlayerUI").name == "PlayerUI")
         {
-            ShowSkill("PlayerUI/skill2");
+            //ShowSkill("PlayerUI/skill2");
         }
         else
         {
-            ShowSkill("PlayerUI(Clone)/skill2");
+            //ShowSkill("PlayerUI(Clone)/skill2");
         }
     }
         
+    // 补一个被动技能的释放  是否有被动技能 有的话 直接释放  被动技能是否 配有动作？
 
     protected HZDate jn;
-    public void ShowSkill(string urlName)
+    public void ShowSkill(GameObject hzObj)
     {
         if (IsHitWall) return;
         if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping ||isAcing) return;
-        //print(" >>>   "+ urlName);
-        jn = GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
+        //print(" >>>   释放技能");
+        jn = hzObj.GetComponent<UI_Skill>().GetHZDate();// GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
         if (jn != null)
         {
             if (jn.IsCDOver())
             {
                 if (roleDate.lan - jn.xyLan < 0) return;
                 if (roleDate.live - jn.xyXue < 1) return;
+                if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
                 roleDate.lan -= jn.xyLan;
                 roleDate.live -= jn.xyXue;
-                jn.StartCD();
+                //jn.StartCD();
                 //if(Globals.isDebug)print("---------------------------> 释放技能！！");
                 //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
                 if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
                 {
                     //***找到起始特效点 找骨骼动画的点 或者其他办法
                     GetAcMsg(jn.skillACName);
+                    print("技能释放动作    "+jn.skillACName);
                     playerRigidbody2D.velocity = Vector2.zero;
                     if (jn.ACyanchi > 0)
                     {

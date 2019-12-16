@@ -41,13 +41,13 @@ public class Gezi : MonoBehaviour {
         }
 
         string skillName = "";
-        if (_obj.GetComponent<HZDate>().zd_skill_Name == "")
+        if (_obj.GetComponent<HZDate>().zd_skill_ui_Name == "")
         {
             skillName = "none";
         }
         else
         {
-            skillName = _obj.GetComponent<HZDate>().zd_skill_Name;
+            skillName = _obj.GetComponent<HZDate>().zd_skill_ui_Name;
         }
 
         _obj.GetComponent<HZDate>().RQName = this.transform.name;
@@ -81,7 +81,7 @@ public class Gezi : MonoBehaviour {
            
 
             print("name >>22222222222222222222   " + this.transform.name);
-            print("徽章带的主动技能名字：  " + _obj.GetComponent<HZDate>().zd_skill_Name);
+            print("徽章带的主动技能名字：  " + _obj.GetComponent<HZDate>().zd_skill_ui_Name);
             List<RectTransform> HZs = this.transform.parent.GetComponent<Mianban1>().GetInHZListHZ();
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.SKILL_UI_CHANGE, HZs), this);
         }

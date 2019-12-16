@@ -40,11 +40,11 @@ public class HZDate : MonoBehaviour {
     public string type = "bd";
 
     [Header("主动技能 名字")]
-    public string zd_skill_Name = "";
+    public string zd_skill_ui_Name = "";
     [Header("技能CD")]
     public int cd = 0;
     [Header("技能可以连续使用次数")]
-    public int usenums = 0;
+    public int usenums = 1;
 
     [Header("消耗蓝")]
     public float xyLan = 0;

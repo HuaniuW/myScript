@@ -74,4 +74,7 @@ public class EventTypeName
 
     //释放技能
     public const string RELEASE_SKILL = "release_skill";
+
+    public const string CHANGE_HUN = "change_hun";
+
 }

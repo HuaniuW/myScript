@@ -41,7 +41,9 @@ public class UI_ShowPanel : MonoBehaviour {
         {
             if(o.GetComponent<UI_Skill>().GetSkillPos() == str)
             {
-                print(o.GetComponent<UI_Skill>().GetHZDate().zd_skill_Name);
+                GlobalTools.FindObjByName("player").GetComponent<GameBody>().ShowSkill(o);
+
+                break;
             }
         }
     }
@@ -66,7 +68,7 @@ public class UI_ShowPanel : MonoBehaviour {
             //匹配 HZlist
 
 
-            string name = o.GetComponent<HZDate>().zd_skill_Name;
+            string name = o.GetComponent<HZDate>().zd_skill_ui_Name;
             if (name == "") continue;
             int posNum = 0;// int.Parse(e.eventParams.ToString().Split('_')[1]);
             string str = o.GetComponent<HZDate>().RQName;

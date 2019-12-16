@@ -11,6 +11,20 @@ public class PlayerRoleDate : RoleDate
     float _live;
     float _lan;
 
+    public override float lan
+    {
+        get
+        {
+            return Lan;
+        }
+        set
+        {
+            Lan = value;
+            if (Lan < 0) Lan = 0;
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HUN, Lan), this);
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
