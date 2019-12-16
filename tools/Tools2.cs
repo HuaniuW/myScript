@@ -281,3 +281,10 @@ GetComponent<RectTransform>().sizeDelta
 
 //SetAsFirstSibling(); UI层级提到开始 
 //SetAsLastSibling();  放到最下层 显示在最高层
+
+
+//改变 颜色    obj.GetComponent<Image>().material.color可以改变 角色骨骼动画 图片 里面的 颜色
+//color数值 除以255的float值  第4个是alpha   Color _col = new Color(66 / 255f, 66 / 255f, 66 / 255f, 1);
+//obj.GetComponent<Image>().material.color = color;  改变 image material 的属性颜色  这个灰改变所有UI的 material的颜色
+//这个才是改变 image 的color
+//obj.GetComponent<Image>().color = color;

@@ -29,6 +29,8 @@ public class HZDate : MonoBehaviour {
 
     [Header("附带技能动作")]
     public string skillACName;
+    [Header("附带技能动作  空中")]
+    public string skillACNameInAir;
     [Header("技能动作起始延迟")]
     public float ACyanchi;
 
@@ -36,8 +38,13 @@ public class HZDate : MonoBehaviour {
     public float kanghuo;
     [Header("是被动技能还是主动技能")]
     public string type = "bd";
+
+    [Header("主动技能 名字")]
+    public string zd_skill_Name = "";
     [Header("技能CD")]
     public int cd = 0;
+    [Header("技能可以连续使用次数")]
+    public int usenums = 0;
 
     [Header("消耗蓝")]
     public float xyLan = 0;
@@ -50,6 +57,8 @@ public class HZDate : MonoBehaviour {
 
     [Header("主动技能图片介绍")]
     public string imgName = "";
+
+    public string RQName = "";
 
     void Start () {
         

@@ -179,8 +179,12 @@ public class GameMapControl : MonoBehaviour {
 			StartCoroutine(SetPlayerPos(men.transform.Find("men").transform.Find("pp").transform.position));
 
 		}
-		//是否 有墙 前景 近景 和背景 远景 
-		Qianjing(men.transform.Find("men"));
+        //是否 有墙 前景 近景 和背景 远景 
+        //Qianjing(men.transform.Find("men"));
+        MenQianjingD(men.transform.Find("men"),ScreenDate.men_qjd_1,3);
+        MenJinjingD(men.transform.Find("men"), ScreenDate.men_jjd_1);
+        MenJinjingU(men.transform.Find("men"),ScreenDate.men_jju_1,0.3f);
+
 
 		//上一个主 路部件  --  写入临时
 		GlobalTools.tempRecordMapObj = men;
@@ -213,18 +217,145 @@ public class GameMapControl : MonoBehaviour {
 
         //}
 
-        //平地
-        pingdisenlin(3);
-        pingdisenlin(1);
-
-
-    }
-
-
-    void feipingdiHW()
-    {
+        int LandNums = 2 + GlobalTools.GetRandomNum(4);
+        List<string> landNames = new List<string> { "xdiban_1_1", "xdiban_1_2" };
         
+        //平地
+        pingdisenlinCJ(landNames, LandNums,ScreenDate.shu_1,ScreenDate.jyj_1,ScreenDate.zyj_1,ScreenDate.qjdd_1,ScreenDate.qjd_1, 3);
+
+        LandNums = 2 + GlobalTools.GetRandomNum(4);
+        //pingdisenlinCJ(landNames, LandNums, ScreenDate.shu_1, ScreenDate.jyj_1, ScreenDate.zyj_1, ScreenDate.qjdd_1, ScreenDate.qjd_1, 1);
+
+
+        SetJumpScreen(ScreenDate.tiaoyuediban_1, 6, null, true, ScreenDate.mdiban_1, null,3);
     }
+
+    
+    void SetJumpScreen(List<string> dibanNameList,int landNums,List<string> dyjList,bool isMoveDB,List<string> moveDibanList,List<string> diciList,int type = 1)
+    {
+        Vector2 qidian = Vector2.zero;
+        Vector2 zhongdian = Vector2.zero;
+        Vector2 lianjiedian = Vector2.zero;
+        float __x = 0;
+        float __y = 0;
+
+        float _distanceX = 0;
+        float _distanceY = 0;
+
+        bool isMFloor = false;
+        float lastMFloorW = 0;
+
+        for (var i = 0; i < landNums; i++)
+        {
+            string _name = "";//dibanNameList[GlobalTools.GetRandomNum(dibanNameList.Count)]; 
+            if (i != landNums - 1)
+            {
+                if (GlobalTools.GetRandomNum() < 100)
+                {
+                    //普通地板
+                    _name = dibanNameList[GlobalTools.GetRandomNum(dibanNameList.Count)];
+                }
+                else
+                {
+                    //使用 mfloor
+                    _name = moveDibanList[GlobalTools.GetRandomNum(moveDibanList.Count)];
+                    isMFloor = true;
+                }
+            }
+            else
+            {
+                //最后一个floor 不能是 mfloor
+                _name = dibanNameList[GlobalTools.GetRandomNum(dibanNameList.Count)];
+            }
+           
+
+            GameObject lu = GlobalTools.GetGameObjectByName(_name);            
+            lu.transform.parent = GlobalTools.FindObjByName("maps").transform;
+            lu.transform.position = Vector2.zero;
+            _distanceX = 5f+GlobalTools.GetRandomDistanceNums(10f);
+            
+
+            //连接点
+            if (GlobalTools.tempRecordMapObj.tag == "men")
+            {
+                lianjiedian = GlobalTools.tempRecordMapObj.transform.Find("ljd").position;
+            }
+            else
+            {
+                print("==================================================>   "+ GlobalTools.tempRecordMapObj.transform.position);
+                lianjiedian = GlobalTools.GetXMapLJDian(GlobalTools.tempRecordMapObj);
+                print("=================================================lianjiedian=>   " + lianjiedian);
+            }
+
+
+            //大模块起点
+            if (i == 0)
+            {
+                qidian = lianjiedian;
+            }
+
+            float _x = lianjiedian.x + _distanceX;
+            
+            if (lastMFloorW!=0)
+            {
+                _x -= lastMFloorW * 0.5f; 
+            }
+
+            if (isMFloor) {
+                isMFloor = false;
+                lastMFloorW = GlobalTools.GetHasPointMapObjW(lu);
+                 _x += lastMFloorW * 0.5f;
+            }
+
+            float _y = qidian.y;
+
+            if (type == 1)
+            {
+                //平地
+                
+            }
+            else if (type == 2)
+            {
+                //小波动
+                if (GlobalTools.GetRandomNum() > 50)
+                {
+                    _y = qidian.y + GlobalTools.GetRandomDistanceNums(2);
+                }
+                else
+                {
+                    _y = qidian.y - GlobalTools.GetRandomDistanceNums(2);
+                }
+
+            }
+            else if (type == 3)
+            {
+                //上
+                _y = lianjiedian.y +2+ GlobalTools.GetRandomDistanceNums(5);
+
+            }
+            else if (type == 4)
+            {
+                //下
+                _y = lianjiedian.y - 2 - GlobalTools.GetRandomDistanceNums(5);
+            }
+
+            lu.transform.position = new Vector2(_x, _y);
+
+            print("lu------------------------------------------------------------>  qidian  "+qidian+"   lu   "+lu.transform.position);
+
+            //大模块终点
+            Vector2 _rd = lu.transform.Find("rd").transform.position;
+            zhongdian = new Vector2(_rd.x + _distanceX, _rd.y);
+
+            GlobalTools.tempRecordMapObj = lu;
+            GlobalTools.SaveGameObj(lu);
+        }
+
+        //设置 地刺
+
+        //设置大的远背景
+    }
+
 
     /**
      * 可以增加参数 
@@ -239,27 +370,29 @@ public class GameMapControl : MonoBehaviour {
      *      间隔 并且 有移动地板连接的
      *      
      */
-    //普通平路 很少会波动 上下起伏
-    void pingdisenlin(int type = 1){
+    //普通 有树 的平路 很少会波动 上下起伏  1平地 2上升 3下降
+    void pingdisenlinCJ(List<string> dibanNameList,int landNums,List<string> shuList,List<string> jyjList,List<string> zyjList,List<string> dqjList,List<string> qjdList, int type = 1){
 		//获取 模组的地板 数量
-		int LandNums = 2 + GlobalTools.GetRandomNum(4);
-		List<string> landNames = new List<string> { "1", "2" };
+		//int LandNums = 2 + GlobalTools.GetRandomNum(4);
+        //List<string> landNames = new List<string> { "1", "2" };
+
+        int LandNums = landNums;
 
         //起点和终点 放置共同的大型背景
         Vector2 qidian = Vector2.zero;
         Vector2 zhongdian = Vector2.zero;
-
+        Vector2 lianjiedian = Vector2.zero;
 
 
         for (var i = 0; i < LandNums;i++){
-            string _name = "xdiban_1" + "_" + landNames[GlobalTools.GetRandomNum(landNames.Count)];  //(1+GlobalTools.GetRandomNum(landNames.Count));
+            string _name = dibanNameList[GlobalTools.GetRandomNum(dibanNameList.Count)];  //(1+GlobalTools.GetRandomNum(landNames.Count));
 			//print("_name  "+_name);
 			GameObject lu = GlobalTools.GetGameObjectByName(_name);
 			//print("lu  "+lu);
 			lu.transform.parent = GlobalTools.FindObjByName("maps").transform;
 
             //寻找连接点
-            Vector2 lianjiedian = Vector2.zero;
+            
             if (GlobalTools.tempRecordMapObj.tag == "men")
             {
                 lianjiedian = GlobalTools.tempRecordMapObj.transform.Find("ljd").position;
@@ -358,28 +491,44 @@ public class GameMapControl : MonoBehaviour {
             GlobalTools.SaveGameObj(lu);
             //生成地板的景 雾效果 等
             //景 树
-            Shu(lu.transform,true);
+            Shu(lu.transform, shuList, true);
             if (type == 1)
             {
                 //背面近景 前景  景 草 石头 什么的
-                Qianjing(lu.transform,"",-3,-5);
+                //Qianjing(lu.transform,"",-3,-5);
+                QianjingD(lu.transform, qjdList, 50,-0.2f,-0.6f);
+                QianjingD(lu.transform, qjdList, 18, -1.8f);
+
                 // 前面的远景  蔓藤 之类的
-                DaqianjingYJ(lu.transform);
-                GetJYJ(lu.transform);
-                GetJYJ(lu.transform, 3, -45, 1.2f, 5f);
+                DaqianjingYJ(lu.transform,dqjList);
+               
                 //中远景
-                GetZYJ(lu.transform);
+                if(i == 0||i == LandNums - 1)
+                {
+                    GetJYJ(lu.transform, jyjList,0.6f);
+                    GetJYJ(lu.transform, jyjList,0.4f, -35, 1.2f, 5f);
+                    GetZYJ(lu.transform, zyjList,0.8f);
+                }
+                else
+                {
+                    GetJYJ(lu.transform, jyjList,2);
+                    GetJYJ(lu.transform, jyjList, 3, -45, 1.2f, 5f);
+                    GetZYJ(lu.transform, zyjList,3.5f);
+                }
+                
                 //粒子落叶
-                GetLiziLY(lu.transform, "liziLY", 2, -2.5f);
-                GetLiziLY(lu.transform, "liziWu", 2, 0f);
+                GetLiziLY(lu.transform, ScreenDate.liziLY_1, 2, -2.5f);
+                GetLiziLY(lu.transform, ScreenDate.liziWu_1, 2, 0f);
             }
             else if (type == 2||type== 3)
             {
-                Qianjing(lu.transform,"",-1,0,0);
-                GetJYJ(lu.transform);
-                GetJYJ(lu.transform, 1.5f, -45, 1.2f, 5f);
-                GetLiziLY(lu.transform, "liziLY", 2, -2.5f);
-                GetLiziLY(lu.transform, "liziWu", 2, 0f);
+                //Qianjing(lu.transform,"",-1,0,0,true);
+                QianjingD(lu.transform, qjdList, 50, -0.2f,-0.6f);
+                QianjingD(lu.transform, qjdList, 16,-0.8f);
+                GetJYJ(lu.transform, jyjList,0.4f);
+                GetJYJ(lu.transform, jyjList, 1.5f, -45, 1.2f, 5f);
+                GetLiziLY(lu.transform, ScreenDate.liziLY_1, 2, -2.5f);
+                GetLiziLY(lu.transform, ScreenDate.liziWu_1, 2, 0f);
             }
             GlobalTools.tempRecordMapObj = lu; //这里做为记录 和连接点 来使用
                                                //生成的地图记录到本地
@@ -396,12 +545,10 @@ public class GameMapControl : MonoBehaviour {
         GetWu("", qidian, zhongdian, -60, color2);
     }
 
-    void GetLiziLY(Transform obj,string liziName, int _nums= 2 , float xzY = -2)
+    void GetLiziLY(Transform obj,List<string> liziList, int _nums= 2 , float xzY = -2)
     {
         //产生个数
         int nums = _nums;
-        string nameFst = liziName + "_" + ScreenDate.GetGKNum();
-        List<string> jingNums = ScreenDate.GetInstance().GetListByFstNameAndGKNums("liziLY_");  //new List<string> { "1", "2","3","4","5","6","8"};
         float _x1 = obj.Find("tl").transform.position.x;
         float _x2 = obj.Find("rd").transform.position.x;
         float _y = obj.Find("tl").transform.position.y - xzY;
@@ -410,16 +557,16 @@ public class GameMapControl : MonoBehaviour {
         //float d = Mathf.Abs(_x1 - _x2) / midu;
         //nums = (int)d;     //GlobalTools.GetRandomNum(10);
         //print("============================================================================================  name " + obj.name + "   _x " + _x1 + "  _x2 " + _x2 + "  _y  " + _y);
-        SetLiziByNums(nums, nameFst, jingNums, _x1, _x2, _y);
+        SetLiziByNums(nums, liziList, _x1, _x2, _y);
     }
 
 
-    void SetLiziByNums(int nums, string jingNameTou, List<string> jingTypeNums, float _x1, float _x2, float _y)
+    void SetLiziByNums(int nums, List<string> liziList, float _x1, float _x2, float _y)
     {
         for (var i = 0; i < nums; i++)
         {
             //print("---------->  "+jingNameTou);
-            string jingName = jingNameTou + "_" + jingTypeNums[GlobalTools.GetRandomNum(jingTypeNums.Count)];
+            string jingName = liziList[GlobalTools.GetRandomNum(liziList.Count)];
             //print("-----------------> 啥啊  "+jingName);
             GameObject jing = GlobalTools.GetGameObjectByName(jingName);
             jing.transform.parent = GlobalTools.FindObjByName("maps").transform;
@@ -429,11 +576,11 @@ public class GameMapControl : MonoBehaviour {
     }
 
     //近远景 路面对象  Z的位置 深度   修正Y  密度（间隔距离 越小越多）
-    void GetJYJ(Transform obj,float _z = 1,int SDOrder =-29,float xzY = 1.2f,float midu = 2) {
+    void GetJYJ(Transform obj,List<string> jyjList,float _z = 1,int SDOrder =-29,float xzY = 1.2f,float midu = 2) {
         //产生个数
         int nums = 7;
-        string nameFst = "jyj" + "_" + ScreenDate.GetGKNum();
-        List<string> jingNums = ScreenDate.GetInstance().GetListByFstNameAndGKNums("jyj_");  //new List<string> { "1", "2","3","4","5","6","8"};
+        //string nameFst = "jyj" + "_" + ScreenDate.GetGKNum();
+        //List<string> jingNums = ScreenDate.GetInstance().GetListByFstNameAndGKNums("jyj_");  //new List<string> { "1", "2","3","4","5","6","8"};
         float _x1 = obj.Find("tl").transform.position.x;
         float _x2 = obj.Find("rd").transform.position.x;
         float _y = obj.Find("tl").transform.position.y - xzY;
@@ -442,10 +589,10 @@ public class GameMapControl : MonoBehaviour {
         float d = Mathf.Abs(_x1 - _x2) / midu;
         nums = (int)d;     //GlobalTools.GetRandomNum(10);
         //print("============================================================================================  name " + obj.name + "   _x " + _x1 + "  _x2 " + _x2 + "  _y  " + _y);
-        SetJingByNums(nums, nameFst, jingNums, _x1, _x2, _y, _z, 0.9f, SDOrder, false, 0.5f, false);
+        SetJingByNums(nums, jyjList, _x1, _x2, _y, _z, 0.9f, SDOrder, false, 0.5f, false);
     }
 
-    void GetZYJ(Transform obj)
+    void GetZYJ(Transform obj,List<string> zyjList,float __z = 6)
     {
         //产生个数
         int nums = 7;
@@ -459,7 +606,7 @@ public class GameMapControl : MonoBehaviour {
         float d = Mathf.Abs(_x1 - _x2) / 2f;
         nums = (int)d;     //GlobalTools.GetRandomNum(10);
         //print("============================================================================================  name " + obj.name + "   _x " + _x1 + "  _x2 " + _x2 + "  _y  " + _y);
-        SetJingByNums(nums, nameFst, jingNums, _x1, _x2, _y, 6, 1f, -39, false, 0.5f, false);
+        SetJingByNums(nums, zyjList, _x1, _x2, _y, __z, 1f, -39, false, 0.5f, false);
     }
 
 
@@ -492,38 +639,32 @@ public class GameMapControl : MonoBehaviour {
     }
 
 
-	void DaqianjingYJ(Transform obj){
+    void DaqianjingYJ(Transform obj, List<string> dqjList){
 		int n = GlobalTools.GetRandomNum();
 
-		List<string> jingNs = new List<string> { };
         float _x1 = 0;
         float _x2 = 0;
         float _y = 0;
-        string nameFst = "";
 
 		if(n<100){
-			//前远景
-			jingNs = ScreenDate.GetInstance().GetListByFstNameAndGKNums("qyj_");  //new List<string> { "1", "2" };
-                                                                                      //几个
             int jNs = 1;
             _x1 = obj.Find("tl").transform.position.x;
             _x2 = obj.Find("rd").transform.position.x;
             _y = obj.Find("tl").transform.position.y - 0.3f;
-            nameFst = "qyj_" + ScreenDate.GetGKNum();
 
-			SetJingByNums(jNs, nameFst, jingNs, _x1, _x2, _y, -5, 2, 30,false,3);
+			SetJingByNums(jNs, dqjList, _x1, _x2, _y, -5, 2, 30,false,3);
 		}
 	}
 
     //景的放置
-	void Shu(Transform obj,bool isGetTree){
-		int nums = 1;
+	void Shu(Transform obj,List<string> shuList,bool isGetTree){
+		int nums = 0;
         //树的排放 是否放树？
 		if(isGetTree){
 			//树需要取到关卡字节头吗？？
 			//  "shu_1"
-			string nameFst = "shu"+"_"+ScreenDate.GetGKNum();
-			List<string> jingNums = ScreenDate.GetInstance().GetListByFstNameAndGKNums("shu_");  //new List<string> { "1", "2","3","4","5","6","8"};
+			//string nameFst = "shu"+"_"+ScreenDate.GetGKNum();
+            List<string> jingNums = shuList;////ScreenDate.GetInstance().GetListByFstNameAndGKNums("shu_");  //new List<string> { "1", "2","3","4","5","6","8"};
 			float _x1 = obj.Find("tl").transform.position.x;
             float _x2 = obj.Find("rd").transform.position.x;
 			float _y = obj.Find("tl").transform.position.y - 0.3f;
@@ -531,15 +672,85 @@ public class GameMapControl : MonoBehaviour {
 			float d = Mathf.Abs(_x1 - _x2)/6f;            
 			nums = (int)d;     //GlobalTools.GetRandomNum(10);
 			//print("============================================================================================  name "+obj.name+"   _x "+_x1+"  _x2 "+_x2+"  _y  "+_y);
-			SetJingByNums(nums, nameFst, jingNums, _x1, _x2, _y, 0, 0, -20,false,1,true);
+			SetJingByNums(nums, shuList, _x1, _x2, _y, 0, 0, -20,false,1,true);
 		}
 	}
 
 
+    //近景 下方
+    void JinjingD(Transform obj, List<string> jjList,int jNums,bool isLBsuoduan = false) {
+        float _x1 = 0;
+        float _x2 = 0;
+        float _y = 0;
+        _x1 = obj.Find("tl").transform.position.x;
+        _x2 = obj.Find("rd").transform.position.x;
+        _y = obj.Find("tl").transform.position.y - 0.3f;
+        SetJingByNums(jNums, jjList, _x1, _x2, _y, 0, 0, -30, false, 0, false, isLBsuoduan);
+    }
+
+    //前景 下
+    void QianjingD(Transform obj, List<string> qjdList, int jNums, float qjdJL = 0, float qjdY = 0.25f, bool isLBsuoduan = false)
+    {
+        float _x1 = 0;
+        float _x2 = 0;
+        float _y = 0;
+        _x1 = obj.Find("tl").transform.position.x;
+        _x2 = obj.Find("rd").transform.position.x;
+        _y = obj.Find("tl").transform.position.y + qjdY;
+        //jNums = 35 + GlobalTools.GetRandomNum(10);
+        SetJingByNums(jNums, qjdList, _x1, _x2, _y - 1.6f, qjdJL, 0.2f, 20, false, 0, false, isLBsuoduan);
+    }
+
+    //大前景 下
+    void DaQianjingD(Transform obj, List<string> dqjdList, int jNums, float dqjdJL = 0, float qjdY = 0.25f, bool isLBsuoduan = false)
+    {
+        float _x1 = 0;
+        float _x2 = 0;
+        float _y = 0;
+        _x1 = obj.Find("tl").transform.position.x;
+        _x2 = obj.Find("rd").transform.position.x;
+        //jNums = 35 + GlobalTools.GetRandomNum(10);
+        _y = obj.Find("tl").transform.position.y + qjdY;
+        SetJingByNums(jNums, dqjdList, _x1, _x2, _y - 1.6f, dqjdJL, 0.2f, 20, false, 0, false, isLBsuoduan);
+    }
+
+    void MenQianjingD(Transform obj, List<string> mqjList,int jNums, float qjdJL = -0.6f, float qjdY = -0.3f, bool isLBsuoduan = false) {
+        float _x1 = 0;
+        float _x2 = 0;
+        float _y = 0;
+        _x1 = obj.Find("l").transform.position.x;
+        _x2 = obj.Find("r").transform.position.x;
+        _y = obj.Find("l").transform.position.y + qjdY;
+        SetJingByNums(jNums, mqjList, _x1, _x2, _y - 1.6f, qjdJL, 0.2f, 20);
+    }
 
 
+
+    //门近景 上
+    void MenJinjingU(Transform obj, List<string> jjListUp, float qjdY = 0.3f, bool isLBsuoduan = false) {
+        float _xu1 = obj.Find("l2").transform.position.x;
+        float _xu2 = obj.Find("r2").transform.position.x;
+        float _yu = obj.Find("l2").transform.position.y + qjdY;
+
+        SetJingByNums(2, jjListUp, _xu1, _xu2, _yu, 0, 0, -10, true);
+        SetJingByNums(1, jjListUp, _xu1, _xu2, _yu, 0, 0, 20, true);
+    }
+
+    //门 近景下
+    void MenJinjingD(Transform obj, List<string> jjListDown, float qjdY = -0.3f, bool isLBsuoduan = false) {
+        float _x1 = 0;
+        float _x2 = 0;
+        float _y = 0;
+        _x1 = obj.Find("l").transform.position.x;
+        _x2 = obj.Find("r").transform.position.x;
+        _y = obj.Find("l").transform.position.y + qjdY;
+        SetJingByNums(3, jjListDown, _x1, _x2, _y, 0, 0, -10);
+    }
+
+
+    /**
     //这里需要调节 参数  如果是第二关  并且 前景的 名字数组不一样  这里就需要改了  现在想到的办法 存一个在 专门的 数据里面 到时候直接取
-	void Qianjing(Transform obj,string jingNameTou = "",float qjdJL = 0,float dqjdJL = 0,float qjdY = 0.25f, bool isLBsuoduan = false)
+    void Qianjing(Transform obj,List<string> qjList ,string jingNameTou = "",float qjdJL = 0,float dqjdJL = 0,float qjdY = 0.25f, bool isLBsuoduan = false)
     {
 
 		List<string> jingNs = new List<string> { };
@@ -583,14 +794,14 @@ public class GameMapControl : MonoBehaviour {
 			_y = obj.Find("tl").transform.position.y-0.3f;
 			int jNums = 2+GlobalTools.GetRandomNum(4);
 			nameFst = "jjd_" + ScreenDate.GetGKNum();
-			SetJingByNums(jNums, "jjd_1", jingNs, _x1, _x2, _y, 0, 0, -30, false, 0, false, isLBsuoduan);
+			SetJingByNums(jNums, jjdList, _x1, _x2, _y, 0, 0, -30, false, 0, false, isLBsuoduan);
 
 			_y = obj.Find("tl").transform.position.y+ qjdY;
 			jNums = 35 + GlobalTools.GetRandomNum(10);
 			jingNs =   ScreenDate.GetInstance().GetListByFstNameAndGKNums("qjd_"); //new List<string> { "3", "4", "6","7", "8","5"};
             //景 名字 头
 			nameFst = "qjd_" + ScreenDate.GetGKNum();
-			SetJingByNums(jNums, nameFst, jingNs, _x1, _x2, _y - 1.6f, qjdJL, 0.2f, 20, false, 0, false, isLBsuoduan);
+			SetJingByNums(jNums, qjdList, _x1, _x2, _y - 1.6f, qjdJL, 0.2f, 20, false, 0, false, isLBsuoduan);
 
             //大前景距离
             if(dqjdJL != 0)
@@ -599,25 +810,47 @@ public class GameMapControl : MonoBehaviour {
                 _y = obj.Find("tl").transform.position.y + 0.25f;
                 jNums = 1 + GlobalTools.GetRandomNum(2);
                 jingNs = ScreenDate.GetInstance().GetListByFstNameAndGKNums("qjdd_");//new List<string> { "1", "2", "10"};
-                SetJingByNums(jNums, nameFst, jingNs, _x1, _x2, _y - 1.6f, dqjdJL, 0.2f, 20,false,0,false, isLBsuoduan);
+                SetJingByNums(jNums, qjddList, _x1, _x2, _y - 1.6f, dqjdJL, 0.2f, 20,false,0,false, isLBsuoduan);
             }
           
 
 		}
 	}
+    */
 
-
-
-	void SetJingByNums(int nums ,string jingNameTou,List<string> jingTypeNums,float _x1,float _x2,float _y,float _z,float dz,int sdfw,bool isDG = false,float xzds=0,bool isTree = false, bool isLBsuoduan = false)
+    //isLBsuoduan 是否两边缩短
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nums">生成景的数量</param>
+    /// <param name="jingNameList">景名字 列表</param>
+    /// <param name="_x1">最左边 x坐标</param>
+    /// <param name="_x2">最右边 x坐标</param>
+    /// <param name="_y">景 y坐标</param>
+    /// <param name="_z">景 z坐标</param>
+    /// <param name="dz">景 z范围调整</param>
+    /// <param name="sdfw">order 深度范围  </param>
+    /// <param name="isDG"> 是否 是倒挂 </param>
+    /// <param name="xzds">旋转度数 </param>
+    /// <param name="isTree">是否是 树</param>
+    /// <param name="isLBsuoduan"> 是否 两边 缩短 （放置两边穿帮）</param>
+    void SetJingByNums(int nums ,List<string> jingNameList,float _x1,float _x2,float _y,float _z,float dz,int sdfw,bool isDG = false,float xzds=0,bool isTree = false, bool isLBsuoduan = false)
     {
 		for (var i = 0; i < nums;i++){
 			//print("---------->  "+jingNameTou);
-			string jingName = jingNameTou + "_" + jingTypeNums[GlobalTools.GetRandomNum(jingTypeNums.Count)];
+			string jingName = jingNameList[GlobalTools.GetRandomNum(jingNameList.Count)];
 			//print("-----------------> 啥啊  "+jingName);
 			GameObject jing = GlobalTools.GetGameObjectByName(jingName);
 			jing.transform.parent = GlobalTools.FindObjByName("maps").transform;
 
-			GlobalTools.SetJingTY(jing, _x1, _x2, _y, _z, dz, i, nums, xzds, sdfw, isDG,isTree,isLBsuoduan); 
+            
+            if (isLBsuoduan && (i == 0 || i == nums - 1))
+            {
+                GlobalTools.SetJingTY(jing, _x1, _x2, _y, _z * 0.1f, dz*0.1f, i, nums, xzds, sdfw, isDG, isTree,isLBsuoduan);
+            }
+            else {
+                GlobalTools.SetJingTY(jing, _x1, _x2, _y, _z, dz, i, nums, xzds, sdfw, isDG, isTree);
+            }
 		}
 	}
 

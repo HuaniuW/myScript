@@ -123,11 +123,11 @@ public class MyDrag : CanTouchBox
                     return;
                 }
 
-                if ((this.GetComponent<HZDate>().type == "bd" && _geziArr[i].tag == "JN_zhuangbeilan")|| 
+                /*if ((this.GetComponent<HZDate>().type == "bd" && _geziArr[i].tag == "JN_zhuangbeilan")|| 
                     this.GetComponent<HZDate>().type == "zd" && _geziArr[i].tag == "zhuangbeilan") {
                     this.transform.position = OldRQ.transform.position;
                     return;
-                }
+                }*/
                 
 
                 if (_geziArr[i].name == OldRQ.name)

@@ -38,7 +38,7 @@ public class GlobalTools : MonoBehaviour {
     /// <returns></returns>
     public static GameObject GetGameObjectByName(string ObjName)
     {
-        //print("ObjName    "+ ObjName);
+        print("ObjName    "+ ObjName);
         GameObject obj = Resources.Load(ObjName) as GameObject;
         obj = Instantiate(obj);
         return obj;
@@ -336,13 +336,13 @@ public class GlobalTools : MonoBehaviour {
                 {
                     __x = _x1 + jingW * 0.5f + 0.2f;
                     __z *= 0.05f;
-                   // if (isLBsuoduan) __x += jingW * 0.2f;
+                   if (isLBsuoduan) __x += jingW * 0.2f;
                 }
                 else if (i == nums - 1)
                 {
                     __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
                     __z *= 0.05f;
-                    //if (isLBsuoduan) __x -= jingW * 0.2f;
+                    if (isLBsuoduan) __x -= jingW * 0.2f;
                 }
                 else
                 {

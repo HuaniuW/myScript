@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AudioControl : MonoBehaviour {
     private AudioSource m_AudioSource;
+    public bool isValueByPlayerDistance = false;
+    public float distance = 10;
+    GameObject player;
     // Use this for initialization
     void Start () {
         m_AudioSource = gameObject.GetComponent<AudioSource>();
@@ -11,10 +14,35 @@ public class AudioControl : MonoBehaviour {
         m_AudioSource.volume = GlobalSetDate.instance.GetSoundEffectValue();
     }
 
+    void GetValueByPlayerDistance()
+    {
+        
+        if (isValueByPlayerDistance)
+        {
+            if (player == null)
+            {
+                player = GlobalTools.FindObjByName("player");
+            }
+
+            if(Mathf.Abs(player.transform.position.x - this.transform.position.x)> distance)
+            {
+                m_AudioSource.volume = 0;
+                return;
+            }
+            m_AudioSource.volume = (1 -Mathf.Abs(player.transform.position.x - this.transform.position.x)/distance)* GlobalSetDate.instance.GetSoundEffectValue();
+        }
+
+    }
+
     private void OnEnable()
     {
         if(m_AudioSource) m_AudioSource.volume = GlobalSetDate.instance.GetSoundEffectValue();
         //print(GlobalSetDate.instance.GetSoundEffectValue());
+    }
+
+    void Update()
+    {
+        GetValueByPlayerDistance();
     }
 
     

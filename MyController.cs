@@ -127,6 +127,43 @@ public class MyController : MonoBehaviour {
 
     void NewKey()
     {
+
+        
+
+        if (Input.GetKeyDown(KeyCode.U)&& Input.GetKey(KeyCode.D))
+        {
+            //if (IsCanControl()) _body.GetSkill1();
+            //print("技能释放---------   right ");
+
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "right"), this);
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.U) && Input.GetKey(KeyCode.W))
+        {
+            //if (IsCanControl()) _body.GetSkill1();
+            //print("技能释放---------  up");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "up"), this);
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.U) && Input.GetKey(KeyCode.S))
+        {
+            //if (IsCanControl()) _body.GetSkill1();
+            //print("技能释放---------  down");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "down"), this);
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            //if (IsCanControl()) _body.GetSkill1();
+            //print("技能释放---------   center");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "center"), this);
+            return;
+        }
+
+
+
         if (Input.GetKeyDown(KeyCode.W))
         {
             Globals.isKeyUp = true;
@@ -147,7 +184,10 @@ public class MyController : MonoBehaviour {
             Globals.isKeyDown = false;
         }
 
-
+        if (Input.GetKeyUp(KeyCode.T))
+        {
+            _body.GetSit2();
+        }
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -184,7 +224,7 @@ public class MyController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (IsCanControl()) _body.GetSkill1();
+            //if (IsCanControl()) _body.GetSkill1();
         }
 
         if (Input.GetKeyDown(KeyCode.I))

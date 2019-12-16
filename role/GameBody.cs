@@ -276,7 +276,7 @@ public class GameBody : MonoBehaviour, IRole {
         
 
     protected HZDate jn;
-    void ShowSkill(string urlName)
+    public void ShowSkill(string urlName)
     {
         if (IsHitWall) return;
         if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping ||isAcing) return;
@@ -1682,6 +1682,11 @@ public class GameBody : MonoBehaviour, IRole {
     public bool IsAtkOver()
     {
         return !isAtking;
+    }
+
+    public virtual void GetSit2()
+    {
+
     }
 
 }

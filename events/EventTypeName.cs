@@ -66,4 +66,12 @@ public class EventTypeName
     public const string HZ_TOUCH = "hz_touch";
 
     public const string SHOW_UIBY_ALPHA = "show_uiby_alpha";
+
+
+
+    //跟换主动技能徽章 的UI切换显示  参数是装备栏徽章的数组
+    public const string SKILL_UI_CHANGE = "skill_ui_change";
+
+    //释放技能
+    public const string RELEASE_SKILL = "release_skill";
 }

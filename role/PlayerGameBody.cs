@@ -12,6 +12,7 @@ public class PlayerGameBody : GameBody {
 	// Update is called once per frame
 	void Update () {
         LJJiSHu();
+        if (Globals.isInPlot) return;
         if (isFighting)
         {
             OutFighting();
@@ -41,6 +42,7 @@ public class PlayerGameBody : GameBody {
     {
         int nums = Random.Range(1, 3);
         nums += 1;
+        nums = 1;
         STAND = "stand_" + nums;
         if(nums == 3||nums == 1)
         {
@@ -810,6 +812,23 @@ public class PlayerGameBody : GameBody {
             }*/
 
             return grounded;
+        }
+    }
+
+
+    public override void GetSit2()
+    {
+        if (!Globals.isInPlot)
+        {
+            Globals.isInPlot = true;
+            if(DBBody.animation.lastAnimationName!= "sit_2")
+            {
+                DBBody.animation.GotoAndPlayByFrame("sit_2", 0, -1);
+            }
+        }
+        else
+        {
+            Globals.isInPlot = false;
         }
     }
 }

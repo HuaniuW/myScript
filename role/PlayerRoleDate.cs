@@ -218,7 +218,7 @@ public class PlayerRoleDate : RoleDate
     //徽章的数据加成
     void GetHZDate(HZDate hzdate)
     {
-        print(hzdate.HZName);
+        //print(hzdate.HZName);
         
         if (hzdate.def != 0) this.def += hzdate.def;
         if (hzdate.atk != 0) this.atk += hzdate.atk;

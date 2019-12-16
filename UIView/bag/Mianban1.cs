@@ -185,8 +185,9 @@ public class Mianban1 : MonoBehaviour {
         else
         {
             if (choseObj.GetComponent<MyDrag>().OldRQ.name == getRQ.name) return;
-            if (choseObj.GetComponent<HZDate>().type == "bd" && getRQ.tag == "JN_zhuangbeilan") return;
-            if (choseObj.GetComponent<HZDate>().type == "zd" && getRQ.tag == "zhuangbeilan") return;
+            //被动 主动
+            //if (choseObj.GetComponent<HZDate>().type == "bd" && getRQ.tag == "JN_zhuangbeilan") return;
+            //if (choseObj.GetComponent<HZDate>().type == "zd" && getRQ.tag == "zhuangbeilan") return;
             RectTransform newObj = getRQ.GetComponent<Gezi>().IsHasObj();
             if (newObj == null)
             {

@@ -11,8 +11,8 @@ public class TheTimer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-	}
+        ContinuouslyTimes();
+    }
 
     public bool isStart = false;
 
@@ -49,4 +49,57 @@ public class TheTimer : MonoBehaviour {
     {
         isStart = false;
     }
+
+
+
+
+    //连续计时
+
+
+    public delegate void callback(float nums);
+    callback _call;
+    float _timeNums = 0;
+    float _maxTimesNum = 0;
+    float _intervals = 1;
+
+    public void ContinuouslyTimesAdd(float timeNums,float intervals, callback call)
+    {
+        _maxTimesNum = timeNums / intervals;
+        _timeNums = _maxTimesNum;
+        _intervals = intervals;
+        _call = call;
+    }
+
+    bool _isContinuouslyTimesStart = false;
+    void ContinuouslyTimesStart()
+    {
+        if (_timeNums == 0) {
+            _isContinuouslyTimesStart = false;
+            _timeNums = (int)_maxTimesNum;
+            return;
+        }
+
+        if (!IsPauseTimeOver())
+        {
+            return;
+        }
+        else {
+            GetStopByTime(_intervals);
+            _timeNums--;
+            //print("cd _timeNums   " + _timeNums);
+            _call(_timeNums);
+        } 
+
+    }
+
+    public void GetContinuouslyTimesStart()
+    {
+        _isContinuouslyTimesStart = true;
+    }
+
+    void ContinuouslyTimes()
+    {
+        if (_isContinuouslyTimesStart) ContinuouslyTimesStart();
+    }
+
 }
