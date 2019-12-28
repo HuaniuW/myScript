@@ -24,6 +24,11 @@ public class SkillBox : CanTouchBox
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.ZD_SKILL, this.GetSkill);
     }
 
+    public void OnDestroy2()
+    {
+        OnDestroy();
+    }
+
 
     //Vector3 imgReduceScale = new Vector3(0.95f, 0.95f, 1);   //设置图片缩放
     //Vector3 imgNormalScale = new Vector3(1, 1, 1);   //正常大小

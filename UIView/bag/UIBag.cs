@@ -105,7 +105,7 @@ public class UIBag : MonoBehaviour {
                 GlobalSetDate.instance.IsChangeScreening = true;
                 mianbanShow(this.GetComponent<RectTransform>());
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BAG_OPEN,null), this);
-                print("开启背包！！！！！");
+                //print("开启背包！！！！！");
             }
             else
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TheTimer : MonoBehaviour {
-    //控制慢动作用的计时器
+    //控制慢动作用的计时器  必须挂在 模块上 不能单独 new 否则不能回调
 	// Use this for initialization
 	void Start () {
 		
@@ -12,6 +12,7 @@ public class TheTimer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         ContinuouslyTimes();
+        DanciTimes();
     }
 
     public bool isStart = false;
@@ -48,6 +49,7 @@ public class TheTimer : MonoBehaviour {
     public void ReSet()
     {
         isStart = false;
+        //_isContinuouslyTimesStart = false;
     }
 
 
@@ -64,37 +66,74 @@ public class TheTimer : MonoBehaviour {
 
     public void ContinuouslyTimesAdd(float timeNums,float intervals, callback call)
     {
+        
         _maxTimesNum = timeNums / intervals;
         _timeNums = _maxTimesNum;
         _intervals = intervals;
+        print("!!!!!!!!!!   "+ _timeNums);
         _call = call;
+    }
+
+    public void TempSetTimeNums(float nums)
+    {
+        _timeNums = nums;
+        _isContinuouslyTimesStart = true;
+    }
+
+    public void TimesAdd(float times, callback call)
+    {
+        GetStopByTime(times);
+        isDanciTimes2 = true;
+        _call = call;
+    }
+
+    bool isDanciTimes2 = false;
+    void DanciTimes() {
+        if (isDanciTimes2) {
+            DanciStart();
+        } 
+    }
+
+    void DanciStart() {
+        if (IsPauseTimeOver())
+        {
+            _call(0);
+            isDanciTimes2 = false;
+        }
     }
 
     bool _isContinuouslyTimesStart = false;
     void ContinuouslyTimesStart()
     {
-        if (_timeNums == 0) {
-            _isContinuouslyTimesStart = false;
-            _timeNums = (int)_maxTimesNum;
-            return;
-        }
-
-        if (!IsPauseTimeOver())
+        //print("------------------------------------------------------------------_timeNums      "+ _timeNums);
+        if (IsPauseTimeOver())
         {
-            return;
-        }
-        else {
             GetStopByTime(_intervals);
             _timeNums--;
-            //print("cd _timeNums   " + _timeNums);
             _call(_timeNums);
-        } 
+        }
 
+
+        if (_timeNums == 0) {
+            GetFull();
+            return;
+        }
+
+      
+
+    }
+
+
+    public void GetFull()
+    {
+        _isContinuouslyTimesStart = false;
+        _timeNums = (int)_maxTimesNum;
     }
 
     public void GetContinuouslyTimesStart()
     {
-        _isContinuouslyTimesStart = true;
+        if(!_isContinuouslyTimesStart) _isContinuouslyTimesStart = true;
+        //print("开始计时  _timeNums  " + _timeNums);
     }
 
     void ContinuouslyTimes()

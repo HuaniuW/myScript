@@ -34,6 +34,7 @@ public class JN_base : MonoBehaviour
         //print(obj.transform.position.y + "  -  " + GameObject.Find("/MainCamera").transform.position.y);
         atkObj = obj;
         jn_date = GetComponent<JN_Date>();
+        if (jn_date == null)return;
         jn_date.team = team;
         sacaleX = _sacaleX;
         //根据数据 获取新的位置 
@@ -65,15 +66,19 @@ public class JN_base : MonoBehaviour
 
 
         //特效方向
-        if (_sacaleX > 0) {
-            GetComponent<MyParticlesScale>().SetParticlesScale(1);
-            this.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleW, jn_date._scaleW);
+        if (GetComponent<MyParticlesScale>() != null && GetComponent<MyParticlesScale>().IsUseThis) {
+            if (_sacaleX > 0)
+            {
+                GetComponent<MyParticlesScale>().SetParticlesScale(1);
+                this.transform.localScale = new Vector3(jn_date._scaleW, jn_date._scaleW, jn_date._scaleW);
+            }
+            else
+            {
+                GetComponent<MyParticlesScale>().SetParticlesScale(-1);
+                this.transform.localScale = new Vector3(-jn_date._scaleW, -jn_date._scaleW, -jn_date._scaleW);
+            }
         }
-        else
-        {
-            GetComponent<MyParticlesScale>().SetParticlesScale(-1);
-            this.transform.localScale = new Vector3(-jn_date._scaleW, -jn_date._scaleW, -jn_date._scaleW);
-        }
+        
 
 
         if (jn_date._type == "2"|| jn_date._type == "3") {

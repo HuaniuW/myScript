@@ -29,9 +29,12 @@ public class ScreenChange : MonoBehaviour {
     void ChangeScreen()
     {
         playerUI = GlobalTools.FindObjByName("PlayerUI");
+        playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().saveAllHZDate();
         //获取角色当前数据 当前血量 当前蓝量  发给GlobalSetDate  什么格式 以后再说  cLive=1000,cLan=1000
         GlobalSetDate.instance.ScreenChangeDateRecord();
         GlobalSetDate.instance.HowToInGame = GlobalSetDate.CHANGE_SCREEN;
+        if (GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1") != null) GlobalSetDate.instance.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
+        
         //通知储存关卡变化的数据
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_SCREEN, null), this);
         //ObjectPools.GetInstance().delAll();//解决切换场景时候特效没回收被销毁导致再取取不出来的问题  但是这样销毁会导致卡顿很长的切换速度 已用重新创建解决

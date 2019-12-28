@@ -7,6 +7,9 @@ public class MyParticlesScale : MonoBehaviour {
     // Use this for initialization
     ParticleSystem[] particles;
     int particlesLength;
+    [Header("是否使用此类 用的话 会改变朝向")]
+    public bool IsUseThis = true;
+
     float _rx;
     void Start () {
         particles = GetComponentsInChildren<ParticleSystem>(true);
@@ -24,7 +27,7 @@ public class MyParticlesScale : MonoBehaviour {
 
     public void SetParticlesScale2(float _sx)
     {
-
+        if (!IsUseThis) return;
         //print(transform.localEulerAngles);
         //print(transform.localRotation);
         //切换场景的时候 特效还在 这里判断摄像机
@@ -93,7 +96,7 @@ public class MyParticlesScale : MonoBehaviour {
 
     public void SetParticlesScale(float _sx)
     {
-
+        if (!IsUseThis) return;
         //print(transform.localEulerAngles);
         //print(transform.localRotation);
         //切换场景的时候 特效还在 这里判断摄像机

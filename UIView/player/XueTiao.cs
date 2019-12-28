@@ -103,6 +103,7 @@ public class XueTiao : MonoBehaviour {
 
     private void OnDestroy()
     {
+        print("血条 我被销毁了？？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         //是否有诅咒条
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
@@ -137,7 +138,7 @@ public class XueTiao : MonoBehaviour {
 
     public void GetTargetObj(GameObject obj)
     {
-        //print("GetTargetObj    "+obj);
+        print("GetTargetObj    "+obj);
         if (obj) {
             gameObj = obj;
             GetGameObj();
@@ -165,7 +166,9 @@ public class XueTiao : MonoBehaviour {
     {
         if (gameObj != null)
         {
+            //print("gameObj-------------->    " + gameObj);
             roleDate = gameObj.GetComponent<RoleDate>();
+            //print("roleDate------------->   "+ roleDate);
             _maxLive = roleDate.maxLive;
             roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
             _cLive = roleDate.live;

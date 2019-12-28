@@ -52,7 +52,7 @@ public class Gezi : MonoBehaviour {
 
         _obj.GetComponent<HZDate>().RQName = this.transform.name;
         //string tt = "hi";
-        string ui_change_msg = skillName + "|" + this.transform.name;
+        //string ui_change_msg = skillName + "|" + this.transform.name;
 
 
         //_OldRO = this.GetComponent<RectTransform>();
@@ -60,7 +60,7 @@ public class Gezi : MonoBehaviour {
         {
             //&& (this.tag == "zhuangbeilan" && _OldRO.tag != "zhuangbeilan") || (this.tag != "zhuangbeilan" && _OldRO.tag == "zhuangbeilan")
             if (!isOldObjOut) {
-                if (Globals.isDebug) print("zhuangbeilan  切换属性事件  " + _OldRQ.tag);
+                //if (Globals.isDebug) print("zhuangbeilan  切换属性事件  " + _OldRQ.tag);
                 List<RectTransform> HZs = this.transform.parent.GetComponent<Mianban1>().GetInHZListHZ();
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ,HZs), this);
 
@@ -71,17 +71,21 @@ public class Gezi : MonoBehaviour {
                 //string skillName = _obj.GetComponent<HZDate>().zd_skill_Name == "" ? "n" : _obj.GetComponent<HZDate>().zd_skill_Name;
                 
                
-                print("ui_change_msg  "+ ui_change_msg);
+                //print("ui_change_msg  "+ ui_change_msg);
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.SKILL_UI_CHANGE, HZs), this);
-
             }
         }
 
         if (_OldRQ != null && (this.tag == "zhuangbeilan" && _OldRQ.tag == "zhuangbeilan")) {
            
 
-            print("name >>22222222222222222222   " + this.transform.name);
-            print("徽章带的主动技能名字：  " + _obj.GetComponent<HZDate>().zd_skill_ui_Name);
+            //print("name >>22222222222222222222   " + this.transform.name);
+            //print("徽章带的主动技能名字：  " + _obj.GetComponent<HZDate>().zd_skill_ui_Name);
+            List<RectTransform> HZs = this.transform.parent.GetComponent<Mianban1>().GetInHZListHZ();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.SKILL_UI_CHANGE, HZs), this);
+        }
+
+        if (_OldRQ == null&& this.tag == "zhuangbeilan") {
             List<RectTransform> HZs = this.transform.parent.GetComponent<Mianban1>().GetInHZListHZ();
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.SKILL_UI_CHANGE, HZs), this);
         }

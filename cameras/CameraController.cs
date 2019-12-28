@@ -141,6 +141,12 @@ public class CameraController : MonoBehaviour
     //}
 
 
+    public void CameraFollow(GameObject obj)
+    {
+        transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y, transform.position.z);
+    }
+
+
     float distanceX = 0;
 
     void Update()
@@ -191,7 +197,8 @@ public class CameraController : MonoBehaviour
                     //}
 
                     //distanceX = 0;
-                    isInEdge = true;
+                    if(x<= _min.x + cameraHalfWidth|| x >= _max.x - cameraHalfWidth) isInEdge = true;
+
                 }
                 else
                 {

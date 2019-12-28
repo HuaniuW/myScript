@@ -13,7 +13,7 @@ public class UIShake : MonoBehaviour {
         shackNums = initScaleNum;
     }
 
-  
+    float changeNums = 0.4f;
 	
 	// Update is called once per frame
 	void Update () {
@@ -37,7 +37,7 @@ public class UIShake : MonoBehaviour {
         if (!isShakeing) return;
         if (isUp)
         {
-            shackNums += (shakeUpNum - shackNums) * 0.2f;
+            shackNums += (shakeUpNum - shackNums) * changeNums;
             if (shackNums >= shakeUpNum-0.04f)
             {
                 shackNums = shakeUpNum;
@@ -46,7 +46,7 @@ public class UIShake : MonoBehaviour {
         }
         else
         {
-            shackNums += (initScaleNum - shackNums) * 0.2f;
+            shackNums += (initScaleNum - shackNums) * changeNums;
             if (shackNums <= initScaleNum+ 0.04f)
             {
                 shackNums = initScaleNum;

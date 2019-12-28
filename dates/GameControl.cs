@@ -16,11 +16,11 @@ public class GameControl : MonoBehaviour {
     {
         float s = 8 * 365/7*6;
         float t = 1000000;
-        print("--------------------------------------------->每个月的收入  " + t / s * 8 * 31+"元"+"  每天价值 "+t/s*8+"  每小时价值 "+t/s);
+        //print("--------------------------------------------->每个月的收入  " + t / s * 8 * 31+"元"+"  每天价值 "+t/s*8+"  每小时价值 "+t/s);
 
         float dj = 39*0.7f*0.55f;
         float zong = 10000000;
-        print("1000万收入 需要卖出多少份   "+zong/dj);
+        //print("1000万收入 需要卖出多少份   "+zong/dj);
     }
 
     public void LuaTest(string str)
@@ -263,6 +263,11 @@ public class GameControl : MonoBehaviour {
     void Update () {
         //print(player.transform.position);
         //if(player) player.GetComponent<GameBody>().TurnRight();
+
+
+        //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>  "+Time.time);
+        //if(Time.time>=10) print("Time.realtimeSinceStartup    " + Time.realtimeSinceStartup);
+
     }
 
     //GameObject FindObjByName(string _name)
@@ -350,6 +355,8 @@ public class GameControl : MonoBehaviour {
             //加载背包
             GlobalTools.GetGameObjectByName("UI_Bag");
         }
+
+        //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().GetAllHZDate();
     }
 
 
@@ -368,6 +375,8 @@ public class GameControl : MonoBehaviour {
         }
         //playerUI.GetComponent<DontDistoryObj>().ShowSelf();
         playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
+        //GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLan);
+        //playerUI.GetComponent<PlayerUI>().ui_hun.GetComponent<UI_Hun>().SetHun();
     }
 
 

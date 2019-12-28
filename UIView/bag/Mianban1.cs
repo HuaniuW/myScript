@@ -288,6 +288,7 @@ public class Mianban1 : MonoBehaviour {
     {
         if (GlobalSetDate.instance.CurrentUserDate == null) return;
         string tempDateStr = GlobalSetDate.instance.CurrentUserDate.bagDate;// "huizhang1_0-huizhang2_2";
+        print(tempDateStr);
         getDateStrArr = tempDateStr.Split('-');
         hzIdList.AddRange(getDateStrArr);
         //hzIdList.Add(getDateStrArr);

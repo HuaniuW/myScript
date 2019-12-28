@@ -162,6 +162,30 @@ public class MyController : MonoBehaviour {
             return;
         }
 
+       
+
+
+        if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.W))
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIU_FEIDAO, "up"), this);
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.S))
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIU_FEIDAO, "down"), this);
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            //print("i");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIU_FEIDAO, ""), this);
+            return;
+        }
+
+
+
 
 
         if (Input.GetKeyDown(KeyCode.W))

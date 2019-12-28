@@ -32,6 +32,9 @@ public class UserDate{
     //地图名字
     public string screenName;
 
+    //技能使用记录 skillName_nums_cd|skillName_nums_cd
+    public string skill_use_date;
+
     public UserDate()
     {
         

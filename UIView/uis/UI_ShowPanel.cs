@@ -18,14 +18,130 @@ public class UI_ShowPanel : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.SKILL_UI_CHANGE, this.GetSkillChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RELEASE_SKILL, this.ReleaseSkill);
         //GetObjByName("top",this.gameObject);
+        _skillUseDate = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        //对比 技能使用情况
 
-        // print("??  "+this.GetType().GetProperty("top").GetValue(this, null));
+        print(" UI_ShowPanel  启动 新建的是否 新进来了   top "+top);
+         //print("??  "+this.GetType().GetProperty("top").GetValue(this, null));
     }
+
+
+    //将 徽章UI存入对象池
+    public void RemoveAllSkillHZUI()
+    {
+        foreach(GameObject o in HZList)
+        {
+            ObjectPools.GetInstance().DestoryObject2(o);
+        }
+        HZList.Clear();
+    }
+
+    //存档时 所有CD直接变满
+    public void AllSkillCDFull()
+    {
+        foreach (GameObject o in HZList)
+        {
+            o.GetComponent<UI_Skill>().CDFull();
+        }
+        GlobalSetDate.instance.CurrentUserDate.skill_use_date = "";
+    }
+
+
+
+    //存入 所有 徽章数据 
+    public void saveAllHZDate()
+    {
+        foreach (GameObject o in HZList)
+        {
+            o.GetComponent<UI_Skill>().GetDateInGlobalSkillDate();
+        }
+        print("  徽章数据 "+ GlobalSetDate.instance.CurrentUserDate.skill_use_date);
+    }
+
+
+    //读取所有徽章使用数据
+    public void GetAllHZDate()
+    {
+        print("--------------------------------------------------------------->   读取所有徽章使用数据 "+HZList.Count);
+        foreach (GameObject o in HZList)
+        {
+            o.GetComponent<UI_Skill>().GetGlobalSkillDate();
+        }
+    }
+
+
+
+
+    //对比技能使用数据
+    public void ComparedSkillUse(string skillUseDate)
+    {
+        string[] useDateList = skillUseDate.Split('|');
+        if (useDateList.Length == 0) return;
+        List<GameObject> tempHZList = HZList;
+
+        for (int i=0;i<useDateList.Length;i++)
+        {
+            for(int j = tempHZList.Count-1;j>=0;j--)
+            {
+               
+                //剩余使用次数
+                int synums = int.Parse(useDateList[i].Split('_')[1]);
+                if(tempHZList[j].GetComponent<UI_Skill>().GetHZDate().usenums <= synums)
+                {
+                    //如果事最大使用次数  就直接跳过
+                    tempHZList.Remove(tempHZList[j]);
+                    break;
+                }
+
+                string hzName = useDateList[i].Split('_')[0];
+                //剩余CD宽高
+                float cd = float.Parse(useDateList[i].Split('_')[2]);
+                //剩余读秒
+                float dumiaoNums = float.Parse(useDateList[i].Split('_')[3]);
+                if (tempHZList[j].GetComponent<UI_Skill>().GetHZDate().HZName == hzName)
+                {
+                    tempHZList[j].GetComponent<UI_Skill>().SetSkillDate(synums, cd, dumiaoNums);
+                    tempHZList.Remove(tempHZList[j]);
+                }
+            }
+        }
+    }
+
+    public string GetSaveSkillDate()
+    {
+        string str = "";
+        for (int i=0;i<HZList.Count;i++)
+        {
+            /**if(i == HZList.Count - 1)
+            {
+                str += HZList[i].GetComponent<UI_Skill>().GetSkillDate();
+            }
+            else
+            {
+                str += HZList[i].GetComponent<UI_Skill>().GetSkillDate() + "|";
+            }*/
+
+            str += i == HZList.Count - 1 ? str += HZList[i].GetComponent<UI_Skill>().GetSkillDate() : HZList[i].GetComponent<UI_Skill>().GetSkillDate() + "|";
+        }
+        return str;
+    }
+
 
     void OnDistory()
     {
+        print("我被销毁了？？？？@、@");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SKILL_UI_CHANGE, this.GetSkillChange);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.RELEASE_SKILL, this.ReleaseSkill);
+    }
+
+    string _skillUseDate = "";
+    public string SaveSkillUseDate() {
+
+        return "";
+    }
+
+    public void OnDistory2() {
+        OnDistory();
     }
 	
 	// Update is called once per frame
@@ -41,6 +157,7 @@ public class UI_ShowPanel : MonoBehaviour {
         {
             if(o.GetComponent<UI_Skill>().GetSkillPos() == str)
             {
+                
                 GlobalTools.FindObjByName("player").GetComponent<GameBody>().ShowSkill(o);
 
                 break;
@@ -58,13 +175,13 @@ public class UI_ShowPanel : MonoBehaviour {
         //21 右
         //return;
         List<RectTransform> t = (List<RectTransform>)e.eventParams;
-        print(">>>>>>>>>>>>>     "+t.Count);
+        //print(">>>>>>>>>>>>>     "+t.Count);
 
         RemoveAllHZUI();
-
+        
         foreach (Transform o in t)
         {
-            print(o.GetComponent<HZDate>().name+"   容器名字  " +o.GetComponent<HZDate>().RQName);
+            //print(o.GetComponent<HZDate>().name+"   容器名字  " +o.GetComponent<HZDate>().RQName);
             //匹配 HZlist
 
 
@@ -95,6 +212,8 @@ public class UI_ShowPanel : MonoBehaviour {
             switch (posNum)
             {
                 case 1:
+                    //print("topimg   "+ top);
+                    //if (top == null) top = this.transform.Find("top");
                     if (posNum == 1) GetInObj(top, name, o.GetComponent<HZDate>(),"up");
                     break;
                 case 2:
@@ -111,14 +230,14 @@ public class UI_ShowPanel : MonoBehaviour {
         }
 
         //print(e.eventParams.);
-       
+
 
         //1.对比是否跟换了 新的徽章  1.移除 位置上的 徽章   2.替换新徽章 
-
+        GetAllHZDate();
 
     }
 
-    List<GameObject> HZList = new List<GameObject> { };
+    public List<GameObject> HZList = new List<GameObject> { };
 
 
     void RemoveAllHZUI()
@@ -148,6 +267,8 @@ public class UI_ShowPanel : MonoBehaviour {
     {
         //print("-------------->   "+objName);
         GameObject hz = ObjectPools.GetInstance().SwpanObject2(Resources.Load(objName) as GameObject);
+        //print("hz ---------------> "+ hz);
+        //print("img-------------->  " + img);
         hz.transform.position = img.transform.position;
         hz.transform.parent = GlobalTools.FindObjByName("PlayerUI").transform;
         hz.GetComponent<UI_Skill>().SetHZDate(hzDate);

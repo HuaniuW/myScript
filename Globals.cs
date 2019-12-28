@@ -35,6 +35,26 @@ public class Globals : MonoBehaviour {
     public static bool isKeyUp = false;
     public static bool isKeyDown = false;
 
+    //记录飞刀位置 和丢出的 FX
+    public static string feidaoFX = "";
+
+    public static GameObject feidao = null;
+
+    public static bool isShouFD = false;
+
+
+
+
+
+
+
+    public static UI_ShowPanel Get_UI_ShowPanel()
+    {
+        return null;
+    }
+
+
+   
 
     void Start () {
 		

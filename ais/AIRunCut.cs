@@ -79,7 +79,7 @@ public class AIRunCut : MonoBehaviour {
     {
         if (GetComponent<RoleDate>().isBeHiting)
         {
-            print("------------------------------------------------->被击中打断！");
+            //print("------------------------------------------------->被击中打断！");
             AcOver();
             return;
         }

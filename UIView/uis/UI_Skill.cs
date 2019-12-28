@@ -30,20 +30,142 @@ public class UI_Skill : MonoBehaviour {
     //是否 可以使用技能
     public bool isCanBeUseSkill()
     {
-        if (skillCanUseTimes == 0) return false;
+        //print("skillCanUseTimes   "+ skillCanUseTimes+"    ");
+        if (skillCanUseTimes == 0) {
+            if(_hzDate.type == "zd")
+            {
+                if (NoNumsBeep != null) NoNumsBeep.Play();
+                GetComponent<UIShake>().GetShake();
+            }
+            return false;
+        }
+        
         skillCanUseTimes--;
         SetText(skillCanUseTimes.ToString());
         if (skillCanUseTimes == 0) {
-            if (NoNumsBeep != null) NoNumsBeep.Play();
+            //print("开始技能计时    ---------------------");
             CDStart();
         }
         return true;
     }
 
+    public bool IsCDSkillCanBeUse()
+    {
+        if (skillCanUseTimes == 0) return false;
+        return true;
+    }
+
+
+
 
     void OnDistory()
     {
 
+    }
+
+
+    public void CDFull()
+    {
+        skillCanUseTimes = _hzDate.usenums;
+        SetText(skillCanUseTimes.ToString());
+
+        if (IsLeft)
+        {
+            Wh(MaskImg, maxCDDistance, 30);
+        }
+        else
+        {
+            Wh(MaskImg, 30, maxCDDistance);
+        }
+
+        GetComponent<TheTimer>().GetFull();
+    }
+
+    //在全局找 技能信息的数据
+    public void GetGlobalSkillDate()
+    {
+        string globalSkillUseDate =  GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        print("GetGlobalSkillDate   ? "+ globalSkillUseDate+"    "+ _hzDate.HZName);
+        string msg = GetStringByName(_hzDate.HZName, globalSkillUseDate);
+        if (msg != null)
+        {
+            string[] strArr = msg.Split('_');
+            int nums = int.Parse(strArr[1]);
+            float cds = float.Parse(strArr[2]);
+            float miaoshuNums = float.Parse(strArr[3]);
+            SetSkillDate(nums,cds,miaoshuNums);
+        }
+    }
+
+    string GetStringByName(string _name,string dateStr) {
+        string[] strArr = dateStr.Split('|');
+        foreach(string s in strArr)
+        {
+            if (s.Split('_')[0] == _name) return s;
+        }
+        return null;
+    }
+
+    string TiHuanStringInStr(string _name, string tihuanDate,string dateStr)
+    {
+        string[] strArr = dateStr.Split('|');
+        string str = "";
+        for (int i=0;i<strArr.Length;i++)
+        {
+            if (strArr[i].Split('_')[0] == _name) {
+                str += i== strArr.Length-1? tihuanDate:tihuanDate + "|";
+                continue;
+            } 
+            str += i == strArr.Length - 1 ? strArr[i]:strArr[i]+"|";
+        }
+        return str;
+    }
+
+    //对比 设置 技能数据
+    public void SetSkillDate(int nums,float cds,float miaoshuNums)
+    {
+        print("对比数据   "+_hzDate.HZName+"    "+nums);
+        if(nums == 0)
+        {
+            /**if (Time.realtimeSinceStartup - (gameTime + miaoshuNums) > _hzDate.cd)
+            {
+                CDFull();
+                return;
+            }*/
+            //开始 CD计时
+            SetText(skillCanUseTimes.ToString());
+            cdDistance = cds;
+            GetComponent<TheTimer>().TempSetTimeNums(miaoshuNums);
+        }
+        else
+        {
+            skillCanUseTimes = nums;
+            SetText(skillCanUseTimes.ToString());
+        }
+    }
+
+    public string GetSkillDate()
+    {
+        string str = "";
+        //徽章名称_剩下可以使用次数_cd长度（图片涨到哪了 宽高）_剩余cd读秒数    
+        str = _hzDate.HZName + "_" + skillCanUseTimes + "_" + cdDistance + "_" + miaoshuNum;
+        return str;
+    }
+
+    //将数据 存入全局数据
+    public void GetDateInGlobalSkillDate()
+    {
+        string hzUseDate = GetSkillDate();
+        string globalSkillUseDate = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        string msg = GetStringByName(_hzDate.HZName, globalSkillUseDate);
+        if (msg == null) {
+            GlobalSetDate.instance.CurrentUserDate.skill_use_date += "|" + hzUseDate;
+        }
+        else
+        {
+            TiHuanStringInStr(_hzDate.HZName, GetSkillDate(), GlobalSetDate.instance.CurrentUserDate.skill_use_date);
+        }
+        
     }
 
     HZDate _hzDate;
@@ -55,9 +177,10 @@ public class UI_Skill : MonoBehaviour {
         SkillCanUseNums = _hzDate.usenums;
         skillCanUseTimes = SkillCanUseNums;
         CDTimeNums = _hzDate.cd;
+        print("CDTimeNums   "+ CDTimeNums+"   ----    "+ Intervals);
         GetComponent<TheTimer>().ContinuouslyTimesAdd(CDTimeNums, Intervals, CDCallBack);
         GetComponent<UIShake>().GetShakeObj(this.gameObject);
-        print("初始化 徽章的 技能信息！！！" + skillCanUseTimes);
+        //print("初始化 徽章的 技能信息！！！" + skillCanUseTimes);
         SetText(skillCanUseTimes.ToString());
 
 
@@ -112,7 +235,7 @@ public class UI_Skill : MonoBehaviour {
     //是否可以用技能 如果不能 播放不能 使用技能的声音
 
 
-
+    float miaoshuNum = 0;
     void CDCallBack(float nums) {
         cdDistance += maxCDDistance / CDTimeNums* Intervals;
         if (IsLeft)
@@ -123,7 +246,9 @@ public class UI_Skill : MonoBehaviour {
         {
             Wh(MaskImg, 30, cdDistance);
         }
-        if (nums == 0) {
+        miaoshuNum = nums;
+        //print("miaoshuNum  返回的数据数值是多少     "+ miaoshuNum);
+        if (nums <= 0) {
             //CD满 播放提示音 和抖一下
             Beep.Play();
             SetText(skillCanUseTimes.ToString());
@@ -131,6 +256,8 @@ public class UI_Skill : MonoBehaviour {
             GetComponent<UIShake>().GetShake();
             skillCanUseTimes = SkillCanUseNums;
             SetText(skillCanUseTimes.ToString());
+            //print("CD完成！！！");
+            if (GetComponent<UI_FeiDao>() != null) GetComponent<UI_FeiDao>().HasShouDao(null);
         }
     }
 
@@ -140,17 +267,18 @@ public class UI_Skill : MonoBehaviour {
     float maxCDDistance = 0;
     float cdDistance = 0;
     //CD归0 并且开始CD
-    void CDStart()
+    void CDStart(float cds = 1,float cdDistanceNums = 0)
     {
         if (IsLeft)
         {
-            Wh(MaskImg, 1, 30);
+            Wh(MaskImg, cds, 30);
         }
         else
         {
-            Wh(MaskImg, 30, 1);
+            Wh(MaskImg, 30, cds);
         }
-        cdDistance = 0;
+        cdDistance = cdDistanceNums;
+        //print("再次开始计时CD   ");
         GetComponent<TheTimer>().GetContinuouslyTimesStart();
     }
 
@@ -179,7 +307,7 @@ public class UI_Skill : MonoBehaviour {
     {
         if (SkillCanUseNumsText == null) return;
         SkillCanUseNumsText.text = str;
-        print("SkillCanUseNumsText.text --->   "+ SkillCanUseNumsText.text);
+        //print("SkillCanUseNumsText.text --->   "+ SkillCanUseNumsText.text);
         if (SkillCanUseNumsText.text == "1"|| SkillCanUseNumsText.text == "0")
         {
             SkillCanUseNumsText.text = "";

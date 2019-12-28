@@ -28,7 +28,7 @@ public class MyDrag : CanTouchBox
     //当鼠标按下时调用 接口对应  IPointerDownHandler
     override public void OnPointerDown(PointerEventData eventData)
     {
-        print("鼠标按下！！！！！");
+        //print("鼠标按下！！！！！");
         this.transform.SetAsLastSibling();
         Vector2 mouseDown = eventData.position;    //记录鼠标按下时的屏幕坐标
         Vector2 mouseUguiPos = new Vector2();   //定义一个接收返回的ugui坐标
@@ -65,7 +65,7 @@ public class MyDrag : CanTouchBox
     //当鼠标抬起时调用  对应接口  IPointerUpHandler
     override public void OnPointerUp(PointerEventData eventData)
     {
-        print("鼠标抬起！！！！！");
+        //print("鼠标抬起！！！！！");
         CheckNear();
         offset = Vector2.zero;
     }

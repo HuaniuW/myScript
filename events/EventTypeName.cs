@@ -77,4 +77,14 @@ public class EventTypeName
 
     public const string CHANGE_HUN = "change_hun";
 
+    //魂值不够 提示
+    public const string NO_HUN_PROMPT = "no_hun_prompt";
+
+    public const string DIU_FEIDAO = "diu_feidao";
+
+    public const string SHOU_FEIDAO = "shou_feidao";
+
+    //回收飞刀 销毁
+    public const string DISTORY_FEIDAO = "distory_feidao";
+
 }

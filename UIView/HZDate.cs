@@ -60,6 +60,12 @@ public class HZDate : MonoBehaviour {
 
     public string RQName = "";
 
+    [Header("被动防御技能-触发几率")]
+    public float Chance_of_Passive_Skills = 0;
+
+    [Header("防御效果")]
+    public string def_effect = "";
+
     void Start () {
         
     }

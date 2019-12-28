@@ -38,6 +38,9 @@ public class GlobalSetDate : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.GameOver);
     }
 
+
+
+
     void Start()
     {
         //LuaEnv luaenv = new LuaEnv();
@@ -310,7 +313,10 @@ public class GlobalSetDate : MonoBehaviour {
         {
             CurrentUserDate.playerPosition = player.transform.position.x + 2 + "_" + player.transform.position.y;
         }
-        
+
+        //存档时候 技能CD满
+        GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().AllSkillCDFull();
+
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
         if(GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1")!=null) CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
@@ -348,7 +354,7 @@ public class GlobalSetDate : MonoBehaviour {
         for(var i = 0; i < roleDateArr.Length; i++) {
             string _date = roleDateArr[i];
             if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
-            if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().lan = float.Parse(_date.Split('=')[1]);
+            if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().Lan = float.Parse(_date.Split('=')[1]);
         }
         screenChangeDate = null;
     }

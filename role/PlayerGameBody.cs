@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerGameBody : GameBody {
 
-	// Use this for initialization
-	//void Start () {
- //       GetStart();
- //   }
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    //void Start () {
+    //       GetStart();
+    //   }
+
+    // Update is called once per frame
+    void Update() {
         LJJiSHu();
         if (Globals.isInPlot) return;
         if (isFighting)
@@ -23,6 +23,44 @@ public class PlayerGameBody : GameBody {
     public override void GameOver()
     {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
+    }
+
+    void Shoufeidao(UEvent e)
+    {
+        if (!Globals.feidao||GetComponent<RoleDate>().isDie) return;
+        //判断一些不能收飞刀的情况  比如  攻击 放技能之类的 被攻击
+
+        print("收飞刀！");
+        //变黑 暂停人物动作 无敌时间
+        GetComponent<RoleDate>().isCanBeHit = false;
+        //飞刀是否碰墙
+        /**if (Globals.feidao.GetComponent<JN_FD>().IsHitWall)
+        {
+
+        }*/
+
+
+
+        //判断 飞刀相对有人物的方位 
+        //根据飞刀方位  选择收刀动作 和人物朝向
+        //人物飞刀飞刀位置
+        //GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().CameraFollow(Globals.feidao);
+
+        //print("Globals.feidao.transform.position   "+ Globals.feidao.transform.position);
+        this.transform.position = Globals.feidao.transform.position;
+        //人物速度归零
+        this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+        //人物变白
+        //收飞刀动作
+        //收刀动作播完 恢复
+        //发送 销毁飞刀事件
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DISTORY_FEIDAO, null), this);
+        Globals.isShouFD = false;
+
+        GetComponent<RoleDate>().isCanBeHit = true;
     }
 
     void RemoveSelf(UEvent e)
@@ -33,6 +71,7 @@ public class PlayerGameBody : GameBody {
             return;
         }
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
         DestroyImmediate(this.gameObject, true);
     }
 
@@ -607,6 +646,7 @@ public class PlayerGameBody : GameBody {
     {
         if (roleDate.isBeHiting) return;
         if (isDodgeing) return;
+        if (isAcing) return;
        /* print("jump "+jumpNums+"   jump2 "+isJumping2);
         print(roleDate.isBeHiting + "      " + DBBody.animation.lastAnimationName + "   isOn " + IsGround+" atk "+isAtking+" isAtk "+isAtk);*/
         Jump();
@@ -619,7 +659,7 @@ public class PlayerGameBody : GameBody {
         
         if (jumpNums < 1) return;
         jumpNums--;
-        print("jump num "+jumpNums+ "  isjump "+isJumping+ "  IsGround?  " + IsGround);
+        //print("jump num "+jumpNums+ "  isjump "+isJumping+ "  IsGround?  " + IsGround);
         isGetJump = true;
         isGetJumpOnWall = true;
         //return;
@@ -641,7 +681,7 @@ public class PlayerGameBody : GameBody {
         }
         else
         {
-            print("JINGLAIMEI  " + jumpNums);
+            //print("JINGLAIMEI  " + jumpNums);
             if (!roleDate.isBeHiting &&
                 DBBody.animation.lastAnimationName != JUMP2DUAN &&
                 DBBody.animation.lastAnimationName != JUMPUP)

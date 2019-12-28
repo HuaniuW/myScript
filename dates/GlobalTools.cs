@@ -38,7 +38,7 @@ public class GlobalTools : MonoBehaviour {
     /// <returns></returns>
     public static GameObject GetGameObjectByName(string ObjName)
     {
-        print("ObjName    "+ ObjName);
+        //print("ObjName    "+ ObjName);
         GameObject obj = Resources.Load(ObjName) as GameObject;
         obj = Instantiate(obj);
         return obj;

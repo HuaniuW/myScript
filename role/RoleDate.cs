@@ -105,4 +105,7 @@ public class RoleDate : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    [Header("被动防御技能")]
+    public List<string> passive_def_skill = new List<string> { };
 }

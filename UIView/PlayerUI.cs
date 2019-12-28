@@ -29,7 +29,11 @@ public class PlayerUI : MonoBehaviour {
 
     public RectTransform screenChangeZZ;
     public Text screenLoadTxt;
-    
+
+    public GameObject skill_bar;
+    public GameObject ui_hun;
+    public GameObject ui_feidao;
+
     // Use this for initialization
     void Start () {
         // GetTypePC();
@@ -108,13 +112,20 @@ public class PlayerUI : MonoBehaviour {
 
     private void OnDestroy()
     {
+        skill_bar.GetComponent<UI_ShowPanel>().OnDistory2();
+        ui_hun.GetComponent<UI_Hun>().OnDistory2();
+        ui_feidao.GetComponent<UI_FeiDao>().GetDistory();
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
     }
 
     void RemoveSelfAndRestart(UEvent e)
     {
+        //UI内的 其他子组件  侦听  没有把代码写到 主PlayerUI组件上 不会自动 调用销毁  OnDistory   这里就必须手动调用  或者 改写到主UI上********************注意
+       
+        //DestroyImmediate 立即销毁  Destroy是异步销毁
         DestroyImmediate(this.gameObject, true);
+        //Destroy(this.gameObject);
         GlobalSetDate.instance.GetGameDateStart();
     }
 
@@ -228,5 +239,21 @@ public class PlayerUI : MonoBehaviour {
     void GetDodge1()
     {
         playerObj.GetDodge1();
+    }
+
+
+
+
+    //全局减速
+    public void GetSlowByTimes(float times = 1)
+    {
+        GetComponent<TheTimer>().TimesAdd(times, TimeCallBack);
+        Time.timeScale = 0.5f;
+    }
+
+    public void TimeCallBack(float nums)
+    {
+        print("---------------------------------------------------------------->>>>>>>>>>>>>>>>>??????????????????????");
+        Time.timeScale = 1;
     }
 }

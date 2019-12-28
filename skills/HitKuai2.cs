@@ -87,6 +87,8 @@ public class HitKuai2 : MonoBehaviour
             if (jn_date != null && gameBody != null)
             {
                 gameBody.HasBeHit();
+
+                if (this.transform.parent == null) return;
                 if (Coll.transform.position.x > this.transform.parent.transform.position.x)
                 {
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 , 0));

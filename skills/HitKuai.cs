@@ -32,6 +32,8 @@ public class HitKuai : MonoBehaviour {
 
     GameObject txObj;
     public void GetTXObj(GameObject txObj,bool isSkill = false,float atkObjScaleX = 1){
+
+
         if (txObj != null)
         {
             this.txObj = txObj;
@@ -42,7 +44,7 @@ public class HitKuai : MonoBehaviour {
             //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.name+"     "+this.txObj);
         }
         if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
-        _atkObjScaleX = atkObjScaleX;
+        _atkObjScaleX = txObj.GetComponent<JN_base>().atkObj.transform.localScale.x;
     }
 
 
@@ -77,9 +79,15 @@ public class HitKuai : MonoBehaviour {
             if (!roleDate.isCanBeHit) return;
             //取到施展攻击角色的方向
             //float _roleScaleX = this.transform.localScale.x > 0?-1:1 ;  //-atkObj.transform.localScale.x;
-            float _roleScaleX = -_atkObjScaleX;
+            float _roleScaleX = -_atkObjScaleX;//atkObj.transform.localScale.x;
+            //print("施展攻击方 名字      "+atkObj.name+ "      _roleScaleX     ----    " + _roleScaleX+ "    -atkObj.transform.localScale.x    "+ -atkObj.transform.localScale.x);
+            /**
+            if (jn_date._type != "1")
+            {
+                _roleScaleX = this.transform.localScale.x > 0 ? -1 : 1;
+            }*/
 
-
+            //被击中 变色
             if(gameBody.tag!="Player")gameBody.BeHitColorChange();
 
 
@@ -93,10 +101,59 @@ public class HitKuai : MonoBehaviour {
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector2 tempV3 = _rigidbody2D.velocity;
             _rigidbody2D.velocity = new Vector3(0,tempV3.y);
-            if (jn_date != null &&gameBody != null)
+            if (gameBody.tag == "Player"&& jn_date != null &&gameBody != null)
             {
                 ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
+
+                //List<string> passive_def_skill = gameBody.GetComponent<RoleDate>().passive_def_skill;
+                //---------------------------------------被击中 启动被动防御技能
+                List<GameObject> skill_list = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().HZList;
+                if (skill_list.Count != 0)
+                {
+                   foreach(GameObject defSkill in skill_list)
+                    {
+                        //获取技能信息
+                        //GameObject obj = Resources.Load(defSkill) as GameObject;
+
+                        if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+                        //是否冷却  还是只能找 玩家装备的技能
+                        if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) continue;
+                        
+                        float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
+                        //获取触发几率 
+                        float cfjv = GlobalTools.GetRandomDistanceNums(100);
+                        if(cfjv > jv) continue;
+                        //触发
+                        //加血
+                        //无伤害
+                        if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "wushanghai") {
+                            //defSkill.GetComponent<UI_Skill>().isCanBeUseSkill();
+                            //defSkill.GetComponent<UI_Skill>().Play_Def_Skill_Effect();
+
+                            gameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
+                            //print(" 无伤害 播放 被动防御 特效！！！1 ");
+                            // 弹开攻击者
+                            ObjV3Zero(atkObj);
+                            atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500 * _roleScaleX, 0));
+                            // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
+                            atkObj.GetComponent<GameBody>().HasBeHit();
+                            // 减帧数
+                            GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.5f);
+                            return;
+                        }
+                        
+                        //无被攻击动作
+                        //反震 这个是另外的 特效攻击
+                        //是否触发
+
+                        //触发效果
+                        //触发后 特效显示 
+                    }
+
+                }
+
+
                 //判断是否破防   D 代办事项 
                 float beHitXFScale = roleDate.beHitXFScale;
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
@@ -108,7 +165,7 @@ public class HitKuai : MonoBehaviour {
                     if (jn_date.fasntuili != 0) beHitXFScale = 1;// 有反推力说明是空中向下攻击
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX* beHitXFScale, 0));
                     txPos = 0.8f;
-                    print("sudu-------------------------------------------<>>>>>>>>>> 11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x+"   || "+Coll.name+"   txPos   "+txPos);
+                    //print("sudu-------------------------------------------<>>>>>>>>>> 11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x+"   || "+Coll.name+"   txPos   "+txPos);
                     //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
                     //print(Coll.tag);
                     
@@ -201,6 +258,7 @@ public class HitKuai : MonoBehaviour {
         //判断击中特效播放位置
         //击退 判断方向
         float _psScaleX = sx;
+
         //判断是否在空中
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
@@ -218,7 +276,7 @@ public class HitKuai : MonoBehaviour {
     /// <param name="isZX">是否需要转向</param>
     void HitTX(float psScaleX,string txName,string hitVudio = "",float beishu = 3,bool isSJJD = false,bool isZX = true,float hy = 0)
     {
-        print("hy ------------------------------------------------------>     "+hy);
+        //print("hy ------------------------------------------------------>     "+hy);
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         //print("sudu-------------------------------------------   "+ gameBody.GetComponent<Rigidbody2D>().velocity.x);
