@@ -16,6 +16,7 @@ public class AIRest : MonoBehaviour {
     
     public void GetRestByTimes(float times)
     {
+        //print("休息 ---->rest");
         _times = times;
         isStart = true;
     }

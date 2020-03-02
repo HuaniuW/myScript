@@ -15,7 +15,6 @@ public class UI_FeiDao : MonoBehaviour {
         if(!_hzdate) _hzdate = GetComponent<HZDate>();
         if (!_player) _player = GlobalTools.FindObjByName("player");
         _uiskill.SetHZDate(_hzdate);
-        print(">>>>>>");
     }
 
     void OnDistory()
@@ -34,13 +33,20 @@ public class UI_FeiDao : MonoBehaviour {
     public void HasShouDao(UEvent e)
     {
         //isShouFD = false;
-        
+        if (Globals.feidao)
+        {
+            Globals.feidao.GetComponent<JN_base>().DisObj();
+            Globals.feidao = null;
+            Globals.isShouFD = false;
+            GetComponent<UI_Skill>().CDFull();
+            //print("----------------------->  feidao  CDFull   使用飞到结束！！！！！！！！！！！！！！！！！！！！");
+        }
     }
 
 
     void SanXian()
     {
-        GetComponent<UI_Skill>().CDFull();
+        //GetComponent<UI_Skill>().CDFull();
         //调用角色 闪现到 飞刀地方  事件
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.SHOU_FEIDAO, null), this);
     }
@@ -49,15 +55,20 @@ public class UI_FeiDao : MonoBehaviour {
     void DiuFeidao(UEvent e)
     {
         //print("飞刀-----------------------------------------------------------> "+e.eventParams.ToString());
-
+        //这类是第一拦截点  角色在一些 动作中不能丢飞镖的 这里要 拦截
         print("isShouFD     "+ Globals.isShouFD);
-        if (Globals.isShouFD&&Globals.feidao)
+        //if (_player.GetComponent<GameBody>().isAcing) return;
+        //print("Globals.feidao    ----------------------->   " + (Globals.feidao == null));
+        if (Globals.feidao)
         {
             //收飞刀
+            print("收飞刀");
             SanXian();
             return;
         }
+
         GetComponent<UI_Skill>().CDFull();
+        //print("  ui_feidao    开始 --------------------使用飞刀 ");
 
         //没有飞刀 瞬移 飞刀消失
         Globals.feidaoFX = e.eventParams.ToString();
@@ -100,10 +111,11 @@ public class UI_FeiDao : MonoBehaviour {
             }
         }
 
-        print("_hzdate.skillACName     "+ _hzdate.skillACName);
+        //print("_hzdate.skillACName     "+ _hzdate.skillACName);
 
         _player.GetComponent<GameBody>().ShowSkill(this.gameObject);
         Globals.isShouFD = true;
+        print("？？？？？？？？？？？？？？？？？？？？？？？？？？收飞刀");
 
     }
 	

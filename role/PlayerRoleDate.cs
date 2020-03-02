@@ -67,15 +67,23 @@ public class PlayerRoleDate : RoleDate
         tx = null;
         tx = GlobalTools.GetGameObjectByName(txName);
         Vector2 v =  this.GetComponent<GameBody>().groundCheck.position;
-        tx.transform.parent = this.transform;
+        //tx.transform.parent = this.transform;
         //print(this.transform.localScale);
-        if (this.transform.localScale.x == -1)
+
+        tx.transform.position = new Vector2(v.x, v.y - 0.2f);
+        if (tx.GetComponent<JN_TXgensui>())
         {
-            tx.transform.position = new Vector2(v.x, v.y - 0.6f);
+            tx.GetComponent<JN_TXgensui>().GetGenSuiObj(this.gameObject);
         }
-        else {
-            tx.transform.position = new Vector2(v.x, v.y);
-        }
+        
+
+        //if (this.transform.localScale.x == -1)
+        //{
+        //    tx.transform.position = new Vector2(v.x, v.y - 0.6f);
+        //}
+        //else {
+        //    tx.transform.position = new Vector2(v.x, v.y);
+        //}
         ;//new Vector2(0, -3);
         //print("tx.transform.position     "+ tx.transform.position);
         
@@ -98,6 +106,7 @@ public class PlayerRoleDate : RoleDate
 
     void GetDiaoLuo(UEvent e)
     {
+        if (isDie) return;
         //print("------------------------------->>    "+e.eventParams.ToString());
         if(e.eventParams.ToString() == "XuehunXiao")
         {
@@ -120,7 +129,7 @@ public class PlayerRoleDate : RoleDate
             GetTX("jialan");
         }else if (e.eventParams.ToString() == "C_cundangdian")
         {
-            //print("存档点加血");
+            print("存档点加血");
             this.live += 5000;
             GetTX("jiaxue");
         }

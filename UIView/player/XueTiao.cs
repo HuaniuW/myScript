@@ -223,6 +223,7 @@ public class XueTiao : MonoBehaviour {
         
         //_cLive = testNums;
         _cLive = roleDate.live;
+        if (gameObj.tag!="Player"&& _cLive <= 0) this.gameObject.SetActive(false);
         if (_cLive == lastXue) return;
         if (_cLive < 0) _cLive = 0;
         _w = _cLive / _maxLive * _maxW;

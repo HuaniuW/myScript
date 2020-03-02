@@ -20,6 +20,8 @@ public class Door : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
         if (Mathf.Abs(men.transform.position.y - downPos.position.y) < 1) _zt = "1";
         if (Mathf.Abs(men.transform.position.y - upPos.position.y) < 1) _zt = "0";
+
+
     }
 
     //是否自动记录---单独记录   men_1-0 位置在上  men_1-1 位置在下   0上1下
@@ -33,7 +35,8 @@ public class Door : MonoBehaviour {
     //如果是单独存档 门怪打掉后 还刷不刷？（不刷门怪 怎么记录  刷们怪的画 位置给远一点 不要再存档地点开战）
 
     //状态-已经是开的门
-    string _zt = "0";
+    [Header("1初始位在下面 0初始位在上面")]
+    public string _zt = "0";
     public void HasOpen()
     {
         //当门以及打开 返回场景时候调用
@@ -43,13 +46,13 @@ public class Door : MonoBehaviour {
     
     public void Chushi()
     {
-        //print("?????????");
         men.transform.position = upPos.transform.position;
         _zt = "0";
     }
-
-    bool isUp = false;
-    bool isDown = false;
+    [Header("0 isUp 上移动")]
+    public bool isUp = false;
+    [Header("1 isDown 下移动")]
+    public bool isDown = false;
     public float moveSpeed = 0.1f;
     public void OpenDoor(UEvent e)
     {
@@ -59,23 +62,23 @@ public class Door : MonoBehaviour {
         string zt = str.Split('-')[1];
         //print(_zt+" ?  "+this.name + "   " +str+"   name  "+_name);
         //如果传来的状态一样就返回 没必要改变
-        if (_zt == zt) return;
+        //if (_zt == zt) return;
         //开门用1 关门用0
         if (this.name != _name) return;
         isDown = false;
         isUp = false;
         if (zt == "1")
         {
-            //print("Down");
+            print("Down");
             isDown = true;
             
         }else if (zt == "0")
         {
-            //print("Up");
+            print("Up");
             isUp = true;
             
         }
-        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
+        print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
         //声音播放
         if (openDoorAudio) openDoorAudio.Play();
     }
@@ -85,6 +88,8 @@ public class Door : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.OPEN_DOOR, OpenDoor);
     }
 
+
+    public bool isCanBeRecord = false;
     // Update is called once per frame
     void Update () {
 
@@ -98,6 +103,7 @@ public class Door : MonoBehaviour {
             }
             else
             {
+                if (!isCanBeRecord) return;
                 string zt = this.name + "-0";
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
                 isUp = false;
@@ -117,6 +123,7 @@ public class Door : MonoBehaviour {
             }
             else
             {
+                if (!isCanBeRecord) return;
                 string zt = this.name + "-1";
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, zt), this);
                 isDown = false;

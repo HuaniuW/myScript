@@ -91,7 +91,14 @@ public class GameBody : MonoBehaviour, IRole {
         return bodyScale;
     }
 
+    public UnityEngine.Transform TalkPos;
+    internal Vector2 GetTalkPos()
+    {
+        return TalkPos.position;
+    }
+
     protected bool isRunLefting = false;
+    public bool isRunYing = false;
 
     protected bool isRunRighting = false;
 
@@ -105,11 +112,13 @@ public class GameBody : MonoBehaviour, IRole {
     public bool isTXShow = false;
 
 
+
     public virtual void ResetAll()
     {
         //isRun = false;
         isRunLefting = false;
         isRunRighting = false;
+        isRunYing = false;
         //isInAiring = false;
         isDowning = false;
         //在空中被击中 如果关闭跳跃bool会有落地bug
@@ -312,6 +321,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (jn.type == "bd") return;
         if (jn != null)
         {
+            //print(" jnCD?     "+ jn.IsCDOver());
             if (jn.IsCDOver())
             {
                 if (roleDate.lan - jn.xyLan < 0) {
@@ -334,14 +344,23 @@ public class GameBody : MonoBehaviour, IRole {
                     //***找到起始特效点 找骨骼动画的点 或者其他办法
                     if (isInAiring)
                     {
-                        GetAcMsg(jn.skillACNameInAir);
+                        //print("jn.name    "+ jn.name);
+                        if(jn.name == "jn_feidao")
+                        {
+                            GetAcMsg(jn.skillACName);
+                        }
+                        else
+                        {
+                            GetAcMsg(jn.skillACNameInAir);
+                        }
+                        
                     }
                     else
                     {
                         GetAcMsg(jn.skillACName);
                     }
                     
-                    //print("技能释放动作    "+jn.skillACName);
+                    //print("-----------------------------------------------------技能释放动作    "+jn.skillACName);
                     playerRigidbody2D.velocity = Vector2.zero;
                     if (jn.ACyanchi > 0)
                     {
@@ -351,6 +370,7 @@ public class GameBody : MonoBehaviour, IRole {
                 }
                 else {
                     //测试用 正式的要配动作
+                    //print("????????????????????????????????????????????????????????????");
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                 }
 
@@ -474,7 +494,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected bool isShanjin = false;
     protected bool isCanJump = false;
     
-    void DodgeOver()
+    protected void DodgeOver()
     {
         if (isInAiring)
         {
@@ -490,17 +510,17 @@ public class GameBody : MonoBehaviour, IRole {
         //print(">>>>>>进来没！！");
     }
 
-    [Header("侦测地板的射线起点2")]
-    public UnityEngine.Transform groundCheck2;
+    [Header("侦测地板的射线起点22222")]
+    public UnityEngine.Transform qianmianjiance;
     //路面是否尽头
     bool isEndGround = false;
     public virtual bool IsEndGround
     {
         get
         {
-            if (groundCheck2 == null) return false;
+            if (qianmianjiance == null) return false;
             if (isInAiring) return false;
-            Vector2 start = groundCheck2.position;
+            Vector2 start = qianmianjiance.position;
             Vector2 end = new Vector2(start.x, start.y - 0.7f);
             Debug.DrawLine(start, end, Color.red);
             isEndGround = Physics2D.Linecast(start, end, groundLayer);
@@ -513,10 +533,10 @@ public class GameBody : MonoBehaviour, IRole {
     {
         get
         {
-            if (groundCheck2 == null) return false;
-            Vector2 start = groundCheck2.position;
+            if (qianmianjiance == null) return false;
+            Vector2 start = qianmianjiance.position;
             Vector2 end = new Vector2(start.x, start.y + 0.8f);
-            Debug.DrawLine(start, end, Color.yellow);
+            Debug.DrawLine(start, end, Color.red);
             isHitWall = Physics2D.Linecast(start, end, groundLayer);
             if(isHitWall) isCanShanjin = true;
             return isHitWall;
@@ -529,6 +549,8 @@ public class GameBody : MonoBehaviour, IRole {
     {
         get
         {
+            //print("groundCheck 是否有这个 变量   "+ groundCheck);
+            if (!groundCheck) return false;
             Vector2 start = groundCheck.position;
             Vector2 end = new Vector2(start.x, start.y - distance);
             Debug.DrawLine(start, end, Color.blue);
@@ -592,6 +614,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void RunLeft(float horizontalDirection, bool isWalk = false)
     {
+        if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
         isBackUping = false;
         
@@ -622,26 +645,37 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
-    public void TurnRight()
+    public void TurnDirection(GameObject _obj)
     {
-        if (bodyScale.x == 1)
+        if (!_obj) return;
+        if (this.transform.position.x < _obj.transform.position.x)
         {
-            bodyScale.x = -1;
-            this.transform.localScale = bodyScale;
+            //_airGameBody.TurnRight();
+            this.GetComponent<GameBody>().TurnRight();
+        }
+        else
+        {
+            this.GetComponent<GameBody>().TurnLeft();
+            //_airGameBody.TurnLeft();
         }
     }
 
-    public void TurnLeft()
+    public virtual void TurnRight()
     {
-        if (bodyScale.x == -1)
-        {
-            bodyScale.x = 1;
-            this.transform.localScale = bodyScale;
-        }
+        if (GetComponent<RoleDate>().isDie) return;
+        this.transform.localScale = new Vector3(-1, 1,1);
+       
+    }
+
+    public virtual void TurnLeft()
+    {
+        if (GetComponent<RoleDate>().isDie) return;
+        this.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public virtual void RunRight(float horizontalDirection, bool isWalk = false)
     {
+        if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("l " + isAtking);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
@@ -677,7 +711,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
-    protected virtual void Run()
+    public virtual void Run()
     {
         
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
@@ -807,6 +841,11 @@ public class GameBody : MonoBehaviour, IRole {
     public void SetYSpeedZero()
     {
         Vector2 v2 = new Vector2(playerRigidbody2D.velocity.x, 0);
+    }
+
+    public void SetXSpeedZero()
+    {
+        Vector2 v2 = new Vector2(0,playerRigidbody2D.velocity.y);
     }
 
     protected virtual void Jump()
@@ -978,10 +1017,14 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void Stand()
     {
+        //TurnRight();
         //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-
+        if (!DBBody.animation.HasAnimation(STAND))
+        {
+            STAND = "stand_1";
+        }
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             if (this.tag == "player") {
@@ -991,6 +1034,8 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 //时间0.01f  0.1秒 慢了会报错（位置错误）
+                //print("stand!!!");
+
                 DBBody.animation.FadeIn(STAND, 0.01f, 1);
             }
             
@@ -1014,10 +1059,16 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void GetStand(bool isSetSpeedZero = true)
     {
+        
         ResetAll();
-        //if(DBBody) print("??????????????  "+DBBody.animation.lastAnimationName);
-        if(DBBody) Stand();
-        if(isSetSpeedZero && playerRigidbody2D) playerRigidbody2D.velocity = Vector2.zero;
+        //print("getStand!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        if (DBBody) Stand();
+        if (isSetSpeedZero && playerRigidbody2D) {
+            //print("?????????????????       " +playerRigidbody2D.velocity);
+            playerRigidbody2D.velocity = Vector2.zero;
+            //playerRigidbody2D.velocity *= 0.5f;
+        }
+        
     }
 
     public void SetV0()
@@ -1036,7 +1087,14 @@ public class GameBody : MonoBehaviour, IRole {
 
     // Use this for initialization
     protected void Start () {
+        FirstStart();
         GetStart();
+
+    }
+
+    protected virtual void FirstStart()
+    {
+
     }
 
     protected void GetStart()
@@ -1055,6 +1113,9 @@ public class GameBody : MonoBehaviour, IRole {
         bodyScale = new Vector3(1, 1, 1);
         vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
+        _yanmu2.Stop();
+        _yanmu.Stop();
+        
        
         GameOver();
 
@@ -1069,7 +1130,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetDie()
     {
-        //print("indie!!!!!!!!!!!!!!!!");
+        
         if(DBBody.animation.lastAnimationName != DIE) DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
         //print("回收");
         //对象池无法移除对象 原因不明
@@ -1118,6 +1179,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     // Update is called once per frame
     void Update () {
+        
         GetUpdate();
     }
 
@@ -1291,7 +1353,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void InStand()
     {
-        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
+        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting&&!isRunYing && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
         {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
 
@@ -1425,7 +1487,7 @@ public class GameBody : MonoBehaviour, IRole {
     int yanchiMaxNum = 20;
     //延迟行动尺度
     public int canMoveNums = 100;
-    protected bool isAcing = false;
+    public bool isAcing = false;
 	protected string _acName;
 
     public string GetAcMsg(string acName)
@@ -1436,7 +1498,8 @@ public class GameBody : MonoBehaviour, IRole {
         //print("------------------------------------------------------------------  "+acName);
         if (!DBBody.animation.HasAnimation(acName)) return null;
         //print("------------------------------------------------------------------22  " + acName);
-        
+
+        //print("1111111111");
         if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
         {
             acNums++;
@@ -1445,23 +1508,30 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //可以切换招式
             }
-
+            //print("22222222222");
             //这里的延迟 将来会改到 vo里面直接取  招式切换也是 这个Ac主要针对 非攻击Ac
             if (acNums > yanchiMaxNum) {
                 isAcing = false;
                 isYanchi = false;
                 _acName = null;
+                
+                if (isInAiring)
+                {
+                    DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
+                }
+
                 return "completed";
             }
             return "acYanChi";
         }
-
+        //print("DBBody.animation.lastAnimationName     " + DBBody.animation.lastAnimationName);
         if (DBBody.animation.HasAnimation(acName)&&DBBody.animation.lastAnimationName!=acName)
         {
             DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
             acNums = 0;
             isAcing = true;
 			_acName = acName;
+            //print("acName  进来没？？？？");
             return "start";
         }
         
@@ -1540,14 +1610,14 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //GetPause(0.5f,0.5f);
                 string _atkName = atkName;
-                if (atkName.Split('|').Length != 1)
+                //print("----------------------------------atkname  "+atkName);
+                if (atkName.Split('|').Length > 1)
                 {
                     _atkName = atkName.Split('|')[0];
                     float times = float.Parse(atkName.Split('|')[1].Split('-')[0]);
                     float scales = 0.5f;
                     if (atkName.Split('|')[1].Split('-').Length!=1) scales = float.Parse(atkName.Split('|')[1].Split('-')[1]);
                     GetPause(times, scales);
-                    
                 }
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
@@ -1589,13 +1659,16 @@ public class GameBody : MonoBehaviour, IRole {
         isSkillOut = true;
     }
 
+  
+
     protected bool isSkillOut = false;
 
     //显示动作特效 龙骨的侦听事件
     protected virtual void ShowACTX(string type, EventObject eventObject)
     {
         //print("type:  "+type);
-        //print("_______________________________________name    "+ eventObject.name);
+        //print("eventObject  ????  " + eventObject);
+        //print("___________________________________________________________________________________________________________________________name    "+ eventObject.name);
         if (type == EventObject.SOUND_EVENT)
         {
             //print("eventName:  "+eventObject.name);
@@ -1626,12 +1699,14 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 if (isAcing)
                 {
+                    
                     if (isSkillOut) {
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName, true);
                         isSkillOut = false;
                     }
                     else
                     {
+                        //print("------------------------------------------------------------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                         isTXShow = false;
@@ -1639,8 +1714,8 @@ public class GameBody : MonoBehaviour, IRole {
                    
                 }
                 else {
-                    //print("普通攻击的特效名字  "+vOAtk.txName);
                     //GetPause(0.1f);
+                    //print("vOAtk.txName    " + vOAtk.txName);
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
                     isTXShow = false;
                 }
@@ -1681,12 +1756,14 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void Atk()
     {
+        //print(this.name+ "  ???????????????攻击  atk     "+vOAtk.atkName);
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
         {
             //print(DBBody.animation.lastAnimationState);
         }
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
         {
+            //print("攻击动作完成！！！！！！！！！！！！！！！！！！   "+this.name);
             jisuqi = 0;
             yanchi++;
             if (yanchi > vOAtk.yanchi - canMoveNums) {

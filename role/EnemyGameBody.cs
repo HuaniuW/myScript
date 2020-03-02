@@ -7,13 +7,25 @@ using DragonBones;
 
 public class EnemyGameBody : GameBody {
 
-	// Use this for initialization
-	//void Start () {
- //       GetStart();
- //   }
-	
-	// Update is called once per frame
-	void Update () {
+    // Use this for initialization
+    //void Start () {
+    //       GetStart();
+    //   }
+
+
+    protected override void FirstStart()
+    {
+        RUN = "run_1";
+        if (!GetDB().animation.HasAnimation(RUN)) RUN = "run_3";
+        //print("-------------------->   "+RUN);
+    }
+
+    // Update is called once per frame
+
+
+    
+
+    void Update () {
         if (isFighting)
         {
             OutFighting();
@@ -59,7 +71,7 @@ public class EnemyGameBody : GameBody {
     /// </summary>
     void CheckIsHasAC()
     {
-        if (!DBBody.animation.HasAnimation(STAND)) BEHIT = "stand_1";
+        if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_1";
         if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
     }
 
@@ -299,14 +311,29 @@ public class EnemyGameBody : GameBody {
     }
 
 
-
-
     protected override void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
 
+       
 
         CurrentAcName = DBBody.animation.lastAnimationName;
+        //print("CurrentAcName    "+ CurrentAcName);
+        //if (Globals.isPlayerDie)
+        //{
+        //    print("-----------------------------stand!     "+STAND);
+        //    if (CurrentAcName != STAND)
+        //    {
+        //        ResetAll();
+                
+        //        //DBBody.animation.GotoAndStopByFrame(STAND);
+        //        GetAcMsg(STAND);
+        //        //Time.timeScale
+        //    }
+        //    //GetStand();
+        //    return;
+        //}
+
         //脚下的烟幕
         Yanmu();
 

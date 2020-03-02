@@ -18,17 +18,42 @@ public class AIBase : MonoBehaviour {
 
     protected void GetStart()
     {
-        gameBody = GetComponent<GameBody>();
+        
+        GetGameBody();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
         if (!aiFanji) aiFanji = GetComponent<AIFanji>();
         //Type myType = typeof(DataZS);
         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, playerDie);
+
     }
 
+    bool isPlayerDie = false;
+    
+    private void playerDie(UEvent evt)
+    {
+        //print("dieout---------------------------------------------@@   "+evt.eventParams.ToString());
+        if(evt.eventParams!=null&&evt.eventParams.ToString() == "Player")
+        {
+            isPlayerDie = true;
+            Globals.isPlayerDie = true;
+            //GetComponent<GameBody>().ResetAll();
+            if(GetComponent<GameBody>().GetDB().animation.lastAnimationName!="stand_1")GetComponent<GameBody>().GetStand();
+            //print("palyer is die !!!!!!!!!");
+            //GetComponent<GameBody>().GetStand();
+        }
+        
+    }
+
+    protected virtual void GetGameBody()
+    {
+        gameBody = GetComponent<GameBody>();
+    }
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, playerDie);
     }
 
     public void GetEnemyObj(UEvent e)
@@ -61,9 +86,10 @@ public class AIBase : MonoBehaviour {
     public float outDistance = 15;
     protected void IsEnemyOutAtkDistance()
     {
-        if (!isActioning&&(Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance))
+        if (!isActioning&&!aiQishou.isQishouAtk&&(Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance))
         {
             isFindEnemy = false;
+            //print("起手3   " + aiQishou.isQishouAtk);
             if (aiQishou) aiQishou.isQishouAtk = false;
             gameBody.GetStand();
         }
@@ -156,6 +182,8 @@ public class AIBase : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
+        
+        if (isPlayerDie) return;
         GetUpdate();
     }
 
@@ -173,7 +201,7 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
-        if (gameObj.GetComponent<RoleDate>().isDie)
+        if (!gameObj&&gameObj.GetComponent<RoleDate>().isDie)
         {
             gameBody.ResetAll();
             //gameBody.Stand();
@@ -247,9 +275,14 @@ public class AIBase : MonoBehaviour {
         int i = (int)UnityEngine.Random.Range(0, GetComponent<AITheWay_dcr>().GetZSArrLength());
         //调试用
         //i = 1;
+       // print(aiQishou+"  起手   "+ aiQishou.isQishouAtk);
         if (aiQishou && aiQishou.isQishouAtk)
         {
+            aiQishou.isQishouAtk = false;
             carr = aiQishou.qishouAtkArr;
+         //   print("-------------------------------------------------------进入起手攻击");
+            return -1;
+            
         }
         else
         {
@@ -288,6 +321,7 @@ public class AIBase : MonoBehaviour {
     {
         if (atkNum >= carr.Length)
         {
+            //print("起手1   "+ aiQishou.isQishouAtk);
             if (aiQishou && aiQishou.isQishouAtk) aiQishou.isQishouAtk = false;
             atkNum = 0;
             lie = -1;
@@ -295,7 +329,7 @@ public class AIBase : MonoBehaviour {
     }
 
     //2.招式组第一个攻击动作的攻击距离  位移技能也可以直接取距离
-    protected float atkDistance = 0;
+    public float atkDistance = 0;
 
     //3 靠近 达到攻击距离
     public virtual bool NearRoleInDistance(float distance)
@@ -321,7 +355,7 @@ public class AIBase : MonoBehaviour {
     }
 
     //转向
-    protected void ZhuanXiang()
+    protected virtual void ZhuanXiang()
     {
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
@@ -362,11 +396,13 @@ public class AIBase : MonoBehaviour {
     //6.开始下一个攻击
     protected virtual void GetAtkFS()
     {
-		if(!isAction){
+        //print("atkFS!!!");
+        if (isPlayerDie) return;
+        if (!isAction){
 			isAction = true;
 			acName = GetZS();
 
-            //print(atkNum + "    name " + acName);
+            print(atkNum + "------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -423,6 +459,12 @@ public class AIBase : MonoBehaviour {
                 return;
             }
 
+            if (acName == "zidan")
+            {
+                acName = "zidan";
+                return;
+            }
+
             if (acName == "runCut")
             {
                 acName = "runCut";
@@ -434,6 +476,7 @@ public class AIBase : MonoBehaviour {
 
         if(aiQishou&&aiQishou.isQishouAtk&&!aiQishou.isFirstAtked)
         {
+            //print("---------------------------------------------------》起手攻击  "+ atkDistance);
             if (atkDistance == 0f)
             {
                 aiQishou.isFirstAtked = true;
@@ -490,6 +533,12 @@ public class AIBase : MonoBehaviour {
         if (acName == "yishan")
         {
             GetYiShan();
+            return;
+        }
+
+        if (acName == "zidan")
+        {
+            GetZiDanFire();
             return;
         }
 
@@ -598,20 +647,20 @@ public class AIBase : MonoBehaviour {
 
     protected AIShanxian aisx;
     protected void GetShanXian(){
-		if(!isActioning && NearRoleInDistance(atkDistance)){
+		if(!isActioning){
             isActioning = true;
-            aisx.ReSet();
-			aisx.isStart = true;
-			GetComponent<AIShanxian>().GetTheEnemyPos(gameObj);
+            aisx = GetComponent<AIShanxian>();
+            aisx.GetShanXian();
             atkNum++;
-            GetAtkNumReSet();
+            //GetAtkNumReSet();
             return;
 		}
 
-		if(aisx.isOver){
-			GetComponent<GameBody>().SetACingfalse();
+		if(isActioning&&aisx.IsShanxianOver()){
+            //GetComponent<GameBody>().SetACingfalse();
             //aisx.isStart = false;
-            aisx.ReSet();
+            //aisx.ReSet();
+            ZhuanXiang();
             isAction = false;
             isActioning = false;
         }
@@ -621,7 +670,7 @@ public class AIBase : MonoBehaviour {
     
     protected virtual void AIBeHit()
     {
-        if (aisx != null) aisx.ReSet();
+        //if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
@@ -637,6 +686,7 @@ public class AIBase : MonoBehaviour {
         lie = -1;
         atkNum = 0;
         acName = "";
+        //print("起手2   " + aiQishou.isQishouAtk);
         if (aiQishou) aiQishou.isQishouAtk = false;
 
         //isZSOver = false;
@@ -646,11 +696,10 @@ public class AIBase : MonoBehaviour {
     protected bool DontNear = false;
 
     //一般攻击
-    protected void PtAtk(){
+    protected virtual void PtAtk(){
         //这种如果再次超出攻击距离会再追踪
         if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
         {
-
             isActioning = true;
             if(!DontNear) ZhuanXiang();
             GetAtk();
@@ -687,6 +736,24 @@ public class AIBase : MonoBehaviour {
             GetComponent<AIRunCut>().GetStart(gameObj);
             atkNum++;
             //GetAtkNumReSet();
+        }
+    }
+
+    void GetZiDanFire()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIZiDan>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIZiDan>().IsBehaviorOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
         }
     }
 

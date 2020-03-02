@@ -106,7 +106,7 @@ public class ObjectPools
     {
         //获取到当前对象的ID（每个游戏对象都有各自的ID）
         int key = gameObject.GetInstanceID();
-        //if (Globals.isDebug) Debug.Log("key "+key);
+        //if (Globals.isDebug) Debug.Log(gameObject.name+"  key "+key);
         //如果池中包含key当前游戏对象的key值（游戏对象的ID）
         if (pools2.ContainsKey(key))
         {
@@ -170,7 +170,9 @@ public class ObjectPools
         //当前游戏对象不激活
         gameObject.SetActive(false);
         //获取当前游戏对象的key值，转换成int类型
+        //if (Globals.isDebug) Debug.Log(gameObject.name + " 收 ！ ");
         int key = int.Parse(gameObject.name);
+        //if (Globals.isDebug) Debug.Log(gameObject.name + " 收  key " + key);
         //Debug.Log("回收id  "+key);
         //如果池中不包含key值对应的游戏对象
         if (!pools2.ContainsKey(key))

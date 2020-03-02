@@ -20,6 +20,7 @@ public class TheTimer : MonoBehaviour {
     public bool IsPauseTimeOver() {
         if (!isStart) return true;
         CurTime += Time.deltaTime;
+        //print("   ----->>>>> "+CurTime+"  ???EndTime "+EndTime);
         if (CurTime > EndTime)
         {
             End();
@@ -43,6 +44,7 @@ public class TheTimer : MonoBehaviour {
         StartTime = Time.time;
         CurTime = StartTime;
         EndTime = StartTime + Duration;
+        //print("curTime "+CurTime+"  EndTime  "+EndTime);
         return false;
     }
 
@@ -70,7 +72,7 @@ public class TheTimer : MonoBehaviour {
         _maxTimesNum = timeNums / intervals;
         _timeNums = _maxTimesNum;
         _intervals = intervals;
-        print("!!!!!!!!!!   "+ _timeNums);
+        //print("!!!!!!!!!!   "+ _timeNums);
         _call = call;
     }
 
@@ -82,7 +84,8 @@ public class TheTimer : MonoBehaviour {
 
     public void TimesAdd(float times, callback call)
     {
-        GetStopByTime(times);
+        //print("???? 单次计时  " + times);
+        GetStopByTime(times);        
         isDanciTimes2 = true;
         _call = call;
     }
@@ -95,10 +98,12 @@ public class TheTimer : MonoBehaviour {
     }
 
     void DanciStart() {
+        //print("isStart  "+isStart);
         if (IsPauseTimeOver())
         {
-            _call(0);
+            //print("wo callback!");
             isDanciTimes2 = false;
+            _call(0);
         }
     }
 
@@ -118,8 +123,6 @@ public class TheTimer : MonoBehaviour {
             GetFull();
             return;
         }
-
-      
 
     }
 

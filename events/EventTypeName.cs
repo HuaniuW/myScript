@@ -87,4 +87,8 @@ public class EventTypeName
     //回收飞刀 销毁
     public const string DISTORY_FEIDAO = "distory_feidao";
 
+
+    //其他的 什么处罚机关
+    public const string JG_OTHER_EVENT = "jg_other_event";
+
 }

@@ -177,7 +177,7 @@ public class UI_Skill : MonoBehaviour {
         SkillCanUseNums = _hzDate.usenums;
         skillCanUseTimes = SkillCanUseNums;
         CDTimeNums = _hzDate.cd;
-        print("CDTimeNums   "+ CDTimeNums+"   ----    "+ Intervals);
+        //print("CDTimeNums   "+ CDTimeNums+"   ----    "+ Intervals);
         GetComponent<TheTimer>().ContinuouslyTimesAdd(CDTimeNums, Intervals, CDCallBack);
         GetComponent<UIShake>().GetShakeObj(this.gameObject);
         //print("初始化 徽章的 技能信息！！！" + skillCanUseTimes);

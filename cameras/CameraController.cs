@@ -123,6 +123,7 @@ public class CameraController : MonoBehaviour
     public bool IsOutY2 = false;
 
     public void GetHitCameraKuaiY(float _y) {
+        //print("???????????????????????????    进来了  y");
         IsHitCameraKuai = true;
         CameraKuaiY = _y;
     }
@@ -143,11 +144,13 @@ public class CameraController : MonoBehaviour
 
     public void CameraFollow(GameObject obj)
     {
-        transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y, transform.position.z);
+        transform.position = new Vector3(transform.position.x, obj.transform.position.y, transform.position.z);
     }
 
 
     float distanceX = 0;
+    bool isInEdge = false;
+    bool isFeidaoGS = true;
 
     void Update()
     {
@@ -184,23 +187,37 @@ public class CameraController : MonoBehaviour
                 }
             }
             //x = player.position.x;
-            bool isInEdge = false;
-            if (!_isChangeKuang)
-            {
-                if (player.position.x <= _min.x + cameraHalfWidth || player.position.x >= _max.x - cameraHalfWidth)
+            isInEdge = false;
+
+            //飞到跟随
+            if(Globals.cameraIsFeidaoGS){
+                
+                float vdx = Mathf.Abs(player.position.x-x)*0.2>2? Mathf.Abs(player.position.x - x) * 0.2f:2;
+
+                if (player.transform.localScale.x > 0)
                 {
-                    //if (player.position.x <= _min.x + cameraHalfWidth) {
-                    //    x = _min.x + cameraHalfWidth;
-                    //} else if(player.position.x >= _max.x - cameraHalfWidth)
-                    //{
-                    //    x = _max.x - cameraHalfWidth;
-                    //}
-
-                    //distanceX = 0;
-                    if(x<= _min.x + cameraHalfWidth|| x >= _max.x - cameraHalfWidth) isInEdge = true;
-
+                    x = Mathf.Lerp(x, player.position.x - Margin.x, vdx * Time.deltaTime);
+                    //if (x <= player.position.x - Margin.x + 2) Globals.cameraIsFeidaoGS = false;
                 }
                 else
+                {
+                    x = Mathf.Lerp(x, player.position.x + Margin.x, vdx * Time.deltaTime);
+                    //if(x >= player.position.x + Margin.x - 2) Globals.cameraIsFeidaoGS = false;
+                }
+
+                /**
+                if (vdx > 2)
+                {
+                    y = Mathf.Lerp(y, CameraKuaiY, vdx * Time.deltaTime);
+                    if (Mathf.Abs(y - CameraKuaiY) < 0.1) y = CameraKuaiY;
+                }*/
+
+                /**if(x >= player.position.x - Margin.x - 2&& x <= player.position.x + Margin.x + 2)
+                {
+                    print("飞到跟随》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》");
+                    Globals.cameraIsFeidaoGS = false;
+                }*/
+                if (vdx <= 2)
                 {
                     var vx = player.GetComponent<Rigidbody2D>().velocity.x;
                     var xzX = 3f;//值小会出现边缘卡顿 原因未理清
@@ -209,16 +226,20 @@ public class CameraController : MonoBehaviour
                     {
                         if (isInEdge)
                         {
+                            //镜头进入 锁死区域
                             distanceX = 0;
                         }
                         else
                         {
+                            //速度过快 让摄像机直接跟随 不缓动跟随了
                             x = player.position.x - distanceX;
                         }
                     }
                     else
                     {
+                        //摄像机 缓动跟随 一般是角色速度不大的时候
                         isInEdge = false;
+                        //记录 摄像机 和角色之间的间隔距离
                         distanceX = player.position.x - x;
                         if (!player.GetComponent<GameBody>().isInAiring)
                         {
@@ -231,11 +252,82 @@ public class CameraController : MonoBehaviour
                                 x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
                             }
                         }
+
+
                     }
                 }
 
-                //print("vx   " + player.GetComponent<Rigidbody2D>().velocity.x+ "      distanceX    "+ distanceX);
+                
+                
+
+
+
+                //print("x   " + x + "   player.transform.localScale.x   " + player.transform.localScale.x+"   ???????????????????????  "+(player.position.x + Margin.x - 2)+ "   player.GetComponent<Rigidbody2D>().velocity.x  "+ player.GetComponent<Rigidbody2D>().velocity.x);
+                //if(Mathf.Abs(player.GetComponent<Rigidbody2D>().velocity.x)>8) Globals.cameraIsFeidaoGS = false;
+
             }
+            else
+            {
+                if (!_isChangeKuang)
+                {
+                    if (player.position.x <= _min.x + cameraHalfWidth || player.position.x >= _max.x - cameraHalfWidth)
+                    {
+                        //if (player.position.x <= _min.x + cameraHalfWidth) {
+                        //    x = _min.x + cameraHalfWidth;
+                        //} else if(player.position.x >= _max.x - cameraHalfWidth)
+                        //{
+                        //    x = _max.x - cameraHalfWidth;
+                        //}
+
+                        //distanceX = 0;
+                        if (x <= _min.x + cameraHalfWidth || x >= _max.x - cameraHalfWidth) isInEdge = true;
+
+                    }
+                    else
+                    {
+                        var vx = player.GetComponent<Rigidbody2D>().velocity.x;
+                        var xzX = 3f;//值小会出现边缘卡顿 原因未理清
+
+                        if (Mathf.Abs(vx) >= xzX)
+                        {
+                            if (isInEdge)
+                            {
+                                //镜头进入 锁死区域
+                                distanceX = 0;
+                            }
+                            else
+                            {
+                                //速度过快 让摄像机直接跟随 不缓动跟随了
+                                x = player.position.x - distanceX;
+                            }
+                        }
+                        else
+                        {
+                            //摄像机 缓动跟随 一般是角色速度不大的时候
+                            isInEdge = false;
+                            //记录 摄像机 和角色之间的间隔距离
+                            distanceX = player.position.x - x;
+                            if (!player.GetComponent<GameBody>().isInAiring)
+                            {
+                                if (player.transform.localScale.x > 0)
+                                {
+                                    x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
+                                }
+                                else
+                                {
+                                    x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
+                                }
+                            }
+
+                            
+                        }
+                    }
+
+                    //print("vx   " + player.GetComponent<Rigidbody2D>().velocity.x+ "      distanceX    "+ distanceX);
+                }
+            }
+
+            
 
 
 

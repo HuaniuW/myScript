@@ -5,18 +5,68 @@ using DragonBones;
 
 public class AirGameBody : GameBody {
 
-	// Use this for initialization
-	//void Start () {
-        //print(this.DBBody == null);
-        //if(DBBody == null) DBBody = GetComponentInChildren<UnityArmatureComponent>();
-        //roleDate = GetComponent<RoleDate>();
-        //print(this.rigidbody2D)
-        //this.TestsI();
-        //GetStart();
+    // Use this for initialization
+    //void Start () {
+    //print(this.DBBody == null);
+    //if(DBBody == null) DBBody = GetComponentInChildren<UnityArmatureComponent>();
+    //roleDate = GetComponent<RoleDate>();
+    //print(this.rigidbody2D)
+    //this.TestsI();
+    //GetStart();
     //}
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    [Header("感应与面前墙的距离")]
+    [Range(0, 1)]
+    public float TCDistance = 0.13f;
+
+
+    [Header("顶部探测点")]
+    public UnityEngine.Transform groundCheckTop;
+
+    [Header("冲击烟幕")]
+    public ParticleSystem CJYanmu;
+
+    bool _isHitTop = false;
+    public bool IsHitTop
+    {
+        get
+        {
+            if (groundCheckTop == null) return false;
+            Vector2 start = groundCheckTop.position;
+            Vector2 end = new Vector2(start.x, start.y + TCDistance);
+            Debug.DrawLine(start, end, Color.yellow);
+            _isHitTop = Physics2D.Linecast(start, end, groundLayer);
+            return _isHitTop;
+        }
+    }
+
+
+    [Header("底部探测点")]
+    public UnityEngine.Transform groundCheckDown;
+
+    bool _isHitDown = false;
+    public bool IsHitDown
+    {
+        get
+        {
+            if (groundCheckDown == null) return false;
+            Vector2 start = groundCheckDown.position;
+            Vector2 end = new Vector2(start.x, start.y - TCDistance);
+            Debug.DrawLine(start, end, Color.yellow);
+            _isHitDown = Physics2D.Linecast(start, end, groundLayer);
+            return _isHitDown;
+        }
+    }
+
+
+    [Header("探测地面图层")]
+    public LayerMask TCGroundLayer;
+
+
+
+    // Update is called once per frame
+    void Update () {
         this.GetUpdate();
 	}
 
@@ -30,11 +80,14 @@ public class AirGameBody : GameBody {
         print("222");
     }
 
+
+
     public override void ResetAll()
     {
         //isRun = false;
         isRunLefting = false;
         isRunRighting = false;
+        isRunYing = false;
         //isInAiring = false;
         isDowning = false;
         //在空中被击中 如果关闭跳跃bool会有落地bug
@@ -60,13 +113,13 @@ public class AirGameBody : GameBody {
 
     protected override void Stand()
     {
+        if (CJYanmu) CJYanmu.Stop();
+        if (GetComponent<RoleDate>().isDie) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
         if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
         {
             DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
-            //print("--");
-           
         }
 
         isDowning = false;
@@ -82,14 +135,15 @@ public class AirGameBody : GameBody {
         playerRigidbody2D.velocity = newSpeed;
     }
 
-    protected override void Run()
+    public override void Run()
     {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
+        //print("is run--------------------------------------------> "+RUN);
         //if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName != RUN)
         {
-           // print("?????run");
+            print("?????run     "+ DBBody.animation.lastAnimationName);
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
       
@@ -121,14 +175,59 @@ public class AirGameBody : GameBody {
         
     }
 
+
+    public bool isDieFlyOut = false;
+    public bool isDieRotation = false;
+    public GameObject hitKuai;
+
+    bool isDieAc = false;
     public override void GetDie()
     {
-        playerRigidbody2D.velocity = Vector2.zero;
-        if (DBBody.animation.lastAnimationName != DIE) DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
+        //playerRigidbody2D.velocity = Vector2.zero;
+        //GetComponent<AIAirRunNear>().ResetAll();
+        if(CJYanmu) CJYanmu.Play();
+        if (DBBody.animation.lastAnimationName != DIE) {
+            if (isDieFlyOut)
+            {
+                GetPlayerRigidbody2D().gravityScale = 4;
+                if (hitKuai) hitKuai.SetActive(false);
+                print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
+                BeHitFlyOut(100);
+                if(isDieRotation) GetPlayerRigidbody2D().freezeRotation = true;
+            }
+            
+            if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
+            isDieAc = true;
+        }
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 
-    public override void RunLeft(float horizontalDirection, bool isWalk = false)
+
+    public override void HasBeHit(float chongjili = 0)
+    {
+        if (DBBody.animation.lastAnimationName == DODGE1) return;
+        ResetAll();
+        roleDate.isBeHiting = true;
+        if (isInAiring)
+        {
+            if (DBBody.animation.HasAnimation(BEHITINAIR))
+            {
+                DBBody.animation.GotoAndPlayByFrame(BEHITINAIR, 0, 1);
+                return;
+            }
+        }
+        DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+
+    }
+
+
+    void BeHitFlyOut(float power)
+    {
+        if(GlobalTools.FindObjByName("player")) playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+    }
+
+    public override void RunLeft(float _moveSpeedX = 0, bool isWalk = false)
     {
         //print("r "+isAtking);
         isBackUping = false;
@@ -139,8 +238,9 @@ public class AirGameBody : GameBody {
         if (!isWalk && bodyScale.x == -1)
         {
             bodyScale.x = 1;
+            //TurnLeft();
             this.transform.localScale = bodyScale;
-            playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x * 0.01f, playerRigidbody2D.velocity.y);
+            //playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x * 0.01f, playerRigidbody2D.velocity.y);
             AtkReSet();
         }
 
@@ -151,13 +251,19 @@ public class AirGameBody : GameBody {
         isRunLefting = true;
         isRunRighting = false;
 
-        playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
-        //print("hihihi");
+        if (_moveSpeedX == 0) _moveSpeedX = -moveSpeedX;
+        //playerRigidbody2D.AddForce(new Vector2(-_moveSpeedX, 0));
+        playerRigidbody2D.velocity = new Vector2(-_moveSpeedX, playerRigidbody2D.velocity.y);
+        //print("推动力LLL  "+_moveSpeedX + "    sudu " + playerRigidbody2D.velocity+"  scaleX  "+this.transform.localScale.x);
+       
         Run();
 
     }
 
-    public override void RunRight(float horizontalDirection, bool isWalk = false)
+    public float moveSpeedX =4;
+    public float moveSpeedY = 4;
+
+    public override void RunRight(float _moveSpeedX = 0, bool isWalk = false)
     {
         //print("l " + isAtking);
         isBackUping = false;
@@ -169,7 +275,8 @@ public class AirGameBody : GameBody {
         {
             bodyScale.x = -1;
             this.transform.localScale = bodyScale;
-            playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x * 0.01f, playerRigidbody2D.velocity.y);
+            //TurnRight();
+            //playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x * 0.01f, playerRigidbody2D.velocity.y);
             AtkReSet();
         }
 
@@ -179,20 +286,32 @@ public class AirGameBody : GameBody {
         isRunRighting = true;
         isRunLefting = false;
 
-        playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        if (_moveSpeedX == 0) _moveSpeedX = moveSpeedX;
+        playerRigidbody2D.velocity = new Vector2(_moveSpeedX, playerRigidbody2D.velocity.y);
+        //playerRigidbody2D.AddForce(new Vector2(_moveSpeedX, 0));
+        //print("推动力right  " + _moveSpeedX+"  ? "+ moveSpeedX + "    sudu "+ playerRigidbody2D.velocity+"  朝向 "+ this.transform.localScale.x);
+
+
+        //print("run right!!!!!!");
+
         Run();
     }
+   
 
-    public virtual void RunY(float horizontalDirection)
+    public virtual void RunY(float moveSpeedY)
     {
         isBackUping = false;
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
         if (isDodgeing) return;
         if (isAtking) return;
+        isRunYing = true;
         //resetAll();
         isAtkYc = false;
-        playerRigidbody2D.AddForce(new Vector2(0,yForce * horizontalDirection));
+        //playerRigidbody2D.AddForce(new Vector2(playerRigidbody2D.velocity.x, moveSpeedY));
+        playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, moveSpeedY);
+        //playerRigidbody2D.AddForce(new Vector2(0, moveSpeedY));
+        //this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + moveSpeedY);
         //float spU = horizontalDirection > 0 ? 0.04f : -0.04f;
         //this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + spU);
         Run();
@@ -205,6 +324,10 @@ public class AirGameBody : GameBody {
 
     protected override void GetBeHit()
     {
+        playerRigidbody2D.velocity *= 0.9f;
+        if (CJYanmu) CJYanmu.Play();
+        //playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x*0.9f, playerRigidbody2D.velocity.y * 0.9f);
+        //print("-------------------------------------------------------->  "+ playerRigidbody2D.velocity);
 
         if ((DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted)
         {
@@ -214,7 +337,8 @@ public class AirGameBody : GameBody {
         }
         else
         {
-            print(" isBeHiting! 但是没有进入 behit 动作 ");
+           // print(" isBeHiting! 但是没有进入 behit 动作 "+DBBody.animationName);
+            
         }
     }
 

@@ -7,39 +7,42 @@ public class DieOut : MonoBehaviour {
     public string type = "1";
 
     public string diaoluowu = "";
+
+    Transform bossDieOutPos;
 	// Use this for initialization
 	void Start () {
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
 	}
 
     void OnDistory()
     {
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
     }
 
     void OnRemove()
     {
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
     }
 
-    void DieOutDo(UEvent e)
+    void DieOutDo()
     {
-        if (this == null)
-        {
-            ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
-            return;
-        }
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
             if (IsBoss) {
                 isBossDie = true;
                 //隐藏UI血条
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_DIE, this.name), this);
+                //运行帧速变慢  慢动作
                 GetSlowAC();
             }
             else
             {
                 Diaoluowu();
+                if (IsJingying)
+                {
+                    //开门
+                    DoorDo();
+                }
             }
         }
         //掉落几率 掉落的等级 ==  掉落多个物体
@@ -49,10 +52,11 @@ public class DieOut : MonoBehaviour {
     //掉落物
     void Diaoluowu()
     {
-        if (diaoluowu == "") return;
-        int jv = Random.Range(0, 1000);
+        if (diaoluowu == ""|| !this.GetComponent<AIBase>().gameObj) return;
+        int jv = Random.Range(0, 100);
         int fx = this.transform.position.x > this.GetComponent<AIBase>().gameObj.transform.position.x ? 1 : -1;
         string[] diaoluowuArr = diaoluowu.Split('|');
+        print("掉落物  "+ diaoluowuArr.Length);
         for (var i = 0; i < diaoluowuArr.Length; i++)
         {
             string objName = diaoluowuArr[i].Split('-')[0];
@@ -61,14 +65,34 @@ public class DieOut : MonoBehaviour {
             if (jv < dljv)
             {
                 GameObject o = GlobalTools.GetGameObjectByName(objName);
-                o.transform.position = this.transform.position;
-                o.GetComponent<Wupinlan>().GetXFX(Random.Range(100, 300) * fx);
+                if (IsBoss)
+                {
+                    //BOSS掉落物 掉落到指定位置  出现在指定位置
+                    //魂 和和徽章
+                    //这个 bossDieOutPosition 位置 必须在场景中放置 一个点位置
+                    bossDieOutPos = GlobalTools.FindObjByName("bossDieOutPosition").transform;
+                    if (bossDieOutPos)
+                    {
+                        o.transform.position = new Vector2(bossDieOutPos.position.x+i*2,bossDieOutPos.position.y);
+                    }
+                }else
+                {
+                    o.transform.position = this.transform.position;
+                    o.GetComponent<Wupinlan>().GetXFX(Random.Range(100, 300) * fx);
+                }
+                
             }
         }
     }
 
-    //是否是BOSS
+
+   
+
+
+    [Header("是否是BOSS")]
     public bool IsBoss = false;
+    [Header("是否是精英")]
+    public bool IsJingying = false;
     //如果是boss die 慢动作计时
     int SlowTimesNum = 0;
     bool isBossDie = false;
@@ -106,7 +130,7 @@ public class DieOut : MonoBehaviour {
     public void DistorySelf()
     {
         StartCoroutine(IEDieDestory(2f, this.gameObject));
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
     }
     public IEnumerator IEDieDestory(float time, GameObject obj)
     {
@@ -116,11 +140,11 @@ public class DieOut : MonoBehaviour {
 
 
     [Header("Die后需要处理的门的名字和动作")]
-    public string DoorNames;//Men_1-0:Men_2-0
+    public string DoorNames;//Men_1-0|Men_2-0
     void DoorDo()
     {
         if (DoorNames == null) return;
-        string[] doorArr = DoorNames.Split(':');
+        string[] doorArr = DoorNames.Split('|');
         int Length = doorArr.Length;
         for(var i = 0; i < Length; i++)
         {
@@ -132,6 +156,7 @@ public class DieOut : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        DieOutDo();
         SlowTime();
     }
 }

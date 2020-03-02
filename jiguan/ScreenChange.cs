@@ -12,6 +12,8 @@ public class ScreenChange : MonoBehaviour {
     public bool IsHitGo = false;
     [Header("朝向")]
     public float PlayerScaleX = 1;
+    [Header("门的名字")]
+    public string doorName = "";
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +25,7 @@ public class ScreenChange : MonoBehaviour {
         GlobalSetDate.instance.playerPosition = PlayerPosition;
         GlobalSetDate.instance.screenName = GoScreenName;
         GlobalSetDate.instance.IsChangeScreening = true;
+        GlobalSetDate.instance.doorName = doorName;
     }
 
     GameObject playerUI;

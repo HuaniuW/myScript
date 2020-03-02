@@ -67,8 +67,8 @@ public class JN_FD : MonoBehaviour {
 
     void ShouFeidao(UEvent e)
     {
-        Globals.feidao = null;
-        GetComponent<JN_base>().DisObj();
+        //Globals.feidao = null;
+        //GetComponent<JN_base>().DisObj();
     }
 
     public void ShowFeiDao()

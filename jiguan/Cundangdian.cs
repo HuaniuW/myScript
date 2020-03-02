@@ -23,7 +23,7 @@ public class Cundangdian : MonoBehaviour {
         if (Coll.tag == "Player")
         {
             //print("存档！！！"+this.name);
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_DIAOLUOWU, this.name), this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_DIAOLUOWU, "C_cundangdian"), this);
 
             //播放存档声音
             if (saveAudio != null)

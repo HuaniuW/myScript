@@ -9,9 +9,9 @@ public class UI_Hun : MonoBehaviour {
     public AudioSource no_hun_prompt;
     // Use this for initialization
     void Start () {
-        print("hun!!!");
+        //print("hun!!!");
         if (GlobalSetDate.instance.CurrentUserDate.curLan != null) {
-            print(GlobalSetDate.instance.CurrentUserDate.curLan);
+            //print(GlobalSetDate.instance.CurrentUserDate.curLan);
             GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLan);
         }
         
@@ -24,7 +24,7 @@ public class UI_Hun : MonoBehaviour {
 
     void OnDistory()
     {
-        print("UI_hun  我被销魂了!");
+        print("UI_hun  我被销毁了!");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_HUN, this.ChangeHun);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.NO_HUN_PROMPT, this.No_hun_prompt);
         

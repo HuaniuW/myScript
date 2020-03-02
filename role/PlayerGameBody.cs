@@ -10,7 +10,8 @@ public class PlayerGameBody : GameBody {
     //   }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         LJJiSHu();
         if (Globals.isInPlot) return;
         if (isFighting)
@@ -18,6 +19,7 @@ public class PlayerGameBody : GameBody {
             OutFighting();
         }
         this.GetUpdate();
+
     }
 
     public override void GameOver()
@@ -25,6 +27,8 @@ public class PlayerGameBody : GameBody {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
 
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
+
+        //TurnRight();
     }
 
     void Shoufeidao(UEvent e)
@@ -32,9 +36,10 @@ public class PlayerGameBody : GameBody {
         if (!Globals.feidao||GetComponent<RoleDate>().isDie) return;
         //判断一些不能收飞刀的情况  比如  攻击 放技能之类的 被攻击
 
-        print("收飞刀！");
+        //print("收飞刀！");
         //变黑 暂停人物动作 无敌时间
         GetComponent<RoleDate>().isCanBeHit = false;
+        //GetComponent<GameBody>().GetBoneColorChange(Color.black);
         //飞刀是否碰墙
         /**if (Globals.feidao.GetComponent<JN_FD>().IsHitWall)
         {
@@ -50,6 +55,8 @@ public class PlayerGameBody : GameBody {
 
         //print("Globals.feidao.transform.position   "+ Globals.feidao.transform.position);
         this.transform.position = Globals.feidao.transform.position;
+        Globals.cameraIsFeidaoGS = true;
+
         //人物速度归零
         this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
@@ -58,9 +65,10 @@ public class PlayerGameBody : GameBody {
         //收刀动作播完 恢复
         //发送 销毁飞刀事件
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DISTORY_FEIDAO, null), this);
-        Globals.isShouFD = false;
+        //Globals.isShouFD = false;
 
         GetComponent<RoleDate>().isCanBeHit = true;
+        //GetComponent<GameBody>().GetBoneColorChange(Color.white);
     }
 
     void RemoveSelf(UEvent e)
@@ -73,6 +81,18 @@ public class PlayerGameBody : GameBody {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
         DestroyImmediate(this.gameObject, true);
+    }
+
+    private void OnDisable()
+    {
+        if (this == null)
+        {
+            ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+            return;
+        }
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
+        //DestroyImmediate(this.gameObject, true);
     }
 
     bool isFighting = false;
@@ -99,6 +119,7 @@ public class PlayerGameBody : GameBody {
     public override void RunRight(float horizontalDirection, bool isWalk = false)
     {
         //print("l " + isAtking);
+        if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         isBackUping = false;
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
@@ -106,12 +127,18 @@ public class PlayerGameBody : GameBody {
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
 
         if (isTXShow) return;
+
         if (!isWalk && bodyScale.x == 1)
         {
-            bodyScale.x = -1;
-            this.transform.localScale = bodyScale;
             AtkReSet();
         }
+
+        if (!isWalk){
+            bodyScale.x = -1;
+            this.transform.localScale = bodyScale;
+        }
+
+        
 
         if (isAtk) return;
         //resetAll();
@@ -127,6 +154,7 @@ public class PlayerGameBody : GameBody {
 
     public override void RunLeft(float horizontalDirection, bool isWalk = false)
     {
+        if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
@@ -134,12 +162,19 @@ public class PlayerGameBody : GameBody {
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
         if (isTXShow) return;
+
         if (!isWalk && bodyScale.x == -1)
+        {
+            AtkReSet();
+        }
+
+        if (!isWalk)
         {
             bodyScale.x = 1;
             this.transform.localScale = bodyScale;
-            AtkReSet();
         }
+
+       
 
         if (isAtk) return;
 
@@ -154,7 +189,7 @@ public class PlayerGameBody : GameBody {
 
     }
 
-    protected override void Run()
+    public override void Run()
     {
 
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
@@ -517,7 +552,7 @@ public class PlayerGameBody : GameBody {
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
         }
         //Time.timeScale = 0.5f;
-        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,this.tag), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(1f));
     }
 
@@ -791,8 +826,22 @@ public class PlayerGameBody : GameBody {
     }
 
 
+  
+
     protected override void Stand()
     {
+        if(GlobalSetDate.instance.roleDirection == "l")
+        {
+            TurnLeft();
+            GlobalSetDate.instance.roleDirection = "";
+        }
+        else if(GlobalSetDate.instance.roleDirection == "r")
+        {
+            TurnRight();
+            GlobalSetDate.instance.roleDirection = "";
+        }
+        
+        //TurnRight();
         //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;

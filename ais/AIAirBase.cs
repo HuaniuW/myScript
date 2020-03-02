@@ -2,27 +2,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
-public class AIAirBase : AIBase {
+public class AIAirBase : AIBase
+{
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         GetStart();
-	}
 
+        air_aiNear = GetComponent<AIAirRunNear>();
+    }
+    AIAirRunNear air_aiNear;
 
     protected override void Patrol()
     {
+        //print("AI 巡逻！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
         if (isPatrolRest)
         {
+            //print("rest!!!!!!!");
             PatrolResting();
             return;
         }
-
-
+        isNearing = false;
+        //print("巡逻-----------gameBody.IsHitWall    " + gameBody.IsHitWall + "  " + patrolDistance + "     " + this.transform.position.x+ "   myPosition  "+ myPosition.x);
+        //if (gameBody.IsHitWall) print("巡逻-----------gameBody.IsHitWall    "+ gameBody.IsHitWall+"  "+ patrolDistance+"     "+this.transform.position.x);
         if (isRunLeft)
         {
-            gameBody.RunLeft(-0.4f);
+            gameBody.RunLeft(flyXSpeed);
             if (this.transform.position.x - myPosition.x < -patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 if (isRunLeft)
@@ -36,7 +44,7 @@ public class AIAirBase : AIBase {
         }
         else if (isRunRight)
         {
-            gameBody.RunRight(0.4f);
+            gameBody.RunRight(flyXSpeed);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 if (isRunRight)
@@ -56,7 +64,7 @@ public class AIAirBase : AIBase {
     {
         if (restTimes == -1)
         {
-            print("是否进来 ！！！");
+            print("休息停顿 rest 是否进来 ！！！");
             restTimes = UnityEngine.Random.Range(1, 2);
         }
 
@@ -68,9 +76,10 @@ public class AIAirBase : AIBase {
 
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         GetUpdate2();
-	}
+    }
 
     protected override void AIBeHit()
     {
@@ -78,7 +87,6 @@ public class AIAirBase : AIBase {
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
-        SlowYSpeed(0);
         AIReSet();
         if (aiFanji != null) aiFanji.GetFanji();
     }
@@ -87,8 +95,8 @@ public class AIAirBase : AIBase {
     {
         isAction = false;
         isActioning = false;
-        choseNearType = false;
-        nearTypeNums = 0;
+        GetComponent<AIAirRunNear>().ResetAll();
+        //myPosition = this.transform.position;
         lie = -1;
         atkNum = 0;
         acName = "";
@@ -152,7 +160,7 @@ public class AIAirBase : AIBase {
     }
 
 
-    public float flySpeed = 0.9f;
+    public float flySpeed = 0.02f;
     public float flyXSpeed = 0;
     public float flyYSpeed = 0;
 
@@ -185,188 +193,183 @@ public class AIAirBase : AIBase {
     //鱼怪 的撞击
 
 
-    bool choseNearType = false;
-    int nearTypeNums = 0;
+    public float nearDastanceX = 1f;
+    public float nearDastanceY = 0.3f;
+
+    //X靠近
+    public void GetMoveNearX(float _moveDistance)
+    {
+
+    }
+    //Y靠近
+    public bool GetMoveNearY(float _moveDistance,float speedY = 0)
+    {
+        if (DontNear) return true;
+        if (speedY == 0) speedY = flyYSpeed;
+        if (gameObj.transform.position.y - transform.position.y > _moveDistance)
+        {
+            //目标在上 向上移动
+            
+            this.GetComponent<AirGameBody>().RunY(speedY);
+            return false;
+        }
+        else if (gameObj.transform.position.y - transform.position.y < -_moveDistance)
+        {
+            //目标在下 向下移动
+            this.GetComponent<AirGameBody>().RunY(-speedY);
+            return false;
+        }
+        else
+        {
+
+            return true;
+        }
+    }
+    //X远离
+    //Y远离
+    //同Y
+    //绕后
+
 
 
     public override bool NearRoleInDistance(float distance)
     {
-        //预判策略  是否用策略 （如果 角色和怪之间最近距离有障碍 启用策略   这里只考虑最短路径）
-        //判断X方向是否 有障碍 有的话 下移动 x线没有碰到 y线没碰到
-        //靠近的击中方式  1.xy同时进行  2.先X后Y  3.先Y后X  4.绕后   
-        
-        if (!choseNearType)
-        {
-            choseNearType = true;
-            nearTypeNums = (int)UnityEngine.Random.Range(0, 100);
-        }
-        
-        if (nearTypeNums <= 100)
-        {
-            return NearByYThanX(distance);
-            //同时进行
-            return NearByXAndY(distance);
-        }
-        else if(nearTypeNums <= 50)
-        {
-            return NearByXThanY(distance);
-        }
-        return false;
-    }
 
-
-    void SlowXSpeed()
-    {
-        gameBody.GetPlayerRigidbody2D().velocity = new Vector2(gameBody.GetPlayerRigidbody2D().velocity.x*0.4f, gameBody.GetPlayerRigidbody2D().velocity.y);
-    }
-
-    void SlowYSpeed(float scaleNum = 0.2f) {
-        gameBody.GetPlayerRigidbody2D().velocity = new Vector2(gameBody.GetPlayerRigidbody2D().velocity.x , gameBody.GetPlayerRigidbody2D().velocity.y * scaleNum);
-    }
-
-    //先x后y
-    private bool NearByXThanY(float distance)
-    {
+        if (DontNear) return true;
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
-            gameBody.RunRight(flySpeed);
+            gameBody.RunRight(flyXSpeed);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
-            gameBody.RunLeft(-flySpeed);
+            gameBody.RunLeft(flyXSpeed);
             return false;
         }
         else
         {
-            SlowXSpeed();
-            if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) >= 0.3f) {
-                float speedY = GetSpeedY(transform, gameObj.transform);
-                this.GetComponent<AirGameBody>().RunY(speedY);
-            }
-            else
-            {
-                SlowYSpeed();
-                choseNearType = false;
-                nearTypeNums = 0;
-                return true;
-            }
-           
+
+            return true;
         }
-        return false;
     }
 
-    //先y后x
-    private bool NearByYThanX(float distance)
+    
+
+
+    protected override void ZhuanXiang()
     {
-        if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) >= 0.3f)
-        {
-            float speedY = GetSpeedY(transform, gameObj.transform);
-            this.GetComponent<AirGameBody>().RunY(speedY);
-            return false;
-        }
-
-        SlowYSpeed();
-
-        if (gameObj.transform.position.x - transform.position.x > distance)
+        if (gameObj.transform.position.x - transform.position.x > 0)
         {
             //目标在右
-            gameBody.RunRight(flySpeed);
-            return false;
+            gameBody.RunRight(flyXSpeed);
         }
-        else if (gameObj.transform.position.x - transform.position.x < -distance)
+        else
         {
-            //目标在左
-            gameBody.RunLeft(-flySpeed);
-            return false;
+            gameBody.RunLeft(flyXSpeed);
         }
+    }
 
-        SlowXSpeed();
-        choseNearType = false;
-        nearTypeNums = 0;
+
+    bool XianYhouX()
+    {
+        if (!GetMoveNearY(flyYSpeed)) return false;
+        if (!NearRoleInDistance(atkDistance)) return false;
         return true;
     }
 
-    //x y同时
-    bool NearByXAndY(float distance)
+
+    bool XianXhouY()
     {
-        //print("  ------------------------------------------------- ");
+        if (!NearRoleInDistance(atkDistance)) return false;
+        if (!GetMoveNearY(flyYSpeed)) return false;
+        return true;
+    }
 
-        float speedX = GetSpeedX(transform, gameObj.transform);
-        float speedY = GetSpeedY(transform, gameObj.transform);
+    bool Tongshi()
+    {
+        if (!NearRoleInDistance(atkDistance) || !GetMoveNearY(flyYSpeed)) return false;
+        return true;
+    }
 
-        if(Mathf.Abs(gameObj.transform.position.y - transform.position.y) >= 0.3f) this.GetComponent<AirGameBody>().RunY(speedY);
-        if (gameObj.transform.position.x - transform.position.x > distance)
+
+    int nearRanNum = 0;
+    bool isNearing = false;
+    protected override void PtAtk()
+    {
+        //空怪靠近 
+        //x y靠近方式 有几种
+        //GetComponent<Xunlu>().GetListZB(this.gameObject, gameObj.transform.position, Vector2.zero);
+        /* if (!isActioning&&!isNearing)
+         {
+             isNearing = true;
+             nearRanNum = GlobalTools.GetRandomNum();
+
+         }
+         if (nearRanNum < 30)
+         {
+             print("先Y 后X！！！");
+             if (!XianYhouX()) return;
+         }else if(nearRanNum < 60)
+         {
+             if (!XianXhouY()) return;
+         }
+         else
+         {
+             if (!Tongshi()) return;
+         }*/
+        //print("???????????????????????????????????????????????????????????????????????普通攻击");
+
+        if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance)||DontNear)) return;
+
+
+        if (!isActioning)
         {
-            //目标在右
-            gameBody.RunRight(speedX);
+            isActioning = true;
+            isNearing = false;
+            if (!DontNear) ZhuanXiang();
+            GetAtk();
         }
-        else if (gameObj.transform.position.x - transform.position.x < -distance)
+
+        //先Y后X
+        //先X后Y
+        //XY同时
+        //绕后
+        //最优路线 如果碰到墙就找最优路线
+        print("空中怪 ptatk!!!");
+        //这种如果再次超出攻击距离会再追踪
+        //if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
+        //{
+        //    isActioning = true;
+        //    if (!DontNear) ZhuanXiang();
+        //    GetAtk();
+        //}
+
+        if (isActioning)
         {
-            //目标在左
-            gameBody.RunLeft(-speedX);
-        }
-        else
-        {
-            SlowXSpeed();
-            //print("  xOK "+ speedY);
-            if (Mathf.Abs(gameObj.transform.position.y - transform.position.y) < 0.3f)
+            if (IsAtkOver())
             {
-                SlowYSpeed();
-                choseNearType = false;
-                nearTypeNums = 0;
-                return true;
+                isActioning = false;
+                isAction = false;
             }
         }
-
-        return false;
     }
-
-    bool isRaohou = false;
-    bool isMoveY = false;
-    bool isMoveX = false;
-
-    bool RaoHou(float distance)
-    {
-        //到一定高度 取到高度的点y  如果顶到墙就直接前进
-
-        //渠道角色背后的点x  如果碰到墙就下降
-        if (!isRaohou)
-        {
-            isRaohou = true;
-            //确定Y点
-        }
-
-
-        return false;
-    }
-
-    float GetSpeedX(Transform myP,Transform targetP)
-    {
-        float distanceX = targetP.position.x - myP.position.x;
-        return Mathf.Abs(distanceX/Vector2.Distance(myP.position,targetP.position)*flySpeed);
-    }
-
-    float GetSpeedY(Transform myP, Transform targetP)
-    {
-        float distanceY = targetP.position.y - myP.position.y;
-        return distanceY / Vector2.Distance(myP.position, targetP.position) * flySpeed;
-    }
-
-
-
-
 
     protected override void GetAtkFS()
     {
+        if (GetComponent<RoleDate>().isDie||!gameObj|| gameObj.GetComponent<RoleDate>().isDie) {
+            GetComponent<AIDestinationSetter>().ReSetAll();
+            GetComponent<AIPath>().canMove = false;
+            return;
+        }
+        
         if (!isAction)
         {
             isAction = true;
             acName = GetZS();
 
-            //print(atkNum + "    name " + acName);
+            print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -419,14 +422,34 @@ public class AIAirBase : AIBase {
 
             if (acName == "shanxian")
             {
-                aisx = GetComponent<AIShanxian>();
-                atkDistance = aisx.sxDistance;
+                //aisx = GetComponent<AIShanxian>();
+                //atkDistance = aisx.sxDistance;
+                acName = "shanxian";
                 return;
             }
 
             if (acName == "runCut")
             {
+                //冲砍
                 acName = "runCut";
+                return;
+            }
+
+            if (acName == "chongji")
+            {
+                acName = "chongji";
+                return;
+            }
+
+            if (acName == "zidan")
+            {
+                acName = "zidan";
+                return;
+            }
+
+            if(acName == "yuanli")
+            {
+                acName = "yuanli";
                 return;
             }
 
@@ -494,12 +517,88 @@ public class AIAirBase : AIBase {
             GetYiShan();
             return;
         }
+        if (acName == "shanxian")
+        {
+            GetShanXian();
+            return;
+        }
 
+        if (acName == "chongji")
+        {
+            //print("------------------------------------------> chognji!!! ");
+            GetChongji();
+            return;
+        }
+
+        if(acName == "zidan")
+        {
+            GetZiDanFire();
+            return;
+        }
+
+        if (acName == "yuanli")
+        {
+            GetYuanli();
+            return;
+        }
 
         PtAtk();
-        if (acName != "shanxian")
-        {
+       
+    }
 
+
+    void GetChongji()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIChongji>().GetStart(gameObj.transform);
+            atkNum++;
+            //GetAtkNumReSet();
+            return;
+        }
+
+        if (isActioning && GetComponent<AIChongji>().IsChongjiOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    void GetZiDanFire()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIZiDan>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIZiDan>().IsBehaviorOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    void GetYuanli()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIAirRunAway>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIAirRunAway>().GetYuanliOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
         }
     }
 }

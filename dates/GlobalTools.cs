@@ -120,6 +120,64 @@ public class GlobalTools : MonoBehaviour {
     }
 
 
+
+
+    //根据向量 求速度
+    public static Vector2 GetVector2ByPostion(Vector2 targetPos, Vector2 objPos,float speed)
+    {
+        Vector2 speedV2 = Vector2.zero;
+        Vector2 v2 = targetPos - objPos;
+        float speedY = Mathf.Sin(Mathf.Atan2(v2.y, v2.x))* speed;
+        float speedX = Mathf.Sin(Mathf.Atan2(v2.x, v2.y)) * speed;
+        speedV2 = new Vector2(speedX, speedY);
+        return speedV2;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //-------------------------地图处理 工具函数-------------------------------------------
 
     //摄像机 控制块的 安放

@@ -23,6 +23,8 @@ public class GameControl : MonoBehaviour {
         //print("1000万收入 需要卖出多少份   "+zong/dj);
     }
 
+    public bool IsInPlot = false;
+
     public void LuaTest(string str)
     {
         //print("hello 你好 XLua!"+str);
@@ -30,12 +32,15 @@ public class GameControl : MonoBehaviour {
 
     private void Awake()
     {
+
+
         //GameSaveDate.GetInstance().GetTestSave();
         if (Globals.isDebug) print("游戏关卡控制类 启动 当前场景名字   "+ SceneManager.GetActiveScene().name);
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
         //GlobalSetDate.instance.Init();
         GuankaName = SceneManager.GetActiveScene().name;
+        if (IsInPlot) return;
         GetPlayer();
         if (player == null)
         {
@@ -47,6 +52,8 @@ public class GameControl : MonoBehaviour {
         GetCamersTargetToPlayer();
         InitGuanKaDate();
         GetPlayerStatus();
+
+        
     }
 
     private void OnEnable()
@@ -288,6 +295,7 @@ public class GameControl : MonoBehaviour {
     //找到主角
     void GetPlayer()
     {
+        
         if (GlobalTools.FindObjByName("player") == null)
         {
             player = InstancePrefabByName("player");
@@ -296,7 +304,7 @@ public class GameControl : MonoBehaviour {
         {
             player = GlobalTools.FindObjByName("player");
         }
-       
+        
     }
 
     
@@ -304,6 +312,7 @@ public class GameControl : MonoBehaviour {
     void GetPlayerStatus()
     {
         if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+       
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
         {
@@ -340,11 +349,13 @@ public class GameControl : MonoBehaviour {
         //或者是 跳场景
         //玩家状态 当前气血 护甲 （比如玩家身上是什么 徽章的特效 持续事件   负面特效时间）  跳转场景的时候需要用到这些
         //玩家状态 记录玩家持续的 增益减益等等的 乱七八糟的各种状态
-
+        
 
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("玩家位置   " + player.transform.position);
-        //player.GetComponent<GameBody>().TurnRight();
+
+        //print("player.transform.localScale     " + player.transform.localScale);
+        Time.timeScale = 1;
     }
 
 

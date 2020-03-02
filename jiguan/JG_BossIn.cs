@@ -15,9 +15,9 @@ public class JG_BossIn : MonoBehaviour {
 	}
     //关联boss
     public string BossName;
-    [Header("关联门1的名字")]
+    [Header("关联门1的名字  发送状态0")]
     public string Door1Name;
-    [Header("关联门2的名字")]
+    [Header("关联门2的名字  发送状态0")]
     public string Door2Name;
     [Header("遇见boss音效")]
     public AudioSource SeeBossAudio;
@@ -31,9 +31,12 @@ public class JG_BossIn : MonoBehaviour {
     //防止重复碰撞播放
     bool IsPlayerIn = false;
 
+    [Header("是否是在BOSS中使用  如果不是 就是没有boss 防止自己删除自己")]
+    public bool IsInBoss = true;
     //关联boss是否存在 不存在就销毁自身
     void IsBeingBoss()
     {
+        if (!IsInBoss) return;
         if (BossName == null)
         {
             DistorySelf();
@@ -43,6 +46,11 @@ public class JG_BossIn : MonoBehaviour {
             if(GlobalTools.FindObjByName(BossName)==null) DistorySelf();
         }
         
+    }
+
+    private void OnDisable()
+    {
+        print("我被消除了！？？？？？？");
     }
 
     //关联门 碰撞关门
@@ -95,6 +103,8 @@ public class JG_BossIn : MonoBehaviour {
     }
 
 
+    public string otherEvent;
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         if (!IsPlayerIn&&Coll.tag == "Player")
@@ -102,13 +112,23 @@ public class JG_BossIn : MonoBehaviour {
             IsPlayerIn = true;
             //碰撞了 关门 
             CloseDoor();
-            //显示 字幕
-            ShowSeeBossTxt();
-            //遇Boss音效
-            //Boss战音乐
-            SeeBossAudioPlay();
-            //显示Boss血条
-            ShowBossLiveBar();
+
+            if (otherEvent != "")
+            {
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.JG_OTHER_EVENT, otherEvent), this);
+            }
+
+            if (IsInBoss)
+            {
+                //显示 字幕
+                ShowSeeBossTxt();
+                //遇Boss音效
+                //Boss战音乐
+                SeeBossAudioPlay();
+                //显示Boss血条
+                ShowBossLiveBar();
+            }
+            
 
         }
     }

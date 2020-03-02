@@ -117,7 +117,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     //第一次启动 掉用这里面存储的数据系统
-    public string playerPosition = "6_-2";
+    public string playerPosition = "6_-2_r";
     public string screenName = "g2_1";
     public string cameraPosition = "";
     public string bagDate = "";//背包数据
@@ -125,6 +125,8 @@ public class GlobalSetDate : MonoBehaviour {
     public int xp_nums = 0;
     //切换场景的时候不让 控制  MyController.cs
     public bool IsChangeScreening = false;
+
+    public string doorName = "";
     //存档的名字
     public string saveDateName = "myGame";
     //public GameObject player;
@@ -145,7 +147,7 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.bagDate = bagDate;
         //血瓶数量
         CurrentUserDate.xp_nums = xp_nums;
-        CurrentUserDate.userName = "我的存档";
+        CurrentUserDate.userName = "myGame";
         CurrentUserDate.onlyId = 2;
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
         IsChangeScreening = false;
@@ -170,15 +172,45 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     Vector3 playerInScreenPosition;
+    public string roleDirection = "r";
 
-    public Vector3 GetPlayerInScreenPosition()
+    public Vector2 GetPlayerInScreenPosition()
     {
-        string[] sArray = playerPosition.Split('_');
-        //print("playerPosition>   " + playerPosition);
-        playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]), 0);
-        //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);
+        print("doorName    "+ doorName);
+        if (doorName != "")
+        {
+            GameObject door = GlobalTools.FindObjByName(doorName);
+            playerInScreenPosition = door.transform.position;
+            if (door.transform.localRotation.z < 0)
+            {
+                roleDirection = "r";
+                playerInScreenPosition = new Vector2(door.transform.position.x-1, door.transform.position.y - 1);
+            }
+            else
+            {
+                roleDirection = "l";
+                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1);
+            }
+        }
+        else
+        {
+            string[] sArray = playerPosition.Split('_');
+            //print("-----playerPosition>   " + playerPosition);
+            playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]));
+            if (sArray.Length > 2) roleDirection = sArray[2];
+            //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);
+        }
+
+
+
+        print("角色的位置   "+ playerInScreenPosition);
+
+
         return playerInScreenPosition;
     }
+
+
+  
 
 
     //声音调控
@@ -298,6 +330,7 @@ public class GlobalSetDate : MonoBehaviour {
     public void GetSave()
     {
         //储存玩家所有数据
+        print("SAVE.........");
         //if (Globals.isDebug) print("save " + TempZGuanKaStr);
         GameObject player = GlobalTools.FindObjByName("player");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
@@ -321,7 +354,7 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
         if(GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1")!=null) CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
         //血瓶数量
-        CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
+        if(GlobalTools.FindObjByName("PlayerUI(Clone)/xueping")!=null) CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "我的存档";
         CurrentUserDate.onlyId = 2;
 
@@ -408,6 +441,14 @@ public class GlobalSetDate : MonoBehaviour {
         {
             //存档测试
             GetSave();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            //消除存档数据
+            InNewGame();
+            //新游戏的选项
+            //GetSave();
         }
 
     }

@@ -126,6 +126,8 @@ public class JN_base : MonoBehaviour
     {
         //先判断是否是普通攻击  是的话才跟随  还是加快特效做 待定
         //TX_gensui();
+        //print("jn_date._type      "+ jn_date._type);
+        if (!jn_date) return;
         if (jn_date!=null &&(jn_date._type == "2"|| jn_date._type == "3"))
         {
             //2 持续型
@@ -162,6 +164,7 @@ public class JN_base : MonoBehaviour
     {
         if (atkObj)
         {
+            //print("np     atkObj   " + atkObj+"   jn_date "+jn_date);
             Vector3 np = atkObj.transform.position;
             //根据数据 获取新的位置 
             Vector3 _position = new Vector3(np.x + jn_date._xdx * sacaleX, np.y + jn_date._xdy, np.z);

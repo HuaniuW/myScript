@@ -68,7 +68,7 @@ public class Boat : MonoBehaviour {
         {
             if (player.GetComponent<PlotControl>().GetStand())
             {
-                //print(">>?????");
+                print(">>?????");
                 Globals.isInPlot = false;
             }
         }

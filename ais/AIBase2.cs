@@ -177,7 +177,7 @@ public class AIBase2 : MonoBehaviour
 
         if (zsName == "shanxian")
         {
-            GetShanXian();
+            //GetShanXian();
             return;
         }
 
@@ -189,28 +189,28 @@ public class AIBase2 : MonoBehaviour
     }
 
     AIShanxian aisx;
-    void GetShanXian()
+    /*protected void GetShanXian()
     {
-        //print("? "+NearRoleInDistance(atkDistance)+"   >  "+aisx.isStart);
-
-        if (!aisx.isStart && NearRoleInDistance(atkDistance))
+        if (!isActioning)
         {
-            aisx.ReSet();
-            aisx.isStart = true;
-            //print("oooooo");
-            GetComponent<AIShanxian>().GetTheEnemyPos(gameObj);
+            isActioning = true;
+            aisx.GetShanXian();
+            atkNum++;
+            //GetAtkNumReSet();
             return;
         }
 
-        if (aisx.isOver)
+        if (isActioning && aisx.IsShanxianOver())
         {
-            atkNum++;
-            GetComponent<GameBody>().SetACingfalse();
-            aisx.isStart = false;
-            isAtk = false;
+            //GetComponent<GameBody>().SetACingfalse();
+            //aisx.isStart = false;
+            //aisx.ReSet();
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
         }
 
-    }
+    }*/
 
     //一般攻击
     void PtAtk()

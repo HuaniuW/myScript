@@ -25,6 +25,8 @@ public class Globals : MonoBehaviour {
 
     public static bool isGameOver = false;
 
+    public static bool isPlayerDie = false;
+
     //语言 english
     public static string language = "chinese";
 
@@ -42,7 +44,7 @@ public class Globals : MonoBehaviour {
 
     public static bool isShouFD = false;
 
-
+    public static bool cameraIsFeidaoGS = false;
 
 
 

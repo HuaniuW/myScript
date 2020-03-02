@@ -71,14 +71,9 @@ public class HitKuai2 : MonoBehaviour
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
 
-            if(atkScaleX == 0)
-            {
-                //if (Coll.transform.position.x < this.transform.position.x)
-                //print(Coll.transform.position.x + "  ---  " + this.transform.parent.transform.position.x);
-                if(this.transform.parent)atkScaleX = Coll.transform.position.x < this.transform.parent.transform.position.x ? -1 : 1;
-            }
-
-
+          
+            //print("   这里是否进来  " + Coll.transform.position.x + "  -------    " + this.transform.parent.transform.transform);
+            if (this.transform.parent) atkScaleX = Coll.transform.position.x < this.transform.parent.transform.position.x ? -1 : 1;
             GetBeHit(jn_date, atkScaleX);
             //力作用  这个可以防止 推力重叠 导致任务飞出去
             Vector3 tempV3 = _rigidbody2D.velocity;
@@ -123,22 +118,65 @@ public class HitKuai2 : MonoBehaviour
         //判断是否生命被打空
 
         if (!IsPlayAudio) return;
-        HitTX(_psScaleX, "BloodSplatCritical2D1");
-        HitTX(_psScaleX, "jizhong", roleDate.beHitVudio);
-    }
+        //HitTX(_psScaleX, "BloodSplatCritical2D1");
+        //HitTX(_psScaleX, "jizhong", roleDate.beHitVudio);
 
-    //击中特效
-    void HitTX(float psScaleX, string txName, string hitVudio = "")
+        HitTX(_psScaleX, "BloodSplatCritical3", "", 2, false, false);
+        if (jn_date.HitInSpecialEffectsType != 3) HitTX(_psScaleX, "jizhong", roleDate.beHitVudio, 4, true, true);
+    }
+    //JN_Date jn_date;
+
+    void HitTX(float psScaleX, string txName, string hitVudio = "", float beishu = 3, bool isSJJD = false, bool isZX = true, float hy = 0)
     {
+        //print("hy ------------------------------------------------------>     "+hy);
+
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
-        hitTx.transform.position = gameBody.transform.position;
-        hitTx.transform.localScale = new Vector3(1, 1, psScaleX);
+
+        //print(hitTx.name + "  1---------------------->>   " + hitTx.transform.localEulerAngles);
+        //print("sudu-------------------------------------------   "+ gameBody.GetComponent<Rigidbody2D>().velocity.x);
+        hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * psScaleX, gameBody.transform.position.y, gameBody.transform.position.z);
+        //击中特效缩放
+        hitTx.transform.localScale = new Vector3(beishu, beishu, beishu);
+
+        //print(hitTx.transform.localEulerAngles + " 000000000000000000000000000000000 "+hitTx.transform.name);
+        hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
+
+        print("hitTx.transform.localEulerAngles    "+ hitTx.transform.localEulerAngles+ "   psScaleX  "+ psScaleX);
         if (IsPlayAudio && hitVudio != "")
         {
             hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
         }
+
+        //if (!isZX)
+        //{
+        //    //if(atkObj.transform.position.y-)
+        //    if (jn_date.isAtkZongXiang)
+        //    {
+        //        hitTx.transform.localEulerAngles = new Vector3(-90, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
+        //        hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * psScaleX - 0.5f, gameBody.transform.position.y, gameBody.transform.position.z);
+        //    }
+        //    else
+        //    {
+        //        hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
+        //    }
+
+        //}
     }
+
+
+    //击中特效
+    //void HitTX(float psScaleX, string txName, string hitVudio = "")
+    //{
+    //    GameObject hitTx = Resources.Load(txName) as GameObject;
+    //    hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
+    //    hitTx.transform.position = gameBody.transform.position;
+    //    hitTx.transform.localScale = new Vector3(1, 1, psScaleX);
+    //    if (IsPlayAudio && hitVudio != "")
+    //    {
+    //        hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
+    //    }
+    //}
 
 
 
