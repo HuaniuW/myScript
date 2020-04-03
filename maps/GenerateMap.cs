@@ -408,7 +408,7 @@ public class GenerateMap : MonoBehaviour {
     //根据坐标和方向 获取改位置的 地图名字(用于 判断该方向上是否有地图)  返回特殊地图的名字和信息 还有方位
     string GetMapNameAndMsgByZBAndFX(string zb,string fx)
     {
-        string getMapName = "";
+        //string getMapName = "";
         string _zb = GetNewZBByFX(zb,fx);
         for(int i = 0; i < mapZBArr.Count; i++)
         {

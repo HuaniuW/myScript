@@ -642,7 +642,8 @@ public class CameraController : MonoBehaviour
     float vz2 = 0;
     float newZ22;
 
-    TheTimer stillTimes = new TheTimer();
+    //不能用new 如果有问题 再改   这里是控制震动
+    //TheTimer stillTimes; //= new TheTimer();
     void GetShockZ2(float stillNums)
     {
         newZ22 = this.transform.position.z;
@@ -655,7 +656,7 @@ public class CameraController : MonoBehaviour
             theTargetZ = targetZ2;
 
             yuanshiZ = this.transform.position.z;
-            stillTimes.GetStopByTime(theStillNums);
+            GetComponent<TheTimer>().GetStopByTime(theStillNums);
         }
     }
 
@@ -680,7 +681,7 @@ public class CameraController : MonoBehaviour
                 theTargetZ = targetZ2;
             }
 
-            if (stillTimes.isStart&& stillTimes.IsPauseTimeOver())
+            if (GetComponent<TheTimer>().isStart&& GetComponent<TheTimer>().IsPauseTimeOver())
             {
                 isShockZing2 = false;
                 isShockZ2 = false;
@@ -693,7 +694,7 @@ public class CameraController : MonoBehaviour
 
     void Shock2Stop()
     {
-        stillTimes.End();
+        GetComponent<TheTimer>().End();
         isShockZing2 = false;
         isShockZ2 = false;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, yuanshiZ);

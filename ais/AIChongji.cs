@@ -29,7 +29,7 @@ public class AIChongji : MonoBehaviour
     }
 
     Vector2 v2Speed;
-    float chongjiSpeed = 16;
+    float chongjiSpeed = 20;
 
     public void GetStart(Transform targetObj)
     {
@@ -77,7 +77,11 @@ public class AIChongji : MonoBehaviour
              return;
          }*/
 
-        
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie) {
+
+            ReSetAll();
+            return;
+        }
 
 
         //做起始动作
@@ -85,22 +89,23 @@ public class AIChongji : MonoBehaviour
         //完成后 还原动作
         if (GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_begin")&& GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_start"))
         {
-            print("00000000000000000000000000  "+ GetComponent<AirGameBody>().GetDB().animation.timeScale);
+            //print("00000000000000000000000000  "+ GetComponent<AirGameBody>().GetDB().animation.timeScale);
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == "chongji_begin" && GetComponent<AirGameBody>().GetDB().animation.isCompleted)
             {
-                print(">>>>>>>>>>>>>>>>??????????????????????????????????????????????????????????????");
+                //print(">>>>>>>>>>>>>>>>??????????????????????????????????????????????????????????????");
                 v2Speed = GlobalTools.GetVector2ByPostion(_targetObj.position, this.transform.position, chongjiSpeed);
                 //GetComponent<AirGameBody>().GetDB().animation.GotoAndPlayByFrame("chongji_start", 0, 1);
                 GetComponent<AirGameBody>().GetAcMsg("chongji_start");
                 GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
             }
-            print("弹射----------------------------------------------------------------------》》》弹射"+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+            //print("弹射----------------------------------------------------------------------》》》弹射"+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_begin" && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_start")
             {
-                print("-------------------------------------------我靠 进来没 ");
+                //print("-------------------------------------------我靠 进来没 ");
                 //GetComponent<AirGameBody>().GetDB().animation.Play("chongji_begin");  //GotoAndPlayByFrame("chongji_begin", 0, 1);
                 //转向 朝向玩家
                 GetComponent<AirGameBody>().GetAcMsg("chongji_begin");
+                deltaNums = 0;
                 GetComponent<AirGameBody>().GetDB().animation.timeScale = 0.000000001f;
                 return;
             }

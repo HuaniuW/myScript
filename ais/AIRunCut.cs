@@ -84,8 +84,7 @@ public class AIRunCut : MonoBehaviour {
             return;
         }
 
-
-        if(gameBody.GetDB().animation.lastAnimationName == AtkName && gameBody.GetDB().animation.isCompleted)
+        if (gameBody.GetDB().animation.lastAnimationName == AtkName && gameBody.GetDB().animation.isCompleted)
         {
             AcOver();
             return;
@@ -95,7 +94,9 @@ public class AIRunCut : MonoBehaviour {
             isAtking = true;
             gameBody.GetAtk(AtkMsgName);
 
-        } 
+        }
+
+        
     }
 
     void AcOver()

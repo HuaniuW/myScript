@@ -169,9 +169,16 @@ public class ObjectPools
     {
         //当前游戏对象不激活
         gameObject.SetActive(false);
+        //Debug.Log(gameObject.name.GetType() == typeof(int));
         //获取当前游戏对象的key值，转换成int类型
-        //if (Globals.isDebug) Debug.Log(gameObject.name + " 收 ！ ");
-        int key = int.Parse(gameObject.name);
+        //if (Globals.isDebug) Debug.Log(gameObject.name + " 收 ！id    "+gameObject.GetInstanceID());
+        //if (!int.TryParse(gameObject.name)) return;
+
+        //int.TryParse();
+        int key; //= int.Parse(gameObject.name);
+        if (!int.TryParse(gameObject.name, out key)) return;
+       
+
         //if (Globals.isDebug) Debug.Log(gameObject.name + " 收  key " + key);
         //Debug.Log("回收id  "+key);
         //如果池中不包含key值对应的游戏对象

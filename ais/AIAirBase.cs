@@ -64,7 +64,7 @@ public class AIAirBase : AIBase
     {
         if (restTimes == -1)
         {
-            print("休息停顿 rest 是否进来 ！！！");
+            //print("休息停顿 rest 是否进来 ！！！");
             restTimes = UnityEngine.Random.Range(1, 2);
         }
 
@@ -337,7 +337,7 @@ public class AIAirBase : AIBase
         //XY同时
         //绕后
         //最优路线 如果碰到墙就找最优路线
-        print("空中怪 ptatk!!!");
+        //print("空中怪 ptatk!!!");
         //这种如果再次超出攻击距离会再追踪
         //if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
         //{
@@ -369,7 +369,7 @@ public class AIAirBase : AIBase
             isAction = true;
             acName = GetZS();
 
-            print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
+            //print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 

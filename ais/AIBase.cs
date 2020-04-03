@@ -11,6 +11,9 @@ public class AIBase : MonoBehaviour {
     protected AIQiShou aiQishou;
     protected AIFanji aiFanji;
 
+    [Header("是否是不能动的 怪物")]
+    public bool IsCanNotMove = false;
+
 	// Use this for initialization
 	void Start () {
         GetStart();
@@ -91,8 +94,26 @@ public class AIBase : MonoBehaviour {
             isFindEnemy = false;
             //print("起手3   " + aiQishou.isQishouAtk);
             if (aiQishou) aiQishou.isQishouAtk = false;
-            gameBody.GetStand();
+            if (GetComponent<AIYuanLiHuiXue>()!=null)
+            {
+                print("-------------------------------远离 回血！！！！！");
+                YLHuiXue();
+                
+            }
+            else
+            {
+                gameBody.GetStand();
+            }
+
+            
         }
+    }
+
+
+    public bool IsEnemyObjOutAtkDistance()
+    {
+        if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance || Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance) return true;
+        return false;
     }
 
     //是巡逻 还是站地警戒  
@@ -208,6 +229,13 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        if (isYLHuiXue)
+        {
+            //远离回血的时候 不被打断
+            YLHuiXue();
+            return;
+        }
+
         //被攻击没有重置 isAction所以不能继续攻击了
         if (GetComponent<RoleDate>().isBeHiting)
         {
@@ -260,8 +288,10 @@ public class AIBase : MonoBehaviour {
     protected VOAtk atkvo;
     protected VOAtk GetAtkVOByName(string _name, System.Object obj)
     {
+        print("_name   "+_name);
         Dictionary<string, string> dict = GetDateByName.GetInstance().GetDicSSByName(_name, obj);
-        atkvo = new VOAtk();
+        atkvo = GetComponent<VOAtk>();//new VOAtk();
+        if (dict == null) return null;
         atkvo.GetVO(dict);
         return atkvo;
     }
@@ -352,6 +382,13 @@ public class AIBase : MonoBehaviour {
         {
             return true;
         }
+    }
+
+    
+    public bool IsInAtkDistance(float distance)
+    {
+        if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= distance) return true;
+        return false;
     }
 
     //转向
@@ -471,7 +508,19 @@ public class AIBase : MonoBehaviour {
                 return;
             }
 
-			atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
+            //print("acName:   "+acName+"     "+GetZS());
+            if (acName == "chongci1")
+            {
+                acName = "chongci1";
+                return;
+            }
+
+            if (acName == "yueguangzhan")
+            {
+                return;
+            }
+
+            atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
 		}
 
         if(aiQishou&&aiQishou.isQishouAtk&&!aiQishou.isFirstAtked)
@@ -530,6 +579,12 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        if (acName == "chongci1")
+        {
+            GetChongCi1();
+            return;
+        }
+
         if (acName == "yishan")
         {
             GetYiShan();
@@ -542,11 +597,19 @@ public class AIBase : MonoBehaviour {
             return;
         }
 
+        if (acName == "yueguangzhan")
+        {
+            GetYueGuangZhan();
+            return;
+        }
+
 
         PtAtk();
         if (acName !="shanxian"){
 				
-		}      
+		}
+
+        
     }
 
     public float walkDistance = 3;
@@ -697,13 +760,42 @@ public class AIBase : MonoBehaviour {
 
     //一般攻击
     protected virtual void PtAtk(){
-        //这种如果再次超出攻击距离会再追踪
-        if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
+
+
+        if (!IsCanNotMove)
         {
-            isActioning = true;
-            if(!DontNear) ZhuanXiang();
-            GetAtk();
+            //这种如果再次超出攻击距离会再追踪
+            if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
+            {
+                isActioning = true;
+                if (!DontNear) ZhuanXiang();
+                GetAtk();
+            }
         }
+        else
+        {
+            //非移动怪的 普通攻击
+            //如果在攻击范围外 就直接结束  这里可以取消连击 让玩家难以猜招
+            //这里 如果不是 连招的话 就会是玩家接近就 可以攻击  增加猜招难度
+            if (!DontNear&&!IsInAtkDistance(atkDistance))
+            {
+                if (IsAtkOver())
+                {
+                    isActioning = false;
+                    isAction = false;
+                }
+                return;
+            }
+
+            if (!isActioning)
+            {
+                isActioning = true;
+                GetAtk();
+            }
+        }
+
+
+        
 
         if (isActioning)
         {
@@ -739,6 +831,31 @@ public class AIBase : MonoBehaviour {
         }
     }
 
+    protected void GetChongCi1()
+    {
+        if (isActioning)
+        {
+            if (GetComponent<AI_Chongci>().IsAcOver())
+            {
+                isActioning = false;
+                isAction = false;
+                return;
+            }
+        }
+
+        if (!isActioning)
+        {
+            isActioning = true;
+            ZhuanXiang();
+            //gameBody.GetStand();
+            GetComponent<AI_Chongci>().GetStart(gameObj);
+            atkNum++;
+            //GetAtkNumReSet();
+        }
+    }
+
+
+
     void GetZiDanFire()
     {
         if (!isActioning)
@@ -750,6 +867,27 @@ public class AIBase : MonoBehaviour {
         }
 
         if (isActioning && GetComponent<AIZiDan>().IsBehaviorOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
+    void GetYueGuangZhan()
+    {
+
+        if (!isActioning)
+        {
+            print("111");
+            isActioning = true;
+            GetComponent<JN_YueGuanZhan>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<JN_YueGuanZhan>().IsGetOver())
         {
             ZhuanXiang();
             isAction = false;
@@ -800,6 +938,29 @@ public class AIBase : MonoBehaviour {
             {
                 isActioning = false;
                 isAction = false;
+            }
+        }
+    }
+
+    bool isYLHuiXue = false;
+    //远离 回血
+    public void YLHuiXue()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            //isAction = true;
+            isYLHuiXue = true;
+            GetComponent<AIYuanLiHuiXue>().GetStart();
+        }
+
+        if (isActioning) {
+            if (GetComponent<AIYuanLiHuiXue>().IsGetOver())
+            {
+                isActioning = false;
+                isAction = false;
+                isYLHuiXue = false;
+                print("远离 回血 over！！！！！！！");
             }
         }
     }

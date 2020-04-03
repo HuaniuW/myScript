@@ -146,7 +146,16 @@ public class HitKuai : MonoBehaviour {
                             ObjV3Zero(atkObj);
                             _atkRigidbody2D.AddForce(new Vector2(-500 * _roleScaleX, 0));
                             // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
-                            atkObj.GetComponent<GameBody>().HasBeHit();
+                            if (!atkObj || !atkObj.GetComponent<GameBody>()) {
+
+                            }
+                            else
+                            {
+                                print(" atkObj.name    " + atkObj.name);
+                                print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
+                                atkObj.GetComponent<GameBody>().HasBeHit();
+                            }
+                            
                             // 减帧数
                             GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.5f);
                             return;
@@ -207,17 +216,21 @@ public class HitKuai : MonoBehaviour {
                     {
                         //被攻击怪硬值过大 被反弹
                         //ObjV3Zero(atkObj);
-                        atkObj.GetComponent<GameBody>().SetXSpeedZero();
-                        /* if (!atkObj.GetComponent<GameBody>().isAtkFanTui)
-                         {
-                             atkObj.GetComponent<GameBody>().isAtkFanTui = true;
-                         }*/
-                        if (jn_date.atkDirection == "" && _atkRigidbody2D) _atkRigidbody2D.velocity = new Vector2(-12 * _roleScaleX, _atkRigidbody2D.velocity.y);// _atkRigidbody2D.AddForce(new Vector2(-600 * _roleScaleX, 0));
+                        if (atkObj&& atkObj.GetComponent<GameBody>())
+                        {
+                            atkObj.GetComponent<GameBody>().SetXSpeedZero();
+                            /* if (!atkObj.GetComponent<GameBody>().isAtkFanTui)
+                             {
+                                 atkObj.GetComponent<GameBody>().isAtkFanTui = true;
+                             }*/
+                            if (jn_date.atkDirection == "" && _atkRigidbody2D) _atkRigidbody2D.velocity = new Vector2(-12 * _roleScaleX, _atkRigidbody2D.velocity.y);// _atkRigidbody2D.AddForce(new Vector2(-600 * _roleScaleX, 0));
+                        }
+                       
                     }
                 }
 
 
-                gameBody.GetPause(jn_date.yingzhishijian);
+                gameBody.GetPause(jn_date.yingzhishijian,0.4f);
 
                 //if (Coll.tag != "Player")
             }
@@ -228,7 +241,16 @@ public class HitKuai : MonoBehaviour {
             if (jn_date.fasntuili != 0&&atkObj.GetComponent<Rigidbody2D>())
             {
                 atkObj.GetComponent<GameBody>().SetYSpeedZero();
-                _atkRigidbody2D.velocity = new Vector2(_atkRigidbody2D.velocity.x, 16);
+                //打到鱼 给反作用力16  不然很多怪一只在天上就能打死
+                if (roleDate.IsAirEnemy)
+                {
+                    _atkRigidbody2D.velocity = new Vector2(_atkRigidbody2D.velocity.x, 16);
+                }
+                else
+                {
+                    _atkRigidbody2D.velocity = new Vector2(_atkRigidbody2D.velocity.x, 12);
+                }
+                
             }
 
             if(atkObj.GetComponent<GameBody>()) atkObj.GetComponent<GameBody>().GetPause();

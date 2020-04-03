@@ -129,7 +129,7 @@ public class UI_ShowPanel : MonoBehaviour {
 
     void OnDistory()
     {
-        print("我被销毁了？？？？@、@");
+        //print("我被销毁了？？？？@、@");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SKILL_UI_CHANGE, this.GetSkillChange);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.RELEASE_SKILL, this.ReleaseSkill);
     }

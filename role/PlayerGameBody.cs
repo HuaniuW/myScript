@@ -12,14 +12,78 @@ public class PlayerGameBody : GameBody {
     // Update is called once per frame
     void Update()
     {
-        LJJiSHu();
+
+        DimianAtkHuanYuan();
+
+        //外挂飘动骨骼修正
+        BoneOrderXiuzheng();
+        //DBTest();
+        //连击 如果出问题 就打开 连击计数  作用已经不记得了  延迟不要超过30吧  好像是连击重复什么的
+        //LJJiSHu();
         if (Globals.isInPlot) return;
         if (isFighting)
         {
+            //脱离战斗 随机 站立姿势 跑步动作什么的
             OutFighting();
         }
         this.GetUpdate();
 
+        //print("------  IsAtkDown " + IsAtkDown + "  IsGround   " + IsGround+" isAtk "+isAtk+"   isAtking "+isAtking);
+
+    }
+
+   
+
+
+    bool isTest = false;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="SoltName">修正的骨骼插槽名字</param>
+    /// <param name="ACName">当是什么动作的时候生效</param>
+    void BoneOrderXiuzheng(string SoltName = "",string ACName = "")
+    {
+        if (!isTest)
+        {
+            isTest = true;
+            GetDB().armature.GetSlot("辫子右")._SetDisplayIndex(1);
+            GetDB().armature.GetSlot("辫子左_1")._SetDisplayIndex(1);
+            GetDB().armature.GetSlot("刘海左")._SetDisplayIndex(1);
+            GetDB().armature.GetSlot("刘海中")._SetDisplayIndex(1);
+            GetDB().armature.GetSlot("刘海右")._SetDisplayIndex(1);
+
+
+
+        }
+        
+        if (GetDB().animation.lastAnimationName == ACName)
+        {
+
+        }
+        //if (bianzi1) print("辫子1    "+bianzi1.GetComponent<Renderer>().sortingOrder);
+        //print(" 头部插槽  "+ (GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder);
+        //print(" 辫子右  " + (GetDB().armature.GetSlot("辫子右").display as GameObject).GetComponent<Renderer>().sortingOrder);
+        //print(" 刘海  " + (GetDB().armature.GetSlot("刘海左").display as GameObject).GetComponent<Renderer>().sortingOrder);
+
+        //(GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder = -200;
+
+    }
+
+    void DBTest()
+    {
+
+        //if (GetDB().armature.GetBone("辫子右").visible) GetDB().armature.GetBone("辫子右").visible = false;
+
+        //print("  order   "+(GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder);
+        //(GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder = -10;
+        //print("> " + (GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder);
+        //(GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder = 2;
+        //print((GetDB().armature.GetSlot("头").display as GameObject).GetComponent<Renderer>().sortingOrder);
+
+            //(GetDB().armature.GetSlot("刘海左").display as GameObject).SetActive(false);
+            //GetDB().armature.GetBone("刘海左").visible = false;
+
+            //if (o.slot.display != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
     }
 
     public override void GameOver()
@@ -116,6 +180,64 @@ public class PlayerGameBody : GameBody {
     }
 
 
+
+    public GameObject bianziy;
+    public GameObject bianziz;
+    [Header("骨骼参数修正")]
+    public GameObject XzBone1;
+
+
+    public GameObject toufaz;
+    public GameObject toufazhong;
+    public GameObject toufay;
+
+
+    void ChangeBoneScaleX()
+    {
+        ChangeBoneScaleXByObject(bianziy);
+        ChangeBoneScaleXByObject(bianziz);
+        ChangeBoneScaleXByObject(toufaz);
+        ChangeBoneScaleXByObject(toufazhong);
+        ChangeBoneScaleXByObject(toufay);
+        Xiuzheng();
+    }
+
+
+    void Xiuzheng()
+    {
+        Vector3 v3 = XzBone1.GetComponent<SpringBone>().springForce;
+        if (this.transform.localScale.x == 1)
+        {
+            XzBone1.GetComponent<SpringBone>().SpringForceChangeByScaleX(new Vector3(-Mathf.Abs(v3.x),v3.y,v3.z));
+        }
+        else
+        {
+            XzBone1.GetComponent<SpringBone>().SpringForceChangeByScaleX(new Vector3(Mathf.Abs(v3.x), v3.y, v3.z));
+        }
+    }
+
+
+    //给个参数 可以多个 用
+    void ChangeBoneScaleXByObject(GameObject obj)
+    {
+        //print("角色 的 朝向  "+this.transform.localScale);
+        //print("   scale  "+bianzi1.transform.localScale);
+        //print("rotation   "+bianzi1.transform.localRotation);
+        //print("localEulerAngles   " + bianzi1.transform.localEulerAngles);
+        Vector3 v3 = obj.transform.localScale;
+        if (this.transform.localScale.x == 1)
+        {
+            obj.transform.localScale = new Vector3(Mathf.Abs(v3.x), v3.y, v3.z);
+            obj.transform.localEulerAngles = Vector3.zero;
+        }
+        else
+        {
+            obj.transform.localScale = new Vector3(-Mathf.Abs(v3.x), v3.y, v3.z);
+            obj.transform.localEulerAngles = new Vector3(0, 180, 0);
+        }
+    }
+
+
     public override void RunRight(float horizontalDirection, bool isWalk = false)
     {
         //print("l " + isAtking);
@@ -131,11 +253,13 @@ public class PlayerGameBody : GameBody {
         if (!isWalk && bodyScale.x == 1)
         {
             AtkReSet();
+            
         }
 
         if (!isWalk){
             bodyScale.x = -1;
             this.transform.localScale = bodyScale;
+            ChangeBoneScaleX();
         }
 
         
@@ -147,7 +271,8 @@ public class PlayerGameBody : GameBody {
         isRunLefting = false;
 
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
-        //print("right "+ horizontalDirection + "  xForce "+xForce);
+        //print("right "+ horizontalDirection + "  xForce "+xForce +"    sudu  "+playerRigidbody2D.velocity.x+"   max   "+maxSpeedX);
+        if (playerRigidbody2D.velocity.x > 10) playerRigidbody2D.velocity = new Vector2(maxSpeedX, playerRigidbody2D.velocity.y);
         Run();
     }
 
@@ -166,15 +291,17 @@ public class PlayerGameBody : GameBody {
         if (!isWalk && bodyScale.x == -1)
         {
             AtkReSet();
+            
         }
 
         if (!isWalk)
         {
             bodyScale.x = 1;
             this.transform.localScale = bodyScale;
+            ChangeBoneScaleX();
         }
 
-       
+        
 
         if (isAtk) return;
 
@@ -184,6 +311,8 @@ public class PlayerGameBody : GameBody {
         isRunRighting = false;
 
         playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        //print("left " + horizontalDirection + "  xForce " + xForce + "    sudu  " + playerRigidbody2D.velocity.x + "   max   " + maxSpeedX);
+        if (playerRigidbody2D.velocity.x < -10) playerRigidbody2D.velocity = new Vector2(-maxSpeedX, playerRigidbody2D.velocity.y);
         //print("hihihi");
         Run();
 
@@ -225,7 +354,8 @@ public class PlayerGameBody : GameBody {
         }
     }
 
-    
+    bool IsAtkDown = false;
+    bool IsAtkDowning = false;
 
     protected override void Atk()
     {
@@ -237,11 +367,13 @@ public class PlayerGameBody : GameBody {
         {
             jisuqi = 0;
             yanchi++;
+            //print(yanchi+"   >>   "+ (vOAtk.yanchi - canMoveNums));
             //ljTime.GetStopByTime(0.5f);
             if (yanchi > vOAtk.yanchi - canMoveNums)
             {
                 isAtk = false;
                 if (this.transform.tag != "Player") isAtking = false;
+                //print("   -------->isAtk  "+isAtk);
             }
 
            
@@ -258,13 +390,26 @@ public class PlayerGameBody : GameBody {
                 }
             }
 
+           
+
             if (yanchi >= vOAtk.yanchi)
             {
+                print("---------------------------------> ok!!  " + yanchi);
                 //超过延迟时间 失去连击
                 isAtkYc = false;
+                IsAtkDown = false;
+                IsAtkDowning = false;
                 AtkLJOver();
+                
                 //playerRigidbody2D.gravityScale = 4.5f;
             }
+
+            //print("IsAtkDown " + IsAtkDown + "  IsGround   " + IsGround);
+            //如果hi像下攻击 并且 已经落地
+            DimianAtkHuanYuan();
+
+
+
             InFightAtk();
 
         }
@@ -279,6 +424,23 @@ public class PlayerGameBody : GameBody {
     
     }
 
+    //地面攻击还原
+    void DimianAtkHuanYuan()
+    {
+        if (IsAtkDown && IsGround)
+        {
+            IsAtkDown = false;
+            IsAtkDowning = false;
+            isAtk = false;
+            isAtkYc = false;
+            AtkLJOver();
+            yanchi = 0;
+            print("  ----------->in! ");
+        }
+    }
+
+
+
     //取消空中闪进
     void ShanjinStop()
     {
@@ -289,6 +451,10 @@ public class PlayerGameBody : GameBody {
         roleDate.isCanBeHit = true;
         playerRigidbody2D.gravityScale = gravityScaleNums;
     }
+
+
+   
+
 
     public override void GetAtk(string atkName = null)
     {
@@ -303,8 +469,14 @@ public class PlayerGameBody : GameBody {
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        //if (IsAtkDown) return;
         if (!isAtk)
         {
+            if (Globals.isKeyDown)
+            {
+                if (IsAtkDowning) return;
+            }
+
             isAtk = true;
             isAtking = true;
             isTXShow = true;
@@ -313,20 +485,28 @@ public class PlayerGameBody : GameBody {
             jisuqi = 0;
             isLJ = false;
             jishiNum = 0;
+            print("  dianji gongji ");
 
             if (isInAiring)
             {
                 if (Globals.isKeyUp)
                 {
                     atkZS = DataZS.jumpAtkUpZS;
+                    IsAtkDowning = false;
                 }
                 else if (Globals.isKeyDown)
                 {
+                   
                     atkZS = DataZS.jumpAtkDownZS;
+                    IsAtkDown = true;
+                    //print("  theTimer     " + _theTimer);
+                    //_theTimer.TimesAdd(0.5f, CanAtkDownCallBack);
+                    //GetPause(0.2f, 0.5f);
                 }
                 else
                 {
                     atkZS = DataZS.jumpAtkZS;
+                    IsAtkDowning = false;
                 }
 
 
@@ -342,6 +522,7 @@ public class PlayerGameBody : GameBody {
             }
             else
             {
+                IsAtkDowning = false;
                 if (Globals.isKeyUp)
                 {
                     atkZS = DataZS.atkUpZS;
@@ -352,6 +533,15 @@ public class PlayerGameBody : GameBody {
                 }
                 
             }
+
+            if (IsAtkDown && IsAtkDowning) return;
+
+            if (IsAtkDown&&!IsAtkDowning)
+            {
+                IsAtkDowning = true;
+            }
+
+            
 
             if (atkName == null)
             {
@@ -376,6 +566,8 @@ public class PlayerGameBody : GameBody {
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
             }
 
+          
+
             MoveVX(vOAtk.xF, true);
             //MoveVX(0, true);
 
@@ -392,12 +584,13 @@ public class PlayerGameBody : GameBody {
     void AtkLJOver()
     {
         isAtking = false;
+        isAtk = false;
         yanchi = 0;
         //atkNums = 0;
     }
 
 
-    TheTimer ljTime = new TheTimer();
+    //TheTimer ljTime = new TheTimer();
 
 
     void ChangeACNum(int nums)
@@ -476,6 +669,11 @@ public class PlayerGameBody : GameBody {
     {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
+        if (IsAtkDowning)
+        {
+            IsAtkDowning = false;
+            IsAtkDown = false;
+        }
         roleDate.isBeHiting = true;
         inFightNums = 0;
         mnum = 0;
@@ -573,6 +771,7 @@ public class PlayerGameBody : GameBody {
             isDodgeing = false;
             isDodge = false;
             playerRigidbody2D.gravityScale = gravityScaleNums;
+            print("jinlai  mei         ");
             return;
         }
 
@@ -592,6 +791,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 //落地还原 不然 地上攻击会累加
                 atkNums = 0;
+                print("jinlai  mei     222222222    ");
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 //GetStand();
             }
@@ -610,6 +810,8 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
+                print("   ----------------? ?????  ");
+                //AtkLJOver(); 
                 //isGetJump = false;
                 MoveVX(0);
             }
@@ -821,7 +1023,6 @@ public class PlayerGameBody : GameBody {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
 
             Stand();
-            
         }
     }
 
@@ -838,6 +1039,7 @@ public class PlayerGameBody : GameBody {
         else if(GlobalSetDate.instance.roleDirection == "r")
         {
             TurnRight();
+            ChangeBoneScaleX();
             GlobalSetDate.instance.roleDirection = "";
         }
         

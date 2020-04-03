@@ -97,6 +97,7 @@ public class MyController : MonoBehaviour {
 
         if (currentButton == "Joystick2Button0")
         {
+            if (Globals.IsHitPlotKuai) return;
             if (IsCanControl()) _body.GetAtk();
             currentButton = "";
         }
@@ -239,6 +240,7 @@ public class MyController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.J))
         {
+            if (Globals.IsHitPlotKuai) return;
             if (IsCanControl()) _body.GetAtk();
         }
         if (Input.GetKeyDown(KeyCode.K))

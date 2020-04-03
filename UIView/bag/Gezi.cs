@@ -119,7 +119,7 @@ public class Gezi : MonoBehaviour {
         _obj.transform.position = this.transform.position;
         //print("--------------------->   "+ this.GetComponent<RectTransform>().sizeDelta.x + "  -------------  "+ this.GetComponent<RectTransform>().sizeDelta.y);
         //改变徽章大小 与格子大小同步
-        _obj.GetComponent<RectTransform>().sizeDelta = new Vector2(this.GetComponent<RectTransform>().sizeDelta.x*0.8f, this.GetComponent<RectTransform>().sizeDelta.y * 0.8f);//this.GetComponent<RectTransform>().sizeDelta;
+        _obj.GetComponent<RectTransform>().sizeDelta = new Vector2(this.GetComponent<RectTransform>().sizeDelta.x*1.2f, this.GetComponent<RectTransform>().sizeDelta.y*1.2f);//this.GetComponent<RectTransform>().sizeDelta;
 
     }
 

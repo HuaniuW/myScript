@@ -121,6 +121,7 @@ public class Mianban1 : MonoBehaviour {
         {
             if (hzIdList[i] != "")
             {
+                //print("??  "+i+"  --   "+ hzIdList[i]);
                 string hzName = hzIdList[i].Split('_')[0];
                 int geziNum = int.Parse(hzIdList[i].Split('_')[1]);
                 GetObjByNameInGezi(hzName, geziArr[geziNum]);

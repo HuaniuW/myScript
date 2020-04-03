@@ -7,10 +7,14 @@ public class HitKuai2 : MonoBehaviour
     public bool IsPlayAudio = true;
 
     public int teamNum;
+
+    [Header("是否能被躲避")]
+    public bool IsCanBeDodge = false;
     // Use this for initialization
     void Start()
     {
         //print(this.transform);
+        //print("？？？？？？？？？？？？？------------------" + this.transform.parent);
     }
 
 
@@ -55,6 +59,7 @@ public class HitKuai2 : MonoBehaviour
         //atkObj = txObj.GetComponent<JN_base>().atkObj;
         //print(atkObj.name);
 
+      
 
         JN_Date jn_date = GetComponent<JN_Date>();
 
@@ -68,10 +73,17 @@ public class HitKuai2 : MonoBehaviour
             //float _roleScaleX = -atkObj.transform.localScale.x;
 
 
+            if (IsCanBeDodge)
+            {
+                //print("roleDate  " + roleDate);
+                //print(" isCanbeihit  " + roleDate.isCanBeHit);
+                if (!roleDate.isCanBeHit) return;
+            }
+
             //这个已经不需要了 
             //if (Coll.GetComponent<BeHit>()) Coll.GetComponent<BeHit>().GetBeHit(jn_date, _roleScaleX);
 
-          
+
             //print("   这里是否进来  " + Coll.transform.position.x + "  -------    " + this.transform.parent.transform.transform);
             if (this.transform.parent) atkScaleX = Coll.transform.position.x < this.transform.parent.transform.position.x ? -1 : 1;
             GetBeHit(jn_date, atkScaleX);
@@ -142,7 +154,7 @@ public class HitKuai2 : MonoBehaviour
         //print(hitTx.transform.localEulerAngles + " 000000000000000000000000000000000 "+hitTx.transform.name);
         hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
 
-        print("hitTx.transform.localEulerAngles    "+ hitTx.transform.localEulerAngles+ "   psScaleX  "+ psScaleX);
+        //print("hitTx.transform.localEulerAngles    "+ hitTx.transform.localEulerAngles+ "   psScaleX  "+ psScaleX);
         if (IsPlayAudio && hitVudio != "")
         {
             hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);

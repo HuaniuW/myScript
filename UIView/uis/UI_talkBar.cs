@@ -26,7 +26,7 @@ public class UI_talkBar  : MonoBehaviour
     {
         this.transform.position = pos;
         WaiText.text = talkText.text = txts;
-        GetComponent<TheTimer>().TimesAdd(disTime, TimeCallBack);
+        if(isJishi)GetComponent<TheTimer>().TimesAdd(disTime, TimeCallBack);
     }
 
     public void TimeCallBack(float nums)

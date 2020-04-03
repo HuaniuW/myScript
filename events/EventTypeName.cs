@@ -91,4 +91,8 @@ public class EventTypeName
     //其他的 什么处罚机关
     public const string JG_OTHER_EVENT = "jg_other_event";
 
+
+    //音量变化
+    public const string AUDIO_VALUE = "audio_value";
+
 }

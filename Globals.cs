@@ -46,6 +46,8 @@ public class Globals : MonoBehaviour {
 
     public static bool cameraIsFeidaoGS = false;
 
+    public static bool IsHitPlotKuai = false;
+
 
 
 

@@ -38,12 +38,25 @@ public class AudioControl : MonoBehaviour {
     {
         if(m_AudioSource) m_AudioSource.volume = GlobalSetDate.instance.GetSoundEffectValue();
         //print(GlobalSetDate.instance.GetSoundEffectValue());
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.AUDIO_VALUE,audioValue);
     }
+        
+    public void audioValue(UEvent e)
+    {
+        m_AudioSource.volume = GlobalSetDate.instance.GetSoundEffectValue();
+    }
+
 
     void Update()
     {
         GetValueByPlayerDistance();
     }
 
-    
+
+    private void OnDisable()
+    {
+        //print(" 声音销毁！！！！！ ");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.AUDIO_VALUE, audioValue);
+    }
+
 }

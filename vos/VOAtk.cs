@@ -39,7 +39,16 @@ public class VOAtk : MonoBehaviour {
 
     public void GetVO(Dictionary<string,string> dict)
     {
-        this.atkName = dict["atkName"];
+
+        //print("   容错------------------------------------ "+(dict == null));
+
+        //if (dict == null) {
+        //    Time.timeScale = 0.2f;
+        //}
+
+        if (dict == null) return;
+        //print(" ......>??  "+dict.Count +"  ??===   "+ dict["atkName"]);
+        if(dict["atkName"]!=null) this.atkName = dict["atkName"];
         this.xF = float.Parse(dict["xF"]);
         this.yF = float.Parse(dict["yF"]);
         this.showTXFrame = float.Parse(dict["showTXFrame"]);

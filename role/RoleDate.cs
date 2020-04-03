@@ -8,7 +8,7 @@ public class RoleDate : MonoBehaviour {
     public float maxLive = 10000;
     
     [Header("生命值")]
-    public float live = 10000;
+    public float Live = 10000;
 
     [Header("防御力")]
     public float def = 50;
@@ -22,6 +22,10 @@ public class RoleDate : MonoBehaviour {
 
     [Header("蓝")]
     public float Lan = 1000;
+
+    [Header("是否死空中怪物")]
+    public bool IsAirEnemy = false;
+
     public virtual float lan
     {
         get
@@ -32,6 +36,20 @@ public class RoleDate : MonoBehaviour {
         {
             Lan = value;
             if (Lan < 0) Lan = 0;
+        }
+    }
+
+    public virtual float live
+    {
+        get
+        {
+            return Live;
+        }
+        set
+        {
+            Live = value;
+            if (Live > maxLive) Live = maxLive;
+            if (Live < 0) Live = 0;
         }
     }
 

@@ -15,6 +15,11 @@ public class ShowOutSkill : MonoBehaviour {
 		
 	}
 
+    /// <summary>
+    /// 释放特效
+    /// </summary>
+    /// <param name="hzSkillName">特效名字</param>
+    /// <param name="isSkill">是否是技能</param>
     internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false)
     {
 

@@ -103,7 +103,7 @@ public class XueTiao : MonoBehaviour {
 
     private void OnDestroy()
     {
-        print("血条 我被销毁了？？");
+        //print("血条 我被销毁了？？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         //是否有诅咒条
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);

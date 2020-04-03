@@ -69,16 +69,16 @@ public class Door : MonoBehaviour {
         isUp = false;
         if (zt == "1")
         {
-            print("Down");
+            //print("Down");
             isDown = true;
             
         }else if (zt == "0")
         {
-            print("Up");
+            //print("Up");
             isUp = true;
             
         }
-        print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
+        //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
         //声音播放
         if (openDoorAudio) openDoorAudio.Play();
     }

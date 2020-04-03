@@ -138,6 +138,7 @@ public class GameBody : MonoBehaviour, IRole {
         isAcing = false;
         isYanchi = false;
         isSkilling = false;
+        IsSFSkill = false;
         isSkillOut = false;
         isDodge = false;
         isDodgeing = false;
@@ -207,6 +208,8 @@ public class GameBody : MonoBehaviour, IRole {
             roleDate.isCanBeHit = true;
         }
     }
+
+   
 
     public bool GetBackUpOver()
     {
@@ -434,6 +437,7 @@ public class GameBody : MonoBehaviour, IRole {
                 {
                     DBBody.animation.GotoAndPlayByFrame(DODGE2, 0, 1);
                     MoveVX(testSpeed, true);
+                    //print("  闪进？？？？？ ");
                 }
             }
             else if (playerRigidbody2D.velocity.x < 0)
@@ -535,8 +539,8 @@ public class GameBody : MonoBehaviour, IRole {
         {
             if (qianmianjiance == null) return false;
             Vector2 start = qianmianjiance.position;
-            Vector2 end = new Vector2(start.x, start.y + 0.8f);
-            Debug.DrawLine(start, end, Color.red);
+            Vector2 end = new Vector2(start.x+1, start.y );
+            Debug.DrawLine(start, end, Color.yellow);
             isHitWall = Physics2D.Linecast(start, end, groundLayer);
             if(isHitWall) isCanShanjin = true;
             return isHitWall;
@@ -826,8 +830,12 @@ public class GameBody : MonoBehaviour, IRole {
                 playerRigidbody2D.AddForce(new Vector2(-vx, 0));
             }
         }
-        playerRigidbody2D.velocity = newSpeed;
+
         //print("---vx2    " + playerRigidbody2D.velocity);
+
+
+        playerRigidbody2D.velocity = newSpeed;
+        
     }
 
     protected void MoveVY(float vy)
@@ -1172,8 +1180,19 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void GetPause(float pauseTime = 0.1f,float scaleN = 0.5f)
     {
+        //这一块 就是 被击中 延迟  想其他办法解决
+        //if(DBBody.animation.lastAnimationName!=BEHIT|| DBBody.animation.lastAnimationName != BEHITINAIR)
+        //{
+        //    pauseTime = 0.1f;
+        //}
         DBBody.animation.timeScale = scaleN;
-        if(_theTimer) _theTimer.GetStopByTime(pauseTime);
+        //if(_theTimer) _theTimer.GetStopByTime(pauseTime);
+        if (_theTimer) _theTimer.TimesAdd(pauseTime,TimeCallBack);
+    }
+
+    void TimeCallBack(float n)
+    {
+        DBBody.animation.timeScale = 1;
     }
 
 
@@ -1189,10 +1208,13 @@ public class GameBody : MonoBehaviour, IRole {
         foreach(DragonBones.Bone o in bones)
         {
             //print("name:  " + o.GetType()+o.slot);
+
             if (o.slot != null)
             {
                 //if(o.slot.display!=null &&(o.slot.display as GameObject).GetComponent<Renderer>()!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material.color!=null != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = Color.red;
                 if (o.slot.display != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
+
+                //print(GetComponent<Renderer>().material.GetTextureOffset);
                 //return;
             }
             //print(o.slot._SetColor(DragonBones.ColorTransform));
@@ -1253,7 +1275,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
 
-
+       
 
         if (Globals.isInPlot) return;
 
@@ -1262,20 +1284,25 @@ public class GameBody : MonoBehaviour, IRole {
         {
             ControlSpeed(20);
             GetBeHit();
+            //DBBody.animation.timeScale = 1;
             return;
         }
 
 
-        
+        //if (CurrentAcName != BEHIT || CurrentAcName != BEHITINAIR || CurrentAcName != DIE)
+        //{
+        //    //DBBody.animation.timeScale = 1;
+        //}
 
-        if (_theTimer != null && !_theTimer.IsPauseTimeOver())
-        {
-            return;
-        }
-        else
-        {
-            DBBody.animation.timeScale = 1;
-        }
+
+        //if (_theTimer != null && !_theTimer.IsPauseTimeOver())
+        //{
+        //    return;
+        //}
+        //else
+        //{
+        //    //DBBody.animation.timeScale = 1;
+        //}
 
        
         
@@ -1284,7 +1311,7 @@ public class GameBody : MonoBehaviour, IRole {
         {
             //print("isQianhuaing");
             //防止加速过快 限制最大速度
-            ControlSpeed(20);
+            ControlSpeed(60);
             GetQianhuaing();
             return;
         }
@@ -1305,6 +1332,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (isDodgeing)
         {
             //print("isDodgeing");
+            ControlSpeed(35);
             Dodge1();
             return;
         }
@@ -1403,6 +1431,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         isSkilling = false;
         isSkillOut = false;
+        IsSFSkill = false;
         roleDate.isBeHiting = false;
         roleDate.isBeHit = false;
     }
@@ -1643,6 +1672,8 @@ public class GameBody : MonoBehaviour, IRole {
         //print(type+" ???time  "+eventObject);
     }
 
+    public bool IsSFSkill = false;
+
     protected bool isSkilling = false;
     public void GetSkillBeginEffect(string skillName) {
         //判断是否有该技能
@@ -1666,6 +1697,8 @@ public class GameBody : MonoBehaviour, IRole {
     //显示动作特效 龙骨的侦听事件
     protected virtual void ShowACTX(string type, EventObject eventObject)
     {
+
+        if (IsSFSkill) return;
         //print("type:  "+type);
         //print("eventObject  ????  " + eventObject);
         //print("___________________________________________________________________________________________________________________________name    "+ eventObject.name);

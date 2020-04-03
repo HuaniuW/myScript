@@ -10,10 +10,10 @@ public class TX_zidan : MonoBehaviour
         
     }
 
-    GameObject _player;
-    bool isFaShe = false;
+    protected GameObject _player;
+    protected bool isFaShe = false;
     public float speeds = 20;
-    Vector2 v2;
+    //Vector2 v2;
 
 
     private void OnEnable()
@@ -26,17 +26,77 @@ public class TX_zidan : MonoBehaviour
         /*  v2 = _player.transform.position - this.transform.position;
           print("_player.transform.position    " + _player.transform.position + "  this.transform.position   " + this.transform.position+  "-----------------------zd>  " +v2);
           GetComponent<Rigidbody2D>().velocity = v2;*/
+
+
+        //isFire = false;
+        //isShangshen = false;
     }
 
 
-    void fire()
+    public void SetZDSpeed(float theSpeed)
+    {
+        this.speeds = theSpeed;
+    }
+
+
+
+    ////上升的一定高度 速度下降的时候 开始进进攻 高速子弹 或者 有时间限制的  追踪子弹
+    ////上升速度
+    //public float UpSpeed = 15;
+    ////设置重力系数
+
+    //bool isShangshen = false;
+    //bool isFire = false;
+
+    //public bool IsGaosuZiDan = false;
+    //void GaosuZiDan()
+    //{
+    //    if (IsGaosuZiDan)
+    //    {
+    //        if (!isShangshen)
+    //        {
+    //            isShangshen = true;
+    //            Vector2 upPos = new Vector2();
+    //            GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
+    //        }
+    //    }
+    //}
+
+  
+    public virtual void GetZiDanStart()
+    {
+
+    }
+
+
+    protected void fire()
     {
         if (_player&& isFaShe) {
             isFaShe = false;
+            //print("----------------------------------------->>  fire!!!!! "+speeds);
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
         } 
     }
 
+    [Header("是否自行开启向 玩家的 攻击")]
+    public bool IsAtkAuto = true;
+
+    //指定的攻击目标
+    public void GetTargetObj(GameObject targetObj)
+    {
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(targetObj.transform.position, this.transform.position, speeds);
+    }
+
+
+    public void GetDiretionByV2(Vector2 v2,float theSpeed = 0)
+    {
+        if (theSpeed != 0) speeds = theSpeed;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(v2, this.transform.position, speeds);
+    }
+
+    [Header("爆炸 特效 的类型  爆炸特效名字")]
     public int bzType = 1;
 
     void OnTriggerEnter2D(Collider2D Coll)
@@ -57,6 +117,9 @@ public class TX_zidan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        fire();
+
+        if (IsAtkAuto) {
+            fire();
+        }
     }
 }

@@ -143,7 +143,7 @@ public class AirGameBody : GameBody {
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName != RUN)
         {
-            print("?????run     "+ DBBody.animation.lastAnimationName);
+            //print("?????run     "+ DBBody.animation.lastAnimationName);
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
       
@@ -191,7 +191,7 @@ public class AirGameBody : GameBody {
             {
                 GetPlayerRigidbody2D().gravityScale = 4;
                 if (hitKuai) hitKuai.SetActive(false);
-                print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
+                //print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
                 BeHitFlyOut(100);
                 if(isDieRotation) GetPlayerRigidbody2D().freezeRotation = true;
             }

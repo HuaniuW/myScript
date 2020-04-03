@@ -24,7 +24,7 @@ public class UI_Hun : MonoBehaviour {
 
     void OnDistory()
     {
-        print("UI_hun  我被销毁了!");
+        //print("UI_hun  我被销毁了!");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_HUN, this.ChangeHun);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.NO_HUN_PROMPT, this.No_hun_prompt);
         

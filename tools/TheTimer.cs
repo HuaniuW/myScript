@@ -66,6 +66,7 @@ public class TheTimer : MonoBehaviour {
     float _maxTimesNum = 0;
     float _intervals = 1;
 
+    //连续间隔时间 返回
     public void ContinuouslyTimesAdd(float timeNums,float intervals, callback call)
     {
         
@@ -74,6 +75,27 @@ public class TheTimer : MonoBehaviour {
         _intervals = intervals;
         //print("!!!!!!!!!!   "+ _timeNums);
         _call = call;
+    }
+
+    bool _isContinuouslyTimesStart = false;
+    //连续时间 运行
+    void ContinuouslyTimesStart()
+    {
+        //print("------------------------------------------------------------------_timeNums      " + _timeNums);
+        if (IsPauseTimeOver())
+        {
+            GetStopByTime(_intervals);
+            _timeNums--;
+            _call(_timeNums);
+        }
+
+
+        if (_timeNums == 0)
+        {
+            GetFull();
+            return;
+        }
+
     }
 
     public void TempSetTimeNums(float nums)
@@ -91,6 +113,7 @@ public class TheTimer : MonoBehaviour {
     }
 
     bool isDanciTimes2 = false;
+    //单次
     void DanciTimes() {
         if (isDanciTimes2) {
             DanciStart();
@@ -107,24 +130,7 @@ public class TheTimer : MonoBehaviour {
         }
     }
 
-    bool _isContinuouslyTimesStart = false;
-    void ContinuouslyTimesStart()
-    {
-        //print("------------------------------------------------------------------_timeNums      "+ _timeNums);
-        if (IsPauseTimeOver())
-        {
-            GetStopByTime(_intervals);
-            _timeNums--;
-            _call(_timeNums);
-        }
-
-
-        if (_timeNums == 0) {
-            GetFull();
-            return;
-        }
-
-    }
+   
 
 
     public void GetFull()

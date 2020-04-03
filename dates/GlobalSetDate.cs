@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using XLua;
+//using XLua;
 
 public class GlobalSetDate : MonoBehaviour {
     public static GlobalSetDate instance;
@@ -184,13 +184,14 @@ public class GlobalSetDate : MonoBehaviour {
             if (door.transform.localRotation.z < 0)
             {
                 roleDirection = "r";
-                playerInScreenPosition = new Vector2(door.transform.position.x-1, door.transform.position.y - 1);
+                playerInScreenPosition = new Vector2(door.transform.position.x-1, door.transform.position.y - 1f);
             }
             else
             {
                 roleDirection = "l";
-                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1);
+                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1f);
             }
+            doorName = "";
         }
         else
         {
@@ -340,6 +341,7 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
         if (HowToInGame == TEMP_SCREEN)
         {
+            //print("临时进的游戏吗？？？？");
             CurrentUserDate.playerPosition = player.transform.position.x + "_" + player.transform.position.y;
         }
         else
@@ -355,7 +357,7 @@ public class GlobalSetDate : MonoBehaviour {
         if(GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1")!=null) CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
         //血瓶数量
         if(GlobalTools.FindObjByName("PlayerUI(Clone)/xueping")!=null) CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
-        CurrentUserDate.userName = "我的存档";
+        CurrentUserDate.userName = "myGame";
         CurrentUserDate.onlyId = 2;
 
 
@@ -424,12 +426,14 @@ public class GlobalSetDate : MonoBehaviour {
         {
             //音量+
             GetUpSoundEffectValue();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);//   addEventListener(EventTypeName.AUDIO_VALUE, audioValue);
         }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
             //音量-
             GetDownSoundEffectValue();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);
         }
 
         if (Input.GetKeyDown(KeyCode.V))

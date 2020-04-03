@@ -18,7 +18,7 @@ public class MenGuai : MonoBehaviour {
         {
             isOpen = true;
             var strArr = DoorNum.Split(',');
-            if (strArr.Length > 1)
+            if (strArr.Length >1)
             {
                 for(var i=0; i< strArr.Length; i++)
                 {
