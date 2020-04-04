@@ -8,6 +8,7 @@ public class HitKuai : MonoBehaviour {
     // Use this for initialization
     void Start() {
         //print(this.transform);
+       
     }
 
 
@@ -23,6 +24,8 @@ public class HitKuai : MonoBehaviour {
     void Update() {
     }
 
+    
+
     GameObject atkObj;
 
     RoleDate roleDate;
@@ -34,7 +37,7 @@ public class HitKuai : MonoBehaviour {
 
     GameObject txObj;
     Transform beHitObj;
-    public void GetTXObj(GameObject txObj,bool isSkill = false,float atkObjScaleX = 1){
+    public void GetTXObj(GameObject txObj,bool isSkill = false,float atkObjScaleX = 1,GameObject atkObj = null){
 
 
         if (txObj != null)
@@ -44,10 +47,18 @@ public class HitKuai : MonoBehaviour {
         else
         {
             this.txObj = this.transform.parent.gameObject;
+            if (atkObj != null)
+            {
+                txObj.GetComponent<JN_base>().atkObj = atkObj;
+            }
             //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+this.name+"     "+this.txObj);
         }
+        //this.GetComponent<JN_Date>().team = this.txObj.GetComponent<JN_Date>().team;
+        
         if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
+        //atkObj = txObj.GetComponent<JN_base>().atkObj;
         _atkObjScaleX = txObj.GetComponent<JN_base>().atkObj.transform.localScale.x;
+        print("TEAM --------->  " + this.txObj.GetComponent<JN_Date>().team + "   _atkObjScaleX  " + _atkObjScaleX);
     }
 
 
@@ -72,6 +83,7 @@ public class HitKuai : MonoBehaviour {
         if (this.txObj == null) this.txObj = this.transform.parent.gameObject;
         //if(roleDate) print("-------------------------------------------------------------this.txObj    " + this.txObj+"       "+this.transform.name+ "   this.teamNum  " + this.teamNum+ "  roleDate.team "+ roleDate.team);
         atkObj = txObj.GetComponent<JN_base>().atkObj;
+        //if (atkObj == null) return;
         _atkRigidbody2D = atkObj.GetComponent<Rigidbody2D>();
         //print(atkObj.name);
         txPos = -1.2f;
@@ -88,7 +100,8 @@ public class HitKuai : MonoBehaviour {
             //float _roleScaleX = this.transform.localScale.x > 0?-1:1 ;  //-atkObj.transform.localScale.x;
             float _roleScaleX = -_atkObjScaleX;//atkObj.transform.localScale.x;
             if (_roleScaleX == 0) _roleScaleX = -atkObj.transform.localScale.x;
-            //print("施展攻击方 名字      "+atkObj.name+ "      _roleScaleX     ----    " + _roleScaleX+ "    -atkObj.transform.localScale.x    "+ -atkObj.transform.localScale.x+"  team "+jn_date.team+"  被攻击放队伍   "+roleDate.team);
+
+            //print(this.name+"  技能名字 "+jn_date.name+"  施展攻击方 名字      "+atkObj.name+ "      _roleScaleX     ----    " + _roleScaleX+ "    -atkObj.transform.localScale.x    "+ -atkObj.transform.localScale.x+"  team "+jn_date.team+"  被攻击放队伍   "+roleDate.team);
                 /**
                 if (jn_date._type != "1")
                 {
@@ -171,17 +184,18 @@ public class HitKuai : MonoBehaviour {
 
                 }
 
-
+                print("硬直  "+ atkObj.GetComponent<RoleDate>().yingzhi+"   敌人硬直   "+ roleDate.yingzhi+"   方向  "+atkObj.transform.localScale.x);
                 //判断是否破防   D 代办事项 
                 float beHitXFScale = roleDate.beHitXFScale;
-                if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
+                //if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
+                if (atkObj.GetComponent<RoleDate>().yingzhi*0.5f > roleDate.yingzhi)
                 {
                     gameBody.HasBeHit();
                     //atkObjV3Zero(Coll.gameObject);
                     if(_atkRigidbody2D) _atkRigidbody2D.AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
                     Coll.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     if (jn_date.fasntuili != 0) beHitXFScale = 1;// 有反推力说明是空中向下攻击
-                    //print("----------------------------------------------------------------> 冲击力  "+jn_date.chongjili+ "  _roleScaleX   "+ _roleScaleX);
+                    print("----------------------------------------------------------------> 冲击力  "+jn_date.chongjili+ "  _roleScaleX   "+ _roleScaleX);
                     if(Coll.tag == "AirEnemy")
                     {
                         Coll.GetComponent<Rigidbody2D>().AddForce(GlobalTools.GetVector2ByPostion(Coll.transform.position,atkObj.transform.position,jn_date.chongjili));
@@ -197,23 +211,27 @@ public class HitKuai : MonoBehaviour {
                     //print(Coll.tag);
                     
                 }
-                else if (jn_date.atkPower - roleDate.yingzhi > 0)
+                else if (atkObj.GetComponent<RoleDate>().yingzhi>roleDate.yingzhi)
                 {
                     //atkObjV3Zero(Coll.gameObject);
-
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX - 100, 0));
+                    print("  >>>>>>>>_roleScaleX   " + _roleScaleX+"  jndate type  "+ jn_date._type+"  collname  "+Coll.name);
+                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * -atkObj.transform.localScale.x - 100, 0));
                     gameBody.HasBeHit(jn_date.chongjili);
                     if (atkObj && jn_date._type == "1")
                     {
                         ObjV3Zero(atkObj);
-                        if (jn_date.atkDirection=="" && _atkRigidbody2D) _atkRigidbody2D.AddForce(new Vector2(-200 * _roleScaleX, 0));
+                        //print("  /////////////////////////////////>>>>>>>>_roleScaleX   " + _roleScaleX);
+                        if (jn_date.atkDirection=="" && _atkRigidbody2D) _atkRigidbody2D.AddForce(new Vector2(-200 * -atkObj.transform.localScale.x, 0));
                     }
                     txPos = 0.4f;
+                    print("----------------------------222222222------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
                 else
                 {
                     if (atkObj && jn_date._type == "1")
                     {
+
+                        print("  333333333>>>>>>>>_roleScaleX   " + _roleScaleX+"    atkObjScaleX  "+ atkObj.transform.localScale.x  + "  jndate type  " + jn_date._type + "  collname  " + Coll.name);
                         //被攻击怪硬值过大 被反弹
                         //ObjV3Zero(atkObj);
                         if (atkObj&& atkObj.GetComponent<GameBody>())
@@ -223,10 +241,11 @@ public class HitKuai : MonoBehaviour {
                              {
                                  atkObj.GetComponent<GameBody>().isAtkFanTui = true;
                              }*/
-                            if (jn_date.atkDirection == "" && _atkRigidbody2D) _atkRigidbody2D.velocity = new Vector2(-12 * _roleScaleX, _atkRigidbody2D.velocity.y);// _atkRigidbody2D.AddForce(new Vector2(-600 * _roleScaleX, 0));
+                            if (jn_date.atkDirection == "" && _atkRigidbody2D) _atkRigidbody2D.velocity = new Vector2(-12 * -atkObj.transform.localScale.x, _atkRigidbody2D.velocity.y);// _atkRigidbody2D.AddForce(new Vector2(-600 * _roleScaleX, 0));
                         }
                        
                     }
+                    print("---------------------333333333-------------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
 
 
@@ -268,7 +287,9 @@ public class HitKuai : MonoBehaviour {
                 txObj.GetComponent<JN_base>().DisObj();
             }
 
-            GetBeHit(jn_date, _roleScaleX);
+            
+            //GetBeHit(jn_date, _roleScaleX);
+            GetBeHit(jn_date, -atkObj.transform.localScale.x);
 
         }
     }

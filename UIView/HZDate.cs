@@ -66,6 +66,12 @@ public class HZDate : MonoBehaviour {
     [Header("防御效果")]
     public string def_effect = "";
 
+
+    //增加硬直
+    //临时增加硬直
+
+
+
     void Start () {
         
     }

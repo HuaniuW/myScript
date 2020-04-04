@@ -27,7 +27,10 @@ public class JN_base : MonoBehaviour
     private void OnEnable()
     {
         //transform.Find("jn_fk").GetComponent<HitKuai>().CanHit();
+        IsCanMove = true;
     }
+
+
     float sacaleX;
     public void GetPositionAndTeam(Vector3 _position, float team,float _sacaleX,GameObject obj,bool isSkill = false)
     {
@@ -48,14 +51,17 @@ public class JN_base : MonoBehaviour
         //TX_weizhiyupan();
         if (!isSkill)
         {
+            print("-------------------------->>>>????   ");
             ShowHitFK();
         }
         else {
             if (_hitKuai != null) {
+                print("   2222222 ");
                 _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject, true);
             }
             else
             {
+                print("   3333333 ");
                 ShowHitFK();
             }
             
@@ -91,8 +97,12 @@ public class JN_base : MonoBehaviour
 
         //GetKuai(_atkVVo, _position);
         //StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitKuai));
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, jn_date.TXDisTime));
+        if(!IsControlDis) StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(gameObject, jn_date.TXDisTime));
     }
+
+    [Header("是否控制消失 如果是false 这开发者自己控制 什么时候销毁")]
+    public bool IsControlDis = false;
+
 
     //显示碰撞方块  开始是将碰撞块放进特效 和特效一起 但是移动会导致 碰撞快 连续撞击 所以动态调用
     void ShowHitFK()
@@ -102,7 +112,7 @@ public class JN_base : MonoBehaviour
         hitFK.transform.localScale = new Vector3(jn_date.hitKuaiSW, jn_date.hitKuaiSH, 1);
         Vector3 nv3 = new Vector3(this.transform.position.x - sacaleX*jn_date.hitKuai_xdx, this.transform.position.y+jn_date.hitKuai_xdy, this.transform.position.z);
         hitFK.transform.position = nv3;
-
+        //print("------------->hitFK pos  "+nv3);
     }
 
 
@@ -133,13 +143,25 @@ public class JN_base : MonoBehaviour
             //2 持续型
             //3 持续并且碰到就消失
             //print("2222222222222222222222222222222222222     "+jn_date.moveXSpeed);
-            if(gameObject.GetComponent<Rigidbody2D>()!=null) gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed,jn_date.moveYSpeed);
+            if (gameObject.GetComponent<Rigidbody2D>() != null && IsCanMove) {
+                //print(">>>>>>>>>>>>>>>>>   "+ jn_date.moveXSpeed);
+                gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(jn_date.moveXSpeed, jn_date.moveYSpeed);
+            }
+            
             //print(transform.GetComponent<Rigidbody2D>().velocity);
         }
         else
         {
             TX_gensui();
         }
+    }
+
+    bool IsCanMove = true;
+    //停止速度运行
+    public void StopSD() {
+        IsCanMove = false;
+        gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        //print("//////////////////////////////////////////////////////////////////////禁止 速度");   
     }
 
 

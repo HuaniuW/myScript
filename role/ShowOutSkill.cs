@@ -27,7 +27,7 @@ public class ShowOutSkill : MonoBehaviour {
 
         //print("hzSkillName   "+ hzSkillName);
         GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
-        /**
+        
         if (Globals.isDebug)
         {
             print("skill  "+ skill);
@@ -35,12 +35,12 @@ public class ShowOutSkill : MonoBehaviour {
             print("this.transform.GetComponent<RoleDate>().team  " + this.transform.GetComponent<RoleDate>().team);
             print("this.transform.localScale.x  " + this.transform.localScale.x);
             print("this.gameObject  " + this.gameObject);
-        }*/
+        }
 
         //print("攻击时玩家的x周速度  "+this.GetComponent<Rigidbody2D>().velocity.x);
         //print("----------------------------------->????  " + skill.GetComponent<JN_base>());
         skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject, isSkill);
-        
+        //skill.GetComponent<JN_Date>().GetCallBackStart();
         
         //TXPlay2(skill);
         //取到技能vo

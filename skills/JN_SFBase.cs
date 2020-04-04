@@ -25,6 +25,10 @@ public class JN_SFBase : MonoBehaviour
     [Header("接近 速度")]
     public float NearSpeed = 0.9f;
 
+    [Header("起手 延迟  技能动作的 延迟动作")]
+    public float qishoudongzuoyanchi = 0;
+
+
     protected GameBody _gameBody;
 
     protected bool IsStarting = false;
@@ -98,7 +102,7 @@ public class JN_SFBase : MonoBehaviour
 
         //起手慢动作
 
-        _gameBody.GetPause(0.5f, 0);
+        if(qishoudongzuoyanchi!=0) _gameBody.GetPause(qishoudongzuoyanchi, 0);
         //print("_gameBody.GetDB().animation.timeScale:       "+ _gameBody.GetDB().animation.timeScale);
         //_gameBody.GetDB().animation.timeScale = 0;
         //print("_gameBody.GetDB().animation.timeScale2 :       " + _gameBody.GetDB().animation.timeScale);

@@ -328,11 +328,13 @@ public class GameBody : MonoBehaviour, IRole {
             if (jn.IsCDOver())
             {
                 if (roleDate.lan - jn.xyLan < 0) {
+                    //蓝不够释放技能
                     ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NO_HUN_PROMPT, null), this); 
                     return;
                 }
 
                 if (roleDate.live - jn.xyXue < 1) {
+                    //释放技能的血量不够
                     return;
                 }
                 //print("hi! 释放技能");
@@ -342,6 +344,7 @@ public class GameBody : MonoBehaviour, IRole {
                 //jn.StartCD();
                 //if(Globals.isDebug)print("---------------------------> 释放技能！！"+ jn.skillACName);
                 //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
+                //是否包含 技能动作
                 if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
                 {
                     //***找到起始特效点 找骨骼动画的点 或者其他办法
@@ -367,7 +370,7 @@ public class GameBody : MonoBehaviour, IRole {
                     playerRigidbody2D.velocity = Vector2.zero;
                     if (jn.ACyanchi > 0)
                     {
-                        GetPause(jn.ACyanchi);
+                        GetPause(jn.ACyanchi,0);
                         //***人物闪过去的 动作 +移动速度  还有多发的火球类的特效
                     }
                 }

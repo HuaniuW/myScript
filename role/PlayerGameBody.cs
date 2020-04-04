@@ -14,7 +14,8 @@ public class PlayerGameBody : GameBody {
     {
 
         DimianAtkHuanYuan();
-
+        //攻击修正 防卡死
+        AtkXiuZheng();
         //外挂飘动骨骼修正
         BoneOrderXiuzheng();
         //DBTest();
@@ -367,7 +368,7 @@ public class PlayerGameBody : GameBody {
         {
             jisuqi = 0;
             yanchi++;
-            //print(yanchi+"   >>   "+ (vOAtk.yanchi - canMoveNums));
+            print(yanchi+"   >>   "+ (vOAtk.yanchi - canMoveNums));
             //ljTime.GetStopByTime(0.5f);
             if (yanchi > vOAtk.yanchi - canMoveNums)
             {
@@ -414,14 +415,58 @@ public class PlayerGameBody : GameBody {
 
         }
 
-        //保险措施 
-        if (DBBody.animation.lastAnimationName != vOAtk.atkName)
-        {
-            AtkLJOver();
-            //playerRigidbody2D.gravityScale = 4.5f;
-        }
+     
 
     
+    }
+
+
+    void AtkXiuZheng()
+    {
+        if (vOAtk != null)
+        {
+            //保险措施
+
+            if (DBBody.animation.lastAnimationName != vOAtk.atkName|| yanchi >= vOAtk.yanchi)
+            {
+                AtkLJOver();
+
+                IsAtkDown = false;
+                IsAtkDowning = false;
+                isAtkYc = false;
+                isTXShow = false;
+                //if(Globals.isDebug) print("-------------------修正--------------> ok!!  " + yanchi);
+            }
+
+
+            //if (DBBody.animation.lastAnimationName != vOAtk.atkName)
+            //{
+            //    AtkLJOver();
+
+            //    IsAtkDown = false;
+            //    IsAtkDowning = false;
+            //    isAtkYc = false;
+            //    isTXShow = false;
+            //    print("----------修正！！！！！！");
+            //    //playerRigidbody2D.gravityScale = 4.5f;
+            //}
+            //else
+            //{
+            //    if (yanchi >= vOAtk.yanchi)
+            //    {
+            //        print("-------------------修正--------------> ok!!  " + yanchi);
+            //        //超过延迟时间 失去连击
+            //        isAtkYc = false;
+            //        IsAtkDown = false;
+            //        IsAtkDowning = false;
+            //        isTXShow = false;
+            //        AtkLJOver();
+
+            //        //playerRigidbody2D.gravityScale = 4.5f;
+            //    }
+            //}
+        }
+       
     }
 
     //地面攻击还原
@@ -585,6 +630,7 @@ public class PlayerGameBody : GameBody {
     {
         isAtking = false;
         isAtk = false;
+        isTXShow = false;
         yanchi = 0;
         //atkNums = 0;
     }

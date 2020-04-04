@@ -38,7 +38,7 @@ public class JN_Date : MonoBehaviour {
     public float moveYSpeed = 0;
     [Header("sceleX修正 有时候资源正反不一")]
     public int xzScaleX = 1;
-    [Header("特效类型")]
+    [Header("特效类型 1.下一帧或者时间内消失 2.持续型 3.碰到消失 ")]
     public string _type = "1";
     [Header("技能动作")]
     public string _skillAC = "";
@@ -81,9 +81,25 @@ public class JN_Date : MonoBehaviour {
     public void SetDateVO(Dictionary<string,string> dict) {
         
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    //public delegate void callback(float nums = 0);
+    //callback _call;
+
+    //public void GetCallBackStart()
+    //{
+    //    if (_call!=null) _call();
+    //}
+
+    //public void GetcallBackFuc(callback call)
+    //{
+    //    _call = call;
+    //}
+
+
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }
