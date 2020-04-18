@@ -49,7 +49,7 @@ public class AIZiDan : MonoBehaviour
     [Header("是否在地面的怪")]
     public bool IsDimian = false;
 
-    void ReSetAll()
+    public void ReSetAll()
     {
         _isBehaviorOver = false;
         IsFindRoading = false;

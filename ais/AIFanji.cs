@@ -10,6 +10,9 @@ public class AIFanji : MonoBehaviour {
     }
 
     public string SHANBI = "houshan_1";
+
+    public float HouShanValue = 40;
+
     public string FANJI = "atk_1";
 
     bool isFanjiing = false;
@@ -81,7 +84,8 @@ public class AIFanji : MonoBehaviour {
     int beHitNum = 0;
     public void GetFanji()
     {
-        if (isFanjiing) return;     
+        print("   进入 AI反击 ！！  "+_gameBody.isAcing);
+        if (isFanjiing) return;
         if (beHitNum == _gameBody.beHitNum) return;
         beHitNum = _gameBody.beHitNum;
         int n = (int)UnityEngine.Random.Range(0, 100);
@@ -92,15 +96,18 @@ public class AIFanji : MonoBehaviour {
             //print("BeHitNum  " + BeHitNum);
         }
         if (n <= (100 - fanjijilv- BeHitNum)) return;
+
+        print("   进入 AI反击 ！！  反击成功！！！！  ");
         //print("----------------------------------反击！！！"+(fanjijilv + BeHitNum));
         if (!isFanji)
         {
             isFanji = true;
             isFanjiing = true;
+            print("  进入 反击    "+ _gameBody.isAcing);
             _gameBody.FanJiBeHitReSet();
             //清0速度
             _gameBody.SpeedXStop();
-            _gameBody.GetBackUp();
+            _gameBody.GetBackUp(HouShanValue);
         }
         
     }
@@ -182,10 +189,18 @@ public class AIFanji : MonoBehaviour {
                 //    isFanjiing = false;
                 //    return;
                 //}
-                
-                //判断是否是技能攻击
 
-                _gameBody.GetAtk(FANJI);
+                //判断是否是技能攻击
+                if (skillAtkName!="")
+                {
+                    GetComponent<AIBase>().GetAtkFSByName(skillAtkName);
+                    init();
+                    return;
+                }
+                else{
+                    _gameBody.GetAtk(FANJI);
+                }
+                
                 if (atkDelayTimes!=0)
                 {
                     _gameBody.GetPause(atkDelayTimes);

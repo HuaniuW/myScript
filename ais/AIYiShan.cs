@@ -19,8 +19,10 @@ public class AIYiShan : MonoBehaviour {
     public float addYZNum = 0;
 
     EnemyGameBody _gameBody;
-   
+
     // Use this for initialization
+    [Header("烟尘 ")]
+    public ParticleSystem YanChen;
 
     bool isStart = false;
     bool isFirstAddListener = true;
@@ -33,8 +35,47 @@ public class AIYiShan : MonoBehaviour {
     protected UnityArmatureComponent DBBody;
     public void GetStart()
     {
-        
+
+        //判断 前面距离
+        Vector2 start;
+
+
+        //前面的距离测试 
+        Vector2 end;
+        if (this.transform.localScale.x < 0)
+        {
+            start = this.transform.position;
+            end = new Vector2(start.x + atkDistance+2, start.y);
+            Debug.DrawLine(start, end, Color.yellow);
+            if (Physics2D.Linecast(start, end, GetComponent<GameBody>().groundLayer))
+            {
+                //Time.timeScale = 0;
+                //print("撞墙 右！！！");
+                GetOver();
+                return;
+            }
+
+        }
+        else
+        {
+            start = this.transform.position;
+            end = new Vector2(start.x - atkDistance-2, start.y);
+            Debug.DrawLine(start, end, Color.yellow);
+            if (Physics2D.Linecast(start, end, GetComponent<GameBody>().groundLayer))
+            {
+                //Time.timeScale = 0;
+                //print("撞墙 左！！！");
+                GetOver();
+                return;
+            }
+        }
         if (isStart) return;
+
+
+
+
+
+
         if (!isStart) isStart = true;
         _gameBody = GetComponent<EnemyGameBody>();
         //检测是否有悬崖 会冲出去    判断是否动作名是空    判断是否有需要的动作
@@ -50,12 +91,18 @@ public class AIYiShan : MonoBehaviour {
         if (isFirstAddListener) {
             isFirstAddListener = false;
             DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX2);
-        } 
+        }
 
 
 
         //摆出动作
-        if (DBBody.animation.HasAnimation(acName)) _gameBody.GetACByName(acName,true);
+        if (DBBody.animation.HasAnimation(acName)) {
+            //_gameBody.GetACByName(acName, true);
+            GetComponent<EnemyGameBody>()._isHasAtkTX = true;
+            _gameBody.GetAcMsg(acName);
+        }
+
+        
         //停顿时间
         _gameBody.GetPause(StartZSStopTimes, pauseNums);
     }
@@ -68,10 +115,17 @@ public class AIYiShan : MonoBehaviour {
         _isSpeedStart = false;
         GetComponent<RoleDate>().hfYZ(addYZNum);
         GetComponent<TheTimer>().ReSet();
+        GetComponent<EnemyGameBody>()._isHasAtkTX = false;
+        GetComponent<EnemyGameBody>().IsJiasu = false;
+        TempDis = 0;
+        if(YanChen) YanChen.Stop();
+        _XZtimes = 0;
         //if(DBBody) DBBody.RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         //DBBody = null;
 
     }
+
+    float TempDis = 0;
 
     //是否会超出地面 掉到悬崖下面
     bool IsGetOutLand()
@@ -90,7 +144,7 @@ public class AIYiShan : MonoBehaviour {
     }
 
 	void Start () {
-        
+        if (YanChen) YanChen.Stop();
     }
 
     protected void ShowACTX2(string type, EventObject eventObject)
@@ -116,6 +170,7 @@ public class AIYiShan : MonoBehaviour {
                 speedX = this.transform.localScale.x < 0 ? Mathf.Abs(speedX) : -Mathf.Abs(speedX);
                 //GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, 0);
                 _isSpeedStart = true;
+                GetComponent<EnemyGameBody>().IsJiasu = true;
             }
         }
 
@@ -125,10 +180,10 @@ public class AIYiShan : MonoBehaviour {
     public float speedX = 120;
     
     [Header("一闪的结束距离")]
-    float _cjDistance = 12;
+    public float SJDistance = 12;
 
     [Header("一闪结束后 动作停顿时间")]
-    float _overACStopTime = 0.5f;
+    public float _overACStopTime = 0.5f;
 
 
 
@@ -136,16 +191,35 @@ public class AIYiShan : MonoBehaviour {
     bool _isOutDistance = false;
     float _posX;
     bool _isShowTX = false;
+
+
+    float _XZtimes = 0;
+
     // Update is called once per frame
     void Update () {
+        if (_isOutDistance)
+        {
+            _XZtimes += Time.deltaTime;
+            if (_XZtimes >= _overACStopTime)
+            {
+                _isOutDistance = false;
+                GetOver();
+            }
+        }
+
+
         if (!isStart) return;
 
+
+        //print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
+        
         if (_gameBody.isInAiring)
         {
             GetOver();
             return;
         }
 
+        //被击中 或者 悬空 就结束
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
             GetOver();
@@ -154,9 +228,16 @@ public class AIYiShan : MonoBehaviour {
             return;
         }
 
+        if (GetComponent<GameBody>().IsHitWall)
+        {
+            GetOver();
+            return;
+        }
+
         if (_isSpeedStart)
         {
             GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, 0);
+            if (YanChen) YanChen.Play();
         }
 
         if (isStart)
@@ -171,12 +252,22 @@ public class AIYiShan : MonoBehaviour {
                     
                     //GetOver();
                 }
-
+                
 
                 float dis = Mathf.Abs(this.transform.position.x - _posX);
-                //print("---------------------------移动距离 "+dis);
-                if (dis > _cjDistance|| _gameBody.IsHitWall)
+                //if (Mathf.Abs(dis - TempDis) < 0.02f)
+                //{
+                //    //撞墙判断
+                //    GetOver();
+                //    return;
+                //}
+
+                TempDis = dis;
+                //print("   -------->  x位上的 速度     speedX   " + speedX +"  sudu  "+ GetComponent<Rigidbody2D>().velocity.x);
+                //print("---------------------------移动距离 " + dis+"    总距离    "+ SJDistance);
+                if (dis > SJDistance || _gameBody.IsHitWall)
                 {
+                    //Time.timeScale = 0;
                     GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     _isSpeedStart = false;
                     //GetOver();
@@ -185,7 +276,7 @@ public class AIYiShan : MonoBehaviour {
                     if (!_isOutDistance)
                     {
                         _isOutDistance = true;
-                        GetComponent<TheTimer>().TimesAdd(_overACStopTime, CallBack);
+                        //GetComponent<TheTimer>().TimesAdd(_overACStopTime, CallBack);
                     }
                     
                 }

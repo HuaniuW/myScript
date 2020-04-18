@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class JN_LuanRen : MonoBehaviour
 {
-    [Header("增加的硬直")]
-    public float AddYingzhiNums = 1000;
+   
 
 
     public GameObject tx1;
@@ -117,7 +116,7 @@ public class JN_LuanRen : MonoBehaviour
         //hitkuai6.GetComponent<HitKuai>().GetTXObj(gameObject);
 
 
-        print("----------->1");
+        //print("----------->1");
 
 
 
@@ -186,7 +185,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai1)
                 {
                     IsHitKuai1 = true;
-                    print("hitkuai--->  1");
+                    //print("hitkuai--->  1");
                     hitkuai1.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
                 
@@ -222,7 +221,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai2)
                 {
                     IsHitKuai2 = true;
-                    print("hitkuai--->  2");
+                    //print("hitkuai--->  2");
                     hitkuai2.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
 
@@ -255,7 +254,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai3)
                 {
                     IsHitKuai3 = true;
-                    print("hitkuai--->  3");
+                    //print("hitkuai--->  3");
                     hitkuai3.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
 
@@ -278,7 +277,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai4)
                 {
                     IsHitKuai4 = true;
-                    print("hitkuai--->  4");
+                    //print("hitkuai--->  4");
                     hitkuai4.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
 
@@ -301,7 +300,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai5)
                 {
                     IsHitKuai5 = true;
-                    print("hitkuai--->  5");
+                    //print("hitkuai--->  5");
                     hitkuai5.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
 
@@ -323,7 +322,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai6)
                 {
                     IsHitKuai6 = true;
-                    print("hitkuai--->  6");
+                    //print("hitkuai--->  6");
                     hitkuai6.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                     
                 }
@@ -346,7 +345,7 @@ public class JN_LuanRen : MonoBehaviour
     {
         //HideHitKuai();
 
-        print("atkObj    "+atkObj+"   222    "+GetComponent<JN_base>().atkObj);
+        //print("atkObj    "+atkObj+"   222    "+GetComponent<JN_base>().atkObj);
         ReSetAll();
     }
 
@@ -356,18 +355,8 @@ public class JN_LuanRen : MonoBehaviour
    
 
     bool IsAddYz = false;
-    //提高硬直
-    void AddYingzhi()
-    {
-        print("-------------------------------> 增加 硬直 ！！！");
-        atkObj.GetComponent<RoleDate>().addYZ(AddYingzhiNums);
-        GetComponent<TheTimer>().TimesAdd(1,YZHYCallBack);
-    }
 
-    void YZHYCallBack(float n)
-    {
-        atkObj.GetComponent<RoleDate>().hfYZ(AddYingzhiNums);
-    }
+   
 
     private void OnDisable()
     {
@@ -388,12 +377,12 @@ public class JN_LuanRen : MonoBehaviour
         if (!IsAddYz)
         {
             IsAddYz = true;
-            print("-------------///////////////////////////-----是不是先进来的？？？？？");
+            //print("-------------///////////////////////////-----是不是先进来的？？？？？");
             atkObj = GetComponent<JN_base>().atkObj;
-            AddYingzhi();
+            
             //ShowHitKuai();
             //GetAtkObjInHitKuai();
-            print("----------->2");
+            //print("----------->2");
         }
 
         SetAtkObj();

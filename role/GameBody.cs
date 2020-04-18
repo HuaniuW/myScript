@@ -111,7 +111,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public bool isTXShow = false;
 
-
+    public bool IsJiasu = false;
 
     public virtual void ResetAll()
     {
@@ -130,19 +130,21 @@ public class GameBody : MonoBehaviour, IRole {
         isAtking = false;
         atkNums = 0;
         isAtkYc = false;
-        isYanchi = false;
+        isACCompletedYanchi = false;
         isBackUp = false;
         isBackUping = false;
         isQianhua = false;
         isQianhuaing = false;
         isAcing = false;
-        isYanchi = false;
+        //isYanchi = false;
         isSkilling = false;
         IsSFSkill = false;
         isSkillOut = false;
         isDodge = false;
         isDodgeing = false;
         isTXShow = false;
+        yanchiTime = 0;
+        IsJiasu = false;
 
         if (roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
@@ -195,18 +197,40 @@ public class GameBody : MonoBehaviour, IRole {
             BackJumpVX(vx);
             //打开有bug
             //MoveVY(200);
+            print("进入 后闪动作！！！！！！");
         }
 
     }
 
+
     protected void GetBackUping()
     {
+        print("  backUping!!!!! ");
+        if (isBackUping)
+        {
+            print("时间 xiuzheng");
+            buckUpXZTimes += Time.deltaTime;
+            if (buckUpXZTimes >= 1)
+            {
+                BackUpOver();
+            }
+        }
+
+
         if (DBBody.animation.lastAnimationName == BACKUP && DBBody.animation.isCompleted)
         {
-            isBackUping = false;
-            isBackUp = false;
-            roleDate.isCanBeHit = true;
+            BackUpOver();
         }
+    }
+
+    float buckUpXZTimes = 0;
+
+    void BackUpOver()
+    {
+        isBackUping = false;
+        isBackUp = false;
+        roleDate.isCanBeHit = true;
+        buckUpXZTimes = 0;
     }
 
    
@@ -286,30 +310,36 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
-    // 补一个被动技能的释放  是否有被动技能 有的话 直接释放  被动技能是否 配有动作？
+    //被动技能
+    protected HZDate bdjn;
+    //释放被动技能    补一个被动技能的释放  是否有被动技能 有的话 直接释放  被动技能是否 配有动作？
     public void ShowPassiveSkill(GameObject hzObj) {
-        jn = hzObj.GetComponent<UI_Skill>().GetHZDate();
-        if (roleDate.lan - jn.xyLan < 0) return;
-        if (roleDate.live - jn.xyXue < 1) return;
+        bdjn = hzObj.GetComponent<UI_Skill>().GetHZDate();
+        if (roleDate.lan - bdjn.xyLan < 0) return;
+        if (roleDate.live - bdjn.xyXue < 1) return;
         if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
-        roleDate.lan -= jn.xyLan;
-        roleDate.live -= jn.xyXue;
-        if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
+        roleDate.lan -= bdjn.xyLan;
+        roleDate.live -= bdjn.xyXue;
+
+        //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
+
+        if (bdjn.skillACName != null && DBBody.animation.HasAnimation(bdjn.skillACName))
         {
             //***找到起始特效点 找骨骼动画的点 或者其他办法
-            GetAcMsg(jn.skillACName);
-            print("技能释放动作    " + jn.skillACName);
+            GetAcMsg(bdjn.skillACName);
+            print("技能释放动作//////////////////////////////////////////////////////    " + bdjn.skillACName);
             playerRigidbody2D.velocity = Vector2.zero;
-            if (jn.ACyanchi > 0)
+            if (bdjn.ACyanchi > 0)
             {
-                GetPause(jn.ACyanchi);
+                GetPause(bdjn.ACyanchi);
                 //***人物闪过去的 动作 +移动速度  还有多发的火球类的特效
             }
         }
         else
         {
+            print("被动技能释放、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、！！！！！！");
             //测试用 正式的要配动作
-            GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+            GetComponent<ShowOutSkill>().ShowOutSkillByName(bdjn.TXName, true);
         }
 
     }
@@ -321,7 +351,10 @@ public class GameBody : MonoBehaviour, IRole {
         if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping ||isAcing) return;
         //print(" >>>   释放技能");
         jn = hzObj.GetComponent<UI_Skill>().GetHZDate();// GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
+       
         if (jn.type == "bd") return;
+
+      
         if (jn != null)
         {
             //print(" jnCD?     "+ jn.IsCDOver());
@@ -339,8 +372,33 @@ public class GameBody : MonoBehaviour, IRole {
                 }
                 //print("hi! 释放技能");
                 if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
+
+                //在空中的话 没有主动技能释放动作  也返回   没有动作 无法释放  相当于控制无法使用该技能
+                if (isInAiring && jn.type != "bd")
+                {
+                    if (jn.skillACNameInAir == "")
+                    {
+                        return;
+                    }
+
+                }
+
                 roleDate.lan -= jn.xyLan;
                 roleDate.live -= jn.xyXue;
+                //print("   硬直  "+jn.TempAddYingZhi);
+                if(jn.TempAddYingZhi != 0)
+                {
+                    GetComponent<TempAddValues>().TempAddYZ(jn.TempAddYingZhi, jn.TempAddYingZhiTimes);
+                    //print("------------------------> 提高硬直！！！！！！ ");
+                }
+
+                //临时提高硬直
+                if (jn.TempShanghaiJianmianBili!=0)
+                {
+                    GetComponent<TempAddValues>().TempJianShangBL(jn.TempShanghaiJianmianBili,jn.tempJSTimes);
+                }
+
+
                 //jn.StartCD();
                 //if(Globals.isDebug)print("---------------------------> 释放技能！！"+ jn.skillACName);
                 //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
@@ -348,6 +406,8 @@ public class GameBody : MonoBehaviour, IRole {
                 if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
                 {
                     //***找到起始特效点 找骨骼动画的点 或者其他办法
+
+                    yanchiTime = jn.ACOveryanchi;
                     if (isInAiring)
                     {
                         //print("jn.name    "+ jn.name);
@@ -358,6 +418,8 @@ public class GameBody : MonoBehaviour, IRole {
                         else
                         {
                             GetAcMsg(jn.skillACNameInAir);
+                            //临时悬停
+                            GetComponent<TempAddValues>().TempXuanKong(jn.AirXTTimes);
                         }
                         
                     }
@@ -396,7 +458,11 @@ public class GameBody : MonoBehaviour, IRole {
             //***播放声音
         }
     }
-    
+
+ 
+
+
+
     protected bool isDodge = false;
     protected bool isDodgeing = false;
     protected bool isCanShanjin = true;
@@ -610,7 +676,11 @@ public class GameBody : MonoBehaviour, IRole {
     public virtual void RunACChange(string runName,float changeMaxSpeedX = 0)
     {
         RUN = runName;
-        if (changeMaxSpeedX != 0) maxSpeedX = changeMaxSpeedX;
+        if (changeMaxSpeedX != 0) {
+          
+            maxSpeedX = changeMaxSpeedX;
+        }
+        
     }
 
 
@@ -780,7 +850,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    void BackJumpVX(float vx)
+    public void BackJumpVX(float vx)
     {
         var _vx = Mathf.Abs(vx);
         playerRigidbody2D.velocity = Vector2.zero;
@@ -1053,8 +1123,13 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
 
-
+        //修正 防止卡死----------
         isDowning = false;
+        isBackUp = false;
+        isBackUping = false;
+
+
+
         if (newSpeed.x > slideNum)
         {
             newSpeed.x = slideNum - 1;
@@ -1100,7 +1175,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected void Start () {
         FirstStart();
         GetStart();
-
+        print("///////-------------------------------------  START  "+this.name);
     }
 
     protected virtual void FirstStart()
@@ -1130,7 +1205,7 @@ public class GameBody : MonoBehaviour, IRole {
        
         GameOver();
 
-        //print("----------------------------------------------------------------------------PlayerStart");
+        print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
     }
 
     public virtual void GameOver()
@@ -1192,6 +1267,14 @@ public class GameBody : MonoBehaviour, IRole {
         //if(_theTimer) _theTimer.GetStopByTime(pauseTime);
         if (_theTimer) _theTimer.TimesAdd(pauseTime,TimeCallBack);
     }
+
+    public void SetACPlayScale(float scaleN)
+    {
+        DBBody.animation.timeScale = scaleN;
+    }
+
+
+
 
     void TimeCallBack(float n)
     {
@@ -1259,7 +1342,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected virtual void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
-
+        
 
         CurrentAcName = DBBody.animation.lastAnimationName;
         //脚下的烟幕
@@ -1341,7 +1424,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         
-        if(!isAtking)ControlSpeed();
+        if(!IsJiasu && !isAtking)ControlSpeed();
 
 
 
@@ -1413,7 +1496,9 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
-        
+        beHitNum++;
+
+
     }
 
     protected virtual void GetBeHit()
@@ -1511,16 +1596,24 @@ public class GameBody : MonoBehaviour, IRole {
 
 
     //动作控制流程
-    int acNums = 0;
+    float acNums = 0;
     //是否在动作延迟
-    protected bool isYanchi = false;
+    protected bool isACCompletedYanchi = false;
     //动作滞留延迟
     int yanchiNum = 10;
-    int yanchiMaxNum = 20;
+    float yanchiMaxNum = 20;
     //延迟行动尺度
     public int canMoveNums = 100;
     public bool isAcing = false;
 	protected string _acName;
+    float yanchiTime = 0;
+
+
+    public void GetACMsgOverYC(float ycTimes)
+    {
+        acNums = 0;
+        yanchiTime = ycTimes;
+    }
 
     public string GetAcMsg(string acName)
     {
@@ -1530,23 +1623,35 @@ public class GameBody : MonoBehaviour, IRole {
         //print("------------------------------------------------------------------  "+acName);
         if (!DBBody.animation.HasAnimation(acName)) return null;
         //print("------------------------------------------------------------------22  " + acName);
-
+        
         //print("1111111111");
         if (DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted)
         {
-            acNums++;
-            isYanchi = true;
+            acNums+= Time.deltaTime;
+            yanchiMaxNum = yanchiTime;
+            //isACCompletedYanchi = true;
             if (acNums > yanchiNum)
             {
                 //可以切换招式
             }
+
+            //if (yanchiTime != 0)
+            //{
+            //    if (!isACCompletedYanchi) {
+            //        isACCompletedYanchi = true;
+            //        print("  动作延迟   "+yanchiTime);
+            //        GetComponent<TheTimer>().TimesAdd(yanchiTime, AcYanChiCallBack);
+            //    }
+                
+            //    return "acYanChi";
+            //}
             //print("22222222222");
             //这里的延迟 将来会改到 vo里面直接取  招式切换也是 这个Ac主要针对 非攻击Ac
             if (acNums > yanchiMaxNum) {
                 isAcing = false;
-                isYanchi = false;
+                isACCompletedYanchi = false;
                 _acName = null;
-                
+                acNums = 0;
                 if (isInAiring)
                 {
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
@@ -1574,6 +1679,16 @@ public class GameBody : MonoBehaviour, IRole {
         }
         
         return null;
+    }
+
+
+    void AcYanChiCallBack(float n)
+    {
+        print("------------------------------------->    callback   延迟结束！！！！！ ");
+        isAcing = false;
+        isACCompletedYanchi = false;
+        _acName = null;
+        yanchiTime = 0;
     }
 
     private void GetSkillVOByName(string acName)
@@ -1742,7 +1857,7 @@ public class GameBody : MonoBehaviour, IRole {
                     }
                     else
                     {
-                        //print("------------------------------------------------------------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
+                        print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                         isTXShow = false;
@@ -1804,6 +1919,7 @@ public class GameBody : MonoBehaviour, IRole {
             yanchi++;
             if (yanchi > vOAtk.yanchi - canMoveNums) {
                 isAtk = false;
+                //SpeedXStop();
                 if(this.transform.tag!="Player")isAtking = false;
             }
 

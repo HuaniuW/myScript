@@ -25,8 +25,9 @@ public class AIBase : MonoBehaviour {
         GetGameBody();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
         if (!aiFanji) aiFanji = GetComponent<AIFanji>();
-        //Type myType = typeof(DataZS);
-        myPosition = this.transform.position;
+        
+         //Type myType = typeof(DataZS);
+         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, playerDie);
 
@@ -172,6 +173,7 @@ public class AIBase : MonoBehaviour {
         }
 
         GetComponent<AIRest>().GetRestByTimes(restTimes);
+        //gameBody.ResetAll();
         gameBody.GetStand();
 
     }
@@ -362,20 +364,20 @@ public class AIBase : MonoBehaviour {
     public float atkDistance = 0;
 
     //3 靠近 达到攻击距离
-    public virtual bool NearRoleInDistance(float distance)
+    public virtual bool NearRoleInDistance(float distance,float nertSpeed  =0.9f)
     {
         
         if (DontNear) return true;
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
-            gameBody.RunRight(0.9f);
+            gameBody.RunRight(nertSpeed);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
-            gameBody.RunLeft(-0.9f);
+            gameBody.RunLeft(-nertSpeed);
             return false;
         }
         else
@@ -392,7 +394,7 @@ public class AIBase : MonoBehaviour {
     }
 
     //转向
-    protected virtual void ZhuanXiang()
+    public virtual void ZhuanXiang()
     {
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
@@ -417,12 +419,23 @@ public class AIBase : MonoBehaviour {
             isAction = false;
             return;
         }
+        print("  zs "+zs);
         gameBody.GetAtk(zs);
     }
     //5判断攻击是否完成
     protected bool IsAtkOver()
     {
         return gameBody.IsAtkOver();
+    }
+
+    //protected bool IsGetAtkFSByName = false;
+    public virtual void GetAtkFSByName(string atkFSName)
+    {
+        
+        //IsGetAtkFSByName = true;
+        isAction = true;
+        acName = atkFSName;
+        //isActioning = true;
     }
 
 
@@ -438,8 +451,9 @@ public class AIBase : MonoBehaviour {
         if (!isAction){
 			isAction = true;
 			acName = GetZS();
+            //IsGetAtkFSByName = false;
 
-            print(atkNum + "------------------------------------------------------------->    name " + acName);
+            print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -515,10 +529,23 @@ public class AIBase : MonoBehaviour {
                 return;
             }
 
-            if (acName == "yueguangzhan")
+            if (acName == "yueguangzhan"|| acName == "zhongzhan")
             {
                 return;
             }
+
+            //print("   ??? acNmae  "+ acName);
+
+            if (acName == "luanren")
+            {
+                //print(" luanren!!! ");
+                return;
+            }
+
+            //if(acName == "zhongzhan") 
+            //{
+            //    return;
+            //}
 
             atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
 		}
@@ -600,6 +627,18 @@ public class AIBase : MonoBehaviour {
         if (acName == "yueguangzhan")
         {
             GetYueGuangZhan();
+            return;
+        }
+
+        if (acName == "zhongzhan")
+        {
+            GetZhongZhan();
+            return;
+        }
+
+        if (acName == "luanren")
+        {
+            GetLuanRen();
             return;
         }
 
@@ -737,6 +776,7 @@ public class AIBase : MonoBehaviour {
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
+        //IsGetAtkFSByName = false;
         AIReSet();
         if(aiFanji!=null) aiFanji.GetFanji();
     }
@@ -749,6 +789,7 @@ public class AIBase : MonoBehaviour {
         lie = -1;
         atkNum = 0;
         acName = "";
+        //IsGetAtkFSByName = false;
         //print("起手2   " + aiQishou.isQishouAtk);
         if (aiQishou) aiQishou.isQishouAtk = false;
 
@@ -880,8 +921,9 @@ public class AIBase : MonoBehaviour {
 
         if (!isActioning)
         {
-            print("111");
+            //print("111");
             isActioning = true;
+            ZhuanXiang();
             GetComponent<JN_YueGuanZhan>().GetStart(gameObj);
             atkNum++;
             return;
@@ -894,6 +936,53 @@ public class AIBase : MonoBehaviour {
             isActioning = false;
         }
     }
+
+
+    void GetZhongZhan()
+    {
+
+        if (!isActioning)
+        {
+            //print("111   zhongzhan!!!!!!! ");
+            isActioning = true;
+            ZhuanXiang();
+            GetComponent<JN_zhongzhan>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<JN_zhongzhan>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
+
+    void GetLuanRen()
+    {
+
+        if (!isActioning)
+        {
+            //print("111   zhongzhan!!!!!!! ");
+            isActioning = true;
+            ZhuanXiang();
+            GetComponent<JN_LuanRen2>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<JN_LuanRen2>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
 
     protected void GetYiShan()
     {

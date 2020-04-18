@@ -10,6 +10,8 @@ public class PlayerRoleDate : RoleDate
     float _yingzhi;
     float _live;
     float _lan;
+    float _shanghaijianmianLv;
+    
 
     public override float lan
     {
@@ -156,6 +158,7 @@ public class PlayerRoleDate : RoleDate
         _live = this.live;
         _lan = this.lan;
         _yingzhi = this.yingzhi;
+        _shanghaijianmianLv = this.shanghaijianmianLv;
     }
 
     // Update is called once per frame
@@ -170,11 +173,13 @@ public class PlayerRoleDate : RoleDate
         this.def = _def;
         maxLive = _theMaxLive;
         yingzhi = _yingzhi;
+        shanghaijianmianLv = _shanghaijianmianLv;
     }
 
     void changeHZ(UEvent e)
     {
         List<RectTransform> t = (List<RectTransform>)e.eventParams;
+        //还原初始数值
         GetCSDate();
         if (t.Count != 0)
         {
@@ -183,6 +188,7 @@ public class PlayerRoleDate : RoleDate
             {
                 GetHZDate(hz.GetComponent<HZDate>());
             }
+            //诅咒宝石属性计算
             GetHZZZ(t);
             GetHZBeishu();
         }
@@ -260,8 +266,19 @@ public class PlayerRoleDate : RoleDate
             beishuArr.Add("liveP_" + hzdate.liveP + "_" + hzdate.HZName);
         }
 
+        //伤害减免比例的 使用
+        if (hzdate.ShanghaiJianmianBili != 0)
+        {
+            if (hzdate.ShanghaiJianmianBili > this.shanghaijianmianLv)
+            {
+                this.shanghaijianmianLv = hzdate.ShanghaiJianmianBili;
+            }
+        }
        
     }
+
+
+
     
     //徽章诅咒
     void GetHZZZ(List<RectTransform> t)

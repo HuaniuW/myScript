@@ -25,17 +25,25 @@ public class ShowOutSkill : MonoBehaviour {
 
         //if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
 
-        //print("hzSkillName   "+ hzSkillName);
-        GameObject skill = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hzSkillName) as GameObject);
+        //print("-------------------------------------------------------------------？？？？？？？？？hzSkillName   "+ hzSkillName);
+        GameObject skillObj = Resources.Load(hzSkillName) as GameObject;
         
-        if (Globals.isDebug)
+        if (skillObj == null)
         {
-            print("skill  "+ skill);
-            print("this.transform.position  " + this.transform.position);
-            print("this.transform.GetComponent<RoleDate>().team  " + this.transform.GetComponent<RoleDate>().team);
-            print("this.transform.localScale.x  " + this.transform.localScale.x);
-            print("this.gameObject  " + this.gameObject);
+            print("  skillObj = null  ");
+            //Time.timeScale = 0;
+            return;
         }
+        GameObject skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+        
+        //if (Globals.isDebug)
+        //{
+        //    print("skill  "+ skill);
+        //    print("this.transform.position  " + this.transform.position);
+        //    print("this.transform.GetComponent<RoleDate>().team  " + this.transform.GetComponent<RoleDate>().team);
+        //    print("this.transform.localScale.x  " + this.transform.localScale.x);
+        //    print("this.gameObject  " + this.gameObject);
+        //}
 
         //print("攻击时玩家的x周速度  "+this.GetComponent<Rigidbody2D>().velocity.x);
         //print("----------------------------------->????  " + skill.GetComponent<JN_base>());
@@ -56,7 +64,7 @@ public class ShowOutSkill : MonoBehaviour {
         //Vector3 ePosition = new Vector3(this.transform.position.x+groundCheck.position.x, this.transform.position.y + groundCheck.position.y, groundCheck.position.z);
         beginEffect.transform.parent = this.transform;
         beginEffect.transform.position = groundCheck.position;
-        print("effectName   "+ effectName);
+        //print("effectName   "+ effectName);
         //print("beginEffect     "+ beginEffect);
         //beginEffect.transform.position = this.transform.position;
         //scaleX的控制

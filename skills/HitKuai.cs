@@ -58,7 +58,7 @@ public class HitKuai : MonoBehaviour {
         if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
         //atkObj = txObj.GetComponent<JN_base>().atkObj;
         _atkObjScaleX = txObj.GetComponent<JN_base>().atkObj.transform.localScale.x;
-        print("TEAM --------->  " + this.txObj.GetComponent<JN_Date>().team + "   _atkObjScaleX  " + _atkObjScaleX);
+        //print("TEAM --------->  " + this.txObj.GetComponent<JN_Date>().team + "   _atkObjScaleX  " + _atkObjScaleX);
     }
 
 
@@ -139,9 +139,12 @@ public class HitKuai : MonoBehaviour {
                         //GameObject obj = Resources.Load(defSkill) as GameObject;
 
                         if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+                        //是否有蓝
+                        if (gameBody.GetComponent<RoleDate>().lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) continue;
                         //是否冷却  还是只能找 玩家装备的技能
                         if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) continue;
                         
+                        //防御几率
                         float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
                         //获取触发几率 
                         float cfjv = GlobalTools.GetRandomDistanceNums(100);
@@ -149,6 +152,8 @@ public class HitKuai : MonoBehaviour {
                         //触发
                         //加血
                         //无伤害
+                        //判断 蓝够不够
+                        
                         if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "wushanghai") {
                             //defSkill.GetComponent<UI_Skill>().isCanBeUseSkill();
                             //defSkill.GetComponent<UI_Skill>().Play_Def_Skill_Effect();
@@ -157,6 +162,7 @@ public class HitKuai : MonoBehaviour {
                             //print(" 无伤害 播放 被动防御 特效！！！1 ");
                             // 弹开攻击者
                             ObjV3Zero(atkObj);
+                            //弹开攻击者
                             _atkRigidbody2D.AddForce(new Vector2(-500 * _roleScaleX, 0));
                             // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
                             if (!atkObj || !atkObj.GetComponent<GameBody>()) {
@@ -164,8 +170,8 @@ public class HitKuai : MonoBehaviour {
                             }
                             else
                             {
-                                print(" atkObj.name    " + atkObj.name);
-                                print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
+                                //print(" atkObj.name    " + atkObj.name);
+                                //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
                                 atkObj.GetComponent<GameBody>().HasBeHit();
                             }
                             
@@ -184,18 +190,32 @@ public class HitKuai : MonoBehaviour {
 
                 }
 
-                print("硬直  "+ atkObj.GetComponent<RoleDate>().yingzhi+"   敌人硬直   "+ roleDate.yingzhi+"   方向  "+atkObj.transform.localScale.x);
+                //print("硬直  "+ atkObj.GetComponent<RoleDate>().yingzhi+"   敌人硬直   "+ roleDate.yingzhi+"   方向  "+atkObj.transform.localScale.x);
                 //判断是否破防   D 代办事项 
                 float beHitXFScale = roleDate.beHitXFScale;
                 //if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
-                if (atkObj.GetComponent<RoleDate>().yingzhi*0.5f > roleDate.yingzhi)
+                float atkObjYZ = 200;
+                if (atkObj!=null)
+                {
+                    //print("  atkObj Name "+atkObj.name+"  ----   "+atkObj.GetComponent<JN_Date>().atkPower);
+
+                    if (atkObj.GetComponent<RoleDate>()!= null)
+                    {
+                        atkObjYZ = atkObj.GetComponent<RoleDate>().yingzhi;
+                    }
+
+                    
+                }
+              
+
+                if (atkObjYZ > roleDate.yingzhi || Mathf.Abs(atkObjYZ - roleDate.yingzhi) <= 100)
                 {
                     gameBody.HasBeHit();
                     //atkObjV3Zero(Coll.gameObject);
                     if(_atkRigidbody2D) _atkRigidbody2D.AddForce(new Vector2(jn_date.moveXSpeed * _roleScaleX, jn_date.moveYSpeed));
                     Coll.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                     if (jn_date.fasntuili != 0) beHitXFScale = 1;// 有反推力说明是空中向下攻击
-                    print("----------------------------------------------------------------> 冲击力  "+jn_date.chongjili+ "  _roleScaleX   "+ _roleScaleX);
+                    //print("----------------------------------------------------------------> 冲击力  "+jn_date.chongjili+ "  _roleScaleX   "+ _roleScaleX);
                     if(Coll.tag == "AirEnemy")
                     {
                         Coll.GetComponent<Rigidbody2D>().AddForce(GlobalTools.GetVector2ByPostion(Coll.transform.position,atkObj.transform.position,jn_date.chongjili));
@@ -211,27 +231,27 @@ public class HitKuai : MonoBehaviour {
                     //print(Coll.tag);
                     
                 }
-                else if (atkObj.GetComponent<RoleDate>().yingzhi>roleDate.yingzhi)
+                else if (Mathf.Abs(atkObjYZ - roleDate.yingzhi) <= 200)
                 {
                     //atkObjV3Zero(Coll.gameObject);
-                    print("  >>>>>>>>_roleScaleX   " + _roleScaleX+"  jndate type  "+ jn_date._type+"  collname  "+Coll.name);
+                    //print("  >>>>>>>>_roleScaleX   " + _roleScaleX+"  jndate type  "+ jn_date._type+"  collname  "+Coll.name);
                     Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * -atkObj.transform.localScale.x - 100, 0));
                     gameBody.HasBeHit(jn_date.chongjili);
-                    if (atkObj && jn_date._type == "1")
+                    if (atkObj && (jn_date._type == "1"|| jn_date._type == "4"))
                     {
                         ObjV3Zero(atkObj);
                         //print("  /////////////////////////////////>>>>>>>>_roleScaleX   " + _roleScaleX);
                         if (jn_date.atkDirection=="" && _atkRigidbody2D) _atkRigidbody2D.AddForce(new Vector2(-200 * -atkObj.transform.localScale.x, 0));
                     }
                     txPos = 0.4f;
-                    print("----------------------------222222222------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
+                    //print("----------------------------222222222------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
                 else
                 {
-                    if (atkObj && jn_date._type == "1")
+                    if (atkObj && (jn_date._type == "1" || jn_date._type == "4"))
                     {
 
-                        print("  333333333>>>>>>>>_roleScaleX   " + _roleScaleX+"    atkObjScaleX  "+ atkObj.transform.localScale.x  + "  jndate type  " + jn_date._type + "  collname  " + Coll.name);
+                        //print("  333333333>>>>>>>>_roleScaleX   " + _roleScaleX+"    atkObjScaleX  "+ atkObj.transform.localScale.x  + "  jndate type  " + jn_date._type + "  collname  " + Coll.name);
                         //被攻击怪硬值过大 被反弹
                         //ObjV3Zero(atkObj);
                         if (atkObj&& atkObj.GetComponent<GameBody>())
@@ -242,10 +262,11 @@ public class HitKuai : MonoBehaviour {
                                  atkObj.GetComponent<GameBody>().isAtkFanTui = true;
                              }*/
                             if (jn_date.atkDirection == "" && _atkRigidbody2D) _atkRigidbody2D.velocity = new Vector2(-12 * -atkObj.transform.localScale.x, _atkRigidbody2D.velocity.y);// _atkRigidbody2D.AddForce(new Vector2(-600 * _roleScaleX, 0));
+                            GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.1f);
                         }
                        
                     }
-                    print("---------------------333333333-------------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
+                    //print("---------------------333333333-------------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
 
 
@@ -257,7 +278,7 @@ public class HitKuai : MonoBehaviour {
             //print("sudu-------------------------------------------11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x);
 
             //记录空中向下攻击的反推力
-            if (jn_date.fasntuili != 0&&atkObj.GetComponent<Rigidbody2D>())
+            if (jn_date.fasntuili != 0 && atkObj.GetComponent<Rigidbody2D>())
             {
                 atkObj.GetComponent<GameBody>().SetYSpeedZero();
                 //打到鱼 给反作用力16  不然很多怪一只在天上就能打死
@@ -269,10 +290,10 @@ public class HitKuai : MonoBehaviour {
                 {
                     _atkRigidbody2D.velocity = new Vector2(_atkRigidbody2D.velocity.x, 12);
                 }
-                
+
             }
 
-            if(atkObj.GetComponent<GameBody>()) atkObj.GetComponent<GameBody>().GetPause();
+            if (atkObj.GetComponent<GameBody>()) atkObj.GetComponent<GameBody>().GetPause();
 
 
             //判断作用力与反作用力  硬直判断
@@ -314,6 +335,8 @@ public class HitKuai : MonoBehaviour {
             addxue = atkObj.GetComponent<RoleDate>().atk + jn_date.atkPower - roleDate.def;
         }
         addxue = addxue > 0 ? addxue : 1;
+        //计算伤害减免比率
+        if (roleDate.shanghaijianmianLv != 0) addxue *= (1 - roleDate.shanghaijianmianLv);
         roleDate.live -= addxue;
         if (roleDate.live < 0) roleDate.live = 0;
         //print("live "+ roleDate.live);

@@ -41,7 +41,7 @@ public class AIChongji : MonoBehaviour
         isStarting = true;
     }
 
-    void ReSetAll()
+    public void ReSetAll()
     {
         isStarting = false;
         isGetOver = false;

@@ -51,6 +51,7 @@ public class UI_Skill : MonoBehaviour {
 
     public bool IsCDSkillCanBeUse()
     {
+        print("   剩余使用次数  skillCanUseTimes  "+ skillCanUseTimes);
         if (skillCanUseTimes == 0) return false;
         return true;
     }
@@ -85,7 +86,7 @@ public class UI_Skill : MonoBehaviour {
     public void GetGlobalSkillDate()
     {
         string globalSkillUseDate =  GlobalSetDate.instance.CurrentUserDate.skill_use_date;
-        print("GetGlobalSkillDate   ? "+ globalSkillUseDate+"    "+ _hzDate.HZName);
+        print("GetGlobalSkillDate   ? "+ globalSkillUseDate+"  ------  "+ _hzDate.HZName);
         string msg = GetStringByName(_hzDate.HZName, globalSkillUseDate);
         if (msg != null)
         {
@@ -163,6 +164,7 @@ public class UI_Skill : MonoBehaviour {
         }
         else
         {
+            //替换文字信息？？？
             TiHuanStringInStr(_hzDate.HZName, GetSkillDate(), GlobalSetDate.instance.CurrentUserDate.skill_use_date);
         }
         

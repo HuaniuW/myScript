@@ -35,7 +35,8 @@ public class TX_YanChenC : MonoBehaviour
     [Header("地面图层")]
     public LayerMask groundLayer;
 
-
+    [Header("检测线长度距离")]
+    public float jiancexianjuli = 1;
 
     public virtual bool IsGround
     {
@@ -44,7 +45,7 @@ public class TX_YanChenC : MonoBehaviour
             //print("groundCheck 是否有这个 变量   "+ groundCheck);
             if (!groundCheck) return false;
             Vector2 start = groundCheck.position;
-            Vector2 end = new Vector2(start.x, start.y - 1);
+            Vector2 end = new Vector2(start.x, start.y - jiancexianjuli);
             Debug.DrawLine(start, end, Color.blue);
             return Physics2D.Linecast(start, end, groundLayer);
         }

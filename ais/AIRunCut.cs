@@ -12,10 +12,10 @@ public class AIRunCut : MonoBehaviour {
     public float moveSpeedX = 12;
     [Header("增加硬直")]
     public float addYZNum = -300;
-    [Header("攻击动作  匹配 是否有技能所需要的动作  这个是动作 角色动作")]
-    public string AtkName = "atk_7";
+    [Header("攻击动作 *在配置招式中找这个动作*")]
+    public string AtkName = "atk_1";
 
-    [Header("攻击动作信息名字 产生特效以及特效伤害等 ")]
+    [Header("攻击动作信息 配置的招式 在ZSDate 里面找")]
     public string AtkMsgName = "atk_407";
 
     AIBase _aiBase;
@@ -53,6 +53,7 @@ public class AIRunCut : MonoBehaviour {
             GetComponent<RoleDate>().addYZ(addYZNum);
             gameBody = GetComponent<GameBody>();
             _aiBase = GetComponent<AIBase>();
+            print("---------------->AtkName    "+ AtkName);
             if (RunName == ""||!gameBody.GetDB().animation.HasAnimation(RunName)||!gameBody.GetDB().animation.HasAnimation(AtkName))
             {
                 AcOver();
@@ -67,7 +68,7 @@ public class AIRunCut : MonoBehaviour {
     bool isRunNear = false;
     void RunNear()
     {
-        if(!isRunNear&& _aiBase.NearRoleInDistance(CutDistance))
+        if(!isRunNear&& _aiBase.NearRoleInDistance(CutDistance,2))
         {
             isRunNear = true;
         }

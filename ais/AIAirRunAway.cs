@@ -81,23 +81,61 @@ public class AIAirRunAway : MonoBehaviour
     }
 
 
-    List<string> fxList = new List<string> { "qs", "s", "hs", "q", "h" };
+
+    //可以写个 随机 走的 给其他的用
+    [Header("远离类型 1是随机 2是在左右各自方向避开")]
+    public int yuanliType = 1;
+
+    List<string> fxListh = new List<string> {"s", "hs", "h" };
+    List<string> fxListq = new List<string> { "qs", "s", "q"};
+    List<string> fxList = new List<string> { "qs", "s", "q" ,"hs","h"};
     float _yuanliDistance = 4f;
 
     Vector2 ChoseYuanliPos()
     {
         string fx = "no";
         Vector2 yuanliPos = Vector2.zero;
-        if (fxList.Count > 0)
-        {
-            fx = fxList[GlobalTools.GetRandomNum(fxList.Count)];
-        }
-        else
+
+
+        if(fxListh.Count ==0 || fxListq.Count == 0|| fxList.Count ==0)
         {
             return yuanliPos;
         }
+
+
+        if(yuanliType == 1)
+        {
+            fx = fxList[GlobalTools.GetRandomNum(fxList.Count)];
+            fxList.Remove(fx);
+        }
+        else
+        {
+            if (this.transform.position.x > _obj.transform.position.x)
+            {
+                fx = fxListh[GlobalTools.GetRandomNum(fxListh.Count)];
+                fxListh.Remove(fx);
+            }
+            else
+            {
+                fx = fxListq[GlobalTools.GetRandomNum(fxListq.Count)];
+                fxListq.Remove(fx);
+            }
+        }
+
+       
+
+
+
+        //if (fxList.Count > 0)
+        //{
+        //    fx = fxList[GlobalTools.GetRandomNum(fxList.Count)];
+        //}
+        //else
+        //{
+        //    return yuanliPos;
+        //}
          
-        fxList.Remove(fx);
+        
         
         switch (fx)
         {
@@ -120,7 +158,7 @@ public class AIAirRunAway : MonoBehaviour
         if (!_pointDistance.IsPointCanStay(yuanliPos, 2)) {
             print("碰撞了 重选 远离的点！！！！");
             return ChoseYuanliPos();
-            print("???               搂过来了？？？        ");
+            //print("???               搂过来了？？？        ");
         } 
         return yuanliPos;
     }
@@ -130,7 +168,9 @@ public class AIAirRunAway : MonoBehaviour
         isStart = false;
         //isStarting = false;
         if(_behavior) _behavior.ReSetAll();
-        fxList = new List<string> { "qs", "s", "hs", "q", "h" };
+        fxListq = new List<string> { "qs", "s",  "q"};
+        fxListh = new List<string> { "s", "hs", "h" };
+        fxList = new List<string> { "qs", "s", "q", "hs", "h" };
     }
 
 
@@ -141,7 +181,8 @@ public class AIAirRunAway : MonoBehaviour
     Vector2 yuanliPos;
     public bool GetYuanliOver()
     {
-        if (GetComponent<RoleDate>().isBeHiting || fxList.Count == 0) {
+        
+        if (GetComponent<RoleDate>().isBeHiting || fxListq.Count == 0|| fxListh.Count == 0||fxList.Count == 0) {
             ReSetAll();
             print(" 远离 结束了啊！！！！！！");
             return true;

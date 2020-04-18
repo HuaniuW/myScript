@@ -131,13 +131,14 @@ public class EnemyGameBody : GameBody {
         isAtking = false;
         atkNums = 0;
         isAtkYc = false;
-        isYanchi = false;
+        isACCompletedYanchi = false;
+        //isYanchi = false;
         isBackUp = false;
         isBackUping = false;
         isQianhua = false;
         isQianhuaing = false;
         isAcing = false;
-        isYanchi = false;
+        //isYanchi = false;
         isSkilling = false;
         isSkillOut = false;
         isDodge = false;
@@ -248,7 +249,7 @@ public class EnemyGameBody : GameBody {
     protected override void ShowACTX(string type, EventObject eventObject)
     {
         //print("type:  "+type);
-        
+        if (IsSFSkill) return;
         if (type == EventObject.SOUND_EVENT)
         {
             //print("eventName:  "+eventObject.name);
@@ -407,7 +408,7 @@ public class EnemyGameBody : GameBody {
         }
 
 
-        if (!isAtking&&!isAcing2) ControlSpeed();
+        if (!IsJiasu && !isAtking&&!isAcing) ControlSpeed();
 
 
 

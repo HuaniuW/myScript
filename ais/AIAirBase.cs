@@ -11,7 +11,7 @@ public class AIAirBase : AIBase
     void Start()
     {
         GetStart();
-
+        if (!_AIYinshen) _AIYinshen = GetComponent<AIYinshen>();
         air_aiNear = GetComponent<AIAirRunNear>();
     }
     AIAirRunNear air_aiNear;
@@ -81,14 +81,25 @@ public class AIAirBase : AIBase
         GetUpdate2();
     }
 
+    AIYinshen _AIYinshen;
+
     protected override void AIBeHit()
     {
+        //AI闪现
         if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
+       
         AIReSet();
         if (aiFanji != null) aiFanji.GetFanji();
+        if (_AIYinshen != null) _AIYinshen.BeHitHide();
+    }
+
+
+    public void GetReSet()
+    {
+        AIReSet();
     }
 
     protected override void AIReSet()
@@ -97,6 +108,7 @@ public class AIAirBase : AIBase
         isActioning = false;
         GetComponent<AIAirRunNear>().ResetAll();
         //myPosition = this.transform.position;
+        //IsGetAtkFSByName = false;
         lie = -1;
         atkNum = 0;
         acName = "";
@@ -232,7 +244,7 @@ public class AIAirBase : AIBase
 
 
 
-    public override bool NearRoleInDistance(float distance)
+    public override bool NearRoleInDistance(float distance,float nearSpeed = 0.9f)
     {
 
         if (DontNear) return true;
@@ -258,7 +270,7 @@ public class AIAirBase : AIBase
     
 
 
-    protected override void ZhuanXiang()
+    public override void ZhuanXiang()
     {
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
@@ -368,8 +380,9 @@ public class AIAirBase : AIBase
         {
             isAction = true;
             acName = GetZS();
+            //IsGetAtkFSByName = false;
 
-            //print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
+            print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -450,6 +463,11 @@ public class AIAirBase : AIBase
             if(acName == "yuanli")
             {
                 acName = "yuanli";
+                return;
+            }
+
+            if (acName == "yueguangzhan" || acName == "zhongzhan"||acName == "yinshen")
+            {
                 return;
             }
 
@@ -542,10 +560,56 @@ public class AIAirBase : AIBase
             return;
         }
 
+     
+
+        if (acName == "yueguangzhan")
+        {
+            GetYueGuangZhan();
+            return;
+        }
+
+        if (acName == "yinshen")
+        {
+            GetYinshen();
+            return;
+        }
+
         PtAtk();
        
     }
 
+    void GetYueGuangZhan()
+    {
+
+        if (!isActioning)
+        {
+            //print("111");
+            isActioning = true;
+            ZhuanXiang();
+            GetComponent<JN_YueGuanZhan>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<JN_YueGuanZhan>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    public void QuXiaoAC()
+    {
+        //这里还要 清除掉 招式里面的 resetAll
+        isAction = false;
+        isActioning = false;
+        if (GetComponent<JN_YueGuanZhan>()) GetComponent<JN_YueGuanZhan>().ReSetAll();
+        if (GetComponent<AIChongji>()) GetComponent<AIChongji>().ReSetAll();
+        if (GetComponent<AIAirRunAway>()) GetComponent<AIAirRunAway>().ReSetAll();
+        if (GetComponent<AIZiDan>()) GetComponent<AIZiDan>().ReSetAll();
+
+    }
 
     void GetChongji()
     {
@@ -599,6 +663,30 @@ public class AIAirBase : AIBase
             ZhuanXiang();
             isAction = false;
             isActioning = false;
+        }
+    }
+
+    void GetYinshen()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIYinshen>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIYinshen>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            
+            isActioning = false;
+
+            print(" ------------------------------->  隐身结束   ");
+            
+            GetComponent<AIYinshen>().BeHitFanjiAC();
+
         }
     }
 }

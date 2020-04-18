@@ -99,13 +99,14 @@ public class AirGameBody : GameBody {
         isAtking = false;
         atkNums = 0;
         isAtkYc = false;
-        isYanchi = false;
+        isACCompletedYanchi = false;
+        //isYanchi = false;
         isBackUp = false;
         isBackUping = false;
         isQianhua = false;
         isQianhuaing = false;
         isAcing = false;
-        isYanchi = false;
+        //isYanchi = false;
         isSkilling = false;
         isSkillOut = false;
         if (roleDate) roleDate.isBeHiting = false;
@@ -389,6 +390,11 @@ public class AirGameBody : GameBody {
                 }
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+
+                if (vOAtk.qishouYC!=0)
+                {
+                    GetPause(vOAtk.qishouYC,0.01f);
+                }
             }
 
             MoveVX(vOAtk.xF, true);

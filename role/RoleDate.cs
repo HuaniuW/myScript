@@ -23,8 +23,11 @@ public class RoleDate : MonoBehaviour {
     [Header("蓝")]
     public float Lan = 1000;
 
-    [Header("是否死空中怪物")]
+    [Header("是否是空中怪物")]
     public bool IsAirEnemy = false;
+
+    [Header("伤害减免率")]
+    public float shanghaijianmianLv = 0;
 
     public virtual float lan
     {
@@ -116,6 +119,21 @@ public class RoleDate : MonoBehaviour {
         yingzhi -= yzNums;
     }
 
+
+    //临时提高伤害减免比率
+    public void AddNewSHJMBL(float bl)
+    {
+        if (bl > shanghaijianmianLv)
+        {
+            shanghaijianmianLv = bl;
+        }
+    }
+
+    //还原伤害减少比率
+    public void HYSHJMBL(float bl)
+    {
+        shanghaijianmianLv = bl;
+    }
 
 
 

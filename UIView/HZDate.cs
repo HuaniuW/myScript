@@ -31,8 +31,13 @@ public class HZDate : MonoBehaviour {
     public string skillACName;
     [Header("附带技能动作  空中")]
     public string skillACNameInAir;
+    [Header("空中释放技能 悬停时间")]
+    public float AirXTTimes = 0.5f;
     [Header("技能动作起始延迟")]
-    public float ACyanchi;
+    public float ACyanchi = 0;
+
+    [Header("技能动作 结束延迟")]
+    public float ACOveryanchi = 0;
 
     [Header("抗火")]
     public float kanghuo;
@@ -66,6 +71,21 @@ public class HZDate : MonoBehaviour {
     [Header("防御效果")]
     public string def_effect = "";
 
+    [Header("临时提高的硬直")]
+    public float TempAddYingZhi = 0;
+
+    [Header("临时提高的硬直的持续时间")]
+    public float TempAddYingZhiTimes = 1;
+
+
+    [Header("伤害减免比例")]
+    public float ShanghaiJianmianBili = 0;
+
+
+    [Header(" >> 临时伤害减免比例")]
+    public float TempShanghaiJianmianBili = 0;
+    [Header(" -- 临时伤害减免比例 持续时间")]
+    public float tempJSTimes = 0;
 
     //增加硬直
     //临时增加硬直

@@ -31,6 +31,8 @@ public class VOAtk : MonoBehaviour {
 
     public float fantan;
 
+    public float qishouYC = 0;
+
 
     // Use this for initialization
     void Start () {
@@ -69,6 +71,12 @@ public class VOAtk : MonoBehaviour {
         {
             this.fantan = float.Parse(dict["fantan"]);
         }
+
+        if (dict.ContainsKey("qishouYC"))
+        {
+            this.qishouYC = float.Parse(dict["qishouYC"]);
+        }
+
     }
 	
 	

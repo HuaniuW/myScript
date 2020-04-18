@@ -368,7 +368,7 @@ public class PlayerGameBody : GameBody {
         {
             jisuqi = 0;
             yanchi++;
-            print(yanchi+"   >>   "+ (vOAtk.yanchi - canMoveNums));
+            //print(yanchi+"   >>   "+ (vOAtk.yanchi - canMoveNums));
             //ljTime.GetStopByTime(0.5f);
             if (yanchi > vOAtk.yanchi - canMoveNums)
             {
@@ -480,7 +480,7 @@ public class PlayerGameBody : GameBody {
             isAtkYc = false;
             AtkLJOver();
             yanchi = 0;
-            print("  ----------->in! ");
+            //print("  ----------->in! ");
         }
     }
 
@@ -530,7 +530,7 @@ public class PlayerGameBody : GameBody {
             jisuqi = 0;
             isLJ = false;
             jishiNum = 0;
-            print("  dianji gongji ");
+            //print("  dianji gongji ");
 
             if (isInAiring)
             {
@@ -794,6 +794,7 @@ public class PlayerGameBody : GameBody {
             }
             if (!DBBody.animation.HasAnimation(DIE)) DIE = "die_1";
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
+            Time.timeScale = 0.5f;
         }
         //Time.timeScale = 0.5f;
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,this.tag), this);

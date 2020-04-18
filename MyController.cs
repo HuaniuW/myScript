@@ -136,7 +136,7 @@ public class MyController : MonoBehaviour {
             //if (IsCanControl()) _body.GetSkill1();
             //print("技能释放---------   right ");
 
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "right"), this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "center"), this);
             return;
         }
         if (Input.GetKeyDown(KeyCode.U) && Input.GetKey(KeyCode.W))
