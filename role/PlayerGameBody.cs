@@ -713,6 +713,7 @@ public class PlayerGameBody : GameBody {
 
     override public void HasBeHit(float chongjili = 0)
     {
+        //print("  >>>>>>>>>>>>>>>>>>>?????   Behit  ");
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         if (IsAtkDowning)
@@ -763,8 +764,27 @@ public class PlayerGameBody : GameBody {
     int mnum = 0;
     override protected void GetBeHit()
     {
+      
+        //print("   getbehit>>>????????>1111111 "+ DBBody.animation.lastAnimationName+"  ?  "+BEHIT+"   pro  "+ roleDate.isBeHiting);
         if (DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR)
         {
+            
+
+            float jindu = DBBody.animation.lastAnimationState.currentTime / DBBody.animation.lastAnimationState.totalTime;
+            //print("jindu    "+ jindu+"    inair "+isInAiring+"   是否着地  "+IsGround+"    动作  "+ DBBody.animation.lastAnimationName);
+
+            if (!IsGround && DBBody.animation.lastAnimationName == BEHIT) {
+                //print("地上进入 空中   "+ DBBody.animation.lastAnimationName +"   jindu  "+ jindu);
+                DBBody.animation.GotoAndPlayByProgress(BEHITINAIR, jindu, 1);
+            }
+
+            if (IsGround && DBBody.animation.lastAnimationName == BEHITINAIR)
+            {
+                DBBody.animation.GotoAndPlayByProgress(BEHIT, jindu, 1);
+            }
+            
+
+
             mnum++;
             if (mnum > 30)
             {
@@ -774,12 +794,13 @@ public class PlayerGameBody : GameBody {
 
         }
 
-
+       
         if ((DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted)
         {
             roleDate.isBeHiting = false;
             mnum = 0;
             Time.timeScale = 1;
+            //print("???  ----behit!!!!!  ");
             if (IsGround) GetStand();
         }
     }
@@ -804,7 +825,7 @@ public class PlayerGameBody : GameBody {
 
     protected override void InAir()
     {
-        // print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
+        //print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
         
 
 
@@ -838,7 +859,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 //落地还原 不然 地上攻击会累加
                 atkNums = 0;
-                print("jinlai  mei     222222222    ");
+                //print("jinlai  mei     222222222    ");
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 //GetStand();
             }
@@ -857,7 +878,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
-                print("   ----------------? ?????  ");
+                //print("   ----------------? ?????  ");
                 //AtkLJOver(); 
                 //isGetJump = false;
                 MoveVX(0);

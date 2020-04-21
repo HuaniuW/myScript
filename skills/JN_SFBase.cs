@@ -22,6 +22,9 @@ public class JN_SFBase : MonoBehaviour
     [Header("攻击距离")]
     public float AtkDistance = 0;
 
+    [Header("攻击距离Y的方向  控制位置上下 ")]
+    public float AtkDistanceY = 0;
+
     [Header("接近 速度")]
     public float NearSpeed = 0.9f;
 
@@ -90,7 +93,7 @@ public class JN_SFBase : MonoBehaviour
             if (!IsInAtkDistance)
             {
                 //print("3");
-                if (NearRoleInDistance(AtkDistance))
+                if (NearRoleInDistance(AtkDistance, AtkDistanceY))
                 {
                     //print("4");
                     IsInAtkDistance = true;
@@ -129,6 +132,7 @@ public class JN_SFBase : MonoBehaviour
 
     protected virtual void GetAC()
     {
+        //防止 侦听 进入 gamebody
         _gameBody.IsSFSkill = true;
         
         //转向
@@ -197,14 +201,14 @@ public class JN_SFBase : MonoBehaviour
         //print("eventObject  ????  " + eventObject);
         //if(IsStarting)print( testnums + "  ___________________________________________________________________________________________________________________________name    "+ eventObject.name);
        
-
+        
 
         if (type == EventObject.FRAME_EVENT)
         {
             if (!IsStarting) return;
             if (eventObject.name == "ac")
             {
-                //print("?? 特效TXName " + TXName);
+                print("?? 特效TXName " + TXName);
                 GetComponent<ShowOutSkill>().ShowOutSkillByName(TXName, true);
                 
                 OtherTX();
@@ -239,25 +243,24 @@ public class JN_SFBase : MonoBehaviour
     }
 
 
-    public virtual bool NearRoleInDistance(float distance)
+    public virtual bool NearRoleInDistance(float distance,float distanceY = 0)
     {
+        if (_player == null) return true;
 
+        float dyU = _player.transform.position.y + 2;
+        float dyD = _player.transform.position.y - 2;
+
+        if (distanceY != 0)
+        {
+            dyU = _player.transform.position.y + 2 + distanceY;
+            dyD = _player.transform.position.y - 2 + distanceY;
+        }
 
         if (GetComponent<RoleDate>().IsAirEnemy)
         {
-            if (_player.transform.position.y - transform.position.y >= 2)
+            if (transform.position.y >= dyU)
             {
-                print("  >>>>>>  上升  " + _player.transform.position.y +"  ??    "+ "   -    " + transform.position.y);
-                GetComponent<AirGameBody>().RunY(GetComponent<AirGameBody>().moveSpeedY);
-                if (GetComponent<AIAirRunAway>().IsHitTop)
-                {
-                    //直接取消动作
-                    GetComponent<AIAirBase>().QuXiaoAC();
-                }
-                return false;
-            }else if (_player.transform.position.y - transform.position.y <= -2)
-            {
-                print("  >>>>>>  下降  "+ _player.transform.position.y+"   -    "+ transform.position.y);
+                
                 GetComponent<AirGameBody>().RunY(-GetComponent<AirGameBody>().moveSpeedY);
                 if (GetComponent<AIAirRunAway>().IsHitDown)
                 {
@@ -266,9 +269,21 @@ public class JN_SFBase : MonoBehaviour
                 }
                 return false;
             }
+            else if (transform.position.y <= dyD)
+            {
+                
+                GetComponent<AirGameBody>().RunY(GetComponent<AirGameBody>().moveSpeedY);
+                if (GetComponent<AIAirRunAway>().IsHitTop)
+                {
+                    //直接取消动作
+                    GetComponent<AIAirBase>().QuXiaoAC();
+                }
+                return false;
+            }
+
         }
        
-        print("  --------->distance    " + distance+"       "+NearSpeed+"   ?????    "+(_player.transform.position.x - transform.position.x));
+        //print("  --------->distance    " + distance+"       "+NearSpeed+"   ?????    "+(_player.transform.position.x - transform.position.x));
         if (_player.transform.position.x - transform.position.x >= distance)
         {
             //目标在右

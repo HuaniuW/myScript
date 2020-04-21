@@ -102,7 +102,10 @@ public class DataZS : MonoBehaviour
 
     //幽灵boss
     static public Dictionary<string, string> atk_1001 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" },{"qishouYC","0.3" } };
+    //这个是没有 起手动作的 快速砍击
+    static public Dictionary<string, string> atk_1001s = new Dictionary<string, string> { { "atkName", "atk_11" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
     static public Dictionary<string, string> atk_1002 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "25" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
+    static public Dictionary<string, string> atk_1004 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
 
     //public string Tt
     //{

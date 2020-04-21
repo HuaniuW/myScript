@@ -51,16 +51,19 @@ public class AIAirRunNear : MonoBehaviour
         setter.ReSetAll();
         runAway.ReSetAll();
         _aiPath.canMove = false;
+        this.GetComponent<GameBody>().IsJiasu = false;
+        if (_csSpeed!=0) _aiPath.maxSpeed = _csSpeed;
+        _csSpeed = 0;
     }
 
-    public void ResetAll2()
-    {
-        isStartXY = false;
-        isZhuijiY = false;
-        setter.ReSetAll();
-        //runAway.ReSetAll();
-        _aiPath.canMove = false;
-    }
+    //public void ResetAll2()
+    //{
+    //    isStartXY = false;
+    //    isZhuijiY = false;
+    //    setter.ReSetAll();
+    //    //runAway.ReSetAll();
+    //    _aiPath.canMove = false;
+    //}
 
     AIAirRunAway runAway;
     public bool Zhuiji(float inDistance = 0)
@@ -91,13 +94,28 @@ public class AIAirRunNear : MonoBehaviour
         return false;
     }
 
+    //原来的速度
+    float _csSpeed = 0;
+
+
+
     [Header("靠近目标点的 距离 误差")]
     public float zuijiPosDisWC = 0.8f;
-    public bool ZhuijiPointZuoBiao(Vector2 point, float inDistance = 0)
+    public bool ZhuijiPointZuoBiao(Vector2 point, float inDistance = 0,float TempSpeed = 0)
     {
         if (inDistance != 0) zuijiPosDisWC = inDistance;
         setter.SetV2(point);
         if (!_aiPath.canMove) _aiPath.canMove = true;
+
+        if (TempSpeed != 0)
+        {
+            if (_csSpeed == 0) _csSpeed = _aiPath.maxSpeed;
+            _aiPath.maxSpeed = TempSpeed;
+            
+        }
+
+        //print(" _aiPath.maxSpeed不能是0  " + _aiPath.maxSpeed);
+
         zhuijiRun();
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
         if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
@@ -105,6 +123,81 @@ public class AIAirRunNear : MonoBehaviour
             ResetAll();
             return true;
         }
+        return false;
+    }
+
+
+    public float zhijieZhuijiTanCeDistance = 1;
+    //直接 去到目标点
+    public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0)
+    {
+        if (inDistance != 0) zuijiPosDisWC = inDistance;
+        zhuijiRun();
+
+        Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+        print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
+        Vector2 v2 = GlobalTools.GetVector2ByPostion(point, thisV2, TempSpeed);
+        print("直接移动速度 v2   "+v2);
+        this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = v2;
+        this.GetComponent<GameBody>().IsJiasu = true;
+        //如果 行动中撞墙  直接返回true
+
+        if(IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        {
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+
+       
+
+        if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
+        {
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+        return false;
+    }
+
+
+    //通过方向 判断是否在 方向上撞墙
+    public bool IsHitWallByFX(Vector2 speed,float TCDistance,Vector2 pos)
+    {
+        Vector2 tcPoint = Vector2.zero;
+        Vector2 endPoint1 = Vector2.zero;
+        Vector2 endPoint2 = Vector2.zero;
+
+        if (speed.x < 0)
+        {
+            tcPoint = new Vector2(pos.x - TCDistance, pos.y);
+            endPoint1 = new Vector2(tcPoint.x,tcPoint.y+TCDistance);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - TCDistance);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+        }else if (speed.x > 0)
+        {
+            tcPoint = new Vector2(pos.x + TCDistance, pos.y);
+            endPoint1 = new Vector2(tcPoint.x, tcPoint.y + TCDistance);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - TCDistance);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+        }
+
+
+        if (speed.y > 0)
+        {
+            tcPoint = new Vector2(pos.x , pos.y+TCDistance);
+            endPoint1 = new Vector2(tcPoint.x + TCDistance, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - TCDistance, tcPoint.y);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+        }else if (speed.y < 0)
+        {
+            tcPoint = new Vector2(pos.x, pos.y - TCDistance);
+            endPoint1 = new Vector2(tcPoint.x + TCDistance, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - TCDistance, tcPoint.y);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+        }
+
         return false;
     }
 
@@ -131,6 +224,13 @@ public class AIAirRunNear : MonoBehaviour
         GetComponent<AirGameBody>().isRunYing = true;
         _airGameBody.Run();
       
+    }
+
+
+    public bool IsHitDiBanByFX(Vector2 pos1, Vector2 pos2)
+    {
+        Debug.DrawLine(pos1, pos2, Color.red);
+        return Physics2D.Linecast(pos1, pos2, GetComponent<AirGameBody>().groundLayer);
     }
 
 
@@ -245,7 +345,7 @@ public class AIAirRunNear : MonoBehaviour
             }
             else
             {
-                print("  找到追击点    "+v2);
+                //print("  找到追击点    "+v2);
                 return ZhuijiPointZuoBiao(v2);
                 //_aiPath.canMove = true;
                 //setter.SetV2(v2);

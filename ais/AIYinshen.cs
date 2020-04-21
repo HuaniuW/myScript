@@ -14,11 +14,30 @@ public class AIYinshen : MonoBehaviour
     }
 
 
+    public RectTransform xuetiao;
+
+    void HideXuetiao()
+    {
+        if (xuetiao)
+        {
+            xuetiao.GetComponent<CanvasGroup>().alpha = 0;
+        }
+    }
+
+    void ShowXuetiao()
+    {
+        if (xuetiao)
+        {
+            xuetiao.GetComponent<CanvasGroup>().alpha = 1;
+        }
+    }
+
+
 
     [Header("是否开启 被攻击 隐身")]
     public bool IsOpenBeHitHide = false;
 
-    [Header("隐身后攻击招式名字")]
+    [Header("被攻击后 隐身 反击的 招式名字 ")]
     public string HideAtkName = "";
 
     [Header("被攻击 隐身 几率")]
@@ -94,6 +113,7 @@ public class AIYinshen : MonoBehaviour
         IsShowing = false;
         IsBeHitingHide = false;
         _gameBody.SetACPlayScale(1);
+        ShowXuetiao();
     }
 
 
@@ -138,32 +158,88 @@ public class AIYinshen : MonoBehaviour
     bool IsHideing = false;
     void GetHide()
     {
-
         if (!IsHideing) return;
+        if(IsGetHide()) GetShow();
+    }
+
+    public void TempStart()
+    {
+        if (!IsHideing) IsHideing = true;
+    }
+
+
+    public bool IsGetHide()
+    {
+        if (!IsHideing) return false;
         //print("  hide ????  ");
-        if(_db.animation.lastAnimationName == HideACName && _db.animation.isCompleted)
+        if (_db.animation.lastAnimationName == HideACName && _db.animation.isCompleted)
         {
             IsHideing = false;
             _db.animation.Stop();
             //开始显示流程
-            GetShow();
-            return;
+            return true;
         }
 
-        if(_db.animation.lastAnimationName!= HideACName)
+        if (_db.animation.lastAnimationName != HideACName)
         {
             //print("yinshenAC!");
             //_db.animation.GotoAndPlayByFrame(HideACName, 0, 1);
             _gameBody.GetAcMsg(HideACName);
             _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             _gameBody.SetACPlayScale(YsSpeed);
+            HideXuetiao();
             if (!IsCanBeHit)
             {
                 GetComponent<RoleDate>().isCanBeHit = false;
             }
         }
-        
+
+        return false;
     }
+
+
+    public bool IsShowOut()
+    {
+        //if (!IsShowing) return false;
+        
+        if (!_db.animation.HasAnimation(ShowACName))
+        {
+            IsShowing = false;
+            GetComponent<RoleDate>().isCanBeHit = true;
+            //print("  没有显示动作  隐身流程走完！！！！  ");
+            return true;
+        }
+
+        //print(1);
+
+        if (_db.animation.lastAnimationName == ShowACName && _db.animation.isCompleted)
+        {
+            IsShowing = false;
+
+            //print(2);
+
+            _db.animation.Stop();
+            //防止闪烁
+            _gameBody.GetStand();
+            GetComponent<RoleDate>().isCanBeHit = true;
+            GetComponent<AIAirBase>().ZhuanXiang();
+            _gameBody.SetACPlayScale(1);
+            //print("     ----->   显示? ????");
+            ShowXuetiao();
+            return true;
+        }
+
+        if (_db.animation.lastAnimationName != ShowACName)
+        {
+            _gameBody.GetAcMsg(ShowACName);
+            //最好是在 动作里面做短
+            _gameBody.SetACPlayScale(showACSpeed);
+        }
+        return false;
+    }
+
+
+
 
     Vector2 showPos = new Vector2(1000,1000);
     float hitDiBanDistance = 0.4f;
@@ -238,67 +314,11 @@ public class AIYinshen : MonoBehaviour
     void Showing()
     {
         if (!IsShowing|| IsOver) return;
-
-
-        if (!_db.animation.HasAnimation(ShowACName))
-        {
-            IsShowing = false;
-            IsOver = true;
-            GetComponent<RoleDate>().isCanBeHit = true;
-            //print("  没有显示动作  隐身流程走完！！！！  ");
-            return;
-        }
-
-        //print(" 动作名  "+_db.animation.lastAnimationName);
-        //if (_db.animation.lastAnimationName == ShowACName) print(" ??lastAnimationState  " + _db.animation.lastAnimationState+"  isOver? "+IsOver);
-        if(_db.animation.lastAnimationName == ShowACName&& _db.animation.isCompleted)
-        {
-            IsShowing = false;
-            
-            _db.animation.Stop();
-            //_db.animation.GotoAndPlayByFrame("stand_1",0,1);
-            //防止闪烁
-            _gameBody.GetStand();
-            
-            //_gameBody.GetStand();
-            //_gameBody.GetStand();
-            GetComponent<RoleDate>().isCanBeHit = true;
-            //tn = 0;
-            //print("  隐身流程走完！！！！  ");
-
-            //_gameBody.TurnDirection(_obj);
-            GetComponent<AIAirBase>().ZhuanXiang();
-            _gameBody.SetACPlayScale(1);
-
-            IsOver = true;
-
-            //if (HideAtkName != "")
-            //{
-            //    print(" 隐身显示后的攻击  ！！！！！！！     "+ HideAtkName);
-            //    GetComponent<AIAirBase>().GetAtkFSByName(HideAtkName);
-            //    ReSetAll();
-            //}
-            
-            return;
-        }
-
-
-        
-
-
-
-        if (_db.animation.lastAnimationName != ShowACName)
-        {
-            //print("   显示出来啊1！！！！！！！！   "+_db.animation.lastAnimationName+"    isAcing  "+ _gameBody.isAcing);
-            //_db.animation.GotoAndPlayByFrame(ShowACName,0,1);
-            //if (_gameBody.isAcing) _gameBody.isAcing = false;
-            //print("  test n 进来几次 "+tn);
-            //tn++;
-            _gameBody.GetAcMsg(ShowACName);
-            //print(" 99  "+_db.animation.lastAnimationName+"  --  "+ _gameBody.isAcing);
-        }
+        if (IsShowOut()) IsOver = true;
     }
 
+    [Header("显示时候 动作速度")]
+    public float showACSpeed = 1;
     //int tn = 0;
 
     GameObject _obj;

@@ -290,7 +290,7 @@ public class AIBase : MonoBehaviour {
     protected VOAtk atkvo;
     protected VOAtk GetAtkVOByName(string _name, System.Object obj)
     {
-        print("_name   "+_name);
+        //print("_name   "+_name);
         Dictionary<string, string> dict = GetDateByName.GetInstance().GetDicSSByName(_name, obj);
         atkvo = GetComponent<VOAtk>();//new VOAtk();
         if (dict == null) return null;
@@ -419,7 +419,7 @@ public class AIBase : MonoBehaviour {
             isAction = false;
             return;
         }
-        print("  zs "+zs);
+        //print("  zs "+zs);
         gameBody.GetAtk(zs);
     }
     //5判断攻击是否完成

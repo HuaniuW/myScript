@@ -1102,11 +1102,12 @@ public class GameBody : MonoBehaviour, IRole {
         //if (DBBody.animation.lastAnimationName == DODGE2|| DBBody.animation.lastAnimationName == DODGE1) return;
         if (roleDate.isBeHiting) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        if (isDowning) return;
         if (!DBBody.animation.HasAnimation(STAND))
         {
             STAND = "stand_1";
         }
-        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
+        print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             if (this.tag == "player") {
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
@@ -1117,7 +1118,8 @@ public class GameBody : MonoBehaviour, IRole {
                 //时间0.01f  0.1秒 慢了会报错（位置错误）
                 //print("stand!!!");
 
-                DBBody.animation.FadeIn(STAND, 0.01f, 1);
+                //DBBody.animation.FadeIn(STAND, 0.01f, 1);
+                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
             }
             
         }
@@ -1147,7 +1149,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         
         ResetAll();
-        //print("getStand!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //print("getStand!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    isInAiring    "+isInAiring);
         if (DBBody) Stand();
         if (isSetSpeedZero && playerRigidbody2D) {
             //print("?????????????????       " +playerRigidbody2D.velocity);
@@ -1175,7 +1177,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected void Start () {
         FirstStart();
         GetStart();
-        print("///////-------------------------------------  START  "+this.name);
+        //print("///////-------------------------------------  START  "+this.name);
     }
 
     protected virtual void FirstStart()
@@ -1205,7 +1207,7 @@ public class GameBody : MonoBehaviour, IRole {
        
         GameOver();
 
-        print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
+        //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
     }
 
     public virtual void GameOver()
@@ -1368,6 +1370,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (roleDate.isBeHiting)
         {
+            //print("beHiting!!!!!!!!");
             ControlSpeed(20);
             GetBeHit();
             //DBBody.animation.timeScale = 1;
@@ -1503,7 +1506,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void GetBeHit()
     {
-        
+        print("jinde shi nage???");
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
             roleDate.isBeHiting = false;
             if (IsGround) GetStand();
