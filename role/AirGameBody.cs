@@ -210,15 +210,18 @@ public class AirGameBody : GameBody {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         roleDate.isBeHiting = true;
+        
         if (isInAiring)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))
             {
                 DBBody.animation.GotoAndPlayByFrame(BEHITINAIR, 0, 1);
+                //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
                 return;
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+        //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
 
     }
 

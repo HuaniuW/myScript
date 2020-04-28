@@ -362,6 +362,7 @@ public class AIBase : MonoBehaviour {
 
     //2.招式组第一个攻击动作的攻击距离  位移技能也可以直接取距离
     public float atkDistance = 0;
+    public float atkDistanceY = 0;
 
     //3 靠近 达到攻击距离
     public virtual bool NearRoleInDistance(float distance,float nertSpeed  =0.9f)
@@ -650,6 +651,12 @@ public class AIBase : MonoBehaviour {
 
         
     }
+
+
+    //public virtual void AIGetBeHit()
+    //{
+
+    //}
 
     public float walkDistance = 3;
     protected void GetWalkBack()

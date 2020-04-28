@@ -70,6 +70,9 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("是否die回收")]
     public bool isDieRemove = true;
 
+    [Header("子弹的 发射点")]
+    public UnityEngine.Transform zidanPos;
+
 
     protected Rigidbody2D playerRigidbody2D;
     public Rigidbody2D GetPlayerRigidbody2D()
@@ -1107,7 +1110,7 @@ public class GameBody : MonoBehaviour, IRole {
         {
             STAND = "stand_1";
         }
-        print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
+        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             if (this.tag == "player") {
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
@@ -1270,6 +1273,80 @@ public class GameBody : MonoBehaviour, IRole {
         if (_theTimer) _theTimer.TimesAdd(pauseTime,TimeCallBack);
     }
 
+
+    //-----附带伤害 和效果---------------------------------------------------
+    public void FudaiXiaoguo(string fdStr)
+    {
+        string fdName = "";
+        float cxTime = 0;
+        float meimiaoSH = 0;
+        int n = fdStr.Split('_').Length;
+        fdName = fdStr.Split('_')[0];
+
+
+        if (GetComponent<RoleDate>().isDie) return;
+
+        if (n == 2)
+        {
+            cxTime = float.Parse(fdStr.Split('_')[1]);
+        }
+
+        if(n == 3)
+        {
+            cxTime = float.Parse(fdStr.Split('_')[1]);
+            meimiaoSH = float.Parse(fdStr.Split('_')[2]);
+
+        }
+
+        if(fdName == "mabi")
+        {
+            //print("  mabi!!!!!!!!!!!!!  ");
+            IsMabi = true;
+           
+            if (_mbMaxTimes != 0)
+            {
+                if (_mbMaxTimes - _mbTimes >= cxTime) return;
+            }
+            _mbMaxTimes = cxTime;
+            
+            _mbTimes = 0;
+            
+        }
+    }
+
+    bool IsMabi = false;
+
+    float _mbTimes = 0;
+    float _mbMaxTimes = 0;
+
+    void FDMaBi()
+    {
+        if (!IsMabi) return;
+        _mbTimes += Time.deltaTime;
+        //print("附带 麻痹 效果  "+_mbMaxTimes);
+
+        //DBBody.animation.timeScale = 0.5f;
+        GetPlayerRigidbody2D().velocity = Vector2.zero;
+        //GetPlayerRigidbody2D().gravityScale = 0;
+
+        if (_mbTimes>= _mbMaxTimes)
+        {
+            IsMabi = false;
+            DBBody.animation.timeScale = 1;
+            _mbTimes = 0;
+            _mbMaxTimes = 0;
+            //GetPlayerRigidbody2D().gravityScale = 4.5f;
+        }
+    }
+
+
+    void FuDaiXiaoguos()
+    {
+        FDMaBi();
+    }
+
+
+
     public void SetACPlayScale(float scaleN)
     {
         DBBody.animation.timeScale = scaleN;
@@ -1341,6 +1418,15 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
+
+    
+
+    public virtual void Jiansu(float bili,float jsTime = 1)
+    {
+        GetPlayerRigidbody2D().velocity *= bili;
+    }
+
+
     protected virtual void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
@@ -1349,6 +1435,9 @@ public class GameBody : MonoBehaviour, IRole {
         CurrentAcName = DBBody.animation.lastAnimationName;
         //脚下的烟幕
         Yanmu();
+
+        FuDaiXiaoguos();
+
 
         if (roleDate.isDie)
         {
@@ -1490,6 +1579,9 @@ public class GameBody : MonoBehaviour, IRole {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         roleDate.isBeHiting = true;
+
+        //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
+
         if (isInAiring)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))

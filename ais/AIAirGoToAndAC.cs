@@ -61,6 +61,7 @@ public class AIAirGoToAndAC : MonoBehaviour
 
                 //开始 找点
                 chosePos = ChoseAndCheckPointInList();
+                print(" goto寻找到的 点     "+ chosePos);
                 if (chosePos==new Vector2(1000,1000))
                 {
                     IsOver = true;
@@ -79,8 +80,8 @@ public class AIAirGoToAndAC : MonoBehaviour
     Vector2 ChoseAndCheckPointInList()
     {
         //随机找一个点 如果这个点 碰撞了 直接over不重调了
-        int n = GlobalTools.GetRandomNum(gudingZBList.Count-1);
-        print(n+ "    gudingZBList.Count  "+ gudingZBList.Count+"  ?  "+ gudingZBList[0]);
+        int n = GlobalTools.GetRandomNum(gudingZBList.Count);
+        print("  随机数n：  "+n+ "  找点 啊      gudingZBList.Count  "+ gudingZBList.Count+"  ? 第一个点位置  "+ gudingZBList[0]);
         Vector2 _v2 = gudingZBList[n];
         if (!IsPointHitWall(_v2)) {
             return _v2;
@@ -108,6 +109,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     [Header("移动类型 1.飞过去  2.闪现  3.隐身")]
     public int MoveType = 1;
     [Header("移动速度")]
+    [Range(2, 6)]
     public float MoveSpeed = 5;
 
     //是否有 相应的 粒子要播放
@@ -122,7 +124,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     {
 
         if (!IsStartMove) return;
-        print("   IsStartMove "+ IsStartMove);
+        //print("   IsStartMove "+ IsStartMove);
 
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
@@ -135,6 +137,7 @@ public class AIAirGoToAndAC : MonoBehaviour
         //移动过去 
         if (MoveType == 1)
         {
+            //A*寻路
             if (IsAXunlu)
             {
                 if (_aiRunNear.ZhuijiPointZuoBiao(chosePos, 0.4f, MoveSpeed))
@@ -144,9 +147,10 @@ public class AIAirGoToAndAC : MonoBehaviour
             }
             else
             {
+                //print("   zhijie yi dong!!! MoveSpeed     " + MoveSpeed);
                 if (_aiRunNear.ZhijieMoveToPoint(chosePos, 0.4f, MoveSpeed))
                 {
-                    print("   zhijie yidong!!!  ");
+                    
                     StartAtkAC();
                 }
             }

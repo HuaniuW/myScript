@@ -47,16 +47,37 @@ public class AIYinshen : MonoBehaviour
     public float houshanValue = 30;
 
     bool IsBeHitingHide = false;
+
+    //float BeHitYingshenJiShi = 0;
+    ////被攻击隐身 重置 时间上限
+    //float YinShenjishiCZTime = 1;
+    void YinshenXianzhiJishi()
+    {
+        if (IsBeHitingHide&&!GetComponent<RoleDate>().isBeHiting)
+        {
+            IsBeHitingHide = false;
+        }
+    }
+
+
+
     //被攻击后 隐身后退
     public void BeHitHide()
     {
-        if (!IsOpenBeHitHide) return;   
+        if (!IsOpenBeHitHide) return;
+       
         if (IsBeHitingHide) return;
+        IsBeHitingHide = true;
+        //if (IsBeHitingHide &&!GetComponent<RoleDate>().isBeHiting)
+        //{
+        //    IsBeHitingHide = false;
+        //}
         //计算几率
         int jl = GlobalTools.GetRandomNum();
+        print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl    " + jl + "        " + BeHitHideJL);
         if (jl<=BeHitHideJL)
         {
-            IsBeHitingHide = true;
+            
             IsInBeHitFJ = true;
             //重置 被攻击的判断
             _gameBody.FanJiBeHitReSet();
@@ -66,21 +87,23 @@ public class AIYinshen : MonoBehaviour
             _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             _gameBody.BackJumpVX(houshanValue);
             GetComponent<RoleDate>().isCanBeHit = false;
+            ShowXuetiao();
             //隐身 接口
             print("------------------被攻击后 隐身");
             GetComponent<AIAirBase>().GetAtkFSByName("yinshen");
             ReSetAll();
         }
+        
+
     }
 
-    [Header("是否 是在 被攻击的 时候反击")]
-    public bool IsInBeHitFJ = false;
+    bool IsInBeHitFJ = false;
     //被攻击后 反击 AC
     public void BeHitFanjiAC()
     {
         if (IsInBeHitFJ)
         {
-            print("  被攻击 反击   "+ HideAtkName);
+            //print("  被攻击 反击   "+ HideAtkName);
 
             if (HideAtkName != "") {
                 GetComponent<AIAirBase>().GetReSet();
@@ -90,7 +113,7 @@ public class AIYinshen : MonoBehaviour
         }
         else
         {
-            print("  自带的 反击 动作   " + ATKACName);
+            //print("  自带的 反击 动作   " + ATKACName);
             if (ATKACName != "") {
                 GetComponent<AIAirBase>().GetReSet();
                 GetComponent<AIAirBase>().GetAtkFSByName(ATKACName);
@@ -347,6 +370,6 @@ public class AIYinshen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        YinshenXianzhiJishi();
     }
 }

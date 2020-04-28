@@ -197,14 +197,10 @@ public class HitKuai : MonoBehaviour {
                 float atkObjYZ = 200;
                 if (atkObj!=null)
                 {
-                    //print("  atkObj Name "+atkObj.name+"  ----   "+atkObj.GetComponent<JN_Date>().atkPower);
-
                     if (atkObj.GetComponent<RoleDate>()!= null)
                     {
                         atkObjYZ = atkObj.GetComponent<RoleDate>().yingzhi;
                     }
-
-                    
                 }
               
 
@@ -269,9 +265,9 @@ public class HitKuai : MonoBehaviour {
                     //print("---------------------333333333-------------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
 
-
+                //硬直时间？
                 gameBody.GetPause(jn_date.yingzhishijian,0.4f);
-
+                gameBody.FudaiXiaoguo(jn_date.JiZhongFDXiaoguo);
                 //if (Coll.tag != "Player")
             }
 
@@ -352,8 +348,25 @@ public class HitKuai : MonoBehaviour {
         //判断是否在空中
         //挨打动作  判断是否破硬直
         //判断是否生命被打空
+
+        if (jn_date.HitInSpecialEffectsType == 4) {
+            //HitTX(_psScaleX, "JZTX_dian", "", 2, false, false, -txPos);
+            HitTX2("JZTX_dian");
+            return;
+        }
+        
         HitTX(_psScaleX, "BloodSplatCritical3", "",2,false,false,-txPos);
         if(jn_date.HitInSpecialEffectsType != 3)HitTX(_psScaleX,"jizhong",roleDate.beHitVudio,4,true,true);
+    }
+
+
+
+    void HitTX2(string txName)
+    {
+        GameObject hitTx = Resources.Load(txName) as GameObject;
+        hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
+        hitTx.transform.position = gameBody.transform.position;
+        hitTx.transform.parent = gameBody.transform;
     }
 
     /// <summary>

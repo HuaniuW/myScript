@@ -132,6 +132,15 @@ public class JN_SFBase : MonoBehaviour
 
     protected virtual void GetAC()
     {
+
+        //判断有没有 攻击动作 没有直接退出
+        if (!_gameBody.GetDB().animation.HasAnimation(ACName))
+        {
+            //print("没有攻击动作 直接退出！！");
+            ReSetAll();
+            return;
+        }
+
         //防止 侦听 进入 gamebody
         _gameBody.IsSFSkill = true;
         
@@ -208,7 +217,7 @@ public class JN_SFBase : MonoBehaviour
             if (!IsStarting) return;
             if (eventObject.name == "ac")
             {
-                print("?? 特效TXName " + TXName);
+                //print("?? 特效TXName " + TXName);
                 GetComponent<ShowOutSkill>().ShowOutSkillByName(TXName, true);
                 
                 OtherTX();
@@ -258,6 +267,9 @@ public class JN_SFBase : MonoBehaviour
 
         if (GetComponent<RoleDate>().IsAirEnemy)
         {
+
+            //先找点
+
             if (transform.position.y >= dyU)
             {
                 
@@ -286,14 +298,24 @@ public class JN_SFBase : MonoBehaviour
         //print("  --------->distance    " + distance+"       "+NearSpeed+"   ?????    "+(_player.transform.position.x - transform.position.x));
         if (_player.transform.position.x - transform.position.x >= distance)
         {
+            //print("右跑！");
             //目标在右
             _gameBody.RunRight(NearSpeed);
             return false;
         }
         else if (_player.transform.position.x - transform.position.x <= -distance)
         {
+            //print("左 跑！");
             //目标在左
-            _gameBody.RunLeft(NearSpeed);
+            if (GetComponent<AirGameBody>())
+            {
+                _gameBody.RunLeft(NearSpeed);
+            }
+            else
+            {
+                _gameBody.RunLeft(-NearSpeed);
+            }
+            
             return false;
         }
         else

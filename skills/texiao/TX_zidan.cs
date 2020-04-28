@@ -22,6 +22,7 @@ public class TX_zidan : MonoBehaviour
         //HitKuai
         //获取角速度
         isFaShe = true;
+        testN = 0;
         //v2 = GlobalTools.GetVector2ByPostion(_player.transform.position,this.transform.position,speeds);
         /*  v2 = _player.transform.position - this.transform.position;
           print("_player.transform.position    " + _player.transform.position + "  this.transform.position   " + this.transform.position+  "-----------------------zd>  " +v2);
@@ -73,8 +74,9 @@ public class TX_zidan : MonoBehaviour
     {
         if (_player&& isFaShe) {
             isFaShe = false;
-            //print("----------------------------------------->>  fire!!!!! "+speeds);
+            print("----------------------------------------->>  fire!!!!! "+speeds);
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
+            print("   sudu   "+ GetComponent<Rigidbody2D>().velocity);
         } 
     }
 
@@ -99,18 +101,27 @@ public class TX_zidan : MonoBehaviour
     [Header("爆炸 特效 的类型  爆炸特效名字")]
     public int bzType = 1;
 
+
+    int testN = 0;
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
         if(Coll.tag == "Player"||Coll.tag == "diban")
         {
+            
+            //print(testN+"   Coll.tag  碰到了什么鬼：    " + Coll.tag);
             if (Coll.tag == "Player" && Coll.GetComponent<RoleDate>().isCanBeHit == false) return;
             //生成爆炸
-            string bzName = "TX_zidan" + bzType + "_bz";
-            GameObject baozha = ObjectPools.GetInstance().SwpanObject2(Resources.Load(bzName) as GameObject);
-            baozha.transform.position = this.transform.position;
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            //移除自己 
-            StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject,0.2f));
+            if(testN == 0)
+            {
+                testN++;
+                string bzName = "TX_zidan" + bzType + "_bz";
+                GameObject baozha = ObjectPools.GetInstance().SwpanObject2(Resources.Load(bzName) as GameObject);
+                baozha.transform.position = this.transform.position;
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;                
+            }
+            RemoveSelf();
+
         }
     }
 
@@ -121,5 +132,19 @@ public class TX_zidan : MonoBehaviour
         if (IsAtkAuto) {
             fire();
         }
+        //print("sudu   "+ GetComponent<Rigidbody2D>().velocity);
+    }
+
+
+    public virtual void ResetAll()
+    {
+        //testN = 0;
+    }
+
+    public virtual void RemoveSelf()
+    {
+        //移除自己 
+        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject, 0));
+        ResetAll();
     }
 }

@@ -178,7 +178,7 @@ public class EnemyGameBody : GameBody {
         if (!DBBody.animation.HasAnimation(BEHITINAIR)) BEHIT = "beHit_1";
 
         //print(speedX);
-
+        //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
 
         if (isInAiring)
         {

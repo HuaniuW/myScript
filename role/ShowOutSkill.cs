@@ -26,16 +26,50 @@ public class ShowOutSkill : MonoBehaviour {
         //if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
 
         //print("-------------------------------------------------------------------？？？？？？？？？hzSkillName   "+ hzSkillName);
-        GameObject skillObj = Resources.Load(hzSkillName) as GameObject;
-        
+        GameObject skillObj;
+        GameObject skill;
+        //int nums = 0;
+        //string[] _strArr = hzSkillName.Split('|');
+        //if (_strArr.Length > 1)
+        //{
+        //    skillObj = Resources.Load(_strArr[0]) as GameObject;
+        //    //nums = int.Parse(_strArr[1]);
+        //    //间隔时间 这里就不多做了  直接在动画里面 多几个 事件就可以了
+        //}
+        //else
+        //{
+        //    skillObj = Resources.Load(hzSkillName) as GameObject;
+        //}
+
+        skillObj = Resources.Load(hzSkillName) as GameObject;
+
         if (skillObj == null)
         {
             print("  skillObj = null  ");
             //Time.timeScale = 0;
             return;
         }
-        GameObject skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
-        
+        skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+
+        if (skill.GetComponent<TX_zidan>()) {
+            if (this.GetComponent<GameBody>().zidanPos != null)
+            {
+                GameObject shanGuang = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TX_zidan1shan") as GameObject);  //GlobalTools.GetGameObjectByName("TX_zidan1shan");
+                shanGuang.transform.position = this.GetComponent<GameBody>().zidanPos.position;
+                skill.transform.position = this.GetComponent<GameBody>().zidanPos.position;
+            }
+
+            
+            skill.transform.localScale = this.transform.localScale;
+            return;
+        }
+
+
+
+
+      
+
+
         //if (Globals.isDebug)
         //{
         //    print("skill  "+ skill);

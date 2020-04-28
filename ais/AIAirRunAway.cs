@@ -196,8 +196,14 @@ public class AIAirRunAway : MonoBehaviour
             //yuanliVector2 = GlobalTools.GetVector2ByPostion(yuanliPos, this.transform.position, this.GetComponent<GameBody>().speedX);
             //isStarting = true;
             print(" ???远离的目标点-------------------------》      "+ yuanliPos);
-            _behavior.ZhuijiZuoBiao(yuanliPos,0);
-            _airGameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
+            //_behavior.ZhuijiZuoBiao(yuanliPos, 0);
+            
+            //_airGameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
+        }
+
+        if(GetComponent<AIAirRunNear>().ZhijieMoveToPoint(yuanliPos, 1, 3))
+        {
+            return true;
         }
 
         //this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = yuanliVector2;

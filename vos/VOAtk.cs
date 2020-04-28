@@ -19,7 +19,8 @@ public class VOAtk : MonoBehaviour {
     //动作结束延迟时间
     public float yanchi;
 
-    public float atkDistance;
+    public float atkDistance = 0;
+    public float atkDistanceY = 0;
 
     public bool isYanchi = false;
 
@@ -75,6 +76,11 @@ public class VOAtk : MonoBehaviour {
         if (dict.ContainsKey("qishouYC"))
         {
             this.qishouYC = float.Parse(dict["qishouYC"]);
+        }
+
+        if (dict.ContainsKey("atkDistanceY"))
+        {
+            this.atkDistanceY = float.Parse(dict["atkDistanceY"]);
         }
 
     }

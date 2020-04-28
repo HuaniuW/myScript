@@ -97,9 +97,17 @@ public class AIAirBase : AIBase
     }
 
 
+    //public override void AIGetBeHit()
+    //{
+    //    //base.AIGetBeHit();
+    //    print(" aiGetBehit!! ");
+        
+    //}
+
+
     public void GetReSet()
     {
-        print("   getAIReset  ");
+        //print("   getAIReset  ");
         AIReSet();
     }
 
@@ -121,7 +129,7 @@ public class AIAirBase : AIBase
 
     public void ReSetAll2()
     {
-        print("   getAIReset  2222222222222  ");
+        //print("   getAIReset  2222222222222  ");
         isAction = false;
         isActioning = false;
         GetComponent<AIAirRunNear>().ResetAll();
@@ -343,11 +351,11 @@ public class AIAirBase : AIBase
          {
              if (!Tongshi()) return;
          }*/
-        //print("???????????????????????????????????????????????????????????????????????普通攻击");
+        //print("???????????????????????????????????????????????????????????????????????普通攻击      "+isActioning +"     ");
 
-        if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance)||DontNear)) return;
+        if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance,1,atkDistanceY)||DontNear)) return;
 
-
+        //print(" ?? >>");
         if (!isActioning)
         {
             isActioning = true;
@@ -394,7 +402,7 @@ public class AIAirBase : AIBase
             acName = GetZS();
             //IsGetAtkFSByName = false;
 
-            print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName);
+            //print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -484,6 +492,7 @@ public class AIAirBase : AIBase
             }
 
             atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
+            atkDistanceY = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistanceY;
         }
 
         if (aiQishou && aiQishou.isQishouAtk && !aiQishou.isFirstAtked)
@@ -734,7 +743,7 @@ public class AIAirBase : AIBase
             
             isActioning = false;
 
-            print(" ------------------------------->  隐身结束   ");
+            //print(" ------------------------------->  隐身结束   ");
             
             GetComponent<AIYinshen>().BeHitFanjiAC();
 

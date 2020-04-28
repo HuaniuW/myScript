@@ -72,6 +72,11 @@ public class JN_Date : MonoBehaviour {
     public Vector2 TXPos = Vector2.zero;
 
 
+    //ranshao_4_100  效果名字 持续时间 每秒伤害
+    [Header("击中目标的 附带 效果 麻痹 燃烧 等")]
+    public string JiZhongFDXiaoguo = "";
+
+
     //public Dictionary<string, float> atk_date = new Dictionary<string, float> { { "atkPower", 100 },{ "_xdx", -1.5f }, { "_xdy", 0f },{ "_scaleW", 2f }, { "_scaleH", 1.8f }, { "_disTime", 1 }};
     // Use this for initialization
     void Start () {

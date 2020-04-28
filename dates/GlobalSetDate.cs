@@ -84,6 +84,9 @@ public class GlobalSetDate : MonoBehaviour {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
+
+        //Application.targetFrameRate = 60;
+        //Time.fixedDeltaTime = 0.033f;
     }
     
     public void GetGameDateStart(bool isSYS = false)
