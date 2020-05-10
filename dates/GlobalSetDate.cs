@@ -77,16 +77,19 @@ public class GlobalSetDate : MonoBehaviour {
         }
     }
 
+    public GameMapDate gameMapDate;
+
     private void Awake()
     {
         //Debug.Log("Start");
         if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
+        if (gameMapDate == null) gameMapDate = new GameMapDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
 
-        //Application.targetFrameRate = 60;
-        //Time.fixedDeltaTime = 0.033f;
+            //Application.targetFrameRate = 60;
+            //Time.fixedDeltaTime = 0.033f;
     }
     
     public void GetGameDateStart(bool isSYS = false)
@@ -94,14 +97,14 @@ public class GlobalSetDate : MonoBehaviour {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
         if (isInFromSave)
         {
-            //print("读档游戏");
+            print("读档游戏");
             HowToInGame = LOAD_GAME;
             CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName);
             GetSaveGame();
         }
         else
         {
-            //print("新游戏");
+            print("新游戏");
             HowToInGame = NEW_GAME;
             if (isSYS)
             {
@@ -458,5 +461,173 @@ public class GlobalSetDate : MonoBehaviour {
             //GetSave();
         }
 
+
+        //一键保存 小地图
+
     }
+
+
+
+
+
+    //全局 地图 生成
+
+    //大地图信息  由哪些小地图组成
+    public List<string> BigMapMsgList = new List<string> { };
+
+    //小地图 信息
+    public string MapMsgList = "";
+
+    //当前 跳入 的随机地图名字
+    public string CReMapName = "";
+
+    public string CMapTou = "";
+
+
+
+
+
+    public string DanqianMenweizhi = "";
+
+    public CreateMaps _createMap;
+    public void GetMapMsgByName(string mapName,string baoliumenFX,string menweizhi)
+    {
+        if (!_createMap) _createMap = new CreateMaps();
+        _createMap.Test();
+        //是否有大地图
+        //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
+
+
+        DanqianMenweizhi = menweizhi;
+        //地图头 就是大地图的 头部标识
+        CMapTou = mapName.Split('-')[0];
+        //判断 如果 没有该大地图 就生成 大地图 并储存
+        if(!IsHasBigMapByName(CMapTou, gameMapDate.BigMapDate))
+        {
+
+            //这里要 设置 保留门 存入地图数据 存入本地
+            string baoliuFX = baoliumenFX;
+            //入场的 地图名字
+            string ruchangMap = SceneManager.GetActiveScene().name;
+
+            // 设置 地图参数 中间名字  方向几率  最大地图数
+            _createMap.SetMapCenterName(CMapTou.Split('_')[1]);
+            List<string> TempMapList = _createMap.GetMaps();
+            string mapListMsgStr = CMapTou + "+";
+            for(var i=0;i< TempMapList.Count; i++)
+            {
+
+                if (TempMapList[i].Split('!')[0].Split('-')[1] == "1")
+                {
+                    if(i== TempMapList.Count - 1)
+                    {
+                        mapListMsgStr += TempMapList[i] + "^" + baoliuFX + ":" + ruchangMap;
+                    }
+                    else
+                    {
+                        mapListMsgStr += TempMapList[i] + "^" + baoliuFX + ":" + ruchangMap+"|";
+                    }
+                    
+                    continue;
+                }
+
+
+
+                if (i == TempMapList.Count-1)
+                {
+                    mapListMsgStr += TempMapList[i];
+                }
+                else
+                {
+                    mapListMsgStr += TempMapList[i]+"|";
+                }
+
+
+               
+                
+            }
+
+          
+            print(gameMapDate.BigMapDate);
+            
+           
+
+
+            //如果大地图中 没有该大地图   生成大地图
+            if (gameMapDate.BigMapDate == "")
+            {
+                gameMapDate.BigMapDate = mapListMsgStr;
+            }
+            else
+            {
+                gameMapDate.BigMapDate += "@" + mapListMsgStr;
+            }
+
+
+            print("生成的 地图数据    "+ gameMapDate.BigMapDate);
+
+            //这里要存入 数据
+            //return;
+
+
+
+        }
+
+
+
+        //这里 只需要知道 loading哪个 地图 记录 地图名字   进入场景 后 再生成 地形   --   场景中药有地形 生成代码
+
+
+        // map_1-1
+        //先找 小地图  如果 小地图 没有 说明  没有生成    -->生成大地图  再生成小地图
+        if (IsHasMapByName(mapName, gameMapDate.MapDate) != "")
+        {
+            //根据 存储数据 生成地图
+            print("根据地形数据 生成地图");
+        }
+        else
+        {
+            print("没有地图数据 生成一地图地形数据 ！进入哪个地图？   "+mapName);
+            //生成大地图
+            //BigMapMsgList = _createMap.GetMaps();
+            //将地图名字 传入 下个 场景 下个场景 来生成地图
+
+        } 
+
+
+        //生成 大地图 和小地图 都要 保存到本地
+
+    }
+
+    bool IsHasBigMapByName(string mapTouName, string bigMapDateList)
+    {
+        print("   bigMapDateList>>>  "+ bigMapDateList);
+        string[] bigMapArr = bigMapDateList.Split('@');
+        for(var i=0;i< bigMapArr.Length; i++)
+        {
+            if (bigMapArr[i].Split('+')[0] == mapTouName) return true;
+        }
+        return false;
+    }
+
+
+    string IsHasMapByName(string mapName,string mapDateList)
+    {
+        if (mapDateList == "") return "";
+        string[] mapArr = mapDateList.Split('@');
+        for(var i=0;i< mapArr.Length; i++)
+        {
+            if (mapArr[i].Split(':')[0] == mapName) return mapArr[i].Split(':')[1];
+        }
+
+        //foreach(string str in mapList)
+        //{
+        //    if (str.Split(':')[0] == mapName)
+        //    {
+        //        return str;
+        //    }
+        //}
+        return "";
+    }
+
 }

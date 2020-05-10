@@ -402,7 +402,7 @@ public class AIAirBase : AIBase
             acName = GetZS();
             //IsGetAtkFSByName = false;
 
-            //print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
+            print(atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -492,7 +492,8 @@ public class AIAirBase : AIBase
             }
 
             atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
-            atkDistanceY = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistanceY;
+            atkDistanceY = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistanceY;
+            //print("  acName "+acName+ "  atkDistanceY:  " + atkDistanceY);
         }
 
         if (aiQishou && aiQishou.isQishouAtk && !aiQishou.isFirstAtked)

@@ -99,6 +99,9 @@ public class AIAirRunNear : MonoBehaviour
     float _csSpeed = 0;
 
 
+    [Header("追击的速度")]
+    [Range(10,30)]
+    public float zhuijiSpeed = 10;
 
     [Header("靠近目标点的 距离 误差")]
     public float zuijiPosDisWC = 0.8f;
@@ -112,7 +115,11 @@ public class AIAirRunNear : MonoBehaviour
         {
             if (_csSpeed == 0) _csSpeed = _aiPath.maxSpeed;
             _aiPath.maxSpeed = TempSpeed;
-            
+
+        }
+        else
+        {
+            _aiPath.maxSpeed = zhuijiSpeed;
         }
 
         //print(" _aiPath.maxSpeed不能是0  " + _aiPath.maxSpeed);
@@ -307,7 +314,6 @@ public class AIAirRunNear : MonoBehaviour
             }
             v3 = new Vector2(_obj.transform.position.x + atkdistance, _obj.transform.position.y);
             //判断  点周围 是否有碰撞
-
         }
 
         if (atkdistanceY != 0)
@@ -363,9 +369,10 @@ public class AIAirRunNear : MonoBehaviour
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
         //print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
         if (_zjDistance ==0) _zjDistance = atkdistance;
+        _zjDistanceY = 0;
         _zjDistanceY = atkDistanceY;
 
-        print(" _zjDistanceY >    " + _zjDistanceY);
+        //print(" _zjDistanceY >    " + _zjDistanceY);
 
         if (!isStartXY)
         {
@@ -379,7 +386,7 @@ public class AIAirRunNear : MonoBehaviour
 
         if(zuijiType == 2)
         {
-            v2 = FindAtkToPos(atkdistance,atkDistanceY);
+            v2 = FindAtkToPos(atkdistance, _zjDistanceY);
             if (v2 == new Vector2(1000, 1000))
             {
                 print(" 取消动作！！！！！！ ");
@@ -389,7 +396,7 @@ public class AIAirRunNear : MonoBehaviour
             }
             else
             {
-                print("  找到追击点    "+v2);
+                //print("  找到追击点    "+v2);
                 return ZhuijiPointZuoBiao(v2);
                 //_aiPath.canMove = true;
                 //setter.SetV2(v2);
@@ -398,7 +405,7 @@ public class AIAirRunNear : MonoBehaviour
 
         }
 
-        print("?????>>>>>>>>>>>>>>>>>!!!!!");
+        //print("?????>>>>>>>>>>>>>>>>>!!!!!");
 
         //2.寻路 
 
@@ -407,7 +414,7 @@ public class AIAirRunNear : MonoBehaviour
         //-------各个方向 碰壁后 使用寻路-------------
         if (!isZhuijiY && (runAway.IsHitTop || runAway.IsHitDown || runAway.IsHitQianmain)) {
             isZhuijiY = true;
-            print("---------------------------------------------------------->   寻路Y");
+            //print("---------------------------------------------------------->   寻路Y");
             _aiPath.canMove = true;
         } 
 

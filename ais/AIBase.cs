@@ -809,7 +809,7 @@ public class AIBase : MonoBehaviour {
     //一般攻击
     protected virtual void PtAtk(){
 
-
+        //判断 是否hi不能动的怪物
         if (!IsCanNotMove)
         {
             //这种如果再次超出攻击距离会再追踪

@@ -227,46 +227,52 @@ public class Plot_playByStr : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
-        if (!IsHitAlertControl&& !isStarting&&Coll.tag == "Player")
+        if (Coll.tag == "Player")
         {
-            //自动播放的
-            isStarting = true;
-            playNums = 0;
-            //GetStart();
-            GetStartPlotByTimes();
-        }
-        else
-        {
-            //玩家点击交互的
-            playNums = 0;
-            //StopPlayerControl();
-            if(GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround)Globals.IsHitPlotKuai = true;
-            print("hitplotKuai");
-            //显示提示牌
-            ShowAlertBar();
+            if (!IsHitAlertControl && !isStarting)
+            {
+                //自动播放的
+                isStarting = true;
+                playNums = 0;
+                //GetStart();
+                GetStartPlotByTimes();
+            }
+            else
+            {
+                //玩家点击交互的
+                playNums = 0;
+                //StopPlayerControl();
+                if (GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) Globals.IsHitPlotKuai = true;
+                print("hitplotKuai");
+                //显示提示牌
+                ShowAlertBar();
+            }
         }
     }
 
     bool IsSHowTalkBar = false;
-
     [Header("提示显示的 对话按钮显示动画 提示玩家点击")]
     public GameObject AlertObj;
     private void OnTriggerStay2D(Collider2D Coll)
     {
-        if (IsHitAlertControl && Coll.tag == "Player")
-        {
-            //print("?????????  IsHitAlertControl "+ IsHitAlertControl);
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                if (!GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) return;
-                if (!IsSHowTalkBar)
-                {
-                    IsSHowTalkBar = true;
-                    GetStartPlotByTimes();
 
-                    //print("点击切换 对话 " + playNums);
+        if (Coll.tag == "Player")
+        {
+            if (IsHitAlertControl)
+            {
+                //print("?????????  IsHitAlertControl "+ IsHitAlertControl);
+                if (Input.GetKeyDown(KeyCode.J))
+                {
+                    if (!GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) return;
+                    if (!IsSHowTalkBar)
+                    {
+                        IsSHowTalkBar = true;
+                        GetStartPlotByTimes();
+
+                        //print("点击切换 对话 " + playNums);
+                    }
+
                 }
-               
             }
         }
     }
@@ -274,8 +280,8 @@ public class Plot_playByStr : MonoBehaviour
 
     void ShowAlertBar()
     {
-        print("显示提示牌");
-        AlertObj.SetActive(true);
+        print("显示提示牌     "+AlertObj);
+        if(AlertObj) AlertObj.SetActive(true);
     }
 
     void HideAlertBar()
@@ -288,15 +294,22 @@ public class Plot_playByStr : MonoBehaviour
     private void OnTriggerExit2D(Collider2D Coll)
     {
         print("离开");
-        if (IsHitAlertControl && Coll.tag == "Player")
+        if (Coll.tag == "Player")
         {
-            //if(playNums<maxNums)PlotNext();
-            OutHitKuaiReSet();
+            if (IsHitAlertControl)
+            {
+                //if(playNums<maxNums)PlotNext();
+                OutHitKuaiReSet();
+                
+                playNums = 0;
+                IsSHowTalkBar = false;
+                if (talkBar) talkBar.GetComponent<UI_talkBar>().RemoveSelf();
+            }
             Globals.IsHitPlotKuai = false;
-            playNums = 0;
-            IsSHowTalkBar = false;
-            if (talkBar) talkBar.GetComponent<UI_talkBar>().RemoveSelf();
         }
+
+
+        
     }
 
     void OutHitKuaiReSet()

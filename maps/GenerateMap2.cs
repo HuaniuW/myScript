@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //生成地图
-public class GenerateMap : MonoBehaviour {
+public class GenerateMap2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,7 @@ public class GenerateMap : MonoBehaviour {
 	}
 
     //多支路的几率  <10 多加3个分支  <15多加2个分支  其他 是加1个 也就是2条路 左右 左上 等
-    public string duozhiJL = "0-0";
+    public string duozhiJL = "10-15";
 
     [Header("地图间隔距离")]
     public int mapjiangejuli = 10;
@@ -34,7 +34,7 @@ public class GenerateMap : MonoBehaviour {
     public void CreateCustomAllMap() {
         //有几个小地图组成？ 最少10个 +随机
         int n = (int)UnityEngine.Random.Range(0, 4);
-        int mapsNum = 6 + n;
+        int mapsNum = 8 + n;
         //查找 是否有特别地图 以及特别地图位置编号
         string[] smapArr;
         if (GlobalMapDate.IsHasSpecialMap())
@@ -62,7 +62,7 @@ public class GenerateMap : MonoBehaviour {
                 currentMap = GetGKImgAndPosition(mapName,400,200);
                 mapZBArr.Add(mapName + "!0#0"+"!400#200");
                 theMapArr.Add(currentMap);
-                currentMapNameZu = mapName;
+                
                 //创建分支
                 CreateMapFenZhi(i+1,mapName);
             }
@@ -78,8 +78,7 @@ public class GenerateMap : MonoBehaviour {
                 if (mapName != currentMap.name) {
                     print("数据错误！！！！！！！！！！！！！！！");
                     return;
-                }
-                currentMapNameZu +="|"+ mapName;
+                } 
                 CreateMapFenZhi(i + 1, mapName);
             }
         }
@@ -88,13 +87,8 @@ public class GenerateMap : MonoBehaviour {
 
         //先要有数据  再根据数据生成 地图  不要一上来就 生成地图
         print(" 地图坐标list 长度： "+mapZBArr.Count);
-
-
-        print("  生成的地图数据  "+ currentMapNameZu);
         
     }
-
-
 
     
     string currentMapNameZu = "";
@@ -305,29 +299,17 @@ public class GenerateMap : MonoBehaviour {
 
     string IsMapNameHasMapGetNewName(string _mapName)
     {
-
-        for (int i = 0;i< mapZBArr.Count;i++)
+        for (int i=0;i<theMapArr.Count; i++)
         {
-            if(_mapName == mapZBArr[i].Split('!')[0])
+            //print(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    "+ theMapArr[i].name+"   对比的名字  "+ _mapName);
+            if(_mapName == theMapArr[i].name)
             {
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>占用了  "+ _mapName);
                 _mapName = _mapName.Split('-')[0] + "-" + (int.Parse(_mapName.Split('-')[1]) + 1);
                 return IsMapNameHasMapGetNewName(_mapName);
+                
             }
         }
-
-
-
-        //for (int i=0;i<theMapArr.Count; i++)
-        //{
-        //    //print(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    "+ theMapArr[i].name+"   对比的名字  "+ _mapName);
-        //    if(_mapName == theMapArr[i].name)
-        //    {
-        //        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>占用了  "+ _mapName);
-        //        _mapName = _mapName.Split('-')[0] + "-" + (int.Parse(_mapName.Split('-')[1]) + 1);
-        //        return IsMapNameHasMapGetNewName(_mapName);
-                
-        //    }
-        //}
         return _mapName;
     }
 
@@ -380,100 +362,12 @@ public class GenerateMap : MonoBehaviour {
     //主路骨干 和 怪物分布优先出  然后是 景
     //连线  找出孤立位置 放置宝箱啥的
 
-    //map_1-1!0#0!l:map_1-2^r:map_1-3^u:map_1-4
-
-
-
-    void GetInMapZBArr(string newMapName,string fx,string cZXMapName,Vector2 pos)
+    void GetInMapZBArr(string mapName,string fx,string cZXMapName,Vector2 pos)
     {
-
-        
-
         string newMapZB = GetZBByFX(fx, cZXMapName);
-        string mapZBAndName = newMapName + "!" + newMapZB+"!"+pos.x+"#"+pos.y;
-        //print(" cZXMapName   ");
-        GetMapMsgListStr(cZXMapName, fx, newMapName);
-
-
+        string mapZBAndName = mapName + "!" + newMapZB+"!"+pos.x+"#"+pos.y;
         mapZBArr.Add(mapZBAndName);
     }
-
-
-
-
-
-    void GetMapMsgListStr(string cZXMapName, string fx, string newMapName)
-    {
-        //1.查找 中心地图名字
-        //2.将分支 加入地图数据
-
-        print("  zxMap " + cZXMapName);
-
-        string[] mapMsgArr = currentMapNameZu.Split('|');
-        string tempMapMsgArrStr = "";
-        string str = "";
-        for (var i = 0; i < mapMsgArr.Length; i++)
-        {
-
-            str = GetMapMsgStr(mapMsgArr[i], cZXMapName, fx, newMapName);
-            if (i == 0)
-            {
-                if (str != "")
-                {
-                    tempMapMsgArrStr = str;
-                }
-                else
-                {
-                    tempMapMsgArrStr = mapMsgArr[i];
-                }
-
-            }
-            else
-            {
-
-                if (str != "")
-                {
-                    tempMapMsgArrStr += "|" + str;
-                }
-                else
-                {
-                    tempMapMsgArrStr += "|" + mapMsgArr[i];
-                }
-
-
-            }
-
-        }
-
-        currentMapNameZu = tempMapMsgArrStr;
-    }
-
-
-    string GetMapMsgStr(string strs,string cZXMapName,string fx,string newMapName)
-    {
-        string str = "";
-
-        if (strs.Split('!')[0] == cZXMapName)
-        {
-
-            if (strs.Split('!').Length >= 3)
-            {
-                str = cZXMapName + "^" + GetCurrentMapZBByName(cZXMapName) + "!" + fx + ":" + newMapName;
-            }
-            else
-            {
-                str = cZXMapName + "!" + GetCurrentMapZBByName(cZXMapName) + "!" + fx + ":" + newMapName;
-            }
-
-        }
-
-
-        return str;
-    }
-
-
-
-
 
     string GetZBByFX(string fx,string cZXMapName)
     {
@@ -599,7 +493,6 @@ public class GenerateMap : MonoBehaviour {
         return false;
     }
 
-    //通过 方向 来创建 地图img
     void CreateMapImgByFX(string theCZXMapName,string fx,string newMapName)
     {
         tempSpeMapList.Clear();
@@ -617,7 +510,7 @@ public class GenerateMap : MonoBehaviour {
         }
     }
 
-    //这里是绕开 所有特殊地图名  是特殊地图的花 名字+1 
+
     string IsSpeMapAddMaxI(string newMapName)
     {
         //先判断 名字是否被占用
@@ -626,7 +519,6 @@ public class GenerateMap : MonoBehaviour {
         {
             //要判断 数组中是否已经有该特殊数组了
             if(!tempSpeMapList.Contains(newMapName)) tempSpeMapList.Add(newMapName);
-            print("特殊地图名字？ "+newMapName);
             newMapName = newMapName.Split('-')[0] + "-" + (int.Parse(newMapName.Split('-')[1]) + 1);
             print("newMapName 1     "+ newMapName);
             if (GlobalMapDate.IsSpeMapByName(newMapName))
@@ -642,18 +534,11 @@ public class GenerateMap : MonoBehaviour {
 
     GameObject CreateOutMap(GameObject _currentMap, string fx, string newMapName, string currentZXMapName)
     {
-        //获取 图片的 位置信息
         Vector2 pos = GetMapPos(_currentMap, fx);
-        //存入坐标数据
         GetInMapZBArr(newMapName, fx, currentZXMapName, pos);
-
-        //创建地图img
         GameObject gkImg = GetGKImgAndPosition(newMapName, pos.x, pos.y);
-
-        //上面 存入坐标信息 这里才能用这个方法去到 坐标信息
         string _zb = GetCurrentMapZBByName(newMapName);
         //print("中心地图："+ currentZXMapName +"  -   "+fx+ " 侧 -生成的新地图名字： "+ newMapName+"  坐标是： "+ _zb);
-        //填写坐标 到img
         gkImg.GetComponent<gkImgTextTest>().GetText("pos  " + _zb);
         theMapArr.Add(gkImg);
         //连线
@@ -710,7 +595,7 @@ public class GenerateMap : MonoBehaviour {
     string FindLJSpeMapDeMap(List<string> SpeMapFXArr,string speMapName)
     {
         string findFX = "";
-        //string findZB = "";
+        string findZB = "";
         for(int i = mapZBArr.Count - 1; i >= 0; i--)
         {
             for (int j=0;j< SpeMapFXArr.Count;j++) {
@@ -736,14 +621,9 @@ public class GenerateMap : MonoBehaviour {
 
                 //如果是特殊地图就跳出当前循环
                 if (GlobalMapDate.IsSpeMapByName(cMapName)) break;
-                
                 //根据 findFX 找到 适合的 地图  1.该方向上有空位  
                 if (!IsHasMap(findFX, cMapName))
                 {
-
-                    //这里 要找  这个坐标 特殊地图 另外几个方向上 是否 有地图  有的话要判断是否允许连接  能连就连接 不能就另外找地方连
-
-                    print("  特殊地图 找到的 可以连接的 中心地图 名字 " + cMapName);
                     //获取这个空位坐标
                     string _zb = GetZBByFX(findFX, cMapName); //这个坐标上面没有地图  这个坐标就是特殊地图 选的位置
                     //2.空位上 特殊地图的方向 没有特殊地图
@@ -801,17 +681,8 @@ public class GenerateMap : MonoBehaviour {
             print("-----------------------------------------------------------特殊地图 "+ cZXMapName +"    "+FXlist[c] + " 侧 分支"+ _newMapName);
             //创建地图 生成名字 和坐标 存入两个数组  
             CreateSpeMapImgByFX(cZXMapName, FXlist[c], _newMapName, cSpeMapObj);
-
-
-            GetMapMsgListStr(cZXMapName, FXlist[c], _newMapName);
-
         }
     }
-
-
-   
-
-
 
     string IsSpeMapNewFZMapNameIsSpeName(string speFZMapName)
     {

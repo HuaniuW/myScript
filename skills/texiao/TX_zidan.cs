@@ -70,7 +70,7 @@ public class TX_zidan : MonoBehaviour
     }
 
 
-    protected void fire()
+    protected virtual void fire()
     {
         if (_player&& isFaShe) {
             isFaShe = false;

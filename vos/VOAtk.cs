@@ -82,6 +82,10 @@ public class VOAtk : MonoBehaviour {
         {
             this.atkDistanceY = float.Parse(dict["atkDistanceY"]);
         }
+        else
+        {
+            this.atkDistanceY = 0;
+        }
 
     }
 	

@@ -108,7 +108,7 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_1004 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
 
     //电球恶魔boss
-    static public Dictionary<string, string> atk_1104 = new Dictionary<string, string> { { "atkName", "skill_genzong" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_dianqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "30" }, { "atkDistanceY", "4" } };
+    static public Dictionary<string, string> atk_1104 = new Dictionary<string, string> { { "atkName", "skill_genzong1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_dianqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "30" }, { "atkDistanceY", "4" } };
     static public Dictionary<string, string> atk_1105 = new Dictionary<string, string> { { "atkName", "skill_juji" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_jujiqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "50" } };
 
 

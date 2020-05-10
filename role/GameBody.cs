@@ -696,6 +696,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
+        //print("-------------->  isAcing   " + isAcing);
         isBackUping = false;
         
         if (roleDate.isBeHiting) return;
@@ -757,6 +758,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("l " + isAtking);
+        //print(" --------------------------- ???? isAcing  "+ isAcing);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
@@ -793,7 +795,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void Run()
     {
-        
+        //print("   >>>>>>>> run   !!! ");
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
@@ -1459,8 +1461,8 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (roleDate.isBeHiting)
         {
-            //print("beHiting!!!!!!!!");
-            ControlSpeed(20);
+            //print(" 被攻击了 控制 推力  beHiting!!!!!!!!");
+            ControlSpeed(30);
             GetBeHit();
             //DBBody.animation.timeScale = 1;
             return;

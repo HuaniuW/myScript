@@ -15,6 +15,25 @@ public class ScreenChange : MonoBehaviour {
     [Header("门的名字")]
     public string doorName = "";
 
+    [Header("门的朝向")]
+    public string MenFX = "";
+
+
+    //判断 是否 生成 新的 地图
+    [Header("随机地图名字")]
+    public string ReMapName = "";
+
+
+
+    [Header("当前门的位置 保留到 进入门位置 来判断出口是哪个门")]
+    public string DangQianMenWeizhi = "";
+
+    //查找全局 数据 中是否 有 地图 数据     没有的 话 要生成  并且 保存入 全局数据
+
+
+    //当前 是 map1  还是map2  都不是的话 就转map1
+
+
 	// Use this for initialization
 	void Start () {
 		
@@ -23,7 +42,24 @@ public class ScreenChange : MonoBehaviour {
     void SetPlayerPositionAndScreen()
     {
         GlobalSetDate.instance.playerPosition = PlayerPosition;
-        GlobalSetDate.instance.screenName = GoScreenName;
+        GlobalSetDate.instance.CReMapName = ReMapName;
+        if (ReMapName != "")
+        {
+            //这里是进入 随机 地图
+            if (SceneManager.GetActiveScene().name != "RMap_1")
+            {
+                GlobalSetDate.instance.screenName = "RMap_1";
+            }
+            else
+            {
+                GlobalSetDate.instance.screenName = "RMap_2";
+            }
+        }
+        else
+        {
+            GlobalSetDate.instance.screenName = GoScreenName;
+        }
+        
         GlobalSetDate.instance.IsChangeScreening = true;
         GlobalSetDate.instance.doorName = doorName;
     }
@@ -53,14 +89,31 @@ public class ScreenChange : MonoBehaviour {
 		
 	}
 
+
+
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //print(Coll.tag + "  --  " + Coll.transform.tag);
         if(Coll.tag == "Player")
         {
+
+
+            print("hit!!!!   ");
+            if (ReMapName != "")
+            {
+                GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
+            }
+
             if (Coll.transform.GetComponent<RoleDate>().isDie) return;
             ChangeScreen();
             Coll.GetComponent<GameBody>().GetStand();
+
+            //查找地图数据
+
+            //if (!IsHitGo) return;
+
+
         }
     }
 

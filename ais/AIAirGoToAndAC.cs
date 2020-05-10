@@ -81,7 +81,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     {
         //随机找一个点 如果这个点 碰撞了 直接over不重调了
         int n = GlobalTools.GetRandomNum(gudingZBList.Count);
-        print("  随机数n：  "+n+ "  找点 啊      gudingZBList.Count  "+ gudingZBList.Count+"  ? 第一个点位置  "+ gudingZBList[0]);
+        //print("  随机数n：  "+n+ "  找点 啊      gudingZBList.Count  "+ gudingZBList.Count+"  ? 第一个点位置  "+ gudingZBList[0]);
         Vector2 _v2 = gudingZBList[n];
         if (!IsPointHitWall(_v2)) {
             return _v2;

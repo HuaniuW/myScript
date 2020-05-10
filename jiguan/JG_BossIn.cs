@@ -127,6 +127,8 @@ public class JG_BossIn : MonoBehaviour {
                 SeeBossAudioPlay();
                 //显示Boss血条
                 ShowBossLiveBar();
+
+                DistorySelf();
             }
             
 

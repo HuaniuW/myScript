@@ -7,14 +7,14 @@ public class GlobalMapDate : MonoBehaviour {
     // Use this for initialization
 
     //当前关卡 第几关
-    public static int CCustomNum = 1;
+    public static string CCustomStr = "";
 
     //判断是否已经有了 数据 有的话去取  没有的话 生成
     public static bool IsHasDateCCustom = false;
 
 
 
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "5!u-r!jiguan|6!l-r!jiguan|7!r-d!jiguan", "", "6!n!boss|8!n!cundang" };
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "r:5!u-l!jiguan|6!l-r!jiguan|7!r-d!jiguan", "", "l:6!n!boss|8!n!cundang" };
 
 
 
@@ -35,7 +35,7 @@ public class GlobalMapDate : MonoBehaviour {
         string mapName1;
         for (int i = 0; i < speMapArr.Length; i++)
         {
-            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            mapName1 = "map_" + CCustomStr + "-" + speMapArr[i].Split('!')[0];
             if (mapName1 == mapName) return true;
         }
         return false;
@@ -50,7 +50,7 @@ public class GlobalMapDate : MonoBehaviour {
         string mapName1;
         for (int i = 0; i < speMapArr.Length; i++)
         {
-            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            mapName1 = "map_" + CCustomStr + "-" + speMapArr[i].Split('!')[0];
             tempMapNameList.Add(mapName1);
         }
         if (tempMapNameList.Count >= 1) return tempMapNameList;
@@ -65,7 +65,7 @@ public class GlobalMapDate : MonoBehaviour {
         string speMsg;
         for (int i = 0; i < speMapArr.Length; i++)
         {
-            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            mapName1 = "map_" + CCustomStr + "-" + speMapArr[i].Split('!')[0];
             if (mapName1 == mapName)
             {
                 speMsg = speMapArr[i].Split('!')[2];
@@ -84,7 +84,7 @@ public class GlobalMapDate : MonoBehaviour {
         string speMapMsg;
         for (int i = 0; i < speMapArr.Length; i++)
         {
-            mapName1 = "map_" + CCustomNum + "-" + speMapArr[i].Split('!')[0];
+            mapName1 = "map_" + CCustomStr + "-" + speMapArr[i].Split('!')[0];
             if (mapName1 == mapName) {
                 speMapMsg = speMapArr[i];
                 return SGKFXArr(speMapMsg);
@@ -117,20 +117,37 @@ public class GlobalMapDate : MonoBehaviour {
 
     public static bool IsHasSpecialMap()
     {
-        if (SpecialMapNameAndNumArr[CCustomNum-1] != "") return true;
+        foreach(string s in SpecialMapNameAndNumArr)
+        {
+            if (s.Split(':')[0] == CCustomStr) return true;
+        }
         return false;
     }
 
     //获取当前关卡的 特殊关卡的数组
     public static string[] GetCSpeicalMapNameArr()
     {
-        return SpecialMapNameAndNumArr[CCustomNum-1].Split('|');
+        foreach (string s in SpecialMapNameAndNumArr)
+        {
+            if (s.Split(':')[0] == CCustomStr)
+            {
+                return s.Split(':')[1].Split('|');
+            }
+        }
+        return null;
     }
 
     //获取当前关卡的 特殊关卡的字符串
     public static string GetCSpeicalMapStr()
     {
-        return SpecialMapNameAndNumArr[CCustomNum-1];
+        foreach (string s in SpecialMapNameAndNumArr)
+        {
+            if (s.Split(':')[0] == CCustomStr)
+            {
+                return s.Split(':')[1];
+            }
+        }
+        return null;
     }
 
     

@@ -214,10 +214,12 @@ public class HitKuai : MonoBehaviour {
                     //print("----------------------------------------------------------------> 冲击力  "+jn_date.chongjili+ "  _roleScaleX   "+ _roleScaleX);
                     if(Coll.tag == "AirEnemy")
                     {
+                        print("   空中怪被攻击 冲击力！ ");
                         Coll.GetComponent<Rigidbody2D>().AddForce(GlobalTools.GetVector2ByPostion(Coll.transform.position,atkObj.transform.position,jn_date.chongjili));
                     }
                     else
                     {
+                        print("   >>>>>>>>>>>地面怪被攻击 冲击力！ "+jn_date.chongjili+"     ");
                         Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(jn_date.chongjili * _roleScaleX * beHitXFScale, 0));
                     }
                     
@@ -267,6 +269,7 @@ public class HitKuai : MonoBehaviour {
 
                 //硬直时间？
                 gameBody.GetPause(jn_date.yingzhishijian,0.4f);
+                //附带效果
                 gameBody.FudaiXiaoguo(jn_date.JiZhongFDXiaoguo);
                 //if (Coll.tag != "Player")
             }

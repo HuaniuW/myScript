@@ -98,7 +98,7 @@ public class AIFanji : MonoBehaviour {
         if (n <= (100 - fanjijilv- BeHitNum)) return;
 
         print("   进入 AI反击 ！！  反击成功！！！！  ");
-        //print("----------------------------------反击！！！"+(fanjijilv + BeHitNum));
+        print("----------------------------------反击！！！   n:  "+n+"  ??:  "+(100-(fanjijilv + BeHitNum))+ "   BeHitNum   "+ BeHitNum+ "  fanjijilv   "+ fanjijilv);
         if (!isFanji)
         {
             isFanji = true;
