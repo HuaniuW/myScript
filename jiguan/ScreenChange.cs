@@ -18,10 +18,16 @@ public class ScreenChange : MonoBehaviour {
     [Header("门的朝向")]
     public string MenFX = "";
 
+    //[Header("是否进入随机地图 ")]
+    //public bool IsInReMap = false;
 
     //判断 是否 生成 新的 地图
     [Header("随机地图名字")]
     public string ReMapName = "";
+
+
+    [Header("玩家出来的 位置")]
+    public Transform OutPosition;
 
 
 
@@ -39,6 +45,31 @@ public class ScreenChange : MonoBehaviour {
 		
 	}
 
+
+    public void SetMenMsg(string fx,string _GoScreenName)
+    {
+        DangQianMenWeizhi = fx;
+        //判断是否是特殊地图
+        if (_GoScreenName.Split('$').Length == 2)
+        {
+            GoScreenName = _GoScreenName.Split('$')[0];
+        }
+        else
+        {
+            ReMapName = _GoScreenName;
+        }
+        //GoScreenName = _GoScreenName;
+    }
+
+
+    public void SetMenMsg2(string goSc,string fx,string goRMap)
+    {
+        GoScreenName = goSc;
+        DangQianMenWeizhi = fx;
+        ReMapName = goRMap;
+    }
+
+
     void SetPlayerPositionAndScreen()
     {
         GlobalSetDate.instance.playerPosition = PlayerPosition;
@@ -54,10 +85,13 @@ public class ScreenChange : MonoBehaviour {
             {
                 GlobalSetDate.instance.screenName = "RMap_2";
             }
+
+            print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 "+ ReMapName);
         }
         else
         {
             GlobalSetDate.instance.screenName = GoScreenName;
+            print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 " + GoScreenName);
         }
         
         GlobalSetDate.instance.IsChangeScreening = true;
@@ -98,11 +132,17 @@ public class ScreenChange : MonoBehaviour {
         if(Coll.tag == "Player")
         {
 
+            //这里判断 是否要进随机的大地图  小地图
 
             print("hit!!!!   ");
             if (ReMapName != "")
             {
+                print("说明是特殊地图 跳到随机里面   ");
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
+            }
+            else
+            {
+                GlobalSetDate.instance.GetInMenWeizhi(DangQianMenWeizhi);
             }
 
             if (Coll.transform.GetComponent<RoleDate>().isDie) return;

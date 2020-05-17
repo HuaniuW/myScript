@@ -461,6 +461,18 @@ public class GlobalSetDate : MonoBehaviour {
             //GetSave();
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            //消除存档数据
+            //InNewGame();
+            //新游戏的选项
+            //GetSave();
+            if (GlobalTools.FindObjByName("maps"))
+            {
+                GlobalTools.FindObjByName("maps").GetComponent<GetReMap>().SetMapMsgDateInStr(true);
+            }
+
+        }
 
         //一键保存 小地图
 
@@ -481,8 +493,14 @@ public class GlobalSetDate : MonoBehaviour {
     //当前 跳入 的随机地图名字
     public string CReMapName = "";
 
+    //当前的map头
     public string CMapTou = "";
 
+
+    public void GetInMenWeizhi(string menWeiZhi)
+    {
+        DanqianMenweizhi = menWeiZhi;
+    }
 
 
 
@@ -493,7 +511,7 @@ public class GlobalSetDate : MonoBehaviour {
     public void GetMapMsgByName(string mapName,string baoliumenFX,string menweizhi)
     {
         if (!_createMap) _createMap = new CreateMaps();
-        _createMap.Test();
+        //_createMap.Test();
         //是否有大地图
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
 
@@ -508,7 +526,7 @@ public class GlobalSetDate : MonoBehaviour {
             //这里要 设置 保留门 存入地图数据 存入本地
             string baoliuFX = baoliumenFX;
             //入场的 地图名字
-            string ruchangMap = SceneManager.GetActiveScene().name;
+            string ruchangMap = SceneManager.GetActiveScene().name+"$p";
 
             // 设置 地图参数 中间名字  方向几率  最大地图数
             _createMap.SetMapCenterName(CMapTou.Split('_')[1]);
@@ -541,9 +559,6 @@ public class GlobalSetDate : MonoBehaviour {
                 {
                     mapListMsgStr += TempMapList[i]+"|";
                 }
-
-
-               
                 
             }
 

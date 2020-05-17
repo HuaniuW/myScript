@@ -9,13 +9,13 @@ public class GameControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        TimeTest();
+        //TimeTest();
 
     }
 
     void TimeTest()
     {
-        Application.targetFrameRate = 30;
+        //Application.targetFrameRate = 30;
         //float s = 8 * 365/7*6;
         //float t = 1000000;
         //print("--------------------------------------------->每个月的收入  " + t / s * 8 * 31+"元"+"  每天价值 "+t/s*8+"  每小时价值 "+t/s);
@@ -52,8 +52,10 @@ public class GameControl : MonoBehaviour {
         GetPlayerUI();
         GetPlayBag();
         GetCamersTargetToPlayer();
+
         InitGuanKaDate();
         GetPlayerStatus();
+        GetPlayerPosByFX();
 
         
     }
@@ -66,8 +68,84 @@ public class GameControl : MonoBehaviour {
 
 
 
+    //-----------------------------------------------------------------------------门数据---------------
+    public List<GameObject> ListDoor = new List<GameObject>() { };
+
+    public void ClearListDoor()
+    {
+        ListDoor.Clear();
+    }
 
 
+    public void GetDoorInList(GameObject door)
+    {
+        ListDoor.Add(door);
+    }
+
+    //通过方向 来判断 门 和放置玩家的位置
+    public void GetPlayerPosByFX()
+    {
+        //print(" 玩家位置 和方向！！");
+        foreach(GameObject door in ListDoor)
+        {
+
+
+            if(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi == GetFanFX(GlobalSetDate.instance.DanqianMenweizhi))
+            {
+                print("--------------------------------------------------进入的门信息--------------------------------------------------------------- ");
+                print("储存的当前门 位置  "+ GlobalSetDate.instance.DanqianMenweizhi);
+                print("找到的门 的位置 "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi);
+
+
+                print("  创建地图时候 玩家的位置 "+ player.transform.position);
+                player.transform.position = door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position;
+
+                print("玩家位置  "+ player.transform.position);
+
+               
+                SetPlayerPos();
+                return;
+            }
+        }
+
+        print("---------------------  在 GameControl 中控制 玩家位置！！！ ");
+    }
+
+    public void SetPlayerPos()
+    {
+        if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "u")
+        {
+            //print(" 右转！！！！ ");
+
+            player.GetComponent<PlayerGameBody>().TurnRight();
+        }
+        else
+        {
+            //print(" ----》左转！！！！ ");
+            player.GetComponent<PlayerGameBody>().TurnLeft();
+        }
+        this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
+    }
+
+    public string GetFanFX(string fx) {
+        if(fx == "l")
+        {
+            fx = "r";
+        }else if(fx == "r")
+        {
+            fx = "l";
+        }else if (fx == "u")
+        {
+            fx = "d";
+        }else if (fx == "d")
+        {
+            fx = "u";
+        }
+        return fx;
+    }
+
+
+    //---------------------------------------------------------------------------------------------------
 
 
 

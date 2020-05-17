@@ -195,6 +195,7 @@ public class PlayerGameBody : GameBody {
 
     void ChangeBoneScaleX()
     {
+        //print("修正！！！");
         ChangeBoneScaleXByObject(bianziy);
         ChangeBoneScaleXByObject(bianziz);
         ChangeBoneScaleXByObject(toufaz);
@@ -395,7 +396,7 @@ public class PlayerGameBody : GameBody {
 
             if (yanchi >= vOAtk.yanchi)
             {
-                print("---------------------------------> ok!!  " + yanchi);
+                //print("---------------------------------> ok!!  " + yanchi);
                 //超过延迟时间 失去连击
                 isAtkYc = false;
                 IsAtkDown = false;
@@ -1095,18 +1096,38 @@ public class PlayerGameBody : GameBody {
     }
 
 
-  
+    public override void TurnRight()
+    {
+        if (GetComponent<RoleDate>().isDie) return;
+        
+        //RunRight(1);
+        this.transform.localScale = new Vector3(-1, 1, 1);
+        ChangeBoneScaleX();
+    }
+
+    public override void TurnLeft()
+    {
+        if (GetComponent<RoleDate>().isDie) return;
+        //RunLeft(1);
+        this.transform.localScale = new Vector3(1, 1, 1);
+    }
+
+
+
 
     protected override void Stand()
     {
+        //print("  进门  "+ GlobalSetDate.instance.roleDirection);
         if(GlobalSetDate.instance.roleDirection == "l")
         {
             TurnLeft();
+            //print("  左转？？？？？    ");
             GlobalSetDate.instance.roleDirection = "";
         }
         else if(GlobalSetDate.instance.roleDirection == "r")
         {
             TurnRight();
+            //print("  -----右转？？？？？    ");
             ChangeBoneScaleX();
             GlobalSetDate.instance.roleDirection = "";
         }
