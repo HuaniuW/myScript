@@ -101,8 +101,13 @@ public class ScreenChange : MonoBehaviour {
     GameObject playerUI;
     void ChangeScreen()
     {
+
         playerUI = GlobalTools.FindObjByName("PlayerUI");
         playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().saveAllHZDate();
+
+        //用来判断 地图地形 是否生成 过 如果生成过 就不用再生成了 直接根据数据生成就可以（控制 地图块内的 自动生成 粒子 草之类的）
+        GlobalSetDate.instance.IsCMapHasCreated = false;
+
         //获取角色当前数据 当前血量 当前蓝量  发给GlobalSetDate  什么格式 以后再说  cLive=1000,cLan=1000
         GlobalSetDate.instance.ScreenChangeDateRecord();
         GlobalSetDate.instance.HowToInGame = GlobalSetDate.CHANGE_SCREEN;

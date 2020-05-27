@@ -66,6 +66,36 @@ public class PlayerUI : MonoBehaviour {
         screenChangeZZ.gameObject.SetActive(false);
     }
 
+
+
+    public void HideSelf()
+    {
+        isShowUI = false;
+        GetComponent<CanvasGroup>().alpha = 0;
+    }
+
+    public void GetUIShow()
+    {
+        isShowUI = true;
+    }
+
+
+    bool isShowUI = false;
+    public void ShowSelf()
+    {
+        if (!isShowUI) return;
+        if (GetComponent<CanvasGroup>().alpha < 0.92)
+        {
+            GetComponent<CanvasGroup>().alpha += (1 - GetComponent<CanvasGroup>().alpha) * 0.2f;
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = 1;
+            isShowUI = false;
+        }
+    }
+
+
     void GetScreenChange()
     {
         if (!IsScreenChangeing) return;
@@ -192,7 +222,7 @@ public class PlayerUI : MonoBehaviour {
         {
             ShowSaveing();
         }
-
+        ShowSelf();
         GetScreenChange();
 
     }

@@ -492,6 +492,8 @@ public class GlobalSetDate : MonoBehaviour {
 
     //当前 跳入 的随机地图名字
     public string CReMapName = "";
+    public bool IsCMapHasCreated = false;
+
 
     //当前的map头
     public string CMapTou = "";

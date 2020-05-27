@@ -24,12 +24,12 @@ public class AudioControl : MonoBehaviour {
                 player = GlobalTools.FindObjByName("player");
             }
 
-            if(Mathf.Abs(player.transform.position.x - this.transform.position.x)> distance)
+            if(player&&Mathf.Abs(player.transform.position.x - this.transform.position.x)> distance)
             {
                 m_AudioSource.volume = 0;
                 return;
             }
-            m_AudioSource.volume = (1 -Mathf.Abs(player.transform.position.x - this.transform.position.x)/distance)* GlobalSetDate.instance.GetSoundEffectValue();
+            if(player)m_AudioSource.volume = (1 -Mathf.Abs(player.transform.position.x - this.transform.position.x)/distance)* GlobalSetDate.instance.GetSoundEffectValue();
         }
 
     }

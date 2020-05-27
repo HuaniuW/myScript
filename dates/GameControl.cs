@@ -56,7 +56,7 @@ public class GameControl : MonoBehaviour {
         InitGuanKaDate();
         GetPlayerStatus();
         GetPlayerPosByFX();
-
+        //print("游戏 控制完成");
         
     }
 
@@ -64,6 +64,12 @@ public class GameControl : MonoBehaviour {
     {
         //if (Globals.isDebug) print("游戏关卡控制类OnEnable 启动");
         
+    }
+
+
+    public GameObject GetPlayerObj()
+    {
+        return player;
     }
 
 
@@ -85,10 +91,10 @@ public class GameControl : MonoBehaviour {
     //通过方向 来判断 门 和放置玩家的位置
     public void GetPlayerPosByFX()
     {
-        //print(" 玩家位置 和方向！！");
+        print(" 玩家位置 和方向！！");
         foreach(GameObject door in ListDoor)
         {
-
+            print("  ---  "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi+"   :   "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
 
             if(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi == GetFanFX(GlobalSetDate.instance.DanqianMenweizhi))
             {
@@ -113,7 +119,8 @@ public class GameControl : MonoBehaviour {
 
     public void SetPlayerPos()
     {
-        if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "u")
+        print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
+        if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "d")
         {
             //print(" 右转！！！！ ");
 
@@ -472,7 +479,7 @@ public class GameControl : MonoBehaviour {
 
 
     //摄像头定焦 和找到敌人
-    void GetCamersTargetToPlayer()
+    public void GetCamersTargetToPlayer()
     {
         //print("hi");
         this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);

@@ -14,7 +14,7 @@ public class GlobalMapDate : MonoBehaviour {
 
 
 
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "r:2!l-r!jiguan", "", "l:6!n!boss|8!n!cundang" };
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "l:6!n!boss|8!n!cundang" };
 
 
 
@@ -129,6 +129,7 @@ public class GlobalMapDate : MonoBehaviour {
     {
         foreach (string s in SpecialMapNameAndNumArr)
         {
+            print(s + "  ---  " + CCustomStr);
             if (s.Split(':')[0] == CCustomStr)
             {
                 return s.Split(':')[1].Split('|');

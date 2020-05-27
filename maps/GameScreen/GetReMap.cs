@@ -4,11 +4,117 @@ using UnityEngine;
 
 public class GetReMap : MonoBehaviour
 {
+    [Header("连接点类型")]
+    public string LianjiandianType = "";
+
+    [Header("地板类型")]
+    public string DibanType = "";
+    [Header("前景1")]
+    public string QianJingType_1 = "";
+    [Header("前景2")]
+    public string QianJingType_2 = "";
+
+    [Header("背景1")]
+    public string BejingType_1 = "";
+
+    [Header("背近远景1")]
+    public string BeiJinYuanjingType_1 = "";
+    [Header("背近远景2")]
+    public string BeiJinYuanjingType_2 = "";
+
+    [Header("背远景1")]
+    public string BeiYuanjingType_1 = "";
+
+    [Header("超大背景")]
+    public string CDBg = "";
+
+    [Header("修饰粒子")]
+    public string XiushiLizi_1 = "";
+
+    [Header("雾")]
+    public string WuType_1 = "";
+
+
+    [Header("最大 地图 分支 衍生的数量")]
+    public int MaxMapNums = 2;
+
+    //---------------------调试 单个地图 直接生成 的 模块 不用的时候 都清空  目前只用作测试--------------------------
+
+    [Header("是否是调试 调试的话用到下面的 信息")]
+    public bool IsTiaoshi = false;
+
+    [Header("当前 关卡名字")]
+    public string CMapName = "";
+
+    //{l:map_r-2,r:map_r-3}
+    [Header("当前 门 方向列表")]
+    public List<string> ThisMenFXList = new List<string>() { };
+    [Header("从哪个门进入的 注意是反的 如果是 l 出来是r位置的门  ")]
+    public string CongNaGeMenjinru = "";
+
+
+
     //地形生成
     // Start is called before the first frame update
     void Start()
     {
         GetInDate();
+
+
+        //设置寻路
+        //GlobalTools.FindObjByName("A_").GetComponent<>;
+        //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().;
+        //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
+
+        //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
+        
+
+        kuang = GlobalTools.FindObjByName("kuang");
+
+        Ax = GlobalTools.FindObjByName("A_");
+
+        StartCoroutine(IEDestory2ByTime(0.1f));
+    }
+
+    bool IsDuiqiAx = false;
+    GameObject kuang;
+    GameObject Ax;
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (IsDuiqiAx)
+        {
+            if(Ax.transform.position!= kuang.transform.position)
+            {
+                Ax.transform.position = kuang.transform.position;
+                //Ax.GetComponent<AstarPath>()
+                Ax.GetComponent<AstarPath>().Scan();
+                //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
+                //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
+
+                IsDuiqiAx = false;
+            }
+        }
+    }
+
+
+    public IEnumerator IEDestory2ByTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        //yield return new WaitForFixedUpdate();
+        //Debug.Log(">>   "+ gameObject);
+        print("寻路位置对齐！！！！！");
+        IsDuiqiAx = true;
+
+        //GlobalSetDate.instance.IsCMapHasCreated = true;
+
+        if (!GlobalSetDate.instance.IsCMapHasCreated)
+        {
+            SetMapMsgDateInStr();
+        }
+        //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
+        //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
     }
 
 
@@ -39,31 +145,51 @@ public class GetReMap : MonoBehaviour
 
         maps = GlobalTools.FindObjByName("maps");
 
+        if (IsTiaoshi&& CMapName != "")
+        {
+            GlobalSetDate.instance.CReMapName = CMapName;
+            GlobalMapDate.CCustomStr = CMapName.Split('_')[1];
+        }
+        else
+        {
+            CMapName = GlobalSetDate.instance.CReMapName;
+        }
+
         print("本地图名字 "+GlobalSetDate.instance.CReMapName);
-
-
-
         if (GlobalSetDate.instance.CReMapName == "") return;
 
 
 
-
-
         //获取门信息
-        menFXList = GetMenFXListByMapName(GlobalSetDate.instance.CReMapName);
-        print("menFXList   "+ menFXList.Count);
-        foreach (string m in menFXList) print(m);
+        if (IsTiaoshi && ThisMenFXList.Count!=0) {
+            //{l:map_r-2,r:map_r-3}
+            menFXList = ThisMenFXList;
+        }
+        else
+        {
+            menFXList = GetMenFXListByMapName(GlobalSetDate.instance.CReMapName);
+            ThisMenFXList = menFXList;
+        }
+        print("menFXList   " + menFXList);
+
+        //foreach (string m in menFXList) print(m);
         //这里要知道 从哪进来的 进入方向   保留一个门
         //-
+        if (IsTiaoshi && CongNaGeMenjinru != "")
+        {
+            GlobalSetDate.instance.DanqianMenweizhi = CongNaGeMenjinru;
+        }
+        else
+        {
+            CongNaGeMenjinru = GlobalSetDate.instance.DanqianMenweizhi;
+        }
         print("从哪个位置的门进来的  "+ GlobalSetDate.instance.DanqianMenweizhi);
-
-
-
         //判断 全局数据中 是否有 地图 有的话  取出来
         string mapDateMsg = GetMapMsgDateByName(GlobalSetDate.instance.CReMapName);
         if (mapDateMsg != "")
         {
             print("根据 数据 来生成地图");
+            GlobalSetDate.instance.IsCMapHasCreated = true;
             CreateMapByMapMsgDate(mapDateMsg);
             //获取 门信息
 
@@ -72,49 +198,10 @@ public class GetReMap : MonoBehaviour
             return;
         }
         
-
-
         //判断是 哪种景色  洞外 洞内  相应的 景 图片是哪些
-
-
-
-
-
-
-     
-
-
 
         //随机出每个 分支 的地图数量
         string type = GetTypeByMenFXList(menFXList);
-
-        SetMapMsgDateInStr();
-        //根据类型 生成 连接点
-
-        //lr  平地 洞内   左右的 地形是最多的  有门的 打怪才能过的  有直线通道的
-        //普通的直线  连接线 左右连接  向左  向右  向上  向下 4个方向 生成地图
-        // 左右的 或者 2个门的 还有只要 碰到就下落的地板   上下移动   左右移动的地板
-        // 2个门都适用   1.户外 2.洞内 3.户外洞内混合
-
-
-
-        //lru
-        //lrd
-
-        //lud
-        //rud
-
-        //ru
-        //rd
-        //lu
-        //ld
-        //ud
-        //lrud
-
-
-
-
-
     }
 
 
@@ -139,9 +226,16 @@ public class GetReMap : MonoBehaviour
                 _pos = s.Split('$')[0].Split('!')[1];
                 _sd = s.Split('$')[0].Split('!')[2];
 
-                _goScreenName = s.Split('$')[1].Split('!')[0];
-                _reMapName = s.Split('$')[1].Split('!')[1];
-                _dangQianMenWeiZhi = s.Split('$')[1].Split('!')[2];
+                if (_name.Split('_')[0] == "wu")
+                {
+
+                }
+                else
+                {
+                    _goScreenName = s.Split('$')[1].Split('!')[0];
+                    _reMapName = s.Split('$')[1].Split('!')[1];
+                    _dangQianMenWeiZhi = s.Split('$')[1].Split('!')[2];
+                }
             }
 
 
@@ -159,14 +253,17 @@ public class GetReMap : MonoBehaviour
                 GameObject mapObj = GlobalTools.GetGameObjectByName(_name);
                 mapObj.transform.parent = maps.transform;
                 mapObj.transform.position = new Vector3( float.Parse(_pos.Split('#')[0]), float.Parse(_pos.Split('#')[1]), float.Parse(_pos.Split('#')[2]));
-                int theSD = int.Parse(_sd);
+                int theSD = 0;
+                if (_sd!="") theSD = int.Parse(_sd);
+                print(_name+" position "+ mapObj.transform.position+"   sd  "+_sd);
+
                 if (mapObj.GetComponent<DBBase>())
                 {
                     mapObj.GetComponent<DBBase>().SetSD(theSD);
                 }
                 else
                 {
-                    mapObj.GetComponent<SpriteRenderer>().sortingOrder = theSD;
+                    if(mapObj.GetComponent<SpriteRenderer>()) mapObj.GetComponent<SpriteRenderer>().sortingOrder = theSD;
                 }
 
                 //如果是门数据
@@ -174,6 +271,14 @@ public class GetReMap : MonoBehaviour
                 {
                     GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetDoorInList(mapObj);
                     mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg2(_goScreenName, _dangQianMenWeiZhi, _reMapName);
+                }
+
+                if(_name.Split('_')[0] == "wu")
+                {
+                    Vector3 sf = GlobalTools.VParse(s.Split('$')[1].Split('!')[0]);
+                    Color _color = GlobalTools.ColorParse(s.Split('$')[1].Split('!')[1]);
+                    mapObj.transform.localScale = sf;
+                    mapObj.GetComponent<SpriteRenderer>().color = _color;
                 }
                 
             }
@@ -200,6 +305,7 @@ public class GetReMap : MonoBehaviour
 
         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().ClearListDoor();
 
+        //这里 做了排序     lr=l:mapR_1$p!r:map_r-3
         string str = GetStrByList(menFXList);
         print("str    "+str);
         //取中心连接点 地图 以及 随机出 每个 朝向的 模块数量    模块的最少数是多少？ 左右是1  上下是2（多一个直连+转弯） 然后连接门  门不算进数量 数量走完连接门
@@ -207,7 +313,7 @@ public class GetReMap : MonoBehaviour
         // lr=l:mapR_1?3?pd?shu!r:map_r-2?3?dn?qiang
         
         string lianjie = str.Split('=')[0];
-
+        if (LianjiandianType != "") lianjie = lianjie + "_" + LianjiandianType;
         CreateLJByName(lianjie);
 
         //str    lr=l:mapR_1!r:map_r-2
@@ -221,7 +327,7 @@ public class GetReMap : MonoBehaviour
         return "";
     }
 
-    public int MaxMapNums = 2;
+    
 
     void CreateBianlu(string mapStrMsg)
     {
@@ -229,10 +335,29 @@ public class GetReMap : MonoBehaviour
         for (int i = 0; i < strList.Count; i++){
             string fx = strList[i].Split(':')[0];
             //获取 生成的 地图块 数量
-            int n = 2 + GlobalTools.GetRandomNum(MaxMapNums);
+            int n = 1 + GlobalTools.GetRandomNum(MaxMapNums);
             string _goScreenName = strList[i].Split(':')[1];
             print("门位置 "+ strList[i].Split(':')[0] + "  _goScreenName    "+ _goScreenName);
-            CreateFZRoad(fx, n, _goScreenName);
+            if(strList.Count == 1)
+            {
+                if(fx == "d")
+                {
+                    CreateFZRoad("l", n, _goScreenName,fx);
+                }
+                else if(fx == "u")
+                {
+                    CreateFZRoad("r", n, _goScreenName,fx);
+                }
+                else
+                {
+                    CreateFZRoad(fx, n, _goScreenName);
+                }
+            }
+            else
+            {
+                CreateFZRoad(fx, n, _goScreenName);
+            }
+            
         }
 
         //计算边界 设置 CameraKuai  和 A*
@@ -281,7 +406,7 @@ public class GetReMap : MonoBehaviour
             }
             else
             {
-                _sd = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder.ToString();
+                if(child.gameObject.GetComponent<SpriteRenderer>()) _sd = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder.ToString();
             }
 
             string gkMapMsg = _name + "!" + _pos + "!" + _sd;
@@ -292,6 +417,16 @@ public class GetReMap : MonoBehaviour
                 string _reMapName= child.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().ReMapName;
                 string _dangQianMenWeiZhi = child.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi;
                 gkMapMsg += "$" + _goScreenName + "!" + _reMapName + "!" + _dangQianMenWeiZhi;
+            }
+
+            if(_name.Split('_')[0] == "wu")
+            {
+                //雾  记录缩放 颜色
+                string sf = child.transform.localScale.ToString();
+                string colorStr = child.GetComponent<SpriteRenderer>().color.ToString();
+                print("---------------------------> 缩放  "+sf+"  颜色  "+colorStr);
+
+                gkMapMsg += "$" + sf + "!" + colorStr;
             }
 
 
@@ -372,7 +507,8 @@ public class GetReMap : MonoBehaviour
 
     GameObject _cMapObj;
     List<GameObject> mapObjArr = new List<GameObject>() { };
-    void CreateFZRoad(string fx,int mapNums,string goScreenName)
+    //参数    danFX单方向修正  
+    void CreateFZRoad(string fx,int mapNums,string goScreenName,string danFX = "")
     {
         Vector2 LJDpos;
         Vector2 pos;
@@ -383,10 +519,10 @@ public class GetReMap : MonoBehaviour
         {
             if (fx == "l")
             {
-
                 if(i!= mapNums)
                 {
                     string mapArrName = "db_pd";
+                    if (DibanType != "") mapArrName += "_" + DibanType;
                     int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                     string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                     mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -399,8 +535,14 @@ public class GetReMap : MonoBehaviour
                     {
                         goScreenName += "$p";
                     }
-                    mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(fx, goScreenName);
-
+                    if (danFX != "")
+                    {
+                        mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(danFX, goScreenName);
+                    }
+                    else
+                    {
+                        mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(fx, goScreenName);
+                    }
                     GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetDoorInList(mapObj);
                 }
                
@@ -416,8 +558,9 @@ public class GetReMap : MonoBehaviour
 
                 if (i == 0)
                 {
-                    //  DiBanBase  LianJieDian  
+                    //  DiBanBase  LianJieDian
                     LJDpos = lianjiedian.GetComponent<LianJieDian>().GetLeftPos();
+
                     pos = new Vector2(LJDpos.x - mapObj.GetComponent<DBBase>().GetWidth(), LJDpos.y);
                   
                     //寻找连接点
@@ -444,6 +587,7 @@ public class GetReMap : MonoBehaviour
                 if (i != mapNums)
                 {
                     string mapArrName = "db_pd";
+                    if (DibanType != "") mapArrName += "_" + DibanType;
                     int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                     string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                     mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -455,7 +599,17 @@ public class GetReMap : MonoBehaviour
                     {
                         goScreenName += "$p";
                     }
-                    mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(fx, goScreenName);
+
+                    if (danFX != "")
+                    {
+                        mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(danFX, goScreenName);
+                    }
+                    else
+                    {
+                        mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(fx, goScreenName);
+                    }
+
+                    
 
                     GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetDoorInList(mapObj);
                 }
@@ -471,7 +625,9 @@ public class GetReMap : MonoBehaviour
 
                 if (i == 0)
                 {
-                    //  DiBanBase  LianJieDian  
+                    //  DiBanBase  LianJieDian
+                    //这里要先 拿到连接点位置
+
                     LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
                     pos = LJDpos;
 
@@ -504,6 +660,8 @@ public class GetReMap : MonoBehaviour
                     if(i == mapNums - 1)
                     {
                         string mapArrName = "db_rd";
+                        if (DibanType != "") mapArrName += "_" + DibanType;
+
                         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                         string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                         mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -511,6 +669,7 @@ public class GetReMap : MonoBehaviour
                     else
                     {
                         string mapArrName = "db_dn_shu";
+                        if (DibanType != "") mapArrName += "_" + DibanType;
                         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                         string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                         mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -520,6 +679,7 @@ public class GetReMap : MonoBehaviour
                 }
                 else
                 {
+                  
                     mapObj = GlobalTools.GetGameObjectByName("dt_men_r");
                     if (GlobalMapDate.IsSpeMapByName(goScreenName))
                     {
@@ -533,11 +693,24 @@ public class GetReMap : MonoBehaviour
                 sd = 19 + i % 7;
                 if (mapObj.transform.Find("diban")) mapObj.GetComponent<DBBase>().SetSD(sd);
 
-                if (i == 0)
+                if (i == mapNums-1)
+                {
+                    //转弯
+                    if (i == 0)
+                    {
+                        LJDpos = lianjiedian.GetComponent<DBBase>().GetUpPos();
+                    }
+                    else
+                    {
+                        LJDpos = _cMapObj.GetComponent<DBBase>().GetUpPos();
+                    }
+                    
+                    pos = LJDpos;
+                }else if (i == 0)
                 {
                     //  DiBanBase  LianJieDian  
                     LJDpos = lianjiedian.GetComponent<LianJieDian>().GetUpPos();
-                    pos = new Vector2(LJDpos.x,LJDpos.y+ mapObj.GetComponent<DBBase>().GetHight());
+                    pos = new Vector2(LJDpos.x, LJDpos.y + mapObj.GetComponent<DBBase>().GetHight());
 
                     //寻找连接点
                 }
@@ -546,17 +719,12 @@ public class GetReMap : MonoBehaviour
                     //结束 创建门
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetRightPos();
                     pos = LJDpos;//new Vector2(LJDpos.x - mapObj.GetComponent<DBBase>().GetWidth(), LJDpos.y);
-                }else if (i == mapNums-1)
-                {
-                    //转弯
-                    LJDpos = _cMapObj.GetComponent<DBBase>().GetUpPos();
-                    pos = LJDpos;
                 }
                 else
                 {
                     //创建地板
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetUpPos();
-                    pos = LJDpos;
+                    pos = new Vector2(LJDpos.x, LJDpos.y + _cMapObj.GetComponent<DBBase>().GetHight());
 
                 }
                 mapObj.transform.position = pos;
@@ -572,6 +740,7 @@ public class GetReMap : MonoBehaviour
                     if (i == mapNums - 1)
                     {
                         string mapArrName = "db_lu";
+                        if (DibanType != "") mapArrName += "_" + DibanType;
                         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                         string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                         mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -579,6 +748,7 @@ public class GetReMap : MonoBehaviour
                     else
                     {
                         string mapArrName = "db_dn_shu";
+                        if (DibanType != "") mapArrName += "_" + DibanType;
                         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
                         string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
                         mapObj = GlobalTools.GetGameObjectByName(mapName);
@@ -588,6 +758,7 @@ public class GetReMap : MonoBehaviour
                 }
                 else
                 {
+                   
                     mapObj = GlobalTools.GetGameObjectByName("dt_men_l");
                     if (GlobalMapDate.IsSpeMapByName(goScreenName))
                     {
@@ -601,6 +772,8 @@ public class GetReMap : MonoBehaviour
                 sd = 19 + i % 7;
                 if (mapObj.transform.Find("diban")) mapObj.GetComponent<DBBase>().SetSD(sd);
 
+
+             
                 if (i == 0)
                 {
                     //  DiBanBase  LianJieDian  
@@ -689,6 +862,11 @@ public class GetReMap : MonoBehaviour
         print("切换后 位置 和 大小   "+ zhongxindian+"  大小  "+ kuang.GetComponent<BoxCollider2D>().size);
 
         GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(kuang.GetComponent<BoxCollider2D>());
+
+
+
+      
+        
     }
 
 
@@ -716,7 +894,7 @@ public class GetReMap : MonoBehaviour
         //GlobalTools.FindObjByName("MainCamera").transform.position = new Vector3(player.transform.position.x, player.transform.position.y, GlobalTools.FindObjByName("MainCamera").transform.position.z);  //GlobalTools.FindObjByName("player").transform.position;
     }
 
-
+    // lr=l:mapR_1$p!r:map_r-3
     string GetStrByList(List<string> menFXList)
     {
         string str = "";
@@ -778,6 +956,7 @@ public class GetReMap : MonoBehaviour
     List<string> menFXList = new List<string> { };
     List<string> GetMenFXListByMapName(string mapName)
     {
+        //BigMapDate->         map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
         string[] mapArr1 = GlobalSetDate.instance.gameMapDate.BigMapDate.Split('@');
         string mapMsg = "";
         foreach(string s in mapArr1)
@@ -790,8 +969,8 @@ public class GetReMap : MonoBehaviour
         }
 
         string[] CMapMsgArr = mapMsg.Split('|');
-
-        foreach(string m in CMapMsgArr)
+        //map_r-1!0#0!r:map_r-2^u:map_r-3
+        foreach (string m in CMapMsgArr)
         {
             if(m.Split('!')[0] == GlobalSetDate.instance.CReMapName)
             {
@@ -809,9 +988,5 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
 }

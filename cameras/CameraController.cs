@@ -189,7 +189,7 @@ public class CameraController : MonoBehaviour
             //x = player.position.x;
             isInEdge = false;
 
-            //飞到跟随
+            //飞刀跟随
             if(Globals.cameraIsFeidaoGS){
                 
                 float vdx = Mathf.Abs(player.position.x-x)*0.2>2? Mathf.Abs(player.position.x - x) * 0.2f:2;
@@ -307,11 +307,14 @@ public class CameraController : MonoBehaviour
                             isInEdge = false;
                             //记录 摄像机 和角色之间的间隔距离
                             distanceX = player.position.x - x;
-                            if (!player.GetComponent<GameBody>().isInAiring)
+
+                            //!player.GetComponent<GameBody>().isInAiring  之前的
+                            if (!player.GetComponent<GameBody>().isInAiring||player.GetComponent<GameBody>().IsGround)
                             {
                                 if (player.transform.localScale.x > 0)
                                 {
                                     x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
+
                                 }
                                 else
                                 {
@@ -396,7 +399,6 @@ public class CameraController : MonoBehaviour
             x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
         }
 
-        
 
         if (!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
 
@@ -407,15 +409,30 @@ public class CameraController : MonoBehaviour
 
         if(isShockZing2) z = GetShockZing2();
 
-
+        if (IsSetNewAddXPos) x =player.transform.position.x+ _addPosX;
         transform.position = new Vector3(x, y, z);//改变相机的位置
-        //print("2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
+        //print("playerpos    "+player.transform.position+  "2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
 
         
     }
 
+    bool IsSetNewAddXPos = false;
+    float _addPosX;
+    public void SetNewAddXPos(float addPosX)
+    {
+        IsSetNewAddXPos = true;
+        _addPosX = addPosX;
+    }
 
-   
+    public void ReSetNewAddXPos()
+    {
+        IsSetNewAddXPos = false;
+        //print("@ 还原 摄像机位置！！！！！");
+        _addPosX = 0;
+    }
+
+
+
     Vector3 newPositon;
     bool setNewPosition = false;
     public void SetNewPosition(Vector3 pos)

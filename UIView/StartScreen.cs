@@ -19,6 +19,9 @@ public class StartScreen : MonoBehaviour {
     public AudioSource xz;
     public AudioSource xd;
 
+
+    public Image TxtD;
+
     // Use this for initialization
     void Start () {
         FindSaveDate();
@@ -29,6 +32,33 @@ public class StartScreen : MonoBehaviour {
         //btn1.Component.CrossFadeAlpha
         //(btn1.GetComponentsInChildren<Component>()[0] as Graphic).CrossFadeAlpha(0, 1, true);
 
+    }
+
+    float speedX = 0.04f;
+    float speedY = 0.034f;
+    bool isStart = false;
+    float distance = 16;
+    Vector2 vp = Vector2.zero;
+    //文本飘动
+    void DPiaoDpnr()
+    {
+        if (!isStart)
+        {
+            isStart = true;
+            vp = TxtD.transform.position;
+        }
+
+        float _x = TxtD.transform.position.x;
+        float _y = TxtD.transform.position.y;
+        _x += speedX;
+        _y += speedY;
+        TxtD.transform.position = new Vector2(_x, _y);
+        if (TxtD.transform.position.x > vp.x + distance || TxtD.transform.position.x < vp.x - distance) speedX *= -1;
+        if (TxtD.transform.position.y > vp.y + distance || TxtD.transform.position.y < vp.y - distance) speedY *= -1;
+
+
+
+        
     }
 
 
@@ -211,6 +241,9 @@ public class StartScreen : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+        DPiaoDpnr();
+
         if (UI_Save) return;
         if (GlobalSetDate.instance.IsChangeScreening) return;
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -222,7 +255,7 @@ public class StartScreen : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             FindNearestQR("down");
-            print("in------>");
+            //print("in------>");
             GlobalTools.PlayAudio("xz", this);
         }
 

@@ -83,6 +83,7 @@ public class GameSaveDate{
     public bool IsHasSaveDateByName(string SaveDateName)
     {
         //string str = Application.persistentDataPath + "/" + SaveDateName;
+
         if (GetSaveDateByName(SaveDateName) != null) return true;
         return false;
     }

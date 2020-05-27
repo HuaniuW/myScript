@@ -67,8 +67,8 @@ public class UI_setBar : MonoBehaviour {
         {
             text1.text = "音量";
             text2.text = "语言";
-            tog1.GetComponentInChildren<Text>().text = "中文";
-            tog2.GetComponentInChildren<Text>().text = "英文";
+            tog1.GetComponentInChildren<Text>().text = "简体中文";
+            tog2.GetComponentInChildren<Text>().text = "english";
             if (btn_inStartScreen.isActiveAndEnabled)
             {
                 btn_inStartScreen.GetComponentInChildren<Text>().text = "开始界面";

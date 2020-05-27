@@ -1379,6 +1379,7 @@ public class GameBody : MonoBehaviour, IRole {
             if (o.slot != null)
             {
                 //if(o.slot.display!=null &&(o.slot.display as GameObject).GetComponent<Renderer>()!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material.color!=null != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = Color.red;
+                //print("???    "+o.slot.name);
                 if (o.slot.display != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
 
                 //print(GetComponent<Renderer>().material.GetTextureOffset);
@@ -1429,11 +1430,12 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
+    public bool TSACControl = false;
     protected virtual void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
-        
 
+        if (TSACControl) return;
         CurrentAcName = DBBody.animation.lastAnimationName;
         //脚下的烟幕
         Yanmu();
@@ -1454,9 +1456,9 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
 
-       
 
         if (Globals.isInPlot) return;
+
 
 
         if (roleDate.isBeHiting)
@@ -1526,7 +1528,7 @@ public class GameBody : MonoBehaviour, IRole {
         
         InAir();
         IsCanShanjinAndJump();
-
+        
 
         if (isAcing)
         {
@@ -1751,7 +1753,7 @@ public class GameBody : MonoBehaviour, IRole {
                 acNums = 0;
                 if (isInAiring)
                 {
-                    DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
+                    if(DBBody.animation.HasAnimation(JUMPDOWN)) DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
 
                 return "completed";

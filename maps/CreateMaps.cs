@@ -9,7 +9,7 @@ public class CreateMaps : MonoBehaviour
     public bool IsDuoFX = false;
 
     [Header("多分支的几率 <15 2 <30 3   这样")]
-    public string DuoFenZhiJL = "0-0";
+    public string DuoFenZhiJL = "30-60";
 
     [Header("生成的 地图 最大数量")]
     public int MaxMapNums = 10;

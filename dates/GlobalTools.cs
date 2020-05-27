@@ -138,10 +138,21 @@ public class GlobalTools : MonoBehaviour {
 
 
 
+    //字符 (1.6, 1.6, 1.0)  转换为 Vector3   
+    public static Vector3 VParse(string str)
+    {
+        str = str.Replace("(", "").Replace(")", "");
+        string[] v = str.Split(',');
+        return new Vector3(float.Parse(v[0]), float.Parse(v[1]), float.Parse(v[2]));
+    }
 
-
-
-
+    //字符 RGBA(0.100, 1.000, 1.000, 0.200)  转换为 Color   
+    public static Color ColorParse(string str)
+    {
+        str = str.Replace("RGBA(", "").Replace(")", "");
+        string[] c = str.Split(',');
+        return new Color(float.Parse(c[0]), float.Parse(c[1]), float.Parse(c[2]), float.Parse(c[3]));
+    }
 
 
 
@@ -239,7 +250,7 @@ public class GlobalTools : MonoBehaviour {
     //设置物体 深度 order
 	public static void SetMapObjOrder(GameObject mapObj,int orderNum = 0)
     {
-        mapObj.GetComponent<SpriteRenderer>().sortingOrder = orderNum;
+        if(mapObj.GetComponent<SpriteRenderer>()) mapObj.GetComponent<SpriteRenderer>().sortingOrder = orderNum;
     }
 
 
@@ -341,12 +352,14 @@ public class GlobalTools : MonoBehaviour {
 
     }
 
+    // nums 是指数组长度
     public static void SetLizi(GameObject jingObj, float _x1, float _x2, float _y, int i, int nums) {
         float __x = 0;
         float __y = 0;
         float __z = 0;
         float w = Mathf.Abs(_x2 - _x1);
 
+        //如果数组长度是1  只有1个 就在中心位置 偏移一点
         if (nums == 1)
         {
             float xiuzhengNums = GetRandomNum() >= 50 ? 0.3f : -0.3f;
@@ -367,8 +380,24 @@ public class GlobalTools : MonoBehaviour {
         SaveGameObj(jingObj);
     }
 
-	//通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） _dz distance z(z的距离范围随机)   是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样 
-	public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false,bool isTree = false,bool isLBsuoduan = false){
+    //通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） _dz distance z(z的距离范围随机)   是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样   isDG是否倒挂   是否是树    isLBsuoduan两边景位置缩短
+    /// <summary>
+    /// 横着的 地方 地面 和顶部的位置 摆放
+    /// </summary>
+    /// <param name="jingObj">景物体</param>
+    /// <param name="_x1">左边点位置</param>
+    /// <param name="_x2">右边点位置</param>
+    /// <param name="_y">y高度</param>
+    /// <param name="_z">深度</param>
+    /// <param name="_dz">深度随机范围</param>
+    /// <param name="i">第几个 循环数</param>
+    /// <param name="nums">循环总数</param>
+    /// <param name="xzds">旋转度数</param>
+    /// <param name="sdfw">深度范围 20 深度就是20-30 </param>
+    /// <param name="isDG"> 是否倒挂</param>
+    /// <param name="isTree">是否是树</param>
+    /// <param name="isLBsuoduan">俩边位置是否向中间缩短</param>
+    public static void SetJingTY(GameObject jingObj,float _x1,float _x2,float _y,float _z,float _dz,int i,int nums,float xzds,int sdfw,bool isDG = false,bool isTree = false,bool isLBsuoduan = false){
 		float jingW = 0;
 		float jingH = 0;
         			
@@ -468,15 +497,16 @@ public class GlobalTools : MonoBehaviour {
         jingObj.transform.position = new Vector3(__x, __y, __z);
 
 
-		SaveGameObj(jingObj);
-        
-	}
+        SaveGameObj(jingObj);
+
+    }
 
 
 
     //将 生成的 地图 存入数据保存
 	public static void SaveGameObj(GameObject obj){
         //print("---------------------------------------------------------->  " + obj.name);
+        return;
         if(obj.tag == "men")
         {
             print("景储存---->名字   " + obj.name + "   位置   " + obj.transform.position);

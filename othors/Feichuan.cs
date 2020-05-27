@@ -24,6 +24,7 @@ public class Feichuan : MonoBehaviour {
             Vector2 end = new Vector2(start.x+distanceMQ, start.y);
             Debug.DrawLine(start, end, Color.yellow);
             isHitWall = Physics2D.Linecast(start, end, groundLayer);
+            
             return isHitWall;
         }
     }
@@ -37,10 +38,64 @@ public class Feichuan : MonoBehaviour {
     public bool IsMoveX = true;
 	// Update is called once per frame
 	void Update () {
+        if (IsStandUp) return;
+
+        if (IsHitWall) {
+            Daoan();
+            return;
+        }
+        
         if (IsMoveY) MoveY();
-        if (IsHitWall) return;
+        
         if (IsMoveX) MoveX();
         
+    }
+
+
+    public bool IsDaoan()
+    {
+        return IsStandUp;
+    }
+
+
+    bool IsCloseDoor = false;
+    bool IsStandUp = false;
+    GameObject player;
+    float ycNums = 0;
+
+    //到岸
+    void Daoan()
+    {
+        if (!IsCloseDoor)
+        {
+            IsCloseDoor = true;
+            player = GlobalTools.FindObjByName("player");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"Men_1-1"), this);
+        }
+
+        ycNums += Time.deltaTime;
+        if (ycNums < 1) return;
+
+        if (!IsStandUp)
+        {
+            if (player.GetComponent<GameBody>().GetDB().animation.lastAnimationName == "getStand_1")
+            {
+                IsStandUp = true;
+                Globals.isInPlot = false;
+                player.GetComponent<GameBody>().GetStand();
+                GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetUIShow();
+                GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().ReSetNewAddXPos();
+                return;
+            }
+
+            //print("  lastAnimationName     " + player.GetComponent<GameBody>().GetDB().animation.lastAnimationName+"     "+ player.GetComponent<GameBody>().GetDB().animation.lastAnimationState + "  Globals.isInPlot   " + Globals.isInPlot);
+
+            if (player.GetComponent<GameBody>().GetDB().animation.lastAnimationName != "getStand_1")
+            {
+                player.GetComponent<GameBody>().GetDB().animation.GotoAndPlayByFrame("getStand_1");
+            }
+        }
+
     }
 
     public float speedX = 0.1f;
@@ -114,6 +169,7 @@ public class Feichuan : MonoBehaviour {
 
     private void MoveX()
     {
+        //speedX = 0.01f + GlobalTools.GetRandomDistanceNums(0.02f);
         float moveX = this.transform.position.x + speedX;
         this.transform.position = new Vector3(moveX, this.transform.position.y, this.transform.position.z);
         foreach (Transform t in objList)
