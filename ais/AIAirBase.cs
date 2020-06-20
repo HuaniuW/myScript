@@ -351,7 +351,7 @@ public class AIAirBase : AIBase
          {
              if (!Tongshi()) return;
          }*/
-        //print("???????????????????????????????????????????????????????????????????????普通攻击      "+isActioning +"     ");
+//        print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance+ "  atkDistanceY  "+ atkDistanceY);
 
         if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance,1,atkDistanceY)||DontNear)) return;
 
@@ -395,6 +395,9 @@ public class AIAirBase : AIBase
             GetComponent<AIPath>().canMove = false;
             return;
         }
+
+
+        if (IsBoss) return;
         
         if (!isAction)
         {
@@ -491,9 +494,22 @@ public class AIAirBase : AIBase
                 return;
             }
 
-            atkDistance = GetAtkVOByName(GetZS(), DataZS.GetInstance()).atkDistance;
-            atkDistanceY = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistanceY;
-            //print("  acName "+acName+ "  atkDistanceY:  " + atkDistanceY);
+
+            //if (acName.Split('|').Length > 1)
+            //{
+               
+            //}
+            //else
+            //{
+            //    atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
+            //    atkDistanceY = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistanceY;
+            //}
+
+
+            atkDistance = GetAtkVOByName(acName.Split('|')[0], DataZS.GetInstance()).atkDistance;
+            atkDistanceY = GetAtkVOByName(acName.Split('|')[0], DataZS.GetInstance()).atkDistanceY;
+
+            print("  acName "+acName+ "  atkDistanceY:  " + atkDistanceY);
         }
 
         if (aiQishou && aiQishou.isQishouAtk && !aiQishou.isFirstAtked)

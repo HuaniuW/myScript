@@ -73,6 +73,8 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("子弹的 发射点")]
     public UnityEngine.Transform zidanPos;
 
+    [Header("是否需要 碰撞点 不需要的话直接是中点")]
+    public bool IsNeedHitPos = false;
 
     protected Rigidbody2D playerRigidbody2D;
     public Rigidbody2D GetPlayerRigidbody2D()
@@ -329,7 +331,17 @@ public class GameBody : MonoBehaviour, IRole {
         if (bdjn.skillACName != null && DBBody.animation.HasAnimation(bdjn.skillACName))
         {
             //***找到起始特效点 找骨骼动画的点 或者其他办法
-            GetAcMsg(bdjn.skillACName);
+            if (isInAiring)
+            {
+                GetAcMsg(bdjn.skillACNameInAir);
+            }
+            else
+            {
+                GetAcMsg(bdjn.skillACName);
+            }
+            
+
+
             print("技能释放动作//////////////////////////////////////////////////////    " + bdjn.skillACName);
             playerRigidbody2D.velocity = Vector2.zero;
             if (bdjn.ACyanchi > 0)
@@ -337,14 +349,15 @@ public class GameBody : MonoBehaviour, IRole {
                 GetPause(bdjn.ACyanchi);
                 //***人物闪过去的 动作 +移动速度  还有多发的火球类的特效
             }
+            
         }
         else
         {
             print("被动技能释放、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、！！！！！！");
             //测试用 正式的要配动作
-            GetComponent<ShowOutSkill>().ShowOutSkillByName(bdjn.TXName, true);
+            
         }
-
+        GetComponent<ShowOutSkill>().ShowOutSkillByName(bdjn.TXName, true);
     }
 
     protected HZDate jn;
@@ -482,6 +495,9 @@ public class GameBody : MonoBehaviour, IRole {
         
 
         if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP|| DBBody.animation.lastAnimationName == JUMPHITWALL) return;
+        if(!thePlayerUI) thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
+        if (!thePlayerUI.ui_shanbi.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
+        //if (!GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().ui_shanbi.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
         float testSpeed;
         if (isInAiring)
         {
@@ -492,7 +508,8 @@ public class GameBody : MonoBehaviour, IRole {
         }
         else
         {
-            DODGE2 = "dodge_2";
+            DODGE2 = "dodge_1";
+            //DODGE2 = "shanjin_2";
             testSpeed = 16;
         }
 
@@ -520,13 +537,20 @@ public class GameBody : MonoBehaviour, IRole {
                     MoveVX(testSpeed, true);
                 }
             }
+
+            ShanjinTX();
         }
     }
 
+    //闪进特效
+    protected virtual void ShanjinTX()
+    {
+
+    }
 
     protected void Dodge1()
     {
-
+        //ShanjinTX();
         if (isDodgeing && IsHitMQWall && isInAiring)
         {
             //碰到墙
@@ -584,7 +608,14 @@ public class GameBody : MonoBehaviour, IRole {
         shanjinjuli = 0;
         isShanjin = false;
         //print(">>>>>>进来没！！");
+        ShanjinOverTX();
     }
+
+    protected virtual void ShanjinOverTX()
+    {
+
+    }
+
 
     [Header("侦测地板的射线起点22222")]
     public UnityEngine.Transform qianmianjiance;
@@ -1190,7 +1221,8 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
-    protected void GetStart()
+    protected PlayerUI thePlayerUI;
+    protected virtual void GetStart()
     {
         //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
@@ -1206,10 +1238,11 @@ public class GameBody : MonoBehaviour, IRole {
         bodyScale = new Vector3(1, 1, 1);
         vOAtk = GetComponent<VOAtk>();
         this.transform.localScale = bodyScale;
-        _yanmu2.Stop();
+        if(_yanmu2) _yanmu2.Stop();
         _yanmu.Stop();
-        
-       
+        GetYuanColor();
+        //thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
+
         GameOver();
 
         //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
@@ -1243,7 +1276,7 @@ public class GameBody : MonoBehaviour, IRole {
         //Destroy(this.gameObject);
         if(this.tag == "Player")
         {
-            Time.timeScale = 1;
+            Time.timeScale = 1f;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_OVER), this);
             Globals.isGameOver = true;
             //this.gameObject.SetActive(false);
@@ -1369,9 +1402,28 @@ public class GameBody : MonoBehaviour, IRole {
         GetUpdate();
     }
 
+    Color _ycolor = Color.white;
+    void GetYuanColor()
+    {
+        List<DragonBones.Bone> bones = GetDB().armature.GetBones();
+        foreach (DragonBones.Bone o in bones)
+        {
+            if (o.slot != null)
+            {
+                if (o.slot.display != null)
+                {
+                    _ycolor = (o.slot.display as GameObject).GetComponent<Renderer>().material.color;
+                    return;
+                }
+            }
+        }
+    }
+
+
     public void GetBoneColorChange(Color color)
     {
         List<DragonBones.Bone> bones = GetDB().armature.GetBones();
+        //print(" ///////////////////////////////////////////////////     被攻击改变颜色！！！！  ");
         foreach(DragonBones.Bone o in bones)
         {
             //print("name:  " + o.GetType()+o.slot);
@@ -1380,7 +1432,11 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //if(o.slot.display!=null &&(o.slot.display as GameObject).GetComponent<Renderer>()!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material!=null&& (o.slot.display as GameObject).GetComponent<Renderer>().material.color!=null != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = Color.red;
                 //print("???    "+o.slot.name);
-                if (o.slot.display != null) (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
+                if (o.slot.display != null) {
+                    //print("??     "+color);
+                    (o.slot.display as GameObject).GetComponent<Renderer>().material.color = color;
+                    //print(" ------>    "+ (o.slot.display as GameObject).GetComponent<Renderer>().material.color);
+                } 
 
                 //print(GetComponent<Renderer>().material.GetTextureOffset);
                 //return;
@@ -1393,14 +1449,16 @@ public class GameBody : MonoBehaviour, IRole {
     public void BeHitColorChange()
     {
         GetBoneColorChange(Color.red);
-        StartCoroutine(IReSetBeHitColor(0.12f));
+        //GetBoneColorChange(Color.red);
+        StartCoroutine(IReSetBeHitColor(0.23f));
     }
 
 
     public IEnumerator IReSetBeHitColor(float time)
     {
         yield return new WaitForSeconds(time);
-        GetBoneColorChange(Color.white);
+        //print("变白！！！");
+        GetBoneColorChange(_ycolor);
     }
 
 
@@ -1662,7 +1720,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (IsHitMQWall && isInAiring&& DBBody.animation.lastAnimationName == JUMPHITWALL&& !DBBody.animation.isCompleted) {
             //碰到墙
-            _yanmu2.Play();
+            if (_yanmu2) _yanmu2.Play();
             return;
         }
 
@@ -1671,12 +1729,12 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (IsHitMQWall && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) > 3) {
             
-            _yanmu2.Play();
+            if(_yanmu2) _yanmu2.Play();
             //if(GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(true);
         }
         else
         {
-            _yanmu2.Stop();
+            if (_yanmu2) _yanmu2.Stop();
             //if (GetComponent<RoleAudio>()) GetComponent<RoleAudio>().PlayHitWallDown(false);
         }
     }
@@ -1956,6 +2014,12 @@ public class GameBody : MonoBehaviour, IRole {
                     }
                     else
                     {
+                        if (jn == null) {
+                            print("******************************************************************************** 技能为空 ");
+                            print("******************************************************************************** 技能为空 ");
+                            return;
+                        }
+                        
                         print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);

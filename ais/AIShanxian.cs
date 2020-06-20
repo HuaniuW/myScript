@@ -75,7 +75,7 @@ public class AIShanxian : MonoBehaviour, ISkill
 
 	void Hy()
 	{
-		//print("??????????????还原啊-------------------------------");
+		print("??????????????还原啊-------------------------------");
 		this.gameObject.transform.localScale = new Vector3(1,1,1);
 		GetComponent<GameBody>().GetBoneColorChange(Color.white);
 		GetComponent<RoleDate>().isCanBeHit = true;

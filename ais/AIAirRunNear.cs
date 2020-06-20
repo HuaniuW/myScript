@@ -137,6 +137,7 @@ public class AIAirRunNear : MonoBehaviour
 
     public float zhijieZhuijiTanCeDistance = 1;
     //直接 去到目标点
+    //inDistance 进入 范围直径
     public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0)
     {
         if (inDistance != 0) zuijiPosDisWC = inDistance;
@@ -396,7 +397,7 @@ public class AIAirRunNear : MonoBehaviour
             }
             else
             {
-                //print("  找到追击点    "+v2);
+                print("  找到追击点    "+v2);
                 return ZhuijiPointZuoBiao(v2);
                 //_aiPath.canMove = true;
                 //setter.SetV2(v2);
@@ -414,7 +415,7 @@ public class AIAirRunNear : MonoBehaviour
         //-------各个方向 碰壁后 使用寻路-------------
         if (!isZhuijiY && (runAway.IsHitTop || runAway.IsHitDown || runAway.IsHitQianmain)) {
             isZhuijiY = true;
-            //print("---------------------------------------------------------->   寻路Y");
+            print("---------------------------------------------------------->   寻路Y");
             _aiPath.canMove = true;
         } 
 

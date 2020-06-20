@@ -77,6 +77,10 @@ public class Door : MonoBehaviour {
             //print("Up");
             isUp = true;
             
+        }else if (zt == "d")
+        {
+            HasOpen();
+            return;
         }
         //print(e.eventParams.ToString() + " -zt  " + _zt + "  thisName  " + this.name + "   name " + _name);
         //声音播放

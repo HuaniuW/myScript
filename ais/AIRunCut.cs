@@ -28,6 +28,10 @@ public class AIRunCut : MonoBehaviour {
 	void Update () {
         if (isAcing)
         {
+
+            if(GetComponent<AIBase>().IsChongqi) AcOver();
+
+
             if (!isRunNear)
             {
                 RunNear();
@@ -75,7 +79,11 @@ public class AIRunCut : MonoBehaviour {
     }
 
     bool isAtking = false;
+    [Header("是否有第二个招式 切换不是连招")]
+    public bool IsAC2 = false;
 
+    public float Live_bili = 0.3f;
+    public string Ac2Name = "";
     void GetAtk()
     {
         if (GetComponent<RoleDate>().isBeHiting)
@@ -93,12 +101,20 @@ public class AIRunCut : MonoBehaviour {
 
         if (!isAtking) {
             isAtking = true;
+            if(AtkMsgName!= Ac2Name&&IsAC2 && Ac2Name != "")
+            {
+                if(GetComponent<RoleDate>().live< GetComponent<RoleDate>().maxLive* Live_bili)
+                {
+                    AtkMsgName = Ac2Name;
+                }
+            }
             gameBody.GetAtk(AtkMsgName);
-
         }
 
         
     }
+
+
 
     void AcOver()
     {

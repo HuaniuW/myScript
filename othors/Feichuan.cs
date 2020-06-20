@@ -14,6 +14,10 @@ public class Feichuan : MonoBehaviour {
     public LayerMask groundLayer;
 
 
+
+    public ParticleSystem Denglizi;
+
+
     bool isHitWall = false;
     public bool IsHitWall
     {
@@ -31,8 +35,18 @@ public class Feichuan : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+       
+    }
+
+
+    public void LiziPlay()
+    {
+        if (Denglizi)
+        {
+            Denglizi.transform.position = new Vector3(Denglizi.transform.position.x + 0.1f, Denglizi.transform.position.y, Denglizi.transform.position.z);
+            Denglizi.Play();
+        }
+    }
 
 
     public bool IsMoveX = true;
@@ -63,9 +77,12 @@ public class Feichuan : MonoBehaviour {
     GameObject player;
     float ycNums = 0;
 
+
+    public bool IsStopPlot = false;
     //到岸
     void Daoan()
     {
+        if (IsStopPlot) return;
         if (!IsCloseDoor)
         {
             IsCloseDoor = true;

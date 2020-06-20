@@ -177,15 +177,22 @@ public class JN_SFBase : MonoBehaviour
         //print("?????   " + obj);
         //进入 攻击距离
         IsStarting = true;
+        if (SFTX) {
+            //print(" 播放特效啊 ！！！！！！！！！！！！！！！！！！！！！！！！ ");
+            SFTX.Play();
+        }
+        
     }
 
-
+    public ParticleSystem SFTX;
 
     public virtual bool IsGetOver() {
-        //print("  IsStarting ////////////////    "+ IsStarting);
+        
         if (!IsStarting)
         {
             ReSetAll();
+            //print("  IsStarting  over ////////////////    " + IsStarting);
+            if (SFTX) SFTX.Stop();
         }
         return !IsStarting;
     }

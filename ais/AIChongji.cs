@@ -28,17 +28,15 @@ public class AIChongji : MonoBehaviour
         return isGetOver;
     }
 
-    Vector2 v2Speed;
-    float chongjiSpeed = 20;
+    public float chongjiSpeed = 20;
 
     public void GetStart(Transform targetObj)
     {
         if (_targetObj == null) _targetObj = targetObj;
         isGetOver = false;
-        Vector2 targetPoint = targetObj.position;
-        v2Speed = GlobalTools.GetVector2ByPostion(targetPoint, this.transform.position, chongjiSpeed);
         GetComponent<RoleDate>().addYZ(1000);
         isStarting = true;
+        //print("this.transform.position：   " + this.transform.position);
     }
 
     public void ReSetAll()
@@ -69,14 +67,21 @@ public class AIChongji : MonoBehaviour
     bool isStarting = false;
     public bool isTanSheing = false;
     float deltaNums = 0;
+    [Header("冲击方式 是否是跟踪模式 ")]
+    public bool IsGenZongType = false;
+
+    bool IsStartChongji = false;
+
+    Vector2 targetPos = Vector2.zero;
+
+
+    [Header("准备动作做完后 开始 冲击的 延迟时间")]
+    public float CJYanchiTime = 0.5f;
+    float CJYanchiNums = 0;
+
+
     void Tanshe()
     {
-        /* if (GetComponent<RoleDate>().isBeHiting)
-         {
-             ReSetAll();
-             return;
-         }*/
-
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie) {
 
             ReSetAll();
@@ -89,34 +94,45 @@ public class AIChongji : MonoBehaviour
         //完成后 还原动作
         if (GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_begin")&& GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_start"))
         {
-            //print("00000000000000000000000000  "+ GetComponent<AirGameBody>().GetDB().animation.timeScale);
-            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == "chongji_begin" && GetComponent<AirGameBody>().GetDB().animation.isCompleted)
-            {
-                //print(">>>>>>>>>>>>>>>>??????????????????????????????????????????????????????????????");
-                v2Speed = GlobalTools.GetVector2ByPostion(_targetObj.position, this.transform.position, chongjiSpeed);
-                //GetComponent<AirGameBody>().GetDB().animation.GotoAndPlayByFrame("chongji_start", 0, 1);
-                GetComponent<AirGameBody>().GetAcMsg("chongji_start");
-                GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
-            }
-            //print("弹射----------------------------------------------------------------------》》》弹射"+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_begin" && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_start")
             {
-                //print("-------------------------------------------我靠 进来没 ");
-                //GetComponent<AirGameBody>().GetDB().animation.Play("chongji_begin");  //GotoAndPlayByFrame("chongji_begin", 0, 1);
                 //转向 朝向玩家
                 GetComponent<AirGameBody>().GetAcMsg("chongji_begin");
+                GetComponent<AirGameBody>().GetDB().animation.Stop();
+                GetComponent<AirGameBody>().GetStop();
                 deltaNums = 0;
-                GetComponent<AirGameBody>().GetDB().animation.timeScale = 0.000000001f;
                 return;
             }
 
-           
-        }
-       
 
-        //print("    deltaNums " + deltaNums+"  suduV2  "+v2Speed);
+            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == "chongji_begin")
+            {
+                CJYanchiNums += Time.deltaTime;
+                //print("  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+                if (CJYanchiNums >= CJYanchiTime)
+                {
+                    GetComponent<AirGameBody>().GetAcMsg("chongji_start");
+                    if(!GetComponent<AirGameBody>().GetDB().animation.isPlaying) GetComponent<AirGameBody>().GetDB().animation.Play();
+                }
+                return;
+            }
+        }
+
+        //print("ac   "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+
+
+        if (!IsStartChongji&&!IsGenZongType) {
+            IsStartChongji = true;
+            targetPos = _targetObj.position;
+        }
+
+        if(IsGenZongType) targetPos = _targetObj.position;
+
+
+        //print(" 5  "+ this.transform.position);
         deltaNums += Time.deltaTime;
-        if (deltaNums >= _tsTimes)
+
+        if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed))
         {
             deltaNums = 0;
             CJYanmu.Stop();
@@ -125,52 +141,34 @@ public class AIChongji : MonoBehaviour
             isStarting = false;
             isGetOver = true;
             isTanSheing = false;
-            //print("*************************************************************冲击 结束！！！！！");
+            IsStartChongji = false;
+            CJYanchiNums = 0;
+            GetComponent<AIAirRunNear>().ResetAll();
+            print("*************************************************************冲击 结束！！！！！");
         }
-
-        if (runAway.IsHitDown)
-        {
-            this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + fantanNums);
-            v2Speed = new Vector2(v2Speed.x, -v2Speed.y);
-        }
-        else if (runAway.IsHitTop)
-        {
-            this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y - fantanNums);
-            v2Speed = new Vector2(v2Speed.x, -v2Speed.y);
-        }
-        else if (runAway.IsHitQianmain)
-        {
-            if (this.transform.localScale.x > 0)
-            {
-                this.transform.position = new Vector2(this.transform.position.x + fantanNums, this.transform.position.y);
-            }
-            else
-            {
-                this.transform.position = new Vector2(this.transform.position.x - fantanNums, this.transform.position.y);
-            }
-
-            v2Speed = new Vector2(-v2Speed.x, v2Speed.y);
-        }
-
-        //this.GetComponent<AirGameBody>().GetPlayerRigidbody2D().AddForce(v2Speed);
-        this.GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = v2Speed;
-
 
         CJYanmu.Play();
     }
 
-    float _tsTimes = 0.5f;
+    [Header("冲击时间 注意 冲击速度越小 这个时间要越长 不然 就冲不到位置")]
+    public float _tsTimes = 0.5f;
 
     [Header("冲击烟幕")]
     public ParticleSystem CJYanmu;
 
-    //攻击距离
-    float _atkDistance = 10;
+    [Header("鱼进入 冲击弹射 范围")]
+    public float _atkDistance = 8;
     //定位目标
     bool GetNearTarget()
     {
+        if (!t1)
+        {
+            t1 = true;
+            //print("**this.transform.position：   " + this.transform.position);
+        }
         return runNear.Zhuiji(_atkDistance);
     }
+    bool t1 = false;
     //算xy速度
     //角色攻击动作
     //弹射

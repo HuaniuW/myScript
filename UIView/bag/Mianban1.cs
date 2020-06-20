@@ -117,6 +117,7 @@ public class Mianban1 : MonoBehaviour {
    //将背包数据 物品放入背包格子
     void GetInHZ()
     {
+        //print("  将背包数据 物品放入背包格子   "+ hzIdList.Count);
         for(var i = 0; i < hzIdList.Count; i++)
         {
             if (hzIdList[i] != "")
@@ -172,7 +173,7 @@ public class Mianban1 : MonoBehaviour {
     void GetChoseObj()
     {
         //查找该格子里面是否有物品 有的话就被选中了
-        print("getRQ   "+ getRQ);
+        //print("getRQ   "+ getRQ);
         if (getRQ == null) return;
         if (choseObj == null)
         {
@@ -289,7 +290,7 @@ public class Mianban1 : MonoBehaviour {
     {
         if (GlobalSetDate.instance.CurrentUserDate == null) return;
         string tempDateStr = GlobalSetDate.instance.CurrentUserDate.bagDate;// "huizhang1_0-huizhang2_2";
-        //print(tempDateStr);
+        //print("tempDateStr>     " + tempDateStr);
         getDateStrArr = tempDateStr.Split('-');
         hzIdList.AddRange(getDateStrArr);
         //hzIdList.Add(getDateStrArr);

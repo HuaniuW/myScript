@@ -43,7 +43,10 @@ public class DieScreen : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (isStartShowOut) ShowOut();
+        if (isStartShowOut) {
+            ShowOut();
+        }
+        
         if (Input.anyKey)
         {
             //得到按下什么键

@@ -15,7 +15,7 @@ public class JN_TXgensui : MonoBehaviour
     {
         if (_obj != null)
         {
-            this.transform.position = new Vector2(_obj.transform.position.x, this.transform.position.y);
+            this.transform.position = new Vector2(_obj.transform.position.x, _obj.transform.position.y-1f);
         }
     }
 

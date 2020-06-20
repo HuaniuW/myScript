@@ -17,7 +17,26 @@ public class Diaoluowu : MonoBehaviour {
     // Use this for initialization
     void Start () {
        //thisY = this.transform.position.y;
+      
     }
+
+    public bool IsCanBeRecord = false;
+    bool IsOutRecorded = false;
+    void GetOutRecord()
+    {
+        if (!IsCanBeRecord) return;
+        if (type == 1&&!IsOutRecorded)
+        {
+            if (this.transform.parent.GetComponent<Wupinlan>().isChildCanBeHit)
+            {
+                IsOutRecorded = true;
+                print(" --------------------------------------------------------爆出 物品记录   ");
+                var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);   //this.transform.parent.name.Replace("(Clone)", "");
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName + "-1@" + this.transform.parent.transform.position.x + "#" + this.transform.parent.transform.position.y), this);
+            }
+        }
+    }
+    
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
@@ -32,7 +51,8 @@ public class Diaoluowu : MonoBehaviour {
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_OBJ_NAME, this.objName), this);
                 //print(this.transform.parent.name);
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.transform.parent.name),this);
+                var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName+ "-0"),this);
             }
             else if (type == 2) {
                 //消耗的掉落物 吃了 直接加血
@@ -85,7 +105,10 @@ public class Diaoluowu : MonoBehaviour {
             //print(this.transform.position.y +"  -------------   "+ moveSpeed);
             this.transform.position = new Vector2(this.transform.position.x, mY);
         }
-	}
+
+        GetOutRecord();
+
+    }
 
     public void DistorySelf()
     {

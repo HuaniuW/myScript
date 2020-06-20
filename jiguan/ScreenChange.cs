@@ -76,7 +76,7 @@ public class ScreenChange : MonoBehaviour {
         GlobalSetDate.instance.CReMapName = ReMapName;
         if (ReMapName != "")
         {
-            //这里是进入 随机 地图
+            //这里是进入 随机 地图   只有这两个地图 容器
             if (SceneManager.GetActiveScene().name != "RMap_1")
             {
                 GlobalSetDate.instance.screenName = "RMap_1";
@@ -91,6 +91,7 @@ public class ScreenChange : MonoBehaviour {
         else
         {
             GlobalSetDate.instance.screenName = GoScreenName;
+            print(" 数据TempZGuanKaStr  >:   " + GlobalSetDate.instance.TempZGuanKaStr);
             print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 " + GoScreenName);
         }
         

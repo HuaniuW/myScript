@@ -28,7 +28,7 @@ public class AIZiDan : MonoBehaviour
     public float InDistanceY = 3;
     [Header("追击进入的 攻击距离")]
     public float AtkDistance = 15;
-
+    [Header("进入的距离半径")]
     public float Radios = 1;
 
     PointDistaction _pointDistration;
@@ -120,7 +120,8 @@ public class AIZiDan : MonoBehaviour
             //_gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             //这里做一个缓动减速
             _behavior.StartJS();
-            GetComponent<GameBody>().TurnDirection(_targetObj);
+            //朝向攻击目标
+            GetComponent<GameBody>().TurnDirection(_targetObj); 
             GetFire();
         }
        
@@ -129,7 +130,7 @@ public class AIZiDan : MonoBehaviour
 
     int _zdType = 1;
     int _acType = 1;
-    string ZDName = "TX_zidan2";
+    public string ZDName = "TX_zidan2";
 
 
     public void GetZidanType(string str)
@@ -150,6 +151,7 @@ public class AIZiDan : MonoBehaviour
         //print("距离--------------------------->    "+ (_targetObj.transform.position - this.transform.position).sqrMagnitude);
         //进入2点攻击距离
         if (_targetObj == null) return;
+        //判断是否 进入 射程  两点间距离是否小于 distance
         if (!_pointDistration.IsTwoPointInDistance(_targetObj.transform.position, this.transform.position, AtkDistance))
         {
             if (IsGoToNewPoint) {
@@ -173,7 +175,6 @@ public class AIZiDan : MonoBehaviour
             //如果Y碰撞
             if (_runAway.IsHitTop || _runAway.IsHitDown)
             {
-                print("》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》碰到墙了");
                 _isBehaviorOver = true;
                 _isStart = false;
             }
@@ -189,7 +190,7 @@ public class AIZiDan : MonoBehaviour
     void GetToNewPoint()
     {
 
-        newPoint = this.transform.position.x < _targetObj.transform.position.x ? new Vector2(_targetObj.transform.position.x + Mathf.Abs(_targetObj.transform.position.x - this.transform.position.x), this.transform.position.y) : new Vector2(_targetObj.transform.position.x + Mathf.Abs(_targetObj.transform.position.x + this.transform.position.x), this.transform.position.y);
+        newPoint = this.transform.position.x < _targetObj.transform.position.x ? new Vector2(_targetObj.transform.position.x + Mathf.Abs(_targetObj.transform.position.x - this.transform.position.x), this.transform.position.y) : new Vector2(_targetObj.transform.position.x - Mathf.Abs(_targetObj.transform.position.x - this.transform.position.x), this.transform.position.y);
 
         if (_pointDistration.IsPointCanStay(newPoint, Radios))
         {
@@ -202,6 +203,10 @@ public class AIZiDan : MonoBehaviour
         _isStart = false;
 
     }
+
+
+
+    //这里做个延迟可以
 
     void GetFire()
     {

@@ -8,17 +8,43 @@ public class Plot1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (IsHasPlayed) {
+            //飞船是到岸的 默认-89.62   到岸是 -23.73
+            FeiChuanDaoAn();
+            _text.GetComponent<CanvasGroup>().alpha = 0;
+            //龙不动
+            //门是关的
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "Men_1-1"), this);
+            return;
+        }
+        
+
         zz.GetComponent<CanvasGroup>().alpha = 1;
         txtCSPos = _text.transform.position;
         _text.GetComponent<CanvasGroup>().alpha = 0;
     }
+
+    void FeiChuanDaoAn()
+    {
+        feichuan.GetComponent<Feichuan>().IsStopPlot = true;
+        feichuan.transform.position = new Vector3(-23.73f, feichuan.transform.position.y, feichuan.transform.position.z);
+        feichuan.GetComponent<Feichuan>().Denglizi.Stop();
+        feichuan.GetComponent<Feichuan>().LiziPlay();
+        //feichuan.GetComponent<Feichuan>().LiziPlay();
+        //feichuan.GetComponent<Feichuan>().LiziPlay();
+        //feichuan.GetComponent<Feichuan>().LiziPlay();
+
+
+    }
+
+    public bool IsHasPlayed = false;
 
     Vector3 txtCSPos = Vector3.zero;
 
     // Update is called once per frame
     void Update()
     {
-        if (feichuan.GetComponent<Feichuan>().IsDaoan()) return;
+        if (IsHasPlayed||feichuan.GetComponent<Feichuan>().IsDaoan()) return;
         GetMainUI();
         HideZZ();
 

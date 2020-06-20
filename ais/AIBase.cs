@@ -19,6 +19,9 @@ public class AIBase : MonoBehaviour {
         GetStart();
     }
 
+
+    public bool IsBoss = false;
+
     protected void GetStart()
     {
         
@@ -30,7 +33,12 @@ public class AIBase : MonoBehaviour {
          myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, playerDie);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
+    }
 
+    void BossFight(UEvent e)
+    {
+        IsBoss = false;
     }
 
     bool isPlayerDie = false;
@@ -99,7 +107,7 @@ public class AIBase : MonoBehaviour {
             {
                 print("-------------------------------远离 回血！！！！！");
                 YLHuiXue();
-                
+               
             }
             else
             {
@@ -138,6 +146,7 @@ public class AIBase : MonoBehaviour {
 
         if (isRunLeft)
         {
+            //print("------>isRunLeft");
             gameBody.RunLeft(-0.4f);
             if (this.transform.position.x - myPosition.x<-patrolDistance|| gameBody.IsEndGround||gameBody.IsHitWall)
             {
@@ -150,6 +159,7 @@ public class AIBase : MonoBehaviour {
             }
         }else if (isRunRight)
         {
+            //print("------>isRunRight");
             gameBody.RunRight(0.4f);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
@@ -221,15 +231,20 @@ public class AIBase : MonoBehaviour {
         if (!gameObj)
         {
             gameObj = GlobalTools.FindObjByName("player");
+        }
+
+        if (!gameObj||gameObj.GetComponent<RoleDate>().isDie)
+        {
+            //print(" vx "+gameBody.GetPlayerRigidbody2D().velocity.x);
+            //gameBody.TSACControl = true;
+            isActioning = false;
+            gameBody.ResetAll();
+            gameBody.SpeedXStop();
+            gameBody.GetStand();
             return;
         }
 
-        if (!gameObj&&gameObj.GetComponent<RoleDate>().isDie)
-        {
-            gameBody.ResetAll();
-            //gameBody.Stand();
-            return;
-        }
+        //print(" vx22 " + gameBody.GetPlayerRigidbody2D().velocity.x);
 
         if (isYLHuiXue)
         {
@@ -345,6 +360,8 @@ public class AIBase : MonoBehaviour {
             }
            
         }
+        moretimes = 0;
+        IsChongqi = false;
         return zs;
     }
 
@@ -408,7 +425,7 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-    protected bool isActioning = false;
+    public bool isActioning = false;
     protected bool isAction = false;
 
     //4.攻击
@@ -449,6 +466,8 @@ public class AIBase : MonoBehaviour {
     {
         //print("atkFS!!!");
         if (isPlayerDie) return;
+        if (IsBoss) return;
+        if(IsIfStopMoreTime())return;
         if (!isAction){
 			isAction = true;
 			acName = GetZS();
@@ -478,6 +497,7 @@ public class AIBase : MonoBehaviour {
             if (strArr[0] == "jn") {
                 jn_effect = acName;
                 acName = "jn";
+                return;
             }
 
 
@@ -547,8 +567,16 @@ public class AIBase : MonoBehaviour {
             //{
             //    return;
             //}
-
-            atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
+            //print("     acName  "+ acName);
+            if (acName.Split('|').Length > 1)
+            {
+                atkDistance = GetAtkVOByName(acName.Split('|')[0], DataZS.GetInstance()).atkDistance;
+            }
+            else
+            {
+                atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
+            }
+            
 		}
 
         if(aiQishou&&aiQishou.isQishouAtk&&!aiQishou.isFirstAtked)
@@ -788,6 +816,26 @@ public class AIBase : MonoBehaviour {
         if(aiFanji!=null) aiFanji.GetFanji();
     }
 
+    float moretimes = 0;
+    public bool IsChongqi = false;
+
+    //当怪物 卡死 长时间后 自动 重启ai
+    bool IsIfStopMoreTime()
+    {
+        moretimes += Time.deltaTime;
+        if (moretimes >= 5)
+        {
+            moretimes = 0;
+            print("   AI重启   ！！！！！！！！！！！！！！！！！！！！！！");
+            IsChongqi = true;
+            AIBeHit();
+            GetComponent<GameBody>().ResetAll();
+            return true;
+        }
+        return false;
+    }
+
+
     protected virtual void AIReSet()
     {
         isAction = false;
@@ -873,6 +921,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             ZhuanXiang();
             //gameBody.GetStand();
+            
             GetComponent<AIRunCut>().GetStart(gameObj);
             atkNum++;
             //GetAtkNumReSet();
@@ -997,6 +1046,7 @@ public class AIBase : MonoBehaviour {
         {
             if (GetComponent<AIYiShan>() == null||GetComponent<AIYiShan>().IsAcOver())
             {
+                print("一闪 完成-----------------------------------------》");
                 isActioning = false;
                 isAction = false;
                 return;

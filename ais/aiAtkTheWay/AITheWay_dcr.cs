@@ -55,9 +55,10 @@ public class AITheWay_dcr : MonoBehaviour {
 
         for (var i = 0; i < zs_way.Count; i++)
         {
-            //print(this.GetComponent<RoleDate>().live +"  -----    "+ _xueliangN * (zs_way.Count - i));
+            
             if (this.GetComponent<RoleDate>().live-1 <= _xueliangN * (zs_way.Count - i))
             {
+                //print(this.GetComponent<RoleDate>().live - 1 + " i ---" + i + "-n- " + n + " ------  " + _xueliangN * (zs_way.Count - i));
                 //print("jinlaimei");
                 if (n <= i) n = i;
                 //获取 招式数组列表

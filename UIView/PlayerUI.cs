@@ -33,6 +33,7 @@ public class PlayerUI : MonoBehaviour {
     public GameObject skill_bar;
     public GameObject ui_hun;
     public GameObject ui_feidao;
+    public GameObject ui_shanbi;
 
     // Use this for initialization
     void Start () {
@@ -66,7 +67,7 @@ public class PlayerUI : MonoBehaviour {
         screenChangeZZ.gameObject.SetActive(false);
     }
 
-
+    
 
     public void HideSelf()
     {
@@ -145,6 +146,7 @@ public class PlayerUI : MonoBehaviour {
         skill_bar.GetComponent<UI_ShowPanel>().OnDistory2();
         ui_hun.GetComponent<UI_Hun>().OnDistory2();
         ui_feidao.GetComponent<UI_FeiDao>().GetDistory();
+        
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
     }

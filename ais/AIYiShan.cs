@@ -162,7 +162,7 @@ public class AIYiShan : MonoBehaviour {
 
             if (eventObject.name == "ac")
             {
-                //print("一闪 内 侦听");
+                print("一闪 内 侦听");
                 _posX = this.transform.position.x;
                 //推力
                 //float tuili = this.transform.localScale.x < 0 ? XForce : -XForce;
@@ -197,8 +197,12 @@ public class AIYiShan : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+      
+
+
         if (_isOutDistance)
         {
+            print("----------------> ?????????????/????  "+ GetComponent<Rigidbody2D>().velocity.x);
             _XZtimes += Time.deltaTime;
             if (_XZtimes >= _overACStopTime)
             {
@@ -210,8 +214,14 @@ public class AIYiShan : MonoBehaviour {
 
         if (!isStart) return;
 
+        if (!GetComponent<AIBase>().isActioning)
+        {
+            GetOver();
+            return;
+        }
 
-        //print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
+
+        print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
         
         if (_gameBody.isInAiring)
         {
@@ -249,7 +259,7 @@ public class AIYiShan : MonoBehaviour {
                     _isShowTX = true;
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(txName, true);
                     //GetComponent<TheTimer>().TimesAdd(1,CallBack);
-                    
+                    print("rolePos  "+ this.transform.position.x+"   距离    "+SJDistance);
                     //GetOver();
                 }
                 
@@ -285,7 +295,9 @@ public class AIYiShan : MonoBehaviour {
             }
 
         }
-	}
+
+        print("  22222222222-------s x:    " + GetComponent<Rigidbody2D>().velocity.x);
+    }
 
 
     void CallBack(float n)

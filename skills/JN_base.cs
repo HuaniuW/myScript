@@ -51,7 +51,7 @@ public class JN_base : MonoBehaviour
         //TX_weizhiyupan();
         if (!isSkill)
         {
-            //print("-------------------------->>>>????   ");
+            //print("-------------------------->>>>????   "+obj.name+ "  _sacaleX   " + _sacaleX);
             ShowHitFK();
         }
         else {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 using System.Reflection;
 
 using System;
@@ -38,7 +39,7 @@ public class GlobalTools : MonoBehaviour {
     /// <returns></returns>
     public static GameObject GetGameObjectByName(string ObjName)
     {
-        //print("ObjName    "+ ObjName);
+        print("ObjName    "+ ObjName);
         GameObject obj = Resources.Load(ObjName) as GameObject;
         obj = Instantiate(obj);
         return obj;
@@ -156,7 +157,10 @@ public class GlobalTools : MonoBehaviour {
 
 
 
-
+    public static string GetNewStrQuDiaoClone(string str) {
+        var newStr = str.Replace("(Clone)", "");
+        return newStr;
+    }
 
 
 
@@ -427,15 +431,19 @@ public class GlobalTools : MonoBehaviour {
                 }
                 else if (i == nums - 1)
                 {
-                    __x = _x1 - jingW * 0.5f + w / nums * i - 0.2f;
+                    __x = _x2 - jingW * 0.5f - 0.2f;
                     __z *= 0.05f;
                     if (isLBsuoduan) __x -= jingW * 0.2f;
                 }
                 else
                 {
                     __x = _x1 + jingW * 0.5f + w / nums * i;
-                }	
-			}else{
+                }
+
+               
+
+            }
+            else{
 				__x = _x1 + w / nums * i + w / nums * 0.5f;
 			}
             
@@ -490,11 +498,21 @@ public class GlobalTools : MonoBehaviour {
 		//int sdMax = sdfw + 10;
 		int sd = sdfw + i % 10; //(int)UnityEngine.Random.Range(sdfw, sdMax);
 
-		if(_dz!=0)__z = GetRandomNum(100) > 50 ? _z + UnityEngine.Random.Range(0, _dz) : _z - UnityEngine.Random.Range(0, _dz);
+        //z=-1的话 保持原有z
+        if (_z == -1) _z = jingObj.transform.position.z;
+
+        if (_dz!=0)__z = GetRandomNum(100) > 50 ? _z + UnityEngine.Random.Range(0, _dz) : _z - UnityEngine.Random.Range(0, _dz);
 
 		if(!isTree)SetMapObjOrder(jingObj,sd);
 
         jingObj.transform.position = new Vector3(__x, __y, __z);
+
+
+
+        //if (jingObj.name == "jju_1_4" || jingObj.name == "jju_1_4(Clone)")
+        //{
+        //    print(jingObj.name + "   w " + jingW + "    iiiiiiiiiiiiiiiiiiiiii   i " + i + "  pos   " + jingObj.transform.position + "  _x1   " + _x1 + "  _x2  " + _x2);
+        //}
 
 
         SaveGameObj(jingObj);
@@ -598,9 +616,17 @@ public class GlobalTools : MonoBehaviour {
     }
 
     //获取上一个 物体 的 信息  ？？？？？
-    
+
+    public static Color RandomColor()
+    {
+        //随机颜色的RGB值。即刻得到一个随机的颜色
+        float r = UnityEngine.Random.Range(0f, 1f);
+        float g = UnityEngine.Random.Range(0f, 1f);
+        float b = UnityEngine.Random.Range(0f, 1f);
+        Color color = new Color(r, g, b);
+        return color;
+    }
 
 
 
-  
 }

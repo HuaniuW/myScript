@@ -15,7 +15,6 @@ public class Wupinlan : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (!isChildCanBeHit && this.transform.GetComponent<Rigidbody2D>().velocity.y == 0) isChildCanBeHit = true;
-
     }
 
     public void GetXFX(float num)

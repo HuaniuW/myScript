@@ -77,6 +77,12 @@ public class TheTimer : MonoBehaviour {
         _call = call;
     }
 
+    //CD清0
+    public void CDQing0()
+    {
+        _timeNums = _maxTimesNum;
+    }
+
     bool _isContinuouslyTimesStart = false;
     //连续时间 运行
     void ContinuouslyTimesStart()

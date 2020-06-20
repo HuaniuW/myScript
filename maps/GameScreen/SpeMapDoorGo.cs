@@ -73,7 +73,7 @@ public class SpeMapDoorGo : MonoBehaviour
             {
                 print("  特殊地图中处理玩家位置  ");
                 GlobalTools.FindObjByName("player").transform.position = o.GetComponent<ScreenChange>().OutPosition.position;
-                GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().SetPlayerPos();
+                GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().SetPlayerFXAndCameraPos();
             }
         }
 

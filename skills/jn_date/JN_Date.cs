@@ -10,7 +10,7 @@ public class JN_Date : MonoBehaviour {
     [Header("相对位置y")]
     public float _xdy = 0;
 
-    [Header("hitKuai相对位置x")]
+    [Header("hitKuai相对位置x 越大越靠前")]
     public float hitKuai_xdx = 0;
     [Header("hitKuai相对位置y")]
     public float hitKuai_xdy = 0;

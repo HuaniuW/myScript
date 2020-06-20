@@ -58,16 +58,16 @@ public class MapNames : MonoBehaviour
 
 
     //------地板---------
-    public List<string> db_rd = new List<string> { "db_dn_rd_1" };
-    public List<string> db_ld = new List<string> { "db_dn_ld_1" };
+    public List<string> db_rd_1 = new List<string> { "db_dn_rd_1" };
+    public List<string> db_ld_1 = new List<string> { "db_dn_ld_1" };
 
-    public List<string> db_lu = new List<string> { "db_dn_lu_1" };
-    public List<string> db_ru = new List<string> { "db_dn_ru_1" };
+    public List<string> db_lu_1 = new List<string> { "db_dn_lu_1" };
+    public List<string> db_ru_1 = new List<string> { "db_dn_ru_1" };
 
-    public List<string> db_pd = new List<string> {"db_pd_1", "db_pd_2"};
+    public List<string> db_pd_1 = new List<string> {"db_pd_1", "db_pd_2"};
 
-    public List<string> db_dn_heng = new List<string> { "db_dn_heng_1"};
-    public List<string> db_dn_shu = new List<string> { "db_dn_shu_1" };
+    public List<string> db_dn_heng_1 = new List<string> { "db_dn_heng_1"};
+    public List<string> db_dn_shu_1 = new List<string> { "db_dn_shu_1" };
 
 
 
@@ -98,14 +98,20 @@ public class MapNames : MonoBehaviour
     //门 下方的 前景
     public List<string> men_qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
     //前景 下方
-    public List<string> qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_6", "qjd_1_8" };
+    public List<string> qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_6", "qjd_1_8"  };
+
+
+    public List<string> zsw_1 = new List<string> { "j_ludeng_1", "j_lupai_1", "j_zhalan_1", "j_zhalan_2" };
     
 
 
     public List<string> qjd2_1 = new List<string> { "qjd_1_1", "qjd_1_5", "qjd_1_7" , "qjd_1_10" };
-    public List<string> qjd3_1 = new List<string> { "qjd_1_9", "qjd_1_10" };
+    public List<string> qjd3_1 = new List<string> { "qjd_1_9", "qjd_1_10"};
+
+    public List<string> qyjd_1 = new List<string> { "qjd_1_9", "qjd_1_10", "qyj_1_1" };
+
     //前景上方 倒挂的景
-    public List<string> qju_1 = new List<string> { "jju_1_1", "jju_1_2", "jju_1_3", "jju_1_4" };
+    public List<string> qju_1 = new List<string> { "jju_1_1",  "jju_1_3", "jju_1_4" };
 
 
     //较大的 前景 w>13 h>4
@@ -118,6 +124,9 @@ public class MapNames : MonoBehaviour
     public List<string> jyj_1 = new List<string> { "jyj_1_1", "jyj_1_2", "jyj_1_3", "jyj_1_4", "jyj_1_5", "jyj_1_6" };
     //中远景
     public List<string> zyj_1 = new List<string> { "zyj_1_1", "zyj_1_2", "zyj_1_3", "zyj_1_4", "zyj_1_5", "zyj_1_6", "zyj_1_7" };
+    //大远景
+    public List<string> dyj_1 = new List<string> {"dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
+
     //粒子落叶
     public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };
     //粒子 雾
@@ -128,4 +137,21 @@ public class MapNames : MonoBehaviour
     //移动的地板
     public List<string> mdiban_1 = new List<string> { "mdiban_1_1", "mdiban_1_2" };
 
+
+    public List<string> tiaoyueDB_1 = new List<string> { "db_ty_1"};
+
+    public List<string> tiaoyueDBD_1 = new List<string> { "db_tyd_1", "db_tyd_2", "db_tyd_3", "db_tyd_4" };
+
+    public List<string> tiaoyuepingdiDB_1 = new List<string> { "db_ty_1", "db_pd_1","db_pd_2"};
+
+
+    //xiaoGuai_1 = {};
+    //kongZhongXiaoGuai_1 = {};
+    //jingYingGuai_1 = {};
+    //Boss = {};  根据当前 大关卡 来选
+
+
+    public List<string> xiaoGuai_1 = new List<string> {"G_dcrj1", "G_dcr2"};
+    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_ylD"};
+    public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
 }

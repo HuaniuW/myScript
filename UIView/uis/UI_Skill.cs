@@ -23,12 +23,18 @@ public class UI_Skill : MonoBehaviour {
     public float Intervals = 0.1f;
 
     public bool IsLeft = false;
+
     //CD时间
     //使用次数
 
-    int skillCanUseTimes = 0;
+    protected int skillCanUseTimes = 0;
+
+    public virtual int GetUseTimes()
+    {
+        return skillCanUseTimes;
+    }
     //是否 可以使用技能
-    public bool isCanBeUseSkill()
+    public virtual bool isCanBeUseSkill()
     {
         //print("skillCanUseTimes   "+ skillCanUseTimes+"    ");
         if (skillCanUseTimes == 0) {
@@ -170,8 +176,8 @@ public class UI_Skill : MonoBehaviour {
         
     }
 
-    HZDate _hzDate;
-    public void SetHZDate(HZDate hzDate)
+    protected HZDate _hzDate;
+    public virtual void SetHZDate(HZDate hzDate)
     {
         if (_hzDate != null) return;
         _hzDate = hzDate;
@@ -238,7 +244,7 @@ public class UI_Skill : MonoBehaviour {
 
 
     float miaoshuNum = 0;
-    void CDCallBack(float nums) {
+    protected void CDCallBack(float nums) {
         cdDistance += maxCDDistance / CDTimeNums* Intervals;
         if (IsLeft)
         {
@@ -266,10 +272,10 @@ public class UI_Skill : MonoBehaviour {
    
 
 
-    float maxCDDistance = 0;
+    protected float maxCDDistance = 0;
     float cdDistance = 0;
     //CD归0 并且开始CD
-    void CDStart(float cds = 1,float cdDistanceNums = 0)
+    protected void CDStart(float cds = 1,float cdDistanceNums = 0)
     {
         if (IsLeft)
         {
@@ -282,6 +288,7 @@ public class UI_Skill : MonoBehaviour {
         cdDistance = cdDistanceNums;
         //print("再次开始计时CD   ");
         GetComponent<TheTimer>().GetContinuouslyTimesStart();
+
     }
 
 	
@@ -297,7 +304,7 @@ public class UI_Skill : MonoBehaviour {
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
     }
 
-    void SetImgColor(Image obj, Color color)
+    protected void SetImgColor(Image obj, Color color)
     {
         //obj.GetComponent<Image>().material.color = color;  改变 image material 的属性颜色  这个灰改变所有UI的 material的颜色
         //这个才是改变 image 的color
@@ -305,12 +312,12 @@ public class UI_Skill : MonoBehaviour {
     }
 
     //改变 text文本
-    void SetText(string str)
+    protected void SetText(string str)
     {
         if (SkillCanUseNumsText == null) return;
         SkillCanUseNumsText.text = str;
         //print("SkillCanUseNumsText.text --->   "+ SkillCanUseNumsText.text);
-        if (SkillCanUseNumsText.text == "1"|| SkillCanUseNumsText.text == "0")
+        if (SkillCanUseNumsText.text == "0")
         {
             SkillCanUseNumsText.text = "";
         }

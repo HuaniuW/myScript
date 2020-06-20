@@ -95,4 +95,7 @@ public class EventTypeName
     //音量变化
     public const string AUDIO_VALUE = "audio_value";
 
+
+    public const string GUAI_DIE = "guai_die";
+
 }

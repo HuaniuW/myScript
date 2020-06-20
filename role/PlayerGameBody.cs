@@ -27,13 +27,94 @@ public class PlayerGameBody : GameBody {
             //脱离战斗 随机 站立姿势 跑步动作什么的
             OutFighting();
         }
+
+        if (GetComponent<RoleDate>().isDie)
+        {
+            GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x * 0.5f, GetPlayerRigidbody2D().velocity.y);
+        }
+
+        
+
         this.GetUpdate();
 
         //print("------  IsAtkDown " + IsAtkDown + "  IsGround   " + IsGround+" isAtk "+isAtk+"   isAtking "+isAtking);
 
     }
 
-   
+    protected override void FirstStart()
+    {
+        STAND = "stand_5";
+        DIE = "die_4";
+        Die_dian.Stop();
+        hongdian.Stop();
+    }
+
+
+
+    public GameObject img_bianziz;
+    public GameObject img_bianziy;
+    public GameObject img_toufaz;
+    public GameObject img_toufazhong;
+    public GameObject img_toufay;
+
+    [Header("黑电")]
+    public ParticleSystem heidian;
+    [Header("红电")]
+    public ParticleSystem hongdian;
+    public ParticleSystem Hongyan;
+    public ParticleSystem Die_dian;
+
+    public void Bianhei()
+    {
+        img_bianziz.GetComponent<SpriteRenderer>().color = Color.black;
+        img_bianziy.GetComponent<SpriteRenderer>().color = Color.black;
+        img_toufaz.GetComponent<SpriteRenderer>().color = Color.black;
+        img_toufazhong.GetComponent<SpriteRenderer>().color = Color.black;
+        img_toufay.GetComponent<SpriteRenderer>().color = Color.black;
+        //print(" >>>>>>>>>>>>> 播放特效！！！！！！！  ");
+
+
+        //if (!thePlayerUI) thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
+        if (!roleDate.isDie && thePlayerUI.ui_shanbi.GetComponent<UI_Shanbi>().GetUseTimes() == 0)
+        {
+            hongdian.Play();
+        }
+        else
+        {
+            heidian.Play();
+        }
+        
+        Hongyan.Play();
+    }
+
+    public void Bianbai()
+    {
+        img_bianziz.GetComponent<SpriteRenderer>().color = Color.white;
+        img_bianziy.GetComponent<SpriteRenderer>().color = Color.white;
+        img_toufaz.GetComponent<SpriteRenderer>().color = Color.white;
+        img_toufazhong.GetComponent<SpriteRenderer>().color = Color.white;
+        img_toufay.GetComponent<SpriteRenderer>().color = Color.white;
+        //print(">>>>>>>>>>>>> ting---------特效！！！！！！！  ");
+        heidian.Stop();
+        hongdian.Stop();
+        //Hongyan.Stop();
+    }
+
+
+    protected override void ShanjinTX()
+    {
+        Bianhei();
+    }
+
+    protected override void ShanjinOverTX()
+    {
+        Bianbai();
+    }
+
+
+
+
+
 
 
     bool isTest = false;
@@ -166,7 +247,7 @@ public class PlayerGameBody : GameBody {
     {
         int nums = Random.Range(1, 3);
         nums += 1;
-        nums = 1;
+        nums = 5;
         STAND = "stand_" + nums;
         if(nums == 3||nums == 1)
         {
@@ -175,7 +256,7 @@ public class PlayerGameBody : GameBody {
         else
         {
             //RUN = "run_" + nums;
-            RUN = "run_1";
+            RUN = "run_3";
         }
         CheckIsHasAC();
     }
@@ -331,6 +412,7 @@ public class PlayerGameBody : GameBody {
 
         if (DBBody.animation.lastAnimationName != RUN)
         {
+            Hongyan.Stop();
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
     }
@@ -496,6 +578,7 @@ public class PlayerGameBody : GameBody {
         isDodge = false;
         roleDate.isCanBeHit = true;
         playerRigidbody2D.gravityScale = gravityScaleNums;
+        Bianbai();
     }
 
 
@@ -669,7 +752,7 @@ public class PlayerGameBody : GameBody {
     void CheckIsHasAC()
     {
         if (roleDate.isBeHiting) return;
-        if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_1";
+        if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_5";
         if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
     }
 
@@ -717,6 +800,7 @@ public class PlayerGameBody : GameBody {
         //print("  >>>>>>>>>>>>>>>>>>>?????   Behit  ");
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
+        Bianbai();
         if (IsAtkDowning)
         {
             IsAtkDowning = false;
@@ -806,18 +890,34 @@ public class PlayerGameBody : GameBody {
         }
     }
 
+    bool IsBianhei = false;
     override public void GetDie()
     {
         if (DBBody.animation.lastAnimationName != DIE) {
-            if (!isInAiring)
-            {
-                int nums = Random.Range(1, 3);
-                DIE = "die_" + nums;
-            }
-            if (!DBBody.animation.HasAnimation(DIE)) DIE = "die_1";
+            //if (!isInAiring)
+            //{
+            //    int nums = Random.Range(1, 3);
+            //    DIE = "die_" + nums;
+            //}
+            //if (!DBBody.animation.HasAnimation(DIE)) DIE = "die_1";
+            Die_dian.Play();
+            
+            GetPlayerRigidbody2D().gravityScale = 0;
+            GetPlayerRigidbody2D().velocity = new Vector2(0,1f);
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
-            Time.timeScale = 0.5f;
+            DBBody.animation.Play(DIE,1);
+            Time.timeScale = 0.2f;
         }
+
+        //print(DBBody.animation.lastAnimationState.fadeTotalTime+"  ------->  "+ DBBody.animation.lastAnimationState.currentPlayTimes+"  @@  "+ DBBody.animation.lastAnimationState.currentTime);
+        //print(" progress   "+DBBody.animation.lastAnimationState);
+        if (!IsBianhei&&DBBody.animation.lastAnimationState.currentTime >= 0.31f)
+        {
+            IsBianhei = true;
+            
+            Bianhei();
+        }
+
         //Time.timeScale = 0.5f;
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,this.tag), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(1f));
@@ -840,7 +940,8 @@ public class PlayerGameBody : GameBody {
             isDodgeing = false;
             isDodge = false;
             playerRigidbody2D.gravityScale = gravityScaleNums;
-            print("jinlai  mei         ");
+            Hongyan.Stop();
+            //print("jinlai  mei         ");
             return;
         }
 
@@ -879,6 +980,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
+                Hongyan.Stop();
                 //print("   ----------------? ?????  ");
                 //AtkLJOver(); 
                 //isGetJump = false;
@@ -912,6 +1014,16 @@ public class PlayerGameBody : GameBody {
         }
 
 
+        if (newSpeed.y < -20f)
+        {
+            //print("newSpeed.y >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + newSpeed.y);
+            if (Hongyan.isStopped)
+            {
+                
+                Hongyan.Play();
+            } 
+        }
+
 
         if (isInAiring)
         {
@@ -925,6 +1037,8 @@ public class PlayerGameBody : GameBody {
                     //还原落地攻击的BUG
                     isQiTiao = true;
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
+                    
+                    
                 }
             }
             else
@@ -939,6 +1053,7 @@ public class PlayerGameBody : GameBody {
                     DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                     DBBody.animation.Stop();
                     isDowning = false;
+                    //Hongyan.Stop();
                 }
             }
         }

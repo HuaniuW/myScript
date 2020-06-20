@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class DBBase : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class DBBase : MonoBehaviour
     [Header("右下点")]
     public Transform rd;
 
-    public GameObject light2d;
+    public Light2D light2d;
 
     public GameObject diban1;
     public GameObject diban2;
@@ -43,11 +44,19 @@ public class DBBase : MonoBehaviour
     [Header("左边的 连接点")]
     public Transform lianjiedianL;
 
+    //根据这个类型来出怪
+    [Header("地形type")]
+    public string DXType = "";
+
 
     // Start is called before the first frame update
     void Start()
     {
-        if(!GlobalSetDate.instance.IsCMapHasCreated)GetJing();
+        if (!GlobalSetDate.instance.IsCMapHasCreated) {
+            GetJing();
+            SetLightColor();
+        }
+        
     }
 
     // Update is called once per frame
@@ -55,6 +64,8 @@ public class DBBase : MonoBehaviour
     {
         
     }
+
+   
 
 
     public float GetWidth()
@@ -71,20 +82,126 @@ public class DBBase : MonoBehaviour
 
     public bool IsPingDiJing = false;
 
+    
+
     GameObject maps;
 
     //左右景布置  这里 后面会根据全局 来判断和调整 景是哪些内容  区别后缀不要用数字
     void GetJing()
     {
+        //这里根据 当前 关卡  来判断  是否 生成 树 背景远景 等 复杂的 类型       ***** 判断  用哪个大关卡的 景
+
+
+        //近前景  石头  草 啥的
+        //前排的 近景 档在玩家前面  的栅栏 什么的  这个后面看  DD
+        //背景  石头 草 树 花  栅栏 路灯 等   
+        //背远景 树林影子 等
+        //前远景 加一层 前景   石头 草树  黑色栅栏  模糊的 黑色景
+
         maps = GlobalTools.FindObjByName("maps");
+
+
+        if (IsHasShu) GetShu();
+        if (IsZJY) GetZYJ();
         if (IsPingDiJing) GetLRJinBG();
         if (IsPingDiJing) GetJQJ();
         if (IsSCWu) GetWus();
+        if (IsJYJ) GetJYJ();
+        if (IsZhuangshiwu) Zhuanshiwu();
 
         if (IsTopJ) GetTopJ();
         if (IsTopJ2) GetTopJ2();
     }
 
+
+    public bool IsZhuangshiwu = false;
+    //栅栏什么的 可以放进 近景
+    //装饰物 是单个 等 什么的 只要单个的   一个底面只要一个 位置随机
+    void Zhuanshiwu()
+    {
+        //判断是否有装饰物  只有一个
+        if (GlobalTools.GetRandomNum() < 20) return;
+        Vector2 pos1 = tl.position;
+        Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
+        //float _y = pos1.y - 1.5f;
+        //int nums = 1 + GlobalTools.GetRandomNum(2);
+        //SetJingByDistanceU("jyj_1", nums, pos1, pos2, pos1.y - GlobalTools.GetRandomDistanceNums(2), 0, 0, -10, "u");
+
+        GameObject Jobj = GetJObjByListName("zsw_1");
+
+        float jingW = 0; 
+
+        if (Jobj.GetComponent<J_SPBase>())
+        {
+            jingW = Jobj.GetComponent<J_SPBase>().GetWidth();
+            if (Jobj.GetComponent<J_SPBase>().light2d != null) {
+                Jobj.GetComponent<J_SPBase>().light2d.color = GlobalTools.RandomColor();
+            }
+            
+            Jobj.GetComponent<J_SPBase>().SetSD(-10);
+        }
+
+        
+        
+        float _w = GetWidth() - jingW;
+        float __x = tl.position.x + GlobalTools.GetRandomDistanceNums(_w);
+        float __y = tl.position.y - GlobalTools.GetRandomDistanceNums(1);
+
+        
+
+        Jobj.transform.position = new Vector3(__x,__y,0);
+        
+    }
+
+
+    public bool IsJYJ = false;
+    //中远景
+    void GetJYJ()
+    {
+        int nums = 4 + GlobalTools.GetRandomNum(4);
+        Vector2 pos1 = tl.position;
+        Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
+        //float _y = pos1.y - 1.5f;
+        SetJingByDistanceU("jyj_1", nums, pos1, pos2, pos1.y - GlobalTools.GetRandomDistanceNums(2), 1, 0.6f, -30, "u", 3);
+    }
+
+
+
+
+    public bool IsZJY = false;
+    //中远景
+    void GetZYJ()
+    {
+        int nums = 4 + GlobalTools.GetRandomNum(4);
+        Vector2 pos1 = tl.position;
+        Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
+        //float _y = pos1.y - 1.5f;
+        SetJingByDistanceU("zyj_1", nums, pos1, pos2, pos1.y - GlobalTools.GetRandomDistanceNums(3), 2, 1, -40, "u",3);
+    }
+
+
+
+    public bool IsHasShu = false;
+    void GetShu()
+    {
+
+
+        //print(" 树叔叔时速！！！！！！！！！！！！ ");
+        int nums = 1+GlobalTools.GetRandomNum(2);
+        //SetJingByDistanceU("shu_1", nums, pos1, pos2, pos1.y - 3f, 0, 0, -10, "d");
+
+        Vector2 pos1 = tl.position;
+        Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
+        //float _y = pos1.y - 1.5f;
+        SetJingByDistanceU("shu_1", nums, pos1, pos2, pos1.y - GlobalTools.GetRandomDistanceNums(2), 0, 0, -10, "u",2);
+
+
+        //这里加 木栅栏  
+
+        //路灯
+
+        //铁栅栏  这种纯 排的 景
+    }
 
     public bool IsTopJ = false;
     void GetTopJ()
@@ -182,16 +299,19 @@ public class DBBase : MonoBehaviour
     //近前景
     void GetJQJ()
     {
-        int nums = 4 + GlobalTools.GetRandomNum(3);
+        int nums = 9 + GlobalTools.GetRandomNum(3);
         Vector2 pos1 = tl.position;
         Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
         //float _y = pos1.y - 1.5f;
-        SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y        , -1f,0.5f,30, "u");
+        SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y -GlobalTools.GetRandomDistanceNums(1)   , -1f,0.5f,30, "u");
         //SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y, -4f, -1f, 40, "u");
 
         SetJingByDistanceU("qjd2_1", nums, pos1, pos2, pos1.y - 1.5f, -0.1f,0, 30, "u");
 
         SetJingByDistanceU("qjd3_1", nums, pos1, pos2, pos1.y - 1.6f, -0.1f, 0, 30, "u");
+
+        nums = 1 + GlobalTools.GetRandomNum(1);
+        SetJingByDistanceU("qyjd_1", nums, pos1, pos2, pos1.y - 2.2f, -6.3f, 1, 40, "u",2);
     }
 
     //近背景
@@ -203,8 +323,8 @@ public class DBBase : MonoBehaviour
         SetJingByDistanceU("jjd_1",nums,pos1,pos2, pos1.y, 0,0,-15,"u");
     }
 
-    //_cx 朝向 
-    void SetJingByDistanceU(string jinglistName,int nums,Vector2 pos1,Vector2 pos2,float _y,float _z,float _dz, int sd, string _cx)
+    //_cx 朝向  xzds 旋转度数
+    void SetJingByDistanceU(string jinglistName,int nums,Vector2 pos1,Vector2 pos2,float _y,float _z,float _dz, int sd, string _cx,float xzds = 0)
     {
         List<string> strArr = GetDateByName.GetInstance().GetListByName(jinglistName, MapNames.GetInstance());
         
@@ -213,17 +333,36 @@ public class DBBase : MonoBehaviour
             string objName = strArr[GlobalTools.GetRandomNum(strArr.Count)];
             GameObject jingObj = GlobalTools.GetGameObjectByName(objName);
             jingObj.transform.parent = maps.transform;
-            if (IsDaYuDis(jingObj, pos1.x, pos2.x)) {
-                Destroy(jingObj);
-                continue;
+            //大于宽度的景 直接删除了
+            bool IsShu = false;
+            if(jinglistName.Split('_')[0] != "shu")
+            {
+                if (IsDaYuDis(jingObj, pos1.x, pos2.x))
+                {
+                    Destroy(jingObj);
+                    continue;
+                }
+            }
+            else
+            {
+                IsShu = true;
             }
             
-            GlobalTools.SetJingTY(jingObj, pos1.x, pos2.x, _y, _z, _dz, i, nums, 0, sd);
-            
+            GlobalTools.SetJingTY(jingObj, pos1.x, pos2.x, _y, _z, _dz, i, nums, xzds, sd,false, IsShu);
         }
-
     }
 
+
+
+    GameObject GetJObjByListName(string jinglistName)
+    {
+        List<string> strArr = GetDateByName.GetInstance().GetListByName(jinglistName, MapNames.GetInstance());
+        string objName = strArr[GlobalTools.GetRandomNum(strArr.Count)];
+        GameObject jingObj = GlobalTools.GetGameObjectByName(objName);
+        jingObj.transform.parent = maps.transform;
+        return jingObj;
+    }
+    
 
 
     bool IsDaYuDis(GameObject obj,float _x1,float _x2) {
@@ -263,12 +402,6 @@ public class DBBase : MonoBehaviour
     }
 
 
-
-   
-
-
-    
-
     //设置深度
     public virtual void SetSD(int sd)
     {
@@ -286,8 +419,24 @@ public class DBBase : MonoBehaviour
 
     public virtual void SetLightColor()
     {
-        //if(light2d) light2d.GetComponent<Light>()
+        if (light2d) {
+            light2d.GetComponent<Light2D>().color = GlobalTools.RandomColor();
+            light2d.GetComponent<Light2D>().intensity = 0.6f + GlobalTools.GetRandomDistanceNums(0.6f);
+        }
+        
     }
 
+    public void SetLightColorByValue(Color _color)
+    {
+        if (light2d) light2d.GetComponent<Light2D>().color = _color;
+    }
+
+
+    public Color GetLightColor()
+    {
+        if (!light2d) return Color.white;
+        return light2d.GetComponent<Light2D>().color;
+    }
+   
 
 }

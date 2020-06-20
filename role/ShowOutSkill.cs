@@ -93,20 +93,19 @@ public class ShowOutSkill : MonoBehaviour {
 
     public void ShowOutSkillBeginEffectByName(string effectName)
     {
-        GameObject beginEffect = ObjectPools.GetInstance().SwpanObject2(Resources.Load(effectName) as GameObject);
-        Transform groundCheck = this.GetComponent<GameBody>().groundCheck;
-        //Vector3 ePosition = new Vector3(this.transform.position.x+groundCheck.position.x, this.transform.position.y + groundCheck.position.y, groundCheck.position.z);
-        beginEffect.transform.parent = this.transform;
-        beginEffect.transform.position = groundCheck.position;
-        //print("effectName   "+ effectName);
-        //print("beginEffect     "+ beginEffect);
-        //beginEffect.transform.position = this.transform.position;
-        //scaleX的控制
+        return;
+        //GameObject beginEffect = ObjectPools.GetInstance().SwpanObject2(Resources.Load(effectName) as GameObject);
+        //Transform groundCheck = this.GetComponent<GameBody>().groundCheck;
+        
+        //beginEffect.transform.parent = this.transform;
+        //beginEffect.transform.position = groundCheck.position;
+        
+        ////scaleX的控制
 
-        //后面可以加入特殊位置的特效显示 比如武器上 等等
+        ////后面可以加入特殊位置的特效显示 比如武器上 等等
 
-        //销毁
-        StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(beginEffect, 2));
+        ////销毁
+        //StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(beginEffect, 2));
     }
 
     void TXPlay2(GameObject tx)

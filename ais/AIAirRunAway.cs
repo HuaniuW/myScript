@@ -89,7 +89,8 @@ public class AIAirRunAway : MonoBehaviour
     List<string> fxListh = new List<string> {"s", "hs", "h" };
     List<string> fxListq = new List<string> { "qs", "s", "q"};
     List<string> fxList = new List<string> { "qs", "s", "q" ,"hs","h"};
-    float _yuanliDistance = 4f;
+    [Header("远离距离")]
+    public float _yuanliDistance = 2f;
 
     Vector2 ChoseYuanliPos()
     {
@@ -179,6 +180,9 @@ public class AIAirRunAway : MonoBehaviour
    //bool isStarting = false;
     Vector2 yuanliVector2;
     Vector2 yuanliPos;
+
+    public float YuanLiSpeed = 1.2f;
+
     public bool GetYuanliOver()
     {
         
@@ -201,13 +205,14 @@ public class AIAirRunAway : MonoBehaviour
             //_airGameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
         }
 
-        if(GetComponent<AIAirRunNear>().ZhijieMoveToPoint(yuanliPos, 1, 3))
+        if(GetComponent<AIAirRunNear>().ZhijieMoveToPoint(yuanliPos, 1, YuanLiSpeed))
         {
             return true;
         }
 
         //this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = yuanliVector2;
 
+        //控制 run的动作
         zhuijiRun();
 
         //碰到边墙 提前结束

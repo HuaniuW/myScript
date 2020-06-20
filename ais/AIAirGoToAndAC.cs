@@ -92,6 +92,7 @@ public class AIAirGoToAndAC : MonoBehaviour
 
     //检测 选定点   是否撞到墙壁
     AIAirRunNear _aiRunNear;
+    //探测 点 4个方向距离 防止 有墙
     public float TcDistance = 2;
     bool IsPointHitWall(Vector2 pos) {
         if (!_aiRunNear) _aiRunNear = GetComponent<AIAirRunNear>();
@@ -140,7 +141,7 @@ public class AIAirGoToAndAC : MonoBehaviour
             //A*寻路
             if (IsAXunlu)
             {
-                if (_aiRunNear.ZhuijiPointZuoBiao(chosePos, 0.4f, MoveSpeed))
+                if (_aiRunNear.ZhuijiPointZuoBiao(chosePos, 1, MoveSpeed))
                 {
                     StartAtkAC();
                 }
@@ -148,7 +149,7 @@ public class AIAirGoToAndAC : MonoBehaviour
             else
             {
                 //print("   zhijie yi dong!!! MoveSpeed     " + MoveSpeed);
-                if (_aiRunNear.ZhijieMoveToPoint(chosePos, 0.4f, MoveSpeed))
+                if (_aiRunNear.ZhijieMoveToPoint(chosePos, 1, MoveSpeed))
                 {
                     
                     StartAtkAC();

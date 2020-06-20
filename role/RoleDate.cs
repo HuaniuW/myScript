@@ -96,8 +96,8 @@ public class RoleDate : MonoBehaviour {
     }
 
     void Start () {
-		
-	}
+        csYZ = yingzhi;
+    }
 	
 
     public void GetInit()
@@ -106,6 +106,8 @@ public class RoleDate : MonoBehaviour {
         isBeHit = false;
         isBeHiting = false;
     }
+
+
 
     //初始硬直
     float csYZ;

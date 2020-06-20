@@ -37,9 +37,8 @@ public class HitKuai : MonoBehaviour {
 
     GameObject txObj;
     Transform beHitObj;
+    
     public void GetTXObj(GameObject txObj,bool isSkill = false,float atkObjScaleX = 1,GameObject atkObj = null){
-
-
         if (txObj != null)
         {
             this.txObj = txObj;
@@ -55,9 +54,9 @@ public class HitKuai : MonoBehaviour {
         }
         //this.GetComponent<JN_Date>().team = this.txObj.GetComponent<JN_Date>().team;
         
-        if(!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
+        if (!isSkill)StartCoroutine(ObjectPools.GetInstance().IEDestory2(this.gameObject));
         //atkObj = txObj.GetComponent<JN_base>().atkObj;
-        _atkObjScaleX = txObj.GetComponent<JN_base>().atkObj.transform.localScale.x;
+        _atkObjScaleX = atkObjScaleX; // txObj.GetComponent<JN_base>().atkObj.transform.localScale.x;
         //print("TEAM --------->  " + this.txObj.GetComponent<JN_Date>().team + "   _atkObjScaleX  " + _atkObjScaleX);
     }
 
@@ -68,6 +67,45 @@ public class HitKuai : MonoBehaviour {
     float _atkObjScaleX;
 
     float txPos = 0;
+
+
+    Vector2 HitPos = Vector2.zero;
+    Vector2 GetHitPos()
+    {
+        Vector2 p1 = this.GetComponent<BoxCollider2D>().bounds.center;
+        Vector2 s1 = this.GetComponent<BoxCollider2D>().bounds.extents;
+        Vector2 p2 = gameBody.GetComponent<CapsuleCollider2D>().bounds.center;
+        Vector2 s2 = gameBody.GetComponent<CapsuleCollider2D>().bounds.extents;
+
+        float _x = 0;
+        float _y = 0;
+
+
+        if (p1.x + s1.x < p2.x)
+        {
+            _x = p1.x + s1.x;
+        }
+        else
+        {
+            _x = p2.x;
+        }
+
+        if (p1.y >= p2.y + s2.y)
+        {
+            //print(p1.y+"   u   "+(p2.y+s2.y));
+            _y = p2.y + s2.y;
+        }
+        else if (p1.y <= p2.y - s2.y)
+        {
+            _y = p2.y - s2.y;
+        }
+        else
+        {
+            _y = p1.y;
+        }
+        HitPos = new Vector2(_x,_y);
+        return HitPos;
+    }
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
@@ -96,6 +134,33 @@ public class HitKuai : MonoBehaviour {
             
             if (roleDate.isDie) return;
             if (!roleDate.isCanBeHit) return;
+
+            //print(Coll.);
+            //ContactPoint contact = Coll.contacts[0];
+            //Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
+            //Vector3 pos = contact.point;
+
+
+
+            //print(this.GetComponent<BoxCollider2D>().bounds);
+            //print(this.GetComponent<BoxCollider2D>().transform.position + "   ???size  " + this.GetComponent<BoxCollider2D>().size);
+            //print(gameBody.GetComponent<CapsuleCollider2D>().bounds);
+            //print(gameBody.GetComponent<CapsuleCollider2D>().transform.position + "  BEIGONGJI ???size  " + gameBody.GetComponent<CapsuleCollider2D>().size);
+            
+            if (gameBody.GetComponent<GameBody>().IsNeedHitPos)
+            {
+                
+                HitPos = GetHitPos();
+                //print("HitPos-----------------------?   "+ HitPos);
+            }
+            else
+            {
+                //print("我靠！！！！！！！！！！！！！！！！！！");
+                HitPos = gameBody.transform.position;
+            }
+
+
+
             //取到施展攻击角色的方向
             //float _roleScaleX = this.transform.localScale.x > 0?-1:1 ;  //-atkObj.transform.localScale.x;
             float _roleScaleX = -_atkObjScaleX;//atkObj.transform.localScale.x;
@@ -173,10 +238,11 @@ public class HitKuai : MonoBehaviour {
                                 //print(" atkObj.name    " + atkObj.name);
                                 //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
                                 atkObj.GetComponent<GameBody>().HasBeHit();
+                                //atkObj.GetComponent<GameBody>().GetPause(1);
                             }
                             
                             // 减帧数
-                            GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.5f);
+                            GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.2f);
                             return;
                         }
                         
@@ -354,6 +420,7 @@ public class HitKuai : MonoBehaviour {
 
         if (jn_date.HitInSpecialEffectsType == 4) {
             //HitTX(_psScaleX, "JZTX_dian", "", 2, false, false, -txPos);
+            //被电麻痹了
             HitTX2("JZTX_dian");
             return;
         }
@@ -384,13 +451,22 @@ public class HitKuai : MonoBehaviour {
     void HitTX(float psScaleX,string txName,string hitVudio = "",float beishu = 3,bool isSJJD = false,bool isZX = true,float hy = 0)
     {
         //print("hy ------------------------------------------------------>     "+hy);
-        
+
+       
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
 
         //print(hitTx.name + "  1---------------------->>   " + hitTx.transform.localEulerAngles);
         //print("sudu-------------------------------------------   "+ gameBody.GetComponent<Rigidbody2D>().velocity.x);
-        hitTx.transform.position = new Vector3(gameBody.transform.position.x-hy*psScaleX, gameBody.transform.position.y, gameBody.transform.position.z) ;
+        if (gameBody.GetComponent<GameBody>().IsNeedHitPos)
+        {
+            hitTx.transform.position = HitPos;
+        }
+        else
+        {
+            hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * -_atkObjScaleX, gameBody.transform.position.y, gameBody.transform.position.z);
+        }
+        
         //击中特效缩放
         hitTx.transform.localScale = new Vector3(beishu, beishu, beishu);
 
@@ -400,12 +476,23 @@ public class HitKuai : MonoBehaviour {
             //if(atkObj.transform.position.y-)
             if (jn_date.isAtkZongXiang)
             {
-                hitTx.transform.localEulerAngles = new Vector3(-90, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
-                hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * psScaleX-0.5f, gameBody.transform.position.y, gameBody.transform.position.z);
+                hitTx.transform.localEulerAngles = new Vector3(-90, hitTx.transform.localEulerAngles.y * -_atkObjScaleX, hitTx.transform.localEulerAngles.z);
+
+                if (gameBody.GetComponent<GameBody>().IsNeedHitPos)
+                {
+                    hitTx.transform.position = HitPos;
+                }
+                else
+                {
+                    //hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * -_atkObjScaleX, gameBody.transform.position.y, gameBody.transform.position.z);
+                    hitTx.transform.position = new Vector3(gameBody.transform.position.x - hy * -_atkObjScaleX - 0.5f, gameBody.transform.position.y, gameBody.transform.position.z);
+                }
+
+                
             }
             else
             {
-                hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y * psScaleX, hitTx.transform.localEulerAngles.z);
+                hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y * -_atkObjScaleX, hitTx.transform.localEulerAngles.z);
             }
             
         }
@@ -421,16 +508,20 @@ public class HitKuai : MonoBehaviour {
         }
         //特效方向 
         if (!isZX) return;
-        if (psScaleX>0)
+        //print("psScaleX  -----    "+ psScaleX+" _atkScaleX   "+ -_atkObjScaleX);
+        if (-_atkObjScaleX > 0)
         {
             if(isSJJD)jd = Random.Range(-5, 10);
+
+            //print("hitTx.transform.localEulerAngles    "+ hitTx.transform.localEulerAngles);
             hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, hitTx.transform.localEulerAngles.y, jd);
-            //print(">>>>>>>>>>>>>>>>>>>>>>>>>左");
+            //print(">>>>>>>>>>>>>>>>>>>>>>>>>左    "+ -_atkObjScaleX+"   ??  "+ hitTx.transform.localEulerAngles+"  jd  "+jd);
         }
         else
         {
             if (isSJJD) jd = Random.Range(-5, 10);
             hitTx.transform.localEulerAngles = new Vector3(hitTx.transform.localEulerAngles.x, 180, jd);
+            //print(">>>>>>>>>>>>>>>>>>>>右     "+ -_atkObjScaleX);
         }
 
     }

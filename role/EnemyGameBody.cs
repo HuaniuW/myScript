@@ -17,6 +17,7 @@ public class EnemyGameBody : GameBody {
     {
         RUN = "run_1";
         if (!GetDB().animation.HasAnimation(RUN)) RUN = "run_3";
+        //GetBoneColorChange(Color.white);
         //print("-------------------->   "+RUN);
     }
 
@@ -66,13 +67,23 @@ public class EnemyGameBody : GameBody {
         CheckIsHasAC();
     }
 
+    public bool IsUseRun1 = false;
     /// <summary>
     /// 检测是否包含 站立和跑动动作 不包含就还愿初始动作
     /// </summary>
     void CheckIsHasAC()
     {
         if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_1";
-        if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
+        if (!DBBody.animation.HasAnimation(RUN)) {
+            if (!IsUseRun1) {
+                RUN = "run_3";
+            }
+            else
+            {
+                RUN = "run_1";
+            }
+        }
+        
     }
 
     //void ChangeRunAC()
@@ -291,6 +302,8 @@ public class EnemyGameBody : GameBody {
                     else
                     {
                         //技能释放点
+                        print("  jn "+jn);
+                        if (jn == null) return;
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                         isTXShow = false;
                     }
