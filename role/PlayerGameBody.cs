@@ -927,8 +927,11 @@ public class PlayerGameBody : GameBody {
     protected override void InAir()
     {
         //print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
-        
 
+        if (playerRigidbody2D.velocity.y < -MaxSpeedY) {
+            playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, -MaxSpeedY);
+        }
+        
 
         if (isDodgeing && IsHitMQWall && isInAiring)
         {
@@ -952,7 +955,7 @@ public class PlayerGameBody : GameBody {
         {
             if (DBBody.animation.isCompleted)
             {
-                //print("luodidongzuo zuowan");
+                print("luodidongzuo over!!!!!!!");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -981,7 +984,7 @@ public class PlayerGameBody : GameBody {
                 isAtking = false;
                 isAtk = false;
                 Hongyan.Stop();
-                //print("   ----------------? ?????  ");
+                print(" --------------------------------------------////////////////////  ----------------? ?????  ");
                 //AtkLJOver(); 
                 //isGetJump = false;
                 MoveVX(0);

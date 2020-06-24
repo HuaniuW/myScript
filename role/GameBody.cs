@@ -23,6 +23,9 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("水平最大速度")]
     public float maxSpeedX;
 
+    [Header("Y最大速度")]
+    public float MaxSpeedY =30;
+
     protected Vector2 newSpeed;
 
     [Header("垂直向上的推力")]
@@ -645,6 +648,7 @@ public class GameBody : MonoBehaviour, IRole {
             Vector2 end = new Vector2(start.x+1, start.y );
             Debug.DrawLine(start, end, Color.yellow);
             isHitWall = Physics2D.Linecast(start, end, groundLayer);
+            //print("前面 检测点 是否 探测到撞墙 "+ isHitWall);
             if(isHitWall) isCanShanjin = true;
             return isHitWall;
         }

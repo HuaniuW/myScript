@@ -382,7 +382,7 @@ public class AIBase : MonoBehaviour {
     public float atkDistanceY = 0;
 
     //3 靠近 达到攻击距离
-    public virtual bool NearRoleInDistance(float distance,float nertSpeed  =0.9f)
+    public virtual bool NearRoleInDistance(float distance,float nertSpeed  =1.9f)
     {
         
         if (DontNear) return true;

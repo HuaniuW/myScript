@@ -20,21 +20,40 @@ public class CameraKuaiZ : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (IsSetYGSPlayer)
+        {
+            if(_player&& IsOutKuai) cm.GetHitCameraKuaiY(_player.transform.position.y + DistanceY);
+        }
 	}
 
+    [Header("是否控制 摄像机的y")]
+    public bool IsSetY = true;
+
+    public bool IsSetYGSPlayer = false;
+
+    [Header("控制 摄像机的y 相对于玩家的距离")]
+    public float DistanceY = 2.8f;
+
+    bool IsOutKuai = false;
+
+    GameObject _player;
     void OnTriggerEnter2D(Collider2D Coll)
     {
         if (Coll.tag == "Player")
         {
+            _player = Coll.gameObject;
+            IsOutKuai = true;
             //print("In");
             //print(GlobalTools.FindObjByName("MainCamera"));
             //print(cameraY.transform.position.y);
             //if (isChangeCam) return;
             //isChangeCam = true;
             cameraPosition = GameObject.Find("/MainCamera").transform.position;
-            cm.GetHitCameraKuaiY(cameraY.transform.position.y);
-            cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + 2.8f, cameraZ));
+            if (IsSetY) {
+                cm.GetHitCameraKuaiY(cameraY.transform.position.y);
+            }
+            
+            cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + DistanceY, cameraZ));
         }
     }
 
@@ -47,6 +66,7 @@ public class CameraKuaiZ : MonoBehaviour {
             cm.GetComponent<CameraController>().OutHitCameraKuaiY();
             //cm.SetNewPosition(cameraPosition);
             cm.SetNewPosition(new Vector3(cameraPosition.x, cameraPosition.y,-13));
+            IsOutKuai = false;
         }
         //print("Trigger - B");
     }

@@ -11,11 +11,13 @@ public class JG_Door2 : MonoBehaviour
         AddDoorListener();
     }
 
+
+    public bool IsNeedCheck = true;
     public void AddDoorListener()
     {
         //print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
-        GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
+        if(IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
     }
 
     private void OnDestroy()

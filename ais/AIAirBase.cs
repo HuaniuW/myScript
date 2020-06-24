@@ -16,6 +16,8 @@ public class AIAirBase : AIBase
     }
     AIAirRunNear air_aiNear;
 
+    [Header("巡逻停顿休息 时间长度 -1为默认")]
+    public float PatrolRestTimes = 0.1f;
     protected override void Patrol()
     {
         //print("AI 巡逻！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
@@ -27,34 +29,38 @@ public class AIAirBase : AIBase
         }
         isNearing = false;
         //print("巡逻-----------gameBody.IsHitWall    " + gameBody.IsHitWall + "  " + patrolDistance + "     " + this.transform.position.x+ "   myPosition  "+ myPosition.x);
-        //if (gameBody.IsHitWall) print("巡逻-----------gameBody.IsHitWall    "+ gameBody.IsHitWall+"  "+ patrolDistance+"     "+this.transform.position.x);
+        //if (gameBody.IsHitWall) print("巡逻-----------gameBody.IsHitWall    "+ gameBody.IsHitWall+"  "+ patrolDistance+"     "+this.transform.position.x+"  速度  " +flyXSpeed+"   左？   " +isRunLeft+"  右?  "+isRunRight);
         if (isRunLeft)
         {
             gameBody.RunLeft(flyXSpeed);
+            //print("   左 "+flySpeed);
             if (this.transform.position.x - myPosition.x < -patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 if (isRunLeft)
                 {
                     isPatrolRest = true;
-                    PatrolRest(-1);
+                    PatrolRest(PatrolRestTimes);
                 }
                 isRunLeft = false;
                 isRunRight = true;
+                
             }
         }
         else if (isRunRight)
         {
             gameBody.RunRight(flyXSpeed);
+            //print("   右！！！ " + flySpeed);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 if (isRunRight)
                 {
                     isPatrolRest = true;
-                    PatrolRest(-1);
+                    PatrolRest(PatrolRestTimes);
                 }
 
                 isRunLeft = true;
                 isRunRight = false;
+                
             }
         }
     }

@@ -668,8 +668,8 @@ public class CameraController : MonoBehaviour
         {
             isShockZ2 = true;
             isShockZing2 = true;
-            targetZ2 = newZ22 + 0.4f;
-            targetZ21 = newZ22 - 0.4f;
+            targetZ2 = newZ22 + 0.3f;
+            targetZ21 = newZ22 - 0.3f;
             theTargetZ = targetZ2;
 
             yuanshiZ = this.transform.position.z;
