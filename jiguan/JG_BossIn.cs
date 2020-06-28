@@ -53,11 +53,13 @@ public class JG_BossIn : MonoBehaviour {
         print("我被消除了！？？？？？？");
     }
 
+    [Header("1 下 0上")]
+    public int OpenOrClose = 0;
     //关联门 碰撞关门
     void CloseDoor()
     {
-        if (Door1Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door1Name + "-0"), this);
-        if (Door2Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door2Name + "-0"), this);
+        if (Door1Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door1Name + "-"+ OpenOrClose), this);
+        if (Door2Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door2Name + "-"+ OpenOrClose), this);
     }
 
     //遇见boss显示的字幕

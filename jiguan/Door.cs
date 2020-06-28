@@ -58,9 +58,10 @@ public class Door : MonoBehaviour {
     {
         
         string str = e.eventParams.ToString();
+        print("   -----------------wokao name is what  "+ str);
         string _name = str.Split('-')[0];
         string zt = str.Split('-')[1];
-        //print(_zt+" ?  "+this.name + "   " +str+"   name  "+_name);
+        print(_zt+" ?  "+this.name + "   " +str+"   name  "+_name);
         //如果传来的状态一样就返回 没必要改变
         //if (_zt == zt) return;
         //开门用1 关门用0
@@ -69,12 +70,12 @@ public class Door : MonoBehaviour {
         isUp = false;
         if (zt == "1")
         {
-            //print("Down");
+            print("Down");
             isDown = true;
             
         }else if (zt == "0")
         {
-            //print("Up");
+            print("Up");
             isUp = true;
             
         }else if (zt == "d")

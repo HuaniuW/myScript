@@ -92,7 +92,7 @@ public class ScreenChange : MonoBehaviour {
         {
             GlobalSetDate.instance.screenName = GoScreenName;
             print(" 数据TempZGuanKaStr  >:   " + GlobalSetDate.instance.TempZGuanKaStr);
-            print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 " + GoScreenName);
+            print("--------------------------------？？？？？？？？？------------------------------------------------------------------------ 进入的地图名字 " + GoScreenName);
         }
         
         GlobalSetDate.instance.IsChangeScreening = true;

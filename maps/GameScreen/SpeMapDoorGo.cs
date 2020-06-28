@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpeMapDoorGo : MonoBehaviour
 {
@@ -8,8 +9,11 @@ public class SpeMapDoorGo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetDoorSet();
+        if(!IsTest)GetDoorSet();
     }
+
+    [Header("是否是测试 过是测试 就不匹配地图的门数据（防止报错）")]
+    public bool IsTest = false;
 
     public string ThisMapName = "";
 
@@ -82,6 +86,8 @@ public class SpeMapDoorGo : MonoBehaviour
 
     string GetMapStr() {
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
+
+        ThisMapName = SceneManager.GetActiveScene().name;
         string mapTou = ThisMapName.Split('-')[0];
         print("当前的 关卡 名字是  "+ ThisMapName);
         print("总的 关卡 地图信息   "+ GlobalSetDate.instance.gameMapDate.BigMapDate);
@@ -98,6 +104,12 @@ public class SpeMapDoorGo : MonoBehaviour
         }
 
         print("关卡的 地图信息 "+ CurrentDaMapStr);
+
+        if(CurrentDaMapStr == "")
+        {
+            print("无法取到关卡信息！！！！！！！！！！！！！！！！!!!!!!!!!!!!!!");
+            return "";
+        }
 
         string str = CurrentDaMapStr;
 

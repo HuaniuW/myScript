@@ -1257,7 +1257,7 @@ public class GameBody : MonoBehaviour, IRole {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
     }
 
-
+    public bool IsGetDieOut = false;
     public virtual void GetDie()
     {
         
@@ -1266,7 +1266,12 @@ public class GameBody : MonoBehaviour, IRole {
         //对象池无法移除对象 原因不明
         //ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject, 1f);
         //this.gameObject.SetActive(false);
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+        if (!IsGetDieOut)
+        {
+            IsGetDieOut = true;
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+        }
+        
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 
@@ -1309,7 +1314,7 @@ public class GameBody : MonoBehaviour, IRole {
         //}
         DBBody.animation.timeScale = scaleN;
         //if(_theTimer) _theTimer.GetStopByTime(pauseTime);
-        if (_theTimer) _theTimer.TimesAdd(pauseTime,TimeCallBack);
+        if (_theTimer) _theTimer.TimesAdd(pauseTime, TimeCallBack);
     }
 
 

@@ -9,6 +9,9 @@ public class CameraKuaiZ : MonoBehaviour {
     [Header("碰撞后摄像机的Z距离点")]
     public float cameraZ = -13;
 
+    [Header("离开碰撞点后 的Z距离点")]
+    public float OutKuaiCameraZ = -13;
+
     public Vector3 cameraPosition;
 
     CameraController cm;
@@ -65,7 +68,7 @@ public class CameraKuaiZ : MonoBehaviour {
             //print("out");
             cm.GetComponent<CameraController>().OutHitCameraKuaiY();
             //cm.SetNewPosition(cameraPosition);
-            cm.SetNewPosition(new Vector3(cameraPosition.x, cameraPosition.y,-13));
+            cm.SetNewPosition(new Vector3(cameraPosition.x, cameraPosition.y, OutKuaiCameraZ));
             IsOutKuai = false;
         }
         //print("Trigger - B");

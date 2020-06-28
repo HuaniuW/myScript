@@ -334,7 +334,7 @@ public class HitKuai : MonoBehaviour {
                 }
 
                 //硬直时间？
-                gameBody.GetPause(jn_date.yingzhishijian,0.4f);
+                if (gameBody.tag != "Player") gameBody.GetPause(jn_date.yingzhishijian,0.4f);
                 //附带效果
                 gameBody.FudaiXiaoguo(jn_date.JiZhongFDXiaoguo);
                 //if (Coll.tag != "Player")

@@ -44,6 +44,7 @@ public class GameControl : MonoBehaviour {
         GuankaName = SceneManager.GetActiveScene().name;
         if (IsInPlot) return;
         GetPlayer();
+        print("取到 player!!!");
         if (player == null)
         {
             print("没有找到主角 游戏中断！");
@@ -120,19 +121,23 @@ public class GameControl : MonoBehaviour {
 
     public void SetPlayerFXAndCameraPos()
     {
+        print("------》  "+player.transform.localScale);
+
         //print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
         if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "d")
         {
-            //print(" 右转！！！！ ");
+            print(" 右转！！！！ ");
 
-            player.GetComponent<PlayerGameBody>().TurnRight();
+            player.GetComponent<PlayerGameBody>().TrunFXStrRight();
         }
         else
         {
-            //print(" ----》左转！！！！ ");
-            player.GetComponent<PlayerGameBody>().TurnLeft();
+            print(" ----》左转！！！！ ");
+            player.GetComponent<PlayerGameBody>().TrunFXStrLeft();
         }
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
+
+        print("------222222》  " + player.transform.localScale);
     }
 
     public string GetFanFX(string fx) {

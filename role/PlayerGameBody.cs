@@ -1217,7 +1217,8 @@ public class PlayerGameBody : GameBody {
     public override void TurnRight()
     {
         if (GetComponent<RoleDate>().isDie) return;
-        
+
+        //gameControl 里面 awake 调用的  player里面没有初始化 所以会报错
         //RunRight(1);
         this.transform.localScale = new Vector3(-1, 1, 1);
         ChangeBoneScaleX();
@@ -1228,26 +1229,42 @@ public class PlayerGameBody : GameBody {
         if (GetComponent<RoleDate>().isDie) return;
         //RunLeft(1);
         this.transform.localScale = new Vector3(1, 1, 1);
+        
     }
 
+
+    string turnFX = "";
+    public void TrunFXStrRight()
+    {
+        turnFX = "r";
+    }
+
+    public void TrunFXStrLeft()
+    {
+        turnFX = "l";
+    }
 
 
 
     protected override void Stand()
     {
-        //print("  进门  "+ GlobalSetDate.instance.roleDirection);
-        if(GlobalSetDate.instance.roleDirection == "l")
+        //print("  进门GlobalSetDate.instance.roleDirection     " + GlobalSetDate.instance.roleDirection);
+       
+
+        if(GlobalSetDate.instance.roleDirection == "l"|| turnFX == "l")
         {
             TurnLeft();
-            //print("  左转？？？？？    ");
+            print(" stand 中 左转？？？？？    ");
             GlobalSetDate.instance.roleDirection = "";
+            turnFX = "";
         }
-        else if(GlobalSetDate.instance.roleDirection == "r")
+        else if(GlobalSetDate.instance.roleDirection == "r"|| turnFX == "r")
         {
             TurnRight();
-            //print("  -----右转？？？？？    ");
+            print(" stand -----右转？？？？？    ");
             ChangeBoneScaleX();
             GlobalSetDate.instance.roleDirection = "";
+            turnFX = "";
         }
         
         //TurnRight();

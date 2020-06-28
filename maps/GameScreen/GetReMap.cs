@@ -1168,12 +1168,13 @@ public class GetReMap : MonoBehaviour
                 _cMapObj = mapObj;
                 mapObjArr.Add(mapObj);
             }
-            if (i != mapNums - 1) {
-                ChuGuai();
-            }
-            else{
-                ChuGuai(false,fx);
-            }
+
+            //if (i != mapNums - 1) {
+            //    ChuGuai();
+            //}
+            //else{
+            //    ChuGuai(false,fx);
+            //}
 
 
         }

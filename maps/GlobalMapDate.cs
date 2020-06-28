@@ -12,9 +12,9 @@ public class GlobalMapDate : MonoBehaviour {
     //判断是否已经有了 数据 有的话去取  没有的话 生成
     public static bool IsHasDateCCustom = false;
 
-
-
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "l:6!n!boss|8!n!cundang" };
+    //例子 进门 特殊地图是 map_s-1   s 就是 取特殊地图数组的 标记
+    //“s:7!l-r!jiguan|9!l-r!boss”
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "s:2!l-r" };
 
 
 

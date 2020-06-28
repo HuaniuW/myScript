@@ -651,6 +651,7 @@ public class CreateMaps : MonoBehaviour
         string findFX = "";
         List<string> SpeMapFXArr = new List<string> { };
         //string findZB = "";
+        print("speMapName    "+ speMapName);
         for (int i = mapZBArr.Count - 1; i >= 0; i--)
         {
             SpeMapFXArr = _SpeMapFXArr;

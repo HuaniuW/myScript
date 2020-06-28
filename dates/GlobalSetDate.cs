@@ -190,7 +190,7 @@ public class GlobalSetDate : MonoBehaviour {
             if (door.transform.localRotation.z < 0)
             {
                 roleDirection = "r";
-                playerInScreenPosition = new Vector2(door.transform.position.x-1, door.transform.position.y - 1f);
+                playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.transform.position.y - 1f);
             }
             else
             {

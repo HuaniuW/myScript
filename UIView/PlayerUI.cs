@@ -64,10 +64,23 @@ public class PlayerUI : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
         GetMainCamera();
 
+        //screenChangeZZ.gameObject.SetActive(false);
+
+        this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 1;
+        screenLoadTxt.text = "";
+        StartCoroutine(IHideZZByTimes(0.2f));
+
+    }
+
+    public IEnumerator IHideZZByTimes(float time)
+    {
+        yield return new WaitForSeconds(time);
+        this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
+        //不禁止 会阻挡 鼠标点击事件
         screenChangeZZ.gameObject.SetActive(false);
     }
 
-    
+
 
     public void HideSelf()
     {
@@ -95,6 +108,23 @@ public class PlayerUI : MonoBehaviour {
             isShowUI = false;
         }
     }
+
+
+
+    //void InScreen()
+    //{
+    //    if (this.screenChangeZZ != null)
+    //    {
+    //        this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;
+    //        if (ZZAlphaNums == 0 && this.screenChangeZZ.GetComponent<CanvasGroup>().alpha <= 0.2)
+    //        {
+    //            this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
+    //            IsScreenChangeing = false;
+    //            //防止遮挡鼠标事件
+    //            screenChangeZZ.gameObject.SetActive(false);
+    //        }
+    //    }
+    //}
 
 
     void GetScreenChange()

@@ -65,9 +65,13 @@ public class XialuoGuaizu : MonoBehaviour
         
     }
 
+
+    public bool IsNeedHitStart = true;
+
     bool isStartXialuo = false;
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (!IsNeedHitStart) return;
         if (Coll.tag == "Player")
         {
             if (!isStartXialuo)
