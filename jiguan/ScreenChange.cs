@@ -143,7 +143,7 @@ public class ScreenChange : MonoBehaviour {
             print("hit!!!!   ");
             if (ReMapName != "")
             {
-                print("说明是特殊地图 跳到随机里面   ");
+                print("说明是 从 特殊地图 跳到 随机里面   ");
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
             }
             else

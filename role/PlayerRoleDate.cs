@@ -210,7 +210,8 @@ public class PlayerRoleDate : RoleDate
         string _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live+"/"+this.maxLive + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "/" + this.maxLive + "</color>\n";
         string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
         string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
-        str += _liveStr + _atkStr + _defStr;
+        string _yingshiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
+        str += _liveStr + _atkStr + _defStr+ _yingshiStr;
         return str;
     }
 
@@ -236,6 +237,10 @@ public class PlayerRoleDate : RoleDate
                 {
                     if(_name!="诅咒宝石") this.maxLive *= nums;
                     if(IsHasZZ) if (live > maxLive * 0.3f) live = maxLive * 0.3f;
+                }else if (s1 == "yingzhiP")
+                {
+                    this.yingzhi *= nums;
+                    csYZ = yingzhi;
                 }
             }
         }
@@ -251,6 +256,11 @@ public class PlayerRoleDate : RoleDate
         
         if (hzdate.def != 0) this.def += hzdate.def;
         if (hzdate.atk != 0) this.atk += hzdate.atk;
+        if (hzdate.yingzhi != 0)
+        {
+            this.yingzhi += hzdate.yingzhi;
+            csYZ = yingzhi;
+        }
         //print(this.atk + "  --   " + hzdate.atk);
         if (hzdate.live != 0)
         {
@@ -265,6 +275,12 @@ public class PlayerRoleDate : RoleDate
         if (hzdate.liveP != 0) {
             beishuArr.Add("liveP_" + hzdate.liveP + "_" + hzdate.HZName);
         }
+
+        if (hzdate.yingzhiP!=0)
+        {
+            beishuArr.Add("yingzhiP_" + hzdate.yingzhiP + "_" + hzdate.HZName);
+        }
+       
 
         //伤害减免比例的 使用
         if (hzdate.ShanghaiJianmianBili != 0)

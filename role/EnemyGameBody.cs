@@ -11,11 +11,12 @@ public class EnemyGameBody : GameBody {
     //void Start () {
     //       GetStart();
     //   }
-
+    [Header("默认的 移动动作")]
+    public string RunACName = "run_1";
 
     protected override void FirstStart()
     {
-        RUN = "run_1";
+        RUN = RunACName;
         if (!GetDB().animation.HasAnimation(RUN)) RUN = "run_3";
         //GetBoneColorChange(Color.white);
         //print("-------------------->   "+RUN);
@@ -38,7 +39,7 @@ public class EnemyGameBody : GameBody {
     //切换站立姿势 切换跑动姿势
     void ChangeStandAndRunAC()
     {
-        STAND = "stand_2";
+        STAND = "stand_1";
         CheckIsHasAC();
     }
 
@@ -371,7 +372,7 @@ public class EnemyGameBody : GameBody {
 
         if (roleDate.isBeHiting)
         {
-            ControlSpeed(20);
+            ControlSpeed(30);
             GetBeHit();
             return;
         }

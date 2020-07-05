@@ -13,11 +13,16 @@ public class DieOut : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
-	}
+      
+    }
+
+   
+
 
     void OnDistory()
     {
         //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
+        
     }
 
     void OnRemove()
@@ -27,11 +32,16 @@ public class DieOut : MonoBehaviour {
 
     //标记开门
     public bool IsBiaojiOpenDoor = false;
+
+    [Header("标记 检查 是否 怪都die了")]
+    public bool IsBiaojiAllDieStart = true;
     void DieOutDo()
     {
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
-            if(IsBiaojiOpenDoor) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
+            if (IsNeedDieSlowAC) DieSlowAC();
+            if(IsBiaojiAllDieStart) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "allDie"), this);
+            if (IsBiaojiOpenDoor) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
             if (IsBoss) {
                 isBossDie = true;
                 //隐藏UI血条
@@ -109,10 +119,18 @@ public class DieOut : MonoBehaviour {
     {
         Time.timeScale = nums;
     }
+
+    [Header("是否需要  在die的时候 减慢动作")]
+    public bool IsNeedDieSlowAC = false;
+    void DieSlowAC()
+    {
+        GetComponent<GameBody>().GetPause(0.5f, 0.2f);
+    }
+
+
     //其他要处理事件 比如 BOSS血条隐藏 开门关门 ===
     void SlowTime()
     {
-        
 
         if (!isBossDie) {
             return;
@@ -120,6 +138,7 @@ public class DieOut : MonoBehaviour {
         if (IsBoss)
         {
             SlowTimesNum++;
+            //print("SlowTimesNum   " + SlowTimesNum);
             if (SlowTimesNum > 80)
             {
                 isBossDie = false;

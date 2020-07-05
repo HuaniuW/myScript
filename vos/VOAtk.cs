@@ -34,6 +34,25 @@ public class VOAtk : MonoBehaviour {
 
     public float qishouYC = 0;
 
+    public float chongjili = 0;
+
+
+    public float hitKuaiOX = 0;
+    public float hitKuaiOY = 0;
+
+    
+    public float hitKuaiSX = 0;
+    public float hitKuaiSY = 0;
+
+    public float TXSX = 0;
+    public float TXOX = 0;
+    public float TXOY = 0;
+    public float atkPower = 0;
+
+
+
+
+
 
     // Use this for initialization
     void Start () {
@@ -87,6 +106,46 @@ public class VOAtk : MonoBehaviour {
             this.atkDistanceY = 0;
         }
 
+        if (dict.ContainsKey("chongjili"))
+        {
+            this.chongjili = float.Parse(dict["chongjili"]);
+        }
+
+        if (dict.ContainsKey("hitKuaiOX"))
+        {
+            this.hitKuaiOX = float.Parse(dict["hitKuaiOX"]);
+        }
+
+        if (dict.ContainsKey("hitKuaiOY"))
+        {
+            this.hitKuaiOY = float.Parse(dict["hitKuaiOY"]);
+        }
+
+        if (dict.ContainsKey("hitKuaiSX"))
+        {
+            this.hitKuaiSX = float.Parse(dict["hitKuaiSX"]);
+        }
+
+        if (dict.ContainsKey("hitKuaiSY"))
+        {
+            this.hitKuaiSY = float.Parse(dict["hitKuaiSY"]);
+        }
+
+        if (dict.ContainsKey("TXOX"))
+        {
+            this.TXOX = float.Parse(dict["TXOX"]);
+        }
+
+        if (dict.ContainsKey("TXOY"))
+        {
+            this.TXOY = float.Parse(dict["TXOY"]);
+        }
+
+
+        if (dict.ContainsKey("atkPower"))
+        {
+            this.atkPower = float.Parse(dict["atkPower"]);
+        }
     }
 	
 	

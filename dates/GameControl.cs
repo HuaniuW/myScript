@@ -92,11 +92,11 @@ public class GameControl : MonoBehaviour {
     //通过方向 来判断 门 和放置玩家的位置
     public void GetPlayerPosByFX()
     {
-        //print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
+        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
         foreach(GameObject door in ListDoor)
         {
-            //print("  ---  "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi+"   :   "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
+            print("  ---  "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi+"   :   "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
 
             if(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi == GetFanFX(GlobalSetDate.instance.DanqianMenweizhi))
             {
@@ -123,7 +123,7 @@ public class GameControl : MonoBehaviour {
     {
         print("------》  "+player.transform.localScale);
 
-        //print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
+        print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
         if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "d")
         {
             print(" 右转！！！！ ");

@@ -107,7 +107,7 @@ public class GetReMap : MonoBehaviour
         //print("有怪没啊    " + GuaiList.Count);
         //中心地板 不是左右连接 或者 怪数量小于4 不允许关门
         //如果是左右地图 但是 是跳跃型 也不能关门 后面要做判断
-        if (lianjiedibanType=="lr"&& GuaiList.Count >= 4)
+        if (_lianjiedibanType=="lr"&& GuaiList.Count >= 4)
         {
             
             print("  @@@@@@@@@--------------------------------- 是左右地图  有4个以上的怪 可以 关门！！！！");
@@ -237,11 +237,12 @@ public class GetReMap : MonoBehaviour
         //这里要知道 从哪进来的 进入方向   保留一个门
         //-
 
+        //排序 门  获取 连接点 字符 lr /lru /lrd  等 来获取  连接点的 obj数组 来生成连接点
         string str = GetStrByList(menFXList);
         //print("menlist>///////////// -str :    " + str);
 
         string lianjie = str.Split('=')[0];
-        lianjiedibanType = lianjie;
+        _lianjiedibanType = lianjie;
 
 
 
@@ -427,10 +428,7 @@ public class GetReMap : MonoBehaviour
     //出怪
     void ChuGuai(bool IsZhongxin = false,string Fx = "")
     {
-        
-
         //挨着门的 地图不出怪
-
         //根据地图 大关卡 出怪 出什么怪 怪物数组 放哪 boss组 精英组等
         //xiaoGuai_1 = {};
         //kongZhongXiaoGuai_1 = {};
@@ -517,14 +515,20 @@ public class GetReMap : MonoBehaviour
         int nums = 1;
         string guaiName = "";
         GameObject g;
+        //****************************@****************** 怪生成 设定
+
+        string GuaiType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
+
         if (kongzhong)
         {
-            guaiListName = "kongZhongXiaoGuai_" + GlobalSetDate.instance.DaGuanKaNum;
+            guaiListName = "kongZhongXiaoGuai_" + GuaiType;
         }
         else
         {
-            guaiListName = "xiaoGuai_" + GlobalSetDate.instance.DaGuanKaNum;
+            guaiListName = "xiaoGuai_" + GuaiType;
         }
+
+        print(CMapName+  " 怪物获取列表   "+ guaiListName);
         nums = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance()).Count;
         guaiName = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
         g = GlobalTools.GetGameObjectByName(guaiName);
@@ -597,7 +601,7 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    string lianjiedibanType = "lr";
+    string _lianjiedibanType = "lr";
 
     string GetTypeByMenFXList(List<string> menFXList)
     {
@@ -612,19 +616,34 @@ public class GetReMap : MonoBehaviour
         // lr=l:mapR_1?3?pd?shu!r:map_r-2?3?dn?qiang
         
         string lianjie = str.Split('=')[0];
-        lianjiedibanType = lianjie;
+        _lianjiedibanType = lianjie;
+
+
+
+        //*********************************@************* lr方向 地图生成 设计
+
+        //获取 跳跃 几率
 
         //只有在lr地图里面 有精英怪  可以关门
         if (lianjie == "lr")
         {
             //判断 是否关门   这里只判断 出怪 和 地形  这里还有特殊型地图  按几率生成
-            
+
             //平地 出的怪   和    跳跃地出的怪   上下隧道出的怪   出怪几率
-            if (GlobalTools.GetRandomNum() > 60)
+            int jilv = GlobalTools.GetRandomNum();
+            string MapMsg = GameMapDate.GetMapDiXingByCName(CMapName);
+            print("CMapName "+CMapName+ "  ----  MapMsg  "+ MapMsg);
+            //GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
+            float pd = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
+            float ty = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "ty");
+            float hh = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "hh");
+            float dn = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "dn");
+
+            if (jilv < hh)
             {
                 //跳跃+平地 混合型
                 PingdiDibanType = "tiaoyuepingdiDB";
-            }else if (GlobalTools.GetRandomNum() > 80)
+            }else if (jilv < ty)
             {
                 //跳跃型
                 PingdiDibanType = "tiaoyueDB";
@@ -634,12 +653,22 @@ public class GetReMap : MonoBehaviour
         }
 
 
+
+        //怎么获取 连接点 类型
+
+        print("获取 连接点 类型 数组    当前关卡名字 "+CMapName);
+
+        LianjiedianType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
+        print("获得的连接点 类型  "+ LianjiedianType);
+
+        //*****************************@*****************************连接点 地板 名字 获取 列表*********
         //这里也是 在全局 找类型 LianjiedianType 不同 连接的 数据也不一样
         if (LianjiedianType != "") lianjie = lianjie + "_" + LianjiedianType;
+        //***************************@*******************  生成连接点
         CreateLJByName(lianjie);
 
         //str    lr=l:mapR_1!r:map_r-2
-        //往哪个方向延伸地图
+        //往哪个方向延伸地图  从连接点 创造边路
         CreateBianlu(str.Split('=')[1]);
 
 
@@ -656,12 +685,14 @@ public class GetReMap : MonoBehaviour
         List<string> strList = new List<string>(mapStrMsg.Split('!'));
         for (int i = 0; i < strList.Count; i++){
             string fx = strList[i].Split(':')[0];
+
             //获取 生成的 地图块 数量
             int n = 1 + GlobalTools.GetRandomNum(MaxMapNums);
             string _goScreenName = strList[i].Split(':')[1];
             print("门位置 "+ strList[i].Split(':')[0] + "  _goScreenName    "+ _goScreenName);
             if(strList.Count == 1)
             {
+                //单门 的 死路  可以出精英怪 等
                 if(fx == "d")
                 {
                     CreateFZRoad("l", n, _goScreenName,fx);
@@ -852,7 +883,11 @@ public class GetReMap : MonoBehaviour
     //创建地图
     GameObject GetDiBanByName()
     {
+        //**********************@****************普通地板生成数据控制
         string mapArrName = "db_pd";
+
+        DibanType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
+
         if (PingdiDibanType != "") mapArrName = PingdiDibanType;
         if (DibanType != "") mapArrName += "_" + DibanType;
         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
@@ -870,7 +905,7 @@ public class GetReMap : MonoBehaviour
         Vector2 pos;
         int sd;
         GameObject mapObj;
-        
+
         for (int i=0;i<= mapNums; i++)
         {
             if (fx == "l")
@@ -889,6 +924,7 @@ public class GetReMap : MonoBehaviour
                 }
                 else
                 {
+                    //********************************@***********************门 地图生成 控制
                     mapObj = GlobalTools.GetGameObjectByName("dt_men_l");
                     //判断是否是 特殊地图
                     if (GlobalMapDate.IsSpeMapByName(goScreenName))
@@ -897,6 +933,7 @@ public class GetReMap : MonoBehaviour
                     }
                     if (danFX != "")
                     {
+                        //单门的方向
                         mapObj.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().SetMenMsg(danFX, goScreenName);
                     }
                     else
@@ -1018,8 +1055,8 @@ public class GetReMap : MonoBehaviour
             {
                 if (i != mapNums)
                 {
-
-                    if(i == mapNums - 1)
+                    DibanType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
+                    if (i == mapNums - 1)
                     {
                         string mapArrName = "db_rd";
                         if (DibanType != "") mapArrName += "_" + DibanType;
@@ -1098,7 +1135,7 @@ public class GetReMap : MonoBehaviour
             {
                 if (i != mapNums)
                 {
-
+                    DibanType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
                     if (i == mapNums - 1)
                     {
                         string mapArrName = "db_lu";
@@ -1169,12 +1206,17 @@ public class GetReMap : MonoBehaviour
                 mapObjArr.Add(mapObj);
             }
 
-            //if (i != mapNums - 1) {
-            //    ChuGuai();
-            //}
-            //else{
-            //    ChuGuai(false,fx);
-            //}
+
+
+
+            if (i != mapNums - 1)
+            {
+                ChuGuai();
+            }
+            else
+            {
+                ChuGuai(false, fx);
+            }
 
 
         }
@@ -1269,7 +1311,7 @@ public class GetReMap : MonoBehaviour
         //GlobalTools.FindObjByName("MainCamera").transform.position = new Vector3(player.transform.position.x, player.transform.position.y, GlobalTools.FindObjByName("MainCamera").transform.position.z);  //GlobalTools.FindObjByName("player").transform.position;
     }
 
-    // lr=l:mapR_1$p!r:map_r-3
+    // lr=l:mapR_1$p!r:map_r-3     给门排序  str = lr / lru 等 
     string GetStrByList(List<string> menFXList)
     {
         string str = "";
@@ -1359,6 +1401,7 @@ public class GetReMap : MonoBehaviour
         {
             menFXList.Add(TheMapMsgArr[i]);
         }
+        //{"r:map_r-2","u:map_r-3"}
         return menFXList;
     }
 

@@ -38,6 +38,17 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> jumpAtk_2 = new Dictionary<string, string> { { "atkName", "jumpAtk_2" }, { "xF", "3" }, { "yF", "0" }, { "showTXFrame", "10" }, { "txName", "dg_002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "5" }};
     static public Dictionary<string, string> jumpAtk_21 = new Dictionary<string, string> { { "atkName", "jumpAtk_21" }, { "xF", "3" }, { "yF", "0" }, { "showTXFrame", "10" }, { "txName", "dg_601" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "5" } };
 
+    //小七
+    static public Dictionary<string, string> atk_5001 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_5001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5" } };
+    static public Dictionary<string, string> atk_5002 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_5002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5" } };
+    static public Dictionary<string, string> atk_5003 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "8" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_5003" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5.5" } };
+    static public Dictionary<string, string> atk_5004 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_5001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5" } };
+    static public Dictionary<string, string> atk_5005 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_5005" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5" } };
+
+
+
+
+
     //精英大剑
     static public Dictionary<string, string> atk_107 = new Dictionary<string, string> { { "atkName", "atk_7" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_102" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "5" } };
     static public Dictionary<string, string> atk_108 = new Dictionary<string, string> { { "atkName", "atk_8" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_101" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "35" }, { "atkDistance", "5" } };
@@ -117,6 +128,11 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_1104 = new Dictionary<string, string> { { "atkName", "skill_genzong1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_dianqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "30" }, { "atkDistanceY", "4" } };
     static public Dictionary<string, string> atk_1105 = new Dictionary<string, string> { { "atkName", "skill_juji" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_jujiqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "50" } };
 
+
+    //重甲精英斧头怪
+    static public Dictionary<string, string> atk_1201 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" } ,{ "chongjili","3000"} ,{"hitKuaiOX","1.5"},{"hitKuaiOY","0" },{"hitKuaiSX","5"},{"hitKuaiSY","0"},{"atkPower","400"},{"TXSX","0"},{"TXOX","-1.4" },{"TXOY","0" } };
+    static public Dictionary<string, string> atk_1202 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" }, { "chongjili", "3000" }, { "hitKuaiOX", "1.5" }, { "hitKuaiOY", "0" }, { "hitKuaiSX", "5" }, { "hitKuaiSY", "0" }, { "atkPower", "400" }, { "TXSX", "0" }, { "TXOX", "-1.4" }, { "TXOY", "0" } };
+    static public Dictionary<string, string> atk_1203 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "8" }, { "atkDistanceY", "0" }, { "chongjili", "500" } };
 
     //public string Tt
     //{

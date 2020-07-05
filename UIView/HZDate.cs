@@ -88,6 +88,10 @@ public class HZDate : MonoBehaviour {
     public float tempJSTimes = 0;
 
     //增加硬直
+    [Header("*增加硬直*")]
+    public float yingzhi = 0;
+    [Header("*增加硬直百分比增加*")]
+    public float yingzhiP = 0;
     //临时增加硬直
 
 

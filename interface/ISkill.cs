@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface ISkill{
 
-    void ReSet();
-    bool IsStartAndOver(GameObject obj);
+    void ReSetAll();
+    void GetStart(GameObject gameObj);
+    bool IsGetOver();
+
 }

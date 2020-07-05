@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class AIShanxian : MonoBehaviour, ISkill
+public class AIShanxian : MonoBehaviour
 {
 	public GameObject obj;
 	//目标对象

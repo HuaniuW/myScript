@@ -307,10 +307,10 @@ public class PlayerUI : MonoBehaviour {
 
 
     //全局减速
-    public void GetSlowByTimes(float times = 1)
+    public void GetSlowByTimes(float times = 1,float TimeScaleNums = 0.5f)
     {
         GetComponent<TheTimer>().TimesAdd(times, TimeCallBack);
-        Time.timeScale = 0.5f;
+        Time.timeScale = TimeScaleNums;
     }
 
     public void TimeCallBack(float nums)

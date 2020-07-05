@@ -5,10 +5,10 @@ using UnityEngine;
 public class RoleDate : MonoBehaviour {
     float _maxLive;
     [Header("最大生命值")]
-    public float maxLive = 10000;
+    public float maxLive = 1000;
     
     [Header("生命值")]
-    public float Live = 10000;
+    public float Live = 1000;
 
     [Header("防御力")]
     public float def = 50;
@@ -110,7 +110,7 @@ public class RoleDate : MonoBehaviour {
 
 
     //初始硬直
-    float csYZ;
+    protected float csYZ;
     public void addYZ(float yzNums)
     {
         yingzhi += yzNums;
@@ -119,6 +119,10 @@ public class RoleDate : MonoBehaviour {
     public void hfYZ(float yzNums)
     {
         yingzhi -= yzNums;
+        if (yingzhi < csYZ)
+        {
+            yingzhi = csYZ;
+        }
     }
 
 

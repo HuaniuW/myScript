@@ -16,7 +16,7 @@ public class TempAddValues : MonoBehaviour
 
 
 
-    //----------------------------------------------------临时提高硬直------------------------
+    //----------------------------------------------------临时提高硬直--技能用 别乱删----------------------
 
     bool IsAddTempYZ = false;
     float AddYingzhiNums = 0;
@@ -24,11 +24,18 @@ public class TempAddValues : MonoBehaviour
     float TempYZJiShi = 0;
     public virtual void TempAddYZ(float AddYZNum, float TempTime = 1)
     {
+        if (IsAddTempYZ)
+        {
+            HYYZ();
+        }
+
         AddYingzhiNums = AddYZNum;
         TempYZTimes = TempTime;
         IsAddTempYZ = true;
         TempYZJiShi = 0;
         GetComponent<RoleDate>().addYZ(AddYingzhiNums);
+
+
     }
 
     protected virtual void AddTempYZ()
@@ -40,16 +47,22 @@ public class TempAddValues : MonoBehaviour
             {
                 if (IsAddTempYZ)
                 {
-                    GetComponent<RoleDate>().hfYZ(AddYingzhiNums);
-                    IsAddTempYZ = false;
-                    TempYZJiShi = 0;
-                    AddYingzhiNums = 0;
-                    TempYZTimes = 0;
+                    HYYZ();
                 }
                 
             }
         }
 
+    }
+
+    //还原硬直
+    void HYYZ()
+    {
+        GetComponent<RoleDate>().hfYZ(AddYingzhiNums);
+        IsAddTempYZ = false;
+        TempYZJiShi = 0;
+        AddYingzhiNums = 0;
+        TempYZTimes = 0;
     }
 
 
@@ -68,6 +81,10 @@ public class TempAddValues : MonoBehaviour
     //临时悬空
     public virtual void TempXuanKong(float XTTimes)
     {
+        if (IsTempXK)
+        {
+            XTReSet();
+        }
         _XTTimes = XTTimes;
         TempXKJiShi = 0;
         _YSZhonglI = GetComponent<Rigidbody2D>().gravityScale;
@@ -111,7 +128,7 @@ public class TempAddValues : MonoBehaviour
 
 
 
-    //----------------------------------------------------临时提高减伤比例------------------------
+    //----------------------------------------------------临时提高减伤比例--------花防技能有用到----------------
     bool IsTempJianShangbili = false;
     float _jsBl = 0;
     //计时持续时间
@@ -123,6 +140,12 @@ public class TempAddValues : MonoBehaviour
 
     public void TempJianShangBL(float bl,float JSCXTimes)
     {
+
+        if (IsTempJianShangbili)
+        {
+            TempJSReSet();
+        }
+
         _jsBl = bl;
         _JSCXTimes = JSCXTimes;
         _jlYSbl = GetComponent<RoleDate>().shanghaijianmianLv;

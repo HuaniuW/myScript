@@ -10,6 +10,7 @@ public class PlayerGameBody : GameBody {
     //   }
 
     // Update is called once per frame
+    float flyVx = 0;
     void Update()
     {
 
@@ -30,16 +31,27 @@ public class PlayerGameBody : GameBody {
 
         if (GetComponent<RoleDate>().isDie)
         {
-            GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x * 0.5f, GetPlayerRigidbody2D().velocity.y);
+            if(flyVx == 0)
+            {
+                flyVx = GetPlayerRigidbody2D().velocity.x;
+            }
+
+            flyVx += (0 - flyVx) * 0.04f;
+            GetPlayerRigidbody2D().velocity = new Vector2(flyVx, GetPlayerRigidbody2D().velocity.y);
         }
 
         
 
         this.GetUpdate();
 
+        //不能放在 GetUpdate 前面 否则不执行
+        ChangeDownOnGroundACName();
         //print("------  IsAtkDown " + IsAtkDown + "  IsGround   " + IsGround+" isAtk "+isAtk+"   isAtking "+isAtking);
 
     }
+
+
+    PlayerUI _playerUI;
 
     protected override void FirstStart()
     {
@@ -47,6 +59,7 @@ public class PlayerGameBody : GameBody {
         DIE = "die_4";
         Die_dian.Stop();
         hongdian.Stop();
+        _playerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
     }
 
 
@@ -323,6 +336,7 @@ public class PlayerGameBody : GameBody {
 
     public override void RunRight(float horizontalDirection, bool isWalk = false)
     {
+        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
         //print("l " + isAtking);
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         isBackUping = false;
@@ -362,6 +376,7 @@ public class PlayerGameBody : GameBody {
 
     public override void RunLeft(float horizontalDirection, bool isWalk = false)
     {
+        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
         isBackUping = false;
@@ -797,8 +812,9 @@ public class PlayerGameBody : GameBody {
 
     override public void HasBeHit(float chongjili = 0)
     {
-        //print("  >>>>>>>>>>>>>>>>>>>?????   Behit  ");
-        if (DBBody.animation.lastAnimationName == DODGE1) return;
+        //print("wocao  >>>>>>>>>>>>>>>>>>>?????   Behit  ");
+        //if (DBBody.animation.lastAnimationName == DODGE1) return;
+        //print("wocao  >>>>>>>>>>>>>>>>>>>?????   Behit   wocaohahahhahahahahh  ");
         ResetAll();
         Bianbai();
         if (IsAtkDowning)
@@ -903,7 +919,8 @@ public class PlayerGameBody : GameBody {
             Die_dian.Play();
             
             GetPlayerRigidbody2D().gravityScale = 0;
-            GetPlayerRigidbody2D().velocity = new Vector2(0,1f);
+            GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x, 1f);
+            print("  玩家 拍哦东速度  "+ GetPlayerRigidbody2D().velocity);
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             DBBody.animation.Play(DIE,1);
             Time.timeScale = 0.2f;
@@ -921,6 +938,50 @@ public class PlayerGameBody : GameBody {
         //Time.timeScale = 0.5f;
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,this.tag), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(1f));
+    }
+
+    string DownOnGroundACName = "downOnGround_1";
+    //高空掉下
+    string DownOnGroundACNameGao = "downOnGround_3";
+
+    [Header("高处跳下的烟尘")]
+    public ParticleSystem GaochuTiaoxiaYC;
+
+
+    float timeDownnums = 0;
+    bool IsInAirDown = false;
+    void ChangeDownOnGroundACName()
+    {
+        
+        float _speedY = GetPlayerRigidbody2D().velocity.y;
+        //print(" _speedY=====================  "+_speedY);
+        if (GetDB().animation.lastAnimationName != DOWNONGROUND)
+        {
+            if (IsInAirDown)
+            {
+                timeDownnums += Time.deltaTime;
+                //print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ isdown  "+timeDownnums);
+            }
+            else
+            {
+                timeDownnums = 0;
+                DOWNONGROUND = DownOnGroundACName;
+            }
+
+            if (timeDownnums > 1.1f)
+            {
+                DOWNONGROUND = DownOnGroundACNameGao;
+            }
+
+            //if (_speedY<-23&& DOWNONGROUND == DownOnGroundACName)
+            //{
+            //    DOWNONGROUND = DownOnGroundACNameGao;
+            //}
+            //else
+            //{
+            //    DOWNONGROUND = DownOnGroundACName;
+            //}
+        }
     }
 
 
@@ -955,7 +1016,7 @@ public class PlayerGameBody : GameBody {
         {
             if (DBBody.animation.isCompleted)
             {
-                print("luodidongzuo over!!!!!!!");
+                //print("luodidongzuo over!!!!!!!");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -967,6 +1028,7 @@ public class PlayerGameBody : GameBody {
                 //print("jinlai  mei     222222222    ");
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 //GetStand();
+                DOWNONGROUND = DownOnGroundACName;
             }
             return;
         }
@@ -984,10 +1046,19 @@ public class PlayerGameBody : GameBody {
                 isAtking = false;
                 isAtk = false;
                 Hongyan.Stop();
-                print(" --------------------------------------------////////////////////  ----------------? ?????  ");
+                //print(" --------------------------------------------////////////////////  ----------------? ?????  ");
                 //AtkLJOver(); 
                 //isGetJump = false;
                 MoveVX(0);
+                IsInAirDown = false;
+                if (DOWNONGROUND == DownOnGroundACNameGao)
+                {
+                    _playerUI.GetSlowByTimes(0.1f, 0.1f);
+                    //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.6"), this);
+                    if (GaochuTiaoxiaYC) GaochuTiaoxiaYC.Play();
+                }
+
+
             }
         }
 
@@ -1022,7 +1093,6 @@ public class PlayerGameBody : GameBody {
             //print("newSpeed.y >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + newSpeed.y);
             if (Hongyan.isStopped)
             {
-                
                 Hongyan.Play();
             } 
         }
@@ -1033,6 +1103,7 @@ public class PlayerGameBody : GameBody {
             if (roleDate.isBeHiting || DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR) return;
             if (newSpeed.y <= 0)
             {
+                IsInAirDown = true;
                 if (!isDowning)
                 {
                     //下降
@@ -1047,6 +1118,7 @@ public class PlayerGameBody : GameBody {
             else
             {
                 if ((DBBody.animation.lastAnimationName == JUMP2DUAN || DBBody.animation.lastAnimationName == JUMPHITWALL || DBBody.animation.lastAnimationName == RUNBEGIN) && !DBBody.animation.isCompleted) return;
+                IsInAirDown = false;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
                     //上升
@@ -1077,8 +1149,9 @@ public class PlayerGameBody : GameBody {
     }
 
     
-    protected override void Jump()
+    public override void Jump()
     {
+        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
         if (isDodgeing || isAtk || roleDate.isBeHiting) return;
         
         if (jumpNums < 1) return;
@@ -1131,12 +1204,29 @@ public class PlayerGameBody : GameBody {
             
             if (bodyScale.x == 1)
             {
-                MoveXByPosition(0.4f);
+                if (IsHitMQWall)
+                {
+                    MoveXByPosition(0.4f);
+                }
+                else
+                {
+                    MoveXByPosition(-0.4f);
+                }
+                
                 playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
             }
             else
             {
-                MoveXByPosition(-0.4f);
+                if (IsHitMQWall)
+                {
+                    MoveXByPosition(-0.4f);
+                }
+                else
+                {
+                    MoveXByPosition(0.4f);
+                }
+
+                //MoveXByPosition(-0.4f);
                 playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
                 
             }

@@ -107,6 +107,7 @@ public class DBBase : MonoBehaviour
         if (IsPingDiJing) GetJQJ();
         if (IsSCWu) GetWus();
         if (IsJYJ) GetJYJ();
+        //装饰物
         if (IsZhuangshiwu) Zhuanshiwu();
 
         if (IsTopJ) GetTopJ();

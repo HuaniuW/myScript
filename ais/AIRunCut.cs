@@ -57,7 +57,7 @@ public class AIRunCut : MonoBehaviour {
             GetComponent<RoleDate>().addYZ(addYZNum);
             gameBody = GetComponent<GameBody>();
             _aiBase = GetComponent<AIBase>();
-            print("---------------->AtkName    "+ AtkName);
+            
             if (RunName == ""||!gameBody.GetDB().animation.HasAnimation(RunName)||!gameBody.GetDB().animation.HasAnimation(AtkName))
             {
                 AcOver();
@@ -65,6 +65,8 @@ public class AIRunCut : MonoBehaviour {
             }
             oldRunName = gameBody.GetRunName();
             oldRunSpeedX = gameBody.maxSpeedX;
+            print("---------------->AtkName    " + AtkName + "   RunName  " + RunName+ "     oldRunName  "+ oldRunName);
+
             gameBody.RunACChange(RunName, moveSpeedX);
         }
     }

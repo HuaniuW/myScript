@@ -32,28 +32,31 @@ public class MapNames : MonoBehaviour
 
     //eg: lr_pd_1 平地  lr_dn_1  洞内   这里需不需要建立数组  还是直接在 系统里面 跟景色一样 根据名字生成？ 
     public List<string> lr = new List<string> {"lr_pd_1","lr_dn_1"};
-
-    public List<string> lru = new List<string> { "lru_dn_1", "lru_dn_2" };
-    public List<string> lrd = new List<string> { "lrd_dn_1"};
-
-    public List<string> lud = new List<string> { "lud_dn_1" };
-    public List<string> rud = new List<string> { "rud_dn_1" };
-    public List<string> lrud = new List<string> { "lrud_dn_1" };
+    public List<string> lr_1 = new List<string> { "lr_pd_1"};
 
 
-    public List<string> lu = new List<string> { "lu_dn_1"};
-    public List<string> ld = new List<string> { "ld_dn_1" };
 
-    public List<string> ru = new List<string> { "ru_dn_1" };
-    public List<string> rd = new List<string> { "rd_dn_1" };
+    public List<string> lru_1 = new List<string> { "lru_dn_1", "lru_dn_2" };
+    public List<string> lrd_1 = new List<string> { "lrd_dn_1"};
+
+    public List<string> lud_1 = new List<string> { "lud_dn_1" };
+    public List<string> rud_1 = new List<string> { "rud_dn_1" };
+    public List<string> lrud_1 = new List<string> { "lrud_dn_1" };
 
 
-    public List<string> ud = new List<string> { "ud_dn_1" };
+    public List<string> lu_1 = new List<string> { "lu_dn_1"};
+    public List<string> ld_1 = new List<string> { "ld_dn_1" };
 
-    public List<string> r = new List<string> { "r_pd_1" };
-    public List<string> d = new List<string> { "l_pd_1" };
-    public List<string> l = new List<string> { "l_pd_1" };
-    public List<string> u = new List<string> { "r_pd_1" };
+    public List<string> ru_1 = new List<string> { "ru_dn_1" };
+    public List<string> rd_1 = new List<string> { "rd_dn_1" };
+
+
+    public List<string> ud_1 = new List<string> { "ud_dn_1" };
+
+    public List<string> r_1 = new List<string> { "r_pd_1" };
+    public List<string> d_1 = new List<string> { "l_pd_1" };
+    public List<string> l_1 = new List<string> { "l_pd_1" };
+    public List<string> u_1 = new List<string> { "r_pd_1" };
 
 
 
@@ -132,6 +135,10 @@ public class MapNames : MonoBehaviour
     //粒子 雾
     public List<string> liziWu_1 = new List<string> { "liziWu_1_1" };
 
+
+
+
+
     //跳跃地板
     public List<string> tiaoyuediban_1 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };
     //移动的地板
@@ -151,7 +158,8 @@ public class MapNames : MonoBehaviour
     //Boss = {};  根据当前 大关卡 来选
 
 
-    public List<string> xiaoGuai_1 = new List<string> {"G_dcrj1", "G_dcr2"};
-    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_ylD"};
+    public List<string> xiaoGuai_2 = new List<string> {"G_dcrj1"};
+    public List<string> xiaoGuai_1 = new List<string> { "G_dcr2" };
+    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" };
     public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
 }

@@ -505,6 +505,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     //当前大关卡 数  用来控制 生成地图和怪的标记
     public int DaGuanKaNum = 1;
+    //这里可以根据 关卡 头 中间 字母 来判断  大关卡数字    根据数字 来生成 怪物搭配
 
 
     public void GetInMenWeizhi(string menWeiZhi)

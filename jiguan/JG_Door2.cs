@@ -17,17 +17,22 @@ public class JG_Door2 : MonoBehaviour
     {
         //print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
-        if(IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
+        if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
     }
 
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
     }
 
     void GetDoorEvent(UEvent e)
     {
-        //print("  //////////////////////////@@@   "+e.eventParams.ToString());
+        print("  //////////////////////////@@@   "+e.eventParams.ToString());
+        if (e.eventParams.ToString() == "allDie") return;
+
+
         if(e.eventParams.ToString() == "meiguai")
         {
             //没怪 不允许碰撞关门
@@ -38,7 +43,7 @@ public class JG_Door2 : MonoBehaviour
             IsCanCloseDoorMap = true;
         }else if(e.eventParams.ToString() == "open")
         {
-            //print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  ");
+            print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
             IsCanCloseDoorMap = false;
             IsCloseDoor = false;
         }
@@ -75,7 +80,7 @@ public class JG_Door2 : MonoBehaviour
     public float DoorSpeed = 0.4f;
 
 
-    bool IsCloseDoor = false;
+    public bool IsCloseDoor = false;
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
@@ -89,6 +94,7 @@ public class JG_Door2 : MonoBehaviour
 
         if (Coll.tag == "Player")
         {
+            
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
         }

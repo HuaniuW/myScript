@@ -20,7 +20,7 @@ public class ShowOutSkill : MonoBehaviour {
     /// </summary>
     /// <param name="hzSkillName">特效名字</param>
     /// <param name="isSkill">是否是技能</param>
-    internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false)
+    internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false,VOAtk vOAtk = null)
     {
 
         //if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
@@ -42,6 +42,7 @@ public class ShowOutSkill : MonoBehaviour {
         //}
 
         skillObj = Resources.Load(hzSkillName) as GameObject;
+      
 
         if (skillObj == null)
         {
@@ -50,6 +51,10 @@ public class ShowOutSkill : MonoBehaviour {
             return;
         }
         skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+
+
+
+
 
         if (skill.GetComponent<TX_zidan>()) {
             if (this.GetComponent<GameBody>().zidanPos != null)
@@ -65,9 +70,26 @@ public class ShowOutSkill : MonoBehaviour {
         }
 
 
+        if (vOAtk != null)
+        {
+            //print("vOAtk.chongjili       " + vOAtk.chongjili);
+            if (vOAtk.chongjili != 0) skill.GetComponent<JN_Date>().chongjili = vOAtk.chongjili;
+            if (vOAtk.hitKuaiOX != 0) skill.GetComponent<JN_Date>().hitKuai_xdx = vOAtk.hitKuaiOX;
+            if (vOAtk.hitKuaiOY != 0) skill.GetComponent<JN_Date>().hitKuai_xdy = vOAtk.hitKuaiOY;
+            if (vOAtk.hitKuaiSX != 0) skill.GetComponent<JN_Date>().hitKuaiSW = vOAtk.hitKuaiSX;
+            if (vOAtk.hitKuaiSY != 0) skill.GetComponent<JN_Date>().hitKuaiSH = vOAtk.hitKuaiSY;
+            if (vOAtk.atkPower != 0) skill.GetComponent<JN_Date>().atkPower = vOAtk.atkPower;
+            //print("  POWER!!!???    "+skill.GetComponent<JN_Date>().atkPower+"   >>?????     "+ vOAtk.atkPower);
+            if (vOAtk.TXOX != 0) skill.GetComponent<JN_Date>()._xdx = vOAtk.TXOX;
+            //print(" __xdx  "+ skill.GetComponent<JN_Date>()._xdx+"   ------->>>>>>  "+ vOAtk.TXOX);
+            if (vOAtk.TXOY != 0) skill.GetComponent<JN_Date>()._xdy = vOAtk.TXOY;
+            if (vOAtk.TXSX != 0) skill.GetComponent<JN_Date>()._scaleW = vOAtk.TXSX;
+        }
 
 
-      
+
+
+
 
 
         //if (Globals.isDebug)

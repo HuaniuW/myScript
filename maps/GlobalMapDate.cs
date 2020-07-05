@@ -7,7 +7,7 @@ public class GlobalMapDate : MonoBehaviour {
     // Use this for initialization
 
     //当前关卡 第几关
-    public static string CCustomStr = "";
+    public static string CCustomStr = "s";
 
     //判断是否已经有了 数据 有的话去取  没有的话 生成
     public static bool IsHasDateCCustom = false;
@@ -117,7 +117,8 @@ public class GlobalMapDate : MonoBehaviour {
 
     public static bool IsHasSpecialMap()
     {
-        foreach(string s in SpecialMapNameAndNumArr)
+        if (CCustomStr == "") return false;
+        foreach (string s in SpecialMapNameAndNumArr)
         {
             if (s.Split(':')[0] == CCustomStr) return true;
         }
@@ -127,6 +128,7 @@ public class GlobalMapDate : MonoBehaviour {
     //获取当前关卡的 特殊关卡的数组
     public static string[] GetCSpeicalMapNameArr()
     {
+        if (CCustomStr == "") return null;
         foreach (string s in SpecialMapNameAndNumArr)
         {
             print(s + "  ---  " + CCustomStr);

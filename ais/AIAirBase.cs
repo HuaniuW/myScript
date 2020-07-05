@@ -403,7 +403,7 @@ public class AIAirBase : AIBase
         }
 
 
-        if (IsBoss) return;
+        if (IsBossStop) return;
         
         if (!isAction)
         {

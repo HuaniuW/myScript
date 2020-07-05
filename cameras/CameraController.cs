@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
     float theStillNums = 0;
     void GetShock(UEvent e)
     {
-
+        //str   z2-0.3f   震动0.3秒   或者  z  持续震动
         string str = e.eventParams.ToString();
         string bt = str.Split('-')[0];
         if (str.Split('-').Length>1&& str.Split('-')[1] != null) theStillNums = float.Parse(str.Split('-')[1]);

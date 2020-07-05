@@ -261,6 +261,7 @@ public class CreateMaps : MonoBehaviour
 
                 //判断周围 看看是否坐标被占用 找出空位比较 空地
                 List<string> fxArr = new List<string> { "l", "u", "d", "r" };
+                //List<string> fxArr = new List<string> { "l", "r" };
                 int maxNum = 4;
                 kyFXArr.Clear();
                 for (int c = 0; c < fxArr.Count; c++)

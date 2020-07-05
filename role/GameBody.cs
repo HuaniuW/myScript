@@ -77,7 +77,7 @@ public class GameBody : MonoBehaviour, IRole {
     public UnityEngine.Transform zidanPos;
 
     [Header("是否需要 碰撞点 不需要的话直接是中点")]
-    public bool IsNeedHitPos = false;
+    public bool IsNeedHitPos = true;
 
     protected Rigidbody2D playerRigidbody2D;
     public Rigidbody2D GetPlayerRigidbody2D()
@@ -91,6 +91,17 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (!DBBody) DBBody = GetComponentInChildren<UnityArmatureComponent>();
         return DBBody;
+    }
+
+    public bool IsGetStand()
+    {
+        return GetDB().animation.lastAnimationName == STAND;
+    }
+
+
+    public bool IsDownOnGround()
+    {
+        return GetDB().animation.lastAnimationName == DOWNONGROUND;        
     }
 
     protected Vector3 bodyScale;
@@ -155,12 +166,13 @@ public class GameBody : MonoBehaviour, IRole {
         IsJiasu = false;
 
         if (roleDate) roleDate.isBeHiting = false;
-        if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= gravityScaleNums) playerRigidbody2D.gravityScale = gravityScaleNums;
+        if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= _recordGravity) playerRigidbody2D.gravityScale = _recordGravity;
     }
 
     protected RoleDate roleDate;
 
     public float gravityScaleNums = 4.5f;
+    protected float _recordGravity = 4.5f;
     protected string RUN = "run_3";
     protected string STAND = "stand_1";
     protected const string RUNBEGIN = "runBegin_1";
@@ -168,7 +180,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected const string JUMPUP = "jumpUp_1";
     protected const string JUMPDOWN = "jumpDown_1";
     protected const string JUMPHITWALL = "jumpHitWall_1";
-    protected const string DOWNONGROUND = "downOnGround_1";
+    protected string DOWNONGROUND = "downOnGround_1";
     protected const string JUMP2DUAN = "jump2Duan_1";
     protected const string ATK = "atk_";
     protected string DODGE1 = "dodge_1";
@@ -735,6 +747,8 @@ public class GameBody : MonoBehaviour, IRole {
         isBackUping = false;
         
         if (roleDate.isBeHiting) return;
+        if (isInAiring && (!isJumping || !isJumping2)) return;
+
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
@@ -749,7 +763,6 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         if (isAtking) return;
-
         //resetAll();
         isAtkYc = false;
         isRunLefting = true;
@@ -796,6 +809,7 @@ public class GameBody : MonoBehaviour, IRole {
         //print(" --------------------------- ???? isAcing  "+ isAcing);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
+        if (isInAiring && (!isJumping || !isJumping2)) return;
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
@@ -808,6 +822,7 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         if (isAtking) return;
+        
         //resetAll();
         isAtkYc = false;
         isRunRighting = true;
@@ -832,8 +847,10 @@ public class GameBody : MonoBehaviour, IRole {
     {
         //print("   >>>>>>>> run   !!! ");
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        
         //print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
+        //print(DBBody.animation.lastAnimationName + "  -------------->?????????              " + RUN);
         //print("??????   "+isRunLefting +"    "+isRunRighting);
         //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
 
@@ -969,7 +986,7 @@ public class GameBody : MonoBehaviour, IRole {
         Vector2 v2 = new Vector2(0,playerRigidbody2D.velocity.y);
     }
 
-    protected virtual void Jump()
+    public virtual void Jump()
     {
         if (isAtking || isDodgeing || roleDate.isBeHiting) return;
         if (isCanJump && !roleDate.isBeHiting && !isAtking && DBBody.animation.lastAnimationName != JUMPHITWALL &&
@@ -1193,6 +1210,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (DBBody) Stand();
         if (isSetSpeedZero && playerRigidbody2D) {
             //print("?????????????????       " +playerRigidbody2D.velocity);
+
             playerRigidbody2D.velocity = Vector2.zero;
             //playerRigidbody2D.velocity *= 0.5f;
         }
@@ -1230,6 +1248,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         //Tools.timeData();
         playerRigidbody2D = GetComponent<Rigidbody2D>();
+        _recordGravity = gravityScaleNums;
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
         //print("DBBody   "+ DBBody);
         _theTimer = GetComponent<TheTimer>();
@@ -1507,12 +1526,13 @@ public class GameBody : MonoBehaviour, IRole {
         //脚下的烟幕
         Yanmu();
 
+        //附带效果
         FuDaiXiaoguos();
 
 
         if (roleDate.isDie)
         {
-            DBBody.animation.timeScale = 1;
+            if(GetComponent<DieOut>()&& !GetComponent<DieOut>().IsNeedDieSlowAC) DBBody.animation.timeScale = 1;
             GetDie();
             return;
         }
@@ -1669,7 +1689,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void GetBeHit()
     {
-        print("jinde shi nage???");
+        //print("jinde shi nage???");
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
             roleDate.isBeHiting = false;
             if (IsGround) GetStand();
@@ -2039,7 +2059,7 @@ public class GameBody : MonoBehaviour, IRole {
                 else {
                     //GetPause(0.1f);
                     //print("vOAtk.txName    " + vOAtk.txName);
-                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName,false,vOAtk);
                     isTXShow = false;
                 }
                 
