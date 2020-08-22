@@ -63,7 +63,7 @@ public class Mianban1 : MonoBehaviour {
         //hzIdList.AddRange(t2);
 
         //print(geziArr.Count);
-        getDate();
+        HZGetDate();
         GetInHZ();
         xuanzhong.GetComponent<CanvasGroup>().alpha = 0;
         kuang.position = gezi1.position;
@@ -139,7 +139,7 @@ public class Mianban1 : MonoBehaviour {
         if (gz != null) {
             GetObjByNameInGezi(e.eventParams.ToString(), gz);
             //生成全局数据
-            saveDate();
+            HZSaveDate();
         }
     }
 
@@ -266,7 +266,7 @@ public class Mianban1 : MonoBehaviour {
 
     string saveDateStr;
     //存储数据
-    public string saveDate()
+    public string HZSaveDate()
     {
         saveDateStr = "";
         for (var i = 0; i < geziArr.Count; i++)
@@ -279,17 +279,21 @@ public class Mianban1 : MonoBehaviour {
             }
         }
         
-        GlobalSetDate.instance.CurrentUserDate.bagDate = saveDateStr;
-        //if (Globals.isDebug) print("---saveDateStr  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
+        //GlobalSetDate.instance.CurrentMapMsgDate.bagDate = saveDateStr;
+        //GlobalDateControl.SaveMapDate();
+        //if (Globals.isDebug) print("保存 徽章信息---saveDateStr  " + GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
         return saveDateStr;
     }
 
     string[] getDateStrArr = { };
     //获取并分解数据
-    public void getDate()
+    public void HZGetDate()
     {
-        if (GlobalSetDate.instance.CurrentUserDate == null) return;
-        string tempDateStr = GlobalSetDate.instance.CurrentUserDate.bagDate;// "huizhang1_0-huizhang2_2";
+        //print("  获取徽章》>  ");
+        if (GlobalSetDate.instance.CurrentMapMsgDate == null) return;
+        //print("  游戏 开始 获取 背包 徽章数据！   "+ GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
+        //print("  游戏 开始 获取 背包 徽章数据！CurrentUserDate  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
+        string tempDateStr = GlobalSetDate.instance.CurrentMapMsgDate.bagDate;// "huizhang1_0-huizhang2_2";
         //print("tempDateStr>     " + tempDateStr);
         getDateStrArr = tempDateStr.Split('-');
         hzIdList.AddRange(getDateStrArr);

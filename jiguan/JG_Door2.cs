@@ -9,9 +9,67 @@ public class JG_Door2 : MonoBehaviour
     {
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
         AddDoorListener();
+        
     }
 
 
+    //----------------------------------检测 boss die后的记录 门关闭  判断的 是 boss的 activeSelf
+
+    [Header("没有boss或者精英怪 的时候 是否需要关门 并且组织碰撞关门")]
+    public bool IsNoBossNeedCloseDoor = false;
+    public GameObject BossOrJY;
+    bool IsStopHitJG = false;
+    void CheckIsNoBossCloseDoor()
+    {
+        if (!IsNoBossNeedCloseDoor|| IsStopHitJG) return;
+        IsNoBossNeedCloseDoor = false;
+        //print(" >>>   "+(BossOrJY == null));
+        if (!BossOrJY.activeSelf)
+        {
+            //print("???????   wokao  guanmena  a  a a a a  ");
+            IsStopHitJG = true;
+            
+            IsCloseDoor = true;
+            Door.transform.position = new Vector3(Door.transform.position.x, DownPos.transform.position.y, Door.transform.position.z);
+            SetPlayerPos();
+        }
+    }
+
+    bool IsHasSetPlayerPos = false;
+    void SetPlayerPos()
+    {
+        if (IsHasSetPlayerPos) return;
+        IsHasSetPlayerPos = true;
+        GameObject player = GlobalTools.FindObjByName("player");
+        if (player) player.transform.position = new Vector2(86.82f, 24.1f);
+        //print(" ------>>>>>    "+player.transform.position);
+        GameObject cm = GlobalTools.FindObjByName("MainCamera");
+
+        cm.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, cm.transform.position.z); 
+    }
+
+    //------------------------------------------------------
+
+    [Header("是否自能碰撞一次")]
+    public bool IsOnlyCanHitOne = false;
+
+    //-------------------------------------触发关门 同时 触发其他机关的 设定
+    public bool IsOtherJG1 = false;
+    public BoxCollider2D Kuai;
+    bool IsJGOver = false;
+    void GetOtherJG1()
+    {
+        if (!IsOtherJG1) return;
+        if (IsJGOver) return;
+        IsJGOver = true;
+        GameObject cm = GlobalTools.FindObjByName("MainCamera");
+        cm.GetComponent<CameraController>().GetBounds(Kuai, true);
+        cm.GetComponent<CameraController>().SetNewPosition(new Vector3(cm.transform.position.x, cm.transform.position.y, -14));
+    }
+    //----------------------------------------------------------------------
+
+
+    [Header("检测 摄像机 怪组是否有怪 没有的话 开门并且不许关门")]
     public bool IsNeedCheck = true;
     public void AddDoorListener()
     {
@@ -29,7 +87,7 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        print("  //////////////////////////@@@   "+e.eventParams.ToString());
+        //print("  //////////////////////////@@@   "+e.eventParams.ToString());
         if (e.eventParams.ToString() == "allDie") return;
 
 
@@ -43,7 +101,7 @@ public class JG_Door2 : MonoBehaviour
             IsCanCloseDoorMap = true;
         }else if(e.eventParams.ToString() == "open")
         {
-            print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
+            //print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
             IsCanCloseDoorMap = false;
             IsCloseDoor = false;
         }
@@ -57,6 +115,7 @@ public class JG_Door2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckIsNoBossCloseDoor();
         if (IsCloseDoor)
         {
             CloseDoor();
@@ -90,13 +149,16 @@ public class JG_Door2 : MonoBehaviour
         //多个怪的时候 怎么处理？  只要有精英怪就关门 那么 每个小关卡 都有可能 随机出精英怪？
         //print("  ///////////////////我碰到关门机关了  IsCanCloseDoorMap  "+ IsCanCloseDoorMap);
         if (!IsCanCloseDoorMap) return;
-        
+        if (IsStopHitJG) return;
+
+        if (IsOnlyCanHitOne) IsStopHitJG = true;
 
         if (Coll.tag == "Player")
         {
             
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
+            GetOtherJG1();
         }
     }
 

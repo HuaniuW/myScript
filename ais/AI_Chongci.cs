@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AI_Chongci : MonoBehaviour
+public class AI_Chongci : MonoBehaviour, ISkill
 {
 
     public GameObject HitKuai;
@@ -194,7 +194,7 @@ public class AI_Chongci : MonoBehaviour
 
     bool IsShowTXAndHitKuai = false;
 
-    void ReSetAll()
+    public void ReSetAll()
     {
         
         _isStarting = false;
@@ -218,6 +218,16 @@ public class AI_Chongci : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<AIBase>().IsTuihuiFangshouquing)
+        {
+            ReSetAll();
+            return;
+        }
         if (_isStarting) startRunToTarget();
+    }
+
+    public bool IsGetOver()
+    {
+        return IsAcOver();
     }
 }

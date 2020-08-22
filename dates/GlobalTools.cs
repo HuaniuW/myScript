@@ -134,6 +134,24 @@ public class GlobalTools : MonoBehaviour {
         return speedV2;
     }
 
+    //根据 向量 和速度 取新的 速度
+    public static Vector2 GetVector2ByV2(Vector2 v2, float speed)
+    {
+        Vector2 speedV2 = Vector2.zero;
+        float speedY = Mathf.Sin(Mathf.Atan2(v2.y, v2.x)) * speed;
+        float speedX = Mathf.Sin(Mathf.Atan2(v2.x, v2.y)) * speed;
+        speedV2 = new Vector2(speedX, speedY);
+        return speedV2;
+    }
+
+    //根据 弧度 获取 新的  向量
+    public static Vector2 GetNewV2ByHuDu(float hudu, Vector2 zhongXin)
+    {
+        float _x = zhongXin.x * Mathf.Cos(hudu) + zhongXin.y * Mathf.Sin(hudu);
+        float _y = -zhongXin.x * Mathf.Sin(hudu) + zhongXin.y * Mathf.Cos(hudu);
+        return new Vector2(_x, _y);
+    }
+
 
 
 
@@ -626,6 +644,11 @@ public class GlobalTools : MonoBehaviour {
         Color color = new Color(r, g, b);
         return color;
     }
+
+
+
+
+    
 
 
 

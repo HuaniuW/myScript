@@ -63,9 +63,10 @@ public class GuaiOutControl : MonoBehaviour {
 
     void GetJGDateBySave()
     {
-        if(GlobalSetDate.instance.currentGKDate != "")
+        string currentGKDate = GlobalDateControl.GetCurrentGKDate();
+        if (currentGKDate != "")
         {
-            string[] arr = GlobalSetDate.instance.currentGKDate.Split(',');
+            string[] arr = currentGKDate.Split(',');
             if (GlobalTools.IsHasDate(JGDate, arr))
             {
                 //有数据

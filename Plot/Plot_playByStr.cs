@@ -9,23 +9,183 @@ public class Plot_playByStr : MonoBehaviour
     {
         HideAlertBar();
         GetStart();
+        CheckSaveDate();
+        
     }
 
-  
+
+    public string TalkID = "talk01";
 
     // Update is called once per frame
     void Update()
     {
         if(!IsHitAlertControl)ButtonControl();
+        if (IsHitInAir) HitKuaiInAir();
+        if(IsStartPlot) GetStartPlotStr();
     }
+
+    //是否已经 播放完  读取记录判断   ***新库类 根据位置等  读取记录信息
+    void CheckSaveDate()
+    {
+        //剧情是否被播过？
+        //GlobalSetDate.instance.TempZGuanKaStr;
+        if (GlobalDateControl.IsHasDateByName(TalkID))
+        {
+            //有记录
+            IsHitKuaiStop = false;
+        }
+        else
+        {
+            print("该剧情 没有 记录过！");
+        }
+    }
+
+
+    //剧情角色 相对玩家位置的 转身
+    //第二次触发 的剧情内容
+
+    //自动播放第一条消息
+    //播放完后 取消 碰撞就触发 并且记录  (剧情播完 才能记录)
+
+
+
+
+
+    [Header("是否碰到 剧情块就 停止所有操作")]
+    public bool IsHitKuaiStop = true;
+
+    GameObject player;
+
+    void HitKuaiStop()
+    {
+       
+
+        //停止 动作
+        Globals.isInPlot = true;
+
+        player = GlobalTools.FindObjByName("player");
+
+        //角色 头发变白
+        player.GetComponent<PlayerGameBody>().Bianbai();
+
+        //player.GetComponent<GameBody>().StopVSpeed();
+        player.GetComponent<GameBody>().GetStand();
+
+        if (player.GetComponent<GameBody>().isInAiring)
+        {
+            IsHitInAir = true;
+        }
+    }
+
+    bool IsHitInAir = false;
+    void HitKuaiInAir()
+    {
+        if (player.GetComponent<GameBody>().IsGround) {
+            IsHitInAir = false;
+            player.GetComponent<GameBody>().GetStand();
+            player.GetComponent<GameBody>().GetDB().animation.Play();
+        }
+        else
+        {
+            player.GetComponent<GameBody>().GetDB().animation.GotoAndPlayByFrame(player.GetComponent<GameBody>().GetJumpDownACName());
+            player.GetComponent<GameBody>().GetDB().animation.Stop();
+        } 
+    }
+
+
+    bool IsStartPlot = false;
+    bool IsCanClickRemovePlotKuai = false;
+    float startNums = 0;
+    bool IsPlotOver = false;
+    
+    void GetStartPlotStr()
+    {
+        if (IsCanClickRemovePlotKuai) return;
+        startNums += Time.deltaTime;
+        if (startNums>2f)
+        {
+            startNums = 0;
+            IsStartPlot = false;
+            IsCanClickRemovePlotKuai = true;
+        }
+    }
+
+
+    
+
+    void OnTriggerEnter2D(Collider2D Coll)
+    {
+        if (GlobalDateControl.IsHasDateByName(TalkID)) return;
+        if (!IsHitKuaiStop && !IsHitAlertControl && !isStarting) return;
+        if (Coll.tag == "Player")
+        {
+            if (IsHitKuaiStop)
+            {
+                IsStartPlot = true;
+                startNums = 0;
+                playNums = 0;
+                HitKuaiStop();
+                if (GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) Globals.IsHitPlotKuai = true;
+                print("IsHitKuaiStop!!!!!   剧情开始 ");
+                GetStartPlotByTimes();
+                //显示提示牌
+                //ShowAlertBar();
+                return;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //if (!IsHitAlertControl && !isStarting)
+            //{
+            //    //自动播放的
+            //    isStarting = true;
+            //    playNums = 0;
+            //    //GetStart();
+            //    GetStartPlotByTimes();
+            //}
+            //else
+            //{
+            //    //玩家点击交互的
+            //    playNums = 0;
+            //    //StopPlayerControl();
+            //    if (GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) Globals.IsHitPlotKuai = true;
+            //    print("hitplotKuai");
+            //    //显示提示牌
+            //    //ShowAlertBar();
+            //}
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     void ButtonControl()
     {
+
+        //return;
+
         //if (!Globals.isInPlot) return;
         if (Input.GetKeyDown(KeyCode.J))
         {
-            //print("-------------------------------------尼玛！！1");
+            print("-------------------------------------尼玛！！1");
             //对话 快速跳过
             if (talkBar) talkBar.GetComponent<UI_talkBar>().RemoveSelf();
             GetComponent<TheTimer>().End();
@@ -67,7 +227,7 @@ public class Plot_playByStr : MonoBehaviour
     [Header("是否停止角色的行动 这里 在角色确定打开才停止")]
     public bool IsStopPlayerControl = false;
 
-    [Header("是否 碰撞 后提示操作 这里会停止角色的 行动")]
+    [Header("是否 碰撞 后提示操作 这里会停止角色的 行动 角色点击才能跳过对话")]
     public bool IsHitAlertControl = false;
 
     string _plotString;
@@ -77,11 +237,7 @@ public class Plot_playByStr : MonoBehaviour
     }
 
 
-    void StopPlayerControl()
-    {
-        Globals.isInPlot = true;
-        GlobalTools.FindObjByName("player").GetComponent<GameBody>().GetStand();
-    }
+  
 
     void CanControl()
     {
@@ -109,6 +265,7 @@ public class Plot_playByStr : MonoBehaviour
         print("?????? playNums:    " + playNums);
         if (IsHitAlertControl&& playNums == maxNums)
         {
+            //对话完成 这里之后可以操作  
             if (talkBar) talkBar.GetComponent<UI_talkBar>().RemoveSelf();
             OutHitKuaiReSet();
             GetComponent<TheTimer>().TimesAdd(0.4f, TimeTalkBarCallBack2);
@@ -117,6 +274,10 @@ public class Plot_playByStr : MonoBehaviour
             print("  对话框 结束 playNums 归零 " + playNums);
             print("---------------------------------------------------------------------------");
             if (IsStopPlayerControl) CanControl();
+            
+            //存档
+            GlobalDateControl.SetMsgInCurrentGKDateAndSetInZGKDate(this.TalkID);
+            IsPlotOver = true;
             return;
         }
         string str = plotList[playNums];
@@ -157,8 +318,6 @@ public class Plot_playByStr : MonoBehaviour
             if (talkBar) talkBar.GetComponent<UI_talkBar>().RemoveSelf();
             //隐藏掉 提示牌
             HideAlertBar();
-            
-            
             _talkContent = talkContent;
             //if(talkPos == null||talkPos == Vector2.zero)
             //{
@@ -176,7 +335,7 @@ public class Plot_playByStr : MonoBehaviour
             talkBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TalkBar") as GameObject);
 
             //这里时间减了 0.5f就是错开了 显示  UIBar 提前了0.5秒消失 0.5秒后 会再自动调用下一句
-            talkBar.GetComponent<UI_talkBar>().ShowTalkText(talkContent, talkPos, time - 0.5f, !IsHitAlertControl);
+            talkBar.GetComponent<UI_talkBar>().ShowTalkText(talkContent, talkPos, time - 0.5f);
         }
     }
 
@@ -189,9 +348,9 @@ public class Plot_playByStr : MonoBehaviour
 
     void TimeTalkBarCallBack(float nums)
     {
-        if (IsStopPlayerControl) StopPlayerControl();
+        if (IsStopPlayerControl) HitKuaiStop();
         talkBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TalkBar") as GameObject);
-        talkBar.GetComponent<UI_talkBar>().ShowTalkText(_talkContent, _talkPos, _distime, !IsHitAlertControl);
+        talkBar.GetComponent<UI_talkBar>().ShowTalkText(_talkContent, _talkPos, _distime);
         IsSHowTalkBar = false;
         //GetComponent<TheTimer>().TimesAdd(1f, TimeTalkBarCallBack2);
 
@@ -225,37 +384,15 @@ public class Plot_playByStr : MonoBehaviour
     }
 
 
-    void OnTriggerEnter2D(Collider2D Coll)
-    {
-        if (Coll.tag == "Player")
-        {
-            if (!IsHitAlertControl && !isStarting)
-            {
-                //自动播放的
-                isStarting = true;
-                playNums = 0;
-                //GetStart();
-                GetStartPlotByTimes();
-            }
-            else
-            {
-                //玩家点击交互的
-                playNums = 0;
-                //StopPlayerControl();
-                if (GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) Globals.IsHitPlotKuai = true;
-                print("hitplotKuai");
-                //显示提示牌
-                ShowAlertBar();
-            }
-        }
-    }
+
+  
 
     bool IsSHowTalkBar = false;
     [Header("提示显示的 对话按钮显示动画 提示玩家点击")]
     public GameObject AlertObj;
     private void OnTriggerStay2D(Collider2D Coll)
     {
-
+        
         if (Coll.tag == "Player")
         {
             if (IsHitAlertControl)
@@ -263,7 +400,15 @@ public class Plot_playByStr : MonoBehaviour
                 //print("?????????  IsHitAlertControl "+ IsHitAlertControl);
                 if (Input.GetKeyDown(KeyCode.J))
                 {
+                    if (IsPlotOver) return;
                     if (!GlobalTools.FindObjByName("player").GetComponent<GameBody>().IsGround) return;
+
+                    print("startNums 计时器      " + startNums);
+
+                    if (!IsCanClickRemovePlotKuai) return;
+                    IsCanClickRemovePlotKuai = false;
+                    IsStartPlot = true;
+
                     if (!IsSHowTalkBar)
                     {
                         IsSHowTalkBar = true;

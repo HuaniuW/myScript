@@ -33,12 +33,21 @@ public class DieOut : MonoBehaviour {
     //标记开门
     public bool IsBiaojiOpenDoor = false;
 
+    [Header("自身的碰撞块")]
+    public GameObject HitKuai;
+
+
+
     [Header("标记 检查 是否 怪都die了")]
     public bool IsBiaojiAllDieStart = true;
     void DieOutDo()
     {
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
+
+            if (IsOrter1) DieBeBlack();
+
+            if (HitKuai) HitKuai.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
             if(IsBiaojiAllDieStart) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "allDie"), this);
             if (IsBiaojiOpenDoor) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
@@ -67,6 +76,16 @@ public class DieOut : MonoBehaviour {
         //掉落 血  蓝  物品
     }
 
+
+    public bool IsOrter1 = false;
+    void DieBeBlack()
+    {
+        GetComponent<GameBody>().SetInitColor(Color.black);
+        GetComponent<GameBody>().GetBoneColorChange(Color.black);
+    }
+
+
+
     //掉落物
     void Diaoluowu()
     {
@@ -74,8 +93,8 @@ public class DieOut : MonoBehaviour {
         int jv = Random.Range(0, 100);
         int fx = this.transform.position.x > this.GetComponent<AIBase>().gameObj.transform.position.x ? 1 : -1;
         string[] diaoluowuArr = diaoluowu.Split('|');
-        print("掉落物  "+ diaoluowuArr.Length);
-        for (var i = 0; i < diaoluowuArr.Length; i++)
+        //print("掉落物  "+ diaoluowuArr.Length);
+        for (var i = 0; i < diaoluowuArr.Length; i++) 
         {
             string objName = diaoluowuArr[i].Split('-')[0];
             //掉落几率
@@ -88,10 +107,15 @@ public class DieOut : MonoBehaviour {
                     //BOSS掉落物 掉落到指定位置  出现在指定位置
                     //魂 和和徽章
                     //这个 bossDieOutPosition 位置 必须在场景中放置 一个点位置
-                    if(bossDieOutPos == null) bossDieOutPos = GlobalTools.FindObjByName("bossDieOutPosition").transform;
+                    if(bossDieOutPos == null&& GlobalTools.FindObjByName("bossDieOutPosition")) bossDieOutPos = GlobalTools.FindObjByName("bossDieOutPosition").transform;
                     if (bossDieOutPos)
                     {
                         o.transform.position = new Vector2(bossDieOutPos.position.x+i*2,bossDieOutPos.position.y);
+                    }
+                    else
+                    {
+                        //如果没有 boss出现点 就是开门 后面 继续  掉落物在 后面的场景
+
                     }
                 }else
                 {
@@ -173,14 +197,27 @@ public class DieOut : MonoBehaviour {
     }
 
 
+    [Header("特殊 单独的 门处理")]
+    public bool IsSpciDoorOpen = false;
+    // 加入的 是 里面有 JG_Door2 的 obj
+    public GameObject Door1;
+    public GameObject Door2;
+
     [Header("Die后需要处理的门的名字和动作")]
     public string DoorNames;//Men_1-0|Men_2-0
     void DoorDo()
     {
+        if (IsSpciDoorOpen)
+        {
+            if (Door1 && Door1.GetComponent<JG_Door2>()) Door1.GetComponent<JG_Door2>().IsCloseDoor = false;
+            if (Door2 && Door2.GetComponent<JG_Door2>()) Door2.GetComponent<JG_Door2>().IsCloseDoor = false;
+        }
+
+
         if (DoorNames == null|| DoorNames == "") return;
         string[] doorArr = DoorNames.Split('|');
         int Length = doorArr.Length;
-        print("Length    " + Length);
+        //print("Length    " + Length);
         if (Length == 0) return;
         for(var i = 0; i < Length; i++)
         {

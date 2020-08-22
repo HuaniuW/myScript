@@ -178,18 +178,18 @@ public class PlayerRoleDate : RoleDate
 
     void changeHZ(UEvent e)
     {
-        List<RectTransform> t = (List<RectTransform>)e.eventParams;
+        List<RectTransform> hzDateList = (List<RectTransform>)e.eventParams;
         //还原初始数值
         GetCSDate();
-        if (t.Count != 0)
+        if (hzDateList.Count != 0)
         {
             beishuArr.Clear();
-            foreach (var hz in t)
+            foreach (var hz in hzDateList)
             {
                 GetHZDate(hz.GetComponent<HZDate>());
             }
             //诅咒宝石属性计算
-            GetHZZZ(t);
+            GetHZZZ(hzDateList);
             GetHZBeishu();
         }
         else
@@ -210,8 +210,8 @@ public class PlayerRoleDate : RoleDate
         string _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live+"/"+this.maxLive + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "/" + this.maxLive + "</color>\n";
         string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
         string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
-        string _yingshiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
-        str += _liveStr + _atkStr + _defStr+ _yingshiStr;
+        string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
+        str += _liveStr + _atkStr + _defStr+ _yingzhiStr;
         return str;
     }
 

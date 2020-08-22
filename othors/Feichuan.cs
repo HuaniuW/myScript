@@ -113,6 +113,10 @@ public class Feichuan : MonoBehaviour {
             }
         }
 
+        //print("起始剧情结束");
+
+        GlobalDateControl.SetMsgInCurrentGKDateAndSetInZGKDate(Plot1.QISHI,false,true);
+
     }
 
     public float speedX = 0.1f;

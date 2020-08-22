@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JN_JumpCut : MonoBehaviour,ISkill
+public class JN_JumpCut : MonoBehaviour, ISkill
 {
 
     public float TempGravity = 6;
@@ -88,6 +88,12 @@ public class JN_JumpCut : MonoBehaviour,ISkill
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<AIBase>().IsTuihuiFangshouquing)
+        {
+            ReSetAll();
+            return;
+        }
+
         if (!GetComponent<RoleDate>().isDie &&IsJumpToPlayerPostion &&IsStartXV && _gameBody.isInAiring&&_gameObj)
         {
             //print("我进来没、、、、、、、、、、、、、、///////////////////////////////////-------------->");

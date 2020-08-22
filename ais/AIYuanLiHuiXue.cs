@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIYuanLiHuiXue : MonoBehaviour
+public class AIYuanLiHuiXue : MonoBehaviour,ISkill
 {
     //当玩家 远离的 时候 进入 回血状态
 
@@ -34,7 +34,7 @@ public class AIYuanLiHuiXue : MonoBehaviour
         isResetAll = false;
     }
 
-    public void GetStart()
+    public void GetStart(GameObject obj)
     {
         _theTimer.ContinuouslyTimesAdd(Hxtimes,1,callBack);
         _theTimer.GetContinuouslyTimesStart();
@@ -48,7 +48,7 @@ public class AIYuanLiHuiXue : MonoBehaviour
 
 
     bool isResetAll = false;
-    void ReSetAll()
+    public void ReSetAll()
     {
 
         

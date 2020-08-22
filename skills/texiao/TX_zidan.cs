@@ -72,6 +72,14 @@ public class TX_zidan : MonoBehaviour
 
     protected virtual void fire()
     {
+
+        if (_isFSByFX)
+        {
+            GetComponent<Rigidbody2D>().velocity = FSFXV2;
+            return;
+        }
+
+
         if (_player&& isFaShe) {
             isFaShe = false;
             print("----------------------------------------->>  fire!!!!! "+speeds);
@@ -82,6 +90,14 @@ public class TX_zidan : MonoBehaviour
 
     [Header("是否自行开启向 玩家的 攻击")]
     public bool IsAtkAuto = true;
+
+
+    public void CloseAutoFire()
+    {
+        IsAtkAuto = false;
+    }
+
+
 
     //指定的攻击目标
     public void GetTargetObj(GameObject targetObj)
@@ -97,6 +113,16 @@ public class TX_zidan : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(v2, this.transform.position, speeds);
     }
+
+    bool _isFSByFX = false;
+    Vector2 FSFXV2 = new Vector2(1, 0);
+    public void SetZiDanSpeedByFX(float scaleX)
+    {
+        _isFSByFX = true;
+        FSFXV2 = new Vector2(1, 0);
+        FSFXV2 *= scaleX*speeds;
+    }
+
 
     [Header("爆炸 特效 的类型  爆炸特效名字")]
     public int bzType = 1;
@@ -139,6 +165,7 @@ public class TX_zidan : MonoBehaviour
     public virtual void ResetAll()
     {
         //testN = 0;
+        _isFSByFX = false;
     }
 
     public virtual void RemoveSelf()

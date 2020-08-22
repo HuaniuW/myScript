@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DragonBones;
 
-public class JN_SFBase : MonoBehaviour
+public class JN_SFBase : MonoBehaviour, ISkill
 {
     //技能释放基础类
     [Header("释放特效的 动作 名字")]
@@ -72,6 +72,12 @@ public class JN_SFBase : MonoBehaviour
 
     protected virtual void GetUpDate()
     {
+        if (GetComponent<AIBase>().IsTuihuiFangshouquing)
+        {
+            ReSetAll();
+            return;
+        }
+
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
             ReSetAll();
@@ -246,7 +252,7 @@ public class JN_SFBase : MonoBehaviour
     private void OnDisable()
     {
         print("释放技能类 销毁");
-        _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
+        if(_gameBody) _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
     }
 
 
@@ -262,6 +268,14 @@ public class JN_SFBase : MonoBehaviour
     public virtual bool NearRoleInDistance(float distance,float distanceY = 0)
     {
         if (_player == null) return true;
+
+        if (_player.GetComponent<RoleDate>().isDie) {
+            ReSetAll();
+            return false;
+        }
+        
+
+
 
         float dyU = _player.transform.position.y + 2;
         float dyD = _player.transform.position.y - 2;

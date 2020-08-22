@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIRunCut : MonoBehaviour {
+public class AIRunCut : MonoBehaviour,ISkill{
     string oldRunName = "";
     float oldRunSpeedX = 0;
     public float CutDistance = 4;
@@ -28,8 +28,14 @@ public class AIRunCut : MonoBehaviour {
 	void Update () {
         if (isAcing)
         {
+            if (GetComponent<AIBase>().IsTuihuiFangshouquing) {
+                ReSetAll();
+                return;
+            }
 
+            //重启
             if(GetComponent<AIBase>().IsChongqi) AcOver();
+            //
 
 
             if (!isRunNear)
@@ -133,5 +139,15 @@ public class AIRunCut : MonoBehaviour {
     public bool IsAcOver()
     {
         return !isAcing;
+    }
+
+    public void ReSetAll()
+    {
+        AcOver();
+    }
+
+    public bool IsGetOver()
+    {
+        return IsAcOver();
     }
 }

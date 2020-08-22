@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DragonBones;
 
-public class AIYiShan : MonoBehaviour {
+public class AIYiShan : MonoBehaviour ,ISkill {
     [Header("攻击动作")]
     public string acName = "";
     [Header("起手招式停顿时间")]
@@ -33,7 +33,7 @@ public class AIYiShan : MonoBehaviour {
 
 
     protected UnityArmatureComponent DBBody;
-    public void GetStart()
+    public void GetStart(GameObject gameObj)
     {
 
         //判断 前面距离
@@ -312,5 +312,15 @@ public class AIYiShan : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    public void ReSetAll()
+    {
+        ReSet();
+    }
+
+    public bool IsGetOver()
+    {
+        return IsAtkACOver();
     }
 }

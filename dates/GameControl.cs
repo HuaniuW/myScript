@@ -44,10 +44,10 @@ public class GameControl : MonoBehaviour {
         GuankaName = SceneManager.GetActiveScene().name;
         if (IsInPlot) return;
         GetPlayer();
-        print("取到 player!!!");
+        //print("取到 player!!!");
         if (player == null)
         {
-            print("没有找到主角 游戏中断！");
+            //print("没有找到主角 游戏中断！");
             return;
         }
         GetPlayerUI();
@@ -92,11 +92,11 @@ public class GameControl : MonoBehaviour {
     //通过方向 来判断 门 和放置玩家的位置
     public void GetPlayerPosByFX()
     {
-        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
+        //print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
         foreach(GameObject door in ListDoor)
         {
-            print("  ---  "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi+"   :   "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
+            //print("  ---  "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi+"   :   "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
 
             if(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi == GetFanFX(GlobalSetDate.instance.DanqianMenweizhi))
             {
@@ -121,23 +121,23 @@ public class GameControl : MonoBehaviour {
 
     public void SetPlayerFXAndCameraPos()
     {
-        print("------》  "+player.transform.localScale);
+        //print("------》  "+player.transform.localScale);
 
-        print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
+        //print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
         if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "d")
         {
-            print(" 右转！！！！ ");
+            //print(" 右转！！！！ ");
 
             player.GetComponent<PlayerGameBody>().TrunFXStrRight();
         }
         else
         {
-            print(" ----》左转！！！！ ");
+            //print(" ----》左转！！！！ ");
             player.GetComponent<PlayerGameBody>().TrunFXStrLeft();
         }
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, this.transform.position.z);
 
-        print("------222222》  " + player.transform.localScale);
+        //print("------222222》  " + player.transform.localScale);
     }
 
     public string GetFanFX(string fx) {
@@ -172,30 +172,31 @@ public class GameControl : MonoBehaviour {
     [Header("记录关卡的动态数据")]
     public string GuanKaStr = "";
     
-    string TempCurrentGKDate;
+    //string TempCurrentGKDate;
     //初始化关卡数据
     public void InitGuanKaDate()
     {
+        print(" 初始化  关卡数据！！！！！！  ");
         //进游戏 才能调用 
-        GlobalSetDate.instance.GetGameAllCunstomStr();
+        //GlobalSetDate.instance.GetGameAllCunstomStr();
+        GlobalDateControl.GetGameAllCunstomStr();
         //查找存档中是否有本关卡的关卡记录  通过本关卡名字获取本关卡数据
-        TempCurrentGKDate = GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);
-        print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
+        string TempCurrentGKDate = GlobalDateControl.GetCurrentGKDate();  //GlobalSetDate.instance.GetGuanKaStrByGKNameAndRemoveIt(SceneManager.GetActiveScene().name);
+        //print("关于本关卡的关卡记录>>   " + TempCurrentGKDate);
         if (TempCurrentGKDate == null) {
+            //print(" 记录 null   "+ TempCurrentGKDate);
             TempCurrentGKDate = ""; //GuanKaStr;
         }
         else
         {
+            //print("  有关卡记录  草！！！！！！！  ");
             //如果全局数据中有本关卡数据  清除掉原数据中本关卡数据   匹配本关卡数据
             GetPiPei();
         }
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
-
-        
-
-       
     }
+
 
     //这个和自动地图区别开 防止混合调用了
     public bool IsCanBeCheckGuai = true;
@@ -239,76 +240,79 @@ public class GameControl : MonoBehaviour {
     //记录数据的改变 存入全局临时变量  如果是BOSS死掉 存入文档 捡到boss装备也要自动存档
     public void GKDateChange(UEvent e)
     {
-        //men_1-1 改变门状态
-        //if (Globals.isDebug) print(">>>  " + e.eventParams + "  ----------------  > " + TempCurrentGKDate);
-        //if (TempCurrentGKDate == "") return;
-        string changeDate = e.eventParams.ToString();//men_1-1
+        
+        string changeDate = e.eventParams.ToString();//Men_1-1
+        //print(" GKDateChange 事件  "+ changeDate);
         string changeDateName = changeDate.Split('-')[0];//men_1
         string type = changeDateName.Split('_')[0];//men
-        //print("type  "+type);
         string changezt;
         if (changeDate.Split('-').Length>1) changezt = changeDate.Split('-')[1];
 
-        if (TempCurrentGKDate == "") {
-            TempCurrentGKDate += ","+changeDate;
-            //print("1  "+ TempCurrentGKDate);
-            return;
-        }
+        string TempCurrentGKDate = GlobalDateControl.GetCurrentGKDate().Split(':')[1];
 
-        //print(" >>????? TempCurrentGKDate     "+ TempCurrentGKDate+ "  ??changeDate   "+ changeDate);
-        //men_1-0,men_2-0,boss_1-0 当前关卡数据长这样
-        string[] currentGKDateArr = TempCurrentGKDate.Split(',');
-        //先查找 关卡数据中是否有该数据 有的就变化状态 没有的话就在后面加
-        if (!GlobalTools.IsHasDate(changeDate, currentGKDateArr)) {
-            TempCurrentGKDate += ","+changeDate;
-            //print(" ??????    "+ TempCurrentGKDate+"   ....   "+ changeDate);
-            //return;
+        if (TempCurrentGKDate == "") {
+            TempCurrentGKDate = changeDate;
+            //print("1  "+ TempCurrentGKDate);
         }
         else
         {
-            string newGKDate = "";
-            for (var i = 0; i < currentGKDateArr.Length; i++)
+            //print(" >>????? TempCurrentGKDate     "+ TempCurrentGKDate+ "  ??changeDate   "+ changeDate);
+            //men_1-0,men_2-0,boss_1-0 当前关卡数据长这样
+            string[] currentGKDateArr = TempCurrentGKDate.Split(',');
+            //先查找 关卡数据中是否有该数据 有的就变化状态 没有的话就在后面加
+            if (!GlobalTools.IsHasDate(changeDate, currentGKDateArr))
             {
-                string theGKDate = currentGKDateArr[i];
-                string dateName = theGKDate.Split('-')[0];
-                //if (Globals.isDebug) print("theGKDate  >  " + theGKDate);
-                //string zt = theGKDate.Split('-')[1];
-                //这里 替换了 名字相同的内容  也就是替换了状态
-                if (dateName == changeDateName)
-                {
-                    if (i != currentGKDateArr.Length - 1)
-                    {
-                        newGKDate += changeDate + ",";
-                    }
-                    else
-                    {
-                        newGKDate += changeDate;
-                    }
-                }
-                else
-                {
-                    if (i != currentGKDateArr.Length - 1)
-                    {
-                        newGKDate += theGKDate + ",";
-                    }
-                    else
-                    {
-                        newGKDate += theGKDate;
-                    }
-                }
+                TempCurrentGKDate += "," + changeDate;
+                //print(" ??????    "+ TempCurrentGKDate+"   ....   "+ changeDate);
+                //return;
             }
-            TempCurrentGKDate = newGKDate;
+            else
+            {
+                string newGKDate = "";
+                for (var i = 0; i < currentGKDateArr.Length; i++)
+                {
+                    string theGKDate = currentGKDateArr[i];
+                    string dateName = theGKDate.Split('-')[0];
+                    //if (Globals.isDebug) print("theGKDate  >  " + theGKDate);
+                    //string zt = theGKDate.Split('-')[1];
+                    //这里 替换了 名字相同的内容  也就是替换了状态
+                    if (dateName == changeDateName)
+                    {
+                        if (i != currentGKDateArr.Length - 1)
+                        {
+                            newGKDate += changeDate + ",";
+                        }
+                        else
+                        {
+                            newGKDate += changeDate;
+                        }
+                    }
+                    else
+                    {
+                        if (i != currentGKDateArr.Length - 1)
+                        {
+                            newGKDate += theGKDate + ",";
+                        }
+                        else
+                        {
+                            newGKDate += theGKDate;
+                        }
+                    }
+                }
+                TempCurrentGKDate = newGKDate;
+            }
         }
 
-        
 
+
+        string TempGKDateStr = GuankaName + ":" + TempCurrentGKDate;
+        if (TempCurrentGKDate != null) GlobalDateControl.SetCurrentGKDateInZGKTempDate(TempGKDateStr);
+        //print("记录数据  "+TempGKDateStr);
         //print("TempCurrentGKDate:    " + TempCurrentGKDate);
         if (type == "boss"||type == "G"|| type == "B"|| type == "WP")
         {
-            //将关卡数据写入全局临时数据
-            if (TempCurrentGKDate != null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName + ":" + TempCurrentGKDate);
-            //存档
-            GlobalSetDate.instance.GetSave();
+            //将关卡数据写入全局临时数据 存档
+            GlobalDateControl.SaveMapDate();
         }
     }
     //将本关卡存入全局临时数据
@@ -316,23 +320,21 @@ public class GameControl : MonoBehaviour {
     {
         //将关卡数据写入全局临时数据
         
-        if (TempCurrentGKDate != null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName+":"+TempCurrentGKDate);
-        print(" 将临时数据 写入 全局变量：  " + GlobalSetDate.instance.TempZGuanKaStr);
+        //if (TempCurrentGKDate != null) GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName+":"+TempCurrentGKDate);
+        //print(" 将临时数据 写入 全局变量：  " + GlobalSetDate.instance.TempZGuanKaStr);
     }
 
-    public string GetSaveZGKDate()
-    {
-        return GlobalSetDate.instance.SetChangeThisGKInZGKTempDate(GuankaName + ":" + TempCurrentGKDate);
-    }
-
+  
 
     //匹配记录的机关状态 门是开的还是关的 BOSS有没有杀掉
     void GetPiPei()
     {
-		if (TempCurrentGKDate == "") return;
+        string TempCurrentGKDate = GlobalDateControl.GetCurrentGKDate().Split(':')[1];
+
+        if (TempCurrentGKDate == "") return;
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
-        //if (Globals.isDebug) print("TempCurrentGKDate   "+ TempCurrentGKDate);
+        //if (Globals.isDebug) print("匹配！！TempCurrentGKDate：   "+ TempCurrentGKDate);
         //print(" ------------------------ >  "+ strArr);
         for (var i = 0; i < strArr.Length; i++)
         {
@@ -342,6 +344,10 @@ public class GameControl : MonoBehaviour {
             if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1].Split('@')[0];
 
             string sName = s.Split('_')[0];
+
+            //print("字母头 sName：    " + sName+" zt  "+zt);
+
+
             //找名字 好像部分大小写
             if (sName == "Men")
             {
@@ -395,6 +401,11 @@ public class GameControl : MonoBehaviour {
                     JGNum = int.Parse(strArr[i].Split('-')[1]);
                     //print("----------------------------  匹配！！！");
                 }
+            }
+            else
+            {
+                print("其他记录    "+s);
+                if (GlobalTools.FindObjByName(s) != null) GlobalTools.FindObjByName(s).SetActive(false);
             }
         }
     }
@@ -468,7 +479,7 @@ public class GameControl : MonoBehaviour {
         {
             if (Globals.isDebug) print("取档进入游戏！");
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
-            player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
+            if(GlobalSetDate.instance.CurrentUserDate.curLive!=null) player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN)
         {
@@ -486,7 +497,7 @@ public class GameControl : MonoBehaviour {
         
         //摄像机位置跟随
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
-        if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, mainCamera.transform.position.z);
+        if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+2f, mainCamera.transform.position.z);
         //玩家站立
         player.GetComponent<GameBody>().SetV0();
         //当前是什么状态 新进游戏（不管是取档 还是新游戏）

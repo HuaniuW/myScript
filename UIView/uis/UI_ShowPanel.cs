@@ -18,11 +18,13 @@ public class UI_ShowPanel : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.SKILL_UI_CHANGE, this.GetSkillChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RELEASE_SKILL, this.ReleaseSkill);
         //GetObjByName("top",this.gameObject);
-        _skillUseDate = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        //print(" 9999999999999!  ");
+        //_skillUseDate = GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date;
+        //print(" _skillUseDate  "+ _skillUseDate);
         //对比 技能使用情况
-
-        print(" UI_ShowPanel  启动 新建的是否 新进来了   top "+top);
-         //print("??  "+this.GetType().GetProperty("top").GetValue(this, null));
+        //ComparedSkillUse(_skillUseDate);
+        //print(" UI_ShowPanel  启动 新建的是否 新进来了   top "+top);
+        //print("??  "+this.GetType().GetProperty("top").GetValue(this, null));
     }
 
 
@@ -43,26 +45,31 @@ public class UI_ShowPanel : MonoBehaviour {
         {
             o.GetComponent<UI_Skill>().CDFull();
         }
-        GlobalSetDate.instance.CurrentUserDate.skill_use_date = "";
+        GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date = "";
     }
 
 
 
     //存入 所有 徽章数据 
-    public void saveAllHZDate()
+    public void SaveAllHZDate()
     {
+        //print("HZList是不是技能槽？    " + HZList.Count);
         foreach (GameObject o in HZList)
         {
             o.GetComponent<UI_Skill>().GetDateInGlobalSkillDate();
         }
-        print("  徽章数据 "+ GlobalSetDate.instance.CurrentUserDate.skill_use_date);
+        //GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        //GlobalSetDate.instance.TempSkillUseRecord = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+
+        //GlobalSetDate.instance.CurrentUserDate.skill_use_date = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        //print("  徽章数据 "+ GlobalSetDate.instance.CurrentUserDate.skill_use_date);
     }
 
 
     //读取所有徽章使用数据
     public void GetAllHZDate()
     {
-        print("--------------------------------------------------------------->   读取所有徽章使用数据 "+HZList.Count);
+        //print("--------------------------------------------------------------->   读取所有徽章使用数据 "+HZList.Count);
         foreach (GameObject o in HZList)
         {
             o.GetComponent<UI_Skill>().GetGlobalSkillDate();
@@ -152,7 +159,7 @@ public class UI_ShowPanel : MonoBehaviour {
     void ReleaseSkill(UEvent e)
     {
         string str = e.eventParams.ToString();
-        print("释放技能  "+str);
+        //print("释放技能  "+str);
         foreach(GameObject o in HZList)
         {
             //上下左右 4个位置的节能 如果和 str 传来的位置一致就释放
@@ -271,7 +278,7 @@ public class UI_ShowPanel : MonoBehaviour {
         //print("hz ---------------> "+ hz);
         //print("img-------------->  " + img);
         hz.transform.position = img.transform.position;
-        hz.transform.parent = GlobalTools.FindObjByName("PlayerUI").transform;
+        hz.transform.parent = this.transform; //GlobalTools.FindObjByName("PlayerUI").transform;
         hz.GetComponent<UI_Skill>().SetHZDate(hzDate);
         hz.GetComponent<UI_Skill>().SetSkillPos(hzPos);
         //print("hz   "+ hz+"   hz pos  "+hz.transform.position);

@@ -16,6 +16,17 @@ public class AirGameBody : GameBody {
     //}
 
 
+    [Header("默认的 移动动作")]
+    public string RunACName = "run_3";
+    protected override void FirstStart()
+    {
+        RUN = RunACName;
+        if (!GetDB().animation.HasAnimation(RUN)) RUN = "run_3";
+    }
+
+
+
+
     [Header("感应与面前墙的距离")]
     [Range(0, 1)]
     public float TCDistance = 0.13f;

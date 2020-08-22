@@ -197,6 +197,16 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected bool isBackUp = false;
     protected bool isBackUping = false;
+
+
+
+
+    public string GetJumpDownACName()
+    {
+        return JUMPDOWN;
+    }
+
+
     public void GetBackUp(float vx = 15)
     {
         if (roleDate.isBeHiting) return;
@@ -533,7 +543,7 @@ public class GameBody : MonoBehaviour, IRole {
             ResetAll();
             isDodge = true;
             isDodgeing = true;
-            roleDate.isCanBeHit = false;
+            //roleDate.isCanBeHit = false;
             //print("-->x  " + playerRigidbody2D.velocity.x);
             if (playerRigidbody2D.velocity.x >= 0)
             {
@@ -727,7 +737,6 @@ public class GameBody : MonoBehaviour, IRole {
     {
         RUN = runName;
         if (changeMaxSpeedX != 0) {
-          
             maxSpeedX = changeMaxSpeedX;
         }
         
@@ -1208,13 +1217,17 @@ public class GameBody : MonoBehaviour, IRole {
         ResetAll();
         //print("getStand!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    isInAiring    "+isInAiring);
         if (DBBody) Stand();
-        if (isSetSpeedZero && playerRigidbody2D) {
-            //print("?????????????????       " +playerRigidbody2D.velocity);
+        StopVSpeed();
 
+
+    }
+
+    public void StopVSpeed(bool isSetSpeedZero = true)
+    {
+        if (isSetSpeedZero && playerRigidbody2D)
+        {
             playerRigidbody2D.velocity = Vector2.zero;
-            //playerRigidbody2D.velocity *= 0.5f;
         }
-        
     }
 
     public void SetV0()
@@ -1269,6 +1282,12 @@ public class GameBody : MonoBehaviour, IRole {
         GameOver();
 
         //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
+    }
+
+    public void StopYanMu()
+    {
+        if (_yanmu2) _yanmu2.Stop();
+        if (_yanmu) _yanmu.Stop();
     }
 
     public virtual void GameOver()
@@ -1489,7 +1508,10 @@ public class GameBody : MonoBehaviour, IRole {
         GetBoneColorChange(_ycolor);
     }
 
-
+    public void SetInitColor(Color _color2)
+    {
+        _ycolor = _color2;
+    }
 
 
     protected virtual void IsCanShanjinAndJump()
@@ -2044,12 +2066,12 @@ public class GameBody : MonoBehaviour, IRole {
                     else
                     {
                         if (jn == null) {
-                            print("******************************************************************************** 技能为空 ");
-                            print("******************************************************************************** 技能为空 ");
+                            //print("******************************************************************************** 技能为空 ");
+                            //print("******************************************************************************** 技能为空 ");
                             return;
                         }
                         
-                        print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
+                        //print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                         isTXShow = false;

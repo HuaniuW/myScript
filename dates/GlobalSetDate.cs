@@ -23,6 +23,10 @@ public class GlobalSetDate : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<GlobalSetDate>();
     }
+
+    public string TempSkillUseRecord = "";
+
+
     //是否初次开启游戏
     public bool isFirstInGame = true;
 
@@ -31,6 +35,7 @@ public class GlobalSetDate : MonoBehaviour {
     //现在的全局玩家数据
     public UserDate CurrentUserDate;
 
+    public UserDate CurrentMapMsgDate;
 
     public bool isGameOver = false;
     private void OnDestroy()
@@ -77,6 +82,7 @@ public class GlobalSetDate : MonoBehaviour {
         }
     }
 
+    //这个是  用来 存取 自动地图的 数据  不要搞混了
     public GameMapDate gameMapDate;
 
     private void Awake()
@@ -84,6 +90,9 @@ public class GlobalSetDate : MonoBehaviour {
         //Debug.Log("Start");
         if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
+        if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
+
+
         if (gameMapDate == null) gameMapDate = new GameMapDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
@@ -137,9 +146,10 @@ public class GlobalSetDate : MonoBehaviour {
     public string saveDateName = "myGame";
     //public GameObject player;
 
-    void InNewGame(string pos = "-90.47_-4.46", string scrName = "ng0_-2")
+    void InNewGame(string pos = "-90.47_-4.46", string scrName = "nga0_1")
     {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
+        if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
         playerPosition = pos; 
         screenName = scrName;
         cameraPosition = "";
@@ -156,6 +166,7 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.userName = "myGame";
         CurrentUserDate.onlyId = 2;
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
+        GameSaveDate.GetInstance().SaveDateByURLName(saveDateName+"Map", CurrentUserDate);
         IsChangeScreening = false;
         //print("hi!!!!");
     }
@@ -167,12 +178,6 @@ public class GlobalSetDate : MonoBehaviour {
         playerPosition = CurrentUserDate.playerPosition;
         screenName = CurrentUserDate.screenName;
         cameraPosition = CurrentUserDate.cameraPosition;
-    }
-
-
-    void TempScreenGame()
-    {
-
     }
 
 
@@ -201,9 +206,19 @@ public class GlobalSetDate : MonoBehaviour {
         }
         else
         {
-            string[] sArray = playerPosition.Split('_');
+            string[] sArray;
+            print("  CurrentUserDate.playerPosition  "+ CurrentUserDate.playerPosition);
+            if (CurrentUserDate.playerPosition!=null)
+            {
+                sArray = CurrentUserDate.playerPosition.Split('_');
+            }
+            else
+            {
+                sArray = playerPosition.Split('_');
+            }
+            
             //print("-----playerPosition>   " + playerPosition);
-            playerInScreenPosition = new Vector3(float.Parse(sArray[0]), float.Parse(sArray[1]));
+            playerInScreenPosition = new Vector2(float.Parse(sArray[0]), float.Parse(sArray[1]));
             if (sArray.Length > 2) roleDirection = sArray[2];
             //if (Globals.isDebug) print("位置   "+ playerInScreenPosition);
         }
@@ -249,98 +264,33 @@ public class GlobalSetDate : MonoBehaviour {
 	//当前存档位
 	public string CurrentSaveDateName = "UnityUserData";
     //全局总关卡的临时数据
-    public string TempZGuanKaStr;
+    public string TempZGuanKaStr = "";
     //启动游戏的时候 调用存档数据先  对比当前关卡数据是否有变动 
     //每关都要对比加到临时数据
 
-    //匹配存档中的全局关卡记录
-    public void GetGameAllCunstomStr()
-    {
-        //获取当前关卡的数据
+    
 
-        //是否有存档
-        if (GameSaveDate.GetInstance().IsHasSaveDate())
-        {
-            if (Globals.isDebug) print("!!!!!!!!!!!!!!!!!!有存档记录");
-            //找到总的关卡记录
-            if (GameSaveDate.GetInstance().IsHasSaveDateByName(saveDateName)) {
-                //print(GameSaveDate.GetInstance().GetSaveDateByName(CurrentSaveDateName));
-                TempZGuanKaStr = GameSaveDate.GetInstance().GetSaveDateByName(saveDateName).mapDate;
-                print("TempZGuanKaStr  "+ TempZGuanKaStr);
-            }
-            else
-            {
-                //print("没有当前存档的记录");
-            }
-            
-        }
-        else
-        {
-            if (Globals.isDebug) print("没有存档记录");
-			//记录当前关卡的记录  这里一般是新开游戏
-			//TempZGuanKaStr = "";
-        }
-        //获取存档的关卡记录
-    }
 
-    public string currentGKDate;
-    //获取关卡名的关卡数据 并且在原数据中删除
-    public string GetGuanKaStrByGKNameAndRemoveIt(string GKName)
-    {
-        if (TempZGuanKaStr == null) return null;
-        currentGKDate = null;
-        
-        if (Globals.isDebug) print("  GKName " + GKName + "  TempZGuanKaStr " + TempZGuanKaStr);
-        // |g1_1:men_1-1,men_2-1|
-        string gkStr = "";
-        string[] arr = TempZGuanKaStr.Split('|');
-        for(var i = 0; i < arr.Length; i++)
-        {
-            string[] arr2 = arr[i].Split(':');
-            string curGKName = arr2[0];
-            //if (Globals.isDebug) print("curGKName  "+ curGKName);
-            if (curGKName != ""&& curGKName == GKName)
-            {
-                
-                currentGKDate = arr2[1];
-                if (Globals.isDebug) print("当前关卡的数据  "+ currentGKDate);
-            }
-            else
-            {
-                if(arr[i]!="") gkStr += arr[i] + '|';
-            }
-           
-        }
-        if (Globals.isDebug) print("进场景取数据  "+ TempZGuanKaStr); //gkStr是去掉当前关卡后的数据
-        TempZGuanKaStr = gkStr;
-        if (Globals.isDebug) print("取完数据后的全局数据  "+ TempZGuanKaStr);
-        return currentGKDate;
-    }
 
-    //将当前关卡数据 加到总关卡数据中
-    public string SetChangeThisGKInZGKTempDate(string GKDate)
-    {
-        //if (Globals.isDebug) print(" >>>>>>>>>>>>>>>>>>>>>>>>  "+GKDate);
-        //if (Globals.isDebug) print(" 当前全局的数据  "+ TempZGuanKaStr);
-        TempZGuanKaStr += GKDate+"|";
-        //if (Globals.isDebug) print("加完后的全局数据！！！ " + TempZGuanKaStr);
-        return TempZGuanKaStr;
-    }
 
-    public void SaveDoor()
-    {
-        if (CurrentUserDate == null) CurrentUserDate = new UserDate();
-        CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
-        if (Globals.isDebug) print("CurrentUserDate.mapDate    " + CurrentUserDate.mapDate);
-        GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
-    }
+  
+
+
+
+    
+
+   
+
+  
+
 
     public void GetSave()
     {
         //储存玩家所有数据
         print("SAVE.........");
-        //if (Globals.isDebug) print("save " + TempZGuanKaStr);
+        //if (Globals.isDebug) print("save临时总关卡数据  " + TempZGuanKaStr);
         GameObject player = GlobalTools.FindObjByName("player");
+        if (player == null) return;
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
         //print("CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
@@ -355,14 +305,16 @@ public class GlobalSetDate : MonoBehaviour {
         {
             CurrentUserDate.playerPosition = player.transform.position.x + 2 + "_" + player.transform.position.y;
         }
-
+        //print("储存的 玩家位置    "+ CurrentUserDate.playerPosition);
         //存档时候 技能CD满
         GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().AllSkillCDFull();
 
         CurrentUserDate.cameraPosition = GlobalTools.FindObjByName("MainCamera").transform.position.x + "_" + GlobalTools.FindObjByName("MainCamera").transform.position.y;
-        CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
-        if(GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1")!=null) CurrentUserDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
-        print(" 储存进来的徽章数据   "+ CurrentUserDate.bagDate);
+        //CurrentUserDate.mapDate = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetSaveZGKDate();
+        GlobalDateControl.SaveMapDate();
+        //print(" @@@@---  CurrentUserDate.mapDate     "+ CurrentUserDate.mapDate);
+        if (GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1") != null) CurrentUserDate.bagDate = CurrentMapMsgDate.bagDate;  //GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().HZSaveDate();
+        //print(" 储存进来的徽章数据   "+ CurrentUserDate.bagDate);
         //血瓶数量
         if(GlobalTools.FindObjByName("PlayerUI(Clone)/xueping")!=null) CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "myGame";
@@ -380,6 +332,9 @@ public class GlobalSetDate : MonoBehaviour {
 
 
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
+
+        //print("////////////////////////////////////////////////////////////////////////////////////////////////////////===================================记录完成！！！ ");
+
     }
 
     string screenChangeDate;
@@ -398,7 +353,7 @@ public class GlobalSetDate : MonoBehaviour {
             string _date = roleDateArr[i];
             if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
             if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().Lan = float.Parse(_date.Split('=')[1]);
-            print(_date.Split('=')[0]+"   --->   "+ _date.Split('=')[1]);
+            //print(_date.Split('=')[0]+"   --->   "+ _date.Split('=')[1]);
             if(_date.Split('=')[0] == "cYingzhi") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().yingzhi = float.Parse(_date.Split('=')[1]);
             if (_date.Split('=')[0] == "cFangyu") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().def = float.Parse(_date.Split('=')[1]);
         }
@@ -461,6 +416,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Z))
         {
             //消除存档数据
+            print("---> 清除 存档 数据！");
             InNewGame();
             //新游戏的选项
             //GetSave();
@@ -487,7 +443,29 @@ public class GlobalSetDate : MonoBehaviour {
 
 
 
-    //全局 地图 生成
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //-----------------------------------全局 地图 生成
 
     //大地图信息  由哪些小地图组成
     public List<string> BigMapMsgList = new List<string> { };

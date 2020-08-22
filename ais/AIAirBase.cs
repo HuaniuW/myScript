@@ -163,6 +163,7 @@ public class AIAirBase : AIBase
         if (GetComponent<RoleDate>().isBeHiting)
         {
             AIBeHit();
+            GetJingshi();
             return;
         }
 
@@ -293,18 +294,21 @@ public class AIAirBase : AIBase
         }
     }
 
-    
 
 
+    public bool IsCanZhuangXiang = true;
     public override void ZhuanXiang()
     {
+        if (!IsCanZhuangXiang) return;
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
+            print("  ****** right ");
             //目标在右
             gameBody.RunRight(flyXSpeed);
         }
         else
         {
+            print("  ****** left ");
             gameBody.RunLeft(flyXSpeed);
         }
     }
@@ -427,6 +431,29 @@ public class AIAirBase : AIBase
             }
 
 
+            if(strArr[0] == "AIZiDans")
+            {
+                acName = strArr[0];
+                GetComponent<AI_ZiDans>().SetZiDanType(int.Parse(strArr[1]));
+                return;
+            }
+
+            if(acName == "hengXiangChongZhuang")
+            {
+                return;
+            }
+
+            if (acName == "hengXiangCZKuaiSu")
+            {
+                return;
+            }
+
+            if (acName == "zongYa")
+            {
+                return;
+            }
+
+
             if (acName == "yishan")
             {
                 return;
@@ -538,6 +565,26 @@ public class AIAirBase : AIBase
             return;
         }
 
+
+        if (acName == "hengXiangChongZhuang")
+        {
+            GetHengXiangChongZhuang();
+            return;
+        }
+
+        if (acName == "hengXiangCZKuaiSu")
+        {
+            GetHengXiangCZKuaiSu();
+            return;
+        }
+
+        if (acName == "zongYa")
+        {
+            GetZongYa();
+            return;
+        }
+
+
         if (acName == "walkBack")
         {
             GetWalkBack();
@@ -630,6 +677,12 @@ public class AIAirBase : AIBase
             return;
         }
 
+        if (acName == "AIZiDans")
+        {
+            GetAIZiDans();
+            return;
+        }
+
         PtAtk();
        
     }
@@ -691,6 +744,8 @@ public class AIAirBase : AIBase
         if (GetComponent<AIZiDan>()) GetComponent<AIZiDan>().ReSetAll();
         if (GetComponent<AIAirGoToAndAC>()) GetComponent<AIAirGoToAndAC>().ReSetAll();
         if (GetComponent<JN_Dazhan>()) GetComponent<JN_Dazhan>().ReSetAll();
+        if (GetComponent<AIZongYa>()) GetComponent<AIZongYa>().ReSetAll();
+        if (GetComponent<AIHengXiangChongZhuang>()) GetComponent<AIHengXiangChongZhuang>().ReSetAll();
 
     }
 
@@ -793,4 +848,86 @@ public class AIAirBase : AIBase
 
         }
     }
+
+
+    void GetHengXiangChongZhuang()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIHengXiangChongZhuang>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIHengXiangChongZhuang>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+
+
+        }
+    }
+
+    void GetHengXiangCZKuaiSu()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIHengXiangCZKuaiSu>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIHengXiangCZKuaiSu>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+
+
+        }
+    }
+
+    
+
+    void GetZongYa()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIZongYa>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIZongYa>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
+    void GetAIZiDans()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AI_ZiDans>().GetStart(gameObj);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AI_ZiDans>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
 }

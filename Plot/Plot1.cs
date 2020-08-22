@@ -5,16 +5,32 @@ using UnityEngine.UI;
 
 public class Plot1 : MonoBehaviour
 {
+
+    public static string QISHI = "qishi";
     // Start is called before the first frame update
     void Start()
     {
+
+        //print(GlobalDateControl.GetCurrentGKDate());
+        //GlobalDateControl.SetDateInCGKDateAndGetInZGKDate(QISHI);
+
+        if (GlobalDateControl.IsHasDateByName(QISHI))
+        {
+            IsHasPlayed = true;
+            print(" 起始剧情已经播放完毕！！！  ");
+        }
+        else
+        {
+            print(" @@@@  没有记录 ");
+        }
+
         if (IsHasPlayed) {
             //飞船是到岸的 默认-89.62   到岸是 -23.73
             FeiChuanDaoAn();
             _text.GetComponent<CanvasGroup>().alpha = 0;
             //龙不动
             //门是关的
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "Men_1-1"), this);
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "Men_1-1"), this);
             return;
         }
         
@@ -216,7 +232,7 @@ public class Plot1 : MonoBehaviour
         _text.transform.position = new Vector3(txtCSPos.x, txtCSPos.y - 30, txtCSPos.z);
 
 
-        print(_text.transform.position);
+        //print(_text.transform.position);
     }
 
 

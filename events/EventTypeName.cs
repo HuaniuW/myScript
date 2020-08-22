@@ -104,4 +104,19 @@ public class EventTypeName
 
     public const string GUAI_DIE = "guai_die";
 
+
+
+    //剧情对话中 下一个 选中 id 事件
+    public const string NEXT_ID = "next_id";
+
+    public const string CHOSE_EVENT = "chose_event";
+    public const string STATR_FIGHT = "startfight";
+    public const string PLOT_KILL_PLAYER = "plot_kill_player";
+
+
+
+
+
+
+
 }

@@ -138,7 +138,7 @@ public class XueTiao : MonoBehaviour {
 
     public void GetTargetObj(GameObject obj)
     {
-        print("GetTargetObj    "+obj);
+        //print("GetTargetObj    "+obj);
         if (obj) {
             gameObj = obj;
             GetGameObj();

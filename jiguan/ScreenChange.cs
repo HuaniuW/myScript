@@ -102,9 +102,9 @@ public class ScreenChange : MonoBehaviour {
     GameObject playerUI;
     void ChangeScreen()
     {
-
+        print(" 场景 变化   screenChange ");
         playerUI = GlobalTools.FindObjByName("PlayerUI");
-        playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().saveAllHZDate();
+        playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().SaveAllHZDate();
 
         //用来判断 地图地形 是否生成 过 如果生成过 就不用再生成了 直接根据数据生成就可以（控制 地图块内的 自动生成 粒子 草之类的）
         GlobalSetDate.instance.IsCMapHasCreated = false;
@@ -112,7 +112,15 @@ public class ScreenChange : MonoBehaviour {
         //获取角色当前数据 当前血量 当前蓝量  发给GlobalSetDate  什么格式 以后再说  cLive=1000,cLan=1000
         GlobalSetDate.instance.ScreenChangeDateRecord();
         GlobalSetDate.instance.HowToInGame = GlobalSetDate.CHANGE_SCREEN;
-        if (GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1") != null) GlobalSetDate.instance.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().saveDate();
+        if (GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1") != null) {
+            //GlobalSetDate.instance.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().HZSaveDate();
+            //GlobalSetDate.instance.CurrentMapMsgDate.bagDate = GlobalSetDate.instance.CurrentMapMsgDate.bagDate = GlobalSetDate.instance.bagDate;
+            GlobalSetDate.instance.CurrentMapMsgDate.bagDate = GlobalTools.FindObjByName("UI_Bag(Clone)/mianban1").GetComponent<Mianban1>().HZSaveDate();
+            print("切换到新 地图时  总地图数据  " + GlobalSetDate.instance.CurrentMapMsgDate.mapDate);
+            print("GlobalSetDate.instance.CurrentMapMsgDate.bagDate： " + GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
+            GlobalDateControl.SaveMapDate();
+        }
+       
         
         //通知储存关卡变化的数据
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_SCREEN, null), this);
@@ -137,10 +145,7 @@ public class ScreenChange : MonoBehaviour {
         //print(Coll.tag + "  --  " + Coll.transform.tag);
         if(Coll.tag == "Player")
         {
-
             //这里判断 是否要进随机的大地图  小地图
-
-            print("hit!!!!   ");
             if (ReMapName != "")
             {
                 print("说明是 从 特殊地图 跳到 随机里面   ");

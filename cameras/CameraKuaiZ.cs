@@ -20,12 +20,14 @@ public class CameraKuaiZ : MonoBehaviour {
     void Start () {
         cm = GameObject.Find("/MainCamera").GetComponent<CameraController>();
     }
-	
+
+
+    public bool IsSuoDingY = false;
 	// Update is called once per frame
 	void Update () {
         if (IsSetYGSPlayer)
         {
-            if(_player&& IsOutKuai) cm.GetHitCameraKuaiY(_player.transform.position.y + DistanceY);
+            if(_player&& IsOutKuai) cm.GetHitCameraKuaiY(_player.transform.position.y + DistanceY, IsSuoDingY);
         }
 	}
 
@@ -70,6 +72,7 @@ public class CameraKuaiZ : MonoBehaviour {
             //cm.SetNewPosition(cameraPosition);
             cm.SetNewPosition(new Vector3(cameraPosition.x, cameraPosition.y, OutKuaiCameraZ));
             IsOutKuai = false;
+            if (IsSuoDingY) cm.JieKaiSuoDingY();
         }
         //print("Trigger - B");
     }

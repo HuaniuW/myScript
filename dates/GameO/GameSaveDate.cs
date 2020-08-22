@@ -53,7 +53,7 @@ public class GameSaveDate{
     public void SaveDateByURLName(string URL,UserDate date)
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;
-        if (Globals.isDebug) Debug.Log("_fileURL2> "+ _fileURL2);
+        //if (Globals.isDebug) Debug.Log("_fileURL2> "+ _fileURL2);
         string s = SerializeObject(date, typeof(UserDate));
         //创建XML文件且写入数据
         CreateTextFile(_fileURL2, s, false);
@@ -61,7 +61,6 @@ public class GameSaveDate{
 
     public UserDate GetSaveDateByName(string cGKDateName)
     {
-        //Debug.Log(cGKDateName);
         // _fileName = Application.persistentDataPath + "/" + _fileName;
         string str = Application.persistentDataPath + "/" + cGKDateName;
         //if(Globals.isDebug)Debug.Log(str);
@@ -91,18 +90,18 @@ public class GameSaveDate{
     string[] dateZu = { "date1", "date2", "date3" };
     public bool IsHasSaveDate()
     {
-        //这个是 多个存档位的版本
-        //for(var i = 0; i < dateZu.Length; i++)
-        // {
-        //     string str = dateZu[i];
-        //     if (IsHasSaveDateByName(str)) return true;
-        // }
-
-        //一个存档位
         if (IsHasSaveDateByName(GlobalSetDate.instance.saveDateName)) return true;
         return false;
     }
-    
+
+    public bool IsHasMapSaveDate()
+    {
+        if (IsHasSaveDateByName(GlobalSetDate.instance.saveDateName+"Map")) return true;
+        return false;
+    }
+
+
+
     public string SerializeObject(object pObject, System.Type ty)
     {
         string XmlizedString = null;

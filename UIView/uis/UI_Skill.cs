@@ -57,7 +57,7 @@ public class UI_Skill : MonoBehaviour {
 
     public bool IsCDSkillCanBeUse()
     {
-        print("   剩余使用次数  skillCanUseTimes  "+ skillCanUseTimes);
+        //print("   剩余使用次数  skillCanUseTimes  "+ skillCanUseTimes);
         if (skillCanUseTimes == 0) return false;
         return true;
     }
@@ -91,9 +91,13 @@ public class UI_Skill : MonoBehaviour {
     //在全局找 技能信息的数据
     public void GetGlobalSkillDate()
     {
-        string globalSkillUseDate =  GlobalSetDate.instance.CurrentUserDate.skill_use_date;
-        print("GetGlobalSkillDate   ? "+ globalSkillUseDate+"  ------  "+ _hzDate.HZName);
+        string globalSkillUseDate =  GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date;
+        //string globalSkillUseDate = GlobalSetDate.instance.TempSkillUseRecord;
+        //print("读取 背包数据:   " + GlobalSetDate.instance.CurrentUserDate.bagDate);
+        //print(" 读取 CurrentMapMsgDate 技能的 使用数据  " + GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date);
+        //print("GetGlobalSkillDate   ? "+ globalSkillUseDate+"  ------  "+ _hzDate.HZName);
         string msg = GetStringByName(_hzDate.HZName, globalSkillUseDate);
+        print("msg:  "+msg+"  =null?  "+(msg == null));
         if (msg != null)
         {
             string[] strArr = msg.Split('_');
@@ -125,14 +129,18 @@ public class UI_Skill : MonoBehaviour {
             } 
             str += i == strArr.Length - 1 ? strArr[i]:strArr[i]+"|";
         }
+        //print("str 替换 后 是什么鬼   "+str);
         return str;
     }
 
     //对比 设置 技能数据
     public void SetSkillDate(int nums,float cds,float miaoshuNums)
     {
-        print("对比数据   "+_hzDate.HZName+"    "+nums);
-        if(nums == 0)
+        //print("对比数据   "+_hzDate.HZName+"    "+nums);
+
+
+        skillCanUseTimes = nums;
+        if (nums == 0)
         {
             /**if (Time.realtimeSinceStartup - (gameTime + miaoshuNums) > _hzDate.cd)
             {
@@ -140,15 +148,21 @@ public class UI_Skill : MonoBehaviour {
                 return;
             }*/
             //开始 CD计时
-            SetText(skillCanUseTimes.ToString());
+
+            //skillCanUseTimes = nums;
+            //print("----------------------------------------------------------------------------------");
+            //print("skillCanUseTimes   "+ skillCanUseTimes);
+            //print(" cdDistance      "+cds);
+            //print("  miaoshuNums   " + miaoshuNums);
+
+            //print("----------------------------------------------------------------------------------@");
+
+            
+            
             cdDistance = cds;
             GetComponent<TheTimer>().TempSetTimeNums(miaoshuNums);
         }
-        else
-        {
-            skillCanUseTimes = nums;
-            SetText(skillCanUseTimes.ToString());
-        }
+        SetText(skillCanUseTimes.ToString());
     }
 
     public string GetSkillDate()
@@ -163,17 +177,23 @@ public class UI_Skill : MonoBehaviour {
     public void GetDateInGlobalSkillDate()
     {
         string hzUseDate = GetSkillDate();
-        string globalSkillUseDate = GlobalSetDate.instance.CurrentUserDate.skill_use_date;
+        //print(" hzUseDate  "+ hzUseDate);
+        string globalSkillUseDate = GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date;
+        print(globalSkillUseDate);
+        //string globalSkillUseDate = GlobalSetDate.instance.TempSkillUseRecord;
         string msg = GetStringByName(_hzDate.HZName, globalSkillUseDate);
+        //print(" msg=?  "+msg);
         if (msg == null) {
-            GlobalSetDate.instance.CurrentUserDate.skill_use_date += "|" + hzUseDate;
+            GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date += "|" + hzUseDate;
         }
         else
         {
             //替换文字信息？？？
-            TiHuanStringInStr(_hzDate.HZName, GetSkillDate(), GlobalSetDate.instance.CurrentUserDate.skill_use_date);
+            GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date = TiHuanStringInStr(_hzDate.HZName, GetSkillDate(), GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date);
         }
-        
+
+        //print(" 存入徽章的使用数据 后的 总date数据   "+ globalSkillUseDate);
+
     }
 
     protected HZDate _hzDate;

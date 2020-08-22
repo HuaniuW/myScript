@@ -22,19 +22,81 @@ public class AIBase : MonoBehaviour {
     [Header("碰到开战块 打开 boss行动 直接打开的话boss行动-测试用")]
     public bool IsBossStop = false;
 
+    [Header("是否能退回防守区")]
+    public bool IsCanTuihuiFSQ = true;
+
+    //初始的  x 位置 用来 退回防守区
+    float _ChuSshiX = 0;
+
+    public bool IsTuihuiFangshouquing = false;
+
+    float tuihuiSpeed = 2;
+
+    void TuihuiFangshouqu()
+    {
+        if (!IsCanTuihuiFSQ) return;
+        if (!IsTuihuiFangshouquing) return;
+
+        if (Mathf.Abs(this.transform.position.x - _ChuSshiX)<1)
+        {
+            IsTuihuiFangshouquing = false;
+            isActioning = false;
+            gameBody.ResetAll();
+            gameBody.SpeedXStop();
+            gameBody.GetStand();
+            return;
+        }
+
+        if(this.transform.position.x< _ChuSshiX)
+        {
+            //右移动
+            gameBody.RunRight(tuihuiSpeed);
+        }
+        else
+        {
+            //左移动
+            gameBody.RunLeft(-tuihuiSpeed);
+        }
+
+        if (IsTuihuiFangshouquing)
+        {
+            return;
+        }
+    }
+
+
+
     protected void GetStart()
     {
         
         GetGameBody();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
         if (!aiFanji) aiFanji = GetComponent<AIFanji>();
-        
-         //Type myType = typeof(DataZS);
+        _ChuSshiX = this.transform.position.x;
+        //Type myType = typeof(DataZS);
         myPosition = this.transform.position;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, playerDie);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
+    }
+
+    void ChoseEvent(UEvent e)
+    {
+        string EStr = e.eventParams.ToString();
+        if (EStr == EventTypeName.STATR_FIGHT)
+        {
+            //可以做延迟 几秒 开始
+            StartCoroutine(IPoltPlay(0.8f));
+        }
+    }
+
+    public IEnumerator IPoltPlay(float time)
+    {
+        //Debug.Log("time   "+time);
+        //yield return new WaitForFixedUpdate();
+        yield return new WaitForSeconds(time);
+        IsBossStop = false;
     }
 
     void BossFight(UEvent e)
@@ -42,22 +104,10 @@ public class AIBase : MonoBehaviour {
         IsBossStop = false;
     }
 
-    bool isPlayerDie = false;
-    
-    private void playerDie(UEvent evt)
-    {
-        //print("dieout---------------------------------------------@@   "+evt.eventParams.ToString());
-        if(evt.eventParams!=null&&evt.eventParams.ToString() == "Player")
-        {
-            isPlayerDie = true;
-            //Globals.isPlayerDie = true;
-            //GetComponent<GameBody>().ResetAll();
-            //if(GetComponent<GameBody>().GetDB().animation.lastAnimationName!="stand_1")GetComponent<GameBody>().GetStand();
-            //print("palyer is die !!!!!!!!!");
-            //GetComponent<GameBody>().GetStand();
-        }
-        
-    }
+    public bool isPlayerDie = false;
+
+
+  
 
     protected virtual void GetGameBody()
     {
@@ -66,8 +116,9 @@ public class AIBase : MonoBehaviour {
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
-        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, playerDie);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
     }
 
 
@@ -79,7 +130,7 @@ public class AIBase : MonoBehaviour {
     public bool IsCanJingshi = false;
 
     bool IsJingshiing = false;
-    void GetJingshi()
+    protected void GetJingshi()
     {
         if (!IsCanJingshi) return;
         if (IsJingshiEvent) return;
@@ -90,7 +141,12 @@ public class AIBase : MonoBehaviour {
         }
     }
 
-
+    [Header("**空中掉落的怪 重力设定 是0的话就没变化")]
+    public float XialuoZhongliang = 0;
+    [Header("**空中掉落的怪 X距离检测 否则 超出范围也检测")]
+    public bool IsXJulijiance = false;
+    [Header("**X警示距离")]
+    public float XJinshijuli = 8;
 
     [Header("****是否能警示 接受通知")]
     public bool IsCanJieShouJingshi = false;
@@ -100,8 +156,24 @@ public class AIBase : MonoBehaviour {
         if (!IsCanJieShouJingshi) return;
         if (!IsJingshiEvent)
         {
-            IsJingshiEvent = true;
-            SetFindEnemyDistance(40);
+            if (IsXJulijiance)
+            {
+                GameObject playerObj = GlobalTools.FindObjByName("player");
+                float juli = Mathf.Abs(this.transform.position.x - playerObj.transform.position.x);
+                print("jinshi 1   XialuoZhongliang " + XialuoZhongliang+"  juli   "+ juli);
+                if (XialuoZhongliang != 0 && juli < XJinshijuli)
+                {
+                    print("jinshi 2");
+                    GetComponent<GameBody>().GetPlayerRigidbody2D().gravityScale = XialuoZhongliang;
+                    IsJingshiEvent = true;
+                    SetFindEnemyDistance(40);
+                }
+            }
+            else
+            {
+                IsJingshiEvent = true;
+                SetFindEnemyDistance(40);
+            }
         }
 
     }
@@ -286,11 +358,15 @@ public class AIBase : MonoBehaviour {
             if (GetComponent<GameBody>().GetDB().animation.lastAnimationName.Split('_')[0] == "run")
             {
                 isActioning = false;
+                GetComponent<GameBody>().SetV0();
                 GetComponent<GameBody>().GetStand();
             }
 
             return;
         }
+
+
+       
 
         if (!isAction&&isPlayerDie)
         {
@@ -319,6 +395,9 @@ public class AIBase : MonoBehaviour {
             GetJingshi();
             return;
         }
+
+        TuihuiFangshouqu();
+        if (IsTuihuiFangshouquing) return;
 
 
         if (gameBody.tag != "AirEnemy" && !gameBody.IsGround)
@@ -355,7 +434,7 @@ public class AIBase : MonoBehaviour {
 
         if (!IsFindEnemy()) return;
 
-
+        
         if (aiFanji != null && aiFanji.IsFanjiing()) return;
 
         GetAtkFS();
@@ -449,7 +528,7 @@ public class AIBase : MonoBehaviour {
 
     bool IsPlayerDieStand = false;
     //3 靠近 达到攻击距离
-    public virtual bool NearRoleInDistance(float distance,float nertSpeed  =1.9f)
+    public virtual bool NearRoleInDistance(float distance,float nearSpeed  =1.9f)
     {
 
         if (GlobalTools.FindObjByName("player").GetComponent<RoleDate>().isDie)
@@ -464,17 +543,37 @@ public class AIBase : MonoBehaviour {
 
             return false;
         }
+
+       
+
+
         if (DontNear) return true;
+
+
+        if (gameBody.IsEndGround)
+        {
+            //没路了 怎么办
+            if (IsCanTuihuiFSQ&&!IsTuihuiFangshouquing)
+            {
+                IsTuihuiFangshouquing = true;
+                print("没路了！！！！！！！");
+                return false;
+            }
+        }
+
+
+
+
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
-            gameBody.RunRight(nertSpeed);
+            gameBody.RunRight(nearSpeed);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
-            gameBody.RunLeft(-nertSpeed);
+            gameBody.RunLeft(-nearSpeed);
             return false;
         }
         else
@@ -561,7 +660,7 @@ public class AIBase : MonoBehaviour {
             //IsGetAtkFSByName = false;
            
             
-            print(atkNum + "????------------------------------------------------------------->    name " + acName);
+            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -911,13 +1010,25 @@ public class AIBase : MonoBehaviour {
 
 	}
 
-    
+    [Header("判断是否有  被攻击时候 需要 移除的 物体")]
+    public bool IsHasBeHitDisObj = false;
+    [Header("被攻击时候 需要 移除的 物体")]
+    public GameObject BeHitDisObj;
+
     protected virtual void AIBeHit()
     {
         //if (aisx != null) aisx.ReSet();
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
+        IsTuihuiFangshouquing = false;
+        IsBossStop = false;
+
+        if (IsHasBeHitDisObj)
+        {
+            if(BeHitDisObj) Destroy(BeHitDisObj);
+        }
+
         //IsGetAtkFSByName = false;
         AIReSet();
         if(aiFanji!=null) aiFanji.GetFanji();
@@ -1101,7 +1212,7 @@ public class AIBase : MonoBehaviour {
     }
 
 
-
+    //远程
     void GetLianZhuaCi()
     {
         if (!isActioning)
@@ -1208,7 +1319,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             ZhuanXiang();
             //gameBody.GetStand();
-            GetComponent<AIYiShan>().GetStart();
+            GetComponent<AIYiShan>().GetStart(gameObj);
             atkNum++;
             //GetAtkNumReSet();
         }
@@ -1247,7 +1358,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             //isAction = true;
             isYLHuiXue = true;
-            GetComponent<AIYuanLiHuiXue>().GetStart();
+            GetComponent<AIYuanLiHuiXue>().GetStart(gameObj);
         }
 
         if (isActioning) {

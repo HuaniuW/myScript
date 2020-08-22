@@ -122,11 +122,20 @@ public class CameraController : MonoBehaviour
     public bool IsOutY = false;
     public bool IsOutY2 = false;
 
-    public void GetHitCameraKuaiY(float _y) {
+    bool _IsSuoDingY = false;
+
+    public void GetHitCameraKuaiY(float _y,bool IsSuoDingY = false) {
         //print("???????????????????????????    进来了  y");
+        _IsSuoDingY = IsSuoDingY;
         IsHitCameraKuai = true;
         CameraKuaiY = _y;
     }
+
+    public void JieKaiSuoDingY()
+    {
+        _IsSuoDingY = false;
+    }
+
     public void OutHitCameraKuaiY()
     {
         IsHitCameraKuai = false;
@@ -401,6 +410,12 @@ public class CameraController : MonoBehaviour
 
 
         if (!IsHitCameraKuai) y = Mathf.Clamp(y, _min.y + orthographicSize, _max.y - orthographicSize);//限定y值
+
+        if (IsHitCameraKuai && _IsSuoDingY)
+        {
+            y += (CameraKuaiY - y) * 0.16f ;
+        }
+
 
         if (isShockYing) y = GetShockYing();
 

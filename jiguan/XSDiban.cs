@@ -23,10 +23,12 @@ public class XSDiban : MonoBehaviour {
             suishi.SetActive(false);
         }
 
-
     }
 
 
+
+    public bool IsChangeKuai = false;
+    public BoxCollider2D Kuai;
 
     void BeStart()
     {
@@ -36,7 +38,40 @@ public class XSDiban : MonoBehaviour {
         PlaySound();
         PlaySanluo();
         JishiStop();
+        //亮灯
+        LiangDeng();
+
+        GetRecord();
     }
+
+
+    public bool IsGetRecordSelf = false;
+    void GetRecord()
+    {
+        if (IsGetRecordSelf)
+        {
+            print("  记录自己！！！！！！！！！！     "+ this.transform.name);
+            GlobalDateControl.SetMsgInCurrentGKDateAndSetInZGKDate(this.transform.name);
+        }
+    }
+
+
+    void ChangeCameraKuai()
+    {
+        if (IsChangeKuai)
+        {
+            GameObject cm = GlobalTools.FindObjByName("MainCamera");
+            //cm.GetComponent<CameraController>().GetBounds(Kuai, true);
+            cm.GetComponent<CameraController>().SetNewPosition(new Vector3(cm.transform.position.x, cm.transform.position.y, -15));
+        }
+    }
+
+    public GameObject deng;
+    void LiangDeng()
+    {
+        if (deng) deng.SetActive(true);
+    }
+
 
     TheTimer theTime = new TheTimer();
     void JishiStop()
@@ -48,6 +83,7 @@ public class XSDiban : MonoBehaviour {
     {
         StopYanmu();
         StopSound();
+        ChangeCameraKuai();
         Destroy(this.gameObject);
     }
 
@@ -116,12 +152,13 @@ public class XSDiban : MonoBehaviour {
 	}
 
 
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         if (!IsOtherCF) return;
         if (Coll.tag == "Player")
         {
-            print("chufa !!!!!!!");
+            //print("chufa !!!!!!!");
             BeStart();
         }
     }

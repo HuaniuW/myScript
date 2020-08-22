@@ -50,7 +50,7 @@ public class JN_base : MonoBehaviour
         //this.transform.localScale = new Vector3(jn_date._scaleW,jn_date._scaleH,1);
         //TX_weizhiyupan();
 
-        print("-------------------------->>>>????   " + obj.name + "  _sacaleX   " + _sacaleX+ "   this.transform.localScale.x   " + this.transform.localScale.x);
+        //print("-------------------------->>>>????   " + obj.name + "  _sacaleX   " + _sacaleX+ "   this.transform.localScale.x   " + this.transform.localScale.x);
         if (!isSkill)
         {
             
@@ -59,6 +59,7 @@ public class JN_base : MonoBehaviour
         else {
             if (_hitKuai != null) {
                 //print("   ----------->  2222222  _hitKuai   "+_hitKuai+"   name "+_hitKuai.name  + "  ?  "+ _hitKuai.GetComponent<HitKuai>());
+                //print("hitkuai  "+_hitKuai.transform.parent);
                 _hitKuai.GetComponent<HitKuai>().GetTXObj(this.gameObject, true);
             }
             else

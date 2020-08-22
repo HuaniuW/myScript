@@ -336,7 +336,11 @@ public class PlayerGameBody : GameBody {
 
     public override void RunRight(float horizontalDirection, bool isWalk = false)
     {
-        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
+        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao)
+        {
+            MoveVX(0);
+            return;
+        }
         //print("l " + isAtking);
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         isBackUping = false;
@@ -376,7 +380,11 @@ public class PlayerGameBody : GameBody {
 
     public override void RunLeft(float horizontalDirection, bool isWalk = false)
     {
-        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
+        if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) {
+            MoveVX(0);
+            return;
+        }
+        
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
         isBackUping = false;
@@ -936,7 +944,13 @@ public class PlayerGameBody : GameBody {
         }
 
         //Time.timeScale = 0.5f;
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,this.tag), this);
+        if (!IsGetDieOut)
+        {
+            IsGetDieOut = true;
+            print("  玩家 die*************************** die！！！ ");
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT, this.tag), this);
+        }
+        
         if (isDieRemove) StartCoroutine(IEDieDestory(1f));
     }
 
@@ -985,6 +999,8 @@ public class PlayerGameBody : GameBody {
     }
 
 
+    float LuodiXSD = 0;
+
     protected override void InAir()
     {
         //print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
@@ -1005,6 +1021,8 @@ public class PlayerGameBody : GameBody {
             isDodge = false;
             playerRigidbody2D.gravityScale = gravityScaleNums;
             Hongyan.Stop();
+            //这里控制 碰墙后 速度
+            GetPlayerRigidbody2D().velocity = Vector2.zero;
             //print("jinlai  mei         ");
             return;
         }
@@ -1014,6 +1032,16 @@ public class PlayerGameBody : GameBody {
         isInAiring = !IsGround;
         if (IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
+            if (DOWNONGROUND == DownOnGroundACNameGao)
+            {
+                //print("@x:  "+this.transform.position.x);
+                this.transform.position = new Vector2(LuodiXSD ,this.transform.position.y);
+                GetPlayerRigidbody2D().velocity = Vector2.zero;
+                MoveVX(0);
+            }
+
+
+
             if (DBBody.animation.isCompleted)
             {
                 //print("luodidongzuo over!!!!!!!");
@@ -1053,9 +1081,12 @@ public class PlayerGameBody : GameBody {
                 IsInAirDown = false;
                 if (DOWNONGROUND == DownOnGroundACNameGao)
                 {
+                    LuodiXSD = this.transform.position.x;
                     _playerUI.GetSlowByTimes(0.1f, 0.1f);
+                    GetPlayerRigidbody2D().velocity = Vector2.zero;
                     //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.6"), this);
                     if (GaochuTiaoxiaYC) GaochuTiaoxiaYC.Play();
+                    MoveVX(0);
                 }
 
 
@@ -1344,14 +1375,14 @@ public class PlayerGameBody : GameBody {
         if(GlobalSetDate.instance.roleDirection == "l"|| turnFX == "l")
         {
             TurnLeft();
-            print(" stand 中 左转？？？？？    ");
+            //print(" stand 中 左转？？？？？    ");
             GlobalSetDate.instance.roleDirection = "";
             turnFX = "";
         }
         else if(GlobalSetDate.instance.roleDirection == "r"|| turnFX == "r")
         {
             TurnRight();
-            print(" stand -----右转？？？？？    ");
+            //print(" stand -----右转？？？？？    ");
             ChangeBoneScaleX();
             GlobalSetDate.instance.roleDirection = "";
             turnFX = "";
