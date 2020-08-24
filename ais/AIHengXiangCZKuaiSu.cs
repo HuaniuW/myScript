@@ -24,9 +24,25 @@ public class AIHengXiangCZKuaiSu : AIHengXiangChongZhuang
             return new Vector2(1000, 1000);
         }
 
+        if (IsNeedCheckDiBan)
+        {
+            if (!DiBan || !DiBan.activeSelf || DiBan.GetComponent<XSDiban>().IsHideFloor)
+            {
+                if (_player.transform.position.x > CenterPos.position.x)
+                {
+                    return new Vector2(CenterPos.position.x - ToCenterPosXDistance, _player.transform.position.y);
+                }
+                else
+                {
+                    return new Vector2(CenterPos.position.x + ToCenterPosXDistance, _player.transform.position.y);
+                }
+            }
+        }
+      
 
 
-        if((_player.transform.position.x< CenterPos.position.x && this.transform.position.x< CenterPos.position.x)||(_player.transform.position.x > CenterPos.position.x && this.transform.position.x > CenterPos.position.x))
+
+        if ((_player.transform.position.x< CenterPos.position.x && this.transform.position.x< CenterPos.position.x)||(_player.transform.position.x > CenterPos.position.x && this.transform.position.x > CenterPos.position.x))
         {
             //print("1 在同一边！！！！ ");
             return new Vector2(CenterPos.position.x, CenterPos.position.y+0.6f);

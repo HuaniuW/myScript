@@ -22,6 +22,8 @@ public class AITheWay_dcr : MonoBehaviour {
             return;
         }
         GetNewZSListByCLive();
+
+       // 特殊触发 强行 变招  如果 小于3 就等于3
     }
 
     public string[] zsArr1 = { "atk_1", "atk_2", "atk_3" };
@@ -33,7 +35,7 @@ public class AITheWay_dcr : MonoBehaviour {
 
     Array[] atkArrs = new Array[] { };
 
-
+   
     //做成动态的   不可逆 当回血后 不要返回之前的攻击
     int n = 0;//记录 不可以返回
     string _zsList = "";
@@ -43,6 +45,7 @@ public class AITheWay_dcr : MonoBehaviour {
     {
         if (zs_way.Count == 0 || zs_way.Count == 1) return zsArr1;
         //print("lie   "+lie+ "  atkArrs   "+ atkArrs.Length);
+
         string[] zss = (string[])atkArrs[lie];
         return zss;
     }

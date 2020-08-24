@@ -241,7 +241,7 @@ public class AIZiDan : MonoBehaviour
     private void OnDisable()
     {
         //print("AIZidan   我被销毁了");
-        _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
+        if(_gameBody&& _gameBody.GetDB()) _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
     }
 
     //接受事件

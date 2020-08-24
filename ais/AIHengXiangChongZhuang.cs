@@ -159,6 +159,9 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
         }
     }
 
+    [Header("冲击结束延迟 时间")]
+    public float OverYCTimes = 0.3f;
+
 
     float JSNums = 0;
     bool _isHitWallOver = false;
@@ -171,7 +174,7 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
         {
             JSNums += Time.deltaTime;
             print(1);
-            if (JSNums > 0.3f)
+            if (JSNums > OverYCTimes)
             {
                 JSNums = 0;
                 _isStartChongJi = false;
@@ -251,6 +254,14 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
 
 
 
+    [Header("是否需要判断 击碎地板")]
+    public bool IsNeedCheckDiBan = false;
+    [Header("下压 可以 压碎 的 地板")]
+    public GameObject DiBan;
+
+
+
+
     [Header("中心点位置")]
     public Transform CenterPos;
 
@@ -268,6 +279,22 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
             return new Vector2(1000, 1000);
         }
 
+        if (IsNeedCheckDiBan)
+        {
+            if (!DiBan || !DiBan.activeSelf || DiBan.GetComponent<XSDiban>().IsHideFloor)
+            {
+                if (_player.transform.position.x > CenterPos.position.x)
+                {
+                    return new Vector2(CenterPos.position.x - ToCenterPosXDistance, _player.transform.position.y);
+                }
+                else
+                {
+                    return new Vector2(CenterPos.position.x + ToCenterPosXDistance, _player.transform.position.y);
+                }
+            }
+        }
+
+
 
         if (_player.transform.position.x > CenterPos.position.x)
         {
@@ -277,8 +304,6 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
         {
             return new Vector2(CenterPos.position.x + ToCenterPosXDistance, CenterPos.position.y);
         }
-
-        
     }
 
 
@@ -350,8 +375,9 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie||(_player&&_player.GetComponent<RoleDate>().isDie))
         {
+            ReSetAll();
             _isGetOver = true;
             return;
         }

@@ -70,11 +70,38 @@ public class AI_ZiDans : MonoBehaviour,ISkill
             FireAudio.Play();
         }
 
+
+
+
+
+
         GameObject zidan = GetZiDan();
         Vector2 v1 = _player.transform.position - ZiDanPos.position;
         zidan.GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByV2(v1, 10);
 
-        SanLianSanDan(v1,2);
+
+
+        if (ZiDanTypeNum == 2)
+        {
+            //3子弹
+            SanLianSanDan(v1, 1);
+        }
+        else if (ZiDanTypeNum == 3)
+        {
+            //5子弹
+            SanLianSanDan(v1, 2);
+        }
+        else if (ZiDanTypeNum == 4)
+        {
+            //11子弹
+            SanLianSanDan(v1, 5);
+        }else if (ZiDanTypeNum == 5)
+        {
+            //连续 2层的 3子弹
+        }
+
+        //连续3层  等。。。。
+        
 
         _isFireOver = true;
     }
@@ -139,6 +166,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         if (_fireOverJS>= _fireOverTimes)
         {
             ReSetAll();
+            print(" 子弹s " + ZiDanTypeNum+"   结束！！！  ");
             _isGetOver = true;
         }
     }
@@ -158,8 +186,11 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     GameObject _player;
     public void GetStart(GameObject gameObj)
     {
+        print(" 子弹s "+ZiDanTypeNum);
         _player = gameObj;
+        _isGetOver = false;
         _isQiShiAC = true;
+        
     }
 
     bool _isGetOver = false;

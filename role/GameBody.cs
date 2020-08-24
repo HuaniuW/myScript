@@ -667,7 +667,8 @@ public class GameBody : MonoBehaviour, IRole {
         {
             if (qianmianjiance == null) return false;
             Vector2 start = qianmianjiance.position;
-            Vector2 end = new Vector2(start.x+1, start.y );
+            float __x = this.transform.localScale.x > 0 ? start.x - 1 : start.x + 1;
+            Vector2 end = new Vector2(__x, start.y );
             Debug.DrawLine(start, end, Color.yellow);
             isHitWall = Physics2D.Linecast(start, end, groundLayer);
             //print("前面 检测点 是否 探测到撞墙 "+ isHitWall);
@@ -1445,7 +1446,6 @@ public class GameBody : MonoBehaviour, IRole {
 
     // Update is called once per frame
     void Update () {
-        
         GetUpdate();
     }
 

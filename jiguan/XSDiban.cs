@@ -30,7 +30,7 @@ public class XSDiban : MonoBehaviour {
     public bool IsChangeKuai = false;
     public BoxCollider2D Kuai;
 
-    void BeStart()
+    public void BeStart()
     {
         HideFloor();
         GetShock();
@@ -125,11 +125,15 @@ public class XSDiban : MonoBehaviour {
         if (zdSound) zdSound.Stop();
     }
 
-
+    public bool IsHideFloor = false;
     //隐藏地板
     void HideFloor()
     {
-        if (hideFloor) hideFloor.SetActive(false);
+        if (hideFloor) {
+            hideFloor.SetActive(false);
+            IsHideFloor = true;
+        }
+        
     }
 
     //播放震动动画 地板碎片散落

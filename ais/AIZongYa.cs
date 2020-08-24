@@ -4,11 +4,37 @@ using UnityEngine;
 
 public class AIZongYa : MonoBehaviour,ISkill
 {
+    [Header("是否需要判断 击碎地板")]
+    public bool IsNeedCheckDiBan = false;
+    [Header("下压 可以 压碎 的 地板")]
+    public GameObject DiBan;
+    [Header("血量 低于多少的时候 可以压碎地板")]
+    public float ZhenSuiDiBanXueLiang = 0;
+
+    bool IsNeedZhenSuiDiBan()
+    {
+        if (IsNeedCheckDiBan && DiBan && DiBan.activeSelf && GetComponent<RoleDate>().live <= ZhenSuiDiBanXueLiang) return true;
+        return false;
+    }
+
+
+
+
     GameObject _player;
     public void GetStart(GameObject gameObj)
     {
+        if (IsNeedCheckDiBan)
+        {
+            if (!DiBan||!DiBan.activeSelf || DiBan.GetComponent<XSDiban>().IsHideFloor)
+            {
+                _isGetOver = true;
+                return;
+            }
+            
+        }
         _isGetOver = false;
         _player = gameObj;
+        _jiadongzuoNums = JiaDongZuoNums;
         _airGameBody = GetComponent<AirGameBody>();
         StartCS();
         print(" 调用 纵压   "+ _isGoToStartPos);
@@ -52,6 +78,16 @@ public class AIZongYa : MonoBehaviour,ISkill
         _isHasYaXia = false;
     }
 
+
+    [Header("是否 有 再次 下压瞄准")]
+    public bool IsHasJiaDongZuo = false;
+    [Header("是否 有 再次 下压瞄准 几率")]
+    public float JiaDongZuoJL = 100;
+    [Header("是否 有 再次 下压瞄准 次数")]
+    public int JiaDongZuoNums = 1;
+    int _jiadongzuoNums = 0;
+
+
     bool _isGoToStartPos = false;
     //2.移动到选取的 高空点
     void GoToStartPos()
@@ -59,6 +95,10 @@ public class AIZongYa : MonoBehaviour,ISkill
         print(" zhongya 1  "+ _isGoToStartPos);
         if (GetComponent<AirGameBody>().IsHitWall || GoToMoveToPoint(GoToPos, 0.5f, 8))
         {
+           
+
+
+
             ReSetAll();
             GetXiaYaPos();
             _isXiaYaQSACing = true;
@@ -112,8 +152,22 @@ public class AIZongYa : MonoBehaviour,ISkill
         if (_QSYCTime >= _QSYCNums)
         {
             _QSYCTime = 0;
-            //_isXiaYaQSACing = false;
+
             ReSetAll();
+            //假动作
+            if (IsHasJiaDongZuo && _jiadongzuoNums > 0)
+            {
+                if (GlobalTools.GetRandomNum() <= JiaDongZuoJL)
+                {
+                    print("假动作  再次瞄准");
+                    _jiadongzuoNums--;
+                    StartCS();
+                    return;
+                }
+            }
+
+            //_isXiaYaQSACing = false;
+            
             _startXiaYa = true;
         }
     }
@@ -136,6 +190,9 @@ public class AIZongYa : MonoBehaviour,ISkill
 
     bool _startXiaYa = false;
     bool _isHasYaXia = false;
+
+    [Header("下压特效名字")]
+    public string TX_XiaLuoYanAME = "tx_xialuozhendongYC";
 
     [Header("下压后 停顿的时间")]
     public float hasXiaYaDJS = 0.3f;
@@ -164,12 +221,23 @@ public class AIZongYa : MonoBehaviour,ISkill
             {
                 GameObject yc;
                 Vector2 _pos = this.transform.position;
-                yc = Resources.Load("tx_xialuozhendongYC") as GameObject;
+                yc = Resources.Load(TX_XiaLuoYanAME) as GameObject;
                 yanchenHitKuai = ObjectPools.GetInstance().SwpanObject2(yc);
                 yanchenHitKuai.transform.parent = this.transform.parent;
                 yanchenHitKuai.GetComponent<JN_base>().GetPositionAndTeam(_pos, this.GetComponent<RoleDate>().team, 1, this.gameObject, true);
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.8"), this);
                 print("@@@@@@@@@@@ 进来几次 ");
+
+                GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+
+                if(IsNeedZhenSuiDiBan()){
+                    //进入 击碎地板的  流程
+                    if (DiBan) {
+                        DiBan.GetComponent<XSDiban>().BeStart();
+                    } 
+                }
+
+
             }
         }
     }
@@ -185,6 +253,14 @@ public class AIZongYa : MonoBehaviour,ISkill
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<RoleDate>().isBeHiting || GetComponent<RoleDate>().isDie || (_player && _player.GetComponent<RoleDate>().isDie))
+        {
+            ReSetAll();
+            _isGetOver = true;
+            return;
+        }
+
+
         if (_isGoToStartPos) GoToStartPos();
         if (_isXiaYaQSACing) XiaYaQSAC();
         if (_startXiaYa) GetXiaYa();

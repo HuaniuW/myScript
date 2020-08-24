@@ -97,7 +97,7 @@ public class PlayerGameBody : GameBody {
             heidian.Play();
         }
         
-        Hongyan.Play();
+        if(Hongyan) Hongyan.Play();
     }
 
     public void Bianbai()
@@ -320,6 +320,7 @@ public class PlayerGameBody : GameBody {
         //print("   scale  "+bianzi1.transform.localScale);
         //print("rotation   "+bianzi1.transform.localRotation);
         //print("localEulerAngles   " + bianzi1.transform.localEulerAngles);
+        if (!obj) return;
         Vector3 v3 = obj.transform.localScale;
         if (this.transform.localScale.x == 1)
         {
@@ -1073,7 +1074,7 @@ public class PlayerGameBody : GameBody {
                 isAtkYc = false;
                 isAtking = false;
                 isAtk = false;
-                Hongyan.Stop();
+                if(Hongyan) Hongyan.Stop();
                 //print(" --------------------------------------------////////////////////  ----------------? ?????  ");
                 //AtkLJOver(); 
                 //isGetJump = false;

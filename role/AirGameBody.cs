@@ -78,6 +78,7 @@ public class AirGameBody : GameBody {
 
     // Update is called once per frame
     void Update () {
+        //if (this.tag != "Player") print("   ??IsHitWall     " + IsHitWall);
         this.GetUpdate();
 	}
 

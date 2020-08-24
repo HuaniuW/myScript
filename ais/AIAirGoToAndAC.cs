@@ -25,11 +25,36 @@ public class AIAirGoToAndAC : MonoBehaviour
     }
 
 
+
+    [Header("是否需要判断 击碎地板")]
+    public bool IsNeedCheckDiBan = false;
+    [Header("下压 可以 压碎 的 地板")]
+    public GameObject DiBan;
+    [Header("判断 地板后 的 nums")]
+    public int CheckDiBanHouNum = 3;
+    [Header("中心点位置")]
+    public Transform CenterPos;
+
+    [Header("离 中心点位置 的随机距离最大值")]
+    public float ToCenterPosAutoDistance = 1;
+
+
+
     Vector2 chosePos = new Vector2(1000,1000);
     //固定坐标 list
     List<Vector2> gudingZBList = new List<Vector2>();
     void ChosePos()
     {
+        if (IsNeedCheckDiBan)
+        {
+            if (!DiBan||!DiBan.activeSelf|| DiBan.GetComponent<XSDiban>().IsHideFloor)
+            {
+                TypeNum = CheckDiBanHouNum;
+            }
+        }
+
+
+
         //typeNum = 1 就是4个随机点  2就是 在玩家的x 处 的固定高位 可以下压
         if(TypeNum == 1)
         {
@@ -69,6 +94,31 @@ public class AIAirGoToAndAC : MonoBehaviour
                 }
                 IsStartMove = true;
             }
+        }else if(TypeNum == 2)
+        {
+            //在玩家上方多高
+        }else if (TypeNum == 3)
+        {
+            //与玩家 同Y 固定点 x
+            gudingZBList.Clear();
+            Vector2 v2 = new Vector2(CenterPos.position.x, _obj.transform.position.y);
+            gudingZBList.Add(v2);
+            chosePos = ChoseAndCheckPointInList();
+            IsStartMove = true;
+        }else if (TypeNum == 4)
+        {
+            //围绕给出 的一个 点 在随机距离内 生成 点 适合 空旷地带
+            gudingZBList.Clear();
+
+            float _dx = GlobalTools.GetRandomDistanceNums(ToCenterPosAutoDistance);    //GlobalTools.GetRandomNum()>50?GlobalTools.GetRandomDistanceNums(ToCenterPosAutoDistance):
+            float _dy = GlobalTools.GetRandomDistanceNums(ToCenterPosAutoDistance);
+            _dx = GlobalTools.GetRandomNum() > 50 ? _dx : -_dx;
+            _dy = GlobalTools.GetRandomNum() > 50 ? _dy : -_dy;
+
+            Vector2 v2 = new Vector2(CenterPos.position.x+_dx, CenterPos.position.y+_dy);
+            gudingZBList.Add(v2);
+            chosePos = ChoseAndCheckPointInList();
+            IsStartMove = true;
         }
         //运动到目标点
 
@@ -223,7 +273,11 @@ public class AIAirGoToAndAC : MonoBehaviour
                 //GetComponent<AIAirBase>().GetAtkFSByName(AtkACName);
                 ReSetAll();
             }
-            
+
+        }
+        else
+        {
+            ReSetAll();
         }
         
     }
