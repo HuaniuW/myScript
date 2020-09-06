@@ -82,9 +82,9 @@ public class TX_zidan : MonoBehaviour
 
         if (_player&& isFaShe) {
             isFaShe = false;
-            print("----------------------------------------->>  fire!!!!! "+speeds);
+            //print("----------------------------------------->>  fire!!!!! "+speeds);
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
-            print("   sudu   "+ GetComponent<Rigidbody2D>().velocity);
+            //print("   sudu   "+ GetComponent<Rigidbody2D>().velocity);
         } 
     }
 

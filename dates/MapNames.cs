@@ -67,7 +67,7 @@ public class MapNames : MonoBehaviour
     public List<string> db_lu_1 = new List<string> { "db_dn_lu_1" };
     public List<string> db_ru_1 = new List<string> { "db_dn_ru_1" };
 
-    public List<string> db_pd_1 = new List<string> {"db_pd_1", "db_pd_2"};
+    public List<string> db_pd_1 = new List<string> {"db_pd_1"};
 
     public List<string> db_dn_heng_1 = new List<string> { "db_dn_heng_1"};
     public List<string> db_dn_shu_1 = new List<string> { "db_dn_shu_1" };

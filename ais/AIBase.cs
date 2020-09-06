@@ -660,7 +660,7 @@ public class AIBase : MonoBehaviour {
             //IsGetAtkFSByName = false;
            
             
-            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
+            print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 

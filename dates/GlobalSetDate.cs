@@ -474,7 +474,7 @@ public class GlobalSetDate : MonoBehaviour {
     public string MapMsgList = "";
 
     //当前 跳入 的随机地图名字
-    public string CReMapName = "";
+    public string CReMapName = "s";
     public bool IsCMapHasCreated = false;
 
 

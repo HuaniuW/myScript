@@ -49,6 +49,9 @@ public class AIAirRunNear : MonoBehaviour
     {
         isStartXY = false;
         isZhuijiY = false;
+        IsZhuijiPosing = false;
+        _isZhuijiType3 = false;
+        _isGetPos = false;
         setter.ReSetAll();
         runAway.ReSetAll();
         _aiPath.canMove = false;
@@ -123,9 +126,12 @@ public class AIAirRunNear : MonoBehaviour
         }
 
         //print(" _aiPath.maxSpeed不能是0  " + _aiPath.maxSpeed);
+       
 
         zhuijiRun();
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+        print("thisV2  " + thisV2 + "  point " + point + "  zuijiPosDisWC  "+ zuijiPosDisWC);
+        print(" ---->  "+ (thisV2 - point).sqrMagnitude);
         if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
         {
             ResetAll();
@@ -356,6 +362,50 @@ public class AIAirRunNear : MonoBehaviour
         return v2;
     }
 
+
+
+    public bool GoToMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0)
+    {
+        zhuijiRun();
+
+        Vector2 thisV2 = this.transform.position;
+        Vector2 v2 = (point - thisV2) * TempSpeed;
+        if (v2.x < 1 || v2.y < 1)
+        {
+            v2 *= 2;
+        }
+        this.GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = v2;
+        this.GetComponent<AirGameBody>().IsJiasu = true;
+
+        if (GetComponent<AirGameBody>().IsHitWall)
+        {
+            print(" ??????   jinlaile ??  ");
+            return true;
+        }
+
+        //这里要做预判
+
+        print("------------------距离：   "+Vector2.Distance(thisV2, point) + "  ----范围    " + inDistance+"  速度：   "+v2+"   当前速度  " + this.GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
+        //距离小于 误差内 直接结束
+        //Vector2.Distance(thisV2,point)
+        if ((thisV2 - point).sqrMagnitude < inDistance)
+        {
+            print(" thisV2  " + thisV2 + "    toPos   " + point);
+            print(" inDistance "+ inDistance);
+            this.GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            return true;
+        }
+        return false;
+    }
+
+
+    bool IsInAtkDistance(float inDistance)
+    {
+        return Vector2.Distance(this.transform.position, _obj.transform.position) <= inDistance;
+    }
+
+
+
     //探测距离
     float tancejuli = 0.5f;
 
@@ -364,7 +414,10 @@ public class AIAirRunNear : MonoBehaviour
     bool isZhuijiY = true;
     int nums = 0;
 
-   
+    bool IsZhuijiPosing = false;
+    public Transform BiaoJiYPos;
+    bool _isZhuijiType3 = false;
+    bool _isGetPos = false;
 
     //靠XY来追击 不是寻路
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
@@ -385,12 +438,84 @@ public class AIAirRunNear : MonoBehaviour
         //纯寻路的 追击
         //1.找到位置点  判断位置点和位置点周围 是否 碰到墙壁  找不到直接返回去   触发无法到达 取消 AI动作
 
+        
+
+        if (zuijiType == 3)
+        {
+            if(!_isZhuijiType3 &&this.transform.position.y< BiaoJiYPos.position.y) {
+                v2 = new Vector2(this.transform.position.x, BiaoJiYPos.position.y+2);
+                ZhuijiPointZuoBiao(v2);
+            }
+            else
+            {
+                if (this.transform.position.y > BiaoJiYPos.position.y)
+                {
+                    print("我已经 超过了Y轴的 位置");
+                }
+                else
+                {
+                    print("又 低于 Y了---->>>>????????");
+                }
+
+
+                _aiPath.canMove = false;
+                if (!_isZhuijiType3)
+                {
+                    _isZhuijiType3 = true;
+                }
+
+
+                if (!_isGetPos)
+                {
+                    _isGetPos = true;
+                    
+                }
+
+
+                print("atkdistance   "+ atkdistance+ "  _zjDistanceY  "+ _zjDistanceY);
+                v2 = FindAtkToPos(atkdistance-2, _zjDistanceY-2);
+                print("寻找点  " + v2);
+
+                bool _isInPos = GoToMoveToPoint(v2, 0.2f, 10);
+
+                print("攻击范围  " + atkdistance);
+                print( "我的位置    "+ this.transform.position+" 敌人位置  "+ _obj.transform.position + " 距离  "+ Vector2.Distance(this.transform.position, _obj.transform.position));
+                
+
+                if (IsInAtkDistance(atkdistance))
+                {
+                    ResetAll();
+                    print("进入了 攻击范围！");
+                    return true;
+                }
+                else
+                {
+                    if (_isInPos)
+                    {
+                        print("没有进入 攻击范围 但是 进入了 寻找点  重新开始 寻找点");
+                        _isGetPos = false;
+                    }
+                  
+                }
+            }
+            return false;
+        }
+
+
+
         if(zuijiType == 2)
         {
+            //if (!IsZhuijiPosing)
+            //{
+            //    IsZhuijiPosing = true;
+            //    v2 = FindAtkToPos(atkdistance, _zjDistanceY);
+            //}
             v2 = FindAtkToPos(atkdistance, _zjDistanceY);
+
             if (v2 == new Vector2(1000, 1000))
             {
                 print(" 取消动作！！！！！！ ");
+                IsZhuijiPosing = false;
                 //找不到 目标点 直接 取消动作
                 GetComponent<AIAirBase>().QuXiaoAC();
                 return false;
@@ -398,7 +523,19 @@ public class AIAirRunNear : MonoBehaviour
             else
             {
                 print("  找到追击点    "+v2);
-                return ZhuijiPointZuoBiao(v2);
+
+                bool _isToPos = ZhuijiPointZuoBiao(v2);
+
+                //if (_isToPos)
+                //{
+                //    if(Mathf.Abs(this.transform.position.x - _obj.transform.position.x)> _zjDistance)
+                //    {
+                //        _isToPos = false;
+                //        IsZhuijiPosing = false;
+                //    }
+                //}
+
+                return _isToPos;
                 //_aiPath.canMove = true;
                 //setter.SetV2(v2);
 

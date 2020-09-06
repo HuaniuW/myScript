@@ -70,6 +70,10 @@ public class JN_SFBase : MonoBehaviour, ISkill
         GetUpDate();
     }
 
+    [Header("直接释放技能")]
+    public bool IsZhiJieShiFangJN = false;
+
+
     protected virtual void GetUpDate()
     {
         if (GetComponent<AIBase>().IsTuihuiFangshouquing)
@@ -88,6 +92,20 @@ public class JN_SFBase : MonoBehaviour, ISkill
         //print("0");
         if (IsStarting)
         {
+            //直接释放技能 不用走近
+            if (IsZhiJieShiFangJN)
+            {
+                if (!IsInAtkDistance)
+                {
+                    IsInAtkDistance = true;
+                    NearRoleInDistance(AtkDistance, AtkDistanceY);
+                    if (IsStopMove) StopMove();
+                    GetAC();
+                }
+            }
+
+
+
             //if (TXName == "TX_LuanRen") print("  ???? gameBody speed   " + _gameBody.GetComponent<Rigidbody2D>().velocity+ "   IsInAtkDistance  "+ IsInAtkDistance);
             //if (IsInAtkDistance)
             //{

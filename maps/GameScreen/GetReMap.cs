@@ -76,6 +76,12 @@ public class GetReMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GetStart();
+    }
+
+
+    protected virtual void GetStart()
+    {
         GetInDate();
 
 
@@ -86,7 +92,7 @@ public class GetReMap : MonoBehaviour
 
         //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GUAI_DIE, this.gameObject), this);
-        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GUAI_DIE,this.GuaiDieOver);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GUAI_DIE, this.GuaiDieOver);
 
         //print("  @@--------这里是 完成地图后！ ");
 
@@ -102,7 +108,8 @@ public class GetReMap : MonoBehaviour
         StartCoroutine(IEDestory2ByTime(0.1f));
     }
 
-    void GetGuaiControlMen()
+
+    protected void GetGuaiControlMen()
     {
         //print("有怪没啊    " + GuaiList.Count);
         //中心地板 不是左右连接 或者 怪数量小于4 不允许关门
@@ -129,8 +136,8 @@ public class GetReMap : MonoBehaviour
 
 
     bool IsDuiqiAx = false;
-    GameObject kuang;
-    GameObject Ax;
+    protected GameObject kuang;
+    protected GameObject Ax;
 
     // Update is called once per frame
     void Update()
@@ -178,7 +185,7 @@ public class GetReMap : MonoBehaviour
         //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
     }
 
-
+    
     //对比 当前地图内部的 地图 名字 是否就是需要生成的名字  用在 从非随机地图 进入 随机地图    这样可以不用生成   从随机地图 进入 非随机地图的时候 记录一下 是哪个Rmap_1 还是2 出来的
 
     //记录 关卡名字   获取地图的门信息
@@ -194,11 +201,11 @@ public class GetReMap : MonoBehaviour
     //粒子效果
     //
 
-    GameObject maps;
+    protected GameObject maps;
 
     //当前地图 信息  eg->   map_1-1!0#0!r:map_1-2  
-    string theMapMsg = "";
-    public void GetInDate()
+    protected string theMapMsg = "";
+    public virtual void GetInDate()
     {
 
         //判断 是否 有这个地图的数据 有的话 直接按数据生成地图
@@ -218,7 +225,6 @@ public class GetReMap : MonoBehaviour
 
         print("本地图名字 "+GlobalSetDate.instance.CReMapName);
         if (GlobalSetDate.instance.CReMapName == "") return;
-
 
 
         //获取门信息
@@ -282,7 +288,7 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    void CreateMapByMapMsgDate(string mapMsgDate)
+    protected void CreateMapByMapMsgDate(string mapMsgDate)
     {
         print("->根据地图数据 生成地图 mapMsgDate "+ mapMsgDate);
         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().ClearListDoor();
@@ -403,7 +409,7 @@ public class GetReMap : MonoBehaviour
 
     
 
-    string GetMapMsgDateByName(string mapName)
+    protected string GetMapMsgDateByName(string mapName)
     {
         string[] mapMsgDateArr = GlobalSetDate.instance.gameMapDate.MapDate.Split('@');
         foreach(string s in mapMsgDateArr)
@@ -415,7 +421,7 @@ public class GetReMap : MonoBehaviour
 
     List<GameObject> GuaiList = new List<GameObject> { };
     
-    void GuaiDieOver(UEvent e)
+    protected void GuaiDieOver(UEvent e)
     {
         GuaiList.Remove(e.eventParams as GameObject);
         print(" 怪物die      "+ GuaiList.Count);
@@ -426,7 +432,7 @@ public class GetReMap : MonoBehaviour
     }
 
     //出怪
-    void ChuGuai(bool IsZhongxin = false,string Fx = "")
+    protected void ChuGuai(bool IsZhongxin = false,string Fx = "")
     {
         //挨着门的 地图不出怪
         //根据地图 大关卡 出怪 出什么怪 怪物数组 放哪 boss组 精英组等
@@ -601,9 +607,9 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    string _lianjiedibanType = "lr";
+    protected string _lianjiedibanType = "lr";
 
-    string GetTypeByMenFXList(List<string> menFXList)
+    protected string GetTypeByMenFXList(List<string> menFXList)
     {
 
         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().ClearListDoor();
@@ -634,9 +640,13 @@ public class GetReMap : MonoBehaviour
             string MapMsg = GameMapDate.GetMapDiXingByCName(CMapName);
             print("CMapName "+CMapName+ "  ----  MapMsg  "+ MapMsg);
             //GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
+            //平地
             float pd = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
+            //跳跃
             float ty = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "ty");
+            //混合
             float hh = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "hh");
+            //洞内
             float dn = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "dn");
 
             if (jilv < hh)
@@ -741,9 +751,9 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    string MapMsgStr = "";
+    protected string MapMsgStr = "";
     //存入生成的地图数据  手动存入 也是 调用这个方法
-    public void SetMapMsgDateInStr(bool IsShouDong = false)
+    public virtual void SetMapMsgDateInStr(bool IsShouDong = false)
     {
         print("储存 地图地形 数据！！！！！！！！！！！");
         MapMsgStr = "";
@@ -881,7 +891,7 @@ public class GetReMap : MonoBehaviour
 
     string PingdiDibanType = "";
     //创建地图
-    GameObject GetDiBanByName()
+    protected GameObject GetDiBanByName()
     {
         //**********************@****************普通地板生成数据控制
         string mapArrName = "db_pd";
@@ -896,10 +906,10 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    GameObject _cMapObj;
-    List<GameObject> mapObjArr = new List<GameObject>() { };
+    protected GameObject _cMapObj;
+    protected List<GameObject> mapObjArr = new List<GameObject>() { };
     //参数    danFX单方向修正  
-    void CreateFZRoad(string fx,int mapNums,string goScreenName,string danFX = "")
+    protected virtual void CreateFZRoad(string fx,int mapNums,string goScreenName,string danFX = "")
     {
         Vector2 LJDpos;
         Vector2 pos;
@@ -1223,12 +1233,12 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    float u;
-    float d;
-    float l;
-    float r;
+    protected float u;
+    protected float d;
+    protected float l;
+    protected float r;
 
-    void GetKuaiBianjie(List<GameObject> mapObjList)
+    protected void GetKuaiBianjie(List<GameObject> mapObjList)
     {
         for(int i= 0; i < mapObjList.Count; i++)
         {
@@ -1281,8 +1291,8 @@ public class GetReMap : MonoBehaviour
 
 
 
-    GameObject lianjiedian;
-    void CreateLJByName(string lianjie)
+    protected GameObject lianjiedian;
+    protected virtual void CreateLJByName(string lianjie)
     {
         print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
         int nums = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count;
@@ -1312,7 +1322,7 @@ public class GetReMap : MonoBehaviour
     }
 
     // lr=l:mapR_1$p!r:map_r-3     给门排序  str = lr / lru 等 
-    string GetStrByList(List<string> menFXList)
+    protected string GetStrByList(List<string> menFXList)
     {
         string str = "";
 
@@ -1370,8 +1380,8 @@ public class GetReMap : MonoBehaviour
 
 
     //门方向列表 {"l","r"}
-    List<string> menFXList = new List<string> { };
-    List<string> GetMenFXListByMapName(string mapName)
+    protected List<string> menFXList = new List<string> { };
+    protected List<string> GetMenFXListByMapName(string mapName)
     {
         //BigMapDate->         map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
         string[] mapArr1 = GlobalSetDate.instance.gameMapDate.BigMapDate.Split('@');

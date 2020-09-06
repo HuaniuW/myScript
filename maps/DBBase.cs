@@ -54,7 +54,7 @@ public class DBBase : MonoBehaviour
     {
         if (!GlobalSetDate.instance.IsCMapHasCreated) {
             GetJing();
-            SetLightColor();
+            //SetLightColor();
         }
         
     }
@@ -102,7 +102,7 @@ public class DBBase : MonoBehaviour
 
 
         if (IsHasShu) GetShu();
-        if (IsZJY) GetZYJ();
+        //if (IsZJY) GetZYJ();
         if (IsPingDiJing) GetLRJinBG();
         if (IsPingDiJing) GetJQJ();
         if (IsSCWu) GetWus();
@@ -146,7 +146,7 @@ public class DBBase : MonoBehaviour
         
         float _w = GetWidth() - jingW;
         float __x = tl.position.x + GlobalTools.GetRandomDistanceNums(_w);
-        float __y = tl.position.y - GlobalTools.GetRandomDistanceNums(1);
+        float __y = tl.position.y - GlobalTools.GetRandomDistanceNums(1)-1;
 
         
 
@@ -236,7 +236,7 @@ public class DBBase : MonoBehaviour
         //SetJingByDistanceU("liziWu_1", nums, pos1, pos2, pos1.y+1, 0, 0, 0, "u");
         //Color color1 = new Color(0.1f, 1f, 1f, 0.1f);
         //GetWu("", pos1, pos2, -30, color1);
-        Color color2 = new Color(0.1f, 1f, 1f, 0.2f);
+        Color color2 = new Color(0.1f, 1f, 1f, 0.3f);
         GetWu("", pos1, pos2, -60, color2);
 
 
@@ -278,7 +278,7 @@ public class DBBase : MonoBehaviour
         //print(" 地板宽度     "+_w2);
 
 
-        _wu.transform.localScale = new Vector3(_w2 / (_w + 0.6f), _h2 / _h * 3, 1);
+        _wu.transform.localScale = new Vector3(_w2 / (_w + 0.6f), _h2 / _h * 3,1);
         //print("  缩放 "+ _wu.transform.localScale);
         _wu.transform.position = new Vector2(qidian.x + _w2 * 0.5f + (_w2 - GlobalTools.GetJingW(_wu)) * 0.5f, zhongdian.y + GlobalTools.GetJingH(_wu) * 0.5f-0.3f);
 
@@ -304,7 +304,7 @@ public class DBBase : MonoBehaviour
         Vector2 pos1 = tl.position;
         Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
         //float _y = pos1.y - 1.5f;
-        SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y -GlobalTools.GetRandomDistanceNums(1)   , -1f,0.5f,30, "u");
+        SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y - 0.4f - GlobalTools.GetRandomDistanceNums(1), -0.2f, 0.1f, 30, "u");
         //SetJingByDistanceU("qjd_1", nums, pos1, pos2, pos1.y, -4f, -1f, 40, "u");
 
         SetJingByDistanceU("qjd2_1", nums, pos1, pos2, pos1.y - 1.5f, -0.1f,0, 30, "u");
