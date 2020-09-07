@@ -137,9 +137,12 @@ public class GetReMap2 : GetReMap
     }
 
 
+    GameObject lianjiedianY;
+
     protected override void CreateLJByName(string lianjie)
     {
         print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
+        
         int nums = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count;
         string ljdianName = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
         print("连接点 名字   " + ljdianName);
@@ -149,29 +152,66 @@ public class GetReMap2 : GetReMap
         lianjiedian.transform.parent = maps.transform;
         mapObjArr.Add(lianjiedian);
 
+        lianjiedianY = null;
+
+        int YanZhanDibANNums = 1 + GlobalTools.GetRandomNum(2);
+        int _DuanNums = 1+ GlobalTools.GetRandomNum(2);
+        if (!IsHasFX(_lianjieFX,"l")&& !IsHasFX(_lianjieFX, "d"))
+        {
+            //左封路
+            for(int i = 0; i < _DuanNums; i++)
+            {
+                YanShengDiBan("l", YanZhanDibANNums, i, true);
+            }
+            
+        }
+        else if (!IsHasFX(_lianjieFX, "r") && !IsHasFX(_lianjieFX, "u"))
+        {
+            //右封路
+            for (int i = 0; i < _DuanNums; i++)
+            {
+                YanShengDiBan("r", YanZhanDibANNums, i, true);
+            }
+        }
+        else
+        {
+            if (GlobalTools.GetRandomNum() >= 5)
+            {
+                //print("创建 右边 延展的 连接点");
+                YanShengDiBan("r", YanZhanDibANNums, 0);
+            }
+        }
+
+
+
+     
+
+
+
 
 
         //if (lianjie.Split('_')[0] == "lr")
         //{
         //    if (!GlobalSetDate.instance.IsCMapHasCreated) ChuGuai(true);
         //}
-       
+
     }
 
-    string _lianjieFX = "lrud";
+    string _lianjieFX = "ru";
     void CreateMapByFX(string lianjieFX)
     {
         print("  ??? "+ lianjieFX);
         //_lianjieFX = lianjieFX;
+        CMapName = "map_s-1";
+
         //创建 连接点
         CreateLJByName(lianjieFX);
         //创建 各个方向的 起始点地板
 
-
         char[] FXArr = _lianjieFX.ToCharArray();
 
 
-        CMapName = "map_s-1";
+       
 
         for (int i = 0; i < FXArr.Length; i++)
         {
@@ -228,7 +268,7 @@ public class GetReMap2 : GetReMap
 
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetLeftPos();
                     pos = LJDpos;
-                    GetMapObjPos(i);
+                    GetMapObjPos(0);
 
                 }
             }
@@ -257,7 +297,7 @@ public class GetReMap2 : GetReMap
                     GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetDoorInList(mapObj);
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetRightPos();
                     pos = LJDpos;
-                    GetMapObjPos(i);
+                    GetMapObjPos(0);
                 }
             }
 
@@ -373,7 +413,15 @@ public class GetReMap2 : GetReMap
                 if (isFirstNums == 0 && !_isQishi0)
                 {
                     _isQishi0 = true;
-                    LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
+                    if (lianjiedianY)
+                    {
+                        LJDpos = lianjiedianY.GetComponent<DBBase>().GetRightPos();
+                    }
+                    else
+                    {
+                        LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
+                    }
+                    
                 }
                 else
                 {
@@ -394,7 +442,15 @@ public class GetReMap2 : GetReMap
                 if (isFirstNums == 0 && !_isQishi0)
                 {
                     _isQishi0 = true;
-                    LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
+
+                    if (lianjiedianY)
+                    {
+                        LJDpos = lianjiedianY.GetComponent<DBBase>().GetRightPos();
+                    }
+                    else
+                    {
+                        LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
+                    }
                 }
                 else
                 {
@@ -417,19 +473,77 @@ public class GetReMap2 : GetReMap
         _isQishi0 = false;
     }
 
-    void ShengChengDiBan(int i,string FX,int nums)
+
+    //延伸的 地板
+    void YanShengDiBan(string FX,int DuanNums,int isFirstNums, bool IsFenglu = false) {
+        //生成什么 地形的 几率
+        int nums = GlobalTools.GetRandomNum();
+        for (int i = 0; i < DuanNums; i++)
+        {
+            mapObj = GetDiBanByName();
+            if(FX== "l"||FX == "d")
+            {
+                if (isFirstNums == 0 && !_isQishi0)
+                {
+                    _isQishi0 = true;
+                    LJDpos = lianjiedian.GetComponent<LianJieDian>().GetLeftPos();
+                }
+                else
+                {
+                    LJDpos = _cMapObj.GetComponent<DBBase>().GetLeftPos();
+                }
+            }
+            else if (FX == "r" || FX == "u")
+            {
+                if (isFirstNums == 0 && !_isQishi0)
+                {
+                    _isQishi0 = true;
+                    LJDpos = lianjiedian.GetComponent<LianJieDian>().GetRightPos();
+                }
+                else
+                {
+                    LJDpos = _cMapObj.GetComponent<DBBase>().GetRightPos();
+                }
+            }
+          
+
+            ShengChengDiBan(i, FX, nums,true);
+            //放置和 记录地板 
+            GetMapObjPos(i);
+
+            if (i == DuanNums - 1)
+            {
+                if (IsFenglu)
+                {
+                    //封路
+
+                }
+                else
+                {
+                    lianjiedianY = mapObj;
+                }
+            }
+        }
+        _isQishi0 = false;
+    }
+
+    void ShengChengDiBan(int i, string FX, int nums, bool IsYanZhan = false)
     {
-        if (nums < 80)
+        //print("  nums  "+nums+ "  IsYanZhan  "+ IsYanZhan);
+        if (nums < 30)
         {
             PuTongPingDiDX(i, FX, false);
         }
-        else if (nums < 50)
+        else if (nums < 60)
         {
             PuTongPingDiDX(i, FX, false);
         }
-        else if (nums < 30)
+        else if (nums < 80)
         {
-            if ((FX == "l" && IsHasFX(_lianjieFX, "d"))|| (FX == "u" && IsHasFX(_lianjieFX, "r")))
+            if (IsYanZhan)
+            {
+                PuTongXiaJiangDX(i, FX, false);
+            }else if ((FX == "l" && IsHasFX(_lianjieFX, "d"))|| (FX == "u" && IsHasFX(_lianjieFX, "r")))
             {
                 //如果包含 D 下路 就不能有下降 下降改为平地
                 PuTongPingDiDX(i, FX, false);
@@ -441,8 +555,11 @@ public class GetReMap2 : GetReMap
         }
         else
         {
-
-            if((FX== "d" && IsHasFX(_lianjieFX, "l"))|| (FX == "r" && IsHasFX(_lianjieFX, "u")))
+            if (IsYanZhan)
+            {
+                PuTongShangShengDX(i, FX, false);
+            }
+            else if ((FX== "d" && IsHasFX(_lianjieFX, "l"))|| (FX == "r" && IsHasFX(_lianjieFX, "u")))
             {
                 //如果包含 L 左路 就不能上升 上升改为平地
                 PuTongPingDiDX(i, FX, false);
@@ -474,7 +591,6 @@ public class GetReMap2 : GetReMap
     //普通 梯度上升 地形
     void PuTongShangShengDX(int i,string fx, bool IsQishi = false)
     {
-        print("  i shi duoshao--------------->    "+i);
 
         if(fx == "l"|| fx == "d")
         {

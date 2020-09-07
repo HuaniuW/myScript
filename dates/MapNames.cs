@@ -28,7 +28,129 @@ public class MapNames : MonoBehaviour
         return instance;
     }
 
+
+    public string GetGKKey()
+    {
+        return "1";
+    }
+
+    // 通过关卡 标记 获取 元素数组名 
+    public string GetJingArrNameByGKKey(string jingArrName)
+    {
+        string JingArrName = jingArrName + "_" + GetGKKey();
+        if(GetDateByName.GetInstance().GetListByName(JingArrName, MapNames.GetInstance()) == null)
+        {
+            JingArrName = "";
+        }
+        return JingArrName;
+    }
+
+    public Color GetColorByGKKey()
+    {
+        Color _color = new Color(0.1f, 1f, 1f, 0.3f); //Color.cyan;
+        return _color;
+    }
+
+
+    //地板
+    public List<string> db_pd_1 = new List<string> { "db_pd_1" };
+
+
     //要知道 类型 ？？  怎么给 列表 加标识
+
+
+    //下层近景 近景 下 jin jing  down =jjd
+    public List<string> jjd_1 = new List<string> { "jjd_1_1", "jjd_1_2" };
+    public List<string> shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
+
+    //门 下方的近景
+    public List<string> men_jjd_1 = new List<string> { "jjd_1_1", "jjd_1_2" };
+
+    //门 上方的近景 
+    public List<string> men_jju_1 = new List<string> { "jju_1_1", "jju_1_2", "jju_1_3", "jju_1_4" };
+
+    //门 下方的 前景
+    public List<string> men_qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
+    //前景 下方
+    public List<string> qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_6", "qjd_1_8" };
+    public List<string> qjd2_1 = new List<string> { "qjd_1_1", "qjd_1_5", "qjd_1_7", "qjd_1_10" };
+    public List<string> qjd3_1 = new List<string> { "qjd_1_9", "qjd_1_10" };
+
+
+    //装饰物
+    public List<string> zsw_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" };
+
+    //特殊的 修饰物 地标类型
+    public List<string> zswTS_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" };
+
+    //连续的装饰物  比如 栅栏   
+    public List<string> LXZsw_1 = new List<string> { };
+
+
+
+    //前远景大
+    public List<string> qyjd_1 = new List<string> { "qjd_1_9", "qjd_1_10", "qyj_1_1" };
+    //前景上方 倒挂的景
+    public List<string> qju_1 = new List<string> { "jju_1_1", "jju_1_3", "jju_1_4" };
+
+
+    //较大的 前景 w>13 h>4
+    public List<string> qjdd_1 = new List<string> { "qyj_1_1" };
+
+    //public static List<string> qjdd_1 = new List<string> { "1", "2", "10" };
+
+    public List<string> qyj_1 = new List<string> { "qyj_1_1" };
+    //近远景
+    public List<string> jyj_1 = new List<string> { "jyj_1_1", "jyj_1_2", "jyj_1_3", "jyj_1_4", "jyj_1_5", "jyj_1_6" };
+    //中远景
+    public List<string> zyj_1 = new List<string> { "zyj_1_1", "zyj_1_2", "zyj_1_3", "zyj_1_4", "zyj_1_5", "zyj_1_6", "zyj_1_7" };
+    //大远景
+    public List<string> dyj_1 = new List<string> { "dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
+
+    //粒子落叶
+    public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };
+    //粒子 雾
+    public List<string> liziWu_1 = new List<string> { "liziWu_1_1" };
+
+    public List<string> xiaoGuai_2 = new List<string> { "G_dcrj1" };
+    public List<string> xiaoGuai_1 = new List<string> { "G_dcr2" };
+    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" };
+    public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //*********************************************************** 老版本*******************
 
     //eg: lr_pd_1 平地  lr_dn_1  洞内   这里需不需要建立数组  还是直接在 系统里面 跟景色一样 根据名字生成？ 
     public List<string> lr = new List<string> {"lr_pd_1","lr_dn_1"};
@@ -67,7 +189,7 @@ public class MapNames : MonoBehaviour
     public List<string> db_lu_1 = new List<string> { "db_dn_lu_1" };
     public List<string> db_ru_1 = new List<string> { "db_dn_ru_1" };
 
-    public List<string> db_pd_1 = new List<string> {"db_pd_1"};
+   
 
     public List<string> db_dn_heng_1 = new List<string> { "db_dn_heng_1"};
     public List<string> db_dn_shu_1 = new List<string> { "db_dn_shu_1" };
@@ -88,52 +210,7 @@ public class MapNames : MonoBehaviour
 
 
 
-    //下层近景 近景 下 jin jing  down =jjd
-    public List<string> jjd_1 = new List<string> { "jjd_1_1", "jjd_1_2" };
-    public List<string> shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
-
-    //门 下方的近景
-    public List<string> men_jjd_1 = new List<string> { "jjd_1_1", "jjd_1_2" };
-
-    //门 上方的近景 
-    public List<string> men_jju_1 = new List<string> { "jju_1_1", "jju_1_2", "jju_1_3", "jju_1_4" };
-
-    //门 下方的 前景
-    public List<string> men_qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
-    //前景 下方
-    public List<string> qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_6", "qjd_1_8"  };
-
-
-    public List<string> zsw_1 = new List<string> { "j_ludeng_1", "j_lupai_1", "j_zhalan_1", "j_zhalan_2" };
-    
-
-
-    public List<string> qjd2_1 = new List<string> { "qjd_1_1", "qjd_1_5", "qjd_1_7" , "qjd_1_10" };
-    public List<string> qjd3_1 = new List<string> { "qjd_1_9", "qjd_1_10"};
-
-    public List<string> qyjd_1 = new List<string> { "qjd_1_9", "qjd_1_10", "qyj_1_1" };
-
-    //前景上方 倒挂的景
-    public List<string> qju_1 = new List<string> { "jju_1_1",  "jju_1_3", "jju_1_4" };
-
-
-    //较大的 前景 w>13 h>4
-    public List<string> qjdd_1 = new List<string> { "qyj_1_1" };
-
-    //public static List<string> qjdd_1 = new List<string> { "1", "2", "10" };
-
-    public List<string> qyj_1 = new List<string> { "qyj_1_1" };
-    //近远景
-    public List<string> jyj_1 = new List<string> { "jyj_1_1", "jyj_1_2", "jyj_1_3", "jyj_1_4", "jyj_1_5", "jyj_1_6" };
-    //中远景
-    public List<string> zyj_1 = new List<string> { "zyj_1_1", "zyj_1_2", "zyj_1_3", "zyj_1_4", "zyj_1_5", "zyj_1_6", "zyj_1_7" };
-    //大远景
-    public List<string> dyj_1 = new List<string> {"dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
-
-    //粒子落叶
-    public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };
-    //粒子 雾
-    public List<string> liziWu_1 = new List<string> { "liziWu_1_1" };
+   
 
 
 
@@ -158,8 +235,5 @@ public class MapNames : MonoBehaviour
     //Boss = {};  根据当前 大关卡 来选
 
 
-    public List<string> xiaoGuai_2 = new List<string> {"G_dcrj1"};
-    public List<string> xiaoGuai_1 = new List<string> { "G_dcr2" };
-    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" };
-    public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
+  
 }

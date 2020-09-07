@@ -147,8 +147,9 @@ public class GetReMap : MonoBehaviour
             if(Ax.transform.position!= kuang.transform.position)
             {
                 Ax.transform.position = kuang.transform.position;
-                //Ax.GetComponent<AstarPath>()
+                //Ax.GetComponent<AstarPath>().UpdateGraphs
                 Ax.GetComponent<AstarPath>().Scan();
+
                 //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
                 //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
 
@@ -1383,7 +1384,7 @@ public class GetReMap : MonoBehaviour
     protected List<string> menFXList = new List<string> { };
     protected List<string> GetMenFXListByMapName(string mapName)
     {
-        //BigMapDate->         map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
+        //BigMapDate->         map_r+map_r-1!0#0!r:map_r-2^u:map_r-3 | map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
         string[] mapArr1 = GlobalSetDate.instance.gameMapDate.BigMapDate.Split('@');
         string mapMsg = "";
         foreach(string s in mapArr1)

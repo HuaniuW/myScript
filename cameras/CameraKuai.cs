@@ -25,7 +25,7 @@ public class CameraKuai : MonoBehaviour {
             //print("In");
             //print(GlobalTools.FindObjByName("MainCamera"));
             //print("持续？？？？" + cameraY.transform.position.y);
-            cm.GetHitCameraKuaiY(cameraY.transform.position.y);
+            if(cm)cm.GetHitCameraKuaiY(cameraY.transform.position.y);
         }
     }
 
