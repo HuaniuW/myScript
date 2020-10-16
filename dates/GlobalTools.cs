@@ -31,6 +31,14 @@ public class GlobalTools : MonoBehaviour {
         return obj;
     }
 
+    public static GameObject FindObjByNameInRMaps(string _urlName)
+    {
+        GameObject obj = GameObject.Find("maps/" + _urlName) as GameObject;
+        if (obj == null) obj = GameObject.Find("maps/" + _urlName + "(Clone)") as GameObject;
+        return obj;
+    }
+
+
     //
     /// <summary>
     ///根据名字动态加载 并实例化 GameObject  （预制对象必须在resources 文件夹下） 

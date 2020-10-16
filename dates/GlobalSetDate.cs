@@ -131,6 +131,17 @@ public class GlobalSetDate : MonoBehaviour {
     }
 
 
+
+    public bool IsScreenNameIsSpeMap()
+    {
+        string _screenName = screenName;
+        if (_screenName.Split('_').Length == 1) return false;
+        string zhongjianName = _screenName.Split('_')[1].Split('-')[0];
+
+        return false;
+    }
+
+
     //第一次启动 掉用这里面存储的数据系统
     public string playerPosition = "6_-2_r";
     public string screenName = "g2_1";
@@ -178,6 +189,8 @@ public class GlobalSetDate : MonoBehaviour {
         playerPosition = CurrentUserDate.playerPosition;
         screenName = CurrentUserDate.screenName;
         cameraPosition = CurrentUserDate.cameraPosition;
+        print(" *** screenName" + screenName);
+        print(" *** playerPosition" + playerPosition);
     }
 
 
@@ -295,7 +308,8 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
         //print("CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
         CurrentUserDate.curLan = player.GetComponent<RoleDate>().lan.ToString();
-        CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
+        //CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
+        CurrentUserDate.screenName = GlobalDateControl.GetCGKName();
         if (HowToInGame == TEMP_SCREEN)
         {
             //print("临时进的游戏吗？？？？");
@@ -384,8 +398,8 @@ public class GlobalSetDate : MonoBehaviour {
         //Debug.Log("DoSomeThings");
     }
 
-   
 
+    int SpaceNums = 0;
     // Update is called once per frame
     void Update () {
         if (Input.GetKeyDown(KeyCode.B))
@@ -433,6 +447,22 @@ public class GlobalSetDate : MonoBehaviour {
                 GlobalTools.FindObjByName("maps").GetComponent<GetReMap>().SetMapMsgDateInStr(true);
             }
 
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //暂停游戏
+            SpaceNums++;
+            if (SpaceNums % 2 == 0)
+            {
+                Time.timeScale = 1;
+            }
+            else
+            {
+                Time.timeScale = 0;
+            }
+           
         }
 
         //一键保存 小地图
@@ -495,7 +525,7 @@ public class GlobalSetDate : MonoBehaviour {
 
 
     public string DanqianMenweizhi = "";
-
+    //public string CRMapName = "";
     public CreateMaps _createMap;
     public void GetMapMsgByName(string mapName,string baoliumenFX,string menweizhi)
     {
@@ -504,6 +534,8 @@ public class GlobalSetDate : MonoBehaviour {
         //是否有大地图
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
 
+        //CRMapName = mapName;
+        print("*** mapName " + mapName+ "  baoliumenFX  "+ baoliumenFX+ "  menweizhi "+ menweizhi);
 
         DanqianMenweizhi = menweizhi;
         //地图头 就是大地图的 头部标识你  eg:  map_r-1  -->  map_r 就是地图 头标记
@@ -517,6 +549,7 @@ public class GlobalSetDate : MonoBehaviour {
             //入场的 地图名字
             string ruchangMap = SceneManager.GetActiveScene().name+"$p";
 
+            print("  *** ruchangMap "+ ruchangMap);
             // 设置 地图参数 中间名字  方向几率  最大地图数
             _createMap.SetMapCenterName(CMapTou.Split('_')[1]);
             List<string> TempMapList = _createMap.GetMaps();
@@ -538,8 +571,6 @@ public class GlobalSetDate : MonoBehaviour {
                     continue;
                 }
 
-
-
                 if (i == TempMapList.Count-1)
                 {
                     mapListMsgStr += TempMapList[i];
@@ -548,15 +579,11 @@ public class GlobalSetDate : MonoBehaviour {
                 {
                     mapListMsgStr += TempMapList[i]+"|";
                 }
-                
             }
 
             //生成的 地图数据    map_r+map_r-1!0#0!r:map_r-2^l:mapR_1$p|map_r-2!1#0!l:map_r-1^r:map_r-3|map_r-4!2#1!d:map_r-3|map_r-5!2#-1!u:map_r-3|map_r-3!2#0!l:map_r-2^u:map_r-4^d:map_r-5^r:map_r-6|map_r-7!3#1!d:map_r-6|map_r-8!3#-1!u:map_r-6|map_r-6!3#0!l:map_r-3^u:map_r-7^d:map_r-8^r:map_r-9|map_r-9!4#0!l:map_r-6^u:map_r-10|map_r-10!4#1!d:map_r-9
-            print(gameMapDate.BigMapDate);
+            print("生成的 地图数据:   " + gameMapDate.BigMapDate);
             
-           
-
-
             //如果大地图中 没有该大地图   生成大地图
             if (gameMapDate.BigMapDate == "")
             {
@@ -567,14 +594,10 @@ public class GlobalSetDate : MonoBehaviour {
                 gameMapDate.BigMapDate += "@" + mapListMsgStr;
             }
 
-
             print("生成的 地图数据    "+ gameMapDate.BigMapDate);
 
             //这里要存入 数据
             //return;
-
-
-
         }
 
 
@@ -587,20 +610,20 @@ public class GlobalSetDate : MonoBehaviour {
         if (IsHasMapByName(mapName, gameMapDate.MapDate) != "")
         {
             //根据 存储数据 生成地图
-            print("根据地形数据 生成地图");
+            print("*** 根据地形数据 生成地图");
         }
         else
         {
-            print("没有地图数据 生成一地图地形数据 ！进入哪个地图？   "+mapName);
+            print("*** 没有地图数据 生成一地图地形数据 ！进入哪个地图？   "+mapName);
             //生成大地图
             //BigMapMsgList = _createMap.GetMaps();
             //将地图名字 传入 下个 场景 下个场景 来生成地图
 
-        } 
+        }
 
-
+        print("***  进入了 生成地图判断 ");
         //生成 大地图 和小地图 都要 保存到本地
-
+        screenName = "R@" + screenName;
     }
 
     bool IsHasBigMapByName(string mapTouName, string bigMapDateList)

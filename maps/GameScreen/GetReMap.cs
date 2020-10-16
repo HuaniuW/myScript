@@ -109,14 +109,13 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    protected void GetGuaiControlMen()
+    protected virtual void GetGuaiControlMen()
     {
         //print("有怪没啊    " + GuaiList.Count);
         //中心地板 不是左右连接 或者 怪数量小于4 不允许关门
         //如果是左右地图 但是 是跳跃型 也不能关门 后面要做判断
         if (_lianjiedibanType=="lr"&& GuaiList.Count >= 4)
         {
-            
             print("  @@@@@@@@@--------------------------------- 是左右地图  有4个以上的怪 可以 关门！！！！");
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
         }
@@ -180,7 +179,8 @@ public class GetReMap : MonoBehaviour
 
 
 
-
+        //进行一次 手动的匹配
+        GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetPiPei();
 
         //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
         //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
@@ -313,7 +313,12 @@ public class GetReMap : MonoBehaviour
                 _pos = s.Split('$')[0].Split('!')[1];
                 _sd = s.Split('$')[0].Split('!')[2];
 
+
+             
                 if (_name.Split('_')[0] == "wu")
+                {
+
+                }else if (_name.Split('_')[0] == "JG")
                 {
 
                 }
@@ -348,6 +353,7 @@ public class GetReMap : MonoBehaviour
             }
             else
             {
+                //print("_name???*****  "+_name);
                 GameObject mapObj = GlobalTools.GetGameObjectByName(_name);
                 mapObj.transform.parent = maps.transform;
                 mapObj.transform.position = new Vector3( float.Parse(_pos.Split('#')[0]), float.Parse(_pos.Split('#')[1]), float.Parse(_pos.Split('#')[2]));
@@ -401,8 +407,17 @@ public class GetReMap : MonoBehaviour
                     print("生成怪！！！！！  "+mapObj.name); 
                     GuaiList.Add(mapObj);
                 }
-                
 
+                if (_name == "JG_huoyan")
+                {
+                    //gkMapMsg += "$" + child.GetComponent<JG_huoyan>().jiangeshijian + "!" + child.GetComponent<JG_huoyan>().penfashijian;
+                    float jiangeshijian = float.Parse(s.Split('$')[1].Split('!')[0]);
+                    float penfashijian = float.Parse(s.Split('$')[1].Split('!')[1]);
+                    string _scale = s.Split('$')[1].Split('!')[2];
+                    mapObj.GetComponent<JG_huoyan>().jiangeshijian = jiangeshijian;
+                    mapObj.GetComponent<JG_huoyan>().penfashijian = penfashijian;
+                    mapObj.transform.localScale = GlobalTools.VParse(_scale);
+                }
 
             }
         }
@@ -420,7 +435,7 @@ public class GetReMap : MonoBehaviour
         return "";
     }
 
-    List<GameObject> GuaiList = new List<GameObject> { };
+    public List<GameObject> GuaiList = new List<GameObject> { };
     
     protected void GuaiDieOver(UEvent e)
     {
@@ -448,7 +463,7 @@ public class GetReMap : MonoBehaviour
         int guainum = 0;
         if (n < 10) {
             //出2只
-            guainum = 3;
+            guainum = 2;
         }
         else if (n<100) {
             //出1只
@@ -471,24 +486,14 @@ public class GetReMap : MonoBehaviour
             return;
         }
 
-        print(_cMapObj.name + " 地板类型-------------->    " + _cMapObj.GetComponent<DBBase>().DXType);
+
+        if (!_cMapObj) return;
+
+        //print("_cMapObj.name   "+ _cMapObj.name);
+        //print(_cMapObj.name + " 地板类型-------------->    " + _cMapObj.GetComponent<DBBase>().DXType);
 
         if (_cMapObj.GetComponent<DBBase>().DXType == "pingdi")
         {
-            //平地出地面怪 和空中怪
-            
-            //if (guainum == 1)
-            //{
-            //    kongzhong = GlobalTools.GetRandomNum() <= 30 ? true : false;
-            //    GuaiOut(kongzhong);
-            //}
-            //else if(guainum == 2)
-            //{
-            //    kongzhong = GlobalTools.GetRandomNum() <= 30 ? true : false;
-            //    GuaiOut(kongzhong);
-            //    kongzhong = GlobalTools.GetRandomNum() <= 30 ? true : false;
-            //    GuaiOut(kongzhong);
-            //}
             for(int i=0;i< guainum; i++)
             {
                 kongzhong = GlobalTools.GetRandomNum() <= 30 ? true : false;
@@ -498,16 +503,6 @@ public class GetReMap : MonoBehaviour
         }
         else if(_cMapObj.GetComponent<DBBase>().DXType == "kongzhong"|| _cMapObj.GetComponent<DBBase>().DXType == "tiaoyue")
         {
-            //控制 只出空怪
-            //if (guainum == 1)
-            //{
-            //    GuaiOut(true);
-            //}
-            //else if (guainum == 2)
-            //{
-            //    GuaiOut(true);
-            //    GuaiOut(true);
-            //}
             for (int i = 0; i < guainum; i++)
             {
                 GuaiOut(true, i, guainum, "shu");
@@ -516,7 +511,7 @@ public class GetReMap : MonoBehaviour
     }
 
 
-    void GuaiOut(bool kongzhong ,int i,int length,string DBType = "heng",string Fx = "")
+    void GuaiOut(bool kongzhong ,int i,int GuaiNums,string DBType = "heng",string Fx = "")
     {
         string guaiListName = "";
         int nums = 1;
@@ -528,11 +523,11 @@ public class GetReMap : MonoBehaviour
 
         if (kongzhong)
         {
-            guaiListName = "kongZhongXiaoGuai_" + GuaiType;
+            guaiListName = "kongZhongXiaoGuai_" + Globals.mapTypeNums;
         }
         else
         {
-            guaiListName = "xiaoGuai_" + GuaiType;
+            guaiListName = "xiaoGuai_" + Globals.mapTypeNums;
         }
 
         print(CMapName+  " 怪物获取列表   "+ guaiListName);
@@ -561,15 +556,15 @@ public class GetReMap : MonoBehaviour
             
             if (_cMapObj)
             {
-                dx = _cMapObj.GetComponent<DBBase>().GetWidth() / (length + 1);
+                dx = _cMapObj.GetComponent<DBBase>().GetWidth() / (GuaiNums + 1);
                 if (Fx == "l"|| Fx == "r")
                 {
-                    dx = _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f / (length + 1);
+                    dx = _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f / (GuaiNums + 1);
                 }
             }
             else
             {
-                dx = lianjiedian.GetComponent<DBBase>().GetWidth() / (length + 1);
+                dx = lianjiedian.GetComponent<DBBase>().GetWidth() / (GuaiNums + 1);
             }
             _x = tl.x + dx * i + dx * 0.5f;
             if (Fx == "l") {
@@ -595,7 +590,7 @@ public class GetReMap : MonoBehaviour
         else
         {
             _x = tl.x+1.5f;
-            _y = tl.y + 4 / length*i;
+            _y = tl.y + 4 / GuaiNums * i;
 
             print("怪y " + tl.y + "   ----   " + _y);
         }
@@ -794,9 +789,18 @@ public class GetReMap : MonoBehaviour
                 if (child.GetComponent<J_SPBase>().light2d != null)
                 {
                     Color __color = child.GetComponent<J_SPBase>().GetLightColor();
+                    //记录了 灯光颜色 和亮度
                     gkMapMsg += "$" + "color!" + __color.ToString() + "!" + child.GetComponent<J_SPBase>().light2d.intensity;
                 }
             }
+
+
+            if(_name == "JG_huoyan")
+            {
+                string _scale = child.transform.localScale.ToString();
+                gkMapMsg += "$" + child.GetComponent<JG_huoyan>().jiangeshijian + "!" + child.GetComponent<JG_huoyan>().penfashijian+"!"+ _scale;
+            }
+
 
 
             if (child.GetComponent<RMapMen>())
@@ -890,12 +894,12 @@ public class GetReMap : MonoBehaviour
 
     }
 
-    string PingdiDibanType = "";
+    protected string PingdiDibanType = "";
     //创建地图
-    protected GameObject GetDiBanByName()
+    protected virtual GameObject GetDiBanByName(string mapObjTypeName = "db_pd")
     {
         //**********************@****************普通地板生成数据控制
-        string mapArrName = "db_pd";
+        string mapArrName = mapObjTypeName;
 
         DibanType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
 
@@ -1293,7 +1297,7 @@ public class GetReMap : MonoBehaviour
 
 
     protected GameObject lianjiedian;
-    protected virtual void CreateLJByName(string lianjie)
+    protected virtual void CreateLJByName(string lianjie, bool IsYanZhan = false)
     {
         print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
         int nums = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count;
@@ -1379,7 +1383,7 @@ public class GetReMap : MonoBehaviour
 
 
 
-
+    protected string _mapZB = "";
     //门方向列表 {"l","r"}
     protected List<string> menFXList = new List<string> { };
     protected List<string> GetMenFXListByMapName(string mapName)
@@ -1408,7 +1412,8 @@ public class GetReMap : MonoBehaviour
         }
 
         string[] TheMapMsgArr = theMapMsg.Split('!')[2].Split('^');
-        for(var i=0;i< TheMapMsgArr.Length; i++)
+        _mapZB = theMapMsg.Split('!')[1];
+        for (var i=0;i< TheMapMsgArr.Length; i++)
         {
             menFXList.Add(TheMapMsgArr[i]);
         }

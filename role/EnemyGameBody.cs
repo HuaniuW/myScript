@@ -352,6 +352,8 @@ public class EnemyGameBody : GameBody {
         //脚下的烟幕
         Yanmu();
 
+        GuDingTuiLiHufu();
+
         if (roleDate.isDie)
         {
             DBBody.animation.timeScale = 1;
@@ -376,7 +378,6 @@ public class EnemyGameBody : GameBody {
             GetBeHit();
             return;
         }
-
 
 
 

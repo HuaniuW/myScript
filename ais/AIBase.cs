@@ -19,6 +19,11 @@ public class AIBase : MonoBehaviour {
         GetStart();
     }
 
+   
+
+
+
+
     [Header("碰到开战块 打开 boss行动 直接打开的话boss行动-测试用")]
     public bool IsBossStop = false;
 
@@ -37,7 +42,7 @@ public class AIBase : MonoBehaviour {
         if (!IsCanTuihuiFSQ) return;
         if (!IsTuihuiFangshouquing) return;
 
-        if (Mathf.Abs(this.transform.position.x - _ChuSshiX)<1)
+        if (Mathf.Abs(this.transform.position.x - _ChuSshiX)<1|| gameBody.IsHitWall)
         {
             IsTuihuiFangshouquing = false;
             isActioning = false;
@@ -57,6 +62,8 @@ public class AIBase : MonoBehaviour {
             //左移动
             gameBody.RunLeft(-tuihuiSpeed);
         }
+
+
 
         if (IsTuihuiFangshouquing)
         {
@@ -338,6 +345,11 @@ public class AIBase : MonoBehaviour {
         GetUpdate();
     }
 
+
+
+    bool IsJumpFX = false;
+    public float VXPower = 200;
+
     protected virtual void GetUpdate()
     {
         if (GetComponent<RoleDate>().isDie)
@@ -355,11 +367,11 @@ public class AIBase : MonoBehaviour {
         if (!gameObj || gameObj.GetComponent<RoleDate>().isDie)
         {
             //print(" -------- ///////////////////////////////   什么哦   " + GetComponent<GameBody>().GetDB().animation.lastAnimationName);
-            if (GetComponent<GameBody>().GetDB().animation.lastAnimationName.Split('_')[0] == "run")
+            if (gameBody.GetDB().animation.lastAnimationName.Split('_')[0] == "run")
             {
                 isActioning = false;
-                GetComponent<GameBody>().SetV0();
-                GetComponent<GameBody>().GetStand();
+                gameBody.SetV0();
+                gameBody.GetStand();
             }
 
             return;
@@ -373,11 +385,15 @@ public class AIBase : MonoBehaviour {
             //print(" vx "+gameBody.GetPlayerRigidbody2D().velocity.x);
             //gameBody.TSACControl = true;
             isActioning = false;
+            IsJumpFX = false;
             gameBody.ResetAll();
             gameBody.SpeedXStop();
             gameBody.GetStand();
             return;
         }
+
+
+       
 
         //print(" vx22 " + gameBody.GetPlayerRigidbody2D().velocity.x);
 
@@ -392,9 +408,73 @@ public class AIBase : MonoBehaviour {
         if (GetComponent<RoleDate>().isBeHiting)
         {
             AIBeHit();
+            gameBody.ResetAll();
             GetJingshi();
             return;
         }
+
+        if (IsJump)
+        {
+            //print("   isJumping???    " + gameBody.isJumping + "     ");
+
+
+            if (gameBody.grounded && GetComponent<GameBody>().GetPlayerRigidbody2D().velocity.y <= 0)
+            {
+                IsJump = false;
+                IsJumpFX = false;
+                //print("跳跃完成！！！！");
+                gameBody.ResetAll();
+                gameBody.SpeedXStop();
+                gameBody.GetStand();
+            }
+
+
+
+            if (gameBody.isJumping)
+            {
+                gameBody.InAir();
+                if (gameBody.isJumping && gameBody.IsGround && gameBody.GetDB().animation.lastAnimationName == gameBody.GetJumpUpACName()&&gameBody.grounded&&GetComponent<GameBody>().GetPlayerRigidbody2D().velocity.y<=0)
+                {
+                    //print("  ??>>>> " + gameBody.IsGround + "   gameBody ACName " + gameBody.GetDB().animation.lastAnimationName + "   >>>  ");
+                    gameBody.isJumping = false;
+                    IsJumpFX = false;
+                    //IsJump = false;
+                    gameBody.ResetAll();
+                    //gameBody.SpeedXStop();
+                    //gameBody.GetStand();
+                    gameBody.GetDB().animation.GotoAndPlayByFrame(gameBody.GetJumpDownACName(), 0, 1);
+                }
+                else
+                {
+                    //print("   空中推力________________  ");
+                    //float powerX = Mathf.Abs(this.transform.position.x - _playerX) / DistanceXDW * 80;
+                    //float vx = this.transform.position.x > gameObj.transform.position.x ? -VXPower : VXPower;
+                    if (!IsJumpFX)
+                    {
+                        IsJumpFX = true;
+                        VXPower = Mathf.Abs(VXPower);
+                        VXPower = this.transform.position.x > gameObj.transform.position.x ? -VXPower : VXPower;
+                    }
+
+
+
+                    //if (IsJumpToPlayerPostion) vx = this.transform.position.x > _playerX ? -powerX : powerX;
+                    if (!gameBody.IsHitWall && !GetComponent<RoleDate>().isBeHiting&&
+                        (gameBody.GetDB().animation.lastAnimationName == gameBody.GetJumpUpACName()|| gameBody.GetDB().animation.lastAnimationName == gameBody.GetJumpDownACName())
+                        ) gameBody.GetZongTuili(new Vector2(VXPower, 0)); 
+                }
+                return;
+
+            }
+
+          
+
+        }
+
+
+
+
+
 
         TuihuiFangshouqu();
         if (IsTuihuiFangshouquing) return;
@@ -533,7 +613,7 @@ public class AIBase : MonoBehaviour {
 
         if (GlobalTools.FindObjByName("player").GetComponent<RoleDate>().isDie)
         {
-            print("  ////  --------------------- -------------getStand!!!!!!");
+            //print("  ////  --------------------- -------------getStand!!!!!!");
             
             if (!IsPlayerDieStand)
             {
@@ -544,41 +624,121 @@ public class AIBase : MonoBehaviour {
             return false;
         }
 
-       
 
+        //print("AI 靠近敌人！！！！！");
 
         if (DontNear) return true;
+        //print("??????  靠近敌人？？  敌人是否在攻击  "+gameBody.isAtking  +"   是否能跳跃  "+!IsJump);
 
 
-        if (gameBody.IsEndGround)
+        if (IsJump) return false;
+
+        if (
+            !gameBody.isJumping&&
+            (gameBody.IsEndGround||gameBody.IsHitWall)&&
+            (this.transform.localScale.x>0&&(gameObj.transform.position.x<this.transform.position.x)
+            ||
+            this.transform.localScale.x < 0 && (gameObj.transform.position.x > this.transform.position.x))
+            )
         {
+            //print("撞墙 或者 没路了   撞墙  "+ gameBody.IsHitWall+"    没路  "+ gameBody.IsEndGround);
+
+
+
+            if (gameBody.IsHitWall)
+            {
+                //print("***** 前面撞高墙没有路了");
+                if (gameBody.IsCanJump2())
+                {
+                    //print("****跳高");
+                    GetJump(1200);
+                    return false;
+                }
+            }
+
+
+
+            if (gameBody.IsCanMoveDown()) {
+                //print("下面有路 可以直接 下去！！！！！！");
+                //如果下面是 机关 就直接退回去
+
+                return GetMove(distance, nearSpeed);
+            }
+           
+
+            //先找 能不能 跳过去
+            if (gameBody.IsEndGround)
+            {
+                //print("***** 前面没有路了");
+                //探测 前面是否有地板  有的 话跳跃
+                if (gameBody.IsCanJump1())
+                {
+                    //跳跃1 跳远
+                    //print("跳远");
+                    GetJump(1000);
+                    return false;
+                }
+                else
+                {
+                    //print("没有路 还不能跳！！");
+                }
+            }
+
+         
+
+          
+
             //没路了 怎么办
             if (IsCanTuihuiFSQ&&!IsTuihuiFangshouquing)
             {
                 IsTuihuiFangshouquing = true;
-                print("没路了！！！！！！！");
+                //print("没路了！！！！！！！");
                 return false;
             }
         }
+        //print(" 靠近 目标！！！！ ");
+        return GetMove(distance, nearSpeed);
 
+
+    }
+
+
+    bool GetMove(float distance,float nearSpeed)
+    {
 
 
 
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
+            //print("  向右跑！！   ");
             gameBody.RunRight(nearSpeed);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
+            //print("  向 左跑！！ ***  ");
             gameBody.RunLeft(-nearSpeed);
             return false;
         }
         else
         {
             return true;
+        }
+    }
+
+
+   
+    protected bool IsJump = false;
+    public void GetJump(float jumpPower = 1200)
+    {
+        if (!IsJump)
+        {
+            IsJump = true;
+            GetComponent<GameBody>().yForce = jumpPower;
+            GetComponent<GameBody>().GetJump();
+            GetComponent<GameBody>().Jump();
         }
     }
 
@@ -644,23 +804,18 @@ public class AIBase : MonoBehaviour {
     protected virtual void GetAtkFS()
     {
         //print("atkFS!!!");
-       
-
-
-
-
         if (!isAction &&isPlayerDie) return;
-        
         if (IsBossStop) return;
         if (GetComponent<GameBody>() && GetComponent<GameBody>().GetDB().animation.lastAnimationName == "downOnGround_1") return;
-        if(IsIfStopMoreTime())return;
+        if (gameBody.isJumping) return;
+        if (IsIfStopMoreTime())return;
         if (!isAction){
 			isAction = true;
 			acName = GetZS();
             //IsGetAtkFSByName = false;
            
             
-            print(atkNum + "????------------------------------------------------------------->    name " + acName);
+            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -1058,7 +1213,7 @@ public class AIBase : MonoBehaviour {
     {
         isAction = false;
         isActioning = false;
-        
+        IsJump = false;
         lie = -1;
         atkNum = 0;
         acName = "";
@@ -1074,6 +1229,8 @@ public class AIBase : MonoBehaviour {
 
     //一般攻击
     protected virtual void PtAtk(){
+
+        if (gameBody.isAtking) return;
 
         //判断 是否hi不能动的怪物
         if (!IsCanNotMove)
@@ -1091,8 +1248,10 @@ public class AIBase : MonoBehaviour {
             //非移动怪的 普通攻击
             //如果在攻击范围外 就直接结束  这里可以取消连击 让玩家难以猜招
             //这里 如果不是 连招的话 就会是玩家接近就 可以攻击  增加猜招难度
+            //print("  移动靠近目标 DontNear  "+ DontNear);
             if (!DontNear&&!IsInAtkDistance(atkDistance))
             {
+                //print("  靠近目标！！！isActioning     " + isActioning+ "  isAction  "+ isAction);
                 if (IsAtkOver())
                 {
                     isActioning = false;
@@ -1307,7 +1466,7 @@ public class AIBase : MonoBehaviour {
         {
             if (GetComponent<AIYiShan>() == null||GetComponent<AIYiShan>().IsAcOver())
             {
-                print("一闪 完成-----------------------------------------》");
+                //print("一闪 完成-----------------------------------------》");
                 isActioning = false;
                 isAction = false;
                 return;

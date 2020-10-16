@@ -56,7 +56,9 @@ public class CameraController : MonoBehaviour
     {
         //str   z2-0.3f   震动0.3秒   或者  z  持续震动
         string str = e.eventParams.ToString();
-        string bt = str.Split('-')[0];
+        string[] strArr = str.Split('-');
+        string bt = strArr[0];
+        int zdType = 1;
         if (str.Split('-').Length>1&& str.Split('-')[1] != null) theStillNums = float.Parse(str.Split('-')[1]);
 
 
@@ -67,7 +69,8 @@ public class CameraController : MonoBehaviour
             GetShockZ();
         }else if (bt == "z2")
         {
-            GetShockZ2(theStillNums);
+            if (strArr.Length == 3) zdType = int.Parse(strArr[2]);
+            GetShockZ2(theStillNums, zdType);
         }else if (bt == "end")
         {
             Shock2Stop();
@@ -676,15 +679,25 @@ public class CameraController : MonoBehaviour
 
     //不能用new 如果有问题 再改   这里是控制震动
     //TheTimer stillTimes; //= new TheTimer();
-    void GetShockZ2(float stillNums)
+    void GetShockZ2(float stillNums,int type = 1)
     {
         newZ22 = this.transform.position.z;
         if (!isShockZ2)
         {
             isShockZ2 = true;
             isShockZing2 = true;
-            targetZ2 = newZ22 + 0.3f;
-            targetZ21 = newZ22 - 0.3f;
+            if(type == 1)
+            {
+                targetZ2 = newZ22 + 0.3f;
+                targetZ21 = newZ22 - 0.3f;
+            }
+            else
+            {
+                targetZ2 = newZ22 + 0.3f;
+                targetZ21 = newZ22 - 0.2f;
+            }
+
+          
             theTargetZ = targetZ2;
 
             yuanshiZ = this.transform.position.z;

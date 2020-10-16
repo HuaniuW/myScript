@@ -74,6 +74,9 @@ public class ScreenChange : MonoBehaviour {
     {
         GlobalSetDate.instance.playerPosition = PlayerPosition;
         GlobalSetDate.instance.CReMapName = ReMapName;
+
+        //print("?????  ReMapName  " + ReMapName);
+
         if (ReMapName != "")
         {
             //这里是进入 随机 地图   只有这两个地图 容器
@@ -86,13 +89,13 @@ public class ScreenChange : MonoBehaviour {
                 GlobalSetDate.instance.screenName = "RMap_2";
             }
 
-            print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 "+ ReMapName);
+            //print("-------------------------------------------------------------------------------------------------------- 进入的地图名字 "+ ReMapName);
         }
         else
         {
             GlobalSetDate.instance.screenName = GoScreenName;
             print(" 数据TempZGuanKaStr  >:   " + GlobalSetDate.instance.TempZGuanKaStr);
-            print("--------------------------------？？？？？？？？？------------------------------------------------------------------------ 进入的地图名字 " + GoScreenName);
+            //print("--------------------------------？？？？？？？？？------------------------------------------------------------------------ 进入的地图名字 " + GoScreenName);
         }
         
         GlobalSetDate.instance.IsChangeScreening = true;
@@ -127,6 +130,7 @@ public class ScreenChange : MonoBehaviour {
         //ObjectPools.GetInstance().delAll();//解决切换场景时候特效没回收被销毁导致再取取不出来的问题  但是这样销毁会导致卡顿很长的切换速度 已用重新创建解决
         SetPlayerPositionAndScreen();
         //SceneManager.LoadScene("loads");
+        //print("***  GlobalSetDate.instance.screenName   "+ GlobalSetDate.instance.screenName);
         StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
         playerUI.GetComponent<PlayerUI>().GetScreenZZChange(1);
 
@@ -146,10 +150,28 @@ public class ScreenChange : MonoBehaviour {
         if(Coll.tag == "Player")
         {
             //这里判断 是否要进随机的大地图  小地图
-            if (ReMapName != "")
+
+            //这里判断 地图类型 如果 特殊地图类型是 Boss  CD  或者JY   就改为 自动地图（自动地图的，特殊地图） 
+
+            //Boss 有boss名 直接用boss名 没有 直接随机  全局记录 当前关卡 有boss  过关再次进入 要删除boss
+
+            //另外生成一个 特殊地图的 信息列表 来匹配 特殊地图 是否有  有的话生成 特殊地图
+            //eg   12!boss^boss_test!db^2!qj^2!jqj^2!bg^2 等11!cundang    9!juqing^juqingjueseming
+
+            //print("***  ReMapName????? "+ ReMapName  + "  GoScreenName  "+ GoScreenName);
+
+            GlobalMapDate.ClearGlobalCurrentMapMsg();
+
+            if (ReMapName == "" && IsTeShuShengChengDiTu(GoScreenName))
             {
-                print("说明是 从 特殊地图 跳到 随机里面   ");
+                ReMapName = GlobalMapDate.CurrentSpelMapName;
+                GlobalSetDate.instance.GetMapMsgByName(ReMapName, MenFX, DangQianMenWeizhi);
+                //print("*** ReMapName "+ ReMapName);
+            }else if (ReMapName != "")
+            {
+                //print("说明是 从 特殊地图 跳到 随机里面   ");
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
+                //return;
             }
             else
             {
@@ -170,6 +192,37 @@ public class ScreenChange : MonoBehaviour {
 
 
 
+    bool IsTeShuShengChengDiTu(string goScreenName)
+    {
+        foreach(string s in GlobalMapDate.TeShuShengchengDiTuList)
+        {
+            
+            string TeShuShengchengDituName = "map_"+s.Split(':')[0] + "-" + s.Split(':')[1].Split('!')[0];
+            //print("***  TeShuShengchengDituName  " + TeShuShengchengDituName+ "  goScreenName  "+ goScreenName);
+            if (TeShuShengchengDituName == goScreenName) {
+                GlobalMapDate.CurrentSpelMapName = TeShuShengchengDituName;
+                //s 的数据结构 eg:  "i:2!boss^1!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
+
+                string gkMsg = s.Split(':')[1];
+                //print("gkMsg   " + gkMsg);
+                string[] msgArr = gkMsg.Split('!');
+                //print("msgArr.Length   "+ msgArr.Length);
+                GlobalMapDate.CurrentSpelMapType = msgArr[1];
+                if (msgArr.Length>=3) GlobalMapDate.CurrentSpeMapDiXingMsg = msgArr[2];
+
+
+                //print("*** TeShuShengchengDituName   "+ TeShuShengchengDituName);
+                //print("*** GlobalMapDate.CurrentSpelMapName   " + GlobalMapDate.CurrentSpelMapName);
+                //print("*** GlobalMapDate.CurrentSpelMapType --  " + GlobalMapDate.CurrentSpelMapType);
+
+
+                return true;
+            } 
+        }
+        return false;
+    }
+
+
 
 
 
@@ -182,7 +235,7 @@ public class ScreenChange : MonoBehaviour {
     {
         int displayProgress = 0;
         int toProgress = 0;
-        //if (Globals.isDebug) print("screen>  " + scene);
+        //if (Globals.isDebug) print("*** screen>  " + scene);
         AsyncOperation op = SceneManager.LoadSceneAsync(scene);
         //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
         op.allowSceneActivation = false;

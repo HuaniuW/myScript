@@ -49,8 +49,9 @@ public class Globals : MonoBehaviour {
     public static bool IsHitPlotKuai = false;
 
 
-
-
+    internal static string mapType;
+    internal static int mapTypeNums = 1;
+    public static List<string> mapZBArr;
 
     public static UI_ShowPanel Get_UI_ShowPanel()
     {

@@ -7,8 +7,46 @@ public class Plot_Str : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        IsHasOverAndNeedDel();
     }
+
+    [Header("是否在对话完成后 删除自己")]
+    public bool IsOverMoveSelf = false;
+
+    [Header("在对话结束 后 删除的 对象")]
+    public GameObject OverDelObj;
+    void OverDelSelf()
+    {
+        if (OverDelObj) OverDelObj.SetActive(false);
+    }
+
+    void IsHasOverAndNeedDel()
+    {
+        //开始 来看 是否需要删除
+        if (IsPlotHasPlayed() && IsOverMoveSelf) OverDelSelf();
+    }
+
+    [Header("出现物品的 位置")]
+    public Transform OutObjPos;
+
+    [Header("是否 对话结束 出现东西 默认出现 不出现的时候 看选择是什么")]
+    public bool IsOverOutObj = true;
+
+    [Header("对话结束 给予玩家的 徽章物品")]
+    public string OverOutObjName = "";
+
+    void OverOutObj()
+    {
+        if (!OutObjPos) return;
+        if (!IsOverOutObj || OverOutObjName == "") return;
+        GameObject outObj = GlobalTools.GetGameObjectByName(OverOutObjName);
+        outObj.transform.position = OutObjPos.position;
+        print("   ------obj "+outObj.name);
+        outObj.transform.parent = this.transform.parent.parent;
+    }
+
+
+
 
     [Header("剧情id")]
     public string TalkID = "talk01";
@@ -265,7 +303,7 @@ public class Plot_Str : MonoBehaviour
 
     void PlotOver()
     {
-        //print("没有文本了！！！！");
+        print("没有文本了！！！！");
         //结束剧情
         ClickJishiReSet();
         if (IsNeedRecordByOver)
@@ -280,13 +318,15 @@ public class Plot_Str : MonoBehaviour
 
     public IEnumerator SetPlotFalse(float time)
     {
+        print("yanchijin ru duihua  jieshu  de !!");
         //Debug.Log("time   "+time);
         //yield return new WaitForFixedUpdate();
         yield return new WaitForSeconds(time);
         Globals.isInPlot = false;
 
-       
 
+        print("    ??????? ");
+        OverOutObj();
         print("是否有 CHOSE_EVENT 事件 "+ ChoseEventStr);
         if (ChoseEventStr == "over")
         {
@@ -296,6 +336,7 @@ public class Plot_Str : MonoBehaviour
 
         IsCanBeHit = false;
         //Destroy(this.gameObject);
+
     }
 
     [Header("对话结束 需要存入的数组吧")]
@@ -313,6 +354,18 @@ public class Plot_Str : MonoBehaviour
         {
             GlobalDateControl.SaveMapDate();
         }
+
+
+        //是否出现啥 徽章  或者爆炸 等
+
+
+        if (IsOverMoveSelf)
+        {
+            OverDelSelf();
+        }
+
+        //能不能延迟 才能使玩家 行动
+
     }
 
 

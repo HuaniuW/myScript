@@ -71,7 +71,13 @@ public class GlobalDateControl : MonoBehaviour
     //获取 当前关卡场景 的名字
     public static string GetCGKName()
     {
-        return SceneManager.GetActiveScene().name;
+        string guankaName = SceneManager.GetActiveScene().name;
+        if(guankaName == "RMap_1"|| guankaName == "RMap_2")
+        {
+            guankaName = "R@"+GlobalSetDate.instance.CReMapName;
+        }
+
+        return guankaName;
     }
 
     
@@ -91,7 +97,7 @@ public class GlobalDateControl : MonoBehaviour
     public static bool IsHasDateByName(string KeyName)
     {
         string mapMsg = GetCurrentGKDate();
-        //print(" mapMsg "+ (mapMsg == null)+"    ????? "+mapMsg);
+        //print(" mapMsg "+ (mapMsg == null)+"    ????? "+mapMsg+"   查询的 key是什么  "+KeyName);
         //if (mapMsg != null && mapMsg == "") mapMsg = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetTempCGKDate();
         if (mapMsg == null|| mapMsg == "") return false;
 
@@ -105,6 +111,7 @@ public class GlobalDateControl : MonoBehaviour
         for(int i=0;i< dateArr.Length; i++)
         {
             string checkName = dateArr[i].Split('-')[0];
+            //print("zhidui----->  " + checkName);
             if (checkName == KeyName) return true;
         }
 

@@ -13,6 +13,9 @@ public class LoadScreen : MonoBehaviour {
 	void Start () {
         loadTxt.text = "加载场景";
         //AsyncOperation op = SceneManager.LoadSceneAsync("guan1_1");
+        print("取档游戏 场景名 " + GlobalSetDate.instance.screenName);
+        //判断是否是 随机的 地图
+
         StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
         //GetMainCamera();
     }
@@ -28,8 +31,22 @@ public class LoadScreen : MonoBehaviour {
     {
         int displayProgress = 0;
         int toProgress = 0;
-        if(Globals.isDebug)print("screen>  "+scene);
+        if (Globals.isDebug) {
+           
+        }
+
+        print("screen>  " + scene);
+        if (scene.Split('@').Length > 1)
+        {
+            print("进入随机 地图！！！" + scene);
+            GlobalSetDate.instance.CReMapName = scene.Split('@')[1];
+            scene = "RMap_1";
+            if(SceneManager.GetActiveScene().name == scene) scene = "RMap_2";
+            print("进入随机地图--->   " + scene+"   CMapName   "+ GlobalSetDate.instance.CReMapName);
+        }
+
         AsyncOperation op = SceneManager.LoadSceneAsync(scene);
+      
         //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
         op.allowSceneActivation = false;
         var rt = loadingBar.GetComponent<RectTransform>();

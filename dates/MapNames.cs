@@ -55,6 +55,10 @@ public class MapNames : MonoBehaviour
     //地板
     public List<string> db_pd_1 = new List<string> { "db_pd_1" };
 
+    public List<string> tiaoyue_1 = new List<string> { "db_ty_1"};
+
+
+
 
     //要知道 类型 ？？  怎么给 列表 加标识
 
@@ -78,10 +82,10 @@ public class MapNames : MonoBehaviour
 
 
     //装饰物
-    public List<string> zsw_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" };
+    public List<string> zsw_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2" };
 
     //特殊的 修饰物 地标类型
-    public List<string> zswTS_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" };
+    public List<string> zswTS_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2" };
 
     //连续的装饰物  比如 栅栏   
     public List<string> LXZsw_1 = new List<string> { };
@@ -91,8 +95,8 @@ public class MapNames : MonoBehaviour
     //前远景大
     public List<string> qyjd_1 = new List<string> { "qjd_1_9", "qjd_1_10", "qyj_1_1" };
     //前景上方 倒挂的景
+    public List<string> qju2_1 = new List<string> { "ju_caodui_1", "ju_caodui_2"};
     public List<string> qju_1 = new List<string> { "jju_1_1", "jju_1_3", "jju_1_4" };
-
 
     //较大的 前景 w>13 h>4
     public List<string> qjdd_1 = new List<string> { "qyj_1_1" };
@@ -153,7 +157,7 @@ public class MapNames : MonoBehaviour
     //*********************************************************** 老版本*******************
 
     //eg: lr_pd_1 平地  lr_dn_1  洞内   这里需不需要建立数组  还是直接在 系统里面 跟景色一样 根据名字生成？ 
-    public List<string> lr = new List<string> {"lr_pd_1","lr_dn_1"};
+    public List<string> lr = new List<string> {"lr_pd_1"};
     public List<string> lr_1 = new List<string> { "lr_pd_1"};
 
 

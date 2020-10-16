@@ -6,6 +6,27 @@ public class GlobalMapDate : MonoBehaviour {
 
     // Use this for initialization
 
+
+    //boss平地
+    public const string BOSS_PINGDI = "bossPingdi";
+    //存档平地
+    public const string CUNDANG_PINGDI = "cundangPingdi";
+    //平地
+    public const string PINGDI = "pingdi";
+    //跳跃
+    public const string TIAOYUE = "tiaoyue";
+    //洞内
+    public const string DONGNEI = "dongnei";
+    //一般
+    public const string YIBAN = "yiban";
+    //剧情平地
+    public const string JUQING_PINGDI = "juqingPingdi";
+    //精英怪 平地
+    public const string JINGYING_PINGDI = "jingyingPingdi";
+
+
+
+
     //当前关卡 第几关
     public static string CCustomStr = "s";
 
@@ -14,9 +35,98 @@ public class GlobalMapDate : MonoBehaviour {
 
     //例子 进门 特殊地图是 map_s-1   s 就是 取特殊地图数组的 标记
     //“s:7!l-r!jiguan|9!l-r!boss”
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "s:2!l-r" };
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "s:2!l-r|4!l-r" };
+
+    //特殊生成地图 列表 （用来匹配 可以 自动生成的 特殊地图）
+    public static List<string> TeShuShengchengDiTuList = new List<string>
+    {
+        "s:4!cundangPingdi^1",
+        "s:5!jingying^jingyingPingdi^1^G_jydj!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
+        "s:3!boss^bossPingdi^1^name!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
+        "s:2!dongnei"
+    };
 
 
+    public static string CurrentSpelMapName = "";
+    //boss    jingying  juqing cundang  dongne 等
+    public static string CurrentSpelMapType = "";
+    //地图组成信息
+    public static string CurrentSpeMapDiXingMsg = "";
+
+    public static void ClearGlobalCurrentMapMsg()
+    {
+        CurrentSpelMapName = "";
+        CurrentSpelMapType = "";
+        CurrentSpeMapDiXingMsg = "";
+    }
+
+
+    //这里暂时 不能用 要做存档取档处理
+    // 阶次  在列表的前 几个 随机获取
+    public static string JieCiRandom(List<string> stringList,int QianNums = 3)
+    {
+        if (stringList.Count == 0) return "";
+        int i = QianNums*(Globals.mapTypeNums-1) + GlobalTools.GetRandomNum(QianNums);
+        if (stringList.Count <= i) {
+            i = stringList.Count-QianNums+ GlobalTools.GetRandomNum(QianNums)-1;
+            if (i < 0) i = 0;
+        } 
+        string _getName = stringList[i];
+        //stringList.Remove(_getName);
+        return _getName;
+    }
+
+    //*****boss随机*******
+    public static List<string> BossName_1 = new List<string> { };
+    public static string GetCanRandomUSEBossName()
+    {
+        return JieCiRandom(BossName_1);
+    }
+
+    //*****精英怪 随机*****
+    public static List<string> JingYingGuai_1 = new List<string> { "G_jydj"};
+    public static string GetCanRandomUSEJYGName()
+    {
+        return JieCiRandom(JingYingGuai_1);
+    }
+
+    //****获得物品随机*******
+
+
+
+
+
+
+    //关卡分支数组 起始方向
+    public static List<string> GKFenZhiArr = new List<string> { "1:fz-1|fx-r", "2:fz-2|fx-r", "3:fz-0", "4:1", "5:2" };
+
+    //当前是 哪一关
+
+    //是否有分支
+    bool IsThisCustomHasFZ(string guankaNums)
+    {
+
+        return false;
+    }
+
+
+    //创建分支 取到分支 起始点
+
+
+    //分支 是否结束
+
+
+    //大关卡数组  关卡分支连接在这里面取 如果用了 就移出数组
+
+
+
+    //1.关卡有多少地图
+    //4.特殊关卡 名字
+    //有多少分支关卡  0 1 2；
+    //存档点关卡
+    //有奖励物关卡
+    //精英怪关卡
+    public static List<string> gk_1 = new List<string> { };
 
     void Start () {
 		
@@ -79,6 +189,7 @@ public class GlobalMapDate : MonoBehaviour {
     //根据名字 获取方向列表
     public static List<string> GetFXListByName(string mapName) {
         if (!IsHasSpecialMap()) return null;
+        print("mapName   "+mapName);
         string[] speMapArr = GetCSpeicalMapNameArr();
         string mapName1;
         string speMapMsg;
@@ -131,7 +242,7 @@ public class GlobalMapDate : MonoBehaviour {
         if (CCustomStr == "") return null;
         foreach (string s in SpecialMapNameAndNumArr)
         {
-            print(s + "  ---  " + CCustomStr);
+            //print(s + "  ---  " + CCustomStr);
             if (s.Split(':')[0] == CCustomStr)
             {
                 return s.Split(':')[1].Split('|');

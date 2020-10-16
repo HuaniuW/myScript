@@ -69,16 +69,19 @@ public class JN_hitKuai : MonoBehaviour
                 if (jn_date.atkPower - roleDate.yingzhi > roleDate.yingzhi * 0.5)
                 {
                     gameBody.HasBeHit();
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * _roleScaleX, 0));
+                    //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 * _roleScaleX, 0));
+                    gameBody.GetZongTuili(new Vector2(400 * _roleScaleX, 0));
                 }
                 else if (jn_date.atkPower - roleDate.yingzhi > 0)
                 {
                     gameBody.HasBeHit();
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(300 * _roleScaleX, 0));
+                    //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(300 * _roleScaleX, 0));
+                    gameBody.GetZongTuili(new Vector2(300 * _roleScaleX, 0));
                     if (atkObj && jn_date._type == "1")
                     {
                         atkObjV3Zero();
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
+                        //atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-300 * _roleScaleX, 0));
+                        atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-300 * _roleScaleX, 0));
                     }
                 }
                 else
@@ -86,7 +89,8 @@ public class JN_hitKuai : MonoBehaviour
                     if (atkObj && jn_date._type == "1")
                     {
                         atkObjV3Zero();
-                        atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500 * _roleScaleX, 0));
+                        //atkObj.GetComponent<Rigidbody2D>().AddForce(new Vector2(-500 * _roleScaleX, 0));
+                        atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-500 * _roleScaleX, 0));
                     }
                 }
 

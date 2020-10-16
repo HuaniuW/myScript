@@ -162,7 +162,7 @@ public class AirGameBody : GameBody {
       
     }
 
-    protected override void InAir()
+    public override void InAir()
     {
         //print("hi");
     }
@@ -208,7 +208,6 @@ public class AirGameBody : GameBody {
                 BeHitFlyOut(100);
                 if(isDieRotation) GetPlayerRigidbody2D().freezeRotation = true;
             }
-            
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
         }
@@ -219,6 +218,7 @@ public class AirGameBody : GameBody {
 
     public override void HasBeHit(float chongjili = 0)
     {
+        if (!DBBody) return;
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         roleDate.isBeHiting = true;
@@ -240,7 +240,11 @@ public class AirGameBody : GameBody {
 
     void BeHitFlyOut(float power)
     {
-        if(GlobalTools.FindObjByName("player")) playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+        if (GlobalTools.FindObjByName("player")) {
+            //playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+            GetZongTuili(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+        }
+       
     }
 
     public override void RunLeft(float _moveSpeedX = 0, bool isWalk = false)

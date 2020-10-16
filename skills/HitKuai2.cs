@@ -98,11 +98,13 @@ public class HitKuai2 : MonoBehaviour
                 if (this.transform.parent == null) return;
                 if (Coll.transform.position.x > this.transform.parent.transform.position.x)
                 {
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 , 0));
+                    //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(400 , 0));
+                    Coll.GetComponent<GameBody>().GetZongTuili(new Vector2(400, 0));
                 }
                 else
                 {
-                    Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(-400 , 0));
+                    //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(-400 , 0));
+                    Coll.GetComponent<GameBody>().GetZongTuili(new Vector2(-400, 0));
                 }
                 
             }

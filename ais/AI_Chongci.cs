@@ -159,7 +159,8 @@ public class AI_Chongci : MonoBehaviour, ISkill
         
 
         //下压的力 放置 角色飞起来了
-        _gameBody.GetPlayerRigidbody2D().AddForce(new Vector2(0, -20));
+        //_gameBody.GetPlayerRigidbody2D().AddForce(new Vector2(0, -20));
+        _gameBody.GetZongTuili(new Vector2(0, -20));
 
         if (runDirection == "right")
         {

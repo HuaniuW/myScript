@@ -8,7 +8,16 @@ public class DB_TiaoYue : DBBase
     void Start()
     {
         if (!GlobalSetDate.instance.IsCMapHasCreated) {
-            SetDBPos();
+
+            if(Globals.mapType == "daogua")
+            {
+                //倒挂
+            }
+            else
+            {
+                SetDBPos();
+                SetZiDanJG();
+            }
             SetLightColor();
         }
         
@@ -20,10 +29,17 @@ public class DB_TiaoYue : DBBase
         
     }
 
+
+    bool IsHasSetDB = false;
     void SetDBPos()
     {
-        GameObject maps = GlobalTools.FindObjByName("maps");
-        string tiaoyuediban = "tiaoyueDBD_" + maps.GetComponent<GetReMap>().DibanType;
+        if (IsHasSetDB) return;
+        IsHasSetDB = true;
+
+        if (maps == null) maps = GlobalTools.FindObjByName("maps");
+        if (maps == null) return;
+        //print("*******************************************跳跃地板");
+        string tiaoyuediban = "tiaoyueDBD_" + Globals.mapTypeNums;
         List<string> tiaoyuedibanDArr = GetDateByName.GetInstance().GetListByName(tiaoyuediban, MapNames.GetInstance());
         GameObject dibanD = GlobalTools.GetGameObjectByName(tiaoyuedibanDArr[GlobalTools.GetRandomNum(tiaoyuedibanDArr.Count)]);
         float _x1 = tl.position.x + 5;
@@ -34,6 +50,47 @@ public class DB_TiaoYue : DBBase
 
         dibanD.transform.position = new Vector3(_x, _y, 0);
         dibanD.transform.parent = maps.transform;
+
+        //if (IsPenSheZiDanJG) GetPenSheZiDanJG();
+
     }
+
+    bool IsHasSetZDJG = false;
+    void SetZiDanJG()
+    {
+        IsHasSetZDJG = true;
+        if (IsPenSheZiDanJG) SetPenSheZiDan();
+    }
+
+    bool IsPenSheZiDanJG = false;
+    public void JiGuan_PenSheZiDanJG()
+    {
+        if (GlobalTools.GetRandomNum() > 100)
+        {
+            IsPenSheZiDanJG = true;
+            if (IsHasSetZDJG)
+            {
+                //说明已经先执行了
+                SetPenSheZiDan();
+            }
+        }
+    }
+
+
+    bool IsHasSetZiDan = false;
+    public void SetPenSheZiDan()
+    {
+        if (IsHasSetZiDan) return;
+        IsHasSetZiDan = true;
+        //print("************************************************************************************************************JG_zidanPenSheUP");
+        GameObject JG_zidanUp = GlobalTools.GetGameObjectByName("JG_zidanPenSheUP");
+        float __x = rd.position.x - 1;
+        float __y = tl.position.y - 8f;
+        JG_zidanUp.transform.position = new Vector2(__x,__y);
+        JG_zidanUp.transform.parent = maps.transform;
+    }
+
+
+    //创建 一个地板
 
 }

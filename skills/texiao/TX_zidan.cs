@@ -97,6 +97,17 @@ public class TX_zidan : MonoBehaviour
         IsAtkAuto = false;
     }
 
+    public void GetSpeedV2()
+    {
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        GetComponent<Rigidbody2D>().velocity = FSFXV2;
+    }
+
+    public void SetV2Speed(Vector2 v2)
+    {
+        FSFXV2 = v2;
+    }
+
 
 
     //指定的攻击目标
@@ -115,11 +126,11 @@ public class TX_zidan : MonoBehaviour
     }
 
     bool _isFSByFX = false;
-    Vector2 FSFXV2 = new Vector2(1, 0);
+    public Vector2 FSFXV2 = new Vector2(1, 0);
     public void SetZiDanSpeedByFX(float scaleX)
     {
         _isFSByFX = true;
-        FSFXV2 = new Vector2(1, 0);
+        //FSFXV2 = new Vector2(1, 0);
         FSFXV2 *= scaleX*speeds;
     }
 
@@ -129,12 +140,14 @@ public class TX_zidan : MonoBehaviour
 
 
     int testN = 0;
+    public bool IsCanHit = true;
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
         if(Coll.tag == "Player"||Coll.tag == "diban")
         {
-            
+            if (!IsCanHit) return;
             //print(testN+"   Coll.tag  碰到了什么鬼：    " + Coll.tag);
             if (Coll.tag == "Player" && Coll.GetComponent<RoleDate>().isCanBeHit == false) return;
             //生成爆炸
@@ -154,7 +167,6 @@ public class TX_zidan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (IsAtkAuto) {
             fire();
         }

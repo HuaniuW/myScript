@@ -47,7 +47,8 @@ public class JN_JumpCut : MonoBehaviour, ISkill
         float powerX = Mathf.Abs(this.transform.position.x - _playerX) / DistanceXDW * 80;
         float vx = this.transform.position.x > _playerX ? -VXPower : VXPower;
         if(IsJumpToPlayerPostion) vx = this.transform.position.x > _playerX ? -powerX : powerX;
-        _gameBody.GetPlayerRigidbody2D().AddForce(new Vector2(vx, 0));
+        //_gameBody.GetPlayerRigidbody2D().AddForce(new Vector2(vx, 0));
+        _gameBody.GetZongTuili(new Vector2(vx, 0));
     }
 
 
@@ -60,11 +61,6 @@ public class JN_JumpCut : MonoBehaviour, ISkill
             //ReSetAll();
             return true;
         }
-
-        
-       
-
-
         return false;
     }
 

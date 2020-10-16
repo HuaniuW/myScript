@@ -34,7 +34,7 @@ public class AIChongji : MonoBehaviour
     {
         if (_targetObj == null) _targetObj = targetObj;
         isGetOver = false;
-        GetComponent<RoleDate>().addYZ(1000);
+        if(ChongjiYingZhi!=0)GetComponent<RoleDate>().addYZ(ChongjiYingZhi);
         isStarting = true;
         //print("this.transform.position：   " + this.transform.position);
     }
@@ -79,6 +79,8 @@ public class AIChongji : MonoBehaviour
     public float CJYanchiTime = 0.5f;
     float CJYanchiNums = 0;
 
+    [Header("冲击时的硬直")]
+    public float ChongjiYingZhi = 1000;
 
     void Tanshe()
     {
@@ -134,21 +136,28 @@ public class AIChongji : MonoBehaviour
 
         if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed))
         {
-            deltaNums = 0;
-            CJYanmu.Stop();
-            GetComponent<RoleDate>().hfYZ(1000);
-            //CJYanmu.loop = false;
-            isStarting = false;
-            isGetOver = true;
-            isTanSheing = false;
-            IsStartChongji = false;
-            CJYanchiNums = 0;
-            GetComponent<AIAirRunNear>().ResetAll();
-            print("*************************************************************冲击 结束！！！！！");
+            ChongjiOver();
         }
 
         CJYanmu.Play();
     }
+
+
+    void ChongjiOver()
+    {
+        deltaNums = 0;
+        CJYanmu.Stop();
+        if (ChongjiYingZhi != 0) GetComponent<RoleDate>().hfYZ(ChongjiYingZhi);
+        //CJYanmu.loop = false;
+        isStarting = false;
+        isGetOver = true;
+        isTanSheing = false;
+        IsStartChongji = false;
+        CJYanchiNums = 0;
+        GetComponent<AIAirRunNear>().ResetAll();
+        print("*************************************************************冲击 结束！！！！！");
+    }
+
 
     [Header("冲击时间 注意 冲击速度越小 这个时间要越长 不然 就冲不到位置")]
     public float _tsTimes = 0.5f;

@@ -191,7 +191,8 @@ public class GameControl : MonoBehaviour {
         {
             //print("  有关卡记录  草！！！！！！！  ");
             //如果全局数据中有本关卡数据  清除掉原数据中本关卡数据   匹配本关卡数据
-            GetPiPei();
+            if (GlobalDateControl.GetCGKName().Split('@').Length == 1) GetPiPei();
+            //GetPiPei();
         }
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
@@ -206,6 +207,14 @@ public class GameControl : MonoBehaviour {
     public void CheckGuaiDoor()
     {
         if (!IsCanBeCheckGuai) return;
+        GameObject maps = GlobalTools.FindObjByName("maps");
+        if (maps) {
+            if (maps.GetComponent<GetReMap2>().GuaiList.Count != 0) GuaiList = maps.GetComponent<GetReMap2>().GuaiList;
+            if (maps.GetComponent<GetReMap2>().GetGuanKaType() == GlobalMapDate.BOSS_PINGDI ||
+                maps.GetComponent<GetReMap2>().GetGuanKaType() == GlobalMapDate.JINGYING_PINGDI) {
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
+            }
+        } 
         if (GuaiList.Count == 0)
         {
             //开门
@@ -252,7 +261,7 @@ public class GameControl : MonoBehaviour {
 
         if (TempCurrentGKDate == "") {
             TempCurrentGKDate = changeDate;
-            //print("1  "+ TempCurrentGKDate);
+            print("1>>>>  "+ TempCurrentGKDate);
         }
         else
         {
@@ -305,10 +314,12 @@ public class GameControl : MonoBehaviour {
 
 
 
-        string TempGKDateStr = GuankaName + ":" + TempCurrentGKDate;
+        //string TempGKDateStr = GuankaName + ":" + TempCurrentGKDate;
+        string TempGKDateStr = GlobalDateControl.GetCGKName() + ":" + TempCurrentGKDate;
+
         if (TempCurrentGKDate != null) GlobalDateControl.SetCurrentGKDateInZGKTempDate(TempGKDateStr);
-        //print("记录数据  "+TempGKDateStr);
-        //print("TempCurrentGKDate:    " + TempCurrentGKDate);
+        print("记录数据  "+TempGKDateStr);
+        print("TempCurrentGKDate:    " + TempCurrentGKDate);
         if (type == "boss"||type == "G"|| type == "B"|| type == "WP")
         {
             //将关卡数据写入全局临时数据 存档
@@ -327,10 +338,10 @@ public class GameControl : MonoBehaviour {
   
 
     //匹配记录的机关状态 门是开的还是关的 BOSS有没有杀掉
-    void GetPiPei()
+    public void GetPiPei()
     {
         string TempCurrentGKDate = GlobalDateControl.GetCurrentGKDate().Split(':')[1];
-
+        print("*****************************************************************开始进行 当前关卡的数据匹配 TempCurrentGKDate:  " + TempCurrentGKDate);
         if (TempCurrentGKDate == "") return;
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
@@ -340,6 +351,7 @@ public class GameControl : MonoBehaviour {
         {
             if (strArr[i] == "") continue;
             string s = strArr[i].Split('-')[0];
+            s = GlobalTools.GetNewStrQuDiaoClone(s);
             string zt = "0";
             if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1].Split('@')[0];
 
@@ -383,11 +395,22 @@ public class GameControl : MonoBehaviour {
               
             }else if (sName == "G")
             {
-                //print("  >////////////////////guai sname   "+s);
-                GameObject guai = GlobalTools.FindObjByName(s);
+
+                GameObject guai;
+                if (GlobalDateControl.GetCGKName().Split('@').Length!=1)
+                {
+                    guai = GlobalTools.FindObjByNameInRMaps(s);
+                }
+                else
+                {
+                    guai = GlobalTools.FindObjByName(s);
+                }
+                //要在 maps 里面找
+                print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
                 if (guai != null) {
                     GuaiList.Remove(guai);
                     guai.SetActive(false);
+                    CheckGuaiDoor();
                 }
             }
             else if (sName == "JG")

@@ -372,7 +372,8 @@ public class PlayerGameBody : GameBody {
         isRunRighting = true;
         isRunLefting = false;
 
-        playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        //playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        GetZongTuili(new Vector2(xForce * horizontalDirection, 0));
         //print("right "+ horizontalDirection + "  xForce "+xForce +"    sudu  "+playerRigidbody2D.velocity.x+"   max   "+maxSpeedX);
         if (playerRigidbody2D.velocity.x > 10) playerRigidbody2D.velocity = new Vector2(maxSpeedX, playerRigidbody2D.velocity.y);
         Run();
@@ -417,7 +418,8 @@ public class PlayerGameBody : GameBody {
         isRunLefting = true;
         isRunRighting = false;
 
-        playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        //playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+        GetZongTuili(new Vector2(xForce * horizontalDirection, 0));
         //print("left " + horizontalDirection + "  xForce " + xForce + "    sudu  " + playerRigidbody2D.velocity.x + "   max   " + maxSpeedX);
         if (playerRigidbody2D.velocity.x < -10) playerRigidbody2D.velocity = new Vector2(-maxSpeedX, playerRigidbody2D.velocity.y);
         //print("hihihi");
@@ -874,7 +876,11 @@ public class PlayerGameBody : GameBody {
     int mnum = 0;
     override protected void GetBeHit()
     {
-      
+        //if(img_bianziz.GetComponent<SpriteRenderer>().color == Color.black){
+        //    Bianbai();
+        //}
+
+
         //print("   getbehit>>>????????>1111111 "+ DBBody.animation.lastAnimationName+"  ?  "+BEHIT+"   pro  "+ roleDate.isBeHiting);
         if (DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR)
         {
@@ -915,6 +921,60 @@ public class PlayerGameBody : GameBody {
         }
     }
 
+
+    public override void ShowPassiveSkill(GameObject hzObj)
+    {
+        bdjn = hzObj.GetComponent<UI_Skill>().GetHZDate();
+        if (roleDate.lan - bdjn.xyLan < 0) return;
+        if (roleDate.live - bdjn.xyXue < 1) return;
+        if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
+        roleDate.lan -= bdjn.xyLan;
+        roleDate.live -= bdjn.xyXue;
+
+        //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
+
+        if (bdjn.skillACName != null && DBBody.animation.HasAnimation(bdjn.skillACName))
+        {
+            //***找到起始特效点 找骨骼动画的点 或者其他办法
+            if (isInAiring)
+            {
+                GetAcMsg(bdjn.skillACNameInAir);
+            }
+            else
+            {
+                GetAcMsg(bdjn.skillACName);
+            }
+
+
+
+            print("技能释放动作//////////////////////////////////////////////////////    " + bdjn.skillACName);
+            playerRigidbody2D.velocity = Vector2.zero;
+            if (bdjn.ACyanchi > 0)
+            {
+                GetPause(bdjn.ACyanchi);
+                //***人物闪过去的 动作 +移动速度  还有多发的火球类的特效
+            }
+
+        }
+        else
+        {
+            print("被动技能释放、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、！！！！！！");
+            //测试用 正式的要配动作
+
+        }
+
+        if (img_bianziz.GetComponent<SpriteRenderer>().color == Color.black)
+        {
+            Bianbai();
+        }
+
+        GetComponent<ShowOutSkill>().ShowOutSkillByName(bdjn.TXName, true);
+    }
+
+
+
+
+
     bool IsBianhei = false;
     override public void GetDie()
     {
@@ -926,7 +986,6 @@ public class PlayerGameBody : GameBody {
             //}
             //if (!DBBody.animation.HasAnimation(DIE)) DIE = "die_1";
             Die_dian.Play();
-            
             GetPlayerRigidbody2D().gravityScale = 0;
             GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x, 1f);
             print("  玩家 拍哦东速度  "+ GetPlayerRigidbody2D().velocity);
@@ -1002,7 +1061,7 @@ public class PlayerGameBody : GameBody {
 
     float LuodiXSD = 0;
 
-    protected override void InAir()
+    public override void InAir()
     {
         //print(DBBody.animation.lastAnimationName+"   speedy  "+ newSpeed.y);
 
@@ -1205,7 +1264,8 @@ public class PlayerGameBody : GameBody {
                 newSpeed.y = 0.1f;
                 //isJumping2 = true;
                 playerRigidbody2D.velocity = newSpeed;
-                playerRigidbody2D.AddForce(Vector2.up * yForce);
+                //playerRigidbody2D.AddForce(Vector2.up * yForce);
+                GetZongTuili(Vector2.up * yForce);
             }
         }
         else
@@ -1223,7 +1283,8 @@ public class PlayerGameBody : GameBody {
 
                 playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0);
                 DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
-                playerRigidbody2D.AddForce(Vector2.up * yForce);
+                //playerRigidbody2D.AddForce(Vector2.up * yForce);
+                GetZongTuili(Vector2.up * yForce);
             }
         }
     }
@@ -1245,7 +1306,8 @@ public class PlayerGameBody : GameBody {
                     MoveXByPosition(-0.4f);
                 }
                 
-                playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
+                //playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
+                GetZongTuili(Vector2.right * wallJumpXNum);
             }
             else
             {
@@ -1259,8 +1321,9 @@ public class PlayerGameBody : GameBody {
                 }
 
                 //MoveXByPosition(-0.4f);
-                playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
-                
+                //playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
+                GetZongTuili(Vector2.left * wallJumpXNum);
+
             }
         }
     }

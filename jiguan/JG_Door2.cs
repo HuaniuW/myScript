@@ -99,7 +99,9 @@ public class JG_Door2 : MonoBehaviour
         }else if (e.eventParams.ToString() == "kyguanmen")
         {
             IsCanCloseDoorMap = true;
-        }else if(e.eventParams.ToString() == "open")
+            print(">>>>>>>>>>>>>>>>>>*****  可以关门！ ");
+        }
+        else if(e.eventParams.ToString() == "open")
         {
             //print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
             IsCanCloseDoorMap = false;
@@ -107,7 +109,7 @@ public class JG_Door2 : MonoBehaviour
         }
         else
         {
-            //print("  wokao!!!!  ");
+            //print("  wokao!!!! 关门啊 啊啊啊啊啊啊啊啊啊啊啊！！！  ");
             IsCloseDoor = true;
         }
     }
@@ -159,6 +161,8 @@ public class JG_Door2 : MonoBehaviour
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
             GetOtherJG1();
+
+            print(" **************  碰撞 关门机关！！！！   ");
         }
     }
 
@@ -173,6 +177,7 @@ public class JG_Door2 : MonoBehaviour
     {
         if (IsCloseDoor && Door.transform.position.y > DownPos.transform.position.y)
         {
+            //print("***************  关门！！！！！！**** ");
             Door.transform.position = new Vector3(Door.transform.position.x, Door.transform.position.y - DoorSpeed, +Door.transform.position.z);
         }
     }
