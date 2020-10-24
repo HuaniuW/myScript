@@ -53,6 +53,16 @@ public class Diaoluowu : MonoBehaviour {
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
                 var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName+ "-0"),this);
+                //显示 获取徽章的 提示UI
+                GameObject ui_huizhangMsg = GlobalTools.FindObjByName("Canvas_HZMsg");
+                if (!ui_huizhangMsg)
+                {
+                    ui_huizhangMsg = GlobalTools.GetGameObjectByName("Canvas_HZMsg");
+                }
+                GameObject HZ_obj = Resources.Load(objName) as GameObject;
+                string HZ_Msg = HZ_obj.GetComponent<HZDate>().GetHZ_information_str();
+                ui_huizhangMsg.GetComponent<UI_HZMsg>().StartShowBar("img_"+objName, HZ_Msg);
+
             }
             else if (type == 2) {
                 //消耗的掉落物 吃了 直接加血

@@ -84,16 +84,19 @@ public class AIFanji : MonoBehaviour {
     int beHitNum = 0;
     public void GetFanji()
     {
-        print("   进入 AI反击 ！！  "+_gameBody.isAcing);
+        //print("   进入 AI反击 ！！  "+_gameBody.isAcing+"  v2  "+_gameBody.GetPlayerRigidbody2D().velocity);
         if (isFanjiing) return;
+        //print(1);
         if (beHitNum == _gameBody.beHitNum) return;
+        //print(2);
         beHitNum = _gameBody.beHitNum;
+        //print(3);
         int n = (int)UnityEngine.Random.Range(0, 100);
         if (isJVCanZJ&&!IsBeHitCut())
         {
             BeHitNum += 5;
             jsNums = 0;
-            //print("BeHitNum  " + BeHitNum);
+            //print("???  判断是否被连续攻击 BeHitNum  " + BeHitNum);
         }
         if (n <= (100 - fanjijilv- BeHitNum)) return;
 

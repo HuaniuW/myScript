@@ -114,9 +114,7 @@ public class EventTypeName
     public const string PLOT_KILL_PLAYER = "plot_kill_player";
 
 
-
-
-
-
+    //切换跑步动作
+    public const string CHANGE_RUN_AC = "change_run_ac";
 
 }

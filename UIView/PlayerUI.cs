@@ -256,6 +256,7 @@ public class PlayerUI : MonoBehaviour {
         }
         ShowSelf();
         GetScreenChange();
+        JianZheng();
 
     }
     
@@ -305,18 +306,31 @@ public class PlayerUI : MonoBehaviour {
 
 
 
+    float _jianzhengNums = 0;
+    float _jianzhengNumsJishi = 0;
+    bool IsJianZheng = false;
+    void JianZheng()
+    {
+        if (IsJianZheng)
+        {
+            _jianzhengNumsJishi += Time.deltaTime;
+            if(_jianzhengNumsJishi>= _jianzhengNums)
+            {
+                IsJianZheng = false;
+                _jianzhengNumsJishi = 0;
+                Time.timeScale = 1;
+            }
+        }
+    }
+
 
     //全局减速
     public void GetSlowByTimes(float times = 1,float TimeScaleNums = 0.5f)
     {
-        //print(" 减慢 时间速度！！！ times  "+times+ "   TimeScaleNums "+ TimeScaleNums);
-        GetComponent<TheTimer>().TimesAdd(times, TimeCallBack);
+        print(" 减慢 时间速度！！！ times  "+times+ "   TimeScaleNums "+ TimeScaleNums);
+        _jianzhengNums = times;
         Time.timeScale = TimeScaleNums;
-    }
-
-    public void TimeCallBack(float nums)
-    {
-        //print("---------------------------------------------------------------->>>>>>>>>>>>>>>>>??????????????????????");
-        Time.timeScale = 1;
+        IsJianZheng = true;
+        _jianzhengNumsJishi = 0;
     }
 }

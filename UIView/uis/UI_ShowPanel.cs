@@ -12,11 +12,13 @@ public class UI_ShowPanel : MonoBehaviour {
     public Image right;
     public Image center;
 
+    GameObject _player;
 
     // Use this for initialization
     void Start () {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.SKILL_UI_CHANGE, this.GetSkillChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RELEASE_SKILL, this.ReleaseSkill);
+        if (!_player) _player = GlobalTools.FindObjByName("player");
         //GetObjByName("top",this.gameObject);
         //print(" 9999999999999!  ");
         //_skillUseDate = GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date;
@@ -74,9 +76,30 @@ public class UI_ShowPanel : MonoBehaviour {
         {
             o.GetComponent<UI_Skill>().GetGlobalSkillDate();
         }
+
+        ShowHZTXinPlayer();
+
     }
 
 
+    //显示 玩家身上要显示那些 徽章特效  切换徽章和使用徽章 都要调用这里
+    public void ShowHZTXinPlayer()
+    {
+        //移除所有徽章特效
+        PlayerGameBody playerGameBody = _player.GetComponent<PlayerGameBody>();
+        //总共显示 哪些徽章 特效
+        //1.花防 2.电刀 -生命上限 3.火刀 -生命上限  4.神佑  5.电盾  6.毒刃 -生命上限  7.龙盾 金色光   8.
+        playerGameBody.StopAllHZInTX();
+
+        foreach (GameObject o in HZList)
+        {
+            print("  看看装备了 哪些徽章：    "+o.GetComponent<UI_Skill>().GetHZDate().HZName+"   是否可用 "+ o.GetComponent<UI_Skill>().IsCDSkillCanBeUse());
+            if(o.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) playerGameBody.PlayHZInTXByTXName(o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName);
+        }
+
+        //显示徽章特效   怎么显示
+
+    }
 
 
     //对比技能使用数据
@@ -167,11 +190,15 @@ public class UI_ShowPanel : MonoBehaviour {
             {
                 if (o.GetComponent<UI_Skill>().GetHZDate().type == "bd") return;
                 GlobalTools.FindObjByName("player").GetComponent<GameBody>().ShowSkill(o);
-
                 break;
             }
         }
     }
+
+
+
+    
+
 
     //name_(0/1)  1是装配 0是卸下
     void GetSkillChange(UEvent e)

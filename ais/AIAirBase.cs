@@ -102,7 +102,7 @@ public class AIAirBase : AIBase
         if (_AIYinshen != null) _AIYinshen.BeHitHide();
     }
 
-
+    
     //public override void AIGetBeHit()
     //{
     //    //base.AIGetBeHit();
@@ -152,7 +152,7 @@ public class AIAirBase : AIBase
             return;
         }
 
-        if (gameObj.GetComponent<RoleDate>().isDie)
+        if (gameObj.GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
             gameBody.ResetAll();
             //gameBody.Stand();

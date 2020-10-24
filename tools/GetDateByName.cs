@@ -52,4 +52,13 @@ public class GetDateByName : MonoBehaviour {
     }
 
 
+    public ParticleSystem GetTXByName(string _name, System.Object obj)
+    {
+        Type type = obj.GetType();
+        FieldInfo fieldInfo = type.GetField(_name);
+        if (fieldInfo == null) return null;
+        return fieldInfo.GetValue(obj) as ParticleSystem;
+    }
+
+
 }

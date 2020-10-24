@@ -288,3 +288,9 @@ GetComponent<RectTransform>().sizeDelta
 //obj.GetComponent<Image>().material.color = color;  改变 image material 的属性颜色  这个灰改变所有UI的 material的颜色
 //这个才是改变 image 的color
 //obj.GetComponent<Image>().color = color;
+
+
+// 动态修改 image中的 图片    图片 必须在resource里面    Image组件还有一个自带的sprite属性，直接给这个属性赋值sprite类型的话是行不通的，只能通过overrideSprite
+//HZ_Img.overrideSprite = Resources.Load(ImgName, typeof(Sprite)) as Sprite;  这个无法加载 只能用下面的 GameObject
+//GameObject sp = Resources.Load("i_huizhang12") as GameObject;
+//HZ_Img.overrideSprite = sp.GetComponent<SpriteRenderer>().sprite;

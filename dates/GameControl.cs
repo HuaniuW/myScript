@@ -43,6 +43,7 @@ public class GameControl : MonoBehaviour {
         //GlobalSetDate.instance.Init();
         GuankaName = SceneManager.GetActiveScene().name;
         if (IsInPlot) return;
+        Globals.IsHitDoorStop = false;
         GetPlayer();
         //print("取到 player!!!");
         if (player == null)

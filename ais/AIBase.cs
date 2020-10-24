@@ -352,7 +352,7 @@ public class AIBase : MonoBehaviour {
 
     protected virtual void GetUpdate()
     {
-        if (GetComponent<RoleDate>().isDie)
+        if (GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
             return;
         }
@@ -705,21 +705,20 @@ public class AIBase : MonoBehaviour {
 
     bool GetMove(float distance,float nearSpeed)
     {
-
-
-
         if (gameObj.transform.position.x - transform.position.x > distance)
         {
             //目标在右
-            //print("  向右跑！！   ");
+            //print("  向右跑！！??   "+ nearSpeed+"    ACName    "+gameBody.GetDB().animation.lastAnimationName );
             gameBody.RunRight(nearSpeed);
+            //print("    ACName    " + gameBody.GetDB().animation.lastAnimationName);
             return false;
         }
         else if (gameObj.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
-            //print("  向 左跑！！ ***  ");
+            //print("  向 左跑！！ ***  "+nearSpeed + "    ACName    " + gameBody.GetDB().animation.lastAnimationName);
             gameBody.RunLeft(-nearSpeed);
+            //print("    ACName    " + gameBody.GetDB().animation.lastAnimationName);
             return false;
         }
         else
@@ -795,7 +794,7 @@ public class AIBase : MonoBehaviour {
         //isActioning = true;
     }
 
-
+    public bool IsCanAtk = true;
     //动作名称
     protected string acName = "";
     protected string jn_effect = "";
@@ -804,6 +803,9 @@ public class AIBase : MonoBehaviour {
     protected virtual void GetAtkFS()
     {
         //print("atkFS!!!");
+        if (!IsCanAtk) return;
+        if (!isNearAtkEnemy) return;
+        if (gameBody.IsGuDingTuili) return;
         if (!isAction &&isPlayerDie) return;
         if (IsBossStop) return;
         if (GetComponent<GameBody>() && GetComponent<GameBody>().GetDB().animation.lastAnimationName == "downOnGround_1") return;
@@ -815,7 +817,7 @@ public class AIBase : MonoBehaviour {
             //IsGetAtkFSByName = false;
            
             
-            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
+            print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -843,6 +845,11 @@ public class AIBase : MonoBehaviour {
 
             if (strArr[0] == "jn") {
                 jn_effect = acName;
+                if(GetAtkVOByName(acName, DataZS.GetInstance()))
+                {
+                    atkDistance = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistance;
+                }
+               
                 acName = "jn";
                 return;
             }
@@ -1173,9 +1180,12 @@ public class AIBase : MonoBehaviour {
     protected virtual void AIBeHit()
     {
         //if (aisx != null) aisx.ReSet();
-        isFindEnemy = true;
-        isPatrolRest = false;
-        isNearAtkEnemy = true;
+        if (IsCanAtk)
+        {
+            isFindEnemy = true;
+            isPatrolRest = false;
+            isNearAtkEnemy = true;
+        }
         IsTuihuiFangshouquing = false;
         IsBossStop = false;
 
@@ -1229,7 +1239,7 @@ public class AIBase : MonoBehaviour {
 
     //一般攻击
     protected virtual void PtAtk(){
-
+        if (!isNearAtkEnemy) return;
         if (gameBody.isAtking) return;
 
         //判断 是否hi不能动的怪物
@@ -1487,6 +1497,7 @@ public class AIBase : MonoBehaviour {
 
     protected void JNAtk()
     {
+        print("技能攻击   距离是多少  atkDistance    " + atkDistance);
         //这种如果再次超出攻击距离会再追踪
         if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
         {

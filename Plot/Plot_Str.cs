@@ -39,6 +39,14 @@ public class Plot_Str : MonoBehaviour
     {
         if (!OutObjPos) return;
         if (!IsOverOutObj || OverOutObjName == "") return;
+
+        //显示 闪光之类的
+        GameObject shanguang = GlobalTools.GetGameObjectByName("TX_HZchuxianXingXing");
+        shanguang.transform.position = OutObjPos.position;
+        shanguang.transform.parent = this.transform.parent.parent;
+        //播声音
+
+
         GameObject outObj = GlobalTools.GetGameObjectByName(OverOutObjName);
         outObj.transform.position = OutObjPos.position;
         print("   ------obj "+outObj.name);
@@ -335,6 +343,12 @@ public class Plot_Str : MonoBehaviour
         }
 
         IsCanBeHit = false;
+
+        if (IsOverMoveSelf)
+        {
+            OverDelSelf();
+        }
+
         //Destroy(this.gameObject);
 
     }
@@ -359,10 +373,10 @@ public class Plot_Str : MonoBehaviour
         //是否出现啥 徽章  或者爆炸 等
 
 
-        if (IsOverMoveSelf)
-        {
-            OverDelSelf();
-        }
+        //if (IsOverMoveSelf)
+        //{
+        //    OverDelSelf();
+        //}
 
         //能不能延迟 才能使玩家 行动
 
@@ -506,6 +520,7 @@ public class Plot_Str : MonoBehaviour
 
     GameObject cm;
     Vector3 cameraPosition = Vector3.zero;
+    //拉近摄像机
     void LaJinCamera()
     {
         cm = GlobalTools.FindObjByName("MainCamera");

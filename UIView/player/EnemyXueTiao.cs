@@ -158,6 +158,10 @@ public class EnemyXueTiao : MonoBehaviour
         Wh(xue1, _w, _h);
     }
 
+    [Header("是否需要 die后 隐藏掉 血条")]
+    public bool IsDieNeedHideBar = true;
+
+
     float testNums = 1000;
 
     float lastXue = 0;
@@ -166,7 +170,14 @@ public class EnemyXueTiao : MonoBehaviour
     {
         _cLive = roleDate.live;
         if (_cLive == lastXue) return;
-        if (_cLive < 0) _cLive = 0;
+        if (_cLive <= 0) {
+            _cLive = 0;
+            if (IsDieNeedHideBar)
+            {
+                Show(false);
+            }
+        }
+        
         _w = _cLive / _maxLive * _maxW;
         if (_w2 != _w) isChage = true;
         if (_w > _w2) _w2 = _w;

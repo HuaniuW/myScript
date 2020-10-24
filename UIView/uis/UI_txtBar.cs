@@ -81,6 +81,24 @@ public class UI_txtBar : MonoBehaviour
         IsHasChose = false;
     }
 
+
+
+    public void Bianhei()
+    {
+        bgImg.color = new Color(0.2f, 0.2f, 0.2f);
+        StrText.color = new Color(1, 1, 1);
+    }
+
+    public void Bianbai()
+    {
+        bgImg.color = new Color(255f, 255f, 255f);
+        StrText.color = new Color(0.2f, 0.2f, 0.2f);
+    }
+
+
+
+
+
     public void GetBeChose()
     {
         IsHasChose = true;

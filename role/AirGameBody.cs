@@ -189,9 +189,9 @@ public class AirGameBody : GameBody {
     }
 
 
-    public bool isDieFlyOut = false;
-    public bool isDieRotation = false;
-    public GameObject hitKuai;
+    //public bool IsDieFlyOut = false;
+    //public bool IsDieRotation = false;
+    
 
     bool isDieAc = false;
     public override void GetDie()
@@ -200,13 +200,13 @@ public class AirGameBody : GameBody {
         //GetComponent<AIAirRunNear>().ResetAll();
         if(CJYanmu) CJYanmu.Play();
         if (DBBody.animation.lastAnimationName != DIE) {
-            if (isDieFlyOut)
+            if (IsDieFlyOut)
             {
                 GetPlayerRigidbody2D().gravityScale = 4;
                 if (hitKuai) hitKuai.SetActive(false);
                 //print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
                 BeHitFlyOut(100);
-                if(isDieRotation) GetPlayerRigidbody2D().freezeRotation = true;
+                if(IsDieFlyOut) GetPlayerRigidbody2D().freezeRotation = false;
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
@@ -238,14 +238,14 @@ public class AirGameBody : GameBody {
     }
 
 
-    void BeHitFlyOut(float power)
-    {
-        if (GlobalTools.FindObjByName("player")) {
-            //playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
-            GetZongTuili(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
-        }
+    //void BeHitFlyOut(float power)
+    //{
+    //    if (GlobalTools.FindObjByName("player")) {
+    //        //playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+    //        GetZongTuili(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+    //    }
        
-    }
+    //}
 
     public override void RunLeft(float _moveSpeedX = 0, bool isWalk = false)
     {

@@ -174,7 +174,7 @@ public class EnemyGameBody : GameBody {
         InFightAtk();
         ChangeStandAndRunAC();
         //print("speedX   "+ speedX);
-        //print("22--->  "+ playerRigidbody2D.velocity.x);
+        //print(this.name+"  22--->  "+ playerRigidbody2D.velocity.x+"     冲击力是多少 "+chongjili);
         if (chongjili > 700)
         {
             BEHIT = "beHit_3";
@@ -374,6 +374,7 @@ public class EnemyGameBody : GameBody {
 
         if (roleDate.isBeHiting)
         {
+            print(this.name + "  ***********************************************  " + GetPlayerRigidbody2D().velocity+"   是否固定 推力中  "+IsGuDingTuili);
             ControlSpeed(30);
             GetBeHit();
             return;

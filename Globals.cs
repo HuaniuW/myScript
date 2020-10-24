@@ -53,6 +53,10 @@ public class Globals : MonoBehaviour {
     internal static int mapTypeNums = 1;
     public static List<string> mapZBArr;
 
+
+    //角色进门 停止
+    internal static bool IsHitDoorStop = false;
+
     public static UI_ShowPanel Get_UI_ShowPanel()
     {
         return null;

@@ -63,6 +63,10 @@ public class RoleDate : MonoBehaviour {
     [Header("被击中时发出的声音")]
     public string beHitVudio = "hit1";
 
+    [Header("被击中时的特效1")]
+    public string BeHitTX_1 = "";
+
+
     public bool isCanBeHit = true;
 
     public bool isBeHit = false;

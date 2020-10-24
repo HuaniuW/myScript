@@ -508,8 +508,8 @@ public class GetReMap2 : GetReMap
         return lianjieFX.Contains(fx);
     }
 
-
-
+    //是否 可以出怪 用于判断 门旁边位置
+    bool _canGuaiOut = true;
 
     protected override void CreateFZRoad(string fx, int mapNums, string goScreenName, string danFX = "")
     {
@@ -674,12 +674,13 @@ public class GetReMap2 : GetReMap
         
     }
 
-
-
+    //默认可以生成跳跃地形
+    bool _morenKeyiShengChengTiaoyue = true;
     //一般地形
     void YiBanDiXing(string FX, int DuanNums, int isFirstNums, bool IsToMen = true)
     {
         int nums = GlobalTools.GetRandomNum();
+        _morenKeyiShengChengTiaoyue = true;
         //这个是 生成 一般的地图
         for (int i = 0; i < DuanNums; i++)
         {
@@ -709,6 +710,7 @@ public class GetReMap2 : GetReMap
             }
             else if (FX == "d")
             {
+                if (IsHasFX(_lianjieFX, "l")) _morenKeyiShengChengTiaoyue = false;
                 if (isFirstNums == 0 && !_isQishi0)
                 {
                     _isQishi0 = true;
@@ -732,6 +734,7 @@ public class GetReMap2 : GetReMap
             }
             else if (FX == "r")
             {
+                if(IsHasFX(_lianjieFX, "u")) _morenKeyiShengChengTiaoyue = false;
                 if (isFirstNums == 0 && !_isQishi0)
                 {
                     _isQishi0 = true;
@@ -1046,7 +1049,7 @@ public class GetReMap2 : GetReMap
 
     //这个是 所有地形都包括了
     //nums 是几率 不是数组长度
-    void ShengChengDiBan(int i, string FX, int nums, bool IsYanZhan = false,int duanNums = 0)
+    void ShengChengDiBan(int i, string FX, int ReNums, bool IsYanZhan = false,int duanNums = 0)
     {
         //print("  nums  "+nums+ "  IsYanZhan  "+ IsYanZhan);
 
@@ -1078,7 +1081,7 @@ public class GetReMap2 : GetReMap
                 PuTongPingDiDX(i, FX, false);
             }
 
-            mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+            if(duanNums!=1) mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
             return;
         }
 
@@ -1093,7 +1096,7 @@ public class GetReMap2 : GetReMap
         }
 
 
-        if (nums < 30)
+        if (ReNums < 30)
         {
             //平地
             mapObj = GetDiBanByName();
@@ -1104,14 +1107,21 @@ public class GetReMap2 : GetReMap
             //存档点
 
         }
-        else if (nums < 50)
+        else if (ReNums < 50)
         {
             //这个里面 都是平地型的 地形
             //跳跃
-            mapObj = GetDiBanByName("tiaoyue");
-            if (i != duanNums - 1)
+            if (_morenKeyiShengChengTiaoyue)
             {
-                mapObj.GetComponent<DB_TiaoYue>().JiGuan_PenSheZiDanJG();
+                mapObj = GetDiBanByName("tiaoyue");
+                if (i != duanNums - 1)
+                {
+                    mapObj.GetComponent<DB_TiaoYue>().JiGuan_PenSheZiDanJG();
+                }
+            }
+            else
+            {
+                mapObj = GetDiBanByName();
             }
             //洞内***********************************************************************
             //mapObj = GetDiBanByName();
@@ -1122,7 +1132,7 @@ public class GetReMap2 : GetReMap
             //是否有刺机关 隐刺机关
 
         }
-        else if (nums < 80)
+        else if (ReNums < 80)
         {
             //普通下降地形
             mapObj = GetDiBanByName();
@@ -1134,17 +1144,17 @@ public class GetReMap2 : GetReMap
                 //如果包含 D 下路 就不能有下降 下降改为平地  ***这里可以判断 是否是洞内
                 PuTongPingDiDX(i, FX, false);
 
-                if (i != 0 && IsCanHasDongNei())
+                if (i != 0 && IsCanHasDongNei()&&duanNums != 1)
                 {
                     __XDistance = FX == "l" ? 4 : -4;
-                    mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+                    if(duanNums!=1)mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
                 }
             }
             else
             {
                 PuTongXiaJiangDX(i, FX, false);
 
-                if (i != duanNums-1 && IsCanHasDongNei())
+                if (i != duanNums-1 && IsCanHasDongNei() && duanNums != 1)
                 {
                     __XDistance = (FX == "l"|| FX == "d") ? -4 : 4;
                     if ((FX == "d" && IsHasFX(_lianjieFX, "l")) || (FX == "r" && IsHasFX(_lianjieFX, "u"))) return;
@@ -1174,7 +1184,7 @@ public class GetReMap2 : GetReMap
             {
                 //上升 这里判断是否在洞内
                 PuTongShangShengDX(i, FX, false);
-                if (i!=0&&IsCanHasDongNei())
+                if (i!=0&&IsCanHasDongNei() && duanNums != 1)
                 {
                     __XDistance = (FX == "d"|| FX == "l") ? 4 : -4;
                     //if ((FX == "l" && IsHasFX(_lianjieFX, "d")) || (FX == "u" && IsHasFX(_lianjieFX, "r"))) return;

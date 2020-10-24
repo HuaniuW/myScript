@@ -160,6 +160,8 @@ public class ScreenChange : MonoBehaviour {
 
             //print("***  ReMapName????? "+ ReMapName  + "  GoScreenName  "+ GoScreenName);
 
+            Globals.IsHitDoorStop = true;
+
             GlobalMapDate.ClearGlobalCurrentMapMsg();
 
             if (ReMapName == "" && IsTeShuShengChengDiTu(GoScreenName))

@@ -298,7 +298,7 @@ public class GameBody : MonoBehaviour, IRole {
             newSpeed.x = 0;
             newSpeed.y = 0;
             playerRigidbody2D.velocity = newSpeed;
-            //print("huitiao");
+            print("********************************************************前滑！！！ huitiao");
             BackJumpVX(200);
             MoveVX(vx,true);
             //打开有bug
@@ -916,7 +916,7 @@ public class GameBody : MonoBehaviour, IRole {
         Run();
     }
 
-    protected bool IsGuDingTuili = false;
+    public bool IsGuDingTuili = false;
     public virtual void GetTuili(float tuili, float times = 0, bool isGuDingTuili = false)
     {
         //playerRigidbody2D.velocity = Vector2.zero;
@@ -948,8 +948,19 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
+        //print(this.name+"  看看谁给的 力 "+v2);
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
         playerRigidbody2D.AddForce(v2);
+    }
+
+    protected virtual void BeHitFlyOut(float power)
+    {
+        if (GlobalTools.FindObjByName("player"))
+        {
+            //playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+            GetZongTuili(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
+        }
+
     }
 
 
@@ -1029,6 +1040,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void BackJumpVX(float vx)
     {
+        if (IsGuDingTuili) return;
         var _vx = Mathf.Abs(vx);
         if (GetComponent<RoleDate>().isDie) return;
         playerRigidbody2D.velocity = Vector2.zero;
@@ -1165,8 +1177,28 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
 
+    }
 
-        
+
+    //防止AI卡在 边角
+    void LuodiXiuZheng()
+    {
+        if (this.tag == "Player") return;
+        //落地修正  如果速度 很小 并且动作是下落动作 卡在 边路就 推下去
+        if(DBBody.animation.lastAnimationName == JUMPDOWN&&Mathf.Abs(GetPlayerRigidbody2D().velocity.y)<=0.3f)
+        {
+            if(this.transform.localScale.x == -1)
+            {
+                //朝右
+                GetPlayerRigidbody2D().AddForce(Vector2.right*10);
+            }
+            else
+            {
+                //朝左
+                GetPlayerRigidbody2D().AddForce(Vector2.left * 10);
+            }
+
+        }
     }
 
     public virtual void InAir()
@@ -1223,6 +1255,8 @@ public class GameBody : MonoBehaviour, IRole {
                 MoveVX(0);
             }
         }
+
+        LuodiXiuZheng();
 
         if (isAtking)
         {
@@ -1416,11 +1450,75 @@ public class GameBody : MonoBehaviour, IRole {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
     }
 
+
+    public GameObject hitKuai;
+
+    [Header("die 是否会旋转")]
+    public bool IsDieRotation = false;
+
+    [Header("die 是否飞出去")]
+    public bool IsDieFlyOut = false;
+    protected virtual void FeiChuqu()
+    {
+        //if (hitKuai) hitKuai.SetActive(false);
+        if (IsDieRotation) {
+            GetPlayerRigidbody2D().freezeRotation = false;
+            //隐藏血条
+        }
+        BeHitFlyOut(50);
+    }
+
+
+    
+
+
+    [Header("die 飞出去的 物品列表")]
+    public List<string> FlyObjList = new List<string>() { };
+
+
+    [Header("die 是否会被打散 飞出去")]
+    public bool IsDieBoomOutObj = false;
+    protected void DieBoomOutObj()
+    {
+        if (FlyObjList.Count == 0) return;
+        //一件不飞
+        int nums = FlyObjList.Count;// GlobalTools.GetRandomNum(FlyObjList.Count);
+        for (int i=0;i<nums;i++)
+        {
+            string BoneName = FlyObjList[i].Split('|')[0];
+            string FlyObjName = FlyObjList[i].Split('|')[1];
+
+            //print("---BoneName   "+ BoneName);
+            //print(" gutou ?????   "+GetDB().armature.GetBone(BoneName)+"  骨头名字   "+GetDB().armature.GetBone(BoneName).name+"  "+ GetDB().armature.GetBone(BoneName).visible);
+
+            //GetDB().armature.GetBone(BoneName).visible = false;
+            //GetDB().armature.GetBone(BoneName).slot.visible = false;
+            //(GetDB().armature.GetBone(BoneName).slot.display as GameObject).SetActive(false);
+
+            if (GetDB().armature.GetSlot(BoneName) != null) {
+                GetDB().armature.GetSlot(BoneName).displayIndex = -1;
+            }
+            
+            GameObject _obj = GlobalTools.GetGameObjectByName(FlyObjName);
+            if (_obj == null) _obj = GlobalTools.GetGameObjectByName("ciwei_ci2");
+            _obj.transform.position = this.transform.position;
+        }
+
+    }
+
+
+    [Header("die 爆出可以拾取的物品")]
     public bool IsGetDieOut = false;
     public virtual void GetDie()
     {
+
+        if (DBBody.animation.lastAnimationName != DIE) {
+            DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
+            if (hitKuai) hitKuai.SetActive(false);
+            if (IsDieBoomOutObj) DieBoomOutObj();
+            if (IsDieFlyOut) FeiChuqu();
+        }
         
-        if(DBBody.animation.lastAnimationName != DIE) DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
         //print("回收");
         //对象池无法移除对象 原因不明
         //ObjectPools.GetInstance().IEDestory2ByTime(this.gameObject, 1f);
@@ -1430,7 +1528,7 @@ public class GameBody : MonoBehaviour, IRole {
             IsGetDieOut = true;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
         }
-        
+
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 
@@ -1946,6 +2044,7 @@ public class GameBody : MonoBehaviour, IRole {
     int yanchiNum = 10;
     float yanchiMaxNum = 20;
     //延迟行动尺度
+    [Header("攻击后的延迟 数值越大 出招越快 延迟时间越短")]
     public int canMoveNums = 100;
     public bool isAcing = false;
 	protected string _acName;
@@ -2237,9 +2336,41 @@ public class GameBody : MonoBehaviour, IRole {
 
     //动作延迟  在延迟内 将isAtk=false 可以控制人物 而不会一直在动作尾不受控制
     protected bool isAtkYc = false;
-    
 
-    protected void AtkReSet()
+
+
+
+    protected int kuaisujishu = 0;
+    protected int kuaisujishuNums = 0;
+    protected bool IsKuaisuAtkReset = false;
+    public void IsAtkKuaijiReSet()
+    {
+        kuaisujishuNums = 0;
+        if (!IsKuaisuAtkReset&& atkNums < atkZS.Length-1) IsKuaisuAtkReset = true;
+    }
+
+
+    protected void AtkKuaijiReSet()
+    {
+        if (GetComponent<RoleDate>().isBeHiting) return;
+        if (!IsKuaisuAtkReset) return;
+        kuaisujishuNums++;
+        if(kuaisujishuNums>= kuaisujishu)
+        {
+            IsKuaisuAtkReset = false;
+            kuaisujishuNums = 0;
+            jisuqi = 0;
+            isAtk = false;
+            isAtking = false;
+            isAtkYc = false;
+            yanchi = 0;
+            atkNums++;
+            if (atkNums >= atkZS.Length) atkNums = 0;
+        }
+    }
+
+
+    public void AtkReSet()
     {
         jisuqi = 0;
         isAtk = false;

@@ -14,6 +14,8 @@ public class PlayerGameBody : GameBody {
     void Update()
     {
 
+        if(IsInFighting)InFingting();
+
         DimianAtkHuanYuan();
         //攻击修正 防卡死
         AtkXiuZheng();
@@ -57,11 +59,48 @@ public class PlayerGameBody : GameBody {
     {
         STAND = "stand_5";
         DIE = "die_4";
+        RUN = "run_3";
         Die_dian.Stop();
         hongdian.Stop();
         _playerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
+
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
+        //PlayTXByTXName("huafang");//测试用 看看能不能播
     }
 
+
+
+
+    /*跑步动作切换*******************************************************************************************************/
+    protected bool IsInFighting = false;
+    //记录初始的 最大X速度
+    protected float _maxSpeedXRecord = 0;
+    protected void ChangeRunAC(UEvent e)
+    {
+        IsInFighting = true;
+        RUN = "run_5";
+        FightingNums = 0;
+        if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
+        maxSpeedX = _maxSpeedXRecord;
+        maxSpeedX += 2;
+    }
+
+    float FightingNums = 0;
+    float TheFightingNums = 10;
+    protected void InFingting()
+    {
+        FightingNums += Time.deltaTime;
+        if (FightingNums >= TheFightingNums)
+        {
+            IsInFighting = false;
+            RUN = "run_3";
+            maxSpeedX = _maxSpeedXRecord;
+            _maxSpeedXRecord = 0;
+        }
+    }
+
+    /*跑步动作切换*******************************************************************************************************/
 
 
     public GameObject img_bianziz;
@@ -126,6 +165,47 @@ public class PlayerGameBody : GameBody {
 
 
 
+
+
+    [Header("花防 粒子特效")]
+    public ParticleSystem TX_huafang_x;
+    [Header("火刀 粒子特效")]
+    public ParticleSystem TX_huodao_x;
+    [Header("电刀 粒子特效")]
+    public ParticleSystem TX_diandao_x;
+    [Header("毒刀 粒子特效")]
+    public ParticleSystem TX_dudao_x;
+    [Header("电盾 粒子特效")]
+    public ParticleSystem TX_diandun_x;
+    [Header("龙盾 粒子特效")]
+    public ParticleSystem TX_longdun_x;
+
+
+    public void StopAllHZInTX()
+    {
+        if (TX_huafang_x) TX_huafang_x.Stop();
+        if (TX_huodao_x) TX_huodao_x.Stop();
+        if (TX_diandao_x) TX_diandao_x.Stop();
+        if (TX_dudao_x) TX_dudao_x.Stop();
+        if (TX_diandun_x) TX_diandun_x.Stop();
+        if (TX_longdun_x) TX_longdun_x.Stop();
+    }
+
+
+    public void PlayHZInTXByTXName(string TXName)
+    {
+        string _txName = "TX_" + TXName + "_x";
+        ParticleSystem _tx = GetDateByName.GetInstance().GetTXByName(_txName, this);
+        if (_tx) _tx.Play();
+    }
+
+
+    public void StopHZInTXByTXName(string TXName)
+    {
+        string _txName = "TX_" + TXName + "_x";
+        ParticleSystem _tx = GetDateByName.GetInstance().GetTXByName(_txName, this);
+        if (_tx) _tx.Stop();
+    }
 
 
 
@@ -237,6 +317,7 @@ public class PlayerGameBody : GameBody {
             ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
             return;
         }
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
         DestroyImmediate(this.gameObject, true);
@@ -472,7 +553,11 @@ public class PlayerGameBody : GameBody {
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isPlaying)
         {
             //print(DBBody.animation.lastAnimationState);
+            //print("1   "+ vOAtk.atkName);
         }
+
+        AtkKuaijiReSet();
+
         if (DBBody.animation.lastAnimationName == vOAtk.atkName && DBBody.animation.isCompleted)
         {
             jisuqi = 0;
@@ -519,7 +604,7 @@ public class PlayerGameBody : GameBody {
             DimianAtkHuanYuan();
 
 
-
+            //判断是否在战斗状态
             InFightAtk();
 
         }
@@ -596,7 +681,7 @@ public class PlayerGameBody : GameBody {
 
 
     //取消空中闪进
-    void ShanjinStop()
+    public void ShanjinStop()
     {
         isShanjin = false;
         isCanShanjin = true;
@@ -613,6 +698,17 @@ public class PlayerGameBody : GameBody {
 
     public override void GetAtk(string atkName = null)
     {
+        if(this.tag == "Player")
+        {
+            print("**********************************************************************************************");
+            print("  roleDate.isBeHiting:  " + roleDate.isBeHiting);
+            print("  isAcing : " + isAcing);
+            print("  isDodgeing : " + isDodgeing+" |  shanjin: "+ isShanjin);
+            print("  isAtk : " + isAtk);
+            print("IsAtkDowning :  " + IsAtkDowning);
+            print("IsKuaisuAtkReset:  "+ IsKuaisuAtkReset+"  如果是 true 就打不出来  ");
+        }
+        IsKuaisuAtkReset = false;
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
 
@@ -623,10 +719,12 @@ public class PlayerGameBody : GameBody {
 
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
+        print("  DBBody.animation.lastAnimationName "+ DBBody.animation.lastAnimationName+"   是否是= "+(DBBody.animation.lastAnimationName == DOWNONGROUND));
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //if (IsAtkDown) return;
         if (!isAtk)
         {
+            print(1);
             if (Globals.isKeyDown)
             {
                 if (IsAtkDowning) return;
@@ -641,7 +739,7 @@ public class PlayerGameBody : GameBody {
             isLJ = false;
             jishiNum = 0;
             //print("  dianji gongji ");
-
+            print(2);
             if (isInAiring)
             {
                 if (Globals.isKeyUp)
@@ -689,20 +787,24 @@ public class PlayerGameBody : GameBody {
                 
             }
 
-            if (IsAtkDown && IsAtkDowning) return;
+            print("3");
 
+            if (IsAtkDown && IsAtkDowning) return;
+            print(4);
             if (IsAtkDown&&!IsAtkDowning)
             {
                 IsAtkDowning = true;
             }
 
-            
+            print(5);
 
             if (atkName == null)
             {
                 if (atkNums >= atkZS.Length) atkNums = 0;
                 vOAtk.GetVO(atkZS[(int)atkNums]);
+                print("???------>   "+ vOAtk.atkName);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+                print(51);
             }
             else
             {
@@ -719,9 +821,10 @@ public class PlayerGameBody : GameBody {
                 }
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+                print(52);
             }
 
-          
+            print(6);
 
             MoveVX(vOAtk.xF, true);
             //MoveVX(0, true);
@@ -811,7 +914,7 @@ public class PlayerGameBody : GameBody {
         inFightNums = 0;
         isFighting = true;
         //print("atkNums   " + atkNums);
-        ChangeStandAndRunAC();
+        //ChangeStandAndRunAC();
         //if (atkNums == 2)
         //{
         //    //ChangeACNum(3);
@@ -837,7 +940,7 @@ public class PlayerGameBody : GameBody {
         inFightNums = 0;
         mnum = 0;
         InFightAtk();
-        ChangeStandAndRunAC();
+        //ChangeStandAndRunAC();
         Time.timeScale = 0.5f;
         //print(" Time.timeScale  "+ Time.timeScale);
         //print("speedX   "+ speedX);
@@ -931,8 +1034,11 @@ public class PlayerGameBody : GameBody {
         roleDate.lan -= bdjn.xyLan;
         roleDate.live -= bdjn.xyXue;
 
-        //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
+        //取消闪进
+        ShanjinStop();
 
+
+        //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
         if (bdjn.skillACName != null && DBBody.animation.HasAnimation(bdjn.skillACName))
         {
             //***找到起始特效点 找骨骼动画的点 或者其他办法
@@ -947,7 +1053,7 @@ public class PlayerGameBody : GameBody {
 
 
 
-            print("技能释放动作//////////////////////////////////////////////////////    " + bdjn.skillACName);
+            print("技能释放动作******************************************************   " + bdjn.skillACName);
             playerRigidbody2D.velocity = Vector2.zero;
             if (bdjn.ACyanchi > 0)
             {
@@ -1042,7 +1148,9 @@ public class PlayerGameBody : GameBody {
                 DOWNONGROUND = DownOnGroundACName;
             }
 
-            if (timeDownnums > 1.1f)
+            //print("---------------------------------------------->_speedY   "+ _speedY);
+
+            if (timeDownnums > 0.6f&& _speedY<=-25)
             {
                 DOWNONGROUND = DownOnGroundACNameGao;
             }
@@ -1055,6 +1163,10 @@ public class PlayerGameBody : GameBody {
             //{
             //    DOWNONGROUND = DownOnGroundACName;
             //}
+        }
+        else
+        {
+            timeDownnums = 0;
         }
     }
 
@@ -1080,6 +1192,7 @@ public class PlayerGameBody : GameBody {
             isDodgeing = false;
             isDodge = false;
             playerRigidbody2D.gravityScale = gravityScaleNums;
+            //红眼光
             Hongyan.Stop();
             //这里控制 碰墙后 速度
             GetPlayerRigidbody2D().velocity = Vector2.zero;
@@ -1414,7 +1527,7 @@ public class PlayerGameBody : GameBody {
         if (GetComponent<RoleDate>().isDie) return;
         //RunLeft(1);
         this.transform.localScale = new Vector3(1, 1, 1);
-        
+        ChangeBoneScaleX();
     }
 
 

@@ -8,6 +8,8 @@ public class HZDate : MonoBehaviour {
     public string id = "";
     [Header("名字")]
     public string HZName;
+    [Header("徽章装配特效的名字")]
+    public string HZZBTXName = "";
     [Header("出现特效的名字")]
     public string TXName;
     [Header("调用的名字")]
@@ -114,50 +116,69 @@ public class HZDate : MonoBehaviour {
     }
 
 
+
+    string hz_name = "徽章名字：";
+    string hz_information = "徽章名字：";
+    string hz_atk = "攻击力：";
+    string hz_atkP = "攻击力倍数：";
+    string hz_def = "防御力：";
+    string hz_defP = "防御力倍数：";
+    string hz_live = "生命值：";
+    string hz_liveP = "生命值：";
+
+
+
     public string GetHZ_information_str()
     {
+        //做一次 语言判断
+
+
         string str = "";
-        string _name = Globals.language == Globals.CHINESE? "<color=#FDFEFE>徽章名字：" + this.HZName+"</color>\n": "<color=#FDFEFE>Badge name：" + this.HZName + "</color>\n";
+        string _name = Globals.language == Globals.CHINESE? "<color=#FDFEFE>"+ hz_name + this.HZName+"</color>\n": "<color=#FDFEFE>Badge name：" + this.HZName + "</color>\n";
         str += _name;
+
+
+
+
         string _atkStr = "";
         if (atk != 0)
         {
-            _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
+            _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>"+ hz_atk + "+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
         }
         str += _atkStr;
 
         string _atkPStr = "";
         if (atkP != 0)
         {
-            _atkPStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力倍数：" + this.atkP + "</color>\n" : "<color=#E74C3C>atk P：" + this.atkP + "</color>\n";
+            _atkPStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>"+ hz_atkP + this.atkP + "</color>\n" : "<color=#E74C3C>atk P：" + this.atkP + "</color>\n";
         }
         str += _atkPStr;
 
         string _defStr = "";
         if (def != 0)
         {
-            _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
+            _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>"+ hz_def + "+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
         }
         str += _defStr;
 
         string _defPStr = "";
         if (defP != 0)
         {
-            _defPStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力倍数：" + this.defP + "</color>\n" : "<color=#5DADE2>def P：" + this.defP + "</color>\n";
+            _defPStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>"+ hz_defP + this.defP + "</color>\n" : "<color=#5DADE2>def P：" + this.defP + "</color>\n";
         }
         str += _defPStr;
 
         string _liveStr = "";
         if (live != 0)
         {
-            _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "</color>\n";
+            _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>"+ hz_live + "+"+this.live + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "</color>\n";
         }
         str += _liveStr;
 
         string _livePStr = "";
         if (liveP != 0)
         {
-            _livePStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值倍数：" + this.liveP + "</color>\n" : "<color=#76D7C4>live P：" + this.liveP + "</color>\n";
+            _livePStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>"+ hz_liveP + this.liveP + "</color>\n" : "<color=#76D7C4>live P：" + this.liveP + "</color>\n";
         }
         str += _livePStr;
 

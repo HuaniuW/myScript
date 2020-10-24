@@ -47,9 +47,11 @@ public class UI_Skill : MonoBehaviour {
         }
         
         skillCanUseTimes--;
+        
         SetText(skillCanUseTimes.ToString());
         if (skillCanUseTimes == 0) {
             //print("开始技能计时    ---------------------");
+            GlobalTools.FindObjByName("player").GetComponent<PlayerGameBody>().StopHZInTXByTXName(_hzDate.HZZBTXName);
             CDStart();
         }
         return true;
@@ -234,6 +236,8 @@ public class UI_Skill : MonoBehaviour {
     }
 
 
+
+    
     // Use this for initialization
     void Start () {
         //是横向 还是纵向

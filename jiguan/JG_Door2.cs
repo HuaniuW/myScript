@@ -162,7 +162,7 @@ public class JG_Door2 : MonoBehaviour
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
             GetOtherJG1();
 
-            print(" **************  碰撞 关门机关！！！！   ");
+            //print(" **************  碰撞 关门机关！！！！   ");
         }
     }
 
