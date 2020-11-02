@@ -508,13 +508,19 @@ public class GetReMap2 : GetReMap
         return lianjieFX.Contains(fx);
     }
 
-    //是否 可以出怪 用于判断 门旁边位置
-    bool _canGuaiOut = true;
 
     protected override void CreateFZRoad(string fx, int mapNums, string goScreenName, string danFX = "")
     {
         for (int i = 0; i <= mapNums; i++)
         {
+            if (i == mapNums - 1)
+            {
+                _isNearMenDuan = true;
+            }
+            else
+            {
+                _isNearMenDuan = false;
+            }
             //这里要 小段 有几个地图组成
             int XiaoDiTuNums = 1 + GlobalTools.GetRandomNum(3);
             if (_dixingkuozhanNums != 0) XiaoDiTuNums = 1;
@@ -580,29 +586,44 @@ public class GetReMap2 : GetReMap
                 }
             }
 
-            if (i != mapNums) ChuGuaiByMapNunms(i, mapNums, fx);
+            //if (i != mapNums) ChuGuaiByMapNunms(i, mapNums, fx);
 
         }
     }
 
-
-
-
-    void ChuGuaiByMapNunms(int i,int mapNums,string fx)
+    //是否是临门段
+    bool _isNearMenDuan = false;
+    bool _isNearMen = false;
+    void IsNearMen(int i,int DuanNums)
     {
+        _isNearMen = i == DuanNums - 1 ? true : false;
+    }
+
+    void ChuGuaiByMapNunms(int i = 0,int mapNums = 0,string fx = "l")
+    {
+        //boss平地 剧情平地 存档平地
         if (_dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JUQING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI) return;
 
         //return;
 
-        if (i != mapNums - 1)
+        //判断 是否是临门的 最后的小段 地板
+
+        //如果是 临近门的 地板段 判断 方向  和 是否是最后一段
+        if(!_isNearMenDuan||(_isNearMenDuan && !_isNearMen))
         {
             ChuGuai();
         }
-        else
-        {
-            //近门最后一个 地板 上面出怪   先取消 太近出门就被攻击
-            ChuGuai(false, fx);
-        }
+
+
+        //if (i != mapNums - 1)
+        //{
+        //    ChuGuai();
+        //}
+        //else
+        //{
+        //    //近门最后一个 地板 上面出怪   先取消 太近出门就被攻击
+        //    ChuGuai(false, fx);
+        //}
     }
 
 
@@ -674,6 +695,10 @@ public class GetReMap2 : GetReMap
         
     }
 
+
+
+
+
     //默认可以生成跳跃地形
     bool _morenKeyiShengChengTiaoyue = true;
     //一般地形
@@ -684,6 +709,7 @@ public class GetReMap2 : GetReMap
         //这个是 生成 一般的地图
         for (int i = 0; i < DuanNums; i++)
         {
+            IsNearMen(i,DuanNums);
             //mapObj = GetDiBanByName();
             if (FX == "l")
             {
@@ -803,6 +829,7 @@ public class GetReMap2 : GetReMap
                 }
             }
             GetMapObjPos(i);
+            ChuGuaiByMapNunms();
         }
         _isQishi0 = false;
         //洞内的 地形判断
@@ -838,6 +865,7 @@ public class GetReMap2 : GetReMap
         //这个是 生成 一般的地图
         for (int i = 0; i < DuanNums; i++)
         {
+            IsNearMen(i, DuanNums);
             //创建地板
             mapObj = GetDiBanByName("tiaoyue");
             if (i != DuanNums - 1)
@@ -919,6 +947,7 @@ public class GetReMap2 : GetReMap
             }
             //设置地图块的 位置 和深度
             GetMapObjPos(i);
+            ChuGuaiByMapNunms();
         }
 
         _isQishi0 = false;
@@ -1069,19 +1098,22 @@ public class GetReMap2 : GetReMap
             {
                 __XDistance = FX == "l" ? 4 : -4;
                 PuTongShangShengDX(i, FX, false);
+                mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
             }
             else if (GetDongNeiLuType() == "xiajiang")
             {
                 __XDistance = FX == "l" ? -4 : 4;
                 PuTongXiaJiangDX(i, FX, false);
+                if (duanNums != 1 && i != duanNums - 1) mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
             }
             else
             {
                 __XDistance = FX == "l" ? 4 : -4;
                 PuTongPingDiDX(i, FX, false);
+                mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
             }
+            
 
-            if(duanNums!=1) mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
             return;
         }
 

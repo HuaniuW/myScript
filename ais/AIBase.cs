@@ -75,7 +75,7 @@ public class AIBase : MonoBehaviour {
 
     protected void GetStart()
     {
-        
+        //GetKuangDownY();//获取 kuang 底部的 y
         GetGameBody();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
         if (!aiFanji) aiFanji = GetComponent<AIFanji>();
@@ -87,6 +87,10 @@ public class AIBase : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
     }
+
+
+  
+
 
     void ChoseEvent(UEvent e)
     {

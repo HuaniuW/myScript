@@ -698,16 +698,16 @@ public class PlayerGameBody : GameBody {
 
     public override void GetAtk(string atkName = null)
     {
-        if(this.tag == "Player")
-        {
-            print("**********************************************************************************************");
-            print("  roleDate.isBeHiting:  " + roleDate.isBeHiting);
-            print("  isAcing : " + isAcing);
-            print("  isDodgeing : " + isDodgeing+" |  shanjin: "+ isShanjin);
-            print("  isAtk : " + isAtk);
-            print("IsAtkDowning :  " + IsAtkDowning);
-            print("IsKuaisuAtkReset:  "+ IsKuaisuAtkReset+"  如果是 true 就打不出来  ");
-        }
+        //if(this.tag == "Player")
+        //{
+        //    print("**********************************************************************************************");
+        //    print("  roleDate.isBeHiting:  " + roleDate.isBeHiting);
+        //    print("  isAcing : " + isAcing);
+        //    print("  isDodgeing : " + isDodgeing+" |  shanjin: "+ isShanjin);
+        //    print("  isAtk : " + isAtk);
+        //    print("IsAtkDowning :  " + IsAtkDowning);
+        //    print("IsKuaisuAtkReset:  "+ IsKuaisuAtkReset+"  如果是 true 就打不出来  ");
+        //}
         IsKuaisuAtkReset = false;
         if (roleDate.isBeHiting) return;
         if (isAcing) return;
@@ -719,12 +719,12 @@ public class PlayerGameBody : GameBody {
 
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
-        print("  DBBody.animation.lastAnimationName "+ DBBody.animation.lastAnimationName+"   是否是= "+(DBBody.animation.lastAnimationName == DOWNONGROUND));
+        //print("  DBBody.animation.lastAnimationName "+ DBBody.animation.lastAnimationName+"   是否是= "+(DBBody.animation.lastAnimationName == DOWNONGROUND));
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         //if (IsAtkDown) return;
         if (!isAtk)
         {
-            print(1);
+            //print(1);
             if (Globals.isKeyDown)
             {
                 if (IsAtkDowning) return;
@@ -739,7 +739,7 @@ public class PlayerGameBody : GameBody {
             isLJ = false;
             jishiNum = 0;
             //print("  dianji gongji ");
-            print(2);
+            //print(2);
             if (isInAiring)
             {
                 if (Globals.isKeyUp)
@@ -787,24 +787,24 @@ public class PlayerGameBody : GameBody {
                 
             }
 
-            print("3");
+            //print("3");
 
             if (IsAtkDown && IsAtkDowning) return;
-            print(4);
+            //print(4);
             if (IsAtkDown&&!IsAtkDowning)
             {
                 IsAtkDowning = true;
             }
 
-            print(5);
+            //print(5);
 
             if (atkName == null)
             {
                 if (atkNums >= atkZS.Length) atkNums = 0;
                 vOAtk.GetVO(atkZS[(int)atkNums]);
-                print("???------>   "+ vOAtk.atkName);
+                //print("???------>   "+ vOAtk.atkName);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-                print(51);
+                //print(51);
             }
             else
             {
@@ -821,10 +821,10 @@ public class PlayerGameBody : GameBody {
                 }
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-                print(52);
+                //print(52);
             }
 
-            print(6);
+            //print(6);
 
             MoveVX(vOAtk.xF, true);
             //MoveVX(0, true);
@@ -1132,7 +1132,7 @@ public class PlayerGameBody : GameBody {
     bool IsInAirDown = false;
     void ChangeDownOnGroundACName()
     {
-        
+        //if (GetComponent<RoleDate>().isBeHiting) timeDownnums = 0;
         float _speedY = GetPlayerRigidbody2D().velocity.y;
         //print(" _speedY=====================  "+_speedY);
         if (GetDB().animation.lastAnimationName != DOWNONGROUND)
@@ -1255,7 +1255,7 @@ public class PlayerGameBody : GameBody {
                 if (DOWNONGROUND == DownOnGroundACNameGao)
                 {
                     LuodiXSD = this.transform.position.x;
-                    _playerUI.GetSlowByTimes(0.1f, 0.1f);
+                    //_playerUI.GetSlowByTimes(0.1f, 0.1f);
                     GetPlayerRigidbody2D().velocity = Vector2.zero;
                     //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.6"), this);
                     if (GaochuTiaoxiaYC) GaochuTiaoxiaYC.Play();

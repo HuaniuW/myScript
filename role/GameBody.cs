@@ -949,6 +949,7 @@ public class GameBody : MonoBehaviour, IRole {
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
         //print(this.name+"  看看谁给的 力 "+v2);
+        if (!playerRigidbody2D) return;
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
         playerRigidbody2D.AddForce(v2);
     }
@@ -1435,8 +1436,28 @@ public class GameBody : MonoBehaviour, IRole {
         //thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
 
         GameOver();
-
+        //kuang 的 底y位置 超出die
+        GetKuangDownY();
         //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
+    }
+
+    protected float _KuangDowny = 0;
+    void GetKuangDownY()
+    {
+        _KuangDowny = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;
+        //print(" *****************************************************************************************  "+ _KuangDowny);
+    }
+
+    [Header("是否 会die 当超出 底部限制的时候")]
+    public bool IsNeedDieOutDownY = true;
+    protected void OutDownYDie()
+    {
+        if (Globals.isInPlot) return;
+        if (!IsNeedDieOutDownY) return;
+        if(this.transform.position.y< _KuangDowny)
+        {
+            this.GetComponent<RoleDate>().live = 0;
+        }
     }
 
     public void StopYanMu()
@@ -1469,15 +1490,17 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    
+    [Header("die 是否会被打散 爆炸")]
+    public bool IsDieBoomOutObj = false;
 
+    [Header("是否随机 爆掉 铠甲头盔等")]
+    public bool IsRandOMboomOutObj = false;
 
     [Header("die 飞出去的 物品列表")]
     public List<string> FlyObjList = new List<string>() { };
 
-
-    [Header("die 是否会被打散 飞出去")]
-    public bool IsDieBoomOutObj = false;
+   
+    
     protected void DieBoomOutObj()
     {
         if (FlyObjList.Count == 0) return;
@@ -1485,6 +1508,10 @@ public class GameBody : MonoBehaviour, IRole {
         int nums = FlyObjList.Count;// GlobalTools.GetRandomNum(FlyObjList.Count);
         for (int i=0;i<nums;i++)
         {
+            if (IsRandOMboomOutObj)
+            {
+                if (GlobalTools.GetRandomNum() > 50) continue;
+            }
             string BoneName = FlyObjList[i].Split('|')[0];
             string FlyObjName = FlyObjList[i].Split('|')[1];
 
@@ -1758,7 +1785,7 @@ public class GameBody : MonoBehaviour, IRole {
 
 
     
-
+    //减速 按比例
     public virtual void Jiansu(float bili,float jsTime = 1)
     {
         GetPlayerRigidbody2D().velocity *= bili;
@@ -1789,13 +1816,15 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-       
+        
 
         if (roleDate.live <= 0)
         {
             roleDate.isDie = true;
         }
 
+
+        OutDownYDie();
 
 
         if (Globals.isInPlot) return;

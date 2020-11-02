@@ -69,6 +69,7 @@ public class DBBase : MonoBehaviour
     }
 
     bool IsGetYinCi = false;
+    //机关 隐刺
     void JiGuan_YinCi()
     {
         GameObject JG_YinCi;
@@ -90,7 +91,7 @@ public class DBBase : MonoBehaviour
     }
 
 
-
+    //机关喷火
     void JiGuan_Penghuo()
     {
         //生成喷火机关的 判断  根据坐标 关卡nums数 大关卡数来判断
@@ -136,7 +137,7 @@ public class DBBase : MonoBehaviour
 
     float __dingDBPosX = 0;
     float __dingDBPosY = 0;
-
+    //设置顶地板 位置
     void SetDingDBPos()
     {
         dibanDing.transform.position = new Vector3(dibanDing.transform.position.x + __dingDBPosX, dibanDing.transform.position.y + __dingDBPosY, dibanDing.transform.position.z);
@@ -224,7 +225,7 @@ public class DBBase : MonoBehaviour
     [Header("地形type")]
     public string DXType = "";
 
-    [Header("是否是挡板")]
+    [Header("是否是挡板 在上下地形防止穿帮的地形 不生成景")]
     public bool IsDangBan = false;
     // Start is called before the first frame update
     void Start()
@@ -235,6 +236,7 @@ public class DBBase : MonoBehaviour
         }
 
         if (!IsShowDingDB) {
+            //隐藏顶部地板
             HideDingDB();
         }
         else
@@ -247,7 +249,7 @@ public class DBBase : MonoBehaviour
     }
 
 
-
+    //关灯
     public void GuanDeng()
     {
         if (light2d) light2d.GetComponent<Light2D>().intensity = 0;
@@ -295,16 +297,21 @@ public class DBBase : MonoBehaviour
 
         maps = GlobalTools.FindObjByName("maps");
 
-        if (!IsShowDingDB && IsHasShu) GetShu();
+        if (!IsShowDingDB && IsHasShu) {
+            if(GlobalTools.GetRandomNum()>50)GetShu();
+        } 
 
 
       
 
 
         //if (IsZJY) GetZYJ();
-        if (IsPingDiJing) GetLRJinBG();
+        //近背景
+        //if (IsPingDiJing) GetLRJinBG();
+        //近前景
         if (IsPingDiJing) GetJQJ();
         if (IsSCWu) GetWus();
+        //近远景
         if (IsJYJ) GetJYJ();
         //装饰物
         if (IsZhuangshiwu) Zhuanshiwu();
@@ -433,7 +440,7 @@ public class DBBase : MonoBehaviour
 
 
     public bool IsJYJ = false;
-    //中远景
+    //近远景
     void GetJYJ()
     {
         //控制数量  要不根据 宽来定数量

@@ -367,7 +367,7 @@ public class HitKuai : MonoBehaviour {
                         //_atkRigidbody2D.AddForce(new Vector2(jn_date.moveXSpeed * -_roleScaleX, jn_date.moveYSpeed));
                         //atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(jn_date.moveXSpeed * -_roleScaleX, jn_date.moveYSpeed),true);
 
-                        if (atkObj.tag == "Player" && !atkObj.GetComponent<GameBody>().isInAiring)
+                        if (atkObj.tag == "Player" && !atkObj.GetComponent<GameBody>().isInAiring&& jn_date.atkDirection == "")
                         {
                             _atkRigidbody2D.AddForce(new Vector2(-400 * _roleScaleX, 0));
                         }
@@ -514,6 +514,12 @@ public class HitKuai : MonoBehaviour {
                       
 
                     }
+
+                    //if (atkObj.tag == "Player" && jn_date._type == "1" && !atkObj.GetComponent<GameBody>().isInAiring)
+                    //{
+                    //    atkObj.GetComponent<GameBody>().IsAtkKuaijiReSet();
+                    //}
+
                     //print("---------------------333333333-------------------------------------------> 冲击力  " + jn_date.chongjili + "  _roleScaleX   " + _roleScaleX);
                 }
 
@@ -625,7 +631,7 @@ public class HitKuai : MonoBehaviour {
 
         if (BeHitGameBody.tag != "Player"&& BeHitRoleDate.live != 0)
         {
-            print("*************************************************************BeHitGameBody.tag   "+ BeHitGameBody.tag);
+            //print("*************************************************************BeHitGameBody.tag   "+ BeHitGameBody.tag);
             _playerUI.GetSlowByTimes(0.12f, 0.4f);
         }
 

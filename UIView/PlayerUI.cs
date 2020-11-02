@@ -327,7 +327,7 @@ public class PlayerUI : MonoBehaviour {
     //全局减速
     public void GetSlowByTimes(float times = 1,float TimeScaleNums = 0.5f)
     {
-        print(" 减慢 时间速度！！！ times  "+times+ "   TimeScaleNums "+ TimeScaleNums);
+        //print(" 减慢 时间速度！！！ times  "+times+ "   TimeScaleNums "+ TimeScaleNums);
         _jianzhengNums = times;
         Time.timeScale = TimeScaleNums;
         IsJianZheng = true;

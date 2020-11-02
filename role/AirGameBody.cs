@@ -210,9 +210,10 @@ public class AirGameBody : GameBody {
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
+            if (IsDieBoomOutObj) DieBoomOutObj();
         }
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
-        if (isDieRemove) StartCoroutine(IEDieDestory(2f));
+        if (isDieRemove) StartCoroutine(IEDieDestory(5f));
     }
 
 
