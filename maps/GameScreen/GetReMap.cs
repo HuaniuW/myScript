@@ -299,6 +299,8 @@ public class GetReMap : MonoBehaviour
             string _name = s.Split('!')[0];
             string _pos = s.Split('!')[1];
             string _sd = s.Split('!')[2];
+            string _rotation = "";
+            if(s.Split('!').Length>3) _rotation = s.Split('!')[3];
 
             string _goScreenName = "";
             string _reMapName = "";
@@ -312,9 +314,9 @@ public class GetReMap : MonoBehaviour
                 _name = s.Split('$')[0].Split('!')[0];
                 _pos = s.Split('$')[0].Split('!')[1];
                 _sd = s.Split('$')[0].Split('!')[2];
+                if (s.Split('!').Length > 3) _rotation = s.Split('$')[0].Split('!')[3];
 
 
-             
                 if (_name.Split('_')[0] == "wu")
                 {
 
@@ -357,6 +359,7 @@ public class GetReMap : MonoBehaviour
                 GameObject mapObj = GlobalTools.GetGameObjectByName(_name);
                 mapObj.transform.parent = maps.transform;
                 mapObj.transform.position = new Vector3( float.Parse(_pos.Split('#')[0]), float.Parse(_pos.Split('#')[1]), float.Parse(_pos.Split('#')[2]));
+                if(_rotation!="") mapObj.transform.localEulerAngles = GlobalTools.RotationParse(_rotation);
                 int theSD = 0;
                 if (_sd!="") theSD = int.Parse(_sd);
                 //print(_name+" position "+ mapObj.transform.position+"   sd  "+_sd);
@@ -759,6 +762,8 @@ public class GetReMap : MonoBehaviour
             string _name = child.gameObject.name.Split('(')[0];
             string _pos = child.position.x + "#" + child.position.y + "#" + child.position.z;
             string _sd = "";
+            string _rotation = child.transform.localEulerAngles.ToString();
+           
 
             if (child.GetComponent<DBBase>())
             {
@@ -773,9 +778,11 @@ public class GetReMap : MonoBehaviour
                 if (child.gameObject.GetComponent<SpriteRenderer>()) _sd = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder.ToString();
             }
 
-            string gkMapMsg = _name + "!" + _pos + "!" + _sd;
+            string gkMapMsg = _name + "!" + _pos + "!" + _sd+"!"+_rotation;
 
-            if(child.GetComponent<DBBase>())
+            //print(" ?????? 旋转角度************************************************************************************************  " + gkMapMsg);
+
+            if (child.GetComponent<DBBase>())
             {
                 Color _color = child.GetComponent<DBBase>().GetLightColor();
                 if (child.GetComponent<DBBase>().light2d)
@@ -817,7 +824,7 @@ public class GetReMap : MonoBehaviour
                 //雾  记录缩放 颜色
                 string sf = child.transform.localScale.ToString();
                 string colorStr = child.GetComponent<SpriteRenderer>().color.ToString();
-                print("---------------------------> 缩放  "+sf+"  颜色  "+colorStr);
+                //print("---------------------------> 缩放  "+sf+"  颜色  "+colorStr);
 
                 gkMapMsg += "$" + sf + "!" + colorStr;
             }

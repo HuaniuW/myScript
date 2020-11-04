@@ -183,6 +183,15 @@ public class GlobalTools : MonoBehaviour {
     }
 
 
+    public static Vector3 RotationParse(string str)
+    {
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+str);
+        str = str.Replace("(", "").Replace(")", "");
+        print("2222222222222222222>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + str);
+        string[] c = str.Split(',');
+        return new Vector3(float.Parse(c[0]), float.Parse(c[1]), float.Parse(c[2]));
+    }
+
 
     public static string GetNewStrQuDiaoClone(string str) {
         var newStr = str.Replace("(Clone)", "");
@@ -411,6 +420,110 @@ public class GlobalTools : MonoBehaviour {
         SaveGameObj(jingObj);
     }
 
+
+
+
+
+    public static void SetDaBeiJingTY(GameObject jingObj, float _x1, float _x2, float _y, float _z, float _dz, int i, int nums, float xzds, int sdfw, bool isDG = false, bool isTree = false, bool isLBsuoduan = false)
+    {
+        float jingW = 0;
+        float jingH = 0;
+
+        if (!isTree)
+        {
+            jingW = GetJingW(jingObj);
+            jingH = GetJingH(jingObj);
+        }
+
+        float __x = 0;
+        float __y = 0;
+        float __z = 0;
+        float w = Mathf.Abs(_x2 - _x1);
+
+        float xiuzhengNums = GetRandomNum() >= 50 ? 1f : -1f;
+        __x = _x1 + w * 0.5f + GetRandomDistanceNums(xiuzhengNums);
+
+
+
+        //是否是 树
+        if (!isTree)
+        {
+            if (__x + jingW * 0.5f > _x2)
+            {
+                __x = _x2 - jingW * 0.5f;
+            }
+        }
+
+        //倒挂的景 物件
+        if (!isDG)
+        {
+            //print("---------------------------------------");
+            //print(jingObj.name + "  -w " + jingW + "   -h " + jingH);
+            //if (jingObj.name == "qjd_1_1" || jingObj.name == "qjd_1_2" || jingObj.name == "qjd_1_10")
+            //{
+            //    print(jingObj.name + "  -w " + jingW + "   -h " + jingH);
+            //}
+            //判断 如果是大物件 就限制高度
+            if (jingW >= 12 && jingH >= 3)
+            {
+                __y = _y - 0.4f + GetRandomDistanceNums(0.2f);
+            }
+            else
+            {
+                __y = _y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.2f);
+            }
+
+
+        }
+        else
+        {
+
+            __y = _y - jingH * 0.5f + 1f - GetRandomDistanceNums(0.2f);
+            //翻转
+            //jingObj.transform.localScale = new Vector3(jingObj.transform.localScale.x, -jingObj.transform.localScale.y, jingObj.transform.localScale.z);
+        }
+
+        //旋转度数
+        if (xzds != 0)
+        {
+            float jd = UnityEngine.Random.Range(0, xzds) * 0.1f;
+            float jdpy = GetRandomNum(100) > 50 ? jd : -jd;
+            //print("jdpy ***************************************************************************************************-------->   "+jdpy);
+            jingObj.transform.rotation = new Quaternion(jingObj.transform.localRotation.x, jingObj.transform.localRotation.y, jdpy, jingObj.transform.localRotation.w);
+        }
+
+
+        //深度设置
+        //int sdMax = sdfw + 10;
+        int sd = sdfw + i % 10; //(int)UnityEngine.Random.Range(sdfw, sdMax);
+
+        //z=-1的话 保持原有z
+        if (_z == -1) _z = jingObj.transform.position.z;
+
+        if (_dz != 0) __z = GetRandomNum(100) > 50 ? _z + UnityEngine.Random.Range(0, _dz) : _z - UnityEngine.Random.Range(0, _dz);
+
+        if (!isTree) SetMapObjOrder(jingObj, sd);
+
+        jingObj.transform.position = new Vector3(__x, __y, __z);
+
+
+
+        //if (jingObj.name == "jju_1_4" || jingObj.name == "jju_1_4(Clone)")
+        //{
+        //    print(jingObj.name + "   w " + jingW + "    iiiiiiiiiiiiiiiiiiiiii   i " + i + "  pos   " + jingObj.transform.position + "  _x1   " + _x1 + "  _x2  " + _x2);
+        //}
+
+
+        SaveGameObj(jingObj);
+
+    }
+
+
+
+
+
+
+
     //通用景的位置 x从哪到哪 y是多少  z多少 zdz位置的随机范围  是否是上层的（倒挂） _dz distance z(z的距离范围随机)   是否旋转（xzds旋转度数）  深度范围(sdfw) eg：-10 就是-10到0  这样   isDG是否倒挂   是否是树    isLBsuoduan两边景位置缩短
     /// <summary>
     /// 横着的 地方 地面 和顶部的位置 摆放
@@ -450,24 +563,43 @@ public class GlobalTools : MonoBehaviour {
         else
         {
 			if(!isTree){
+
+                
+
+
 				if (i == 0)
                 {
-                    __x = _x1 + jingW * 0.5f + 0.2f;
+                    __x = _x1 + jingW * 0.5f + 0.3f;
                     __z *= 0.05f;
-                   if (isLBsuoduan) __x += jingW * 0.2f;
+                    if (isLBsuoduan) {
+                        __x += jingW * 0.2f+0.4f;
+                        __y -= 1;
+                    }
+                    
                 }
                 else if (i == nums - 1)
                 {
-                    __x = _x2 - jingW * 0.5f - 0.2f;
+                    __x = _x2 - jingW * 0.5f - 0.3f;
                     __z *= 0.05f;
-                    if (isLBsuoduan) __x -= jingW * 0.2f;
+                    if (isLBsuoduan) {
+                        __x -= jingW * 0.2f-0.4f;
+                        __y -= 1;
+                    }
                 }
                 else
                 {
                     __x = _x1 + jingW * 0.5f + w / nums * i;
                 }
 
-               
+                //if (isLBsuoduan)
+                //{
+                //    if (Mathf.Abs(__x - _x1) <= 2.6f|| Mathf.Abs(__x - _x2) <= 2.6f)
+                //    {
+                //        print(">>  没有进来的吗？ ");
+                //        __z *= 0.05f;
+                //    }
+                //}
+
 
             }
             else{

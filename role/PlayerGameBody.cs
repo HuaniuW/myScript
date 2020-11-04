@@ -698,6 +698,7 @@ public class PlayerGameBody : GameBody {
 
     public override void GetAtk(string atkName = null)
     {
+        //print("atk!!!");
         //if(this.tag == "Player")
         //{
         //    print("**********************************************************************************************");
@@ -724,12 +725,12 @@ public class PlayerGameBody : GameBody {
         //if (IsAtkDown) return;
         if (!isAtk)
         {
-            //print(1);
+            //print("******************************************atk!   "+ IsAtkDowning);
             if (Globals.isKeyDown)
             {
                 if (IsAtkDowning) return;
             }
-
+            //print("******************************************atk! 2222222222  " );
             isAtk = true;
             isAtking = true;
             isTXShow = true;
@@ -746,6 +747,7 @@ public class PlayerGameBody : GameBody {
                 {
                     atkZS = DataZS.jumpAtkUpZS;
                     IsAtkDowning = false;
+                    //print("*****jumpAtkUpZS   !!!");
                 }
                 else if (Globals.isKeyDown)
                 {
@@ -802,7 +804,7 @@ public class PlayerGameBody : GameBody {
             {
                 if (atkNums >= atkZS.Length) atkNums = 0;
                 vOAtk.GetVO(atkZS[(int)atkNums]);
-                //print("???------>   "+ vOAtk.atkName);
+                //print("***********???------>   "+ vOAtk.atkName);
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
                 //print(51);
             }
@@ -883,6 +885,7 @@ public class PlayerGameBody : GameBody {
         if (roleDate.isBeHiting) return;
         if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_5";
         if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
+        STAND = "stand_5";
     }
 
     //void ChangeRunAC()

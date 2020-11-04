@@ -305,6 +305,7 @@ public class GetReMap2 : GetReMap
                 _GuaiName = GlobalMapDate.CurrentSpelMapType.Split('^')[3];
             }else if(GlobalCMapType == GlobalMapDate.CUNDANG_PINGDI)
             {
+                //存档平地
                 _dixingType = GlobalMapDate.CUNDANG_PINGDI;
                 _dixingkuozhanNums = 1;
             }
@@ -312,8 +313,8 @@ public class GetReMap2 : GetReMap
         }
         else
         {
-            _dixingType = GlobalMapDate.YIBAN;
             //一般地形 也有可能会有 洞内 跳跃等
+            _dixingType = GlobalMapDate.YIBAN;
         }
 
         print(" ******************************************************************************************* _dixingType  地形类型   "+ _dixingType);

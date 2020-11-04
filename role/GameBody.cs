@@ -1436,12 +1436,20 @@ public class GameBody : MonoBehaviour, IRole {
         //thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
 
         GameOver();
+        _KuangDowny = -100;
         //kuang 的 底y位置 超出die
-        GetKuangDownY();
+        StartCoroutine(IEDestory2ByTime(1f));
+        
         //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
     }
 
-    protected float _KuangDowny = 0;
+    public IEnumerator IEDestory2ByTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        GetKuangDownY();
+    }
+
+    protected float _KuangDowny = -100;
     void GetKuangDownY()
     {
         _KuangDowny = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;

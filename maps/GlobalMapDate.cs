@@ -41,9 +41,9 @@ public class GlobalMapDate : MonoBehaviour {
     public static List<string> TeShuShengchengDiTuList = new List<string>
     {
         "s:4!cundangPingdi^1",
-        "s:5!jingying^jingyingPingdi^1^G_jydj!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
+        "s:2!jingying^jingyingPingdi^1^G_jydj!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
         "s:3!boss^bossPingdi^1^name!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
-        "s:2!dongnei"
+        "s:5!dongnei"
     };
 
 
