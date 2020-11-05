@@ -99,7 +99,7 @@ public class JG_Door2 : MonoBehaviour
         }else if (e.eventParams.ToString() == "kyguanmen")
         {
             IsCanCloseDoorMap = true;
-            print(">>>>>>>>>>>>>>>>>>*****  可以关门！ ");
+            //print(">>>>>>>>>>>>>>>>>>*****  可以关门！ ");
         }
         else if(e.eventParams.ToString() == "open")
         {

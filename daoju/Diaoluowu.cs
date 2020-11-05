@@ -30,7 +30,7 @@ public class Diaoluowu : MonoBehaviour {
             if (this.transform.parent.GetComponent<Wupinlan>().isChildCanBeHit)
             {
                 IsOutRecorded = true;
-                print(" --------------------------------------------------------爆出 物品记录   ");
+                //print(" --------------------------------------------------------爆出 物品记录   ");
                 var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);   //this.transform.parent.name.Replace("(Clone)", "");
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName + "-1@" + this.transform.parent.transform.position.x + "#" + this.transform.parent.transform.position.y), this);
             }

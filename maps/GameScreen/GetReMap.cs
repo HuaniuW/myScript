@@ -407,7 +407,7 @@ public class GetReMap : MonoBehaviour
                 }
 
                 if (mapObj.tag == "diren") {
-                    print("生成怪！！！！！  "+mapObj.name); 
+                    print("生成怪！！！！！  " + mapObj.name);
                     GuaiList.Add(mapObj);
                 }
 
@@ -533,13 +533,13 @@ public class GetReMap : MonoBehaviour
             guaiListName = "xiaoGuai_" + Globals.mapTypeNums;
         }
 
-        print(CMapName+  " 怪物获取列表   "+ guaiListName);
+        //print(CMapName+  " 怪物获取列表   "+ guaiListName);
         nums = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance()).Count;
         guaiName = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
         g = GlobalTools.GetGameObjectByName(guaiName);
         g.transform.parent = maps.transform;
 
-        print(" 生成怪 "+ guaiName);
+        //print(" 生成怪 "+ guaiName);
 
         float _x = 0;
         float _y = 0;
@@ -587,7 +587,7 @@ public class GetReMap : MonoBehaviour
             else
             {
                 _y = tl.y - g.GetComponent<GameBody>().groundCheck.transform.position.y;
-                print("怪y " + tl.y + "   --地面--   " + _y+"   g  "+ g.GetComponent<GameBody>().groundCheck.transform.position.y);
+                //print("怪y " + tl.y + "   --地面--   " + _y+"   g  "+ g.GetComponent<GameBody>().groundCheck.transform.position.y);
             }
         }
         else
@@ -595,7 +595,7 @@ public class GetReMap : MonoBehaviour
             _x = tl.x+1.5f;
             _y = tl.y + 4 / GuaiNums * i;
 
-            print("怪y " + tl.y + "   ----   " + _y);
+            //print("怪y " + tl.y + "   ----   " + _y);
         }
         
 
@@ -615,7 +615,7 @@ public class GetReMap : MonoBehaviour
 
         //这里 做了排序     lr=l:mapR_1$p!r:map_r-3   排序是方便通过地形名字映射 找连接点
         string str = GetStrByList(menFXList);
-        print("str    "+str);
+        //print("str    "+str);
         //取中心连接点 地图 以及 随机出 每个 朝向的 模块数量    模块的最少数是多少？ 左右是1  上下是2（多一个直连+转弯） 然后连接门  门不算进数量 数量走完连接门
         //数元素 自带 落叶粒子
         // lr=l:mapR_1?3?pd?shu!r:map_r-2?3?dn?qiang
@@ -637,7 +637,7 @@ public class GetReMap : MonoBehaviour
             //平地 出的怪   和    跳跃地出的怪   上下隧道出的怪   出怪几率
             int jilv = GlobalTools.GetRandomNum();
             string MapMsg = GameMapDate.GetMapDiXingByCName(CMapName);
-            print("CMapName "+CMapName+ "  ----  MapMsg  "+ MapMsg);
+            //print("CMapName "+CMapName+ "  ----  MapMsg  "+ MapMsg);
             //GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
             //平地
             float pd = GameMapDate.GetJiLvByMapMsgStr(MapMsg, "pd");
@@ -665,10 +665,10 @@ public class GetReMap : MonoBehaviour
 
         //怎么获取 连接点 类型
 
-        print("获取 连接点 类型 数组    当前关卡名字 "+CMapName);
+        //print("获取 连接点 类型 数组    当前关卡名字 "+CMapName);
 
         LianjiedianType = GameMapDate.GetLianjiedianTypeByCName(CMapName);
-        print("获得的连接点 类型  "+ LianjiedianType);
+        //print("获得的连接点 类型  "+ LianjiedianType);
 
         //*****************************@*****************************连接点 地板 名字 获取 列表*********
         //这里也是 在全局 找类型 LianjiedianType 不同 连接的 数据也不一样
@@ -698,7 +698,7 @@ public class GetReMap : MonoBehaviour
             //获取 生成的 地图块 数量
             int n = 1 + GlobalTools.GetRandomNum(MaxMapNums);
             string _goScreenName = strList[i].Split(':')[1];
-            print("门位置 "+ strList[i].Split(':')[0] + "  _goScreenName    "+ _goScreenName);
+            //print("门位置 "+ strList[i].Split(':')[0] + "  _goScreenName    "+ _goScreenName);
             if(strList.Count == 1)
             {
                 //单门 的 死路  可以出精英怪 等
@@ -754,7 +754,7 @@ public class GetReMap : MonoBehaviour
     //存入生成的地图数据  手动存入 也是 调用这个方法
     public virtual void SetMapMsgDateInStr(bool IsShouDong = false)
     {
-        print("储存 地图地形 数据！！！！！！！！！！！");
+        //print("储存 地图地形 数据！！！！！！！！！！！");
         MapMsgStr = "";
         for (int i = 0; i < maps.transform.childCount; i++)
         {
@@ -845,11 +845,11 @@ public class GetReMap : MonoBehaviour
         string kuangMsg = "kuang!"+ kuang.transform.position.x+"#"+ kuang.transform.position.y+"!"+kuang.GetComponent<BoxCollider2D>().size.x + "#" + kuang.GetComponent<BoxCollider2D>().size.y;
 
         MapMsgStr = GlobalSetDate.instance.CReMapName + "=" + MapMsgStr+"|"+kuangMsg;
-        print(" 地图信息  " + MapMsgStr);
+        //print(" 地图信息  " + MapMsgStr);
         
 
         if (IsShouDong) {
-            print("修改前 数据  "+ GlobalSetDate.instance.gameMapDate.MapDate);
+            //print("修改前 数据  "+ GlobalSetDate.instance.gameMapDate.MapDate);
             ReplaceMapDate(GlobalSetDate.instance.CReMapName, MapMsgStr);
         }
         else
@@ -864,7 +864,7 @@ public class GetReMap : MonoBehaviour
     {
         List<string> strArr = new List<string>(GlobalSetDate.instance.gameMapDate.MapDate.Split('@'));
         
-        print("  mapName "+mapName+"    count  "+strArr.Count);
+        //print("  mapName "+mapName+"    count  "+strArr.Count);
 
         foreach (string s in strArr)
         {
@@ -874,7 +874,7 @@ public class GetReMap : MonoBehaviour
                 {
                     //print("  ????  进来没   " + s.Split('=')[0] + "   --->  " + mapName);
                     strArr.Remove(s);
-                    print(" mapDateMsg  "+ mapDateMsg);
+                    //print(" mapDateMsg  "+ mapDateMsg);
                     strArr.Add(mapDateMsg);
                     break;
                     //GlobalSetDate.instance.gameMapDate.MapDate += mapDateMsg + "@";
@@ -897,7 +897,7 @@ public class GetReMap : MonoBehaviour
                 GlobalSetDate.instance.gameMapDate.MapDate += "@" + strArr[i];
             }
         }
-        print("修改后>>>>> 数据  " + GlobalSetDate.instance.gameMapDate.MapDate);
+        //print("修改后>>>>> 数据  " + GlobalSetDate.instance.gameMapDate.MapDate);
 
     }
 
@@ -1272,18 +1272,18 @@ public class GetReMap : MonoBehaviour
 
         //CameraKuai 的范围计算
 
-        print("-------------------------------------计算摄像头块的 大小 ！！！！！！！！！！");
-        print(" 地图组成数量    "+ mapObjList.Count);
+        //print("-------------------------------------计算摄像头块的 大小 ！！！！！！！！！！");
+        //print(" 地图组成数量    "+ mapObjList.Count);
         //边界延伸值
         float bianjieyansheng = 15;
         Vector2 lu = new Vector2(l- bianjieyansheng, u+ bianjieyansheng);
         Vector2 rd = new Vector2(r+ bianjieyansheng, d- bianjieyansheng);
 
-        print("左上角位置  "+lu+"   右下角位置  "+rd);
+        //print("左上角位置  "+lu+"   右下角位置  "+rd);
 
         GameObject kuang = GlobalTools.FindObjByName("kuang");
 
-        print("位置   "+kuang.transform.position+"   大小 "+ kuang.GetComponent<BoxCollider2D>().size);
+        //print("位置   "+kuang.transform.position+"   大小 "+ kuang.GetComponent<BoxCollider2D>().size);
 
         Vector2 zhongxindian = new Vector2((r+l)*0.5f,(u+d)*0.5f);
         float w = Mathf.Abs(r - l + 2* bianjieyansheng);
@@ -1291,7 +1291,7 @@ public class GetReMap : MonoBehaviour
         kuang.transform.position = zhongxindian;
         kuang.GetComponent<BoxCollider2D>().size = new Vector2(w,h);
 
-        print("切换后 位置 和 大小   "+ zhongxindian+"  大小  "+ kuang.GetComponent<BoxCollider2D>().size);
+        //print("切换后 位置 和 大小   "+ zhongxindian+"  大小  "+ kuang.GetComponent<BoxCollider2D>().size);
 
         GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(kuang.GetComponent<BoxCollider2D>());
 
@@ -1306,10 +1306,10 @@ public class GetReMap : MonoBehaviour
     protected GameObject lianjiedian;
     protected virtual void CreateLJByName(string lianjie, bool IsYanZhan = false)
     {
-        print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
+        //print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
         int nums = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count;
         string ljdianName = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
-        print("连接点 名字   "+ ljdianName);
+        //print("连接点 名字   "+ ljdianName);
         lianjiedian = GlobalTools.GetGameObjectByName(ljdianName);
         lianjiedian.transform.position = Vector3.zero;
 

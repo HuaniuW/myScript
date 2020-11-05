@@ -7,7 +7,7 @@ public class GetReMap2 : GetReMap
     // Start is called before the first frame update
     void Start()
     {
-        print("GetReMap 2!!");
+        //print("GetReMap 2!!");
         GetStart();
     }
 
@@ -15,7 +15,7 @@ public class GetReMap2 : GetReMap
     {
         GetInDate();
 
-        print("  进入 重写？ ");
+        //print("  进入 重写？ ");
        
 
         ////print("  @@--------这里是 完成地图后！ ");
@@ -58,7 +58,7 @@ public class GetReMap2 : GetReMap
 
 
 
-        print(" 随机 生成地图 调试用！！   ");
+        //print(" 随机 生成地图 调试用！！   ");
 
 
        
@@ -93,7 +93,7 @@ public class GetReMap2 : GetReMap
 
         //排序 门  获取 连接点 字符 lr /lru /lrd  等 来获取  连接点的 obj数组 来生成连接点
         string str = GetStrByList(menFXList);
-        print("menlist>///////////// -str :    " + str);
+        //print("menlist>///////////// -str :    " + str);
 
         string lianjie = str.Split('=')[0];
         _lianjiedibanType = lianjie;
@@ -110,20 +110,20 @@ public class GetReMap2 : GetReMap
             //从哪个门进入的  r
             CongNaGeMenjinru = GlobalSetDate.instance.DanqianMenweizhi;
         }
-        print("从哪个位置的门进来的  " + GlobalSetDate.instance.DanqianMenweizhi);
+        //print("从哪个位置的门进来的  " + GlobalSetDate.instance.DanqianMenweizhi);
         //判断 全局数据中 是否有 地图地形数据 有的话  取出来
         string mapDateMsg = GetMapMsgDateByName(GlobalSetDate.instance.CReMapName);
-        print("  *** mapDateMsg??  "+ mapDateMsg);
+        //print("  *** mapDateMsg??  "+ mapDateMsg);
         if (mapDateMsg != "")
         {
-            print("--------------------------> 根据 数据 来生成地图");
+            //print("--------------------------> 根据 数据 来生成地图");
             GlobalSetDate.instance.IsCMapHasCreated = true;
 
             //获取 地形是否是特殊地形
             if (GlobalMapDate.CurrentSpeMapDiXingMsg!="")
             {
                 _dixingType = GlobalMapDate.CurrentSpelMapType.Split('^')[1];
-                print(" 获取了 地形的 type "+_dixingType);
+                //print(" 获取了 地形的 type "+_dixingType);
             }
 
 
@@ -165,12 +165,12 @@ public class GetReMap2 : GetReMap
 
     protected override void CreateLJByName(string lianjie,bool IsYanZhan = false)
     {
-        print(" lianjie "+ lianjie);
-        print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
+        //print(" lianjie "+ lianjie);
+        //print(" 连接数组长度  " + GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count);
         
         int nums = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance()).Count;
         string ljdianName = GetDateByName.GetInstance().GetListByName(lianjie, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
-        print("连接点 名字   " + ljdianName);
+        //print("连接点 名字   " + ljdianName);
         lianjiedian = GlobalTools.GetGameObjectByName(ljdianName);
         lianjiedian.transform.position = Vector3.zero;
 
@@ -233,7 +233,7 @@ public class GetReMap2 : GetReMap
     int mapTypeNums = 1;
     void CreateMapByFX(string lianjieFX)
     {
-        print("  ??? "+ lianjieFX);
+        //print("  ??? "+ lianjieFX);
         _lianjieFX = lianjieFX;
         if (IsTiaoshi)
         {
@@ -243,7 +243,7 @@ public class GetReMap2 : GetReMap
 
         //*********** 这里开始 从上 往下 写   这里要判断  这个 关卡地形是什么地形  有没有精英怪 boss 存档点 或者 机关 等  再开始根据需求 生成 存档点
         //寻找地图坐标 根据坐标 和地图nums来 判断 地图景 和 地板类型   灯光颜色的改变
-        print(" ********* 本地图的 坐标是多少  " + _mapZB);
+        //print(" ********* 本地图的 坐标是多少  " + _mapZB);
 
         Globals.mapType = _dixingType;
 
@@ -279,7 +279,7 @@ public class GetReMap2 : GetReMap
 
 
             string GlobalCMapType = GlobalMapDate.CurrentSpelMapType.Split('^')[0];
-            print("GlobalMapDate.CurrentSpelMapType   "+ GlobalMapDate.CurrentSpelMapType + "   GlobalCMapType  " + GlobalCMapType);
+            //print("GlobalMapDate.CurrentSpelMapType   "+ GlobalMapDate.CurrentSpelMapType + "   GlobalCMapType  " + GlobalCMapType);
             if (GlobalCMapType == "dongnei")
             {
                 _dixingType = GlobalMapDate.DONGNEI;
@@ -496,7 +496,7 @@ public class GetReMap2 : GetReMap
         string toMenName = "";
         for(int i = 0; i < MenList.Count; i++)
         {
-            print("MenList -------->???  " + MenList[i]);
+            //print("MenList -------->???  " + MenList[i]);
             if (MenList[i].Split(':')[0] == fx) return MenList[i].Split(':')[1].ToString();
         }
         return toMenName;
@@ -666,7 +666,7 @@ public class GetReMap2 : GetReMap
 
 
 
-        print("_isQishi0  " + _isQishi0 + " isFirstNums  " + isFirstNums + "    ");
+        //print("_isQishi0  " + _isQishi0 + " isFirstNums  " + isFirstNums + "    ");
 
         
 
@@ -674,11 +674,11 @@ public class GetReMap2 : GetReMap
 
         if(_dixingType == GlobalMapDate.YIBAN)
         {
-            print("*******************************一般地形 生成");
+            //print("*******************************一般地形 生成");
             YiBanDiXing(FX,DuanNums,isFirstNums,IsToMen);
         }else if (_dixingType == GlobalMapDate.TIAOYUE)
         {
-            print("*******************************跳跃地形………… 生成");
+            //print("*******************************跳跃地形………… 生成");
             //跳跃地形
             TiaoYueDiBan(FX, DuanNums, isFirstNums, IsToMen);
         }

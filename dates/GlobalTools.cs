@@ -185,9 +185,9 @@ public class GlobalTools : MonoBehaviour {
 
     public static Vector3 RotationParse(string str)
     {
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+str);
+        //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+str);
         str = str.Replace("(", "").Replace(")", "");
-        print("2222222222222222222>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + str);
+        //print("2222222222222222222>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + str);
         string[] c = str.Split(',');
         return new Vector3(float.Parse(c[0]), float.Parse(c[1]), float.Parse(c[2]));
     }

@@ -56,7 +56,7 @@ public class DBBase : MonoBehaviour
         __dingDBPosY = __posY-wuchaY;
 
         IsShowDingDB = true;
-        print("顶部景控制*****   " + dibanDing.activeSelf);
+        //print("顶部景控制*****   " + dibanDing.activeSelf);
         //生成 顶部时候 不许出树 或者 大概率不许出树
         //dibanDing.SetActive(true);
         
@@ -490,7 +490,7 @@ public class DBBase : MonoBehaviour
                         LJJingName = jingNameTou + "-1";
                         ljJing = GlobalTools.GetGameObjectByName(LJJingName);
                     }
-                    print("LJJingName      " + LJJingName);
+                    //print("LJJingName      " + LJJingName);
                     float _ljx = tl.position.x + (i + 1) * jingW;
                     if (!Jobj.GetComponent<J_SPBase>())
                     {
@@ -749,7 +749,7 @@ public class DBBase : MonoBehaviour
     {
         List<string> strArr = GetDateByName.GetInstance().GetListByName(jinglistName, MapNames.GetInstance());
         string _jinglistNameTou = jinglistName.Split('_')[0];
-        print("    ----------------------------------------------------------------------------  "+ _jinglistNameTou);
+        //print("    ----------------------------------------------------------------------------  "+ _jinglistNameTou);
         for (int i = 0; i < nums; i++)
         {
             string objName = strArr[GlobalTools.GetRandomNum(strArr.Count)];

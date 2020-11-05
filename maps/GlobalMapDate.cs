@@ -189,7 +189,7 @@ public class GlobalMapDate : MonoBehaviour {
     //根据名字 获取方向列表
     public static List<string> GetFXListByName(string mapName) {
         if (!IsHasSpecialMap()) return null;
-        print("mapName   "+mapName);
+        //print("mapName   "+mapName);
         string[] speMapArr = GetCSpeicalMapNameArr();
         string mapName1;
         string speMapMsg;

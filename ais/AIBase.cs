@@ -349,6 +349,8 @@ public class AIBase : MonoBehaviour {
         GetUpdate();
     }
 
+    float _ycNums = 0;
+    float _theYcNums = 1;
 
 
     bool IsJumpFX = false;
@@ -358,6 +360,12 @@ public class AIBase : MonoBehaviour {
     {
         if (GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
+            return;
+        }
+
+        if(_ycNums< _theYcNums)
+        {
+            _ycNums += Time.deltaTime;
             return;
         }
         

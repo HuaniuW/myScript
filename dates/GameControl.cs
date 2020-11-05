@@ -407,7 +407,7 @@ public class GameControl : MonoBehaviour {
                     guai = GlobalTools.FindObjByName(s);
                 }
                 //要在 maps 里面找
-                print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
+                //print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
                 if (guai != null) {
                     GuaiList.Remove(guai);
                     guai.SetActive(false);

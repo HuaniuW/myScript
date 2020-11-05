@@ -125,12 +125,12 @@ public class CreateMaps : MonoBehaviour
 
 
 
-        print(" mapZBArr  "+ mapZBArr.Count);
+        //print(" mapZBArr  "+ mapZBArr.Count);
 
-        for(var s=0;s< mapZBArr.Count; s++)
-        {
-            print(s+" :  "+mapZBArr[s]);
-        }
+        //for(var s=0;s< mapZBArr.Count; s++)
+        //{
+        //    print(s+" :  "+mapZBArr[s]);
+        //}
 
         Globals.mapZBArr = mapZBArr;
 
@@ -285,15 +285,15 @@ public class CreateMaps : MonoBehaviour
 
         if (isSepMap)
         {
-            print("特殊地图名字------------------------------------------------------------->     " + cZXMapName);
+            //print("特殊地图名字------------------------------------------------------------->     " + cZXMapName);
             //tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             //判断各个方向是否有地图 有的话连接
             tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             print(tempKyFXArr.Count);
-            foreach (string fx in tempKyFXArr)
-            {
-                print(" 特殊地图fx  " + fx);
-            }
+            //foreach (string fx in tempKyFXArr)
+            //{
+            //    print(" 特殊地图fx  " + fx);
+            //}
         }
         else
         {
@@ -365,16 +365,16 @@ public class CreateMaps : MonoBehaviour
         //判断是否是特殊地图
         if (isSepMap)
         {
-            print("特殊地图名字------------------------------------------------------------->     " + cZXMapName);
+            //print("特殊地图名字------------------------------------------------------------->     " + cZXMapName);
             //tempKyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             //判断各个方向是否有地图 有的话连接
             kyFXArr.Clear();
             kyFXArr = GlobalMapDate.GetFXListByName(cZXMapName);
             print(kyFXArr.Count);
-            foreach(string fx in kyFXArr)
-            {
-                print(" 特殊地图fx  "+fx);
-            }
+            //foreach(string fx in kyFXArr)
+            //{
+            //    print(" 特殊地图fx  "+fx);
+            //}
 
             //获取 特殊地图的可用 方向 
             for (int s = 0; s < kyFXArr.Count; s++)
@@ -471,13 +471,13 @@ public class CreateMaps : MonoBehaviour
 
         //1.新地图的 信息   中心 地图
         string newMapZB = GetZBByFX(fx, cZXMapName);
-        print("  zxMapName "+cZXMapName+" zb  "+newMapZB);
+        //print("  zxMapName "+cZXMapName+" zb  "+newMapZB);
         for (var i=0; i< mapZBArr.Count; i++)
         {
             if(mapZBArr[i].Split('!')[0] == cZXMapName)
             {
                 //map_s-2!1#0!l:map_s-1^u:map_s-4^d:map_s-5
-                print("mapArrZB -------?   "+mapZBArr[i] + "   fx   "+fx+ "  newMapName   "+ newMapName);
+                //print("mapArrZB -------?   "+mapZBArr[i] + "   fx   "+fx+ "  newMapName   "+ newMapName);
                 //map_s-1!0#0   fx   r  newMapName   map_s-2
                 GXZXMapMsg(mapZBArr[i],fx,newMapName);
                 //将新生成的 分支地图信息 加入 总的 地图信息数组
@@ -514,7 +514,7 @@ public class CreateMaps : MonoBehaviour
         }
 
         string mapMsg = zxMapName + "!" + zxMapZB + "!" + fzMsg;
-        print(" 跟新中心地图 的 信息   "+mapMsg);
+        //print(" 跟新中心地图 的 信息   "+mapMsg);
         mapZBArr.Remove(mapStrMsg);
         mapZBArr.Add(mapMsg);
     }
@@ -541,7 +541,7 @@ public class CreateMaps : MonoBehaviour
         }
 
         string newMapMsgStr = newMapName + "!" + newMapZB + "!" + ffx + ":" + cZXMapName;
-        print(" 添加的 新地图信息  "+newMapMsgStr);
+        //print(" 添加的 新地图信息  "+newMapMsgStr);
         mapZBArr.Add(newMapMsgStr);
     }
 
@@ -574,12 +574,12 @@ public class CreateMaps : MonoBehaviour
         {
             //要判断 数组中是否已经有该特殊数组了
             if (!tempSpeMapList.Contains(newMapName)) tempSpeMapList.Add(newMapName);
-            print("特殊地图名字？ " + newMapName);
+            //print("特殊地图名字？ " + newMapName);
             newMapName = newMapName.Split('-')[0] + "-" + (int.Parse(newMapName.Split('-')[1]) + 1);
-            print("newMapName 1     " + newMapName);
+            //print("newMapName 1     " + newMapName);
             if (GlobalMapDate.IsSpeMapByName(newMapName))
             {
-                print("特殊地图  " + newMapName);
+                //print("特殊地图  " + newMapName);
                 return IsSpeMapAddMaxI(newMapName);
             }
         }
@@ -609,7 +609,7 @@ public class CreateMaps : MonoBehaviour
 
         for (int i = 0; i < mapZBArr.Count; i++)
         {
-            print( "对比的坐标  "+_zb+ "检车地图 和坐标  " + mapZBArr[i].Split('!')[0]+"    坐标是  "+ mapZBArr[i].Split('!')[1]);
+            //print( "对比的坐标  "+_zb+ "检车地图 和坐标  " + mapZBArr[i].Split('!')[0]+"    坐标是  "+ mapZBArr[i].Split('!')[1]);
             if (zb == mapZBArr[i].Split('!')[1]) return true;
         }
         return false;
@@ -739,7 +739,7 @@ public class CreateMaps : MonoBehaviour
     string GetZBByFX(string fx, string cZXMapName)
     {
         string currentMapZB = GetCurrentMapZBByName(cZXMapName);
-        print(" currentMapZB  "+ currentMapZB);
+        //print(" currentMapZB  "+ currentMapZB);
         string[] zb = currentMapZB.Split('#');
         string newMapZB = "";
         switch (fx)
@@ -764,10 +764,10 @@ public class CreateMaps : MonoBehaviour
     string GetCurrentMapZBByName(string cZXMapName)
     {
         string zb = "";
-        print(" ????????????????cZXMapName "+ cZXMapName);
+        //print(" ????????????????cZXMapName "+ cZXMapName);
         for (int i = 0; i < mapZBArr.Count; i++)
         {
-            print(i+"  ?? "+ mapZBArr[i]);
+            //print(i+"  ?? "+ mapZBArr[i]);
             if (mapZBArr[i].Split('!')[0] == cZXMapName)
             {
                 zb = mapZBArr[i].Split('!')[1];
@@ -812,7 +812,7 @@ public class CreateMaps : MonoBehaviour
         string findFX = "";
         List<string> SpeMapFXArr = new List<string> { };
         //string findZB = "";
-        print("speMapName    "+ speMapName);
+        //print("speMapName    "+ speMapName);
         for (int i = mapZBArr.Count - 1; i >= 0; i--)
         {
             SpeMapFXArr = _SpeMapFXArr;
@@ -855,30 +855,30 @@ public class CreateMaps : MonoBehaviour
                     
 
 
-                    print("  特殊地图 找到的 可以连接的 中心地图 名字 " + cMapName);
+                    //print("  特殊地图 找到的 可以连接的 中心地图 名字 " + cMapName);
                     //获取这个空位坐标
                     string _zb = GetZBByFX(findFX, cMapName); //这个坐标上面没有地图  这个坐标就是特殊地图 选的位置
 
 
                     //除开一个 fx
                     List<string> shengyuFXArr = SpeMapFXArr;
-                    print("中心地图是 " + cMapName + "  找到的给特殊地图 " + speMapName + "可以用的 zb " + _zb + "    移除的方向是    " + SpeMapFXArr[j]);
+                    //print("中心地图是 " + cMapName + "  找到的给特殊地图 " + speMapName + "可以用的 zb " + _zb + "    移除的方向是    " + SpeMapFXArr[j]);
                     shengyuFXArr.Remove(SpeMapFXArr[j]);
-                    print("剩余 几个方向: "+ shengyuFXArr.Count);
+                    //print("剩余 几个方向: "+ shengyuFXArr.Count);
 
-                    foreach(string fx in shengyuFXArr)
-                    {
-                        print(fx);
-                    }
+                    //foreach(string fx in shengyuFXArr)
+                    //{
+                    //    print(fx);
+                    //}
 
                     if (shengyuFXArr.Count != 0 && IsZXMapFXHasMap(shengyuFXArr, _zb)) continue;
 
                    
                     List<string> speMapFXArr = GlobalMapDate.GetFXListByName(speMapName);
-                    print(speMapName+"   分支数量  " +speMapFXArr.Count);
+                    //print(speMapName+"   分支数量  " +speMapFXArr.Count);
 
-                    print(cMapName+" fx "+ findFX+"  j "+j+"  length  "+ shengyuFXArr.Count +"   ??特殊地图名字   "+ speMapName);
-                    print("  ??  "+ speMapFXArr[j]);
+                    //print(cMapName+" fx "+ findFX+"  j "+j+"  length  "+ shengyuFXArr.Count +"   ??特殊地图名字   "+ speMapName);
+                    //print("  ??  "+ speMapFXArr[j]);
                     //获取这个特殊地图已经连接的方向  这个方向要剔除
                     string hasLianJieFX = speMapFXArr[j];
                     //获取剩余方向数组  在上面创建分支 如果遇到特殊地图 就将特殊数组存进临时数组   （计数 如果在特殊数组后开始 就连接上了）
@@ -920,7 +920,7 @@ public class CreateMaps : MonoBehaviour
     //特殊地图分支
     void CreateSpeMapFZByFXList(List<string> FXlist, string cZXMapName)
     {
-        print("现在是哪个特殊地图的分支 ---    " + cZXMapName);
+        //print("现在是哪个特殊地图的分支 ---    " + cZXMapName);
         int createMapNums;
         for (int c = 0; c < FXlist.Count; c++)
         {
@@ -932,7 +932,7 @@ public class CreateMaps : MonoBehaviour
 
             //获得名字  先查找名字是否被占用
             string _newMapName = "map_" + GlobalMapDate.CCustomStr + "-" + createMapNums;
-            print("特殊地图 分支 名字1 " + _newMapName);
+            //print("特殊地图 分支 名字1 " + _newMapName);
             //判断是否是特殊地图 是的话 名字加1 将该名字存进 特殊地图数组
             _newMapName = IsSpeMapNewFZMapNameIsSpeName(_newMapName);
 
@@ -953,7 +953,7 @@ public class CreateMaps : MonoBehaviour
 
             string newMapZB = GetZBByFX(FXlist[c], cZXMapName);
 
-            print("-----------------------------------------------------------特殊地图 " + cZXMapName + "    " + FXlist[c] + " 侧 分支" + _newMapName);
+            //print("-----------------------------------------------------------特殊地图 " + cZXMapName + "    " + FXlist[c] + " 侧 分支" + _newMapName);
             //跟新中心地图
             GXZXMapMsg(GetMapMsgByName(cZXMapName), FXlist[c], _newMapName);
             //记录旧地图
@@ -1035,14 +1035,14 @@ public class CreateMaps : MonoBehaviour
             createMapNums = maxI + 1;
             int nums = GetNotUseNums(mapZBArr);
             if (nums != 1) createMapNums = nums;
-            print(" ----------->中心地图 名字    "+ cZXMapName+ "     创建了几个分支   "+ tempKyFXArr.Count+"     当前生成分支方向 "+ tempKyFXArr[c]);
+            //print(" ----------->中心地图 名字    "+ cZXMapName+ "     创建了几个分支   "+ tempKyFXArr.Count+"     当前生成分支方向 "+ tempKyFXArr[c]);
             //如果大于最大的  并且中心地图不是特殊地图  数组数  直接跳出  没有分支了    特殊地图除外
             if (createMapNums > MaxMapNums && !GlobalMapDate.IsSpeMapByName(cZXMapName)) {
                 return;
             }
             else
             {
-                if(createMapNums > MaxMapNums) print("中心地图是特殊地图 " + cZXMapName + "  最大nums    " + MaxMapNums + " createMapNums    " + createMapNums);
+                //if(createMapNums > MaxMapNums) print("中心地图是特殊地图 " + cZXMapName + "  最大nums    " + MaxMapNums + " createMapNums    " + createMapNums);
             }
             //maxI = theMapArr.Count;
             //createMapNums = maxI+1;
@@ -1055,7 +1055,7 @@ public class CreateMaps : MonoBehaviour
             //如果是 特殊 数组 看看能不能连上 中心数组  不能的话怎么办？
             if (GlobalMapDate.IsSpeMapByName(_newMapName))
             {
-                print(" ********** 新创建的 分支 地图是 特殊地图 " + _newMapName);
+                //print(" ********** 新创建的 分支 地图是 特殊地图 " + _newMapName);
                 //获取 特殊 数组的 方向 数组
                 //List<string> speMapFXList = GlobalMapDate.GetFXListByName(_newMapName);
 
@@ -1067,7 +1067,7 @@ public class CreateMaps : MonoBehaviour
                 continue;
             }
 
-            print("创建的 " + tempKyFXArr[c] + "分支 地图名字  " + _newMapName);
+            //print("创建的 " + tempKyFXArr[c] + "分支 地图名字  " + _newMapName);
             //创建地图 生成名字 和坐标 存入两个数组
             CreateMapImgByFX(cZXMapName, tempKyFXArr[c], _newMapName);
         }
@@ -1160,7 +1160,7 @@ public class CreateMaps : MonoBehaviour
     {
         for (var i = 0; i < FXArr.Count; i++)
         {
-            print("i   "+i);
+            //print("i   "+i);
             if (IsHasMapByZXMapZB(FXArr[i], zb)) return true;
         }
         return false;

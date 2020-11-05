@@ -721,7 +721,12 @@ public class PlayerGameBody : GameBody {
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         //print("  DBBody.animation.lastAnimationName "+ DBBody.animation.lastAnimationName+"   是否是= "+(DBBody.animation.lastAnimationName == DOWNONGROUND));
-        if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        if (DBBody.animation.lastAnimationName == DOWNONGROUND) {
+
+            DownOnGroundOver();
+            //return;
+        }
+        
         //if (IsAtkDown) return;
         if (!isAtk)
         {
@@ -765,15 +770,20 @@ public class PlayerGameBody : GameBody {
                 }
 
 
-                if (vOAtk.yF == 0)
-                {
-                    newSpeed.y = 1;
-                    playerRigidbody2D.velocity = newSpeed;
-                }
-                else
-                {
-                    MoveVY(vOAtk.yF);
-                }
+                newSpeed.y = 1;
+                playerRigidbody2D.velocity = newSpeed;
+
+
+                //if (vOAtk.yF == 0)
+                //{
+                   
+                //    //print("  ====================!!!! "+newSpeed+ "  vOAtk  "+ vOAtk.atkName);
+                //}
+                //else
+                //{
+                //    //print("   ?????????????? 进来了？   ");
+                //    MoveVY(vOAtk.yF);
+                //}
             }
             else
             {
@@ -1097,7 +1107,7 @@ public class PlayerGameBody : GameBody {
             Die_dian.Play();
             GetPlayerRigidbody2D().gravityScale = 0;
             GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x, 1f);
-            print("  玩家 拍哦东速度  "+ GetPlayerRigidbody2D().velocity);
+            //print("  玩家 拍哦东速度  "+ GetPlayerRigidbody2D().velocity);
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             DBBody.animation.Play(DIE,1);
             Time.timeScale = 0.2f;
@@ -1174,6 +1184,24 @@ public class PlayerGameBody : GameBody {
     }
 
 
+    void DownOnGroundOver()
+    {
+        //print("luodidongzuo over!!!!!!!");
+        isDowning = false;
+        isJumping = false;
+        isJumping2 = false;
+        isQiTiao = false;
+        isJump2 = false;
+        isAtkYc = false;
+        //落地还原 不然 地上攻击会累加
+        atkNums = 0;
+        //print("jinlai  mei     222222222    ");
+        DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+        //GetStand();
+        DOWNONGROUND = DownOnGroundACName;
+    }
+
+
     float LuodiXSD = 0;
 
     public override void InAir()
@@ -1220,19 +1248,8 @@ public class PlayerGameBody : GameBody {
 
             if (DBBody.animation.isCompleted)
             {
-                //print("luodidongzuo over!!!!!!!");
-                isDowning = false;
-                isJumping = false;
-                isJumping2 = false;
-                isQiTiao = false;
-                isJump2 = false;
-                isAtkYc = false;
-                //落地还原 不然 地上攻击会累加
-                atkNums = 0;
-                //print("jinlai  mei     222222222    ");
-                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
-                //GetStand();
-                DOWNONGROUND = DownOnGroundACName;
+                DownOnGroundOver();
+               
             }
             return;
         }

@@ -189,8 +189,8 @@ public class GlobalSetDate : MonoBehaviour {
         playerPosition = CurrentUserDate.playerPosition;
         screenName = CurrentUserDate.screenName;
         cameraPosition = CurrentUserDate.cameraPosition;
-        print(" *** screenName" + screenName);
-        print(" *** playerPosition" + playerPosition);
+        //print(" *** screenName" + screenName);
+        //print(" *** playerPosition" + playerPosition);
     }
 
 
@@ -200,7 +200,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     public Vector2 GetPlayerInScreenPosition()
     {
-        print("doorName    "+ doorName);
+        //print("doorName    "+ doorName);
         if (doorName != "")
         {
             GameObject door = GlobalTools.FindObjByName(doorName);
@@ -535,7 +535,7 @@ public class GlobalSetDate : MonoBehaviour {
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
 
         //CRMapName = mapName;
-        print("*** mapName " + mapName+ "  baoliumenFX  "+ baoliumenFX+ "  menweizhi "+ menweizhi);
+        //print("*** mapName " + mapName+ "  baoliumenFX  "+ baoliumenFX+ "  menweizhi "+ menweizhi);
 
         DanqianMenweizhi = menweizhi;
         //地图头 就是大地图的 头部标识你  eg:  map_r-1  -->  map_r 就是地图 头标记
@@ -549,7 +549,7 @@ public class GlobalSetDate : MonoBehaviour {
             //入场的 地图名字
             string ruchangMap = SceneManager.GetActiveScene().name+"$p";
 
-            print("  *** ruchangMap "+ ruchangMap);
+            //print("  *** ruchangMap "+ ruchangMap);
             // 设置 地图参数 中间名字  方向几率  最大地图数
             _createMap.SetMapCenterName(CMapTou.Split('_')[1]);
             List<string> TempMapList = _createMap.GetMaps();
@@ -582,7 +582,7 @@ public class GlobalSetDate : MonoBehaviour {
             }
 
             //生成的 地图数据    map_r+map_r-1!0#0!r:map_r-2^l:mapR_1$p|map_r-2!1#0!l:map_r-1^r:map_r-3|map_r-4!2#1!d:map_r-3|map_r-5!2#-1!u:map_r-3|map_r-3!2#0!l:map_r-2^u:map_r-4^d:map_r-5^r:map_r-6|map_r-7!3#1!d:map_r-6|map_r-8!3#-1!u:map_r-6|map_r-6!3#0!l:map_r-3^u:map_r-7^d:map_r-8^r:map_r-9|map_r-9!4#0!l:map_r-6^u:map_r-10|map_r-10!4#1!d:map_r-9
-            print("生成的 地图数据:   " + gameMapDate.BigMapDate);
+            //print("生成的 地图数据:   " + gameMapDate.BigMapDate);
             
             //如果大地图中 没有该大地图   生成大地图
             if (gameMapDate.BigMapDate == "")
@@ -594,7 +594,7 @@ public class GlobalSetDate : MonoBehaviour {
                 gameMapDate.BigMapDate += "@" + mapListMsgStr;
             }
 
-            print("生成的 地图数据    "+ gameMapDate.BigMapDate);
+            //print("生成的 地图数据    "+ gameMapDate.BigMapDate);
 
             //这里要存入 数据
             //return;
@@ -610,25 +610,25 @@ public class GlobalSetDate : MonoBehaviour {
         if (IsHasMapByName(mapName, gameMapDate.MapDate) != "")
         {
             //根据 存储数据 生成地图
-            print("*** 根据地形数据 生成地图");
+            //print("*** 根据地形数据 生成地图");
         }
         else
         {
-            print("*** 没有地图数据 生成一地图地形数据 ！进入哪个地图？   "+mapName);
+            //print("*** 没有地图数据 生成一地图地形数据 ！进入哪个地图？   "+mapName);
             //生成大地图
             //BigMapMsgList = _createMap.GetMaps();
             //将地图名字 传入 下个 场景 下个场景 来生成地图
 
         }
 
-        print("***  进入了 生成地图判断 ");
+        //print("***  进入了 生成地图判断 ");
         //生成 大地图 和小地图 都要 保存到本地
         screenName = "R@" + screenName;
     }
 
     bool IsHasBigMapByName(string mapTouName, string bigMapDateList)
     {
-        print("   bigMapDateList>>>  "+ bigMapDateList);
+        //print("   bigMapDateList>>>  "+ bigMapDateList);
         string[] bigMapArr = bigMapDateList.Split('@');
         for(var i=0;i< bigMapArr.Length; i++)
         {
