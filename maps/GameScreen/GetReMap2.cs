@@ -225,7 +225,7 @@ public class GetReMap2 : GetReMap
 
     string _dixingType = "yiban";
     int _dixingkuozhanNums = 0;
-    string _GuaiName = "";
+    string _JYGuaiName = "";
 
 
 
@@ -263,7 +263,7 @@ public class GetReMap2 : GetReMap
 
 
             int rnums = GlobalTools.GetRandomNum();
-            _GuaiName = "";
+            _JYGuaiName = "";
             if (rnums < 1)
             {
                 _dixingType = GlobalMapDate.TIAOYUE;
@@ -271,6 +271,9 @@ public class GetReMap2 : GetReMap
             else if (rnums < 2)
             {
                 _dixingType = GlobalMapDate.DONGNEI;
+            }else if (rnums < 80)
+            {
+                _dixingType = GlobalMapDate.DUOGUAI_JINGYING_PINGDI;
             }
             else
             {
@@ -302,12 +305,24 @@ public class GetReMap2 : GetReMap
                 //地形 长度 扩展
                 _dixingkuozhanNums = int.Parse(GlobalMapDate.CurrentSpelMapType.Split('^')[2]);
                 //怪物名字
-                _GuaiName = GlobalMapDate.CurrentSpelMapType.Split('^')[3];
+                _JYGuaiName = GlobalMapDate.CurrentSpelMapType.Split('^')[3];
             }else if(GlobalCMapType == GlobalMapDate.CUNDANG_PINGDI)
             {
                 //存档平地
                 _dixingType = GlobalMapDate.CUNDANG_PINGDI;
                 _dixingkuozhanNums = 1;
+            }else if (GlobalCMapType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI)
+            {
+                _dixingType = GlobalMapDate.DUOGUAI_JINGYING_PINGDI;
+                if (GlobalMapDate.CurrentSpelMapType.Split('^').Length > 2)
+                {
+                    _dixingkuozhanNums = int.Parse(GlobalMapDate.CurrentSpelMapType.Split('^')[2]);
+                }
+            }
+            else if (GlobalCMapType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
+            {
+                _dixingType = GlobalMapDate.DUOGUAI_JSY_PINGDI;
+
             }
 
         }
@@ -340,7 +355,8 @@ public class GetReMap2 : GetReMap
         {
             //竖形长方形 的跳跃 悬浮地形
 
-        }else if (_dixingType == GlobalMapDate.PINGDI || _dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI)
+        }else if (_dixingType == GlobalMapDate.PINGDI || _dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI||
+            _dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI)
         {
             CreateLJByName("lr_" + Globals.mapTypeNums, true);
         }
@@ -429,20 +445,63 @@ public class GetReMap2 : GetReMap
             print("精英怪平地！！");
             GetJingYingGuai(lianjiedian);
             GetGuaiControlMen();
+        }else if (_dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI)
+        {
+            print("*************************************************************精英多怪平地！！");
+            GetJingYingGuai(lianjiedian);
+            GetGuaiControlMen();
+        }else if (_dixingType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
+        {
+            print("多怪 警示鱼 地图");
+
         }
     }
 
     //出精英怪
-    void GetJingYingGuai(GameObject diban)
+    void GetJingYingGuai(GameObject diban,string GuaiNameList = "random")
     {
         float __x = diban.GetComponent<DBBase>().GetRightPos().x + lianjiedian.GetComponent<DBBase>().GetWidth() * 0.5f;
         float __y = diban.GetComponent<DBBase>().GetRightPos().y;
-        string GuaiName = _GuaiName;
-        if(GuaiName!="") GuaiName = GlobalMapDate.GetCanRandomUSEJYGName();
-        GameObject guai = GlobalTools.GetGameObjectByName(GuaiName);
-        guai.transform.position = new Vector2(__x, __y);
-        guai.transform.parent = maps.transform;
-        GuaiList.Add(guai);
+        string GuaiName = _JYGuaiName;
+        if (GuaiName != "") {
+            GuaiName = MapNames.GetInstance().GetCanRandomUSEJYGName("JingYingGuai");  //GlobalMapDate.GetCanRandomUSEJYGName();
+            GameObject guai = GlobalTools.GetGameObjectByName(GuaiName);
+            guai.transform.position = new Vector2(__x, __y);
+            guai.transform.parent = maps.transform;
+            GuaiList.Add(guai);
+            return;
+        }
+        
+        if (GuaiNameList != "")
+        {
+            //判断 数组 长度
+            //在 循环中 判断 是否是 空怪
+            //__x的位置 随机
+
+            //随机 关卡 记录的 普通精英怪
+            if (GuaiNameList == "random") {
+                int nums = 1 + GlobalTools.GetRandomNum(2);
+                for(int i = 0; i < nums; i++)
+                {
+                    GuaiName = MapNames.GetInstance().GetCanRandomUSEJYGName("YiBanJingYingGuai");
+                    GameObject guai2 = GlobalTools.GetGameObjectByName(GuaiName);
+                    //print("   精英怪 数量   "+nums+"   精益怪名字  "+ GuaiName);
+                    __x = GlobalTools.GetRandomNum() > 50 ? __x +3+ GlobalTools.GetRandomDistanceNums(2) : __x -3- GlobalTools.GetRandomDistanceNums(2);
+                    guai2.transform.position = new Vector2(__x, __y);
+                    guai2.transform.parent = maps.transform;
+                    GuaiList.Add(guai2);
+                }
+            }
+
+        }
+        else
+        {
+            GameObject guai = GlobalTools.GetGameObjectByName(GuaiName);
+            guai.transform.position = new Vector2(__x, __y);
+            guai.transform.parent = maps.transform;
+            GuaiList.Add(guai);
+        }
+        
     }
 
 
@@ -468,14 +527,17 @@ public class GetReMap2 : GetReMap
 
 
         print("_dixingType   -------------- 地形  "+ _dixingType);
-        if (_dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JINGYING_PINGDI)
+        if (_dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI)
         {
+            print("*******************************************  小多精英怪! ");
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
+        } else if (_dixingType == GlobalMapDate.BOSS_PINGDI || _dixingType == GlobalMapDate.JINGYING_PINGDI) {
             print(" ***************************************************************************************** boss 或者精英怪 地形    可以 关门！！！！");
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
-        }else if (_lianjiedibanType == "lr" && GuaiList.Count >= 4)
+            
+        } else if (_lianjiedibanType == "lr" && GuaiList.Count >= 4)
         {
-            print("  @@@@@@@@@--------------------------------- 是左右地图  有4个以上的怪 可以 关门！！！！");
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
+            //print("  @@@@@@@@@--------------------------------- 是左右地图  有4个以上的怪 可以 关门！！！！");
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
         }
         else
         {
@@ -697,7 +759,8 @@ public class GetReMap2 : GetReMap
         {
             YiBanDiXing(FX, DuanNums, isFirstNums, IsToMen);
         }
-        else if (_dixingType == GlobalMapDate.PINGDI|| _dixingType == GlobalMapDate.BOSS_PINGDI ||_dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI)
+        else if (_dixingType == GlobalMapDate.PINGDI|| _dixingType == GlobalMapDate.BOSS_PINGDI ||_dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI ||
+            _dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI || _dixingType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
         {
             YiBanDiXing(FX, DuanNums, isFirstNums, IsToMen);
         }
@@ -1132,7 +1195,8 @@ public class GetReMap2 : GetReMap
 
 
 
-        if (_dixingType == GlobalMapDate.PINGDI|| _dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI)
+        if (_dixingType == GlobalMapDate.PINGDI|| _dixingType == GlobalMapDate.BOSS_PINGDI|| _dixingType == GlobalMapDate.JINGYING_PINGDI|| _dixingType == GlobalMapDate.CUNDANG_PINGDI||
+            _dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI|| _dixingType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
         {
             mapObj = GetDiBanByName();
             PuTongPingDiDX(i, FX, false);

@@ -25,6 +25,13 @@ public class GlobalMapDate : MonoBehaviour {
     public const string JINGYING_PINGDI = "jingyingPingdi";
 
 
+    //多怪 精英 平地 会关门
+    public const string DUOGUAI_JINGYING_PINGDI = "duoguaiJingyingPingdi";
+
+    //多怪 警示鱼 平地
+    public const string DUOGUAI_JSY_PINGDI = "duoguaiJSYPingdi";
+
+
 
 
     //当前关卡 第几关
@@ -83,12 +90,7 @@ public class GlobalMapDate : MonoBehaviour {
         return JieCiRandom(BossName_1);
     }
 
-    //*****精英怪 随机*****
-    public static List<string> JingYingGuai_1 = new List<string> { "G_jydj"};
-    public static string GetCanRandomUSEJYGName()
-    {
-        return JieCiRandom(JingYingGuai_1);
-    }
+  
 
     //****获得物品随机*******
 

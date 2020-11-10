@@ -412,6 +412,7 @@ public class GameControl : MonoBehaviour {
                 //print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
                 if (guai != null) {
                     GuaiList.Remove(guai);
+                    if (GlobalTools.FindObjByName("maps") && GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(guai));
                     guai.SetActive(false);
                     CheckGuaiDoor();
                 }

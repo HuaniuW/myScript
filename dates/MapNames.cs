@@ -140,7 +140,19 @@ public class MapNames : MonoBehaviour
 
 
 
-
+    //*****精英怪 随机*****
+    public List<string> JingYingGuai_1 = new List<string> { "G_jydj" };
+    //一般可以随机的 精英怪
+    public List<string> YiBanJingYingGuai_1 = new List<string> { "G_zjjyft" };
+    public string GetCanRandomUSEJYGName(string listName)
+    {
+        string _listName = listName + "_" + Globals.mapTypeNums;
+        //print("取怪的 列表名字  " + _listName);
+        List<string> list = GetDateByName.GetInstance().GetListByName(_listName, MapNames.GetInstance());
+        if (list == null) return "";
+        //print("   list "+list.Count);
+        return list[GlobalTools.GetRandomNum(list.Count)];
+    }
 
 
 

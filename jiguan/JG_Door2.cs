@@ -8,7 +8,7 @@ public class JG_Door2 : MonoBehaviour
     void Start()
     {
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
-        AddDoorListener();
+        //AddDoorListener();
         
     }
 
@@ -73,10 +73,15 @@ public class JG_Door2 : MonoBehaviour
     public bool IsNeedCheck = true;
     public void AddDoorListener()
     {
-        //print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ");
+        print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
         if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
+    }
+
+    private void OnEnable()
+    {
+        AddDoorListener();
     }
 
     private void OnDestroy()
@@ -87,7 +92,7 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        //print("  //////////////////////////@@@   "+e.eventParams.ToString());
+        print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
         if (e.eventParams.ToString() == "allDie") return;
 
 

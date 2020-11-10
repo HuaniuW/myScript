@@ -312,11 +312,11 @@ public class AIBase : MonoBehaviour {
                 isPatrol = false;
             }
         }
-        print(" 我在巡逻？？？？？？？ ");
+        //print(" 我在巡逻？？？？？？？ ");
 
         if (isRunLeft)
         {
-            print("------>isRunLeft");
+            //print("------>isRunLeft");
             gameBody.RunLeft(-PatrolSpeed);
             if (this.transform.position.x - myPosition.x<-patrolDistance|| gameBody.IsEndGround||gameBody.IsHitWall)
             {
@@ -329,7 +329,7 @@ public class AIBase : MonoBehaviour {
             }
         }else if (isRunRight)
         {
-            print("------>isRunRight");
+            //print("------>isRunRight");
             gameBody.RunRight(PatrolSpeed);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
