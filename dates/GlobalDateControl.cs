@@ -125,7 +125,7 @@ public class GlobalDateControl : MonoBehaviour
     {
         string CurrentGKDate = "";
         CurrentGKDate = GetCGKName() + ":" + GetGKDateByName(GetCGKName());
-        //print("  获得 当前 关卡数据  " + CurrentGKDate);
+        //print("  ********************* 获得 当前 关卡数据  " + CurrentGKDate);
         return CurrentGKDate;
     }
 
@@ -135,7 +135,9 @@ public class GlobalDateControl : MonoBehaviour
             GlobalSetDate.instance.TempZGuanKaStr = GKName + ":|";
             return "";
         }
-        
+
+        //print("全局储存数据   "+ GlobalSetDate.instance.TempZGuanKaStr);
+
         string currentGKDate = null;
         string[] arr = GlobalSetDate.instance.TempZGuanKaStr.Split('|');
 
@@ -147,6 +149,7 @@ public class GlobalDateControl : MonoBehaviour
             if (curGKName == GKName)
             {
                 currentGKDate = arr2[1];
+                //print("当前关卡名 "+ curGKName+"     当前关卡数据   "+ currentGKDate);
                 return currentGKDate;
                 //if (Globals.isDebug) print("当前关卡的数据  "+ currentGKDate);
             }

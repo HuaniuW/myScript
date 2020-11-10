@@ -1430,15 +1430,17 @@ public class PlayerGameBody : GameBody {
             
             if (bodyScale.x == 1)
             {
+                //print("111111111111111111111111111111111111");
                 if (IsHitMQWall)
                 {
                     MoveXByPosition(0.4f);
                 }
                 else
                 {
-                    MoveXByPosition(-0.4f);
+                    //踩空前移会被挤进去 先注释掉
+                    //MoveXByPosition(-0.4f);
                 }
-                
+
                 //playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
                 GetZongTuili(Vector2.right * wallJumpXNum);
             }
@@ -1450,7 +1452,8 @@ public class PlayerGameBody : GameBody {
                 }
                 else
                 {
-                    MoveXByPosition(0.4f);
+                    //踩空前移会被挤进去 先注释掉
+                    //MoveXByPosition(0.4f);
                 }
 
                 //MoveXByPosition(-0.4f);

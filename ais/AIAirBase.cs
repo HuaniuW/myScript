@@ -27,6 +27,20 @@ public class AIAirBase : AIBase
             PatrolResting();
             return;
         }
+
+
+        if (IsPatrolRandom)
+        {
+            IsPatrolRandom = false;
+            flyXSpeed = flyXSpeed + GlobalTools.GetRandomDistanceNums(0.6f);
+            //print("随机的 巡逻推力    " + flyXSpeed);
+            if (!IsMastPatrol && GlobalTools.GetRandomNum() >= 60)
+            {
+                isPatrol = false;
+            }
+        }
+
+
         isNearing = false;
         //print("巡逻-----------gameBody.IsHitWall    " + gameBody.IsHitWall + "  " + patrolDistance + "     " + this.transform.position.x+ "   myPosition  "+ myPosition.x);
         //if (gameBody.IsHitWall) print("巡逻-----------gameBody.IsHitWall    "+ gameBody.IsHitWall+"  "+ patrolDistance+"     "+this.transform.position.x+"  速度  " +flyXSpeed+"   左？   " +isRunLeft+"  右?  "+isRunRight);
@@ -80,10 +94,60 @@ public class AIAirBase : AIBase
     }
 
 
+    protected bool IsBeHitRunAwaying = false;
+    protected void BeHitRunAway()
+    {
+      
+        if (!IsBeHitRunAwaying &&GetComponent<AirGameBody>()&& GetComponent<AirGameBody>().IsBehitJingkong)
+        {
+            IsBeHitRunAwaying = true;
+            flyXSpeed += 4;
+            if (!gameObj) return;
+            if (this.transform.position.x >= gameObj.transform.position.x)
+            {
+                isRunLeft = false;
+                isRunRight = true;
+                gameBody.RunRight(flyXSpeed);
+            }
+            else
+            {
+                isRunLeft = true;
+                isRunRight = false;
+                gameBody.RunLeft(flyXSpeed);
+            }
+        }
+    }
+
+    protected void BeHitRunAwaying()
+    {
+        if (isRunLeft)
+        {
+            gameBody.RunLeft(flyXSpeed);
+            if (GetComponent<GameBody>().IsHitWall)
+            {
+                isRunLeft = false;
+                isRunRight = true;
+            }
+        }
+        else if (isRunRight)
+        {
+            gameBody.RunRight(flyXSpeed);
+            if (GetComponent<GameBody>().IsHitWall)
+            {
+                isRunLeft = true;
+                isRunRight = false;
+            }
+        }
+
+
+    }
+
+
 
     // Update is called once per frame
     void Update()
     {
+        
         GetUpdate2();
     }
 
@@ -96,10 +160,11 @@ public class AIAirBase : AIBase
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
-       
+        
         AIReSet();
         if (aiFanji != null) aiFanji.GetFanji();
         if (_AIYinshen != null) _AIYinshen.BeHitHide();
+        BeHitRunAway();
     }
 
     
@@ -172,7 +237,12 @@ public class AIAirBase : AIBase
             return;
         }
 
-
+        if (IsBeHitRunAwaying) {
+            BeHitRunAwaying();
+            return;
+        }
+        
+        
 
         if (isPatrol && !IsFindEnemy())
         {
@@ -302,13 +372,13 @@ public class AIAirBase : AIBase
         if (!IsCanZhuangXiang) return;
         if (gameObj.transform.position.x - transform.position.x > 0)
         {
-            print("  ****** right ");
+            //print("  ****** right ");
             //目标在右
             gameBody.RunRight(flyXSpeed);
         }
         else
         {
-            print("  ****** left ");
+            //print("  ****** left ");
             gameBody.RunLeft(flyXSpeed);
         }
     }

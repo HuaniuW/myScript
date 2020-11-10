@@ -160,7 +160,7 @@ public class AIZiDan : MonoBehaviour
             }
             else
             {
-                //print(" new Point  ");
+                //print(" new Point -------------------------------------------->    "+ AtkDistance);
                 _runNear.Zhuiji(AtkDistance);
             }
             return;

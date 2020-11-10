@@ -509,11 +509,13 @@ public class GetReMap2 : GetReMap
         return lianjieFX.Contains(fx);
     }
 
+    bool _IsCanChuGuai = true;
 
     protected override void CreateFZRoad(string fx, int mapNums, string goScreenName, string danFX = "")
     {
         for (int i = 0; i <= mapNums; i++)
         {
+            _IsCanChuGuai = true;
             if (i == mapNums - 1)
             {
                 _isNearMenDuan = true;
@@ -530,6 +532,11 @@ public class GetReMap2 : GetReMap
                 if (i != mapNums)
                 {
                     CreateRoadDuanByFX(fx, XiaoDiTuNums, i);
+
+                    if(i == 0&&((fx == "l" && IsHasFX(_lianjieFX,"u"))||(fx == "d"&& IsHasFX(_lianjieFX, "r"))))
+                    {
+                        _IsCanChuGuai = false;
+                    }
                 }
                 else
                 {
@@ -608,6 +615,10 @@ public class GetReMap2 : GetReMap
         //return;
 
         //判断 是否是临门的 最后的小段 地板
+
+        //判断是否是 下路或者左路的 第一段
+        if (!_IsCanChuGuai) return;
+
 
         //如果是 临近门的 地板段 判断 方向  和 是否是最后一段
         if(!_isNearMenDuan||(_isNearMenDuan && !_isNearMen))
@@ -1269,8 +1280,8 @@ public class GetReMap2 : GetReMap
     //普通 梯度上升 地形
     void PuTongShangShengDX(int i,string fx, bool IsQishi = false)
     {
-
-        if(fx == "l"|| fx == "d")
+        mapObj.GetComponent<DBBase>().GetDiBanYuanBeiJingUpOrDown("up");
+        if (fx == "l"|| fx == "d")
         {
             if (IsQishi)
             {
@@ -1302,6 +1313,7 @@ public class GetReMap2 : GetReMap
     //普通下降地形
     void PuTongXiaJiangDX(int i, string fx, bool IsQishi = false)
     {
+        mapObj.GetComponent<DBBase>().GetDiBanYuanBeiJingUpOrDown("down");
         float xiajiang = 0;
         GameObject dangban ;
         if (IsQishi&&i==0) xiajiang = 7;

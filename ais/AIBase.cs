@@ -86,6 +86,13 @@ public class AIBase : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
+        //print("   start jinlai mei!!!! "+gameObj);
+        //if (gameObj == null)
+        //{
+        //    IsCanTuihuiFSQ = false;
+        //    gameObj = GlobalTools.FindObjByName("player");
+        //    isAction = true;
+        //}
     }
 
 
@@ -133,13 +140,23 @@ public class AIBase : MonoBehaviour {
     }
 
 
+    [Header("****是否能警示 通知  怪物出现")]
+    public List<string> JingshiOutGuaiNameList = new List<string>() { };
+    protected void ListGuaiOut()
+    {
+        if (JingshiOutGuaiNameList.Count == 0) return;
+        //关门吗？
+        foreach(string _guaiName in JingshiOutGuaiNameList)
+        {
+            GameObject guai = GlobalTools.GetGameObjectByName(_guaiName);
+            //guai.GetComponent<AIBase>().isAction = true;
+            guai.transform.position = new Vector2(this.transform.position.x,this.transform.position.y+15);
+        }
+    }
 
 
-
-
-    [Header("****是否能警示 通知")]
+    [Header("****是否能 警示 通知")]
     public bool IsCanJingshi = false;
-
     bool IsJingshiing = false;
     protected void GetJingshi()
     {
@@ -148,6 +165,7 @@ public class AIBase : MonoBehaviour {
         if (!IsJingshiing && GetComponent<RoleDate>().isBeHiting)
         {
             IsJingshiing = true;
+            ListGuaiOut();
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.JINGSHI), this);
         }
     }
@@ -199,7 +217,6 @@ public class AIBase : MonoBehaviour {
 
     public void GetEnemyObj(UEvent e)
     {
-        
         gameObj = GlobalTools.FindObjByName("player");
     }
 
@@ -214,6 +231,10 @@ public class AIBase : MonoBehaviour {
     {
         if (!isNearAtkEnemy) return false;
         if (isFindEnemy) return true;
+        //if (!gameObj)
+        //{
+        //    gameObj = GlobalTools.FindObjByName("Player");
+        //}
         if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(gameObj.transform.position.y - transform.position.y) < findEnemyDistance)
         {
             isFindEnemy = true;
@@ -265,18 +286,38 @@ public class AIBase : MonoBehaviour {
 
     [Header("巡逻")]
     public bool isPatrol = false;
+    [Header("巡逻几率")]
+    public bool IsPatrolRandom = true;
+    [Header("必须巡逻")]
+    public bool IsMastPatrol = false;
+
+    [Header("巡逻的移动速度")]
+    public float PatrolSpeed = 0.4f;
     protected virtual void Patrol()
     {
+        
+
         if (isPatrolRest) {
             PatrolResting();
             return;
         }
 
+        if (IsPatrolRandom)
+        {
+            IsPatrolRandom = false;
+            PatrolSpeed = PatrolSpeed + GlobalTools.GetRandomDistanceNums(0.6f);
+            //print("随机的 巡逻推力    "+ PatrolSpeed);
+            if (!IsMastPatrol && GlobalTools.GetRandomNum() >= 60)
+            {
+                isPatrol = false;
+            }
+        }
+        print(" 我在巡逻？？？？？？？ ");
 
         if (isRunLeft)
         {
-            //print("------>isRunLeft");
-            gameBody.RunLeft(-0.4f);
+            print("------>isRunLeft");
+            gameBody.RunLeft(-PatrolSpeed);
             if (this.transform.position.x - myPosition.x<-patrolDistance|| gameBody.IsEndGround||gameBody.IsHitWall)
             {
                 if (isRunLeft) {
@@ -288,8 +329,8 @@ public class AIBase : MonoBehaviour {
             }
         }else if (isRunRight)
         {
-            //print("------>isRunRight");
-            gameBody.RunRight(0.4f);
+            print("------>isRunRight");
+            gameBody.RunRight(PatrolSpeed);
             if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 if (isRunRight) {
@@ -344,8 +385,15 @@ public class AIBase : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-        
-        if (!isAction && isPlayerDie) return;
+        if (isPlayerDie)
+        {
+            //如果玩家 die
+            if (GetComponent<AirGameBody>() && GetComponent<AirGameBody>().IsPlayerDieLaugh) GetComponent<AirGameBody>().Laughing();
+            return;
+        }
+        //print(this.name+"  1  !!!!!isAction     "+ isAction);
+        //if (!isAction) return;
+        //print("**************************************************  "+this.name);
         GetUpdate();
     }
 
@@ -683,7 +731,7 @@ public class AIBase : MonoBehaviour {
             {
                 //print("***** 前面没有路了");
                 //探测 前面是否有地板  有的 话跳跃
-                if (gameBody.IsCanJump1())
+                if (gameBody.IsCanJump1()&&Mathf.Abs(this.transform.position.y - gameObj.transform.position.y)>=0.6f)
                 {
                     //跳跃1 跳远
                     //print("跳远");

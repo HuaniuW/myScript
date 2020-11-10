@@ -239,6 +239,9 @@ public class AirGameBody : GameBody {
     }
 
 
+
+
+
     //void BeHitFlyOut(float power)
     //{
     //    if (GlobalTools.FindObjByName("player")) {
@@ -354,7 +357,12 @@ public class AirGameBody : GameBody {
         {
             roleDate.isBeHiting = false;
             GetPause(0.7f);
+            //print("wo bei hit in   in      *********************************IsBehitJingkong     " + IsBehitJingkong);
             if (IsGround) GetStand();
+            //惊恐
+            if (IsBehitJingkong) JingKong();
+            //呆住
+            if (IsDaiXie) DaiXie();
         }
         else
         {
@@ -362,6 +370,59 @@ public class AirGameBody : GameBody {
             
         }
     }
+
+
+
+    [Header("是否在 被攻击后 惊恐")]
+    public bool IsBehitJingkong = false;
+
+    protected bool IsJingKonging = false;
+    protected void JingKong()
+    {
+        //print("1111 IsJingKonging   "+ IsJingKonging);
+        if (IsJingKonging) return;
+        //print("22222222222 !!!!!!!!!!   " );
+        IsJingKonging = true;
+        //print("wo kao jinlaimei !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        if (!DBBody.animation.HasAnimation("jinghuang_1")) return;
+        //print("********************************************************************************   惊慌 ");
+        RUN = "jinghuang_1";
+        STAND = "jinghuang_1";
+        maxSpeedX += 10;
+    }
+
+
+
+    [Header("是否在 玩家die后 嘲笑")]
+    public bool IsPlayerDieLaugh = false;
+    protected bool IsLaughing = false;
+    public void Laughing()
+    {
+        if (IsLaughing) return;
+        IsLaughing = true;
+        if (!DBBody.animation.HasAnimation("run_4")) return;
+        RUN = "run_4";
+        STAND = "run_4";
+        maxSpeedX -= 4;
+        if (maxSpeedX < 0) maxSpeedX = 1;
+    }
+
+
+
+    [Header("是否 有 呆住")]
+    public bool IsDaiXie = false;
+    protected bool IsDaiXieing = false;
+    protected void DaiXie()
+    {
+        if (IsDaiXieing) return;
+        IsDaiXieing = true;
+        if (!DBBody.animation.HasAnimation("daixie_1")) return;
+        RUN = "daixie_1";
+        STAND = "daixie_1";
+        maxSpeedX -= 4;
+        if (maxSpeedX < 0) maxSpeedX = 1;
+    }
+
 
 
 

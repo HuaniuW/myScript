@@ -319,8 +319,8 @@ public class GameControl : MonoBehaviour {
         string TempGKDateStr = GlobalDateControl.GetCGKName() + ":" + TempCurrentGKDate;
 
         if (TempCurrentGKDate != null) GlobalDateControl.SetCurrentGKDateInZGKTempDate(TempGKDateStr);
-        print("记录数据  "+TempGKDateStr);
-        print("TempCurrentGKDate:    " + TempCurrentGKDate);
+        //print("记录数据  "+TempGKDateStr);
+        //print("TempCurrentGKDate:    " + TempCurrentGKDate);
         if (type == "boss"||type == "G"|| type == "B"|| type == "WP")
         {
             //将关卡数据写入全局临时数据 存档
@@ -342,7 +342,7 @@ public class GameControl : MonoBehaviour {
     public void GetPiPei()
     {
         string TempCurrentGKDate = GlobalDateControl.GetCurrentGKDate().Split(':')[1];
-        print("*****************************************************************开始进行 当前关卡的数据匹配 TempCurrentGKDate:  " + TempCurrentGKDate);
+        //print("*****************************************************************开始进行 当前关卡的数据匹配 TempCurrentGKDate:  " + TempCurrentGKDate);
         if (TempCurrentGKDate == "") return;
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
@@ -353,6 +353,7 @@ public class GameControl : MonoBehaviour {
             if (strArr[i] == "") continue;
             string s = strArr[i].Split('-')[0];
             s = GlobalTools.GetNewStrQuDiaoClone(s);
+            //s = GlobalTools.GetNewStrQuDiaoKuohao(s);
             string zt = "0";
             if (strArr[i].Split('-').Length>1) zt = strArr[i].Split('-')[1].Split('@')[0];
 
@@ -382,6 +383,7 @@ public class GameControl : MonoBehaviour {
                 //GlobalTools.FindObjByName(s).SetActive(false);
                 if (zt == "1")
                 {
+                    print("s   ------>   "+s);
                     //生成一个
                     GameObject o =  GlobalTools.GetGameObjectByName(s);
                     string posStr = strArr[i].Split('@')[1];

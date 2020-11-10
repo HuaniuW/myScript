@@ -216,7 +216,7 @@ public class HitKuai : MonoBehaviour {
             float _roleScaleX = -_atkObjScaleX;//atkObj.transform.localScale.x;
             if (_roleScaleX == 0) _roleScaleX = -atkObj.transform.localScale.x;
 
-            //print(this.name+"  技能名字 "+jn_date.name+"  施展攻击方 名字      "+atkObj.name+ "      _roleScaleX     ----    " + _roleScaleX+ "    -atkObj.transform.localScale.x    "+ -atkObj.transform.localScale.x+"  team "+jn_date.team+"  被攻击放队伍   "+roleDate.team);
+            //print(this.name+"  技能名字 "+jn_date.name+"  施展攻击方 名字      "+atkObj.name+ "      _roleScaleX     ----    " + _roleScaleX+ "    -atkObj.transform.localScale.x    "+ -atkObj.transform.localScale.x+"  team "+jn_date.team+"     ");
             /**
             if (jn_date._type != "1")
             {
@@ -310,16 +310,24 @@ public class HitKuai : MonoBehaviour {
                             else
                             {
 
-                                //print("技能的 类型  "+jn_date._type+"    jienneg name "+jn_date.name);
-                                if (jn_date._type == "1")
+                                //print("-------------------》技能的 类型  "+jn_date._type+"    jienneg name "+jn_date.name);
+                                if (jn_date._type == "1"|| jn_date._type == "4")
                                 {
                                     print(" atkObj.name    " + atkObj.name);
                                     //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
-                                    atkObj.GetComponent<GameBody>().HasBeHit();
+                                    if (jn_date.chongjili != 0) {
+                                        atkObj.GetComponent<GameBody>().HasBeHit(-10);
+                                    }
+                                    else
+                                    {
+                                        atkObj.GetComponent<GameBody>().HasBeHit();
+                                    } 
                                     atkObj.GetComponent<GameBody>().GetPause(2, 0.2f);
                                     //_atkRigidbody2D.AddForce(new Vector2(-1000 * _roleScaleX, 0));
                                     //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes();
-                                    float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 : -400;
+                                    float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400+ jn_date.FanTuili : -400- jn_date.FanTuili;
+                                    //if (jn_date.FanTuili != 0) tuili -= jn_date.FanTuili;
+                                    //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> tuili  是多少： " + tuili);
                                     atkObj.GetComponent<GameBody>().GetTuili(tuili, 1f, true);
                                 }
                               
@@ -354,6 +362,7 @@ public class HitKuai : MonoBehaviour {
                     }
                 }
 
+                //print("-----------------------------------------------------------------------> atkObjYZ  "+ atkObjYZ);
                 //int _fx = atkObj.transform.position.x > Coll.transform.position.x ? 1 : -1;
 
                 if (Mathf.Abs(atkObjYZ - BeHitRoleDate.yingzhi) <= 100)
@@ -394,6 +403,12 @@ public class HitKuai : MonoBehaviour {
                         beHitObj.GetComponent<GameBody>().GetZongTuili(new Vector2(jn_date.chongjili * __tuiliFX * beHitXFScale, 0));
                     }
 
+                    if (jn_date.FanTuili != 0)
+                    {
+                        if(atkObj) atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-jn_date.FanTuili * __tuiliFX * beHitXFScale, 0));
+                    }
+
+
                     txPos = 0.8f;
                     //print("sudu-------------------------------------------<>>>>>>>>>> 11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x+"   || "+Coll.name+"   txPos   "+txPos);
                     //if(Coll.tag!="Player") print(Coll.GetComponent<Rigidbody2D>().velocity.x);
@@ -432,6 +447,11 @@ public class HitKuai : MonoBehaviour {
                         beHitObj.GetComponent<GameBody>().GetZongTuili(new Vector2(jn_date.chongjili * __tuiliFX - 100, 0));
                     }
 
+                    if (jn_date.FanTuili != 0)
+                    {
+                        print("----------------------------------------------------------------> 作用反推力 "+ jn_date.FanTuili);
+                        if (atkObj) atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-jn_date.FanTuili * __tuiliFX * beHitXFScale, 0));
+                    }
 
 
                     BeHitGameBody.HasBeHit(jn_date.chongjili);
@@ -451,7 +471,7 @@ public class HitKuai : MonoBehaviour {
                 }
                 else
                 {
-                    //print("  --------硬直差   "+Mathf.Abs(atkObjYZ - BeHitRoleDate.yingzhi)+"  jn_date._type        " + jn_date._type);
+                    //print("  --------硬直差   "+Mathf.Abs(atkObjYZ - BeHitRoleDate.yingzhi)+"  jn_date._type        " + jn_date._type+ "   技能name  " + jn_date.name+ "    atkObjYZ "+ atkObjYZ+ "  BeHitRoleDate.yingzhi  "+ BeHitRoleDate.yingzhi);
                     if (atkObj && (jn_date._type == "1" || jn_date._type == "4"))
                     {
 
@@ -508,13 +528,28 @@ public class HitKuai : MonoBehaviour {
                         }
 
 
+                        //if (jn_date.FanTuili != 0)
+                        //{
+                        //    print("222----------------------------------------------------------------> 作用反推力 " + jn_date.FanTuili);
+                        //    if (atkObj) atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-jn_date.FanTuili * __tuiliFX * beHitXFScale, 0));
+                        //}
+
                         //print("  333333333>>>>>>>>_roleScaleX   " + _roleScaleX+"    atkObjScaleX  "+ atkObj.transform.localScale.x  + "  jndate type  " + jn_date._type + "  collname  " + Coll.name);
                         //被攻击怪硬值过大 被反弹
                         //ObjV3Zero(atkObj);
-                      
+
 
                     }
-
+                    else
+                    {
+                        if (atkObjYZ > BeHitRoleDate.yingzhi)
+                        {
+                            BeHitGameBody.HasBeHit(jn_date.chongjili);
+                            beHitObj.GetComponent<GameBody>().GetZongTuili(new Vector2(jn_date.chongjili * __tuiliFX * beHitXFScale, 0));
+                        }
+                       
+                    }
+                    
                     //if (atkObj.tag == "Player" && jn_date._type == "1" && !atkObj.GetComponent<GameBody>().isInAiring)
                     //{
                     //    atkObj.GetComponent<GameBody>().IsAtkKuaijiReSet();

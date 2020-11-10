@@ -192,6 +192,11 @@ public class GlobalTools : MonoBehaviour {
         return new Vector3(float.Parse(c[0]), float.Parse(c[1]), float.Parse(c[2]));
     }
 
+    public static string GetNewStrQuDiaoKuohao(string str)
+    {
+        return str.Split('(')[0];
+    }
+
 
     public static string GetNewStrQuDiaoClone(string str) {
         var newStr = str.Replace("(Clone)", "");

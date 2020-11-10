@@ -53,6 +53,11 @@ public class JN_Date : MonoBehaviour {
     public float yongchangshijian = 0;
     [Header("冲击力 击退力量")]
     public float chongjili = 0;
+
+    [Header("反推力 一般用在 身体碰撞")]
+    public float FanTuili = 0;
+
+
     [Header("击中硬直时间")]
     public float yingzhishijian = 0.1f;
 

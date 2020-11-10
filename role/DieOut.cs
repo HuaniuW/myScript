@@ -184,10 +184,12 @@ public class DieOut : MonoBehaviour {
     }
 
     public bool IsDieRecord = false;
+    [Header("die 后多久 销毁自己")]
+    public float DieDisSelfTime = 2;
 
     public void DistorySelf()
     {
-        StartCoroutine(IEDieDestory(2f, this.gameObject));
+        StartCoroutine(IEDieDestory(DieDisSelfTime, this.gameObject));
         //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
     }
     public IEnumerator IEDieDestory(float time, GameObject obj)

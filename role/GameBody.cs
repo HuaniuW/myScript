@@ -1157,13 +1157,13 @@ public class GameBody : MonoBehaviour, IRole {
                     newPosition = this.transform.localPosition;
                     if (bodyScale.x == 1)
                     {
-                        MoveXByPosition(0.1f);
+                        //MoveXByPosition(0.1f);
                         //playerRigidbody2D.AddForce(Vector2.right * wallJumpXNum);
                         GetZongTuili(Vector2.right * wallJumpXNum);
                     }
                     else
                     {
-                        MoveXByPosition(-0.1f);
+                        //MoveXByPosition(-0.1f);
                         //playerRigidbody2D.AddForce(Vector2.left * wallJumpXNum);
                         GetZongTuili(Vector2.left * wallJumpXNum);
                     }
@@ -1976,8 +1976,39 @@ public class GameBody : MonoBehaviour, IRole {
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
         beHitNum++;
 
-
+        if (chongjili == -10)
+        {
+            BeHitSlowByTimes();
+        }
     }
+
+
+    protected float _BeHitSlowTimes = 1;
+    protected float _BeHitSlowTimesNums = 0;
+    
+    protected void BeHitSlowByTimes(float beHitSlowTimes = 4,float slowScale = 0f)
+    {
+        _BeHitSlowTimesNums = 0;
+        _BeHitSlowTimes = beHitSlowTimes;
+        _BeHitSlowTimesNums = slowScale;
+
+        _IsBeHitSlowing = true;
+        DBBody.animation.timeScale = slowScale;
+        //GetPause(beHitSlowTimes, slowScale);
+    }
+
+    protected bool _IsBeHitSlowing = false;
+    protected void BeHitslowing()
+    {
+        if (!_IsBeHitSlowing) return;
+        if (_BeHitSlowTimesNums >= _BeHitSlowTimes)
+        {
+            _IsBeHitSlowing = false;
+            DBBody.animation.timeScale = 1;
+        }
+        _BeHitSlowTimesNums += Time.deltaTime;
+    }
+
 
     protected virtual void GetBeHit()
     {
@@ -1990,6 +2021,9 @@ public class GameBody : MonoBehaviour, IRole {
         {
             //print(" isBeHiting! 但是没有进入 behit 动作 ");
         }
+
+        BeHitslowing();
+
     }
 
     //反击 被攻击动作清零

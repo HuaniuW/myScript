@@ -130,12 +130,12 @@ public class MapNames : MonoBehaviour
     public List<string> liziWu2_1 = new List<string> { "lizi_wu3" };
 
     public List<string> xiaoGuai_2 = new List<string> { "G_dcrj1" };
-    public List<string> xiaoGuai_1 = new List<string> { "G_dcr2" };
-    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" };
+   
     public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
 
 
-
+    public List<string> xiaoGuai_1 = new List<string> { "G_dcr2","G_ciwei" };
+    public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" ,"G_xemL"};
 
 
 

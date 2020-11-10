@@ -33,6 +33,14 @@ public class DBBase : MonoBehaviour
     public Transform DingDBPosR;
 
 
+    string _UpOrDown = "";
+    float _YJmoveY = -0;
+    //设置 修补远 背景的 高度
+    public void GetDiBanYuanBeiJingUpOrDown(string UpOrDown)
+    {
+        _UpOrDown = UpOrDown;
+    }
+
     void HideDingDB()
     {
         if(dibanDing&& dibanDing.activeSelf)
@@ -349,7 +357,14 @@ public class DBBase : MonoBehaviour
 
         ybjArrName = MapNames.GetInstance().GetJingArrNameByGKKey("jybj");
         int nums2 = 1 + GlobalTools.GetRandomNum(3);
-        if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums2, pos1, pos2, pos1.y - 0.5f, 1f, 0.8f, -50, "u");
+
+
+        if(_UpOrDown == "up"|| _UpOrDown == "down")
+        {
+
+        }
+
+        if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums2, pos1, pos2, pos1.y - 0.5f+_YJmoveY, 1f, 0.8f, -50, "u");
 
 
 
@@ -357,13 +372,13 @@ public class DBBase : MonoBehaviour
         if (GlobalTools.GetRandomNum() > 60)
         {
             ybjArrName = MapNames.GetInstance().GetJingArrNameByGKKey("ybj");
-            if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums, pos1, pos2, pos1.y + 2.3f, 2.8f, 1.5f, -70, "u");
+            if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums, pos1, pos2, pos1.y + 2.3f + _YJmoveY, 2.8f, 1.5f, -70, "u");
         }
 
         if (GlobalTools.GetRandomNum() > 60)
         {
             ybjArrName = MapNames.GetInstance().GetJingArrNameByGKKey("ybj2");
-            if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums, pos1, pos2, pos1.y + 3.2f, 4.6f, 1.5f, -80, "u");
+            if (ybjArrName != "") SetJingByDistanceU(ybjArrName, nums, pos1, pos2, pos1.y + 3.2f + _YJmoveY, 4.6f, 1.5f, -80, "u");
         }
 
 
@@ -785,10 +800,14 @@ public class DBBase : MonoBehaviour
                 //print(" *************************************************************************** ------>>>???     "+jingObj.name);
 
                 float ___y = _y;
-                if (i == 0 || i == nums - 1)
+                if (_UpOrDown != GlobalMapDate.YIBAN&& _UpOrDown != GlobalMapDate.BOSS_PINGDI && _UpOrDown != GlobalMapDate.JINGYING_PINGDI&& _UpOrDown != GlobalMapDate.JUQING_PINGDI)
                 {
-                    ___y -= 4;
+                    if (i == 0 || i == nums - 1)
+                    {
+                        ___y -= 4;
+                    }
                 }
+               
 
                 GlobalTools.SetDaBeiJingTY(jingObj, pos1.x, pos2.x, _y, _z, _dz, i, nums, xzds, sd, false, IsShu, IsLBSuoDuan);
                 continue;

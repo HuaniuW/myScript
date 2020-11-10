@@ -58,6 +58,7 @@ public class Door : MonoBehaviour {
     {
         
         string str = e.eventParams.ToString();
+        if (str.Split('-').Length == 1) return;
         //print("   -----------------wokao name is what  "+ str);
         string _name = str.Split('-')[0];
         string zt = str.Split('-')[1];
