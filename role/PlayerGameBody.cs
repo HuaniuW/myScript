@@ -339,19 +339,20 @@ public class PlayerGameBody : GameBody {
     //切换站立姿势 切换跑动姿势
     void ChangeStandAndRunAC()
     {
-        int nums = Random.Range(1, 3);
-        nums += 1;
-        nums = 5;
-        STAND = "stand_" + nums;
-        if(nums == 3||nums == 1)
-        {
-            RUN = "run_3";
-        }
-        else
-        {
-            //RUN = "run_" + nums;
-            RUN = "run_3";
-        }
+        //int nums = Random.Range(1, 3);
+        //nums += 1;
+        //nums = 5;
+        //STAND = "stand_" + nums;
+        //if(nums == 3||nums == 1)
+        //{
+        //    RUN = "run_3";
+        //}
+        //else
+        //{
+        //    //RUN = "run_" + nums;
+        //    RUN = "run_3";
+        //}
+        RUN = "run_3";
         CheckIsHasAC();
     }
 
@@ -881,7 +882,11 @@ public class PlayerGameBody : GameBody {
             RUN = "run_2";
         }else if (nums == 4)
         {
-            STAND = "stand_1";
+            STAND = "stand_2";
+            RUN = "run_3";
+        }else if (nums == 5)
+        {
+            STAND = "stand_5";
             RUN = "run_3";
         }
         CheckIsHasAC();
@@ -895,7 +900,7 @@ public class PlayerGameBody : GameBody {
         if (roleDate.isBeHiting) return;
         if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_5";
         if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
-        STAND = "stand_5";
+        //STAND = "stand_5";
     }
 
     //void ChangeRunAC()
@@ -915,7 +920,7 @@ public class PlayerGameBody : GameBody {
         if (inFightNums >= 1000)
         {
             //print(inFightNums);
-            ChangeACNum(4);
+            ChangeACNum(5);
             DBBody.animation.GotoAndPlayByFrame(STAND);
             isFighting = false;
         }
@@ -926,6 +931,7 @@ public class PlayerGameBody : GameBody {
     {
         inFightNums = 0;
         isFighting = true;
+        ChangeACNum(4);
         //print("atkNums   " + atkNums);
         //ChangeStandAndRunAC();
         //if (atkNums == 2)
@@ -961,7 +967,7 @@ public class PlayerGameBody : GameBody {
         if (chongjili > 700)
         {
             if(DBBody.animation.HasAnimation("beHit_3")) BEHIT = "beHit_3";
-            ChangeACNum(2);
+            ChangeACNum(4);
         }
         else
         {

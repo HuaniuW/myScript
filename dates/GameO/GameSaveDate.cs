@@ -50,6 +50,39 @@ public class GameSaveDate{
 
     }
 
+    public void SaveMapDateByURLName(MapSaveDate date,string URL = "MAPDATE")
+    {
+        string _fileURL2 = Application.persistentDataPath + "/" + URL;
+        //if (Globals.isDebug) Debug.Log("_fileURL2> "+ _fileURL2);
+        string s = SerializeObject(date, typeof(MapSaveDate));
+        //创建XML文件且写入数据
+        CreateTextFile(_fileURL2, s, false);
+    }
+
+    public MapSaveDate GetMapSaveDateByName(string cGKDateName = "MAPDATE")
+    {
+        // _fileName = Application.persistentDataPath + "/" + _fileName;
+        string str = Application.persistentDataPath + "/" + cGKDateName;
+        //if(Globals.isDebug)Debug.Log(str);
+        try
+        {
+            string strTemp = LoadTextFile(str, false);
+            //反序列化对象
+            MapSaveDate userD = DeserializeObject(strTemp, typeof(MapSaveDate)) as MapSaveDate;
+            //if (Globals.isDebug) Debug.Log(userD.userName);
+            return userD;
+        }
+        catch
+        {
+            if (Globals.isDebug) Debug.Log("系统读取 地图 XML出现错误，请检查");
+        }
+        return null;
+    }
+
+
+
+
+
     public void SaveDateByURLName(string URL,UserDate date)
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;

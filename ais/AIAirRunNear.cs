@@ -168,7 +168,7 @@ public class AIAirRunNear : MonoBehaviour
 
         if(IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
         {
-            print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
+            //print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;

@@ -13,9 +13,9 @@ public class JG_Door2 : MonoBehaviour
     }
 
 
-    //----------------------------------检测 boss die后的记录 门关闭  判断的 是 boss的 activeSelf
+    //----------------------------------检测 boss die后的记录 门关闭  判断的 是 boss的 activeSelf------这里不要乱勾  不知道是哪用到的了
 
-    [Header("没有boss或者精英怪 的时候 是否需要关门 并且组织碰撞关门")]
+    [Header("**不要乱勾***没有boss或者精英怪 的时候 是否需要关门 并且组织碰撞关门")]
     public bool IsNoBossNeedCloseDoor = false;
     public GameObject BossOrJY;
     bool IsStopHitJG = false;
@@ -92,7 +92,7 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
+        //print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
         if (e.eventParams.ToString() == "allDie") return;
 
 
@@ -101,20 +101,22 @@ public class JG_Door2 : MonoBehaviour
             //没怪 不允许碰撞关门
             IsCanCloseDoorMap = false;
             //print("iiiiiiii  没怪 不许关门");
-        }else if (e.eventParams.ToString() == "kyguanmen")
+            IsCloseDoor = false;
+        }
+        else if (e.eventParams.ToString() == "kyguanmen")
         {
             IsCanCloseDoorMap = true;
             //print(">>>>>>>>>>>>>>>>>>*****  可以关门！ ");
         }
         else if(e.eventParams.ToString() == "open")
         {
-            //print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
+            print(" >>>>>>>...,,,,//////    已经开门了 不要2次关门  "+this.transform.parent.name);
             IsCanCloseDoorMap = false;
             IsCloseDoor = false;
         }
         else
         {
-            //print("  wokao!!!! 关门啊 啊啊啊啊啊啊啊啊啊啊啊！！！  ");
+            print("  wokao!!!! 关门啊 啊啊啊啊啊啊啊啊啊啊啊！！！  ");
             IsCloseDoor = true;
         }
     }
@@ -126,6 +128,7 @@ public class JG_Door2 : MonoBehaviour
         if (IsCloseDoor)
         {
             CloseDoor();
+            //print("hahah !!!");
         }
         else
         {
@@ -154,7 +157,7 @@ public class JG_Door2 : MonoBehaviour
         //判断是否有怪物  没有的话 就不关门
 
         //多个怪的时候 怎么处理？  只要有精英怪就关门 那么 每个小关卡 都有可能 随机出精英怪？
-        //print("  ///////////////////我碰到关门机关了  IsCanCloseDoorMap  "+ IsCanCloseDoorMap);
+        print("  ///////////////////我碰到关门机关了  IsCanCloseDoorMap  "+ IsCanCloseDoorMap);
         if (!IsCanCloseDoorMap) return;
         if (IsStopHitJG) return;
 
@@ -167,7 +170,7 @@ public class JG_Door2 : MonoBehaviour
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
             GetOtherJG1();
 
-            //print(" **************  碰撞 关门机关！！！！   ");
+            print(" **************  碰撞 关门机关！！！！   ");
         }
     }
 

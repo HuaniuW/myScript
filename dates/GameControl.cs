@@ -221,6 +221,7 @@ public class GameControl : MonoBehaviour {
             //开门
             //print("、、、、、、、、、、、、、、、、、、、、 开门  ");
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "meiguai"), this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
         }
     }
 

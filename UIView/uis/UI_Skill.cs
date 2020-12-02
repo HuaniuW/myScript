@@ -77,7 +77,6 @@ public class UI_Skill : MonoBehaviour {
     {
         skillCanUseTimes = _hzDate.usenums;
         SetText(skillCanUseTimes.ToString());
-
         if (IsLeft)
         {
             Wh(MaskImg, maxCDDistance, 30);
@@ -237,7 +236,8 @@ public class UI_Skill : MonoBehaviour {
 
 
 
-    
+    GameObject _player;
+    PlayerGameBody _playerGameBody;
     // Use this for initialization
     void Start () {
         //是横向 还是纵向
@@ -250,11 +250,14 @@ public class UI_Skill : MonoBehaviour {
             maxCDDistance = MaskImg.GetComponent<RectTransform>().rect.height;
         }
 
-        //skillCanUseTimes = SkillCanUseNums;
-        //初始化 技能可用次数的 显示文本
-        //SetText(skillCanUseTimes.ToString());
+        
+        if (!_player) _player = GlobalTools.FindObjByName("player");
+        if (!_playerGameBody) _playerGameBody = _player.GetComponent<PlayerGameBody>();
+         //skillCanUseTimes = SkillCanUseNums;
+         //初始化 技能可用次数的 显示文本
+         //SetText(skillCanUseTimes.ToString());
 
-        //设置 默认 遮罩地板颜色
+            //设置 默认 遮罩地板颜色
         Color _col = new Color(66 / 255f, 66 / 255f, 66 / 255f, 1);
         SetImgColor(TheMask,_col);
 
@@ -288,7 +291,8 @@ public class UI_Skill : MonoBehaviour {
             GetComponent<UIShake>().GetShake();
             skillCanUseTimes = SkillCanUseNums;
             SetText(skillCanUseTimes.ToString());
-            //print("CD完成！！！");
+            //if(_hzDate) print("CD完成！！！ ------>       " +_hzDate.HZName );
+            if (IsCDSkillCanBeUse() && GetHZDate()) _playerGameBody.PlayHZInTXByTXName(GetHZDate().HZZBTXName);
             if (GetComponent<UI_FeiDao>() != null) GetComponent<UI_FeiDao>().HasShouDao(null);
         }
     }

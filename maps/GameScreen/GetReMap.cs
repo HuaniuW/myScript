@@ -349,6 +349,7 @@ public class GetReMap : MonoBehaviour
                 GameObject kuang = GlobalTools.FindObjByName("kuang");
                 Vector2 kuangPos = new Vector2(float.Parse(_pos.Split('#')[0]), float.Parse(_pos.Split('#')[1]));
                 kuang.transform.position = kuangPos;
+                print("**************************************************************************************************** kuang  _sd "+_sd);
                 Vector2 _size = new Vector2(float.Parse(_sd.Split('#')[0]), float.Parse(_sd.Split('#')[1]));
                 kuang.GetComponent<BoxCollider2D>().size = _size;
                 GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(kuang.GetComponent<BoxCollider2D>());
@@ -430,7 +431,7 @@ public class GetReMap : MonoBehaviour
 
     protected string GetMapMsgDateByName(string mapName)
     {
-        string[] mapMsgDateArr = GlobalSetDate.instance.gameMapDate.MapDate.Split('@');
+        string[] mapMsgDateArr = GameMapDate.MapDate.Split('@');
         foreach(string s in mapMsgDateArr)
         {
             if (s.Split('=')[0] == mapName) return s.Split('=')[1];
@@ -849,20 +850,23 @@ public class GetReMap : MonoBehaviour
         
 
         if (IsShouDong) {
-            //print("修改前 数据  "+ GlobalSetDate.instance.gameMapDate.MapDate);
+            print("修改前 数据  "+ GameMapDate.MapDate);
+            print("手动储存 地图数据MapMsgStr     " + MapMsgStr);
             ReplaceMapDate(GlobalSetDate.instance.CReMapName, MapMsgStr);
+            GameMapDate.SaveMapDateInMapDate();
         }
         else
         {
             //将本地图信息 存入 全局 数据
-            GlobalSetDate.instance.gameMapDate.MapDate += MapMsgStr + "@";
+            GameMapDate.MapDate += "@"+MapMsgStr;
+            print("   生成地图后 自动记录进 地图信息      "+ GameMapDate.MapDate);
         }
     }
 
 
     void ReplaceMapDate(string mapName,string mapDateMsg)
     {
-        List<string> strArr = new List<string>(GlobalSetDate.instance.gameMapDate.MapDate.Split('@'));
+        List<string> strArr = new List<string>(GameMapDate.MapDate.Split('@'));
         
         //print("  mapName "+mapName+"    count  "+strArr.Count);
 
@@ -882,19 +886,19 @@ public class GetReMap : MonoBehaviour
             }
         }
 
-       
 
 
-        GlobalSetDate.instance.gameMapDate.MapDate = "";
+
+        GameMapDate.MapDate = "";
         for (int i=0;i< strArr.Count; i++)
         {
             if (i == 0)
             {
-                GlobalSetDate.instance.gameMapDate.MapDate = strArr[i];
+                GameMapDate.MapDate = strArr[i];
             }
             else
             {
-                GlobalSetDate.instance.gameMapDate.MapDate += "@" + strArr[i];
+                GameMapDate.MapDate += "@" + strArr[i];
             }
         }
         //print("修改后>>>>> 数据  " + GlobalSetDate.instance.gameMapDate.MapDate);
@@ -1395,8 +1399,9 @@ public class GetReMap : MonoBehaviour
     protected List<string> menFXList = new List<string> { };
     protected List<string> GetMenFXListByMapName(string mapName)
     {
+        print("  &&&&*******************************************************地图信息    "+ GameMapDate.BigMapDate);
         //BigMapDate->         map_r+map_r-1!0#0!r:map_r-2^u:map_r-3 | map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
-        string[] mapArr1 = GlobalSetDate.instance.gameMapDate.BigMapDate.Split('@');
+        string[] mapArr1 = GameMapDate.BigMapDate.Split('@');
         string mapMsg = "";
         foreach(string s in mapArr1)
         {

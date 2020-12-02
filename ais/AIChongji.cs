@@ -155,7 +155,7 @@ public class AIChongji : MonoBehaviour
         IsStartChongji = false;
         CJYanchiNums = 0;
         GetComponent<AIAirRunNear>().ResetAll();
-        print("*************************************************************冲击 结束！！！！！");
+        //print("*************************************************************冲击 结束！！！！！");
     }
 
 

@@ -6,15 +6,109 @@ public class GameMapDate
 {
     //大地图数据
     //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3  |    map_r-2!1#0!r:map_r-4@map_u+map_u-1     !     0#0!r:map_u-2|map_u-2!1#0!map_u-3
-    public string BigMapDate = "";
+    public static string BigMapDate {
+
+        get {
+            if(_mapSaveDate == null)
+            {
+                _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+                if (_mapSaveDate == null) {
+                    _mapSaveDate = new MapSaveDate();
+                    SaveMapDateInMapDate();
+                }
+                
+            }
+            return _mapSaveDate.BigMapDate;
+        }
+        set {
+            if (_mapSaveDate == null)
+            {
+                _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+                if (_mapSaveDate == null)
+                {
+                    _mapSaveDate = new MapSaveDate();
+                    SaveMapDateInMapDate();
+                }
+            }
+            _mapSaveDate.BigMapDate = value;
+        }
+    }
+
+
+
     //小地图数据
-    public string MapDate = "";
+    public static string MapDate {
+        get
+        {
+            if (_mapSaveDate == null)
+            {
+                _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+                if (_mapSaveDate == null)
+                {
+                    _mapSaveDate = new MapSaveDate();
+                    SaveMapDateInMapDate();
+                }
+            }
+            return _mapSaveDate.MapDate;
+        }
+        set
+        {
+            if (_mapSaveDate == null)
+            {
+                _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+                if (_mapSaveDate == null)
+                {
+                    _mapSaveDate = new MapSaveDate();
+                    SaveMapDateInMapDate();
+                }
+            }
+            _mapSaveDate.MapDate = value;
+        }
+    }
+
+
+
+    public static void ClearMapSaveDate()
+    {
+        _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+        if (_mapSaveDate == null)
+        {
+            _mapSaveDate = new MapSaveDate();
+        }
+        _mapSaveDate.BigMapDate = "";
+        _mapSaveDate.MapDate = "";
+        SaveMapDateInMapDate();
+    }
 
     //关卡类型 预设
     public List<string> TypeList = new List<string>() { };
 
+    public static MapSaveDate _mapSaveDate;
 
-    
+
+    public static void SaveMapDateInMapDate()
+    {
+        //_mapSaveDate.MapDate = MapDate;
+        GameSaveDate.GetInstance().SaveMapDateByURLName(_mapSaveDate);
+    }
+
+    public static void GetBigMapDateInSavedate()
+    {
+        if(_mapSaveDate == null)
+        {
+            _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+        }
+
+    }
+
+    public static void GetMapDateInSaveDate()
+    {
+        if (_mapSaveDate == null)
+        {
+            _mapSaveDate = GameSaveDate.GetInstance().GetMapSaveDateByName();
+        }
+
+    }
 
 
     //左右类型 背景  树 山 巨树  石头  天柱

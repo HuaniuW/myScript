@@ -641,6 +641,7 @@ public class HitKuai : MonoBehaviour {
     //X方向速度清0
     void ObjV3Zero(GameObject obj)
     {
+        if (obj.GetComponent<Rigidbody2D>() == null) return;
         Vector3 v3 = obj.GetComponent<Rigidbody2D>().velocity;
         obj.GetComponent<Rigidbody2D>().velocity = new Vector2(0, v3.y);
     }

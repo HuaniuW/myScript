@@ -117,4 +117,7 @@ public class EventTypeName
     //切换跑步动作
     public const string CHANGE_RUN_AC = "change_run_ac";
 
+    //全部die 开门 检测  
+    public const string ALLDIE_OPEN_DOOR = "alldie_open_door";
+
 }

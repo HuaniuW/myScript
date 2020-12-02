@@ -32,7 +32,7 @@ public class SpeMapDoorGo : MonoBehaviour
         print(GlobalSetDate.instance.CReMapName);
         //配置 各个方向的 地图
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
-        print(GlobalSetDate.instance.gameMapDate.BigMapDate);
+        print(GameMapDate.BigMapDate);
 
         //map_r-1!0#0!r:map_r-2^u:map_r-3
         string mapMsgStr = GetMapStr();
@@ -90,12 +90,12 @@ public class SpeMapDoorGo : MonoBehaviour
         ThisMapName = SceneManager.GetActiveScene().name;
         string mapTou = ThisMapName.Split('-')[0];
         print("当前的 关卡 名字是  "+ ThisMapName);
-        print("总的 关卡 地图信息   "+ GlobalSetDate.instance.gameMapDate.BigMapDate);
+        print("总的 关卡 地图信息   "+ GameMapDate.BigMapDate);
 
 
         print("全局记录的 当前门位置  "+GlobalSetDate.instance.DanqianMenweizhi);
 
-        string[] DaMapArrStr = GlobalSetDate.instance.gameMapDate.BigMapDate.Split('@');
+        string[] DaMapArrStr = GameMapDate.BigMapDate.Split('@');
         string CurrentDaMapStr = "";
         foreach(string st in DaMapArrStr)
         {

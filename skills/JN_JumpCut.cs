@@ -27,7 +27,7 @@ public class JN_JumpCut : MonoBehaviour, ISkill
         _gameObj = gameObj;
         _playerX = _gameObj.transform.position.x;
         IsStartXV = true;
-        print("    --------------------------  >   "+ _playerX);
+        //print("    --------------------------  >   "+ _playerX);
         if(!IsJumpToPlayerPostion)StartVX();
 
         //_gameBody.GetPlayerRigidbody2D().velocity = new Vector2(vx, _gameBody.GetPlayerRigidbody2D().velocity.y);

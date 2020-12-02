@@ -32,22 +32,45 @@ public class GetReMap2 : GetReMap
         StartCoroutine(IEDestory2ByTime(0.2f));
     }
 
+
+    protected void IsAllDieCheck(UEvent e)
+    {
+        //print("GuaiList.Count------------------------->     " + GuaiList.Count);
+        if(GuaiList.Count == 0)
+        {
+            //开门
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
+        }
+    }
+
+
+    private void OnDestroy()
+    {
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.ALLDIE_OPEN_DOOR, this.IsAllDieCheck);
+    }
+
     public override void GetInDate()
     {
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ALLDIE_OPEN_DOOR,this.IsAllDieCheck);
+
 
         //判断 是否 有这个地图的数据 有的话 直接按数据生成地图
         print("************************************************************************************************************************");
         _dixingkuozhanNums = 0;
         maps = GlobalTools.FindObjByName("maps");
 
+        
         if (GlobalSetDate.instance.CReMapName != "" && IsTiaoshi && CMapName != "")
         {
+            print(" 本地图名字   "+CMapName+"   本地*有*地图信息  地图的 信息数据是   " + GlobalSetDate.instance.CReMapName);
             GlobalSetDate.instance.CReMapName = CMapName;
             GlobalMapDate.CCustomStr = CMapName.Split('_')[1];
         }
         else
         {
             CMapName = GlobalSetDate.instance.CReMapName;
+            print(" 本地图名字   " + CMapName + " ********** 没有 本地 地图信息  直接生成新的地图：   " + GlobalSetDate.instance.CReMapName);
         }
 
         print("本地图名字 " + GlobalSetDate.instance.CReMapName);
@@ -428,8 +451,6 @@ public class GetReMap2 : GetReMap
             //放入一个 随机boss  写一个 可以随机的 Boss表
             string bossName = "";
 
-
-            GetGuaiControlMen();
         }
         else if (_dixingType == GlobalMapDate.CUNDANG_PINGDI)
         {
@@ -444,12 +465,10 @@ public class GetReMap2 : GetReMap
             //精英怪平地
             print("精英怪平地！！");
             GetJingYingGuai(lianjiedian);
-            GetGuaiControlMen();
         }else if (_dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI)
         {
             print("*************************************************************精英多怪平地！！");
             GetJingYingGuai(lianjiedian);
-            GetGuaiControlMen();
         }else if (_dixingType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
         {
             print("多怪 警示鱼 地图");
@@ -524,6 +543,20 @@ public class GetReMap2 : GetReMap
         //print("有怪没啊    " + GuaiList.Count);
         //中心地板 不是左右连接 或者 怪数量小于4 不允许关门
         //如果是左右地图 但是 是跳跃型 也不能关门 后面要做判断
+
+
+        print("g怪兽数组   "+GuaiList.Count);
+        foreach(GameObject guai in GuaiList)
+        {
+            print("  怪物的 类型是什么  " + guai.GetComponent<RoleDate>().enemyType);
+            string guaiType = guai.GetComponent<RoleDate>().enemyType;
+            if (guaiType == "jingying"||guaiType == "boss")
+            {
+                print("有精英怪  可以关门 ");
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "kyguanmen"), this);
+                return;
+            }
+        }
 
 
         print("_dixingType   -------------- 地形  "+ _dixingType);

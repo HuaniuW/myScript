@@ -83,7 +83,7 @@ public class GlobalSetDate : MonoBehaviour {
     }
 
     //这个是  用来 存取 自动地图的 数据  不要搞混了
-    public GameMapDate gameMapDate;
+    //public GameMapDate gameMapDate;
 
     private void Awake()
     {
@@ -93,7 +93,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
 
 
-        if (gameMapDate == null) gameMapDate = new GameMapDate();
+        //if (gameMapDate == null) gameMapDate = new GameMapDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
         //GetGuanKaStr();
 
@@ -434,6 +434,7 @@ public class GlobalSetDate : MonoBehaviour {
             InNewGame();
             //新游戏的选项
             //GetSave();
+
         }
 
         if (Input.GetKeyDown(KeyCode.O))
@@ -442,11 +443,18 @@ public class GlobalSetDate : MonoBehaviour {
             //InNewGame();
             //新游戏的选项
             //GetSave();
+            print("储存所有地图数据！！！！");
             if (GlobalTools.FindObjByName("maps"))
             {
                 GlobalTools.FindObjByName("maps").GetComponent<GetReMap>().SetMapMsgDateInStr(true);
             }
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            print("清除所有地图数据");
+            GameMapDate.ClearMapSaveDate();
         }
 
 
@@ -540,8 +548,11 @@ public class GlobalSetDate : MonoBehaviour {
         DanqianMenweizhi = menweizhi;
         //地图头 就是大地图的 头部标识你  eg:  map_r-1  -->  map_r 就是地图 头标记
         CMapTou = mapName.Split('-')[0];
+
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>当前随机地图的 标识     "+ CMapTou);
+
         //判断 如果 没有该大地图 就生成 大地图 并储存
-        if(!IsHasBigMapByName(CMapTou, gameMapDate.BigMapDate))
+        if(!IsHasBigMapByName(CMapTou, GameMapDate.BigMapDate))
         {
 
             //这里要 设置 保留门 存入地图数据 存入本地
@@ -585,13 +596,13 @@ public class GlobalSetDate : MonoBehaviour {
             //print("生成的 地图数据:   " + gameMapDate.BigMapDate);
             
             //如果大地图中 没有该大地图   生成大地图
-            if (gameMapDate.BigMapDate == "")
+            if (GameMapDate.BigMapDate == "")
             {
-                gameMapDate.BigMapDate = mapListMsgStr;
+                GameMapDate.BigMapDate = mapListMsgStr;
             }
             else
             {
-                gameMapDate.BigMapDate += "@" + mapListMsgStr;
+                GameMapDate.BigMapDate += "@" + mapListMsgStr;
             }
 
             //print("生成的 地图数据    "+ gameMapDate.BigMapDate);
@@ -607,7 +618,7 @@ public class GlobalSetDate : MonoBehaviour {
 
         // map_1-1
         //先找 小地图  如果 小地图 没有 说明  没有生成    -->生成大地图  再生成小地图
-        if (IsHasMapByName(mapName, gameMapDate.MapDate) != "")
+        if (IsHasMapByName(mapName, GameMapDate.MapDate) != "")
         {
             //根据 存储数据 生成地图
             //print("*** 根据地形数据 生成地图");
@@ -628,11 +639,19 @@ public class GlobalSetDate : MonoBehaviour {
 
     bool IsHasBigMapByName(string mapTouName, string bigMapDateList)
     {
-        //print("   bigMapDateList>>>  "+ bigMapDateList);
+
+        //这里要根据 mapTou 来判断 是否存在该 大地图数据
+
+
+        print("   bigMapDateList>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  "+ bigMapDateList);
         string[] bigMapArr = bigMapDateList.Split('@');
         for(var i=0;i< bigMapArr.Length; i++)
         {
-            if (bigMapArr[i].Split('+')[0] == mapTouName) return true;
+            if (bigMapArr[i].Split('+')[0] == mapTouName) {
+                Globals.mapZBArr = new List<System.String>(bigMapArr[i].Split('+')[1].Split('|'));
+                return true;
+            }
+            
         }
         return false;
     }

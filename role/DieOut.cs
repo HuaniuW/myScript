@@ -49,8 +49,20 @@ public class DieOut : MonoBehaviour {
 
             if (HitKuai) HitKuai.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
-            if(IsBiaojiAllDieStart) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "allDie"), this);
-            if (IsBiaojiOpenDoor) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
+
+            //判断是否 在自动地图里面
+            if (GlobalTools.FindObjByName("maps") != null)
+            {
+                GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(this.gameObject);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ALLDIE_OPEN_DOOR, "allDie"), this);
+            }
+            else
+            {
+                if (IsBiaojiAllDieStart) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "allDie"), this);
+                if (IsBiaojiOpenDoor) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
+            }
+
+           
             if (IsBoss) {
                 isBossDie = true;
                 //隐藏UI血条
@@ -74,6 +86,16 @@ public class DieOut : MonoBehaviour {
         }
         //掉落几率 掉落的等级 ==  掉落多个物体
         //掉落 血  蓝  物品
+    }
+
+    //在关卡数据 和存档数据匹配的 时候  是怪物的 话 如果 消失 要 调用一下 开门
+    public void GetMenPiPei()
+    {
+        if (GlobalTools.FindObjByName("maps") != null)
+        {
+            GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(this.gameObject);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ALLDIE_OPEN_DOOR, "allDie"), this);
+        }
     }
 
 
@@ -122,14 +144,16 @@ public class DieOut : MonoBehaviour {
                     o.transform.position = this.transform.position;
                     o.GetComponent<Wupinlan>().GetXFX(Random.Range(100, 300) * fx);
                     if(IsDieRecord) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.name), this);
+                    if(IsNeedReSetCameraKuai) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_KUAI_REDUCTION, null), this);
                 }
                 
             }
         }
     }
 
+    [Header("是否需要 还原 摄像机块")]
+    public bool IsNeedReSetCameraKuai = false;
 
-   
 
 
     [Header("是否是BOSS")]

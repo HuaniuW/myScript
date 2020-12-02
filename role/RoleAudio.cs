@@ -23,7 +23,7 @@ public class RoleAudio : MonoBehaviour {
 
     public void PlayAudio(string AudioName) {
         //(this[AudioName] as AudioSource)
-        //print(AudioName);
+        //print("-----------------------------------------------------------> diaoluode audio:  "+AudioName);
         AudioSource cAudio = GetDicSSByName(AudioName, this);
         if (cAudio)
         {

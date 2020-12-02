@@ -485,7 +485,7 @@ public class AIAirBase : AIBase
             acName = GetZS();
             //IsGetAtkFSByName = false;
 
-            print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
+            //print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 

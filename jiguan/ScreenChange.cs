@@ -158,7 +158,7 @@ public class ScreenChange : MonoBehaviour {
             //另外生成一个 特殊地图的 信息列表 来匹配 特殊地图 是否有  有的话生成 特殊地图
             //eg   12!boss^boss_test!db^2!qj^2!jqj^2!bg^2 等11!cundang    9!juqing^juqingjueseming
 
-            //print("***  ReMapName????? "+ ReMapName  + "  GoScreenName  "+ GoScreenName);
+            print("***  ReMapName????? "+ ReMapName  + "  GoScreenName  "+ GoScreenName);
 
             Globals.IsHitDoorStop = true;
 
@@ -171,7 +171,7 @@ public class ScreenChange : MonoBehaviour {
                 //print("*** ReMapName "+ ReMapName);
             }else if (ReMapName != "")
             {
-                //print("说明是 从 特殊地图 跳到 随机里面   ");
+                print("说明是 从 特殊地图 跳到 随机里面   "+ ReMapName);
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
                 //return;
             }

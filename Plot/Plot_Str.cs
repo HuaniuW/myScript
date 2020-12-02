@@ -77,10 +77,17 @@ public class Plot_Str : MonoBehaviour
 
     [Header("是否 在谈话结束 自动记录")]
     public bool IsNeedRecordByOver = true;
-    string plotStr = "acType:talk-talkObjName:B_dlws-msg:我等你好久了，要现在就和我战斗吗？-choseType:dan-id:1-nextId:2|" +
-        "acType:talk-talkObjName:player-msg:来吧！#4^event$test@不要，不想做无谓的战斗。#3-choseType:多-id:2-nextId:3|" +
-        "acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$over-choseType:dan-id:3-nextId:6|" +
-        "acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight-choseType:dan-id:4-nextId:5";
+    //string plotStr = "acType:talk-talkObjName:B_dlws-msg:我等你好久了，要现在就和我战斗吗？-choseType:dan-id:1-nextId:2|" +
+    //    "acType:talk-talkObjName:player-msg:来吧！#4^event$test@不要，不想做无谓的战斗。#3-choseType:duo-id:2-nextId:3|" +
+    //    "acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$over-choseType:dan-id:3-nextId:6|" +
+    //    "acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight-choseType:dan-id:4-nextId:5";
+
+
+    string plotStr = "acType:talk-talkObjName:B_dlws-msg:你就是来渡我们的使者吧。-choseType:dan-id:1-nextId:2|" +
+        "acType:talk-talkObjName:player-msg:。。。。。。！-choseType:dan-id:2-nextId:3|" +
+      "acType:talk-talkObjName:B_dlws-msg:我发现很多人就算到了这里也依然没有勇气面对他们想去面对的人！你也有不敢面对的人吗！-choseType:dan-id:3-nextId:4|" +
+      "acType:talk-talkObjName:player-msg:世间残酷，悄无声息！-choseType:dan-id:4-nextId:5|"+
+    "acType:talk-talkObjName:B_dlws-msg:。。。。。。！^event$over-choseType:dan-id:5-nextId:6|";
 
 
     private void OnEnable()

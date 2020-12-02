@@ -1439,13 +1439,14 @@ public class GameBody : MonoBehaviour, IRole {
         _KuangDowny = -100;
         //kuang 的 底y位置 超出die
         StartCoroutine(IEDestory2ByTime(1f));
-        
         //print("-/////////////////---------------------------------------------------------------------------PlayerStart"+roleDate);
     }
 
+    bool IsCanOutYDie = false;
     public IEnumerator IEDestory2ByTime(float time)
     {
         yield return new WaitForSeconds(time);
+        
         GetKuangDownY();
     }
 
@@ -1453,17 +1454,20 @@ public class GameBody : MonoBehaviour, IRole {
     void GetKuangDownY()
     {
         _KuangDowny = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;
-        //print(" *****************************************************************************************  "+ _KuangDowny);
+        IsCanOutYDie = true;
+        print(" *****************************************************************************************  "+ _KuangDowny);
     }
 
     [Header("是否 会die 当超出 底部限制的时候")]
     public bool IsNeedDieOutDownY = true;
     protected void OutDownYDie()
     {
+        if (!IsCanOutYDie) return;
         if (Globals.isInPlot) return;
         if (!IsNeedDieOutDownY) return;
         if(this.transform.position.y< _KuangDowny)
         {
+            if(this.tag == "Player")print(this.transform.position.y + "  --------------------------- "+ _KuangDowny);
             this.GetComponent<RoleDate>().live = 0;
         }
     }
@@ -2332,7 +2336,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (IsSFSkill) return;
         //print("type:  "+type);
         //print("eventObject  ????  " + eventObject);
-        //print("___________________________________________________________________________________________________________________________name    "+ eventObject.name);
+        //print("___________________________________________________________________________________________________________________________name    "+ eventObject.name+"    name  "+DBBody.animation.lastAnimationName);
         if (type == EventObject.SOUND_EVENT)
         {
             //print("eventName:  "+eventObject.name);
