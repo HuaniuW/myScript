@@ -71,7 +71,7 @@ public class UI_ShowPanel : MonoBehaviour {
     //读取所有徽章使用数据
     public void GetAllHZDate()
     {
-        //print("--------------------------------------------------------------->   读取所有徽章使用数据 "+HZList.Count);
+        print("--------------------------------------------------------------->   读取所有徽章使用数据 "+HZList.Count);
         foreach (GameObject o in HZList)
         {
             o.GetComponent<UI_Skill>().GetGlobalSkillDate();
@@ -203,20 +203,20 @@ public class UI_ShowPanel : MonoBehaviour {
     //name_(0/1)  1是装配 0是卸下
     void GetSkillChange(UEvent e)
     {
-        //print(e.eventParams.ToString());
+        print(e.eventParams.ToString());
         //gezi23  上
         //22 中
         //26 下
         //21 右
         //return;
         List<RectTransform> t = (List<RectTransform>)e.eventParams;
-        //print(">>>>>>>>>>>>>     "+t.Count);
+        print(">>>>>>>>>>>>>     "+t.Count);
 
         RemoveAllHZUI();
         
         foreach (Transform o in t)
         {
-            //print(o.GetComponent<HZDate>().name+"   容器名字  " +o.GetComponent<HZDate>().RQName);
+            print(o.GetComponent<HZDate>().name+"   容器名字  " +o.GetComponent<HZDate>().RQName);
             //匹配 HZlist
 
 

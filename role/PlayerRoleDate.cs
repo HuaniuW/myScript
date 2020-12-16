@@ -27,15 +27,23 @@ public class PlayerRoleDate : RoleDate
         }
     }
 
-
+    bool IsStart = false;
     // Start is called before the first frame update
     void Start()
     {
+        if(!IsStart) GetStart();
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+    }
+
+
+    public void GetStart()
+    {
+        print("角色 数据date类*********************************************************************************************************************");
         InitBaseDate();
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HZ, changeHZ);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JIAXUE, this.JiaXue);
-        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
+        IsStart = true;
     }
 
     private void OnDestroy()
@@ -198,7 +206,7 @@ public class PlayerRoleDate : RoleDate
             IsHasZZ = false;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
-        //print("气血徽章- 事件发送！！！！！");
+        print("------------------------------------------------------------气血徽章- 事件发送！！！！！");
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
         GetPlayerMsg();
     }
@@ -211,7 +219,9 @@ public class PlayerRoleDate : RoleDate
         string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
         string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
         string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
-        str += _liveStr + _atkStr + _defStr+ _yingzhiStr;
+        string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
+        string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
+        str += _liveStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv;
         return str;
     }
 
@@ -256,6 +266,8 @@ public class PlayerRoleDate : RoleDate
         
         if (hzdate.def != 0) this.def += hzdate.def;
         if (hzdate.atk != 0) this.atk += hzdate.atk;
+        if (hzdate.BaoJiLv != 0) this.BaoJiLv += hzdate.BaoJiLv;
+        if (hzdate.BaoJiShangHaiBeiLv != 0) this.BaoJiShangHaiBeiLv += hzdate.BaoJiShangHaiBeiLv;
         if (hzdate.yingzhi != 0)
         {
             this.yingzhi += hzdate.yingzhi;

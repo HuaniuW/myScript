@@ -42,11 +42,12 @@ public class GlobalMapDate : MonoBehaviour {
 
     //例子 进门 特殊地图是 map_s-1   s 就是 取特殊地图数组的 标记
     //“s:7!l-r!jiguan|9!l-r!boss”
-    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "", "", "s:2!l-r|4!l-r" };
+    public static List<string> SpecialMapNameAndNumArr = new List<string>{ "o:3!l-r|4!l-r|5!l-r|9!d|12!l", "", "s:2!l-r|4!l-r" };
 
     //特殊生成地图 列表 （用来匹配 可以 自动生成的 特殊地图）
     public static List<string> TeShuShengchengDiTuList = new List<string>
     {
+        "o:3!cundangPingdi^1",
         "s:4!cundangPingdi^1",
         "s:2!jingying^jingyingPingdi^1^G_jydj!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
         "s:3!boss^bossPingdi^1^name!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",

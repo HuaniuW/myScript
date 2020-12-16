@@ -37,6 +37,10 @@ public class GlobalSetDate : MonoBehaviour {
 
     public UserDate CurrentMapMsgDate;
 
+    //玩家的 选择数据
+    public OtherSaveDate OtherDate;
+
+
     public bool isGameOver = false;
     private void OnDestroy()
     {
@@ -52,7 +56,67 @@ public class GlobalSetDate : MonoBehaviour {
         //luaenv.DoString("require 'gameMain'");
         //XLuaTest("lua test  测试");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
+        OtherDate = GetOtherDate();
     }
+
+    //***********************************************other数据获取区*************************************************************
+    public OtherSaveDate GetOtherDate()
+    {
+        print("  获取了 otherdate!! ");
+        if(OtherDate == null)
+        {
+            OtherDate = new OtherSaveDate();
+            OtherDate = GameSaveDate.GetInstance().GetOtherSaveDateByName();
+        }
+        return OtherDate;
+    }
+
+    public string GetOtherDateValueByKey(string key)
+    {
+        string[] otherDateArr = OtherDate.GlobalOtherDate.Split('|');
+        List<string> otherDateList = new List<string>(otherDateArr);
+        foreach (string str in otherDateList)
+        {
+            if (str.Split('*')[0] == key) return str.Split('*')[1];
+        }
+        return "";
+    }
+
+
+    /// <summary>
+    /// 存入 或者改变 other 数据
+    /// </summary>
+    /// <param name="str"></param>
+    public void SaveInOtherDate(string str)
+    {
+        string key = str.Split('*')[0];
+        string value = str.Split('*')[1];
+        if (GetOtherDateValueByKey(key) != "")
+        {
+            string _dateStr = "";
+            string[] otherDateArr = OtherDate.GlobalOtherDate.Split('|');
+            List<string> otherDateList = new List<string>(otherDateArr);
+
+            for (int i = 0; i < otherDateList.Count; i++)
+            {
+                string strs = otherDateList[i];
+                if (strs.Split('*')[0] == key)
+                {
+                    strs = key + "*" + value;
+                }
+                _dateStr += "|" + strs;
+            }
+            OtherDate.GlobalOtherDate = _dateStr;
+        }
+        else
+        {
+            OtherDate.GlobalOtherDate += "|" + str;
+        }
+        GameSaveDate.GetInstance().SaveOtherDateByURLName(OtherDate);
+    }
+
+    //************************************************************************************************************
+
 
     void XLuaTest(string str)
     {
@@ -91,7 +155,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
-
+        if (OtherDate == null) OtherDate = new OtherSaveDate();
 
         //if (gameMapDate == null) gameMapDate = new GameMapDate();
         //CurrentUserDate = new UserDate(); //外部调用居然比启动更快 这里就不要new了 会导致数据消失
@@ -177,9 +241,14 @@ public class GlobalSetDate : MonoBehaviour {
         CurrentUserDate.userName = "myGame";
         CurrentUserDate.onlyId = 2;
         GameSaveDate.GetInstance().SaveDateByURLName(saveDateName, CurrentUserDate);
-        GameSaveDate.GetInstance().SaveDateByURLName(saveDateName+"Map", CurrentUserDate);
+        GameSaveDate.GetInstance().SaveDateByURLName(saveDateName + "Map", CurrentUserDate);
         IsChangeScreening = false;
         //print("hi!!!!");
+
+
+        //清除 选择的 other数据
+        OtherDate = new OtherSaveDate();
+        GameSaveDate.GetInstance().SaveOtherDateByURLName(OtherDate);
     }
 
     
@@ -200,7 +269,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     public Vector2 GetPlayerInScreenPosition()
     {
-        //print("doorName    "+ doorName);
+        print("doorName    "+ doorName);
         if (doorName != "")
         {
             GameObject door = GlobalTools.FindObjByName(doorName);
@@ -306,7 +375,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (player == null) return;
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         CurrentUserDate.curLive = player.GetComponent<RoleDate>().live.ToString();
-        //print("CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@CurrentUserDate.curLive存档时血量    "+CurrentUserDate.curLive);
         CurrentUserDate.curLan = player.GetComponent<RoleDate>().lan.ToString();
         //CurrentUserDate.screenName = SceneManager.GetActiveScene().name;
         CurrentUserDate.screenName = GlobalDateControl.GetCGKName();
@@ -333,7 +402,7 @@ public class GlobalSetDate : MonoBehaviour {
         if(GlobalTools.FindObjByName("PlayerUI(Clone)/xueping")!=null) CurrentUserDate.xp_nums = GlobalTools.FindObjByName("PlayerUI(Clone)/xueping").GetComponent<XuePingBox>().GetXPNums();
         CurrentUserDate.userName = "myGame";
         CurrentUserDate.onlyId = 2;
-
+        ScreenChangeDateRecord();
 
         //print(CurrentUserDate.curLan);
         //print(CurrentUserDate.screenName);
@@ -356,10 +425,12 @@ public class GlobalSetDate : MonoBehaviour {
     {
         RoleDate _roleDate = GlobalTools.FindObjByName("player").GetComponent<RoleDate>();
         screenChangeDate = "cLive=" +_roleDate.live+","+"cL="+_roleDate.lan+",cYingzhi="+_roleDate.yingzhi+",cFangyu="+_roleDate.def;
+        print("  角色转场前 存储的 角色状态信息  》》》》》》   "+ screenChangeDate);
     }
 
     public void GetScreenChangeDate()
     {
+        print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
         //GlobalTools.FindObjByName("player")
         if (screenChangeDate == null) return;
         string[] roleDateArr = screenChangeDate.Split(',');
@@ -371,7 +442,7 @@ public class GlobalSetDate : MonoBehaviour {
             if(_date.Split('=')[0] == "cYingzhi") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().yingzhi = float.Parse(_date.Split('=')[1]);
             if (_date.Split('=')[0] == "cFangyu") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().def = float.Parse(_date.Split('=')[1]);
         }
-        screenChangeDate = null;
+        //screenChangeDate = null;
     }
 
     

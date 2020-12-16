@@ -48,6 +48,8 @@ public class Mianban1 : MonoBehaviour {
     //被选中的物品
     RectTransform beChoseWP = null;
     void Start() {
+        print("************************************************************************************************************************************************************************************");
+        print("************************************************************************************************************************************************************************************");
         //装备徽章格子+技能徽章格子
         RectTransform[] HZzbz = { gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
         HZzhuangbeizu.AddRange(HZzbz);
@@ -75,6 +77,9 @@ public class Mianban1 : MonoBehaviour {
         GetHZInformation();
         if (HZ_information != null) HZ_information.text = "哈哈哈哈哈 \n 我去";
 
+        print("  ------------------------------------------------------>面板1    "+ HZSaveDate());
+        //发送 事件重新 写角色数据
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.PLAYER_ZT), this.gameObject);
     }
 
     private void OnDestroy()
@@ -90,7 +95,8 @@ public class Mianban1 : MonoBehaviour {
 
     void GetInit()
     {
-        //if (Globals.isDebug) print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
+        if (Globals.isDebug) print("徽章栏初始化   2019-4-16  这个print没写 这里居然不执行  写了后就开始执行了。。。。 （我都开始怀疑世界的真实性了）  。。。。。极思细恐 ");
+        
         //初始化 获取 角色背包加成属性数据
         List<RectTransform> HZs = GetInHZListHZ();
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, HZs), this);
@@ -117,12 +123,12 @@ public class Mianban1 : MonoBehaviour {
    //将背包数据 物品放入背包格子
     void GetInHZ()
     {
-        //print("  将背包数据 物品放入背包格子   "+ hzIdList.Count);
+        print("  将背包数据 物品放入背包格子   "+ hzIdList.Count);
         for(var i = 0; i < hzIdList.Count; i++)
         {
             if (hzIdList[i] != "")
             {
-                //print("??  "+i+"  --   "+ hzIdList[i]);
+                print("??  "+i+"  --   "+ hzIdList[i]);
                 string hzName = hzIdList[i].Split('_')[0];
                 int geziNum = int.Parse(hzIdList[i].Split('_')[1]);
                 GetObjByNameInGezi(hzName, geziArr[geziNum]);
@@ -145,6 +151,7 @@ public class Mianban1 : MonoBehaviour {
 
     void GetObjByNameInGezi(string ObjName, RectTransform gz)
     {
+        print("###ObjName   "+ ObjName);
         //GameObject obj = Resources.Load(ObjName) as GameObject;
         //obj = Instantiate(obj);
         GameObject obj = GlobalTools.GetGameObjectByName(ObjName);
@@ -281,7 +288,7 @@ public class Mianban1 : MonoBehaviour {
         
         //GlobalSetDate.instance.CurrentMapMsgDate.bagDate = saveDateStr;
         //GlobalDateControl.SaveMapDate();
-        //if (Globals.isDebug) print("保存 徽章信息---saveDateStr  " + GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
+        if (Globals.isDebug) print("保存 徽章信息---saveDateStr  " + GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
         return saveDateStr;
     }
 
@@ -291,10 +298,10 @@ public class Mianban1 : MonoBehaviour {
     {
         //print("  获取徽章》>  ");
         if (GlobalSetDate.instance.CurrentMapMsgDate == null) return;
-        //print("  游戏 开始 获取 背包 徽章数据！   "+ GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
-        //print("  游戏 开始 获取 背包 徽章数据！CurrentUserDate  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
+        print("  游戏 开始 获取 背包 徽章数据！   "+ GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
+        print("  游戏 开始 获取 背包 徽章数据！CurrentUserDate  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
         string tempDateStr = GlobalSetDate.instance.CurrentMapMsgDate.bagDate;// "huizhang1_0-huizhang2_2";
-        //print("tempDateStr>     " + tempDateStr);
+        print("tempDateStr>     " + tempDateStr);
         getDateStrArr = tempDateStr.Split('-');
         hzIdList.AddRange(getDateStrArr);
         //hzIdList.Add(getDateStrArr);
@@ -414,6 +421,7 @@ public class Mianban1 : MonoBehaviour {
     void ShowPlayerInformation(UEvent e = null)
     {
         Player_information.text = GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().GetPlayerMsg();
+        print(" 调用了 背包数据 是什么   "+ Player_information.text);
     }
 
 

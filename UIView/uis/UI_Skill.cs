@@ -193,7 +193,7 @@ public class UI_Skill : MonoBehaviour {
             GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date = TiHuanStringInStr(_hzDate.HZName, GetSkillDate(), GlobalSetDate.instance.CurrentMapMsgDate.skill_use_date);
         }
 
-        //print(" 存入徽章的使用数据 后的 总date数据   "+ globalSkillUseDate);
+        print(" 存入徽章的使用数据 后的 总date数据   "+ globalSkillUseDate);
 
     }
 

@@ -28,6 +28,7 @@ public class HitKuai : MonoBehaviour {
     
 
     GameObject atkObj;
+    RoleDate atkObjRoleDate;
 
     RoleDate BeHitRoleDate;
     GameBody BeHitGameBody;
@@ -156,8 +157,9 @@ public class HitKuai : MonoBehaviour {
         if (this.txObj == null) this.txObj = this.transform.parent.gameObject;
         //if(roleDate) print("-------------------------------------------------------------this.txObj    " + this.txObj+"       "+this.transform.name+ "   this.teamNum  " + this.teamNum+ "  roleDate.team "+ roleDate.team);
         atkObj = txObj.GetComponent<JN_base>().atkObj;
-        //if (atkObj.GetComponent<RoleDate>().isDie) return;
-        //if (atkObj == null) return;
+        if (atkObj) atkObjRoleDate = atkObj.GetComponent<RoleDate>();
+         //if (atkObj.GetComponent<RoleDate>().isDie) return;
+         //if (atkObj == null) return;
         _atkRigidbody2D = atkObj.GetComponent<Rigidbody2D>();
         //print(atkObj.name);
         txPos = -1.2f;
@@ -646,7 +648,7 @@ public class HitKuai : MonoBehaviour {
         obj.GetComponent<Rigidbody2D>().velocity = new Vector2(0, v3.y);
     }
 
-  
+    bool IsBaoji = false;
 
     public void GetBeHit(JN_Date jn_date, float sx)
     {
@@ -657,7 +659,12 @@ public class HitKuai : MonoBehaviour {
         float addxue = jn_date.atkPower - BeHitRoleDate.def;
         if (atkObj.GetComponent<RoleDate>())
         {
-            addxue = atkObj.GetComponent<RoleDate>().atk + jn_date.atkPower - BeHitRoleDate.def;
+            float _atkPower = atkObj.GetComponent<RoleDate>().atk + jn_date.atkPower;
+            if (atkObjRoleDate && atkObjRoleDate.BaoJiLv != 0 && GlobalTools.GetRandomNum() <= atkObjRoleDate.BaoJiLv) {
+                _atkPower *= atkObjRoleDate.BaoJiShangHaiBeiLv;
+                IsBaoji = true;
+            } 
+            addxue = _atkPower - BeHitRoleDate.def;
         }
         addxue = addxue > 0 ? addxue : 1;
         //计算伤害减免比率
@@ -672,7 +679,7 @@ public class HitKuai : MonoBehaviour {
         }
 
         string tx_1 = BeHitGameBody.GetComponent<RoleDate>().BeHitTX_1;
-        if (tx_1 != "")
+        if (!IsBaoji&&tx_1 != "")
         {
             GameObject hitTx_1 = Resources.Load(tx_1) as GameObject;
             hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
@@ -703,6 +710,15 @@ public class HitKuai : MonoBehaviour {
         
         HitTX(_psScaleX, "BloodSplatCritical3", "",2,false,false,-txPos);
         if(jn_date.HitInSpecialEffectsType != 3)HitTX(_psScaleX,"jizhong", BeHitRoleDate.beHitVudio,4,true,true);
+
+
+        if (IsBaoji)
+        {
+            IsBaoji = false;
+            GameObject hitTx_1 = Resources.Load("TX_hitGuangquanBJ") as GameObject;
+            hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
+            HitTXPos(hitTx_1);
+        }
     }
 
 

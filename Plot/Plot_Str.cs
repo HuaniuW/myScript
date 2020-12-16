@@ -8,6 +8,7 @@ public class Plot_Str : MonoBehaviour
     void Start()
     {
         IsHasOverAndNeedDel();
+        CheckNeedGetCiPlot();
     }
 
     [Header("是否在对话完成后 删除自己")]
@@ -26,6 +27,18 @@ public class Plot_Str : MonoBehaviour
         if (IsPlotHasPlayed() && IsOverMoveSelf) OverDelSelf();
     }
 
+
+    //怎么 移除 自己    有的是 在第一次谈话就移除  有的是 在选择后 出现是否移除
+    [Header("在对话结束 是否需要移除 自身")]
+    public bool IsOverNeedRemoveSelf = true;
+
+    [Header("备用 对话内容")]
+    public string TalkMsg2 = "";
+    //根据上次对话记录 来获取 第二次对话内容
+
+
+
+
     [Header("出现物品的 位置")]
     public Transform OutObjPos;
 
@@ -38,16 +51,18 @@ public class Plot_Str : MonoBehaviour
     void OverOutObj()
     {
         if (!OutObjPos) return;
-        if (!IsOverOutObj || OverOutObjName == "") return;
-
-        //显示 闪光之类的
-        GameObject shanguang = GlobalTools.GetGameObjectByName("TX_HZchuxianXingXing");
-        shanguang.transform.position = OutObjPos.position;
-        shanguang.transform.parent = this.transform.parent.parent;
+        if (!IsOverOutObj || OverOutObjName == "") {
+            //显示 闪光之类的
+            GameObject shanguang = GlobalTools.GetGameObjectByName("TX_HZchuxianXingXing");
+            shanguang.transform.position = OutObjPos.position;
+            shanguang.transform.parent = this.transform.parent.parent;
+            return;
+        }
         //播声音
 
-
+        print("OverOutObjName     "+ OverOutObjName);
         GameObject outObj = GlobalTools.GetGameObjectByName(OverOutObjName);
+        if (outObj == null) return;
         outObj.transform.position = OutObjPos.position;
         print("   ------obj "+outObj.name);
         outObj.transform.parent = this.transform.parent.parent;
@@ -78,16 +93,44 @@ public class Plot_Str : MonoBehaviour
     [Header("是否 在谈话结束 自动记录")]
     public bool IsNeedRecordByOver = true;
     //string plotStr = "acType:talk-talkObjName:B_dlws-msg:我等你好久了，要现在就和我战斗吗？-choseType:dan-id:1-nextId:2|" +
-    //    "acType:talk-talkObjName:player-msg:来吧！#4^event$test@不要，不想做无谓的战斗。#3-choseType:duo-id:2-nextId:3|" +
+    //    "acType:talk-talkObjName:player-msg:来吧！#4^event$test@不想做无谓的战斗。#3-choseType:duo-id:2-nextId:3|" +
     //    "acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$over-choseType:dan-id:3-nextId:6|" +
     //    "acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight-choseType:dan-id:4-nextId:5";
 
 
-    string plotStr = "acType:talk-talkObjName:B_dlws-msg:你就是来渡我们的使者吧。-choseType:dan-id:1-nextId:2|" +
-        "acType:talk-talkObjName:player-msg:。。。。。。！-choseType:dan-id:2-nextId:3|" +
-      "acType:talk-talkObjName:B_dlws-msg:我发现很多人就算到了这里也依然没有勇气面对他们想去面对的人！你也有不敢面对的人吗！-choseType:dan-id:3-nextId:4|" +
-      "acType:talk-talkObjName:player-msg:世间残酷，悄无声息！-choseType:dan-id:4-nextId:5|"+
-    "acType:talk-talkObjName:B_dlws-msg:。。。。。。！^event$over-choseType:dan-id:5-nextId:6|";
+    //string plotStr = "acType:talk-talkObjName:B_dlws-msg:你就是来渡我们的使者吧。-choseType:dan-id:1-nextId:2|" +
+    //    "acType:talk-talkObjName:player-msg:。。。。。。！-choseType:dan-id:2-nextId:3|" +
+    //  "acType:talk-talkObjName:B_dlws-msg:我发现很多人就算到了这里也依然没有勇气面对他们想去面对的人！你也有不敢面对的人吗！-choseType:dan-id:3-nextId:4|" +
+    //  "acType:talk-talkObjName:player-msg:世间残酷，悄无声息！-choseType:dan-id:4-nextId:5|"+
+    //"acType:talk-talkObjName:B_dlws-msg:。。。。。。！^event$over-choseType:dan-id:5-nextId:6|";
+
+
+    string plotStr = "acType:talk-talkObjName:B_dlws-msg:只有意志坚定的人才能使用我的力量，你觉得你的意志坚定吗？-choseType:dan-id:1-nextId:2|" +
+        "acType:talk-talkObjName:player-msg:当然！#4@我讨厌费神的坚定。#3-choseType:duo-id:2-nextId:3|" +
+        "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
+        "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
+        "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
+        "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
+
+
+
+    public string CheckOtherStr = "0";
+
+    void CheckNeedGetCiPlot()
+    {
+        string value = GlobalSetDate.instance.GetOtherDateValueByKey(CheckOtherStr);
+        if (value == "1")
+        {
+            plotStr = ci2PlotStr1;
+        }
+    }
+
+
+    string ci2PlotStr1 = "acType:talk-talkObjName:B_dlws-msg:你好，探索的怎么样？-choseType:dan-id:1-nextId:2|" +
+        "acType:talk-talkObjName:player-msg:没事#9@我不是一个坚定的人#3^event$jianding*0-choseType:duo-id:2-nextId:3|" +
+        "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6";
+
+
 
 
     private void OnEnable()
@@ -111,11 +154,37 @@ public class Plot_Str : MonoBehaviour
     }
 
 
+    
+
     string ChoseEventStr = "";
     void GetChoseEvent(UEvent e)
     {
         ChoseEventStr = e.eventParams.ToString();
-        //print(" ------ choseEventName    "+e.eventParams.ToString());
+        print(" ------ choseEventName    "+e.eventParams.ToString());
+        //记录关卡 剧情 记录的 事件
+        if (ChoseEventStr.Split('*')[0] == "jianding")
+        {
+            if(ChoseEventStr.Split('*')[1] == "1")
+            {
+                //二次不会碰撞 不能消失
+                IsOverMoveSelf = false;
+                IsCanBeHit = false;
+                IsNeedRecordByOver = false;
+                //选择的 是坚定
+                //存入全局数据 是坚定  无法显示 跳跃关卡 存档点
+
+                
+                print("选择的 是 坚定！！！！！！");
+            }
+            else
+            {
+                //选择的是 不坚定  现在 谈话结束后 可以消失
+                print("选择的是 不 坚定！！");
+            }
+            GlobalSetDate.instance.SaveInOtherDate(ChoseEventStr);
+        }
+
+
     }
 
 
@@ -328,42 +397,73 @@ public class Plot_Str : MonoBehaviour
         HuanYuanCamera();
         if (_cBar) _cBar.GetComponent<UI_talkBar>().RemoveSelf();
 
+
+        if (!IsOverMoveSelf) {
+            StartCoroutine(SetPlotFalse(0.4f,true));
+            return;
+        }
+        
+
+
         StartCoroutine(SetPlotFalse(0.4f));
     }
 
-    public IEnumerator SetPlotFalse(float time)
+
+  
+
+
+
+
+    public IEnumerator SetPlotFalse(float time,bool IsDontRemoveSelf = false)
     {
         print("yanchijin ru duihua  jieshu  de !!");
         //Debug.Log("time   "+time);
         //yield return new WaitForFixedUpdate();
         yield return new WaitForSeconds(time);
-        Globals.isInPlot = false;
 
-
-        print("    ??????? ");
-        OverOutObj();
-        print("是否有 CHOSE_EVENT 事件 "+ ChoseEventStr);
-        if (ChoseEventStr == "over")
+        if (IsDontRemoveSelf)
         {
-            //存档 数据 存入哪些东西
-            PlotOverSave();
+            print("---------------------------------------------------------->>>>>>>不能够移除自身 ");
+            Globals.isInPlot = false;
+            IsCanBeHit = false;
+        }
+        else
+        {
+            Globals.isInPlot = false;
+            print("    ??????? ");
+            OverOutObj();
+            print("是否有 CHOSE_EVENT 事件 " + ChoseEventStr);
+            if (ChoseEventStr == "over")
+            {
+                //存档 数据 存入哪些东西
+                PlotOverSave();
+            }
+
+            IsCanBeHit = false;
+
+            if (IsOverMoveSelf)
+            {
+                OverDelSelf();
+            }
         }
 
-        IsCanBeHit = false;
 
-        if (IsOverMoveSelf)
-        {
-            OverDelSelf();
-        }
+       
 
         //Destroy(this.gameObject);
-
     }
+
+
+
+
 
     [Header("对话结束 需要存入的数组吧")]
     public string[] OverCunRuShuJuArr;
     void PlotOverSave()
     {
+
+        print("对话 存档是否 被调用 ！！！！！！！！！！！！");
+
         for (int i = 0;i< OverCunRuShuJuArr.Length;i++)
         {
             GlobalDateControl.SetMsgInCurrentGKDateAndSetInZGKDate(OverCunRuShuJuArr[i]);
@@ -392,6 +492,7 @@ public class Plot_Str : MonoBehaviour
 
     void KillPlayerOver(UEvent e)
     {
+        print("  KillPlayerOver 这里进来了吗？？？？？？？？   ");
         PlotOverSave();
     }
 

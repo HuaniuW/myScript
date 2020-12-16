@@ -11,12 +11,36 @@ public class Cundangdian : MonoBehaviour {
         {
             huixuetexiao.Stop();
         }
+        GetOtherCheckRemoveSelf();
     }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+
+
+    public string RemoveSelfOtherCheckStr = "";
+    
+    void GetOtherCheckRemoveSelf()
+    {
+        //print(" 存档点 自我检测---------------***************：  "+ RemoveSelfOtherCheckStr);
+        if (RemoveSelfOtherCheckStr == "") return;
+        string value = GlobalSetDate.instance.GetOtherDateValueByKey(RemoveSelfOtherCheckStr);
+        //print("  value值是多少？  "+ value);
+        if (value == "1")
+        {
+            
+            RemoveSelf();
+        }
+    }
+
+    void RemoveSelf()
+    {
+        DestroyImmediate(this.gameObject, true);
+    }
+
 
     void OnTriggerEnter2D(Collider2D Coll)
     {

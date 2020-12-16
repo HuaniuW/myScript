@@ -29,6 +29,14 @@ public class RoleDate : MonoBehaviour {
     [Header("伤害减免率")]
     public float shanghaijianmianLv = 0;
 
+
+    [Header("暴击率")]
+    public float BaoJiLv = 0;
+
+    [Header("暴击倍率")]
+    public float BaoJiShangHaiBeiLv = 0;
+
+
     public virtual float lan
     {
         get

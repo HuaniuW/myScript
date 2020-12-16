@@ -545,10 +545,10 @@ public class GetReMap2 : GetReMap
         //如果是左右地图 但是 是跳跃型 也不能关门 后面要做判断
 
 
-        print("g怪兽数组   "+GuaiList.Count);
+        //print("g怪兽数组   "+GuaiList.Count);
         foreach(GameObject guai in GuaiList)
         {
-            print("  怪物的 类型是什么  " + guai.GetComponent<RoleDate>().enemyType);
+            //print("  怪物的 类型是什么  " + guai.GetComponent<RoleDate>().enemyType);
             string guaiType = guai.GetComponent<RoleDate>().enemyType;
             if (guaiType == "jingying"||guaiType == "boss")
             {

@@ -116,8 +116,18 @@ public class EventTypeName
 
     //切换跑步动作
     public const string CHANGE_RUN_AC = "change_run_ac";
+    public const string CHANGE_RUN_AC_2 = "change_run_ac_2";
 
     //全部die 开门 检测  
     public const string ALLDIE_OPEN_DOOR = "alldie_open_door";
+
+
+
+    //角色状态
+    public const string PLAYER_ZT = "player_zt";
+
+
+
+   
 
 }

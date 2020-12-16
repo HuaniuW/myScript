@@ -50,6 +50,8 @@ public class GameSaveDate{
 
     }
 
+    //************************************ 地图数据的 存储 ******************************************************************************
+    //记录生成地图 地形 等数据
     public void SaveMapDateByURLName(MapSaveDate date,string URL = "MAPDATE")
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;
@@ -79,10 +81,66 @@ public class GameSaveDate{
         return null;
     }
 
+    //******************************************************************************************************************
 
 
 
 
+
+
+
+
+
+
+
+    //************************************ 选择数据 other 存储 ******************************************************************************
+    //记录 剧情 选择 改变的 数据   这数据可以改变游戏方向
+    public void SaveOtherDateByURLName(OtherSaveDate date, string URL = "OTHER")
+    {
+        string _fileURL2 = Application.persistentDataPath + "/" + URL;
+        //if (Globals.isDebug) Debug.Log("_fileURL2> "+ _fileURL2);
+        string s = SerializeObject(date, typeof(OtherSaveDate));
+        //创建XML文件且写入数据
+        CreateTextFile(_fileURL2, s, false);
+    }
+
+
+
+    public OtherSaveDate GetOtherSaveDateByName(string cGKDateName = "OTHER")
+    {
+        // _fileName = Application.persistentDataPath + "/" + _fileName;
+        string str = Application.persistentDataPath + "/" + cGKDateName;
+        //if(Globals.isDebug)Debug.Log(str);
+        try
+        {
+            string strTemp = LoadTextFile(str, false);
+            //反序列化对象
+            OtherSaveDate userD = DeserializeObject(strTemp, typeof(OtherSaveDate)) as OtherSaveDate;
+            //if (Globals.isDebug) Debug.Log(userD.userName);
+            return userD;
+        }
+        catch
+        {
+            if (Globals.isDebug) Debug.Log("系统读取 地图 XML出现错误，请检查");
+        }
+        return null;
+    }
+    //******************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //************************************ 一般数据 存储 ******************************************************************************
     public void SaveDateByURLName(string URL,UserDate date)
     {
         string _fileURL2 = Application.persistentDataPath + "/" + URL;
@@ -111,6 +169,7 @@ public class GameSaveDate{
         }
         return null;
     }
+    //******************************************************************************************************************
 
     public bool IsHasSaveDateByName(string SaveDateName)
     {

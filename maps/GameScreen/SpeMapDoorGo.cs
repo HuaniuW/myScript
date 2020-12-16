@@ -36,8 +36,9 @@ public class SpeMapDoorGo : MonoBehaviour
 
         //map_r-1!0#0!r:map_r-2^u:map_r-3
         string mapMsgStr = GetMapStr();
+        if (mapMsgStr == "") return;
         string[] mapStrArr = mapMsgStr.Split('!')[2].Split('^');
-
+        
 
         //r:map_r-2
         foreach (string s in mapStrArr)

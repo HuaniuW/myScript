@@ -66,19 +66,24 @@ public class PlayerGameBody : GameBody {
 
 
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC_2, this.ChangeRunAC2);
         //PlayTXByTXName("huafang");//测试用 看看能不能播
     }
 
 
 
 
+
+
+
     /*跑步动作切换*******************************************************************************************************/
-    protected bool IsInFighting = false;
-    //记录初始的 最大X速度
-    protected float _maxSpeedXRecord = 0;
-    protected void ChangeRunAC(UEvent e)
+    protected bool IsChiXueRunAC = false;
+    protected void ChangeRunAC2(UEvent e)
     {
+        print("  进入boss战。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。 ");
+        IsChiXueRunAC = true;
         IsInFighting = true;
+        ChangeACNum(4);
         RUN = "run_5";
         FightingNums = 0;
         if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
@@ -86,10 +91,31 @@ public class PlayerGameBody : GameBody {
         maxSpeedX += 2;
     }
 
+
+
+
+
+    protected bool IsInFighting = false;
+    //记录初始的 最大X速度
+    protected float _maxSpeedXRecord = 0;
+    protected void ChangeRunAC(UEvent e)
+    {
+        if (IsChiXueRunAC) return;
+        IsInFighting = true;
+        ChangeACNum(4);
+        RUN = "run_5";
+        FightingNums = 0;
+        if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
+        maxSpeedX = _maxSpeedXRecord;
+        maxSpeedX += 2;
+
+    }
+
     float FightingNums = 0;
     float TheFightingNums = 10;
     protected void InFingting()
     {
+        if (IsChiXueRunAC) return;
         FightingNums += Time.deltaTime;
         if (FightingNums >= TheFightingNums)
         {
@@ -320,6 +346,7 @@ public class PlayerGameBody : GameBody {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_RUN_AC_2, this.ChangeRunAC2);
         DestroyImmediate(this.gameObject, true);
     }
 
@@ -332,6 +359,8 @@ public class PlayerGameBody : GameBody {
         }
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.RemoveSelf);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.SHOU_FEIDAO, this.Shoufeidao);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_RUN_AC_2, this.ChangeRunAC2);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
         //DestroyImmediate(this.gameObject, true);
     }
 
@@ -606,7 +635,7 @@ public class PlayerGameBody : GameBody {
 
 
             //判断是否在战斗状态
-            InFightAtk();
+            //InFightAtk();
 
         }
 
@@ -883,7 +912,7 @@ public class PlayerGameBody : GameBody {
         }else if (nums == 4)
         {
             STAND = "stand_2";
-            RUN = "run_3";
+            RUN = "run_5";
         }else if (nums == 5)
         {
             STAND = "stand_5";
@@ -898,8 +927,8 @@ public class PlayerGameBody : GameBody {
     void CheckIsHasAC()
     {
         if (roleDate.isBeHiting) return;
-        if (!DBBody.animation.HasAnimation(STAND)) STAND = "stand_5";
-        if (!DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
+        if (DBBody && !DBBody.animation.HasAnimation(STAND)) STAND = "stand_5";
+        if (DBBody && !DBBody.animation.HasAnimation(RUN)) RUN = "run_3";
         //STAND = "stand_5";
     }
 
@@ -915,8 +944,8 @@ public class PlayerGameBody : GameBody {
     //脱离战斗状态
     void OutFighting()
     {
+        if (IsChiXueRunAC) return;
         inFightNums++;
-        
         if (inFightNums >= 1000)
         {
             //print(inFightNums);

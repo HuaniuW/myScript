@@ -1453,9 +1453,10 @@ public class GameBody : MonoBehaviour, IRole {
     protected float _KuangDowny = -100;
     void GetKuangDownY()
     {
-        _KuangDowny = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;
+        _KuangDowny = GlobalTools.FindObjByName("kuang").transform.position.y + GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;
         IsCanOutYDie = true;
-        print(" *****************************************************************************************  "+ _KuangDowny);
+        //print(""+ GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y + " -------------------------------------------------> shendushiduoshao????     "+ GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y);
+        //print(" *****************************************************************************************  "+ _KuangDowny);
     }
 
     [Header("是否 会die 当超出 底部限制的时候")]
@@ -1467,7 +1468,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (!IsNeedDieOutDownY) return;
         if(this.transform.position.y< _KuangDowny)
         {
-            if(this.tag == "Player")print(this.transform.position.y + "  --------------------------- "+ _KuangDowny);
+            //if(this.tag == "Player")print(this.transform.position.y + "  --------------------------- "+ _KuangDowny);
             this.GetComponent<RoleDate>().live = 0;
         }
     }

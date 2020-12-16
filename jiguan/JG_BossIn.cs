@@ -99,8 +99,9 @@ public class JG_BossIn : MonoBehaviour {
     {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, ShowSelf);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_OUT, BossName), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_RUN_AC_2, ""), this);
         //if(IsChangeZByBossAndPlayerDistance) GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBossAndMaxZPos(GlobalTools.FindObjByName(BossName));
-        if(ChangeKuaiName!="kuang1"&&ChangeKuaiName!="")GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(GlobalTools.FindObjByName(ChangeKuaiName).GetComponent<BoxCollider2D>(),true);
+        if (ChangeKuaiName!="kuang1"&&ChangeKuaiName!="")GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().GetBounds(GlobalTools.FindObjByName(ChangeKuaiName).GetComponent<BoxCollider2D>(),true);
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "y"), this);
     }
 

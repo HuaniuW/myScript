@@ -133,6 +133,16 @@ public class AIBase : MonoBehaviour {
     }
     private void OnDestroy()
     {
+        //print(" ************************************************************** die  移除 侦听 ");
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
+    }
+
+    protected void OnDisable()
+    {
+        //print(" OnDisable   ************************************************************** die  移除 侦听 ");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ENEMY, GetEnemyObj);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_OUT, BossFight);

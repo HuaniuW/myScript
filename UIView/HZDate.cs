@@ -96,6 +96,12 @@ public class HZDate : MonoBehaviour {
     public float yingzhiP = 0;
     //临时增加硬直
 
+    [Header("暴击率")]
+    public float BaoJiLv = 0;
+
+    [Header("暴击伤害倍数")]
+    public float BaoJiShangHaiBeiLv = 0;
+
 
 
     void Start () {
@@ -125,7 +131,8 @@ public class HZDate : MonoBehaviour {
     string hz_defP = "防御力倍数：";
     string hz_live = "生命值：";
     string hz_liveP = "生命值：";
-
+    string hz_baojilv = "暴击率：";
+    string hz_baojishanghaibeishu = "暴击伤害倍数：";
 
 
     public string GetHZ_information_str()
@@ -181,6 +188,22 @@ public class HZDate : MonoBehaviour {
             _livePStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>"+ hz_liveP + this.liveP + "</color>\n" : "<color=#76D7C4>live P：" + this.liveP + "</color>\n";
         }
         str += _livePStr;
+
+
+        string _baojilv = "";
+        if (BaoJiLv != 0)
+        {
+            _baojilv = Globals.language == Globals.CHINESE ? "<color=#06D7C4>" + hz_baojilv + this.BaoJiLv + "</color>\n" : "<color=#76D7C4>live P：" + this.BaoJiLv + "</color>\n";
+        }
+        str += _baojilv;
+
+
+        string _baojishanghaibeishu = "";
+        if (BaoJiShangHaiBeiLv != 0)
+        {
+            _baojishanghaibeishu = Globals.language == Globals.CHINESE ? "<color=#76D704>" + hz_baojishanghaibeishu + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#76D7C4>live P：" + this.BaoJiShangHaiBeiLv + "</color>\n";
+        }
+        str += _baojishanghaibeishu;
 
 
         string _information = "";

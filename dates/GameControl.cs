@@ -106,7 +106,7 @@ public class GameControl : MonoBehaviour {
                 //print("找到的门 的位置 "+ door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().DangQianMenWeizhi);
 
 
-                //print("  创建地图时候 玩家的位置 "+ player.transform.position);
+                print("  创建地图时候 玩家的位置 "+ player.transform.position);
                 player.transform.position = door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position;
 
                 //print("玩家位置  "+ player.transform.position);
@@ -481,19 +481,22 @@ public class GameControl : MonoBehaviour {
         
         if (GlobalTools.FindObjByName("player") == null)
         {
+            print("   获取玩家信息1  没有角色 生成玩家player  ");
             player = InstancePrefabByName("player");
         }
         else
         {
+            print("   获取玩家信息2  有角色   @@@@@@@@@@@@@@@@@@ 直接调用player  ");
             player = GlobalTools.FindObjByName("player");
         }
-        
+        if (player!=null) player.GetComponent<PlayerRoleDate>().GetStart();
     }
 
     
 
     void GetPlayerStatus()
     {
+        print("玩家状态******************************************************************************************************************************》》》》》》》》       ");
         if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
        
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
@@ -516,7 +519,7 @@ public class GameControl : MonoBehaviour {
 
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             //指定当前数值
-            GlobalSetDate.instance.GetScreenChangeDate();
+            //GlobalSetDate.instance.GetScreenChangeDate();
         } else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.TEMP_SCREEN) {
             if (Globals.isDebug) print("临时 直接重场景进入的游戏");
             GlobalSetDate.instance.GetSave();
@@ -529,10 +532,14 @@ public class GameControl : MonoBehaviour {
         //玩家站立
         player.GetComponent<GameBody>().SetV0();
         //当前是什么状态 新进游戏（不管是取档 还是新游戏）
+        print("玩家的 血量 是多少    "+player.GetComponent<RoleDate>().live+"   玩家的 最大血量是多少   "+ player.GetComponent<RoleDate>().maxLive);
+        print(" 玩家的 数据CurrentUserDate   " + GlobalSetDate.instance.CurrentUserDate);
+        print(" CurrentMapMsgDate 数据     " + GlobalSetDate.instance.CurrentMapMsgDate);
+        //GlobalSetDate.instance.GetScreenChangeDate();
         //或者是 跳场景
         //玩家状态 当前气血 护甲 （比如玩家身上是什么 徽章的特效 持续事件   负面特效时间）  跳转场景的时候需要用到这些
         //玩家状态 记录玩家持续的 增益减益等等的 乱七八糟的各种状态
-        
+
 
         GlobalSetDate.instance.IsChangeScreening = false;
         //print("玩家位置   " + player.transform.position);
@@ -558,6 +565,7 @@ public class GameControl : MonoBehaviour {
     //生成UI
     void GetPlayerUI()
     {
+        print(">>>>>GetPlayerUI  ");
         GameObject playerUI;
         if (GlobalTools.FindObjByName("PlayerUI") == null)
         {
@@ -571,6 +579,8 @@ public class GameControl : MonoBehaviour {
         playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
         //GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLan);
         //playerUI.GetComponent<PlayerUI>().ui_hun.GetComponent<UI_Hun>().SetHun();
+        //print("*******************************************************************************************************************************************************徽章更新***");
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, ""), this);
     }
 
 
