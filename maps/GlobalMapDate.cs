@@ -47,7 +47,7 @@ public class GlobalMapDate : MonoBehaviour {
     //特殊生成地图 列表 （用来匹配 可以 自动生成的 特殊地图）
     public static List<string> TeShuShengchengDiTuList = new List<string>
     {
-        "o:3!cundangPingdi^1",
+        "o:3!jingying^jingyingPingdi^1^",
         "s:4!cundangPingdi^1",
         "s:2!jingying^jingyingPingdi^1^G_jydj!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",
         "s:3!boss^bossPingdi^1^name!db^1,bg^1,jyj^1,yj1^1,yj2^1,qj1^1,qj2^1,xs1^1,xs2^1",

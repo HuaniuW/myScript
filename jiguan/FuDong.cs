@@ -68,10 +68,76 @@ public class FuDong : MonoBehaviour
                 MoveSpeedZ *= -1;
             }
         }
-       
+
+        float moveX = this.transform.position.x + MoveSpeedX;
+        float moveY = this.transform.position.y + MoveSpeedY;
+
+        this.transform.position = new Vector3(moveX, moveY, this.transform.position.z + MoveSpeedZ);
+
+        if (!IsCanHitPlayer) return;
+        var cubeF = GameObject.Find("/MainCamera");
+        foreach (Transform t in objList)
+        {
+            //print(t.tag);
+            if (t.tag == "Player")
+            {
+                
+                //print("cccc   "+cubeF);
+                if (cubeF.GetComponent<CameraController>().IsOutY)
+                {
+                    //print("hiiiiiii");
+                    //cubeF.GetComponent<CameraController>().IsOutY2 = true;
+                    float cmy = cubeF.transform.position.y + MoveSpeedY;
+                    float cmx = cubeF.transform.position.x + MoveSpeedX;
+                    cubeF.transform.position = new Vector3(cmx, cmy, cubeF.transform.position.z);
+                }
+                else
+                {
+                    //cubeF.GetComponent<CameraController>().IsOutY2 = false;
+                }
+
+            }
+            float cy = t.transform.position.y + MoveSpeedY;
+            float cx = t.transform.position.x + MoveSpeedX;
+            t.transform.position = new Vector3(cx, cy, t.transform.position.z);
+        }
 
 
-        this.transform.position = new Vector3(this.transform.position.x+MoveSpeedX, this.transform.position.y + MoveSpeedY, this.transform.position.z + MoveSpeedZ);
+    }
+
+
+
+
+
+
+    public bool IsCanHitPlayer = false;
+
+    Transform[] tarr = { };
+    List<Transform> objList = new List<Transform>();
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!IsCanHitPlayer) return;
+        //print("Trigger - A");
+        //obj2 = collision.collider.transform;
+        if (!objList.Contains(collision.collider.transform)) objList.Add(collision.collider.transform);
+
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (!IsCanHitPlayer) return;
+        //print("Trigger - B");
+        if (objList.Contains(collision.collider.transform)) objList.Remove(collision.collider.transform);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        //print("Trigger - C  " + collision.collider.name);
+        //float my = collision.collider.transform.position.x + mspeed;
+        //collision.collider.transform.position = new Vector3(my, collision.collider.transform.position.y, collision.collider.transform.position.z);
+        //collision.collider.transform.position = new Vector3(collision.collider.transform.position.x, my, collision.collider.transform.position.z);
+
     }
 
 }

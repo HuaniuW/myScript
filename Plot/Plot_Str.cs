@@ -74,7 +74,7 @@ public class Plot_Str : MonoBehaviour
     [Header("剧情id")]
     public string TalkID = "talk01";
 
-    [Header("对话框弹出点")]
+    [Header("对话框弹出 位置 点")]
     public GameObject TalkPosObj;
 
     [Header("CameraZ Z 移动位置")]
@@ -106,7 +106,7 @@ public class Plot_Str : MonoBehaviour
 
 
     string plotStr = "acType:talk-talkObjName:B_dlws-msg:只有意志坚定的人才能使用我的力量，你觉得你的意志坚定吗？-choseType:dan-id:1-nextId:2|" +
-        "acType:talk-talkObjName:player-msg:当然！#4@我讨厌费神的坚定。#3-choseType:duo-id:2-nextId:3|" +
+        "acType:talk-talkObjName:player-msg:当然！#4@我不喜欢费神。#3-choseType:duo-id:2-nextId:3|" +
         "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
         "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
         "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +

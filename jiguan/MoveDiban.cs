@@ -26,6 +26,7 @@ public class MoveDiban : MonoBehaviour {
     // Use this for initialization
     void Start () {
         if (!IsFristUpOrLeft) mspeed *= -1;
+        lastSpeedm = mspeed;
 
     }
 
@@ -34,10 +35,7 @@ public class MoveDiban : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (stopTime > 0) {
-            stopTime--;
-            return;
-        }
+        if (!IsStopOver()) return;
         if (!diban) return;
         if (!IsMoveY)
         {
@@ -48,16 +46,39 @@ public class MoveDiban : MonoBehaviour {
 
     }
 
+    bool IsGetTop = false;
+    //停顿计时
+    float stopTiming = 0;
+    bool IsStopOver()
+    {
+        if (stopTime == 0) return true;
+        if (IsGetTop)
+        {
+            stopTiming += Time.deltaTime;
+            //print(" stopTiming  "+ stopTiming);
+            if(stopTiming>= stopTime)
+            {
+                IsGetTop = false;
+                stopTiming = 0;
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    float lastSpeedm = 1;
     private void MoveY()
     {
         float moveY = diban.transform.position.y + mspeed;
         diban.transform.position = new Vector3(diban.transform.position.x, moveY, diban.transform.position.z);
+        var cubeF = GameObject.Find("/MainCamera");
         foreach (Transform t in objList)
         {
             //print(t.tag);
             if(t.tag == "Player")
             {
-                var cubeF = GameObject.Find("/MainCamera");
+                
                 //print("cccc   "+cubeF);
                 if (cubeF.GetComponent<CameraController>().IsOutY)
                 {
@@ -76,7 +97,15 @@ public class MoveDiban : MonoBehaviour {
             t.transform.position = new Vector3(t.transform.position.x,cy, t.transform.position.z);
         }
 
-        if (diban.transform.position.y >= d1.position.y || diban.transform.position.y <= d2.position.y) mspeed *= -1;
+        if (diban.transform.position.y >= d1.position.y || diban.transform.position.y <= d2.position.y) {
+            mspeed *= -1;
+            if(lastSpeedm!= mspeed)
+            {
+                IsGetTop = true;
+            }
+            lastSpeedm = mspeed;
+        }
+        
     }
 
     private void MoveX()
@@ -90,8 +119,16 @@ public class MoveDiban : MonoBehaviour {
          }
 
         //print(objList.Count);
+
+        if (diban.transform.position.x <= d1.position.x || diban.transform.position.x >= d2.position.x) {
+            mspeed *= -1;
+            if (lastSpeedm != mspeed)
+            {
+                IsGetTop = true;
+            }
+            lastSpeedm = mspeed;
+        }
        
-        if (diban.transform.position.x <= d1.position.x || diban.transform.position.x >= d2.position.x) mspeed *= -1;
     }
 
     //Transform obj2;

@@ -157,7 +157,7 @@ public class JG_Door2 : MonoBehaviour
         //判断是否有怪物  没有的话 就不关门
 
         //多个怪的时候 怎么处理？  只要有精英怪就关门 那么 每个小关卡 都有可能 随机出精英怪？
-        print("  ///////////////////我碰到关门机关了  IsCanCloseDoorMap  "+ IsCanCloseDoorMap);
+        //print("  ///////////////////我碰到关门机关了  IsCanCloseDoorMap  "+ IsCanCloseDoorMap);
         if (!IsCanCloseDoorMap) return;
         if (IsStopHitJG) return;
 

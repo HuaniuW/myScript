@@ -286,20 +286,30 @@ public class GetReMap2 : GetReMap
 
 
             int rnums = GlobalTools.GetRandomNum();
+
+            if (Globals.mapTypeNums == 1)
+            {
+                rnums = 90;
+            }
+
             _JYGuaiName = "";
             if (rnums < 1)
             {
+                //跳跃
                 _dixingType = GlobalMapDate.TIAOYUE;
             }
             else if (rnums < 2)
             {
+                //洞内  
                 _dixingType = GlobalMapDate.DONGNEI;
             }else if (rnums < 80)
             {
+                //多怪 精英 平地
                 _dixingType = GlobalMapDate.DUOGUAI_JINGYING_PINGDI;
             }
             else
             {
+                //一般
                 _dixingType = GlobalMapDate.YIBAN;
             }
 
@@ -1235,6 +1245,15 @@ public class GetReMap2 : GetReMap
             PuTongPingDiDX(i, FX, false);
             return;
         }
+
+
+
+        if (Globals.mapType=="1")
+        {
+            //如果是第一关 在自动地图里面 都是 上下交错的 没有平地
+            ReNums = 50 + GlobalTools.GetRandomNum(50);
+        }
+
 
 
         if (ReNums < 30)

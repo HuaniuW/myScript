@@ -125,7 +125,9 @@ public class GameControl : MonoBehaviour {
         //print("------》  "+player.transform.localScale);
 
         //print("朝向--> "+ GetFanFX(GlobalSetDate.instance.DanqianMenweizhi));
-        if (GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "l" || GetFanFX(GlobalSetDate.instance.DanqianMenweizhi) == "d")
+        //string whatYouWanted = str.Substring(0, 1);
+        string chaoxiang = GetFanFX(GlobalSetDate.instance.DanqianMenweizhi).Substring(0,1);
+        if (chaoxiang == "l" || chaoxiang == "d")
         {
             //print(" 右转！！！！ ");
 
@@ -142,18 +144,27 @@ public class GameControl : MonoBehaviour {
     }
 
     public string GetFanFX(string fx) {
-        if(fx == "l")
+        if (fx == "l")
         {
             fx = "r";
-        }else if(fx == "r")
+        }
+        else if (fx == "r")
         {
             fx = "l";
-        }else if (fx == "u")
+        }
+        else if (fx == "u")
         {
             fx = "d";
-        }else if (fx == "d")
+        }
+        else if (fx == "d")
         {
             fx = "u";
+        }
+        else if (fx == "r2") {
+            fx = "l2";
+        }else if (fx == "l2")
+        {
+            fx = "r2";
         }
         return fx;
     }

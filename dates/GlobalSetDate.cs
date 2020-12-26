@@ -273,6 +273,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (doorName != "")
         {
             GameObject door = GlobalTools.FindObjByName(doorName);
+            print(" ----------->>>   "+door.name);
             playerInScreenPosition = door.transform.position;
             if (door.transform.localRotation.z < 0)
             {
