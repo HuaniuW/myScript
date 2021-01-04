@@ -14,7 +14,7 @@ public class GameBody : MonoBehaviour, IRole {
     const string HORIZONTAL = "Horizontal";
 
     [Header("水平推力")]
-    [Range(0, 150)]//数值滑杆 限定最大最小值
+    [Range(0, 550)]//数值滑杆 限定最大最小值
     public float xForce;
 
     //目前垂直速度

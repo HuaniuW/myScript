@@ -31,7 +31,7 @@ public class MapNames : MonoBehaviour
 
     public string GetGKKey()
     {
-        return "1";
+        return Globals.mapTypeNums.ToString();
     }
 
     // 通过关卡 标记 获取 元素数组名 
@@ -47,7 +47,7 @@ public class MapNames : MonoBehaviour
 
     public Color GetColorByGKKey()
     {
-        Color _color = new Color(0.1f, 1f, 1f, 0.3f); //Color.cyan;
+        Color _color = GlobalTools.RandomColor();//new Color(0.1f, 1f, 1f, 0.3f); //Color.cyan;
         return _color;
     }
 
@@ -129,13 +129,29 @@ public class MapNames : MonoBehaviour
 
     public List<string> liziWu2_1 = new List<string> { "lizi_wu3" };
 
-    public List<string> xiaoGuai_2 = new List<string> { "G_dcrj1" };
-   
+
+
+
+
+
+    
     public List<string> jingYingGuai_1 = new List<string> { "G_bmws" };
-
-
     public List<string> xiaoGuai_1 = new List<string> { "G_dcr2","G_ciwei" };
     public List<string> kongZhongXiaoGuai_1 = new List<string> { "G_huiciyu4" ,"G_xemL"};
+
+    //跳跃地板
+    public List<string> tiaoyuediban_1 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };
+    //移动的地板
+    public List<string> mdiban_1 = new List<string> { "mdiban_1_1", "mdiban_1_2" };
+
+
+    public List<string> tiaoyueDB_1 = new List<string> { "db_ty_1" };
+
+    public List<string> tiaoyueDBD_1 = new List<string> { "db_tyd_1", "db_tyd_2", "db_tyd_3", "db_tyd_4" };
+
+    public List<string> tiaoyuepingdiDB_1 = new List<string> { "db_ty_1", "db_pd_1", "db_pd_2" };
+
+
 
 
 
@@ -144,6 +160,10 @@ public class MapNames : MonoBehaviour
     public List<string> JingYingGuai_1 = new List<string> { "G_jydj" };
     //一般可以随机的 精英怪
     public List<string> YiBanJingYingGuai_1 = new List<string> { "G_zjjyft" };
+
+
+
+
     public string GetCanRandomUSEJYGName(string listName)
     {
         string _listName = listName + "_" + Globals.mapTypeNums;
@@ -153,6 +173,116 @@ public class MapNames : MonoBehaviour
         //print("   list "+list.Count);
         return list[GlobalTools.GetRandomNum(list.Count)];
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //-------------------------------------------------水面关卡----------------------------------------------------------------------------------------------------------------------------
+
+    //******************************地板******************************
+    //连接点 地图
+    public List<string> lr_2 = new List<string> { "lr_pd_2" };
+    //地板
+    //public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd3_2", "db_pd2_2", "db_pd4_2", "db_pd5_2" };
+    public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd6_2"};
+    public List<string> tiaoyue_2 = new List<string> { "db_ty_1" };
+    //跳跃地板
+    public List<string> tiaoyuediban_2 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };
+    //移动的地板
+    public List<string> mdiban_2 = new List<string> { "mdiban_1_1", "mdiban_1_2" };
+
+
+    public List<string> tiaoyueDB_2 = new List<string> { "db_ty_1" };
+
+    public List<string> tiaoyueDBD_2 = new List<string> { "db_tyd2_1", "db_tyd2_2", "db_tyd2_3", "db_tyd2_4" };
+
+    public List<string> tiaoyuepingdiDB_2 = new List<string> { "db_ty_1", "db_pd_1", "db_pd_2" };
+
+    //******************************景部分******************************
+    //门 下方的近景
+    public List<string> men_jjd_2 = new List<string> { "jjd_1_1", "jjd_1_2" };
+    //门 上方的近景 
+    public List<string> men_jju_2 = new List<string> { "jju_1_1", "jju_1_2", "jju_1_3", "jju_1_4" };
+    //门 下方的 前景
+    public List<string> men_qjd_2 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
+    //前景上方 倒挂的景
+    public List<string> qju2_2 = new List<string> { "ju_caodui_1", "ju_caodui_2" };
+    public List<string> qju_2 = new List<string> { "jju_1_1", "jju_1_3", "jju_1_4" };
+    //粒子 雾
+    public List<string> liziWu_2 = new List<string> { "liziWu_1_1" };
+    public List<string> liziWu2_2 = new List<string> { "lizi_wu3" };
+
+    //******************************怪物部分******************************
+    public List<string> kongZhongXiaoGuai_2 = new List<string> { "G_huiciyu4", "G_xemL" };
+    public List<string> xiaoGuai_2 = new List<string> { "G_dcr2", "G_ciwei" };
+    public List<string> jingYingGuai_2 = new List<string> { "G_bmws" };
+
+    //*****精英怪 随机*****
+    public List<string> JingYingGuai_2 = new List<string> { "G_jydj" };
+    //一般可以随机的 精英怪
+    public List<string> YiBanJingYingGuai_2 = new List<string> { "G_zjjyft" };
+
+
+
+
+    //******************************景******************************
+    public List<string> jjd_2 = new List<string> { "sd_zhiwu2_2", "sd_zhiwu_2", "sd_zhiwu3_2" , "hh_hua_4", "hh_caocong_3", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "j_caoh_1", "sd_zhiwu_7", "sd_zhiwu_8", "sd_zhiwu_13" , "jjd_1_6", "dongnei_min1_8", "dongnei_min1_4", "dongnei_min1_5" };
+    public List<string> jjd2_2 = new List<string> { "jjd_1_6", "jjd_1_7", "jjd_1_4", "jjd_1_5", "sd_zhiwu_2" , "dongnei_min1_1", "sd_zhiwu2_2", "sd_zhiwu3_2" };
+
+
+    //前景 下方
+    public List<string> qjd_2 = new List<string> { "qjd_1_3", "qjd_1_6", "qjd_1_8" };
+    public List<string> qjd3_2 = new List<string> { "sd_ying_2", "sd_ying_6", "qjd_1_8" };
+    //public List<string> qjd2_2 = new List<string> { "qj_shui_da_1", "qj_shui_da_2", "qjd_1_7", "qjd_1_10" };
+    //public List<string> qjd2_2 = new List<string> { "qj_shui_da_1", "qj_shui_da_2" };
+
+    public List<string> qjd4_2 = new List<string> { "qj_shui_da_1", "qj_shui_da_2"};
+
+    public List<string> qjd5_2 = new List<string> { "yqj_dongnei_min1_39", "yqj_dongnei_min1_39" };
+
+
+
+
+    //近远景
+    public List<string> jyj_2 = new List<string> { "sd_ying_2", "sd_ying_6"};
+    //中远景
+    public List<string> zyj_2 = new List<string> { "jybg_2_1", "jybg_2_2", "jybg_2_3", "jybg_2_4", "jybg_2_5"};
+    //大远景
+    public List<string> dyj_2 = new List<string> { "ybg_2_1"};
+
+
+    //装饰物
+    public List<string> zsw_2 = new List<string> { "guangHua_min1_36" };
+
+
+
+
+
+    //水面地板
+    public List<string> db_shuimian_2 = new List<string> { "db_shuimian_1", "db_shuimian_2", "db_shuimianxc_1", "db_shuimianxc_2", "db_tyd2_1", "db_tyd2_4" };
+
+
 
 
 
@@ -245,17 +375,7 @@ public class MapNames : MonoBehaviour
 
 
 
-    //跳跃地板
-    public List<string> tiaoyuediban_1 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };
-    //移动的地板
-    public List<string> mdiban_1 = new List<string> { "mdiban_1_1", "mdiban_1_2" };
-
-
-    public List<string> tiaoyueDB_1 = new List<string> { "db_ty_1"};
-
-    public List<string> tiaoyueDBD_1 = new List<string> { "db_tyd_1", "db_tyd_2", "db_tyd_3", "db_tyd_4" };
-
-    public List<string> tiaoyuepingdiDB_1 = new List<string> { "db_ty_1", "db_pd_1","db_pd_2"};
+  
 
 
     //xiaoGuai_1 = {};

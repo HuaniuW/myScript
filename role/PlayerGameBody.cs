@@ -520,7 +520,8 @@ public class PlayerGameBody : GameBody {
             ChangeBoneScaleX();
         }
 
-        
+       
+
 
         if (isAtk) return;
 
@@ -528,6 +529,9 @@ public class PlayerGameBody : GameBody {
         isAtkYc = false;
         isRunLefting = true;
         isRunRighting = false;
+
+        
+
 
         //playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
         GetZongTuili(new Vector2(xForce * horizontalDirection, 0));
@@ -1450,7 +1454,15 @@ public class PlayerGameBody : GameBody {
                 //this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y + 10f);
 
                 playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0);
-                DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+                if (isInAiring) {
+                    DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
+                    //DBBody.animation.GotoAndPlayByFrame(JUMP2DUAN, 0, 1);
+                }
+                else
+                {
+                    DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
+                }
+                
                 //playerRigidbody2D.AddForce(Vector2.up * yForce);
                 GetZongTuili(Vector2.up * yForce);
             }

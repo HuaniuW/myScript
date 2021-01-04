@@ -112,4 +112,28 @@ public class ScreenDate : MonoBehaviour {
     public static List<string> mdiban_1 = new List<string> { "mdiban_1_1", "mdiban_1_2"};
 
 
+	//----------------------2
+
+
+
+
+
+
+
+	//门 下方的近景
+	public static List<string> men_jjd_2 = new List<string> { "jjd_1_1", "jjd_1_2" };
+
+	//门 上方的近景 
+	public static List<string> men_jju_2 = new List<string> { "jju_1_1", "jju_1_2", "jju_1_3", "jju_1_4" };
+
+
+	//粒子 雾
+	public static List<string> liziWu_2 = new List<string> { "liziWu_1_1" };
+
+	//跳跃地板
+	public static List<string> tiaoyuediban_2 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };
+	//移动的地板
+	public static List<string> mdiban_2 = new List<string> { "mdiban_1_1", "mdiban_1_2" };
+
+
 }

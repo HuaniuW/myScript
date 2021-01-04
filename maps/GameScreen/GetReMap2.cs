@@ -201,6 +201,7 @@ public class GetReMap2 : GetReMap
         _cMapObj = lianjiedian;
         mapObjArr.Add(lianjiedian);
 
+        //地形扩展
         if (_dixingkuozhanNums != 0) return;
         if(IsYanZhan)
         {
@@ -293,16 +294,20 @@ public class GetReMap2 : GetReMap
             }
 
             _JYGuaiName = "";
+
+            //这里要注意 后期要根据数据来 获取 地图类型的几率
+            print("这里要注意 后期要根据数据来 获取 地图类型的几率********* o(*￣︶￣*)o");
+
             if (rnums < 1)
             {
                 //跳跃
                 _dixingType = GlobalMapDate.TIAOYUE;
             }
-            else if (rnums < 2)
+            else if (rnums < 5)
             {
                 //洞内  
                 _dixingType = GlobalMapDate.DONGNEI;
-            }else if (rnums < 80)
+            }else if (rnums < 10)
             {
                 //多怪 精英 平地
                 _dixingType = GlobalMapDate.DUOGUAI_JINGYING_PINGDI;
@@ -514,7 +519,7 @@ public class GetReMap2 : GetReMap
                 {
                     GuaiName = MapNames.GetInstance().GetCanRandomUSEJYGName("YiBanJingYingGuai");
                     GameObject guai2 = GlobalTools.GetGameObjectByName(GuaiName);
-                    //print("   精英怪 数量   "+nums+"   精益怪名字  "+ GuaiName);
+                    print("   精英怪 数量   "+nums+"   精益怪名字  "+ GuaiName);
                     __x = GlobalTools.GetRandomNum() > 50 ? __x +3+ GlobalTools.GetRandomDistanceNums(2) : __x -3- GlobalTools.GetRandomDistanceNums(2);
                     guai2.transform.position = new Vector2(__x, __y);
                     guai2.transform.parent = maps.transform;
@@ -559,6 +564,7 @@ public class GetReMap2 : GetReMap
         foreach(GameObject guai in GuaiList)
         {
             //print("  怪物的 类型是什么  " + guai.GetComponent<RoleDate>().enemyType);
+            if (guai == null||guai.GetComponent<RoleDate>()==null) continue;
             string guaiType = guai.GetComponent<RoleDate>().enemyType;
             if (guaiType == "jingying"||guaiType == "boss")
             {
@@ -646,7 +652,9 @@ public class GetReMap2 : GetReMap
                 else
                 {
                     //********************************@***********************门 地图生成 控制
-                    mapObj = GlobalTools.GetGameObjectByName("dt_men_l");
+                    string menNameL = "dt_men_l";
+                    if(Globals.mapTypeNums!=1) menNameL = "dt_men_l_"+ mapTypeNums;
+                    mapObj = GlobalTools.GetGameObjectByName(menNameL);
                     //判断是否是 特殊地图
                     if (GlobalMapDate.IsSpeMapByName(goScreenName))
                     {
@@ -678,7 +686,9 @@ public class GetReMap2 : GetReMap
                 }
                 else
                 {
-                    mapObj = GlobalTools.GetGameObjectByName("dt_men_r");
+                    string menNameR = "dt_men_r";
+                    if (Globals.mapTypeNums != 1) menNameR = "dt_men_r_" + mapTypeNums;
+                    mapObj = GlobalTools.GetGameObjectByName(menNameR);
                     if (GlobalMapDate.IsSpeMapByName(goScreenName))
                     {
                         goScreenName += "$p";

@@ -82,6 +82,8 @@ public class AIZiDan : MonoBehaviour
     void Starting()
     {
 
+        if (_targetObj == null) return;
+
         if (IsDimian)
         {
             GetComponent<GameBody>().TurnDirection(_targetObj);

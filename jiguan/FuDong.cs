@@ -51,23 +51,15 @@ public class FuDong : MonoBehaviour
     public float MoveSpeedZ = 0;
     void GetMove()
     {
-        if(this.transform.position.x>_thisX+MoveXDistance|| this.transform.position.x < _thisX - MoveXDistance)
-        {
-            MoveSpeedX *= -1;
-        }
+       
 
-        if (this.transform.position.y > _thisY + MoveYDistance || this.transform.position.y < _thisY - MoveYDistance)
-        {
-            MoveSpeedY *= -1;
-        }
-
-        if (IsRandomZ)
-        {
-            if (this.transform.position.z > _thisZ + MoveZDistance || this.transform.position.z < _thisZ - MoveZDistance)
-            {
-                MoveSpeedZ *= -1;
-            }
-        }
+        //if (IsRandomZ)
+        //{
+        //    if (this.transform.position.z > _thisZ + MoveZDistance || this.transform.position.z < _thisZ - MoveZDistance)
+        //    {
+        //        MoveSpeedZ *= -1;
+        //    }
+        //}
 
         float moveX = this.transform.position.x + MoveSpeedX;
         float moveY = this.transform.position.y + MoveSpeedY;
@@ -79,9 +71,10 @@ public class FuDong : MonoBehaviour
         foreach (Transform t in objList)
         {
             //print(t.tag);
+            if (t == null) continue;
             if (t.tag == "Player")
             {
-                
+                print("????");    
                 //print("cccc   "+cubeF);
                 if (cubeF.GetComponent<CameraController>().IsOutY)
                 {
@@ -90,6 +83,7 @@ public class FuDong : MonoBehaviour
                     float cmy = cubeF.transform.position.y + MoveSpeedY;
                     float cmx = cubeF.transform.position.x + MoveSpeedX;
                     cubeF.transform.position = new Vector3(cmx, cmy, cubeF.transform.position.z);
+                    //return;
                 }
                 else
                 {
@@ -97,9 +91,27 @@ public class FuDong : MonoBehaviour
                 }
 
             }
+            //if (t == null) {
+            //    //objList.Remove(t);
+            //    continue;
+            //}
+
+
+
             float cy = t.transform.position.y + MoveSpeedY;
             float cx = t.transform.position.x + MoveSpeedX;
             t.transform.position = new Vector3(cx, cy, t.transform.position.z);
+        }
+
+
+        if (this.transform.position.x > _thisX + MoveXDistance || this.transform.position.x < _thisX - MoveXDistance)
+        {
+            MoveSpeedX *= -1;
+        }
+
+        if (this.transform.position.y > _thisY + MoveYDistance || this.transform.position.y < _thisY - MoveYDistance)
+        {
+            MoveSpeedY *= -1;
         }
 
 
@@ -118,7 +130,7 @@ public class FuDong : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!IsCanHitPlayer) return;
-        //print("Trigger - A");
+        print("Trigger - A  碰到角色！！ ");
         //obj2 = collision.collider.transform;
         if (!objList.Contains(collision.collider.transform)) objList.Add(collision.collider.transform);
 
@@ -127,7 +139,7 @@ public class FuDong : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (!IsCanHitPlayer) return;
-        //print("Trigger - B");
+        print("Trigger - B     ---- 角色离开 ");
         if (objList.Contains(collision.collider.transform)) objList.Remove(collision.collider.transform);
     }
 

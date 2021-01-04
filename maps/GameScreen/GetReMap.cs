@@ -534,7 +534,7 @@ public class GetReMap : MonoBehaviour
             guaiListName = "xiaoGuai_" + Globals.mapTypeNums;
         }
 
-        //print(CMapName+  " 怪物获取列表   "+ guaiListName);
+        print(CMapName+  " 怪物获取列表   "+ guaiListName);
         nums = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance()).Count;
         guaiName = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
         g = GlobalTools.GetGameObjectByName(guaiName);
