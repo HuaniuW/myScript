@@ -31,6 +31,9 @@ public class GlobalMapDate : MonoBehaviour {
     //多怪 警示鱼 平地
     public const string DUOGUAI_JSY_PINGDI = "duoguaiJSYPingdi";
 
+    //洞内跳跃机关1
+    public const string DONGNEI_TIAOYUE_1 = "dongnei_tiaoyue_1";
+
 
 
 

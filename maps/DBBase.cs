@@ -52,7 +52,7 @@ public class DBBase : MonoBehaviour
 
     [Header("是否显示 顶地板")]
     public bool IsShowDingDB = false;
-    public void ShowDingDB(float __posY= 0,float __posX = 0)
+    public virtual void ShowDingDB(float __posY= 0,float __posX = 0)
     {
         
         if (!dibanDing.activeSelf)
@@ -146,19 +146,19 @@ public class DBBase : MonoBehaviour
 
 
 
-    float __dingDBPosX = 0;
-    float __dingDBPosY = 0;
+    protected float __dingDBPosX = 0;
+    protected float __dingDBPosY = 0;
     //设置顶地板 位置
     void SetDingDBPos()
     {
         dibanDing.transform.position = new Vector3(dibanDing.transform.position.x + __dingDBPosX, dibanDing.transform.position.y + __dingDBPosY, dibanDing.transform.position.z);
-        dibanDing.transform.parent = maps.transform;
+        if(maps!=null)dibanDing.transform.parent = maps.transform;
         DingDBJing();
     }
 
 
     //顶部地板的 倒挂景
-    void DingDBJing()
+    protected virtual void DingDBJing()
     {
         //print("顶部景控制");
         //是否有什么背景？？？
@@ -241,23 +241,47 @@ public class DBBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitStart();
         if (!GlobalSetDate.instance.IsCMapHasCreated&&!IsDangBan) {
+
+            if (!IsShowDingDB)
+            {
+                //隐藏顶部地板
+                HideDingDB();
+            }
+            else
+            {
+                SetDingDBPos();
+            }
+
+
+            OtherStart();
             GetJing();
             //随机灯光颜色
             //SetLightColor();
-        }
 
-        if (!IsShowDingDB) {
-            //隐藏顶部地板
-            HideDingDB();
-        }
-        else
-        {
-            SetDingDBPos();
-        }
-       
+            
 
 
+           
+
+        }
+    }
+
+
+    protected virtual void InitStart()
+    {
+        //每次都会 调用
+    }
+
+    protected virtual void OtherStart()
+    {
+
+    }
+
+    private void Awake()
+    {
+        if (maps == null) maps = GlobalTools.FindObjByName("maps");
     }
 
 
@@ -307,7 +331,7 @@ public class DBBase : MonoBehaviour
         //背远景 树林影子 等
         //前远景 加一层 前景   石头 草树  黑色栅栏  模糊的 黑色景
 
-        maps = GlobalTools.FindObjByName("maps");
+        if (maps == null) maps = GlobalTools.FindObjByName("maps");
 
         if (!IsShowDingDB && IsHasShu) {
             if (GlobalTools.GetRandomNum() > 0) {
@@ -715,7 +739,7 @@ public class DBBase : MonoBehaviour
 
 
 
-    protected void GetWu(string wuName, Vector2 qidian, Vector2 zhongdian, int SDOrder, Color color)
+    protected virtual void GetWu(string wuName, Vector2 qidian, Vector2 zhongdian, int SDOrder, Color color)
     {
         string _wuName = "wu_1_1";
         GameObject _wu = GlobalTools.GetGameObjectByName(_wuName);

@@ -362,6 +362,11 @@ public class GetReMap2 : GetReMap
                 _dixingType = GlobalMapDate.DUOGUAI_JSY_PINGDI;
 
             }
+            else if (GlobalCMapType == GlobalMapDate.DONGNEI_TIAOYUE_1)
+            {
+                //洞内跳跃机关 1型
+                _dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
+            }
 
         }
         else
@@ -370,6 +375,8 @@ public class GetReMap2 : GetReMap
             _dixingType = GlobalMapDate.YIBAN;
         }
 
+        //测试用 不用了就删掉
+        _dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
         print(" ******************************************************************************************* _dixingType  地形类型   "+ _dixingType);
 
         //根据不同地形 生成的 中心连接点 也不一样  还要根据 坐标 和nums判断 地板和 景类型
@@ -402,10 +409,17 @@ public class GetReMap2 : GetReMap
         {
             //存档
         }
+        else if (_dixingType == GlobalMapDate.DONGNEI_TIAOYUE_1)
+        {
+            //洞内跳跃机关 1型
+            //_dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
+            CreateLJByName("lr_" + Globals.mapTypeNums);
+            //CreateLJByName("lr_dnty_" + Globals.mapTypeNums);
+        }
 
 
         //创建 连接点
-       
+
         //创建 各个方向的 起始点地板
 
         char[] FXArr = _lianjieFX.ToCharArray();
@@ -621,7 +635,6 @@ public class GetReMap2 : GetReMap
     }
 
     bool _IsCanChuGuai = true;
-
     protected override void CreateFZRoad(string fx, int mapNums, string goScreenName, string danFX = "")
     {
         for (int i = 0; i <= mapNums; i++)
@@ -673,6 +686,7 @@ public class GetReMap2 : GetReMap
 
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetLeftPos();
                     pos = LJDpos;
+                    if (_dixingType == GlobalMapDate.DONGNEI_TIAOYUE_1) pos = new Vector2(LJDpos.x, LJDpos.y);
                     GetMapObjPos(0);
 
                 }
@@ -705,6 +719,7 @@ public class GetReMap2 : GetReMap
                     GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetDoorInList(mapObj);
                     LJDpos = _cMapObj.GetComponent<DBBase>().GetRightPos();
                     pos = LJDpos;
+                    if (_dixingType == GlobalMapDate.DONGNEI_TIAOYUE_1) pos = new Vector2(LJDpos.x,LJDpos.y);
                     GetMapObjPos(0);
                 }
             }
@@ -816,6 +831,9 @@ public class GetReMap2 : GetReMap
             _dixingType == GlobalMapDate.DUOGUAI_JINGYING_PINGDI || _dixingType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
         {
             YiBanDiXing(FX, DuanNums, isFirstNums, IsToMen);
+        }else if (_dixingType == GlobalMapDate.DONGNEI_TIAOYUE_1)
+        {
+            TiaoYueDiBan(FX, DuanNums, isFirstNums, IsToMen, "db_dnty");
         }
 
 
@@ -986,7 +1004,7 @@ public class GetReMap2 : GetReMap
 
 
     //跳跃地形
-    void TiaoYueDiBan(string FX, int DuanNums, int isFirstNums, bool IsToMen = true)
+    void TiaoYueDiBan(string FX, int DuanNums, int isFirstNums, bool IsToMen = true,string SpeDiBanType = "tiaoyue")
     {
 
         int nums = GlobalTools.GetRandomNum();
@@ -995,10 +1013,11 @@ public class GetReMap2 : GetReMap
         {
             IsNearMen(i, DuanNums);
             //创建地板
-            mapObj = GetDiBanByName("tiaoyue");
+            mapObj = GetDiBanByName(SpeDiBanType);
+
             if (i != DuanNums - 1)
             {
-                mapObj.GetComponent<DB_TiaoYue>().JiGuan_PenSheZiDanJG();
+                if(SpeDiBanType == "tiaoyue") mapObj.GetComponent<DB_TiaoYue>().JiGuan_PenSheZiDanJG();
             }
 
             if (FX == "l")
@@ -1075,7 +1094,7 @@ public class GetReMap2 : GetReMap
             }
             //设置地图块的 位置 和深度
             GetMapObjPos(i);
-            ChuGuaiByMapNunms();
+            if(SpeDiBanType == "tiaoyue") ChuGuaiByMapNunms();
         }
 
         _isQishi0 = false;

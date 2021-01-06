@@ -258,11 +258,7 @@ public class MapNames : MonoBehaviour
     //public List<string> qjd2_2 = new List<string> { "qj_shui_da_1", "qj_shui_da_2" };
 
     public List<string> qjd4_2 = new List<string> { "qj_shui_da_1", "qj_shui_da_2"};
-
     public List<string> qjd5_2 = new List<string> { "yqj_dongnei_min1_39", "yqj_dongnei_min1_39" };
-
-
-
 
     //近远景
     public List<string> jyj_2 = new List<string> { "sd_ying_2", "sd_ying_6"};
@@ -274,13 +270,32 @@ public class MapNames : MonoBehaviour
 
     //装饰物
     public List<string> zsw_2 = new List<string> { "guangHua_min1_36" };
-
-
-
-
-
     //水面地板
     public List<string> db_shuimian_2 = new List<string> { "db_shuimian_1", "db_shuimian_2", "db_shuimianxc_1", "db_shuimianxc_2", "db_tyd2_1", "db_tyd2_4" };
+
+
+
+
+
+
+
+
+
+    //**************洞内跳跃地图地形*************************
+    //洞内跳跃连接点地板
+    public List<string> lr_dnty_2 = new List<string> { "lr_pd_2" };
+    //洞内跳跃地板
+    public List<string> db_dnty_2 = new List<string> { "db_dnt_1", "db_dnt_2" };
+
+
+    //跳跃地板的 中间的跳跃地板
+    public List<string> db_zjdnty_2 = new List<string> { "db_tyd2_1", "db_tyd2_2", "db_tyd2_3", "db_tyd2_4" , "db_tyd2_6", "db_tyd_7", "DB_xialuo_1", "DB_xialuo_2" };
+
+
+
+
+
+
 
 
 

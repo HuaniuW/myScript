@@ -74,12 +74,12 @@ public class FuDong : MonoBehaviour
             if (t == null) continue;
             if (t.tag == "Player")
             {
-                print("????");    
+                //print("????");    
                 //print("cccc   "+cubeF);
                 if (cubeF.GetComponent<CameraController>().IsOutY)
                 {
                     //print("hiiiiiii");
-                    //cubeF.GetComponent<CameraController>().IsOutY2 = true;
+                    //cubeF.GetComponent<CameraController>().IsOutY2 = true;\
                     float cmy = cubeF.transform.position.y + MoveSpeedY;
                     float cmx = cubeF.transform.position.x + MoveSpeedX;
                     cubeF.transform.position = new Vector3(cmx, cmy, cubeF.transform.position.z);
