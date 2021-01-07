@@ -67,6 +67,7 @@ public class AIYinshen : MonoBehaviour
         if (!IsOpenBeHitHide) return;
        
         if (IsBeHitingHide) return;
+        if (GetComponent<RoleDate>().isDie) return;
         IsBeHitingHide = true;
         //if (IsBeHitingHide &&!GetComponent<RoleDate>().isBeHiting)
         //{
@@ -77,7 +78,12 @@ public class AIYinshen : MonoBehaviour
         print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl    " + jl + "        " + BeHitHideJL);
         if (jl<=BeHitHideJL)
         {
-            
+            if (YinShenType == 2)
+            {
+                ShowYinShenTX();
+            }
+
+
             IsInBeHitFJ = true;
             //重置 被攻击的判断
             _gameBody.FanJiBeHitReSet();
@@ -137,6 +143,8 @@ public class AIYinshen : MonoBehaviour
         IsBeHitingHide = false;
         _gameBody.SetACPlayScale(1);
         ShowXuetiao();
+
+        YinShenJiShi = 0;
     }
 
 
@@ -191,9 +199,78 @@ public class AIYinshen : MonoBehaviour
     }
 
 
+    [Header("隐身类型")]
+    public int YinShenType = 1;
+
+    [Header("隐身时候播放的 粒子")]
+    public string LiZi_yinshen_name = "TX_yinshenYM1";
+    GameObject _yanmu;
+    bool IsStartYinShen = false;
+
+
+    [Header("隐身时候 播放的声音")]
+    public AudioSource AudioYinShen;
+
+
+    //隐身时长 计时
+    float YinShenTimes = 1;
+    float YinShenJiShi = 0;
+
+    //隐身出现位置 类型
+
+    void ShowYinShenTX()
+    {
+        if (_yanmu == null)
+        {
+            _yanmu = ObjectPools.GetInstance().SwpanObject2(Resources.Load(LiZi_yinshen_name) as GameObject);
+            _yanmu.transform.position = this.transform.position;
+        }
+        else
+        {
+            _yanmu.transform.position = this.transform.position;
+            _yanmu.GetComponent<ParticleSystem>().Play();
+        }
+
+        if (AudioYinShen != null) AudioYinShen.Play();
+        //如果做 细节  还有怪物叫声
+    }
+
+
+
+
     public bool IsGetHide()
     {
         if (!IsHideing) return false;
+
+        //这里按类型 分类 如果是 替身术 有烟幕的 另外写 
+        if (YinShenType == 2)
+        {
+            if (!IsStartYinShen)
+            {
+                IsStartYinShen = true;
+                _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
+                HideXuetiao();
+                if (!IsCanBeHit)
+                {
+                    GetComponent<RoleDate>().isCanBeHit = false;
+                }
+                ShowYinShenTX();
+                this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y+1000);
+            }
+
+            YinShenJiShi += Time.deltaTime;
+            if(YinShenJiShi>= YinShenTimes)
+            {
+                YinShenJiShi = 0;
+                IsHideing = false;
+                return true;
+            }
+
+            return false;
+        }
+
+
+
         //print("  hide ????  ");
         if (_db.animation.lastAnimationName == HideACName && _db.animation.isCompleted)
         {
@@ -224,7 +301,27 @@ public class AIYinshen : MonoBehaviour
     public bool IsShowOut()
     {
         //if (!IsShowing) return false;
-        
+
+
+        if(YinShenType == 2)
+        {
+            ShowYinShenTX();
+
+
+
+            _db.animation.Stop();
+            _gameBody.GetStand();
+            GetComponent<AIAirBase>().ZhuanXiang();
+            IsShowing = false;
+            GetComponent<RoleDate>().isCanBeHit = true;
+            return true;
+        }
+
+
+
+
+
+
         if (!_db.animation.HasAnimation(ShowACName))
         {
             IsShowing = false;
@@ -271,36 +368,58 @@ public class AIYinshen : MonoBehaviour
     int ChoseNums = 0;
     void GetShow()
     {
-        
+        //显示时候 可以释放特效 替身术 等
+
+        //隐身 去哪  1.玩家头顶  2.玩家前后
+
+
+
+
+
         if (!_airRun) _airRun = GetComponent<AIAirRunNear>();
         //找点 先找身后 再找前面
         float __x;
-        if(this.transform.position.x > _obj.transform.position.x)
+        float __y;
+
+        if (YinShenType == 2)
         {
-            if(ChoseNums == 0)
-            {
-                __x = _obj.transform.position.x - atkDistanceX;
-            }
-            else
-            {
-                __x = _obj.transform.position.x + atkDistanceX;
-            }
-            
+            __x = GlobalTools.GetRandomNum()>50? thePlayer.transform.position.x - atkDistanceX: thePlayer.transform.position.x + atkDistanceX;
+            __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(4);
         }
         else
         {
-            if(ChoseNums == 0)
+            if (this.transform.position.x > thePlayer.transform.position.x)
             {
-                __x = _obj.transform.position.x + atkDistanceX;
+                if (ChoseNums == 0)
+                {
+                    __x = thePlayer.transform.position.x - atkDistanceX;
+                }
+                else
+                {
+                    __x = thePlayer.transform.position.x + atkDistanceX;
+                }
+
             }
             else
             {
-                __x = _obj.transform.position.x - atkDistanceX;
+                if (ChoseNums == 0)
+                {
+                    __x = thePlayer.transform.position.x + atkDistanceX;
+                }
+                else
+                {
+                    __x = thePlayer.transform.position.x - atkDistanceX;
+                }
+
             }
-            
+
+            __y = thePlayer.transform.position.y;
         }
 
-        showPos = new Vector2(__x, _obj.transform.position.y);
+
+       
+
+        showPos = new Vector2(__x, __y);
 
         //检测 点 是否 被碰撞 左右 上下 判断  
         if (_airRun.IsHitDiBan(showPos, hitDiBanDistance)|| _airRun.IsHitDiBan(showPos, -hitDiBanDistance)|| _airRun.IsHitDiBan(showPos, hitDiBanDistance,"")|| _airRun.IsHitDiBan(showPos, -hitDiBanDistance, ""))
@@ -344,11 +463,11 @@ public class AIYinshen : MonoBehaviour
     public float showACSpeed = 1;
     //int tn = 0;
 
-    GameObject _obj;
+    GameObject thePlayer;
     public void GetStart(GameObject obj)
     {
         //print("yinshen start!!!");
-        _obj = obj;
+        thePlayer = obj;
         IsOver = false;
         IsHideing = true;
     }

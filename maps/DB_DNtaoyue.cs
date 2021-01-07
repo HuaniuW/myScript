@@ -57,14 +57,16 @@ public class DB_DNtaoyue : DBBase
 
     protected override void OtherStart()
     {
-        
-        GetTYDiBan();
-        BianZhai();//注意 这里不能放在 GetTYDiBan之前执行
         if (IsChangSuiDao)
         {
-
+            ChangSuiDaoJiGuanAndGuai();
         }
         else
+        {
+            GetTYDiBan();
+        }
+        BianZhai();//注意 这里不能放在 GetTYDiBan之前执行
+        if (!IsChangSuiDao)
         {
             JiGuanAndGuai();
         }
@@ -74,6 +76,27 @@ public class DB_DNtaoyue : DBBase
     void ChangSuiDaoJiGuanAndGuai()
     {
         //出弹射地板
+        GameObject _db = null;
+
+        float __x = 0;
+        float __y = 0;
+
+        if (GlobalTools.GetRandomNum()>80)
+        {
+            _db = GlobalTools.GetGameObjectByName("DB_tanshe_1");
+            __x = DingDBPosL.transform.position.x + 3f + GlobalTools.GetRandomDistanceNums(1);
+            __y = tl.position.y + 4.4f + GlobalTools.GetRandomDistanceNums(1);
+        }
+        else
+        {
+            _db = GlobalTools.GetGameObjectByName("DB_chang_1");
+            __x = DingDBPosL.transform.position.x + GetWidth()*0.5F-1 + GlobalTools.GetRandomDistanceNums(1);
+            __y = tl.position.y + 4.4f + GlobalTools.GetRandomDistanceNums(1);
+        }
+        if (_db == null) return;
+
+        _db.transform.position = new Vector2(__x, __y - xiajiangNums-GlobalTools.GetRandomDistanceNums(0.7f));
+        _db.transform.parent = maps.transform;
     }
 
 

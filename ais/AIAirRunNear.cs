@@ -47,6 +47,8 @@ public class AIAirRunNear : MonoBehaviour
 
     public void ResetAll()
     {
+        IsStartMoveY = false;
+        CSDistanceY = 0;
         isStartXY = false;
         isZhuijiY = false;
         IsZhuijiPosing = false;
@@ -70,12 +72,12 @@ public class AIAirRunNear : MonoBehaviour
     //}
 
     AIAirRunAway runAway;
-    public bool Zhuiji(float inDistance = 0)
+    public bool Zhuiji(float inDistance = 0,bool IsCanTurnFace = true)
     {
         if (inDistance != 0) _zjDistance = inDistance;
         if(!_aiPath.canMove) _aiPath.canMove = true;
-        zhuijiRun();
-        float distances = (transform.position - _obj.transform.position).sqrMagnitude;
+        zhuijiRun(IsCanTurnFace);
+        float distances = (transform.position - _obj.transform.position).magnitude;
         //print(transform.position +"  -------------   "+ _obj.transform.position+ "   _zjDistance   "+ _zjDistance+ "   ??_aiPath.canMove   "+ _aiPath.canMove+ "    distances   "+ distances);
         if (distances < _zjDistance) {
             ResetAll();
@@ -84,19 +86,36 @@ public class AIAirRunNear : MonoBehaviour
         return false;
     }
 
-    public bool ZhuijiZuoBiao(Vector2 point,float inDistance = 0)
+    public bool ZhuijiZuoBiao(Vector2 point, float inDistance = 0, bool IsCanTurnFace = true)
     {
         if (inDistance != 0) _zjDistance = inDistance;
         setter.SetV2(point);
         if (!_aiPath.canMove) _aiPath.canMove = true;
-        zhuijiRun();
-        if ((transform.position - _obj.transform.position).sqrMagnitude < _zjDistance)
+        zhuijiRun(IsCanTurnFace);
+        if ((transform.position - _obj.transform.position).magnitude < _zjDistance)
         {
             ResetAll();
             return true;
         }
         return false;
     }
+
+    ////去到 同Y的位置
+    //public bool ZhuijiZuoBiaoTongY(Vector2 point, float inDistance = 0)
+    //{
+    //    if (inDistance != 0) _zjDistance = inDistance;
+    //    setter.SetV2(point);
+    //    if (!_aiPath.canMove) _aiPath.canMove = true;
+    //    zhuijiRun();
+    //    if ((transform.position - _obj.transform.position).sqrMagnitude < _zjDistance)
+    //    {
+    //        ResetAll();
+    //        return true;
+    //    }
+    //    return false;
+    //}
+
+
 
     //原来的速度
     float _csSpeed = 0;
@@ -144,10 +163,10 @@ public class AIAirRunNear : MonoBehaviour
     public float zhijieZhuijiTanCeDistance = 1;
     //直接 去到目标点
     //inDistance 进入 范围直径
-    public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0)
+    public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true)
     {
         if (inDistance != 0) zuijiPosDisWC = inDistance;
-        zhuijiRun();
+        zhuijiRun(IsCanTurnFace);
 
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
         //print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
@@ -166,9 +185,9 @@ public class AIAirRunNear : MonoBehaviour
         this.GetComponent<GameBody>().IsJiasu = true;
         //如果 行动中撞墙  直接返回true
 
-        if(IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        if(IsTestHitWall &&IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
         {
-            //print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;
@@ -237,16 +256,20 @@ public class AIAirRunNear : MonoBehaviour
 
 
     //跑动作 和转向
-    void zhuijiRun()
+    protected void zhuijiRun(bool IsCanTurnFace = true)
     {
-        if (this.transform.position.x < _obj.transform.position.x)
+        if (IsCanTurnFace)
         {
-            _airGameBody.TurnRight();
+            if (this.transform.position.x < _obj.transform.position.x)
+            {
+                _airGameBody.TurnRight();
+            }
+            else
+            {
+                _airGameBody.TurnLeft();
+            }
         }
-        else
-        {
-            _airGameBody.TurnLeft();
-        }
+        
 
         if (GetComponent<AIChongji>() && GetComponent<AIChongji>().isTanSheing) return;
         GetComponent<AirGameBody>().isRunYing = true;
@@ -676,26 +699,40 @@ public class AIAirRunNear : MonoBehaviour
         return true;
     }
 
+
+    bool IsStartMoveY = false;
+    float CSDistanceY = 0;
     //Y靠近
     public bool GetMoveNearY(float _moveDistance, float speedY = 0)
     {
         if (speedY == 0) speedY = _airGameBody.moveSpeedY;
+
+        if (!IsStartMoveY)
+        {
+            IsStartMoveY = true;
+            CSDistanceY = Mathf.Abs(_obj.transform.position.y - transform.position.y);
+        }
+
+        speedY *= Mathf.Abs(_obj.transform.position.y - transform.position.y) / CSDistanceY;
+
         if (_obj.transform.position.y - transform.position.y > _moveDistance)
         {
             //目标在上 向上移动
-
+            //print("   上移动 ");
             _airGameBody.RunY(speedY);
             return false;
         }
         else if (_obj.transform.position.y - transform.position.y < -_moveDistance)
         {
             //目标在下 向下移动
+            //print("   下移动 ！！！！！");
             _airGameBody.RunY(-speedY);
             return false;
         }
         else
         {
-
+            IsStartMoveY = false;
+            CSDistanceY = 0;
             return true;
         }
     }

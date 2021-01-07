@@ -285,7 +285,7 @@ public class MapNames : MonoBehaviour
     //洞内跳跃连接点地板
     public List<string> lr_dnty_2 = new List<string> { "lr_pd_2" };
     //洞内跳跃地板
-    public List<string> db_dnty_2 = new List<string> { "db_dnt_1", "db_dnt_2" };
+    public List<string> db_dnty_2 = new List<string> { "db_dnt_1", "db_dnt_2", "db_dnt_4" };
 
 
     //跳跃地板的 中间的跳跃地板

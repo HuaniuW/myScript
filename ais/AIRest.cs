@@ -19,6 +19,7 @@ public class AIRest : MonoBehaviour {
         //print("休息 ---->rest");
         _times = times;
         isStart = true;
+        
     }
 
     public void ReSet()
@@ -35,6 +36,8 @@ public class AIRest : MonoBehaviour {
     void Update () {
         if (isStart)
         {
+            //print("休息    "+ GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
+            GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             _times -= Time.deltaTime;
             if (_times<=0)
             {

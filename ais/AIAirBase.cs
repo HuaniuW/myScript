@@ -102,8 +102,8 @@ public class AIAirBase : AIBase
         {
             IsBeHitRunAwaying = true;
             flyXSpeed += 4;
-            if (!gameObj) return;
-            if (this.transform.position.x >= gameObj.transform.position.x)
+            if (!thePlayer) return;
+            if (this.transform.position.x >= thePlayer.transform.position.x)
             {
                 isRunLeft = false;
                 isRunRight = true;
@@ -211,13 +211,13 @@ public class AIAirBase : AIBase
 
     protected virtual void GetUpdate2()
     {
-        if (!gameObj)
+        if (!thePlayer)
         {
-            gameObj = GlobalTools.FindObjByName("player");
+            thePlayer = GlobalTools.FindObjByName("player");
             return;
         }
 
-        if (gameObj.GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
+        if (thePlayer.GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
             gameBody.ResetAll();
             //gameBody.Stand();
@@ -275,13 +275,13 @@ public class AIAirBase : AIBase
 
     protected virtual bool TongY(float distance)
     {
-        if (gameObj.transform.position.y - transform.position.y > distance)
+        if (thePlayer.transform.position.y - transform.position.y > distance)
         {
             //目标在上面  这里做角度计算 来控制XY 速度
             this.GetComponent<AirGameBody>().RunY(0.9f);
             return false;
         }
-        else if (gameObj.transform.position.y - transform.position.y < -distance)
+        else if (thePlayer.transform.position.y - transform.position.y < -distance)
         {
             //目标在下面
             this.GetComponent<AirGameBody>().RunY(-0.9f);
@@ -315,14 +315,14 @@ public class AIAirBase : AIBase
     {
         if (DontNear) return true;
         if (speedY == 0) speedY = flyYSpeed;
-        if (gameObj.transform.position.y - transform.position.y > _moveDistance)
+        if (thePlayer.transform.position.y - transform.position.y > _moveDistance)
         {
             //目标在上 向上移动
             
             this.GetComponent<AirGameBody>().RunY(speedY);
             return false;
         }
-        else if (gameObj.transform.position.y - transform.position.y < -_moveDistance)
+        else if (thePlayer.transform.position.y - transform.position.y < -_moveDistance)
         {
             //目标在下 向下移动
             this.GetComponent<AirGameBody>().RunY(-speedY);
@@ -345,13 +345,13 @@ public class AIAirBase : AIBase
     {
 
         if (DontNear) return true;
-        if (gameObj.transform.position.x - transform.position.x > distance)
+        if (thePlayer.transform.position.x - transform.position.x > distance)
         {
             //目标在右
             gameBody.RunRight(flyXSpeed);
             return false;
         }
-        else if (gameObj.transform.position.x - transform.position.x < -distance)
+        else if (thePlayer.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
             gameBody.RunLeft(flyXSpeed);
@@ -370,7 +370,7 @@ public class AIAirBase : AIBase
     public override void ZhuanXiang()
     {
         if (!IsCanZhuangXiang) return;
-        if (gameObj.transform.position.x - transform.position.x > 0)
+        if (thePlayer.transform.position.x - transform.position.x > 0)
         {
             //print("  ****** right ");
             //目标在右
@@ -412,7 +412,7 @@ public class AIAirBase : AIBase
     {
         //空怪靠近 
         //x y靠近方式 有几种
-        //GetComponent<Xunlu>().GetListZB(this.gameObject, gameObj.transform.position, Vector2.zero);
+        //GetComponent<Xunlu>().GetListZB(this.gameObject, thePlayer.transform.position, Vector2.zero);
         /* if (!isActioning&&!isNearing)
          {
              isNearing = true;
@@ -470,7 +470,7 @@ public class AIAirBase : AIBase
 
     protected override void GetAtkFS()
     {
-        if (GetComponent<RoleDate>().isDie||!gameObj|| gameObj.GetComponent<RoleDate>().isDie) {
+        if (GetComponent<RoleDate>().isDie||!thePlayer|| thePlayer.GetComponent<RoleDate>().isDie) {
             GetComponent<AIDestinationSetter>().ReSetAll();
             GetComponent<AIPath>().canMove = false;
             return;
@@ -485,7 +485,7 @@ public class AIAirBase : AIBase
             acName = GetZS();
             //IsGetAtkFSByName = false;
 
-            //print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
+            print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName+"  isACing "+isActioning);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -580,6 +580,14 @@ public class AIAirBase : AIBase
                 return;
             }
 
+            if (acName == "chongjiHX")
+            {
+                acName = "chongjiHX";
+                return;
+            }
+
+            
+
             if (acName == "zidan")
             {
                 acName = "zidan";
@@ -623,7 +631,7 @@ public class AIAirBase : AIBase
             }
             else
             {
-                if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
+                if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
             }
 
             return;
@@ -709,7 +717,16 @@ public class AIAirBase : AIBase
             return;
         }
 
-        if(acName == "zidan")
+        if (acName == "chongjiHX")
+        {
+            //print("------------------------------------------> chognji!!! ");
+            GetChongJiHX();
+            return;
+        }
+
+        
+
+        if (acName == "zidan")
         {
             GetZiDanFire();
             return;
@@ -765,7 +782,7 @@ public class AIAirBase : AIBase
             //print("111");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_YueGuanZhan>().GetStart(gameObj);
+            GetComponent<JN_YueGuanZhan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -786,7 +803,7 @@ public class AIAirBase : AIBase
             //print("111");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_Dazhan>().GetStart(gameObj);
+            GetComponent<JN_Dazhan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -824,7 +841,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIChongji>().GetStart(gameObj.transform);
+            GetComponent<AIChongji>().GetStart(thePlayer);
             atkNum++;
             //GetAtkNumReSet();
             return;
@@ -838,12 +855,32 @@ public class AIAirBase : AIBase
         }
     }
 
+
+    void GetChongJiHX()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIChongJiHX>().GetStart(thePlayer);
+            atkNum++;
+            //GetAtkNumReSet();
+            return;
+        }
+
+        if (isActioning && GetComponent<AIChongJiHX>().IsChongjiOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
     void GetZiDanFire()
     {
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIZiDan>().GetStart(gameObj);
+            GetComponent<AIZiDan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -861,7 +898,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIAirRunAway>().GetStart(gameObj);
+            GetComponent<AIAirRunAway>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -879,7 +916,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIYinshen>().GetStart(gameObj);
+            GetComponent<AIYinshen>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -904,7 +941,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIAirGoToAndAC>().GetStart(gameObj);
+            GetComponent<AIAirGoToAndAC>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -925,7 +962,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIHengXiangChongZhuang>().GetStart(gameObj);
+            GetComponent<AIHengXiangChongZhuang>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -945,7 +982,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIHengXiangCZKuaiSu>().GetStart(gameObj);
+            GetComponent<AIHengXiangCZKuaiSu>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -967,7 +1004,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIZongYa>().GetStart(gameObj);
+            GetComponent<AIZongYa>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -986,7 +1023,7 @@ public class AIAirBase : AIBase
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AI_ZiDans>().GetStart(gameObj);
+            GetComponent<AI_ZiDans>().GetStart(thePlayer);
             atkNum++;
             return;
         }

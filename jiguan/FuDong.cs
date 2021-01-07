@@ -130,6 +130,7 @@ public class FuDong : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!IsCanHitPlayer) return;
+        if (collision.collider.tag == "AirEnemy") return;
         print("Trigger - A  碰到角色！！ ");
         //obj2 = collision.collider.transform;
         if (!objList.Contains(collision.collider.transform)) objList.Add(collision.collider.transform);
@@ -139,6 +140,7 @@ public class FuDong : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (!IsCanHitPlayer) return;
+        if (collision.collider.tag == "AirEnemy") return;
         print("Trigger - B     ---- 角色离开 ");
         if (objList.Contains(collision.collider.transform)) objList.Remove(collision.collider.transform);
     }

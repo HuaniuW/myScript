@@ -9,15 +9,15 @@ using System;
 
 public class GlobalTools : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     /// <summary>
     ///根据在场景根目录中位置寻找对象
@@ -66,7 +66,7 @@ public class GlobalTools : MonoBehaviour {
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="num"></param>
-    public static void CanvasGroupAlpha(CanvasGroup CGroup,float num)
+    public static void CanvasGroupAlpha(CanvasGroup CGroup, float num)
     {
         if (num > 1) num = 1;
         if (num < 0) num = 0;
@@ -78,7 +78,7 @@ public class GlobalTools : MonoBehaviour {
 
 
 
-    public static void PlayAudio(string AudioName, System.Object obj,float _value = 1)
+    public static void PlayAudio(string AudioName, System.Object obj, float _value = 1)
     {
         //(this[AudioName] as AudioSource)
         //print(AudioName);
@@ -133,11 +133,11 @@ public class GlobalTools : MonoBehaviour {
 
 
     //根据向量 求速度
-    public static Vector2 GetVector2ByPostion(Vector2 targetPos, Vector2 objPos,float speed)
+    public static Vector2 GetVector2ByPostion(Vector2 targetPos, Vector2 objPos, float speed)
     {
         Vector2 speedV2 = Vector2.zero;
         Vector2 v2 = targetPos - objPos;
-        float speedY = Mathf.Sin(Mathf.Atan2(v2.y, v2.x))* speed;
+        float speedY = Mathf.Sin(Mathf.Atan2(v2.y, v2.x)) * speed;
         float speedX = Mathf.Sin(Mathf.Atan2(v2.x, v2.y)) * speed;
         speedV2 = new Vector2(speedX, speedY);
         return speedV2;
@@ -208,10 +208,22 @@ public class GlobalTools : MonoBehaviour {
 
 
 
+    
 
 
 
+    public static float GetDistanceByTowPoint(Vector2 pos1, Vector2 pos2)
+    {
+        //Vector2 v1 = new Vector2(1, 1);
+        //Vector2 v2 = new Vector2(4, 4);
+        //这个是求 平方根magnitude
+        //float dis1 = (v2 - v1).magnitude;
+        //print("@@@@@dis---------------->   "+dis1);
+        // (v2 - v1).sqrMagnitude 这个是 (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)
+        //注意区分  sqrMagnitude 这个消耗小 用来 比较距离长度可以
 
+        return (pos1 - pos2).magnitude; ;
+    }
 
 
 

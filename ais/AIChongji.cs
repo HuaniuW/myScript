@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIChongji : MonoBehaviour
+public class AIChongji : MonoBehaviour, ISkill
 {
     // Start is called before the first frame update
     void Start()
@@ -12,16 +12,16 @@ public class AIChongji : MonoBehaviour
         CJYanmu.Stop();
     }
 
-    AIAirRunNear runNear;
-    AIAirRunAway runAway;
+    protected AIAirRunNear runNear;
+    protected AIAirRunAway runAway;
     // Update is called once per frame
     void Update()
     {
         if (isStarting) Starting();
     }
 
-    Transform _targetObj;
-    bool isGetOver = false;
+    protected Transform _targetObj;
+    protected bool isGetOver = false;
 
     public bool IsChongjiOver()
     {
@@ -30,17 +30,26 @@ public class AIChongji : MonoBehaviour
 
     public float chongjiSpeed = 20;
 
-    public void GetStart(Transform targetObj)
+    public virtual void GetStart(GameObject targetObj)
     {
-        if (_targetObj == null) _targetObj = targetObj;
+        if (_targetObj == null) _targetObj = targetObj.transform;
+
+        //if (GlobalTools.GetDistanceByTowPoint(this.transform.position, _targetObj.transform.position) < 2)
+        //{
+
+        //}
+
         isGetOver = false;
         if(ChongjiYingZhi!=0)GetComponent<RoleDate>().addYZ(ChongjiYingZhi);
         isStarting = true;
         //print("this.transform.position：   " + this.transform.position);
     }
 
+    protected bool IsTongYing = false;
+
     public void ReSetAll()
     {
+        IsTongYing = false;
         isStarting = false;
         isGetOver = false;
         isTanSheing = false;
@@ -51,7 +60,7 @@ public class AIChongji : MonoBehaviour
     }
 
 
-    void Starting()
+    protected virtual void Starting()
     {
         
         if (GetComponent<RoleDate>().isDie|| _targetObj==null||_targetObj.GetComponent<RoleDate>().isDie)
@@ -64,29 +73,30 @@ public class AIChongji : MonoBehaviour
     }
 
     float fantanNums = 0.1f;
-    bool isStarting = false;
+    protected bool isStarting = false;
     public bool isTanSheing = false;
-    float deltaNums = 0;
+    protected float deltaNums = 0;
     [Header("冲击方式 是否是跟踪模式 ")]
     public bool IsGenZongType = false;
 
-    bool IsStartChongji = false;
+    protected bool IsStartChongji = false;
 
-    Vector2 targetPos = Vector2.zero;
+    protected Vector2 targetPos = Vector2.zero;
 
 
     [Header("准备动作做完后 开始 冲击的 延迟时间")]
     public float CJYanchiTime = 0.5f;
-    float CJYanchiNums = 0;
+    protected float CJYanchiNums = 0;
 
     [Header("冲击时的硬直")]
     public float ChongjiYingZhi = 1000;
 
-    void Tanshe()
+    protected virtual void Tanshe()
     {
-        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie) {
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall || GetComponent<GameBody>().IsGround) {
 
             ReSetAll();
+            ChongjiOver();
             return;
         }
 
@@ -126,6 +136,12 @@ public class AIChongji : MonoBehaviour
         if (!IsStartChongji&&!IsGenZongType) {
             IsStartChongji = true;
             targetPos = _targetObj.position;
+            //这个点 要在靠后一点
+            float dis = GlobalTools.GetDistanceByTowPoint(targetPos,transform.position);
+            float _d = 4;
+            float __x1 = targetPos.x - _d * (this.transform.position.x - targetPos.x) / dis;
+            float __y1 = targetPos.y - _d * (this.transform.position.y - targetPos.y) / dis;
+            targetPos = new Vector2(__x1,__y1);
         }
 
         if(IsGenZongType) targetPos = _targetObj.position;
@@ -143,8 +159,9 @@ public class AIChongji : MonoBehaviour
     }
 
 
-    void ChongjiOver()
+    protected void ChongjiOver()
     {
+        IsTongYing = false;
         deltaNums = 0;
         CJYanmu.Stop();
         if (ChongjiYingZhi != 0) GetComponent<RoleDate>().hfYZ(ChongjiYingZhi);
@@ -155,6 +172,7 @@ public class AIChongji : MonoBehaviour
         IsStartChongji = false;
         CJYanchiNums = 0;
         GetComponent<AIAirRunNear>().ResetAll();
+        GetComponent<AirGameBody>().SetACingfalse();
         //print("*************************************************************冲击 结束！！！！！");
     }
 
@@ -168,16 +186,16 @@ public class AIChongji : MonoBehaviour
     [Header("鱼进入 冲击弹射 范围")]
     public float _atkDistance = 8;
     //定位目标
-    bool GetNearTarget()
+    protected virtual bool GetNearTarget()
     {
-        if (!t1)
-        {
-            t1 = true;
-            //print("**this.transform.position：   " + this.transform.position);
-        }
-        return runNear.Zhuiji(_atkDistance);
+        return runNear.Zhuiji(_atkDistance,false);
     }
-    bool t1 = false;
+
+    bool ISkill.IsGetOver()
+    {
+        return IsChongjiOver();
+    }
+
     //算xy速度
     //角色攻击动作
     //弹射

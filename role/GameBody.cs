@@ -861,13 +861,11 @@ public class GameBody : MonoBehaviour, IRole {
         if (!_obj) return;
         if (this.transform.position.x < _obj.transform.position.x)
         {
-            //_airGameBody.TurnRight();
-            this.GetComponent<GameBody>().TurnRight();
+            TurnRight();
         }
         else
         {
-            this.GetComponent<GameBody>().TurnLeft();
-            //_airGameBody.TurnLeft();
+            TurnLeft();
         }
     }
 

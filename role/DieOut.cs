@@ -53,7 +53,9 @@ public class DieOut : MonoBehaviour {
             //判断是否 在自动地图里面
             if (GlobalTools.FindObjByName("maps") != null)
             {
-                GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(this.gameObject);
+                if (GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>()) {
+                    GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(this.gameObject);
+                }
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ALLDIE_OPEN_DOOR, "allDie"), this);
             }
             else
@@ -111,9 +113,9 @@ public class DieOut : MonoBehaviour {
     //掉落物
     void Diaoluowu()
     {
-        if (diaoluowu == ""|| !this.GetComponent<AIBase>().gameObj) return;
+        if (diaoluowu == ""|| !this.GetComponent<AIBase>().thePlayer) return;
         int jv = Random.Range(0, 100);
-        int fx = this.transform.position.x > this.GetComponent<AIBase>().gameObj.transform.position.x ? 1 : -1;
+        int fx = this.transform.position.x > this.GetComponent<AIBase>().thePlayer.transform.position.x ? 1 : -1;
         string[] diaoluowuArr = diaoluowu.Split('|');
         //print("掉落物  "+ diaoluowuArr.Length);
         for (var i = 0; i < diaoluowuArr.Length; i++) 

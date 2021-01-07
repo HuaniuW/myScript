@@ -15,6 +15,10 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     [Header("子弹发射 声音")]
     public AudioSource FireAudio;
 
+    [Header("是否需要面对 目标")]
+    public bool IsFaceToTarget = false;
+    bool IsTrunFace = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +49,19 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     //起始动作
     protected virtual void QiShiAC()
     {
+        if (IsFaceToTarget&&!IsTrunFace)
+        {
+            IsTrunFace = true;
+            if (this.transform.position.x > _player.transform.position.x)
+            {
+                GetComponent<GameBody>().TurnLeft();
+            }
+            else
+            {
+                GetComponent<GameBody>().TurnRight();
+            }
+        }
+
         _qishiACJS += Time.deltaTime;
 
         if (TX_Qishi && TX_Qishi.isStopped)
@@ -64,7 +81,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     protected bool _isFire = false;
     protected virtual void Fire()
     {
-        print(">>fashezidan!!  发射 设么 子弹 都这里控制");
+        print(">>fashezidan!!  发射 什么 子弹 都这里控制");
         if (FireAudio)
         {
             FireAudio.Play();
@@ -180,6 +197,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         _isFireOver = false;
         _fireOverJS = 0;
         _qishiACJS = 0;
+        IsTrunFace = false;
     }
 
 

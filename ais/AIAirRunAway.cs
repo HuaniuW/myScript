@@ -73,11 +73,11 @@ public class AIAirRunAway : MonoBehaviour
 
 
     GameObject _obj;
-    public void GetStart(GameObject obj, float yuanliDistance = 10)
+    public void GetStart(GameObject obj, float yuanliDistance = 5)
     {
         ReSetAll();
         _obj = obj;
-        _yuanliDistance = yuanliDistance;
+        //_yuanliDistance = yuanliDistance;
     }
 
 
@@ -86,8 +86,8 @@ public class AIAirRunAway : MonoBehaviour
     [Header("远离类型 1是随机 2是在左右各自方向避开")]
     public int yuanliType = 1;
 
-    List<string> fxListh = new List<string> {"s", "hs", "h" };
-    List<string> fxListq = new List<string> { "qs", "s", "q"};
+    List<string> fxListh = new List<string> { "s", "hs", "h" };
+    List<string> fxListq = new List<string> { "qs", "s", "q" };
     List<string> fxList = new List<string> { "qs", "s", "q" ,"hs","h"};
     [Header("远离距离")]
     public float _yuanliDistance = 2f;
@@ -109,7 +109,7 @@ public class AIAirRunAway : MonoBehaviour
             fx = fxList[GlobalTools.GetRandomNum(fxList.Count)];
             fxList.Remove(fx);
         }
-        else
+        else if(yuanliType == 2)
         {
             if (this.transform.position.x > _obj.transform.position.x)
             {
@@ -120,6 +120,19 @@ public class AIAirRunAway : MonoBehaviour
             {
                 fx = fxListq[GlobalTools.GetRandomNum(fxListq.Count)];
                 fxListq.Remove(fx);
+            }
+        }else if (yuanliType == 3)
+        {
+            //左右 分离
+            fx = "";
+            if (this.transform.position.x > _obj.transform.position.x)
+            {
+                //我在右
+                yuanliPos = new Vector2(_obj.transform.position.x + _yuanliDistance, _obj.transform.position.y-1 + GlobalTools.GetRandomDistanceNums(4));
+            }
+            else
+            {
+                yuanliPos = new Vector2(_obj.transform.position.x - _yuanliDistance, _obj.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(4));
             }
         }
 
@@ -185,10 +198,10 @@ public class AIAirRunAway : MonoBehaviour
 
     public bool GetYuanliOver()
     {
-        
+        //print("?????>>>>>>>>>GetYuanliOver!!!");
         if (GetComponent<RoleDate>().isBeHiting || fxListq.Count == 0|| fxListh.Count == 0||fxList.Count == 0) {
+            //print(" 远离 结束了啊！！！！！！" + "fxListq.Count    " + fxListq.Count + "    xListh.Count  " + fxListh.Count + "     fxList.Count   " + fxList.Count + "    isBeHiting  " + GetComponent<RoleDate>().isBeHiting);
             ReSetAll();
-            print(" 远离 结束了啊！！！！！！");
             return true;
         } 
         if (!isStart)

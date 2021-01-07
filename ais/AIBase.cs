@@ -7,7 +7,7 @@ using UnityEngine;
 public class AIBase : MonoBehaviour {
 
     protected GameBody gameBody;
-    public GameObject gameObj;
+    public GameObject thePlayer;
     protected AIQiShou aiQishou;
     protected AIFanji aiFanji;
 
@@ -86,11 +86,11 @@ public class AIBase : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_OUT, BossFight);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JINGSHI, this.JingshiEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHOSE_EVENT, this.ChoseEvent);
-        //print("   start jinlai mei!!!! "+gameObj);
-        //if (gameObj == null)
+        //print("   start jinlai mei!!!! "+thePlayer);
+        //if (thePlayer == null)
         //{
         //    IsCanTuihuiFSQ = false;
-        //    gameObj = GlobalTools.FindObjByName("player");
+        //    thePlayer = GlobalTools.FindObjByName("player");
         //    isAction = true;
         //}
     }
@@ -227,7 +227,7 @@ public class AIBase : MonoBehaviour {
 
     public void GetEnemyObj(UEvent e)
     {
-        gameObj = GlobalTools.FindObjByName("player");
+        thePlayer = GlobalTools.FindObjByName("player");
     }
 
     [Header("是否发现敌人")]
@@ -241,11 +241,11 @@ public class AIBase : MonoBehaviour {
     {
         if (!isNearAtkEnemy) return false;
         if (isFindEnemy) return true;
-        //if (!gameObj)
+        //if (!thePlayer)
         //{
-        //    gameObj = GlobalTools.FindObjByName("Player");
+        //    thePlayer = GlobalTools.FindObjByName("Player");
         //}
-        if(Mathf.Abs(gameObj.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(gameObj.transform.position.y - transform.position.y) < findEnemyDistance)
+        if(Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
         {
             isFindEnemy = true;
             //isPatrol = false;
@@ -258,7 +258,7 @@ public class AIBase : MonoBehaviour {
     public float outDistance = 15;
     protected void IsEnemyOutAtkDistance()
     {
-        if (gameObj&&!isActioning&&!aiQishou.isQishouAtk&&(Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance))
+        if (thePlayer&&!isActioning&&!aiQishou.isQishouAtk&&(Mathf.Abs(thePlayer.transform.position.x - transform.position.x) > outDistance|| Mathf.Abs(thePlayer.transform.position.y - transform.position.y) > findEnemyDistance))
         {
             isFindEnemy = false;
             //print("起手3   " + aiQishou.isQishouAtk);
@@ -281,7 +281,7 @@ public class AIBase : MonoBehaviour {
 
     public bool IsEnemyObjOutAtkDistance()
     {
-        if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) > outDistance || Mathf.Abs(gameObj.transform.position.y - transform.position.y) > findEnemyDistance) return true;
+        if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x) > outDistance || Mathf.Abs(thePlayer.transform.position.y - transform.position.y) > findEnemyDistance) return true;
         return false;
     }
 
@@ -428,13 +428,13 @@ public class AIBase : MonoBehaviour {
         }
         
 
-        if (!gameObj)
+        if (!thePlayer)
         {
-            gameObj = GlobalTools.FindObjByName("player");
+            thePlayer = GlobalTools.FindObjByName("player");
         }
 
         //print("   哦！！ "+gameBody);
-        if (!gameObj || gameObj.GetComponent<RoleDate>().isDie)
+        if (!thePlayer || thePlayer.GetComponent<RoleDate>().isDie)
         {
             //print(" -------- ///////////////////////////////   什么哦   " + GetComponent<GameBody>().GetDB().animation.lastAnimationName);
             if (gameBody.GetDB().animation.lastAnimationName.Split('_')[0] == "run")
@@ -518,12 +518,12 @@ public class AIBase : MonoBehaviour {
                 {
                     //print("   空中推力________________  ");
                     //float powerX = Mathf.Abs(this.transform.position.x - _playerX) / DistanceXDW * 80;
-                    //float vx = this.transform.position.x > gameObj.transform.position.x ? -VXPower : VXPower;
+                    //float vx = this.transform.position.x > thePlayer.transform.position.x ? -VXPower : VXPower;
                     if (!IsJumpFX)
                     {
                         IsJumpFX = true;
                         VXPower = Mathf.Abs(VXPower);
-                        VXPower = this.transform.position.x > gameObj.transform.position.x ? -VXPower : VXPower;
+                        VXPower = this.transform.position.x > thePlayer.transform.position.x ? -VXPower : VXPower;
                     }
 
 
@@ -706,9 +706,9 @@ public class AIBase : MonoBehaviour {
         if (
             !gameBody.isJumping&&
             (gameBody.IsEndGround||gameBody.IsHitWall)&&
-            (this.transform.localScale.x>0&&(gameObj.transform.position.x<this.transform.position.x)
+            (this.transform.localScale.x>0&&(thePlayer.transform.position.x<this.transform.position.x)
             ||
-            this.transform.localScale.x < 0 && (gameObj.transform.position.x > this.transform.position.x))
+            this.transform.localScale.x < 0 && (thePlayer.transform.position.x > this.transform.position.x))
             )
         {
             //print("撞墙 或者 没路了   撞墙  "+ gameBody.IsHitWall+"    没路  "+ gameBody.IsEndGround);
@@ -741,7 +741,7 @@ public class AIBase : MonoBehaviour {
             {
                 //print("***** 前面没有路了");
                 //探测 前面是否有地板  有的 话跳跃
-                if (gameBody.IsCanJump1()&&Mathf.Abs(this.transform.position.y - gameObj.transform.position.y)>=0.6f)
+                if (gameBody.IsCanJump1()&&Mathf.Abs(this.transform.position.y - thePlayer.transform.position.y)>=0.6f)
                 {
                     //跳跃1 跳远
                     //print("跳远");
@@ -775,7 +775,7 @@ public class AIBase : MonoBehaviour {
 
     bool GetMove(float distance,float nearSpeed)
     {
-        if (gameObj.transform.position.x - transform.position.x > distance)
+        if (thePlayer.transform.position.x - transform.position.x > distance)
         {
             //目标在右
             //print("  向右跑！！??   "+ nearSpeed+"    ACName    "+gameBody.GetDB().animation.lastAnimationName );
@@ -783,7 +783,7 @@ public class AIBase : MonoBehaviour {
             //print("    ACName    " + gameBody.GetDB().animation.lastAnimationName);
             return false;
         }
-        else if (gameObj.transform.position.x - transform.position.x < -distance)
+        else if (thePlayer.transform.position.x - transform.position.x < -distance)
         {
             //目标在左
             //print("  向 左跑！！ ***  "+nearSpeed + "    ACName    " + gameBody.GetDB().animation.lastAnimationName);
@@ -814,15 +814,15 @@ public class AIBase : MonoBehaviour {
     
     public bool IsInAtkDistance(float distance)
     {
-        if (Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= distance) return true;
+        if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x) <= distance) return true;
         return false;
     }
 
     //转向
     public virtual void ZhuanXiang()
     {
-        if (!gameObj) return;
-        if (gameObj.transform.position.x - transform.position.x > 0)
+        if (!thePlayer) return;
+        if (thePlayer.transform.position.x - transform.position.x > 0)
         {
             //目标在右
             gameBody.RunRight(0.3f);
@@ -1014,7 +1014,7 @@ public class AIBase : MonoBehaviour {
             }
             else
             {
-                if(Mathf.Abs(gameObj.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
+                if(Mathf.Abs(thePlayer.transform.position.x - transform.position.x) <= atkDistance) aiQishou.isFirstAtked = true;
             }
 
             return;
@@ -1379,7 +1379,7 @@ public class AIBase : MonoBehaviour {
             ZhuanXiang();
             //gameBody.GetStand();
             
-            GetComponent<AIRunCut>().GetStart(gameObj);
+            GetComponent<AIRunCut>().GetStart(thePlayer);
             atkNum++;
             //GetAtkNumReSet();
         }
@@ -1402,7 +1402,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             ZhuanXiang();
             //gameBody.GetStand();
-            GetComponent<AI_Chongci>().GetStart(gameObj);
+            GetComponent<AI_Chongci>().GetStart(thePlayer);
             atkNum++;
             //GetAtkNumReSet();
         }
@@ -1415,7 +1415,7 @@ public class AIBase : MonoBehaviour {
         if (!isActioning)
         {
             isActioning = true;
-            GetComponent<AIZiDan>().GetStart(gameObj);
+            GetComponent<AIZiDan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1437,7 +1437,7 @@ public class AIBase : MonoBehaviour {
             //print("111");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_YueGuanZhan>().GetStart(gameObj);
+            GetComponent<JN_YueGuanZhan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1459,7 +1459,7 @@ public class AIBase : MonoBehaviour {
             //print("111");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_CizuMoves>().GetStart(gameObj);
+            GetComponent<JN_CizuMoves>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1482,7 +1482,7 @@ public class AIBase : MonoBehaviour {
             //print("111   zhongzhan!!!!!!! ");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_zhongzhan>().GetStart(gameObj);
+            GetComponent<JN_zhongzhan>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1502,7 +1502,7 @@ public class AIBase : MonoBehaviour {
             //print("111   zhongzhan!!!!!!! ");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_JumpCut>().GetStart(gameObj);
+            GetComponent<JN_JumpCut>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1525,7 +1525,7 @@ public class AIBase : MonoBehaviour {
             //print("111   zhongzhan!!!!!!! ");
             isActioning = true;
             ZhuanXiang();
-            GetComponent<JN_LuanRen2>().GetStart(gameObj);
+            GetComponent<JN_LuanRen2>().GetStart(thePlayer);
             atkNum++;
             return;
         }
@@ -1558,7 +1558,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             ZhuanXiang();
             //gameBody.GetStand();
-            GetComponent<AIYiShan>().GetStart(gameObj);
+            GetComponent<AIYiShan>().GetStart(thePlayer);
             atkNum++;
             //GetAtkNumReSet();
         }
@@ -1598,7 +1598,7 @@ public class AIBase : MonoBehaviour {
             isActioning = true;
             //isAction = true;
             isYLHuiXue = true;
-            GetComponent<AIYuanLiHuiXue>().GetStart(gameObj);
+            GetComponent<AIYuanLiHuiXue>().GetStart(thePlayer);
         }
 
         if (isActioning) {
