@@ -105,12 +105,19 @@ public class Plot_Str : MonoBehaviour
     //"acType:talk-talkObjName:B_dlws-msg:。。。。。。！^event$over-choseType:dan-id:5-nextId:6|";
 
 
-    string plotStr = "acType:talk-talkObjName:B_dlws-msg:只有意志坚定的人才能使用我的力量，你觉得你的意志坚定吗？-choseType:dan-id:1-nextId:2|" +
-        "acType:talk-talkObjName:player-msg:当然！#4@我不喜欢费神。#3-choseType:duo-id:2-nextId:3|" +
-        "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
-        "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
-        "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
-        "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
+    //string plotStr = "acType:talk-talkObjName:B_dlws-msg:只有意志坚定的人才能使用我的力量，你觉得你的意志坚定吗？-choseType:dan-id:1-nextId:2|" +
+    //    "acType:talk-talkObjName:player-msg:当然！#4@我不喜欢费神。#3-choseType:duo-id:2-nextId:3|" +
+    //    "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
+    //    "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
+    //    "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
+    //    "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
+
+    string plotStr = "acType:talk-talkObjName:B_dlws-msg:。。。没有人爱我！-choseType:dan-id:1-nextId:2|" +
+       "acType:talk-talkObjName:player-msg:。。。。我也是！#4@总会有爱你的人出现的！。#3-choseType:duo-id:2-nextId:3|" +
+       "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
+       "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
+       "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
+       "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
 
 
 

@@ -7,11 +7,14 @@ public class AudioControl : MonoBehaviour {
     public bool isValueByPlayerDistance = false;
     public float distance = 10;
     GameObject player;
+    public float TheVolume = 1;
+    public float YuanshiYinLian = 1;
     // Use this for initialization
     void Start () {
         m_AudioSource = gameObject.GetComponent<AudioSource>();
         //print("m_AudioSource> " + m_AudioSource);
         m_AudioSource.volume = GlobalSetDate.instance.GetSoundEffectValue();
+        YuanshiYinLian = m_AudioSource.volume;
     }
 
     void GetValueByPlayerDistance()
@@ -29,7 +32,12 @@ public class AudioControl : MonoBehaviour {
                 m_AudioSource.volume = 0;
                 return;
             }
-            if(player)m_AudioSource.volume = (1 -Mathf.Abs(player.transform.position.x - this.transform.position.x)/distance)* GlobalSetDate.instance.GetSoundEffectValue();
+            
+            if (player) {
+                TheVolume = (1 - Mathf.Abs(player.transform.position.x - this.transform.position.x) / distance) * GlobalSetDate.instance.GetSoundEffectValue() * YuanshiYinLian;
+                m_AudioSource.volume = TheVolume;
+            }
+           
         }
 
     }

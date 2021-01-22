@@ -634,7 +634,6 @@ public class HitKuai : MonoBehaviour {
     PlayerUI _playerUI;
 
 
-
     void OnTriggerEnter2D(Collider2D Coll)
     {
         GetHit(Coll);
@@ -686,8 +685,9 @@ public class HitKuai : MonoBehaviour {
             HitTXPos(hitTx_1);
         }
 
+       
 
-        //print("live "+ roleDate.live);
+        print(this.name+ " ??atkSkillName  " + jn_date .atkSkillName+ "  "+"live@@@ "+ beHitObj.GetComponent<RoleDate>().live);
 
         //判断是否在躲避阶段  无法被攻击
         //判断击中特效播放位置
@@ -707,7 +707,47 @@ public class HitKuai : MonoBehaviour {
             HitTX2("JZTX_dian");
             return;
         }
-        
+        print("  攻击类型 "+ jn_date.HitInSpecialEffectsType);
+
+        if (jn_date.HitInSpecialEffectsType == 5)
+        {
+            print("5555555555555  被撞击");
+            //是身体碰撞 只显示光圈
+            GameObject hitTx_1 = Resources.Load("TX_hitGuangquan") as GameObject;
+            hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
+            HitTXPos(hitTx_1);
+            //被撞击者 退后
+            float _fanTuili = 1000;
+            _fanTuili = atkObj.transform.position.x > beHitObj.transform.position.x ? _fanTuili : -_fanTuili;
+            if(Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) <= 100)
+            {
+                atkObj.GetComponent<GameBody>().HasBeHit(_fanTuili, false);
+                atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(_fanTuili, 0));
+            }
+            return;
+        }
+
+
+        if (jn_date.HitInSpecialEffectsType == 6)
+        {
+            print("66666666666  型的攻击被撞击  刺鱼  刺猬等");
+            //是身体碰撞 只显示光圈
+            GameObject hitTx_1 = Resources.Load("TX_hitGuangquan") as GameObject;
+            hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
+            HitTXPos(hitTx_1);
+            //被撞击者 退后
+            float _fanTuili = 1000;
+            _fanTuili = atkObj.transform.position.x > beHitObj.transform.position.x ? _fanTuili : -_fanTuili;
+            if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) <= 100)
+            {
+
+                atkObj.GetComponent<GameBody>().HasBeHit(_fanTuili, false);
+                atkObj.GetComponent<GameBody>().BeHitSlowByTimes(1,0);
+                atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(_fanTuili, 0),true);
+            }
+        }
+
+
         HitTX(_psScaleX, "BloodSplatCritical3", "",2,false,false,-txPos);
         if(jn_date.HitInSpecialEffectsType != 3)HitTX(_psScaleX,"jizhong", BeHitRoleDate.beHitVudio,4,true,true);
 

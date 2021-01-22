@@ -44,7 +44,7 @@ public class AITheWay_dcr : MonoBehaviour {
     public string[] GetZSArrays(int lie = 0)
     {
         if (zs_way.Count == 0 || zs_way.Count == 1) return zsArr1;
-        //print("lie   "+lie+ "  atkArrs   "+ atkArrs.Length);
+        print("lie   "+lie+ "  atkArrs   "+ atkArrs.Length);
 
         string[] zss = (string[])atkArrs[lie];
         return zss;

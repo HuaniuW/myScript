@@ -24,7 +24,7 @@ public class AirGameBody : GameBody {
         if (!GetDB().animation.HasAnimation(RUN)) RUN = "run_3";
     }
 
-
+   
 
 
     [Header("感应与面前墙的距离")]
@@ -148,16 +148,24 @@ public class AirGameBody : GameBody {
         playerRigidbody2D.velocity = newSpeed;
     }
 
+    [Header("飞行怪物 移动时候的 声音")]
+    public AudioSource RunAudio;
+
     public override void Run()
     {
         //print("isJumping   "+ isJumping+ "    isDowning  "+ isDowning+ "   isBeHiting  " + roleDate.isBeHiting+ "isInAiring" + isInAiring+ "   isDodgeing  " + isDodgeing);
         //print("is run--------------------------------------------> "+RUN);
         //if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        if (roleDate.isBeHiting) return;
+        if (roleDate.isBeHiting) {
+            if (RunAudio && RunAudio.isPlaying) RunAudio.Stop();
+            return;
+        }
+        
         if (DBBody.animation.lastAnimationName != RUN)
         {
             //print("?????run     "+ DBBody.animation.lastAnimationName);
             DBBody.animation.GotoAndPlayByFrame(RUN);
+            if (RunAudio) RunAudio.Play();
         }
       
     }
@@ -167,13 +175,13 @@ public class AirGameBody : GameBody {
         //print("hi");
     }
 
-    public override bool IsGround
-    {
-        get
-        {
-            return true;
-        }
-    }
+    //public override bool IsGround
+    //{
+    //    get
+    //    {
+    //        return true;
+    //    }
+    //}
 
     public override bool IsEndGround
     {
@@ -210,6 +218,7 @@ public class AirGameBody : GameBody {
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
+            if (BeHitSound_1) BeHitSound_1.Play();
             if (IsDieBoomOutObj) DieBoomOutObj();
         }
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
@@ -217,13 +226,21 @@ public class AirGameBody : GameBody {
     }
 
 
-    public override void HasBeHit(float chongjili = 0)
+    public override void HasBeHit(float chongjili = 0,bool IsOther = true)
     {
         if (!DBBody) return;
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         roleDate.isBeHiting = true;
-        
+
+        if (BeHitSound_1)
+        {
+            if (GlobalTools.GetRandomNum() >= 40)
+            {
+                if(IsOther) BeHitSound_1.Play();
+            }
+        }
+
         if (isInAiring)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))

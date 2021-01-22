@@ -7,10 +7,22 @@ public class AIChongji : MonoBehaviour, ISkill
     // Start is called before the first frame update
     void Start()
     {
+        GetInit();
         runNear = GetComponent<AIAirRunNear>();
         runAway = GetComponent<AIAirRunAway>();
+        _roleDate = GetComponent<RoleDate>();
+        _airGameBody = GetComponent<AirGameBody>();
         CJYanmu.Stop();
     }
+
+
+    protected virtual void GetInit()
+    {
+
+    }
+
+    protected RoleDate _roleDate;
+    protected AirGameBody _airGameBody;
 
     protected AIAirRunNear runNear;
     protected AIAirRunAway runAway;
@@ -47,7 +59,7 @@ public class AIChongji : MonoBehaviour, ISkill
 
     protected bool IsTongYing = false;
 
-    public void ReSetAll()
+    public virtual void ReSetAll()
     {
         IsTongYing = false;
         isStarting = false;
@@ -57,6 +69,7 @@ public class AIChongji : MonoBehaviour, ISkill
         deltaNums = 0;
         CJYanmu.Stop();
         GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
+        if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
     }
 
 
@@ -68,7 +81,11 @@ public class AIChongji : MonoBehaviour, ISkill
             ReSetAll();
             return;
         }
-        if (!isTanSheing && GetNearTarget())isTanSheing = true;
+        if (!isTanSheing && GetNearTarget()) {
+            isTanSheing = true;
+            if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
+        }
+        
         if (isTanSheing) Tanshe();
     }
 
@@ -137,11 +154,24 @@ public class AIChongji : MonoBehaviour, ISkill
             IsStartChongji = true;
             targetPos = _targetObj.position;
             //这个点 要在靠后一点
-            float dis = GlobalTools.GetDistanceByTowPoint(targetPos,transform.position);
-            float _d = 4;
-            float __x1 = targetPos.x - _d * (this.transform.position.x - targetPos.x) / dis;
-            float __y1 = targetPos.y - _d * (this.transform.position.y - targetPos.y) / dis;
-            targetPos = new Vector2(__x1,__y1);
+            //float dis = GlobalTools.GetDistanceByTowPoint(targetPos, transform.position);
+            //float _d = 1;
+            //float __x1 = targetPos.x - _d * (this.transform.position.x - targetPos.x) / dis;
+            //float __y1 = targetPos.y - _d * (this.transform.position.y - targetPos.y) / dis;
+            //targetPos = new Vector2(__x1, __y1);
+
+
+            //转向
+            //朝向
+            if (this.transform.position.x < targetPos.x)
+            {
+                _airGameBody.TurnRight();
+            }
+            else
+            {
+                _airGameBody.TurnLeft();
+            }
+
         }
 
         if(IsGenZongType) targetPos = _targetObj.position;
@@ -150,7 +180,7 @@ public class AIChongji : MonoBehaviour, ISkill
         //print(" 5  "+ this.transform.position);
         deltaNums += Time.deltaTime;
 
-        if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed))
+        if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed,false,true,0))
         {
             ChongjiOver();
         }
@@ -159,7 +189,7 @@ public class AIChongji : MonoBehaviour, ISkill
     }
 
 
-    protected void ChongjiOver()
+    protected virtual void ChongjiOver()
     {
         IsTongYing = false;
         deltaNums = 0;
@@ -173,6 +203,7 @@ public class AIChongji : MonoBehaviour, ISkill
         CJYanchiNums = 0;
         GetComponent<AIAirRunNear>().ResetAll();
         GetComponent<AirGameBody>().SetACingfalse();
+        if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
         //print("*************************************************************冲击 结束！！！！！");
     }
 

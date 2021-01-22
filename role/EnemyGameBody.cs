@@ -165,7 +165,7 @@ public class EnemyGameBody : GameBody {
         _isHasAtkTX = false;
     }
 
-    override public void HasBeHit(float chongjili = 0)
+    override public void HasBeHit(float chongjili = 0, bool IsOther = true)
     {
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();

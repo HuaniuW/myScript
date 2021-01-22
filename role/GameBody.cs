@@ -82,6 +82,14 @@ public class GameBody : MonoBehaviour, IRole {
     [Header("是否需要 碰撞点 不需要的话直接是中点")]
     public bool IsNeedHitPos = true;
 
+
+    [Header("被 击中的 叫声   1")]
+    public AudioSource BeHitSound_1;
+
+    [Header("被 击中的 叫声   2")]
+    public AudioSource BeHitSound_2;
+
+
     protected Rigidbody2D playerRigidbody2D;
     public Rigidbody2D GetPlayerRigidbody2D()
     {
@@ -169,6 +177,8 @@ public class GameBody : MonoBehaviour, IRole {
         IsJiasu = false;
         if (roleDate) roleDate.isBeHiting = false;
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= _recordGravity) playerRigidbody2D.gravityScale = _recordGravity;
+
+        acingTime = 0;
     }
 
     protected RoleDate roleDate;
@@ -951,6 +961,30 @@ public class GameBody : MonoBehaviour, IRole {
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
         playerRigidbody2D.AddForce(v2);
     }
+
+
+    public virtual void GetTuiliACing(Vector2 v2, bool IsSetZero = false)
+    {
+        if (!playerRigidbody2D) return;
+        if (IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
+        isAcing = true;
+        playerRigidbody2D.AddForce(v2);
+    }
+
+    float acingTime = 0;
+    float acTimeDelta = 1; 
+    protected virtual void ACingTimes()
+    {
+        if (isAcing)
+        {
+            acingTime += Time.deltaTime;
+            if (acingTime >= acTimeDelta)
+            {
+                isAcing = false;
+            }
+        }
+    }
+
 
     protected virtual void BeHitFlyOut(float power)
     {
@@ -1840,7 +1874,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (Globals.isInPlot) return;
 
-
+        BeHitslowing();
 
         if (roleDate.isBeHiting)
         {
@@ -1851,7 +1885,7 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-
+        ACingTimes();
 
         //if (CurrentAcName != BEHIT || CurrentAcName != BEHITINAIR || CurrentAcName != DIE)
         //{
@@ -1960,7 +1994,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
     public int beHitNum = 0;
-    public virtual void HasBeHit(float chongjili = 0)
+    public virtual void HasBeHit(float chongjili = 0, bool IsOther = true)
     {
         if (DBBody == null) return;
         if (DBBody.animation.lastAnimationName == DODGE1) return;
@@ -1988,28 +2022,35 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected float _BeHitSlowTimes = 1;
     protected float _BeHitSlowTimesNums = 0;
-    
-    protected void BeHitSlowByTimes(float beHitSlowTimes = 4,float slowScale = 0f)
+    protected float _slowScale = 0;
+
+
+    public void BeHitSlowByTimes(float beHitSlowTimes = 4,float slowScale = 0f)
     {
         _BeHitSlowTimesNums = 0;
         _BeHitSlowTimes = beHitSlowTimes;
-        _BeHitSlowTimesNums = slowScale;
+        _slowScale = slowScale;
 
         _IsBeHitSlowing = true;
         DBBody.animation.timeScale = slowScale;
         //GetPause(beHitSlowTimes, slowScale);
     }
 
-    protected bool _IsBeHitSlowing = false;
+    public bool _IsBeHitSlowing = false;
     protected void BeHitslowing()
     {
+        //print("  ------------------------------------slowingBeHitslowing ");
         if (!_IsBeHitSlowing) return;
+        DBBody.animation.timeScale = _slowScale;
         if (_BeHitSlowTimesNums >= _BeHitSlowTimes)
         {
             _IsBeHitSlowing = false;
             DBBody.animation.timeScale = 1;
+            _BeHitSlowTimesNums = 0;
         }
+        
         _BeHitSlowTimesNums += Time.deltaTime;
+        //print( this.name+  "  ------------------------------------------??????BeHitslowingBeHitslowingBeHitslowingBeHitslowing "+ _BeHitSlowTimes+"   ???  "+ _BeHitSlowTimesNums+ "    ????????? DBBody.animation.timeScale   "+ DBBody.animation.timeScale+ "  lastAnimationName:   " + DBBody.animation.lastAnimationName);
     }
 
 
@@ -2025,7 +2066,7 @@ public class GameBody : MonoBehaviour, IRole {
             //print(" isBeHiting! 但是没有进入 behit 动作 ");
         }
 
-        BeHitslowing();
+        
 
     }
 

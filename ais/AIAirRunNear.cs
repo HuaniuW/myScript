@@ -163,7 +163,7 @@ public class AIAirRunNear : MonoBehaviour
     public float zhijieZhuijiTanCeDistance = 1;
     //直接 去到目标点
     //inDistance 进入 范围直径
-    public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true)
+    public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true,float MaxSpeedX = 18)
     {
         if (inDistance != 0) zuijiPosDisWC = inDistance;
         zhuijiRun(IsCanTurnFace);
@@ -171,7 +171,16 @@ public class AIAirRunNear : MonoBehaviour
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
         //print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
         Vector2 v2 = (point - thisV2) * TempSpeed;// GlobalTools.GetVector2ByPostion(point, thisV2, TempSpeed);
+
+        //print("直接移动速度 v2 >>>>>>>>>>>>>>>>>>  " + v2);
+        if (MaxSpeedX!=0&&Mathf.Abs(v2.x) > MaxSpeedX)
+        {
+            v2.x =v2.x>0? MaxSpeedX:-MaxSpeedX;
+            v2.y *= MaxSpeedX / Mathf.Abs(v2.x);
+        }
+
         //print("直接移动速度 v2   "+v2);
+        
 
         //if (v2.sqrMagnitude > (thisV2 - point).sqrMagnitude)
         //{
@@ -185,9 +194,9 @@ public class AIAirRunNear : MonoBehaviour
         this.GetComponent<GameBody>().IsJiasu = true;
         //如果 行动中撞墙  直接返回true
 
-        if(IsTestHitWall &&IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        if (IsTestHitWall && IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
         {
-            print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;
@@ -195,7 +204,7 @@ public class AIAirRunNear : MonoBehaviour
 
         //这里要做预判
 
-       
+
         //距离小于 误差内 直接结束
         if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
         {
@@ -444,7 +453,7 @@ public class AIAirRunNear : MonoBehaviour
 
     //靠XY来追击 不是寻路
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
-        //print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
+        print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
         if (_zjDistance ==0) _zjDistance = atkdistance;
         _zjDistanceY = 0;
         _zjDistanceY = atkDistanceY;
@@ -713,20 +722,22 @@ public class AIAirRunNear : MonoBehaviour
             CSDistanceY = Mathf.Abs(_obj.transform.position.y - transform.position.y);
         }
 
-        speedY *= Mathf.Abs(_obj.transform.position.y - transform.position.y) / CSDistanceY;
+        float __speedY = speedY;
+        __speedY *= Mathf.Abs(_obj.transform.position.y - transform.position.y) / CSDistanceY;
+        if (__speedY > speedY) __speedY = speedY;
 
         if (_obj.transform.position.y - transform.position.y > _moveDistance)
         {
             //目标在上 向上移动
             //print("   上移动 ");
-            _airGameBody.RunY(speedY);
+            _airGameBody.RunY(__speedY);
             return false;
         }
         else if (_obj.transform.position.y - transform.position.y < -_moveDistance)
         {
             //目标在下 向下移动
             //print("   下移动 ！！！！！");
-            _airGameBody.RunY(-speedY);
+            _airGameBody.RunY(-__speedY);
             return false;
         }
         else

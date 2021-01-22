@@ -20,15 +20,24 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     bool IsTrunFace = false;
 
 
+    RoleDate _roleDate;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _roleDate = GetComponent<RoleDate>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_roleDate.isDie || _roleDate.isBeHiting)
+        {
+            ReSetAll();
+            _isGetOver = true;
+            return;
+        }
+
         if (_isQiShiAC) QiShiAC();
         if (_isFireOver) FireOver();
     }
@@ -84,6 +93,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         print(">>fashezidan!!  发射 什么 子弹 都这里控制");
         if (FireAudio)
         {
+            print("  -------------------------------------------------- 子弹发射声音  ");
             FireAudio.Play();
         }
 

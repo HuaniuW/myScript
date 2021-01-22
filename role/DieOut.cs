@@ -36,6 +36,9 @@ public class DieOut : MonoBehaviour {
     [Header("自身的碰撞块")]
     public GameObject HitKuai;
 
+    [Header("自身的碰撞块")]
+    public GameObject HitKuai2;
+
 
 
     [Header("标记 检查 是否 怪都die了")]
@@ -48,6 +51,7 @@ public class DieOut : MonoBehaviour {
             if (IsOrter1) DieBeBlack();
 
             if (HitKuai) HitKuai.SetActive(false);
+            if (HitKuai2) HitKuai2.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
 
             //判断是否 在自动地图里面

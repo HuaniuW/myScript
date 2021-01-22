@@ -175,7 +175,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     {
 
         if (!IsStartMove) return;
-        //print("   IsStartMove "+ IsStartMove);
+        print("  ---------------------------- IsStartMove "+ IsStartMove);
 
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {

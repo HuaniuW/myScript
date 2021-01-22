@@ -6,10 +6,14 @@ using DragonBones;
 public class AIYinshen : MonoBehaviour
 {
     GameBody _gameBody;
+    RoleDate _roledate;
+    AIAirBase _aiAirBase;
     // Start is called before the first frame update
     void Start()
     {
         _gameBody = GetComponent<GameBody>();
+        _roledate = GetComponent<RoleDate>();
+        _aiAirBase = GetComponent<AIAirBase>();
         if (!_db) _db = _gameBody.GetDB();
     }
 
@@ -53,7 +57,7 @@ public class AIYinshen : MonoBehaviour
     //float YinShenjishiCZTime = 1;
     void YinshenXianzhiJishi()
     {
-        if (IsBeHitingHide&&!GetComponent<RoleDate>().isBeHiting)
+        if (IsBeHitingHide&&!_roledate.isBeHiting)
         {
             IsBeHitingHide = false;
         }
@@ -64,10 +68,11 @@ public class AIYinshen : MonoBehaviour
     //被攻击后 隐身后退
     public void BeHitHide()
     {
+        //print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl            " + BeHitHideJL);
         if (!IsOpenBeHitHide) return;
        
         if (IsBeHitingHide) return;
-        if (GetComponent<RoleDate>().isDie) return;
+        if (_roledate.isDie) return;
         IsBeHitingHide = true;
         //if (IsBeHitingHide &&!GetComponent<RoleDate>().isBeHiting)
         //{
@@ -92,12 +97,15 @@ public class AIYinshen : MonoBehaviour
             //后退速度  用后闪的 接口
             _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             _gameBody.BackJumpVX(houshanValue);
-            GetComponent<RoleDate>().isCanBeHit = false;
+            _roledate.isCanBeHit = false;
             ShowXuetiao();
             //隐身 接口
             print("------------------被攻击后 隐身");
-            GetComponent<AIAirBase>().GetAtkFSByName("yinshen");
             ReSetAll();
+            _aiAirBase.GetAtkFSByName("yinshen");
+           
+
+
         }
         
 
@@ -112,8 +120,8 @@ public class AIYinshen : MonoBehaviour
             //print("  被攻击 反击   "+ HideAtkName);
 
             if (HideAtkName != "") {
-                GetComponent<AIAirBase>().GetReSet();
-                GetComponent<AIAirBase>().GetAtkFSByName(HideAtkName);
+                _aiAirBase.GetReSet();
+                _aiAirBase.GetAtkFSByName(HideAtkName);
             }
             
         }
@@ -121,8 +129,8 @@ public class AIYinshen : MonoBehaviour
         {
             //print("  自带的 反击 动作   " + ATKACName);
             if (ATKACName != "") {
-                GetComponent<AIAirBase>().GetReSet();
-                GetComponent<AIAirBase>().GetAtkFSByName(ATKACName);
+                _aiAirBase.GetReSet();
+                _aiAirBase.GetAtkFSByName(ATKACName);
             }
             
         }
@@ -135,6 +143,7 @@ public class AIYinshen : MonoBehaviour
 
     public void ReSetAll()
     {
+        //隐身撞墙 位置修正次数
         ChoseNums = 0;
         showPos = new Vector2(1000, 1000);
         IsOver = true;
@@ -145,6 +154,9 @@ public class AIYinshen : MonoBehaviour
         ShowXuetiao();
 
         YinShenJiShi = 0;
+
+        IsStartYinShen = false;
+        //_aiAirBase.QuXiaoAC();
     }
 
 
@@ -213,7 +225,8 @@ public class AIYinshen : MonoBehaviour
 
 
     //隐身时长 计时
-    float YinShenTimes = 1;
+    [Header("隐身后 隐身 时长 计时")]
+    public float YinShenTimes = 1;
     float YinShenJiShi = 0;
 
     //隐身出现位置 类型
@@ -236,8 +249,8 @@ public class AIYinshen : MonoBehaviour
     }
 
 
-
-
+    //隐身前的位置
+    Vector2 yinshenQianPos = Vector2.zero;
     public bool IsGetHide()
     {
         if (!IsHideing) return false;
@@ -248,14 +261,16 @@ public class AIYinshen : MonoBehaviour
             if (!IsStartYinShen)
             {
                 IsStartYinShen = true;
+                yinshenQianPos = this.transform.position;
                 _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
                 HideXuetiao();
                 if (!IsCanBeHit)
                 {
-                    GetComponent<RoleDate>().isCanBeHit = false;
+                    _roledate.isCanBeHit = false;
                 }
                 ShowYinShenTX();
                 this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y+1000);
+                print("--------------------------------------------------shun zou ");
             }
 
             YinShenJiShi += Time.deltaTime;
@@ -290,7 +305,7 @@ public class AIYinshen : MonoBehaviour
             HideXuetiao();
             if (!IsCanBeHit)
             {
-                GetComponent<RoleDate>().isCanBeHit = false;
+                _roledate.isCanBeHit = false;
             }
         }
 
@@ -311,9 +326,9 @@ public class AIYinshen : MonoBehaviour
 
             _db.animation.Stop();
             _gameBody.GetStand();
-            GetComponent<AIAirBase>().ZhuanXiang();
+            _aiAirBase.ZhuanXiang();
             IsShowing = false;
-            GetComponent<RoleDate>().isCanBeHit = true;
+            _roledate.isCanBeHit = true;
             return true;
         }
 
@@ -325,7 +340,7 @@ public class AIYinshen : MonoBehaviour
         if (!_db.animation.HasAnimation(ShowACName))
         {
             IsShowing = false;
-            GetComponent<RoleDate>().isCanBeHit = true;
+            _roledate.isCanBeHit = true;
             //print("  没有显示动作  隐身流程走完！！！！  ");
             return true;
         }
@@ -341,8 +356,8 @@ public class AIYinshen : MonoBehaviour
             _db.animation.Stop();
             //防止闪烁
             _gameBody.GetStand();
-            GetComponent<RoleDate>().isCanBeHit = true;
-            GetComponent<AIAirBase>().ZhuanXiang();
+            _roledate.isCanBeHit = true;
+            _aiAirBase.ZhuanXiang();
             _gameBody.SetACPlayScale(1);
             //print("     ----->   显示? ????");
             ShowXuetiao();
@@ -359,6 +374,16 @@ public class AIYinshen : MonoBehaviour
     }
 
 
+    string _yinShenPosType = "";
+    public void SetYinShenPosBiaoJi(string posType = "")
+    {
+        _yinShenPosType = posType;
+    }
+
+    //void GetYinShenTypePos()
+    //{
+       
+    //}
 
 
     Vector2 showPos = new Vector2(1000,1000);
@@ -371,11 +396,6 @@ public class AIYinshen : MonoBehaviour
         //显示时候 可以释放特效 替身术 等
 
         //隐身 去哪  1.玩家头顶  2.玩家前后
-
-
-
-
-
         if (!_airRun) _airRun = GetComponent<AIAirRunNear>();
         //找点 先找身后 再找前面
         float __x;
@@ -383,8 +403,37 @@ public class AIYinshen : MonoBehaviour
 
         if (YinShenType == 2)
         {
-            __x = GlobalTools.GetRandomNum()>50? thePlayer.transform.position.x - atkDistanceX: thePlayer.transform.position.x + atkDistanceX;
-            __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(4);
+            int yu = ChoseNums % 3;
+
+            if (yu == 1)
+            {
+                __x = thePlayer.transform.position.x + 2 + GlobalTools.GetRandomDistanceNums(4);
+                __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(2);
+            }
+            else if (yu == 2)
+            {
+                __x = thePlayer.transform.position.x - 2- GlobalTools.GetRandomDistanceNums(4);
+                __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(2);
+            }
+            else
+            {
+                if (_yinShenPosType == "s")
+                {
+                    print(" ssssss ");
+                    //上方
+                    __x = thePlayer.transform.position.x;
+                    __y = __y = thePlayer.transform.position.y + 5 + GlobalTools.GetRandomDistanceNums(3);
+                }
+                else
+                {
+                    __x = GlobalTools.GetRandomNum() > 50 ? thePlayer.transform.position.x - atkDistanceX : thePlayer.transform.position.x + atkDistanceX;
+                    __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(4);
+                }
+            }
+
+
+
+           
         }
         else
         {
@@ -420,30 +469,47 @@ public class AIYinshen : MonoBehaviour
        
 
         showPos = new Vector2(__x, __y);
-
-        //检测 点 是否 被碰撞 左右 上下 判断  
-        if (_airRun.IsHitDiBan(showPos, hitDiBanDistance)|| _airRun.IsHitDiBan(showPos, -hitDiBanDistance)|| _airRun.IsHitDiBan(showPos, hitDiBanDistance,"")|| _airRun.IsHitDiBan(showPos, -hitDiBanDistance, ""))
+        if (ChoseNums >= 3)
         {
-            ChoseNums++;
-            if (ChoseNums == 1)
-            {
-                GetShow();
-            }
-            else
-            {
-                // 没有可以用的点
-                ChoseNums = 0;
-                //原地 显示
-                showPos = this.transform.position;
-                return;
-            }
-            
-           
+            showPos = yinshenQianPos;
         }
+        else
+        {
+            //检测 点 是否 被碰撞 左右 上下 判断  
+            if (_airRun.IsHitDiBan(showPos, hitDiBanDistance) || _airRun.IsHitDiBan(showPos, -hitDiBanDistance) || _airRun.IsHitDiBan(showPos, hitDiBanDistance, "") || _airRun.IsHitDiBan(showPos, -hitDiBanDistance, ""))
+            {
+                ChoseNums++;
+                if (ChoseNums == 1)
+                {
+                    GetShow();
+                }
+                else
+                {
+                    if (YinShenType == 2)
+                    {
+                        GetShow();
+                    }
+                    else
+                    {
+                        // 没有可以用的点
+                        ChoseNums = 0;
+                        //原地 显示
+                        showPos = this.transform.position;
+                    }
+
+                    return;
+                }
+            }
+        }
+
+
+     
 
         if (!IsShowing)
         {
             IsShowing = true;
+            ShowXuetiao();
+            ChoseNums = 0;
             this.transform.position = showPos;
         }
 
@@ -457,6 +523,7 @@ public class AIYinshen : MonoBehaviour
     {
         if (!IsShowing|| IsOver) return;
         if (IsShowOut()) IsOver = true;
+        _aiAirBase.QuXiaoAC();
     }
 
     [Header("显示时候 动作速度")]
@@ -466,7 +533,7 @@ public class AIYinshen : MonoBehaviour
     GameObject thePlayer;
     public void GetStart(GameObject obj)
     {
-        //print("yinshen start!!!");
+        print("*****************************************************************************************yinshen start!!!   "+GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
         thePlayer = obj;
         IsOver = false;
         IsHideing = true;
@@ -475,7 +542,8 @@ public class AIYinshen : MonoBehaviour
     public bool IsGetOver()
     {
         //如果可以被攻击 并且 在隐身期间被攻击 的话 重置 跳出
-        if (GetComponent<RoleDate>().isBeHiting) {
+        if (_roledate.isBeHiting) {
+            print("----------------------------------------------------是否进来 behiting了");
             IsInBeHitFJ = false;
             ReSetAll();
         }

@@ -976,7 +976,7 @@ public class PlayerGameBody : GameBody {
         //}
     }
 
-    override public void HasBeHit(float chongjili = 0)
+    override public void HasBeHit(float chongjili = 0, bool IsOther = true)
     {
         //print("wocao  >>>>>>>>>>>>>>>>>>>?????   Behit  ");
         //if (DBBody.animation.lastAnimationName == DODGE1) return;

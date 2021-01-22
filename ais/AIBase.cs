@@ -250,9 +250,17 @@ public class AIBase : MonoBehaviour {
             isFindEnemy = true;
             //isPatrol = false;
             GetComponent<GameBody>().InFightAtk();
+            FightingDistanceAdd();
             return true;
         }
         return false;
+    }
+
+    //战斗后 感知距离增加
+    void FightingDistanceAdd()
+    {
+        findEnemyDistance = 30;
+        outDistance = 30;
     }
 
     public float outDistance = 15;
@@ -557,7 +565,7 @@ public class AIBase : MonoBehaviour {
 
 
 
-        if (isPatrol && !IsFindEnemy())
+        if (isPatrol && !IsFindEnemy()&&!gameBody._IsBeHitSlowing)
         {
             AIReSet();
             Patrol();

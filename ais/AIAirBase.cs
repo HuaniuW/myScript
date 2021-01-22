@@ -345,6 +345,7 @@ public class AIAirBase : AIBase
     {
 
         if (DontNear) return true;
+        print("----------???????????");
         if (thePlayer.transform.position.x - transform.position.x > distance)
         {
             //目标在右
@@ -431,7 +432,7 @@ public class AIAirBase : AIBase
          {
              if (!Tongshi()) return;
          }*/
-//        print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance+ "  atkDistanceY  "+ atkDistanceY);
+        print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance + "  atkDistanceY  " + atkDistanceY);
 
         if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance,1,atkDistanceY)||DontNear)) return;
 
@@ -509,6 +510,12 @@ public class AIAirBase : AIBase
             }
 
             if(acName == "hengXiangChongZhuang")
+            {
+                return;
+            }
+
+            //连弹攻击
+            if (acName == "liandan")
             {
                 return;
             }
@@ -600,7 +607,22 @@ public class AIAirBase : AIBase
                 return;
             }
 
-            if (acName == "yueguangzhan" || acName == "zhongzhan"||acName == "yinshen"|| acName == "gotoAtk"|| acName == "dazhan")
+            if (strArr[0] == "yinshen")
+            {
+                acName = strArr[0];
+                if (strArr.Length > 1)
+                {
+                    GetComponent<AIYinshen>().SetYinShenPosBiaoJi(strArr[1]);
+                }
+                else
+                {
+                    GetComponent<AIYinshen>().SetYinShenPosBiaoJi();
+                }
+                
+                return;
+            }
+
+            if (acName == "yueguangzhan" || acName == "zhongzhan"|| acName == "gotoAtk"|| acName == "dazhan")
             {
                 return;
             }
@@ -659,6 +681,12 @@ public class AIAirBase : AIBase
         if (acName == "zongYa")
         {
             GetZongYa();
+            return;
+        }
+
+        if (acName == "liandan")
+        {
+            GetLianDan();
             return;
         }
 
@@ -770,6 +798,8 @@ public class AIAirBase : AIBase
             return;
         }
 
+
+        print("    -------->acName "+ acName);
         PtAtk();
        
     }
@@ -833,6 +863,7 @@ public class AIAirBase : AIBase
         if (GetComponent<JN_Dazhan>()) GetComponent<JN_Dazhan>().ReSetAll();
         if (GetComponent<AIZongYa>()) GetComponent<AIZongYa>().ReSetAll();
         if (GetComponent<AIHengXiangChongZhuang>()) GetComponent<AIHengXiangChongZhuang>().ReSetAll();
+        if (GetComponent<AIChongJiHX>()) GetComponent<AIChongJiHX>().ReSetAll();
 
     }
 
@@ -848,6 +879,25 @@ public class AIAirBase : AIBase
         }
 
         if (isActioning && GetComponent<AIChongji>().IsChongjiOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    void GetLianDan()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AI_LianDan>().GetStart(thePlayer);
+            atkNum++;
+            //GetAtkNumReSet();
+            return;
+        }
+
+        if (isActioning && GetComponent<AI_LianDan>().IsGetOver())
         {
             ZhuanXiang();
             isAction = false;
