@@ -958,6 +958,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         //print(this.name+"  看看谁给的 力 "+v2);
         if (!playerRigidbody2D) return;
+        //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
         playerRigidbody2D.AddForce(v2);
     }
@@ -990,6 +991,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (GlobalTools.FindObjByName("player"))
         {
+            //print("die 飞出去 ！！！！！！！！！！！！");
             //playerRigidbody2D.AddForce(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
             GetZongTuili(GlobalTools.GetVector2ByPostion(this.transform.position, GlobalTools.FindObjByName("player").transform.position, 10) * GlobalTools.GetRandomDistanceNums(power));
         }
@@ -1364,7 +1366,8 @@ public class GameBody : MonoBehaviour, IRole {
         //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             if (this.tag == "player") {
-                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                DBBody.animation.FadeIn(STAND, 0.1f, 1);
             }
             else
             {

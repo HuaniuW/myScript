@@ -687,7 +687,7 @@ public class HitKuai : MonoBehaviour {
 
        
 
-        print(this.name+ " ??atkSkillName  " + jn_date .atkSkillName+ "  "+"live@@@ "+ beHitObj.GetComponent<RoleDate>().live);
+        //print(this.name+ " ??atkSkillName  " + jn_date .atkSkillName+ "  "+"live@@@ "+ beHitObj.GetComponent<RoleDate>().live);
 
         //判断是否在躲避阶段  无法被攻击
         //判断击中特效播放位置
@@ -707,11 +707,11 @@ public class HitKuai : MonoBehaviour {
             HitTX2("JZTX_dian");
             return;
         }
-        print("  攻击类型 "+ jn_date.HitInSpecialEffectsType);
+        //print("  攻击类型 "+ jn_date.HitInSpecialEffectsType);
 
         if (jn_date.HitInSpecialEffectsType == 5)
         {
-            print("5555555555555  被撞击");
+            //print("5555555555555  被撞击");
             //是身体碰撞 只显示光圈
             GameObject hitTx_1 = Resources.Load("TX_hitGuangquan") as GameObject;
             hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);

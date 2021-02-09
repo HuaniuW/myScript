@@ -14,6 +14,9 @@ public class GlobalSetDate : MonoBehaviour {
     /// </summary>
     public const string TEMP_SCREEN = "TempScreen";
     public string HowToInGame = TEMP_SCREEN;
+
+   
+
     // Use this for initialization
     static GlobalSetDate()
     {
@@ -351,20 +354,39 @@ public class GlobalSetDate : MonoBehaviour {
     //启动游戏的时候 调用存档数据先  对比当前关卡数据是否有变动 
     //每关都要对比加到临时数据
 
-    
 
 
 
 
-  
+    //GameObject UI_screenChangeZZ;
+
+    //public void Show_UIZZ()
+    //{
+    //    if (!UI_screenChangeZZ)
+    //    {
+    //        UI_screenChangeZZ = GlobalTools.GetGameObjectByName("ZZ_screenChange");
+    //    }
+    //    UI_screenChangeZZ.GetComponent<UI_screenChangeZZ>().Show_UIZZ();
+    //}
+
+    //public void Hide_UIZZ()
+    //{
+    //    if (!UI_screenChangeZZ)
+    //    {
+    //        UI_screenChangeZZ = GlobalTools.GetGameObjectByName("ZZ_screenChange");
+    //    }
+    //    UI_screenChangeZZ.GetComponent<UI_screenChangeZZ>().Hide_UIZZ();
+    //}
+
+    //public void ShowLoadProgressNums(float nums, bool isHasChangeScreen = false)
+    //{
+    //    UI_screenChangeZZ.GetComponent<UI_screenChangeZZ>().ShowLoadProgressNums(nums);
+    //}
 
 
 
-    
 
-   
 
-  
 
 
     public void GetSave()
@@ -626,13 +648,14 @@ public class GlobalSetDate : MonoBehaviour {
         //判断 如果 没有该大地图 就生成 大地图 并储存
         if(!IsHasBigMapByName(CMapTou, GameMapDate.BigMapDate))
         {
-
+            print("没有大地图 生成数据");
             //这里要 设置 保留门 存入地图数据 存入本地
             string baoliuFX = baoliumenFX;
+            print("进入生成 地图 保留门 的方向   "+ baoliuFX);
             //入场的 地图名字
             string ruchangMap = SceneManager.GetActiveScene().name+"$p";
 
-            //print("  *** ruchangMap "+ ruchangMap);
+            print("  这个是保留的场景名字 从这个 场景 进入的随机地图 *** ruchangMap "+ ruchangMap);
             // 设置 地图参数 中间名字  方向几率  最大地图数
             _createMap.SetMapCenterName(CMapTou.Split('_')[1]);
             List<string> TempMapList = _createMap.GetMaps();
@@ -666,7 +689,9 @@ public class GlobalSetDate : MonoBehaviour {
 
             //生成的 地图数据    map_r+map_r-1!0#0!r:map_r-2^l:mapR_1$p|map_r-2!1#0!l:map_r-1^r:map_r-3|map_r-4!2#1!d:map_r-3|map_r-5!2#-1!u:map_r-3|map_r-3!2#0!l:map_r-2^u:map_r-4^d:map_r-5^r:map_r-6|map_r-7!3#1!d:map_r-6|map_r-8!3#-1!u:map_r-6|map_r-6!3#0!l:map_r-3^u:map_r-7^d:map_r-8^r:map_r-9|map_r-9!4#0!l:map_r-6^u:map_r-10|map_r-10!4#1!d:map_r-9
             //print("生成的 地图数据:   " + gameMapDate.BigMapDate);
-            
+
+            print("生成的地图数据  "+ mapListMsgStr);
+
             //如果大地图中 没有该大地图   生成大地图
             if (GameMapDate.BigMapDate == "")
             {

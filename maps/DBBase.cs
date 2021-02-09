@@ -66,11 +66,11 @@ public class DBBase : MonoBehaviour
         float wuchaY = GlobalTools.GetRandomDistanceNums(2);
         __dingDBPosY = __posY-wuchaY;
 
-       
+        //SetDingDBPos();
         //print("顶部景控制*****   " + dibanDing.activeSelf);
         //生成 顶部时候 不许出树 或者 大概率不许出树
         //dibanDing.SetActive(true);
-        
+
     }
 
 
@@ -149,8 +149,9 @@ public class DBBase : MonoBehaviour
     protected float __dingDBPosX = 0;
     protected float __dingDBPosY = 0;
     //设置顶地板 位置
-    void SetDingDBPos()
+    public void SetDingDBPos()
     {
+        print("woshifou bei diaoyongl !!!!!!!!!!***********************************");
         dibanDing.transform.position = new Vector3(dibanDing.transform.position.x + __dingDBPosX, dibanDing.transform.position.y + __dingDBPosY, dibanDing.transform.position.z);
         if(maps!=null)dibanDing.transform.parent = maps.transform;
         DingDBJing();
@@ -251,7 +252,8 @@ public class DBBase : MonoBehaviour
             }
             else
             {
-                SetDingDBPos();
+                print("&&&&&&&&&&&&&&&&&&&&&&&&&&  设置 顶地板位置");
+                //SetDingDBPos();
             }
 
 
@@ -259,12 +261,6 @@ public class DBBase : MonoBehaviour
             GetJing();
             //随机灯光颜色
             //SetLightColor();
-
-            
-
-
-           
-
         }
     }
 
@@ -272,6 +268,16 @@ public class DBBase : MonoBehaviour
     protected virtual void InitStart()
     {
         //每次都会 调用
+        if (!IsShowDingDB)
+        {
+            print("  隐藏 顶地板！！！  ");
+            HideDingDB();
+            return;
+        }
+        else
+        {
+            ShowDingDB();
+        }
     }
 
     protected virtual void OtherStart()

@@ -73,7 +73,7 @@ public class JG_Door2 : MonoBehaviour
     public bool IsNeedCheck = true;
     public void AddDoorListener()
     {
-        print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ");
+        print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 是否 检测 开门  ");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
         if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
@@ -92,12 +92,30 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        //print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
-        if (e.eventParams.ToString() == "allDie") return;
+        print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
+        if (e.eventParams.ToString() == "allDie") {
+
+
+            print("怪物数组 长度   " + GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count);
+            ////GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
+
+            if (GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count == 0)
+            {
+                print("--->  开门！！！！ ");
+                IsCanCloseDoorMap = false;
+                IsCloseDoor = false;
+            }
+
+            return;
+        } 
+
+
+       
 
 
         if(e.eventParams.ToString() == "meiguai")
         {
+
             //没怪 不允许碰撞关门
             IsCanCloseDoorMap = false;
             //print("iiiiiiii  没怪 不许关门");

@@ -107,11 +107,12 @@ public class GameControl : MonoBehaviour {
 
 
                 print("  创建地图时候 玩家的位置 "+ player.transform.position);
+                print("玩家 出现点位置   " + door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position);
                 player.transform.position = door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position;
+                
+                print("玩家位置  "+ player.transform.position);
 
-                //print("玩家位置  "+ player.transform.position);
-
-
+                player.GetComponent<GameBody>().IsNeedDieOutDownY = true;
                 SetPlayerFXAndCameraPos();
                 return;
             }
@@ -220,7 +221,8 @@ public class GameControl : MonoBehaviour {
     {
         if (!IsCanBeCheckGuai) return;
         GameObject maps = GlobalTools.FindObjByName("maps");
-        if (maps) {
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>****************************@@@@@");
+        if (maps&& maps.GetComponent<GetReMap2>()) {
             if (maps.GetComponent<GetReMap2>().GuaiList.Count != 0) GuaiList = maps.GetComponent<GetReMap2>().GuaiList;
             if (maps.GetComponent<GetReMap2>().GetGuanKaType() == GlobalMapDate.BOSS_PINGDI ||
                 maps.GetComponent<GetReMap2>().GetGuanKaType() == GlobalMapDate.JINGYING_PINGDI) {
@@ -492,14 +494,16 @@ public class GameControl : MonoBehaviour {
         
         if (GlobalTools.FindObjByName("player") == null)
         {
-            print("   获取玩家信息1  没有角色 生成玩家player  ");
+            //print("   获取玩家信息1  没有角色 生成玩家player  ");
             player = InstancePrefabByName("player");
         }
         else
         {
-            print("   获取玩家信息2  有角色   @@@@@@@@@@@@@@@@@@ 直接调用player  ");
+            //print("   获取玩家信息2  有角色   @@@@@@@@@@@@@@@@@@ 直接调用player  ");
             player = GlobalTools.FindObjByName("player");
         }
+        //player.transform.position = new Vector2(0,0);
+        player.GetComponent<GameBody>().IsNeedDieOutDownY = false;
         if (player!=null) player.GetComponent<PlayerRoleDate>().GetStart();
     }
 
@@ -507,7 +511,7 @@ public class GameControl : MonoBehaviour {
 
     void GetPlayerStatus()
     {
-        print("玩家状态******************************************************************************************************************************》》》》》》》》       ");
+        //print("玩家状态******************************************************************************************************************************》》》》》》》》       ");
         if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
        
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏

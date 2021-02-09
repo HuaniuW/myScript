@@ -129,6 +129,9 @@ public class AIZongYa : MonoBehaviour,ISkill
         _isHasYaXia = false;
         ZhongYaStartPos = new Vector2(1000, 1000);
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
+
+        IsHasZhengdongStop = false;
+        xiaYaJS = 0;
     }
 
 
@@ -145,14 +148,14 @@ public class AIZongYa : MonoBehaviour,ISkill
     //2.移动到选取的 高空点
     void GoToStartPos()
     {
-        print(" zhongya 1  "+ _isGoToStartPos);
+        //print(" zhongya 1  "+ _isGoToStartPos);
         if (_airGameBody.IsHitWall || GoToMoveToPoint(GoToPos, 0.5f, 8))
         {
             ReSetAll();
             GetXiaYaPos();
             _isXiaYaQSACing = true;
             //_isGetOver = true;
-            print(" ---------------------------------------------- 到达指定 的高空！！！！ ");
+            //print(" ---------------------------------------------- 到达指定 的高空！！！！ ");
         }
 
         RongCuo();
@@ -271,6 +274,16 @@ public class AIZongYa : MonoBehaviour,ISkill
     [Header("下压到顶临界距离")]
     public float YInDiatance = 0.5f;
 
+
+    bool IsHasZhengdongStop = false;
+    float yazhuTime = 0;
+    [Header("下压后 停顿时间")]
+    public float YaZhuStopTime = 0;
+
+    [Header("下压是否需要判断 终端速度 提前结束")]
+    public bool IsNeedCheckSpeed = true;
+
+
     float xiaYaJS = 0f;
     void GetXiaYa()
     {
@@ -301,17 +314,38 @@ public class AIZongYa : MonoBehaviour,ISkill
         bool _IsHitDown = _airGameBody.IsHitDown;
         if (_IsHitDown  ||GoToMoveToPoint(_XiaYaPos, YInDiatance, ZYSpeed))
         {
-            
+
+            if (IsHasZhengdongStop)
+            {
+                yazhuTime += Time.deltaTime;
+                if (yazhuTime >= YaZhuStopTime)
+                {
+                    ReSetAll();
+                    _isGetOver = true;
+                    yazhuTime = 0;
+                }
+                return;
+            }
+
 
             if (_IsHitDown)
             {
                 float _speedY = _airGameBody.GetPlayerRigidbody2D().velocity.y;
                 //print(" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ysudu     " + _speedY);
-                ReSetAll();
-                _isGetOver = true;
-                if (_speedY > -10) return;
+               
+               
+                //如果下压 速度小于10  就不能 激起震动伤害
+                if (IsNeedCheckSpeed&&_speedY > -10) {
+                    ReSetAll();
+                    _isGetOver = true;
+                    return;
+                }
+                
 
-               //烟尘
+
+                
+
+                //烟尘
                 GameObject yc;
                 Vector2 _pos = this.transform.position;
                 yc = Resources.Load(TX_XiaLuoYanAME) as GameObject;
@@ -333,7 +367,7 @@ public class AIZongYa : MonoBehaviour,ISkill
                     } 
                 }
 
-
+                IsHasZhengdongStop = true;
             }
         }
     }

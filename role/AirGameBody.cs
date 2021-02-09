@@ -213,8 +213,9 @@ public class AirGameBody : GameBody {
                 GetPlayerRigidbody2D().gravityScale = 4;
                 if (hitKuai) hitKuai.SetActive(false);
                 //print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
+                //print("废除取 之前 我的 速度   "+ GetPlayerRigidbody2D().velocity);
                 BeHitFlyOut(100);
-                if(IsDieFlyOut) GetPlayerRigidbody2D().freezeRotation = false;
+                //if(IsDieFlyOut) GetPlayerRigidbody2D().freezeRotation = false;
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;

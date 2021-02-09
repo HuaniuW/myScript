@@ -66,19 +66,53 @@ public class PlayerUI : MonoBehaviour {
 
         //screenChangeZZ.gameObject.SetActive(false);
 
-        this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 1;
+        //this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 1;
         screenLoadTxt.text = "";
-        StartCoroutine(IHideZZByTimes(0.2f));
+        //StartCoroutine(IHideZZByTimes(0.5f));
+        if(GlobalTools.FindObjByName("maps")&& GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>())
+        {
+            StartCoroutine(IHideZZByTimes(0.2f));
+        }
+        else
+        {
+            HideUIZZ();
+        }
+        
+
+        //GlobalSetDate.instance.Hide_UIZZ();
 
     }
 
     public IEnumerator IHideZZByTimes(float time)
     {
         yield return new WaitForSeconds(time);
+        HideZZ();
+    }
+
+
+
+    public void HideUIZZ(float times = 0)
+    {
+       if(times == 0)
+        {
+            HideZZ();
+        }
+        else
+        {
+            StartCoroutine(IHideZZByTimes(times));
+        }
+    }
+
+
+
+
+    void HideZZ()
+    {
         this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
         //不禁止 会阻挡 鼠标点击事件
         screenChangeZZ.gameObject.SetActive(false);
     }
+
 
 
 
@@ -135,6 +169,7 @@ public class PlayerUI : MonoBehaviour {
             this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;
             if(ZZAlphaNums == 0&&this.screenChangeZZ.GetComponent<CanvasGroup>().alpha <= 0.2)
             {
+                print("??????????????????????????????????????   >>>>>>>>>>>>>>  "+ ZZAlphaNums);
                 this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
                 IsScreenChangeing = false;
                 //防止遮挡鼠标事件
@@ -158,7 +193,7 @@ public class PlayerUI : MonoBehaviour {
         {
             //IsScreenChangeing = false;
             //this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
-            ZZAlphaNums = 0;
+            //ZZAlphaNums = 0;
             
         }
         if (screenLoadTxt != null) screenLoadTxt.text = nums + "%";

@@ -60,7 +60,19 @@ public class DieOut : MonoBehaviour {
                 if (GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>()) {
                     GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(this.gameObject);
                 }
+                else
+                {
+                    if (GlobalTools.FindObjByName("MainCamera") != null)
+                    {
+                        GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Remove(this.gameObject);
+                    }
+                }
+
+               
+
+
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ALLDIE_OPEN_DOOR, "allDie"), this);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.All_DIE_OPEN_DOOR, "allDie"), this);
             }
             else
             {

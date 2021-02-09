@@ -77,7 +77,7 @@ public class Mianban1 : MonoBehaviour {
         GetHZInformation();
         if (HZ_information != null) HZ_information.text = "哈哈哈哈哈 \n 我去";
 
-        print("  ------------------------------------------------------>面板1    "+ HZSaveDate());
+        //print("  ------------------------------------------------------>面板1    "+ HZSaveDate());
         //发送 事件重新 写角色数据
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.PLAYER_ZT), this.gameObject);
     }

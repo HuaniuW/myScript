@@ -51,7 +51,7 @@ public class Globals : MonoBehaviour {
 
     internal static string mapType;
     //控制 地图 基本类型的 参数  （使用的 地板 景会变化）
-    internal static int mapTypeNums = 2;
+    internal static int mapTypeNums = 1;
     public static List<string> mapZBArr;
 
 

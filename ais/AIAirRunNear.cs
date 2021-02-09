@@ -78,7 +78,7 @@ public class AIAirRunNear : MonoBehaviour
         if(!_aiPath.canMove) _aiPath.canMove = true;
         zhuijiRun(IsCanTurnFace);
         float distances = (transform.position - _obj.transform.position).magnitude;
-        //print(transform.position +"  -------------   "+ _obj.transform.position+ "   _zjDistance   "+ _zjDistance+ "   ??_aiPath.canMove   "+ _aiPath.canMove+ "    distances   "+ distances);
+        //print(transform.position +" 追击中ing -------------   "+ _obj.transform.position+ "   _zjDistance   "+ _zjDistance+ "   ??_aiPath.canMove   "+ _aiPath.canMove+ "    distances   "+ distances);
         if (distances < _zjDistance) {
             ResetAll();
             return true;
@@ -149,8 +149,8 @@ public class AIAirRunNear : MonoBehaviour
 
         zhuijiRun();
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
-        print("thisV2  " + thisV2 + "  point " + point + "  zuijiPosDisWC  "+ zuijiPosDisWC);
-        print(" ---->  "+ (thisV2 - point).sqrMagnitude);
+        //print("thisV2  " + thisV2 + "  point " + point + "  zuijiPosDisWC  "+ zuijiPosDisWC);
+        //print(" ---->  "+ (thisV2 - point).sqrMagnitude);
         if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
         {
             ResetAll();
@@ -196,7 +196,7 @@ public class AIAirRunNear : MonoBehaviour
 
         if (IsTestHitWall && IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
         {
-            print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
+            //print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;
@@ -204,10 +204,13 @@ public class AIAirRunNear : MonoBehaviour
 
         //这里要做预判
 
+        float _jinruDis = (thisV2 - point).sqrMagnitude;
 
+        //print("两点间距离 " + _jinruDis+"   ------进入距离的 误差 内  "+ zuijiPosDisWC+ "  inDistance   " + inDistance+"    我的位置  "+thisV2+"    目标点 "+ point);
         //距离小于 误差内 直接结束
-        if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
+        if (_jinruDis < zuijiPosDisWC)
         {
+            //print(thisV2+ "  --point  "+ point);
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;

@@ -98,6 +98,11 @@ public class GetReMap2 : GetReMap
         {
             //{l:map_r-2,r:map_r-3}
             menFXList = ThisMenFXList;
+            print("注意 这里是调试 门");
+            print("注意 这里是调试 门");
+            print("注意 这里是调试 门");
+            print("注意 这里是调试 门");
+            print("注意 这里是调试 门");
         }
         else
         {
@@ -108,9 +113,9 @@ public class GetReMap2 : GetReMap
 
         
 
-        //print("menFXList   " + menFXList);
+        print("menFXList   " + menFXList.ToString());
 
-        //foreach (string m in menFXList) print("  menlist>////////////////////////:   "+m);
+        foreach (string m in menFXList) print("  menlist>////////////////////////:   "+m);
         //这里要知道 从哪进来的 进入方向   保留一个门
         //-
 
@@ -366,6 +371,10 @@ public class GetReMap2 : GetReMap
             {
                 //洞内跳跃机关 1型
                 _dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
+                if (GlobalMapDate.CurrentSpelMapType.Split('^').Length >= 2)
+                {
+                    _dixingkuozhanNums = int.Parse(GlobalMapDate.CurrentSpelMapType.Split('^')[1]);
+                }
             }
 
         }
@@ -376,7 +385,7 @@ public class GetReMap2 : GetReMap
         }
 
         //测试用 不用了就删掉
-        _dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
+        //_dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
         print(" ******************************************************************************************* _dixingType  地形类型   "+ _dixingType);
 
         //根据不同地形 生成的 中心连接点 也不一样  还要根据 坐标 和nums判断 地板和 景类型
@@ -1240,24 +1249,32 @@ public class GetReMap2 : GetReMap
             mapObj = GetDiBanByName();
 
             //是否有 高密度机关图
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            print("fx   "+FX+"   >>>>>>>>>>>洞内图!!!!  duanNums是多少  "+ duanNums+"   i "+i);
 
             if (GetDongNeiLuType() == "shangsheng")
             {
+                
                 __XDistance = FX == "l" ? 4 : -4;
                 PuTongShangShengDX(i, FX, false);
                 mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+
+                print("fx   " + FX + "   >>>>>>>>>>>洞内 上升!!!!duanNums    " + duanNums);
             }
             else if (GetDongNeiLuType() == "xiajiang")
             {
                 __XDistance = FX == "l" ? -4 : 4;
                 PuTongXiaJiangDX(i, FX, false);
-                if (duanNums != 1 && i != duanNums - 1) mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+                if (duanNums != 0 && i != duanNums - 1) mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+                //mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+                print("fx   " + FX + "   >>>>>>>>>>>洞内 下降@@@@@@!!!!duanNums    " + duanNums);
             }
             else
             {
                 __XDistance = FX == "l" ? 4 : -4;
                 PuTongPingDiDX(i, FX, false);
                 mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
+                print("fx   " + FX + "   >>>>>>>>>>>洞内 平地=======@@@@@@!!!!duanNums    " + duanNums);
             }
             
 
@@ -1405,6 +1422,7 @@ public class GetReMap2 : GetReMap
         if (mapObj.transform.Find("diban")) mapObj.GetComponent<DBBase>().SetSD(sd);
         mapObj.transform.position = pos;
         mapObj.transform.parent = maps.transform;
+        if (mapObj.GetComponent<DBBase>().IsShowDingDB) mapObj.GetComponent<DBBase>().SetDingDBPos();
         _cMapObj = mapObj;
         //mapObj.GetComponent<DBBase>().GetJing(); 不能这样调用 这样调用 会导致 后面 按数据生成的时候 无法处理
         mapObjArr.Add(mapObj);

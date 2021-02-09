@@ -204,8 +204,8 @@ public class MapNames : MonoBehaviour
     //连接点 地图
     public List<string> lr_2 = new List<string> { "lr_pd_2" };
     //地板
-    //public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd3_2", "db_pd2_2", "db_pd4_2", "db_pd5_2" };
-    public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd6_2"};
+    public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd3_2", "db_pd2_2", "db_pd4_2", "db_pd5_2" };
+    //public List<string> db_pd_2 = new List<string> { "db_pd_2", "db_pd6_2"};
     public List<string> tiaoyue_2 = new List<string> { "db_ty_1" };
     //跳跃地板
     public List<string> tiaoyuediban_2 = new List<string> { "xdiban_1_10", "xdiban_1_11", "xdiban_1_12", "xdiban_1_13", "xdiban_1_14", "xdiban_1_15", "xdiban_1_16", "xdiban_1_17", "xdiban_1_18", "xdiban_1_19" };

@@ -90,10 +90,10 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     protected bool _isFire = false;
     protected virtual void Fire()
     {
-        print(">>fashezidan!!  发射 什么 子弹 都这里控制");
+        //print(">>fashezidan!!  发射 什么 子弹 都这里控制");
         if (FireAudio)
         {
-            print("  -------------------------------------------------- 子弹发射声音  ");
+            //print("  -------------------------------------------------- 子弹发射声音  ");
             FireAudio.Play();
         }
 
@@ -193,7 +193,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         if (_fireOverJS>= _fireOverTimes)
         {
             ReSetAll();
-            print(" 子弹s " + ZiDanTypeNum+"   结束！！！  ");
+            //print(" 子弹s " + ZiDanTypeNum+"   结束！！！  ");
             _isGetOver = true;
         }
     }
@@ -214,7 +214,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     GameObject _player;
     public void GetStart(GameObject gameObj)
     {
-        print(" 子弹s "+ZiDanTypeNum);
+        //print(" 子弹s "+ZiDanTypeNum);
         _player = gameObj;
         _isGetOver = false;
         _isQiShiAC = true;

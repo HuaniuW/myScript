@@ -34,6 +34,10 @@ public class ScreenChange : MonoBehaviour {
     [Header("当前门的位置 保留到 进入门位置 来判断出口是哪个门")]
     public string DangQianMenWeizhi = "";
 
+
+    [Header(" 自动地图碰撞触发 全局的 地图类型 取向  默认是0(不改变) 森林")]
+    public int HitChangeGlobalMapType = 0;
+
     //查找全局 数据 中是否 有 地图 数据     没有的 话 要生成  并且 保存入 全局数据
 
 
@@ -134,6 +138,7 @@ public class ScreenChange : MonoBehaviour {
         StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
         playerUI.GetComponent<PlayerUI>().GetScreenZZChange(1);
 
+        //GlobalSetDate.instance.Show_UIZZ();
     }
 
 	// Update is called once per frame
@@ -161,7 +166,7 @@ public class ScreenChange : MonoBehaviour {
             print("***  ReMapName????? "+ ReMapName  + "  GoScreenName  "+ GoScreenName);
 
             Globals.IsHitDoorStop = true;
-
+            if (HitChangeGlobalMapType != 0) Globals.mapTypeNums = HitChangeGlobalMapType;
             GlobalMapDate.ClearGlobalCurrentMapMsg();
 
             if (ReMapName == "" && IsTeShuShengChengDiTu(GoScreenName))
@@ -171,7 +176,7 @@ public class ScreenChange : MonoBehaviour {
                 //print("*** ReMapName "+ ReMapName);
             }else if (ReMapName != "")
             {
-                print("说明是 从 特殊地图 跳到 随机里面   "+ ReMapName);
+                print("说明是 从 特殊地图 跳到 随机里面   "+ ReMapName+ "  MenFX   " + MenFX);
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName,MenFX,DangQianMenWeizhi);
                 //return;
             }
@@ -179,6 +184,8 @@ public class ScreenChange : MonoBehaviour {
             {
                 GlobalSetDate.instance.GetInMenWeizhi(DangQianMenWeizhi);
             }
+
+            
 
             if (Coll.transform.GetComponent<RoleDate>().isDie) return;
             ChangeScreen();
@@ -252,6 +259,7 @@ public class ScreenChange : MonoBehaviour {
                 //SetLoadingPercentage(displayProgress);
                 //loadingBar.rectTransform.se
                 playerUI.GetComponent<PlayerUI>().ShowLoadProgressNums(displayProgress);
+                //GlobalSetDate.instance.ShowLoadProgressNums(displayProgress);
                 print("screenChange progress: "+ displayProgress);
                 yield return new WaitForEndOfFrame();
             }
@@ -262,6 +270,7 @@ public class ScreenChange : MonoBehaviour {
             ++displayProgress;
             //SetLoadingPercentage(displayProgress);
             playerUI.GetComponent<PlayerUI>().ShowLoadProgressNums(displayProgress);
+            print("screenChange progress: " + displayProgress);
             yield return new WaitForEndOfFrame();
         }
         //设置为true 后 加载到100后直接自动跳转

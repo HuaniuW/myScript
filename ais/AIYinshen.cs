@@ -419,7 +419,7 @@ public class AIYinshen : MonoBehaviour
             {
                 if (_yinShenPosType == "s")
                 {
-                    print(" ssssss ");
+                    //print(" ssssss ");
                     //上方
                     __x = thePlayer.transform.position.x;
                     __y = __y = thePlayer.transform.position.y + 5 + GlobalTools.GetRandomDistanceNums(3);

@@ -170,17 +170,21 @@ public class GetReMap : MonoBehaviour
 
 
 
-        
+
 
         if (!GlobalSetDate.instance.IsCMapHasCreated)
         {
+            //这里是 将 生成的 地图 存到数组中去
             SetMapMsgDateInStr();
         }
 
 
 
-        //进行一次 手动的匹配
+        //进行一次 手动的匹配  匹配 删改查
         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetPiPei();
+
+        //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().HideUIZZ(1f);
+        print("手动 匹配 怪物完成！！！");
 
         //GlobalTools.FindObjByName("A_").transform.position = GlobalTools.FindObjByName("kuang").transform.position;
         //GlobalTools.FindObjByName("A_").GetComponent<AstarPath>().Scan();
@@ -465,13 +469,13 @@ public class GetReMap : MonoBehaviour
         //出怪数量
         int n = GlobalTools.GetRandomNum();
         int guainum = 0;
-        if (n < 10) {
+        if (n < 40) {
             //出2只
-            guainum = 2;
+            guainum = 4;
         }
         else if (n<100) {
             //出1只
-            guainum = 1;
+            guainum = 2;
         }
         else
         {
@@ -510,6 +514,13 @@ public class GetReMap : MonoBehaviour
             for (int i = 0; i < guainum; i++)
             {
                 GuaiOut(true, i, guainum, "shu");
+            }
+        }else if (_cMapObj.GetComponent<DBBase>().DXType == "shuimian")
+        {
+            for (int i = 0; i < guainum; i++)
+            {
+                //kongzhong = GlobalTools.GetRandomNum() <= 30 ? true : false;
+                GuaiOut(true, i, guainum, "heng", Fx);
             }
         }
     }
@@ -599,6 +610,9 @@ public class GetReMap : MonoBehaviour
             //print("怪y " + tl.y + "   ----   " + _y);
         }
         
+
+        _x = GlobalTools.GetRandomNum()>50?_x+GlobalTools.GetRandomDistanceNums(4): _x  - GlobalTools.GetRandomDistanceNums(4);
+
 
         if (_cMapObj && _cMapObj.GetComponent<DBBase>().DXType == "tiaoyue") _y = tl.y + 4 + GlobalTools.GetRandomDistanceNums(4);
 

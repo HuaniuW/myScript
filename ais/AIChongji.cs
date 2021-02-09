@@ -70,8 +70,21 @@ public class AIChongji : MonoBehaviour, ISkill
         CJYanmu.Stop();
         GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
+        _IsHitGroundUp = false;
     }
 
+
+    Vector2 upPos;
+    bool _IsHitGroundUp = false;
+    void GetFlyUp()
+    {
+        if(GetComponent<AIAirRunNear>().ZhijieMoveToPoint(upPos , 0.5f, 1.5f, false, false, 0))
+        {
+            _IsHitGroundUp = false;
+        }
+
+        print("upPos   "+ upPos);
+    }
 
     protected virtual void Starting()
     {
@@ -81,6 +94,29 @@ public class AIChongji : MonoBehaviour, ISkill
             ReSetAll();
             return;
         }
+        //print("_IsHitGroundUp    "+ _IsHitGroundUp);
+
+        //if (!isTanSheing &&runNear.IsHitDiBanByFX(this.transform.position,new Vector2(this.transform.position.x,this.transform.position.y-1.5f)))
+        //{
+        //    //启动时候 碰到地面
+        //    //移动上升一点
+        //    //print("  上升中！！ ");
+        //    //GetFlyUp();
+        //    if (!_IsHitGroundUp)
+        //    {
+        //        _IsHitGroundUp = true;
+        //        runNear.ResetAll();
+        //        upPos = new Vector2(this.transform.position.x, this.transform.position.y + 1);
+        //    }
+            
+        //}
+
+        //if (_IsHitGroundUp) {
+        //    GetFlyUp();
+        //    return;
+        //}
+
+        //print("isTanSheing    "+ isTanSheing);
         if (!isTanSheing && GetNearTarget()) {
             isTanSheing = true;
             if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
@@ -111,6 +147,8 @@ public class AIChongji : MonoBehaviour, ISkill
     protected virtual void Tanshe()
     {
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall || GetComponent<GameBody>().IsGround) {
+            print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
+
 
             ReSetAll();
             ChongjiOver();
@@ -153,12 +191,17 @@ public class AIChongji : MonoBehaviour, ISkill
         if (!IsStartChongji&&!IsGenZongType) {
             IsStartChongji = true;
             targetPos = _targetObj.position;
-            //这个点 要在靠后一点
-            //float dis = GlobalTools.GetDistanceByTowPoint(targetPos, transform.position);
-            //float _d = 1;
-            //float __x1 = targetPos.x - _d * (this.transform.position.x - targetPos.x) / dis;
-            //float __y1 = targetPos.y - _d * (this.transform.position.y - targetPos.y) / dis;
-            //targetPos = new Vector2(__x1, __y1);
+
+            if (ChongJiShenHouDis != 0)
+            {
+                //这个点 要在靠后一点
+                float dis = GlobalTools.GetDistanceByTowPoint(targetPos, transform.position);
+                float _d = ChongJiShenHouDis;
+                float __x1 = targetPos.x - _d * (this.transform.position.x - targetPos.x) / dis;
+                float __y1 = targetPos.y - _d * (this.transform.position.y - targetPos.y) / dis;
+                targetPos = new Vector2(__x1, __y1);
+            }
+          
 
 
             //转向
@@ -180,14 +223,17 @@ public class AIChongji : MonoBehaviour, ISkill
         //print(" 5  "+ this.transform.position);
         deltaNums += Time.deltaTime;
 
-        if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed,false,true,0))
+        if (deltaNums >= _tsTimes|| GetComponent<AIAirRunNear>().ZhijieMoveToPoint(targetPos, 0.1f, chongjiSpeed,false,false,0))
         {
+            //print("自身的位置   "+this.transform.position+ "  冲击到了位置 停止targetPos  " + targetPos);
             ChongjiOver();
         }
 
         CJYanmu.Play();
     }
 
+    [Header("冲击到身后的 距离 是0的话就不计算")]
+    public float ChongJiShenHouDis = 0;
 
     protected virtual void ChongjiOver()
     {
@@ -204,6 +250,7 @@ public class AIChongji : MonoBehaviour, ISkill
         GetComponent<AIAirRunNear>().ResetAll();
         GetComponent<AirGameBody>().SetACingfalse();
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
+        _IsHitGroundUp = false;
         //print("*************************************************************冲击 结束！！！！！");
     }
 
@@ -219,6 +266,15 @@ public class AIChongji : MonoBehaviour, ISkill
     //定位目标
     protected virtual bool GetNearTarget()
     {
+        //print("----------------  接近 ");
+        if (this.transform.position.x > targetPos.x)
+        {
+            _airGameBody.TurnRight();
+        }
+        else
+        {
+            _airGameBody.TurnLeft();
+        }
         return runNear.Zhuiji(_atkDistance,false);
     }
 

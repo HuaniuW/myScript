@@ -52,7 +52,7 @@ public class AIChongJiHX : AIChongji
 
     protected override void Starting()
     {
-        if (_roleDate.isDie || _targetObj == null || _targetObj.GetComponent<RoleDate>().isDie)
+        if (_roleDate.isDie || _roleDate.isBeHiting || _targetObj == null || _targetObj.GetComponent<RoleDate>().isDie)
         {
             ReSetAll();
             return;
@@ -271,7 +271,7 @@ public class AIChongJiHX : AIChongji
             
             if (ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(false);
 
-            print("wo kao!!!!!!!!!");
+            //print("wo kao!!!!!!!!!");
             if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
         }
 
@@ -289,6 +289,7 @@ public class AIChongJiHX : AIChongji
             //print(">>>>????????  冲击over  " + "  @@@@@@  deltaNums   " + deltaNums + "  _tsTimes  " + _tsTimes);
             if(CJhitKuai) CJhitKuai.SetActive(false);
             ChongjiOver();
+            if (!ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(true);
             //ReSetAll();
         }
 
