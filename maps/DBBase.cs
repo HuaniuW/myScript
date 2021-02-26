@@ -698,6 +698,8 @@ public class DBBase : MonoBehaviour
         //SetJingByDistanceU("liziWu_1", nums, pos1, pos2, pos1.y+1, 0, 0, 0, "u");
         //Color color1 = new Color(0.1f, 1f, 1f, 0.1f);
         //GetWu("", pos1, pos2, -30, color1);
+
+        //获取背景的 上升渐变的 雾
         Color color2 = MapNames.GetInstance().GetColorByGKKey(); //new Color(0.1f, 1f, 1f, 0.3f);
         GetWu("", pos1, pos2, -60, color2);
 

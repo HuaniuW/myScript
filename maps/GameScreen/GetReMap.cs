@@ -802,6 +802,7 @@ public class GetReMap : MonoBehaviour
                 Color _color = child.GetComponent<DBBase>().GetLightColor();
                 if (child.GetComponent<DBBase>().light2d)
                 {
+                    //记录灯光 颜色+亮度 +种类
                     gkMapMsg += "$" +"color!"+ _color.ToString()+"!"+ child.GetComponent<DBBase>().light2d.intensity;
                     //print("  地图灯光颜色  "+ _color.ToString());
                 }
