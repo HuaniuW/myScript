@@ -139,8 +139,11 @@ public class Plot1 : MonoBehaviour
 
 
 
-    List<string> txtList = new List<string> {"“一切都是安排好的.”","----地球年9021年."};
+    List<string> txtList = new List<string> {_str2};
     int listI = 0;
+
+    const string _str1 = "“传说月之石可以穿越时空！于是有悔恨的人们对它趋之若鹜”";
+    const string _str2 = "“It is said that Moonlight Gem can travel through time and space, so people with regrets want it very much.”";
 
     bool isTxtStart = false;
     float _y = 0;
@@ -168,7 +171,7 @@ public class Plot1 : MonoBehaviour
 
         if (IsChuXian)
         {
-            if (_y < txtCSPos.y - 0.4f)
+            if (_y < txtCSPos.y - 0.2f)
             {
                 _y += (txtCSPos.y - _text.transform.position.y) * 0.02f;
             }
@@ -176,7 +179,7 @@ public class Plot1 : MonoBehaviour
             {
                 _y = txtCSPos.y;
                 txtNums += Time.deltaTime;
-                if (txtNums >= 2)
+                if (txtNums >= 10)
                 {
                     IsChuXian = false;
                     txtNums = 0;

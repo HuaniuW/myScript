@@ -47,7 +47,6 @@ public class DieOut : MonoBehaviour {
     {
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
-
             if (IsOrter1) DieBeBlack();
 
             if (HitKuai) HitKuai.SetActive(false);

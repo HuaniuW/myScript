@@ -9,7 +9,8 @@ public class JN_JumpCut : MonoBehaviour, ISkill
     float _recordGravity = 4.5f;
     bool IsStarting = false;
 
-    
+    [Header("起跳的 喊声")]
+    public AudioSource JumpSound;
    
 
     GameObject _gameObj;
@@ -33,6 +34,9 @@ public class JN_JumpCut : MonoBehaviour, ISkill
         //_gameBody.GetPlayerRigidbody2D().velocity = new Vector2(vx, _gameBody.GetPlayerRigidbody2D().velocity.y);
         _gameBody.GetJump();
         _gameBody.Jump();
+
+
+        if (JumpSound != null) JumpSound.Play();
         //显示 hitkuai
         GetComponent<AI_hitkuaiShenTi>().ShowHitKuaiInAir();
 

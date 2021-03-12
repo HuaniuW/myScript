@@ -18,7 +18,7 @@ public class DB_TiaoYue : DBBase
                 SetDBPos();
                 SetZiDanJG();
             }
-            SetLightColor();
+            //SetLightColor();
         }
         
     }
@@ -30,8 +30,8 @@ public class DB_TiaoYue : DBBase
     }
 
 
-    bool IsHasSetDB = false;
-    void SetDBPos()
+    protected bool IsHasSetDB = false;
+    protected virtual void SetDBPos()
     {
         if (IsHasSetDB) return;
         IsHasSetDB = true;
@@ -55,14 +55,14 @@ public class DB_TiaoYue : DBBase
 
     }
 
-    bool IsHasSetZDJG = false;
-    void SetZiDanJG()
+    protected bool IsHasSetZDJG = false;
+    protected virtual void SetZiDanJG()
     {
         IsHasSetZDJG = true;
         if (IsPenSheZiDanJG) SetPenSheZiDan();
     }
 
-    bool IsPenSheZiDanJG = false;
+    protected bool IsPenSheZiDanJG = false;
     public void JiGuan_PenSheZiDanJG()
     {
         if (GlobalTools.GetRandomNum() > 100)
@@ -77,8 +77,8 @@ public class DB_TiaoYue : DBBase
     }
 
 
-    bool IsHasSetZiDan = false;
-    public void SetPenSheZiDan()
+    protected bool IsHasSetZiDan = false;
+    public virtual void SetPenSheZiDan()
     {
         if (IsHasSetZiDan) return;
         IsHasSetZiDan = true;

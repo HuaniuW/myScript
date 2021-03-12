@@ -65,8 +65,8 @@ public class PlayerUI : MonoBehaviour {
         GetMainCamera();
 
         //screenChangeZZ.gameObject.SetActive(false);
-
-        //this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 1;
+        //这里是控制 开始遮罩的 
+        this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 1;
         screenLoadTxt.text = "";
         //StartCoroutine(IHideZZByTimes(0.5f));
         if(GlobalTools.FindObjByName("maps")&& GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>())
@@ -86,6 +86,7 @@ public class PlayerUI : MonoBehaviour {
     public IEnumerator IHideZZByTimes(float time)
     {
         yield return new WaitForSeconds(time);
+        //print("延迟 显示 ZZ 延迟时间    "+time);
         HideZZ();
     }
 
@@ -93,6 +94,7 @@ public class PlayerUI : MonoBehaviour {
 
     public void HideUIZZ(float times = 0)
     {
+        //print("延迟 显示 ZZ 延迟时间2    " + times);
        if(times == 0)
         {
             HideZZ();
@@ -164,6 +166,7 @@ public class PlayerUI : MonoBehaviour {
     void GetScreenChange()
     {
         if (!IsScreenChangeing) return;
+        print("场景切换 遮罩调用  ZZAlphaNums： "+ ZZAlphaNums);
         if (this.screenChangeZZ != null)
         {
             this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;

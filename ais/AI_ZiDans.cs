@@ -162,7 +162,9 @@ public class AI_ZiDans : MonoBehaviour,ISkill
 
     GameObject GetZiDan()
     {
+        //print("ZiDanName   "+ ZiDanName);
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(ZiDanName) as GameObject);
+        //print("  zidan "+zidan);
         zidan.transform.position = ZiDanPos.position;
         zidan.GetComponent<TX_zidan>().CloseAutoFire();
         zidan.transform.localScale = this.transform.localScale;

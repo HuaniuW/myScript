@@ -249,7 +249,7 @@ public class HitKuai : MonoBehaviour {
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector2 tempV3 = _BeHitRigidbody2D.velocity;
             _BeHitRigidbody2D.velocity = new Vector3(0, tempV3.y);
-            if (jn_date != null && BeHitGameBody != null)
+            if (jn_date != null && BeHitGameBody != null&&jn_date.HitInSpecialEffectsType!=5)
             {
                 ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);

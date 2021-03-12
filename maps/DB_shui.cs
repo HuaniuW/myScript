@@ -477,7 +477,7 @@ public class DB_shui : DBBase
 
 
 
-    protected override void Zhuanshiwu()
+    protected override void Zhuanshiwu(string JName = "zsw")
     {
 
         //水面地板
@@ -485,7 +485,7 @@ public class DB_shui : DBBase
         //出水面怪
         ShuiMianChuGuai();
 
-        string zswArrName = MapNames.GetInstance().GetJingArrNameByGKKey("zsw");
+        string zswArrName = MapNames.GetInstance().GetJingArrNameByGKKey(JName);
         if (zswArrName == "") return;
 
         //判断是否有装饰物  只有一个

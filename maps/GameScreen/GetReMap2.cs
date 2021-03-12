@@ -386,6 +386,7 @@ public class GetReMap2 : GetReMap
 
         //测试用 不用了就删掉
         //_dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
+        //_dixingType = GlobalMapDate.PINGDI;
         print(" ******************************************************************************************* _dixingType  地形类型   "+ _dixingType);
 
         //根据不同地形 生成的 中心连接点 也不一样  还要根据 坐标 和nums判断 地板和 景类型

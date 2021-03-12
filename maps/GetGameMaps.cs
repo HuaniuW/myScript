@@ -116,6 +116,9 @@ public class GetGameMaps : MonoBehaviour
             xian.transform.position = new Vector2(currentMap.transform.position.x - currentMap.GetComponent<RectTransform>().rect.width * 0.5f - xian.GetComponent<RectTransform>().rect.width * 0.4f, currentMap.transform.position.y);
         }
 
+        print(xian);
+        print(currentMap);
+
         xian.name = currentMap.name + "#" + fx;
         xian.transform.parent = _canva.transform;
         //xian.GetComponent<GKMapXian>().LianJieMap(currentMap.name, gkImg.name);

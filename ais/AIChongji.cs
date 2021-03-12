@@ -21,6 +21,9 @@ public class AIChongji : MonoBehaviour, ISkill
 
     }
 
+    [Header("冲击开始时候的 喊声")]
+    public AudioSource StartSound;
+
     protected RoleDate _roleDate;
     protected AirGameBody _airGameBody;
 
@@ -146,7 +149,7 @@ public class AIChongji : MonoBehaviour, ISkill
 
     protected virtual void Tanshe()
     {
-        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall || GetComponent<GameBody>().IsGround) {
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall) {
             print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
 
 
@@ -165,6 +168,8 @@ public class AIChongji : MonoBehaviour, ISkill
             {
                 //转向 朝向玩家
                 GetComponent<AirGameBody>().GetAcMsg("chongji_begin");
+                //开始冲击时候的 怪物叫声
+                if (StartSound) StartSound.Play();
                 GetComponent<AirGameBody>().GetDB().animation.Stop();
                 GetComponent<AirGameBody>().GetStop();
                 deltaNums = 0;
@@ -266,14 +271,16 @@ public class AIChongji : MonoBehaviour, ISkill
     //定位目标
     protected virtual bool GetNearTarget()
     {
-        //print("----------------  接近 ");
-        if (this.transform.position.x > targetPos.x)
+        print("鱼 冲击 接近目标----------------  接近 ");
+        if (this.transform.position.x > _targetObj.position.x)
         {
-            _airGameBody.TurnRight();
+            print("目标在左侧！！！  "+this.transform.position.x+"    -------x    "+ _targetObj.position.x);
+            _airGameBody.TurnLeft();
         }
         else
         {
-            _airGameBody.TurnLeft();
+            print("目标在---右侧！！！");
+            _airGameBody.TurnRight();
         }
         return runNear.Zhuiji(_atkDistance,false);
     }

@@ -219,7 +219,16 @@ public class AirGameBody : GameBody {
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
-            if (BeHitSound_1) BeHitSound_1.Play();
+
+            if (roleAudio)
+            {
+                if (GlobalTools.GetRandomNum() >= 40)
+                {
+                    roleAudio.PlayAudio("die_1");
+                }
+            }
+
+
             if (IsDieBoomOutObj) DieBoomOutObj();
         }
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
@@ -234,11 +243,11 @@ public class AirGameBody : GameBody {
         ResetAll();
         roleDate.isBeHiting = true;
 
-        if (BeHitSound_1)
+        if (roleAudio && roleDate.live>=0)
         {
             if (GlobalTools.GetRandomNum() >= 40)
             {
-                if(IsOther) BeHitSound_1.Play();
+                roleAudio.PlayAudio("BeHit_1");
             }
         }
 

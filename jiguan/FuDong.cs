@@ -12,7 +12,7 @@ public class FuDong : MonoBehaviour
     public float MoveZDistance = 0;
 
     public bool IsRandom = true;
-    public bool IsRandomZ = true;
+    //public bool IsRandomZ = true;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +35,7 @@ public class FuDong : MonoBehaviour
         MoveZDistance = 1 + GlobalTools.GetRandomDistanceNums(1);
         MoveSpeedX = 0.002f+ GlobalTools.GetRandomDistanceNums(0.008f);
         MoveSpeedY = 0.002f + GlobalTools.GetRandomDistanceNums(0.008f);
-        if(IsRandomZ)MoveSpeedZ = 0.002f + GlobalTools.GetRandomDistanceNums(0.008f);
+        //if(IsRandomZ)MoveSpeedZ = 0.002f + GlobalTools.GetRandomDistanceNums(0.008f);
 
     }
 

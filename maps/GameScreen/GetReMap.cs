@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class GetReMap : MonoBehaviour
 {
@@ -311,7 +312,17 @@ public class GetReMap : MonoBehaviour
             string _dangQianMenWeiZhi = "";
 
             Color _color2 = Color.white;
+            //灯光亮度
             float _intensity = 0.7f;
+            //灯光 内半径
+            float _innerRadius = 0;
+            //灯光外半径
+            float _outerRadius = 0;
+
+            //灯2信息
+            string _l2 = "";
+            //灯3信息
+            string _l3 = "";
 
             if (s.Split('$').Length > 1)
             {
@@ -321,7 +332,10 @@ public class GetReMap : MonoBehaviour
                 if (s.Split('!').Length > 3) _rotation = s.Split('$')[0].Split('!')[3];
 
 
-                if (_name.Split('_')[0] == "wu")
+                if (_name.Split('_')[0] == "Light")
+                {
+
+                }else if (_name.Split('_')[0] == "wu")
                 {
 
                 }else if (_name.Split('_')[0] == "JG")
@@ -336,6 +350,11 @@ public class GetReMap : MonoBehaviour
                         string str = s.Split('$')[1].Split('!')[1];
                         _color2 = GlobalTools.ColorParse(str);
                         _intensity = float.Parse(s.Split('$')[1].Split('!')[2]);
+                        _innerRadius = float.Parse(s.Split('$')[1].Split('!')[3]);
+                        _outerRadius = float.Parse(s.Split('$')[1].Split('!')[4]);
+
+                       
+
                     }
                     else
                     {
@@ -375,6 +394,36 @@ public class GetReMap : MonoBehaviour
                     if (mapObj.GetComponent<DBBase>().light2d) {
                         mapObj.GetComponent<DBBase>().light2d.color = _color2;
                         mapObj.GetComponent<DBBase>().light2d.intensity = _intensity;
+                        if(mapObj.GetComponent<DBBase>().light2d.GetComponent<Light2D>().lightType == Light2D.LightType.Point)
+                        {
+                            mapObj.GetComponent<DBBase>().light2d.GetComponent<Light2D>().pointLightInnerRadius = _innerRadius;
+                            mapObj.GetComponent<DBBase>().light2d.GetComponent<Light2D>().pointLightOuterRadius = _outerRadius;
+
+                            if (s.Split('$')[1].Split('!').Length > 6)
+                            {
+                                _l2 = s.Split('$')[1].Split('!')[5];
+                                _l3 = s.Split('$')[1].Split('!')[6];
+                            }
+
+                            
+
+                            if (mapObj.GetComponent<DBBase>().light2d2 != null)
+                            {
+                                //灯2的数据类型
+                                //"l2s00ddffo1.2o1.2a2.3"
+                                //"l2:00ddff^1.2^1.2a2.3"
+                                mapObj.GetComponent<DBBase>().light2d2.GetComponent<Light2D>().color = GlobalTools.ColorParse(_l2.Split(':')[1].Split('^')[0]);
+                                mapObj.GetComponent<DBBase>().light2d2.GetComponent<Light2D>().intensity = float.Parse(_l2.Split(':')[1].Split('^')[1]);
+                                mapObj.GetComponent<DBBase>().light2d2.transform.position = new Vector2(float.Parse(_l2.Split(':')[1].Split('^')[2].Split('a')[0]), float.Parse(_l2.Split(':')[1].Split('^')[2].Split('a')[1]));
+
+
+                                mapObj.GetComponent<DBBase>().light2d3.GetComponent<Light2D>().color = GlobalTools.ColorParse(_l3.Split(':')[1].Split('^')[0]);
+                                mapObj.GetComponent<DBBase>().light2d3.GetComponent<Light2D>().intensity = float.Parse(_l3.Split(':')[1].Split('^')[1]);
+                                mapObj.GetComponent<DBBase>().light2d3.transform.position = new Vector2(float.Parse(_l3.Split(':')[1].Split('^')[2].Split('a')[0]), float.Parse(_l3.Split(':')[1].Split('^')[2].Split('a')[1]));
+                            }
+
+
+                        }
                     }
                     
                 }else if (mapObj.GetComponent<J_SPBase>())
@@ -409,6 +458,12 @@ public class GetReMap : MonoBehaviour
                     Color _color = GlobalTools.ColorParse(s.Split('$')[1].Split('!')[1]);
                     mapObj.transform.localScale = sf;
                     mapObj.GetComponent<SpriteRenderer>().color = _color;
+                }else if (_name.Split('_')[0] == "Light")
+                {
+                    string __color =  s.Split('$')[1].Split('!')[0];
+                    string __l = s.Split('$')[1].Split('!')[1];
+                    mapObj.GetComponent<Light2D>().color = GlobalTools.ColorParse(__color);
+                    mapObj.GetComponent<Light2D>().intensity = float.Parse(__l);
                 }
 
                 if (mapObj.tag == "diren") {
@@ -800,13 +855,51 @@ public class GetReMap : MonoBehaviour
             if (child.GetComponent<DBBase>())
             {
                 Color _color = child.GetComponent<DBBase>().GetLightColor();
+
+
+                //判断是哪个灯光
+                //关闭其他灯光
+
                 if (child.GetComponent<DBBase>().light2d)
                 {
-                    //记录灯光 颜色+亮度 +种类
-                    gkMapMsg += "$" +"color!"+ _color.ToString()+"!"+ child.GetComponent<DBBase>().light2d.intensity;
+                    float _innerRadius = 0;
+                    float _outerRadius = 0;
+
+                    if(child.GetComponent<DBBase>().light2d.GetComponent<Light2D>().lightType == Light2D.LightType.Point)
+                    {
+                        _innerRadius = child.GetComponent<DBBase>().light2d.GetComponent<Light2D>().pointLightInnerRadius;
+                        _outerRadius = child.GetComponent<DBBase>().light2d.GetComponent<Light2D>().pointLightOuterRadius;
+                    }
+
+                    //记录灯光 颜色+亮度 +内半径+外半径
+                    string __msg = "$" + "color!" + _color.ToString() + "!" + child.GetComponent<DBBase>().light2d.intensity + "!" + _innerRadius + "!" + _outerRadius;
+                    //gkMapMsg += "$" + "color!" + _color.ToString() + "!" + child.GetComponent<DBBase>().light2d.intensity+"!"+ _innerRadius + "!"+ _outerRadius;
                     //print("  地图灯光颜色  "+ _color.ToString());
+
+                    string _l2 = "";
+                    string _l3 = "";
+                    //灯光2 和3
+                    //灯2的数据类型
+                    //"l2s00ddffo1.2o1.2a2.3"
+                    //"l2:00ddff^1.2^1.2a2.3"
+                    if (child.GetComponent<DBBase>().light2d2 != null)
+                    {
+                        //颜色 亮度 位置
+                        string _l2pos = child.GetComponent<DBBase>().light2d2.transform.position.x + "a" + child.GetComponent<DBBase>().light2d2.transform.position.y;
+                        _l2 = "l2:"+child.GetComponent<DBBase>().light2d2.GetComponent<Light2D>().color+"^"+ child.GetComponent<DBBase>().light2d2.GetComponent<Light2D>().intensity+"^"+ _l2pos;
+                    }
+
+                    if (child.GetComponent<DBBase>().light2d3 != null)
+                    {
+                        //颜色 亮度 位置
+                        string _l3pos = child.GetComponent<DBBase>().light2d3.transform.position.x + "a" + child.GetComponent<DBBase>().light2d3.transform.position.y;
+                        _l3 = "l3:" + child.GetComponent<DBBase>().light2d3.GetComponent<Light2D>().color + "^" + child.GetComponent<DBBase>().light2d3.GetComponent<Light2D>().intensity + "^" + _l3pos;
+                    }
+
+                    gkMapMsg += __msg+"!"+_l2+"!"+_l3;
                 }
-                
+
+
             }else if (child.GetComponent<J_SPBase>())
             {
                 if (child.GetComponent<J_SPBase>().light2d != null)
@@ -824,6 +917,14 @@ public class GetReMap : MonoBehaviour
                 gkMapMsg += "$" + child.GetComponent<JG_huoyan>().jiangeshijian + "!" + child.GetComponent<JG_huoyan>().penfashijian+"!"+ _scale;
             }
 
+
+            if(_name.Split('_')[0] == "Light")
+            {
+                string _color = child.GetComponent<Light2D>().color.ToString();
+                string _intensity = child.GetComponent<Light2D>().intensity.ToString();
+                string _LightMsg = _color + "!" + _intensity;
+                gkMapMsg += "$" + _LightMsg;
+            }
 
 
             if (child.GetComponent<RMapMen>())

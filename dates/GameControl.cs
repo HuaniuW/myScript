@@ -94,6 +94,7 @@ public class GameControl : MonoBehaviour {
     public void GetPlayerPosByFX()
     {
         //print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
+        player.GetComponent<GameBody>().IsNeedDieOutDownY = true;
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
         foreach(GameObject door in ListDoor)
         {

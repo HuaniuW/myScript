@@ -23,7 +23,7 @@ public class CreateMaps : MonoBehaviour
     List<string> mapZBArr = new List<string> { };
 
     [Header("地图 分支 的比值")]
-    public List<string> FXBiZhi = new List<string> { "l-5", "d-10", "u-15", "r-70" };
+    public List<string> FXBiZhi = new List<string> { "l-2", "d-3", "u-4", "r-100" };
 
 
     string cMapNum = "1";

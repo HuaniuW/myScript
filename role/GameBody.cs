@@ -83,11 +83,11 @@ public class GameBody : MonoBehaviour, IRole {
     public bool IsNeedHitPos = true;
 
 
-    [Header("被 击中的 叫声   1")]
-    public AudioSource BeHitSound_1;
+    //[Header("被 击中的 叫声   1")]
+    //public AudioSource BeHitSound_1;
 
-    [Header("被 击中的 叫声   2")]
-    public AudioSource BeHitSound_2;
+    //[Header("被 击中的 叫声   2")]
+    //public AudioSource BeHitSound_2;
 
 
     protected Rigidbody2D playerRigidbody2D;
@@ -1447,6 +1447,8 @@ public class GameBody : MonoBehaviour, IRole {
 
     }
 
+
+    protected RoleAudio roleAudio;
     protected PlayerUI thePlayerUI;
     protected virtual void GetStart()
     {
@@ -1454,6 +1456,8 @@ public class GameBody : MonoBehaviour, IRole {
         playerRigidbody2D = GetComponent<Rigidbody2D>();
         _recordGravity = gravityScaleNums;
         DBBody = GetComponentInChildren<UnityArmatureComponent>();
+
+        roleAudio = GetComponent<RoleAudio>();
         //print("DBBody   "+ DBBody);
         _theTimer = GetComponent<TheTimer>();
         //DBBody.AddEventListener(DragonBones.FrameEvent.MOVEMENT_FRAME_EVENT, this.onMOVEMENTBoneEvent, this);
@@ -1501,7 +1505,8 @@ public class GameBody : MonoBehaviour, IRole {
         if (!IsCanOutYDie) return;
         if (Globals.isInPlot) return;
         if (!IsNeedDieOutDownY) return;
-        if(this.transform.position.y< _KuangDowny)
+        //if (this.tag == "Player") print(this.transform.position.y + "  --------------------------- " + _KuangDowny);
+        if (this.transform.position.y< _KuangDowny)
         {
             //if(this.tag == "Player")print(this.transform.position.y + "  --------------------------- "+ _KuangDowny);
             this.GetComponent<RoleDate>().live = 0;
@@ -2303,7 +2308,7 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 atkZS = DataZS.jumpAtkZS;
             }
-            else
+            else 
             {
                 atkZS = DataZS.atkZS;
             }
@@ -2318,6 +2323,7 @@ public class GameBody : MonoBehaviour, IRole {
                 //GetPause(0.5f,0.5f);
                 string _atkName = atkName;
                 //print("----------------------------------atkname  "+atkName);
+                //atk_1201|0.1-0.1        延迟时间-减速的速度
                 if (atkName.Split('|').Length > 1)
                 {
                     _atkName = atkName.Split('|')[0];

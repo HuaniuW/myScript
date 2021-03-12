@@ -12,7 +12,7 @@ public class ScreenChange : MonoBehaviour {
     public bool IsHitGo = false;
     [Header("朝向")]
     public float PlayerScaleX = 1;
-    [Header("门的名字")]
+    [Header("转去场景 查找 门 的名字")]
     public string doorName = "";
 
     [Header("门的朝向")]

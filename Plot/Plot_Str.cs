@@ -112,12 +112,12 @@ public class Plot_Str : MonoBehaviour
     //    "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
     //    "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
 
-    string plotStr = "acType:talk-talkObjName:B_dlws-msg:。。。没有人爱我！-choseType:dan-id:1-nextId:2|" +
-       "acType:talk-talkObjName:player-msg:。。。。我也是！#4@总会有爱你的人出现的！。#3-choseType:duo-id:2-nextId:3|" +
-       "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
-       "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
-       "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
-       "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
+    //string plotStr = "acType:talk-talkObjName:B_dlws-msg:。。。没有人爱我！-choseType:dan-id:1-nextId:2|" +
+    //   "acType:talk-talkObjName:player-msg:。。。。我也是！#4@总会有爱你的人出现的！。#3-choseType:duo-id:2-nextId:3|" +
+    //   "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6|" +
+    //   "acType:talk-talkObjName:B_dlws-msg:你确定吗？你确定能坚定的一口气闯过这里所有的障碍吗。-choseType:dan-id:4-nextId:5|" +
+    //   "acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over-choseType:duo-id:5-nextId:6|" +
+    //   "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
 
 
 
@@ -138,6 +138,13 @@ public class Plot_Str : MonoBehaviour
         "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6";
 
 
+
+
+    public string plotStr = "acType:talk-talkObjName:B_dlws-msg:你也是要来拿月之石的吧？-choseType:dan-id:1-nextId:2|" +
+       "acType:talk-talkObjName:player-msg:。。。。。。。。。-choseType:dan-id:2-nextId:3|" +
+       "acType:talk-talkObjName:B_dlws-msg:看来是的了。你也有什么悔恨的事需要月之石吗？-choseType:dan-id:3-nextId:4|" +
+       "acType:talk-talkObjName:player-msg:我只是想要而已。-choseType:dan-id:4-nextId:5|" +
+       "acType:talk-talkObjName:B_dlws-msg:好吧！这个徽章给你吧，路途艰险，多加小心。-choseType:dan-id:5-nextId:6|";
 
 
     private void OnEnable()
@@ -578,7 +585,7 @@ public class Plot_Str : MonoBehaviour
         {
             //做取消剧情相关的事
             //print("----------------------按键跳过剧情！！");
-            Globals.isInPlot = false;
+            //Globals.isInPlot = false;
         }
 
 

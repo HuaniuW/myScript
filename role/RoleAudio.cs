@@ -15,6 +15,8 @@ public class RoleAudio : MonoBehaviour {
     public AudioSource wallJump;
     public AudioSource hitWallDown;
     public AudioSource longhou;
+    public AudioSource die_1;
+    public AudioSource BeHit_1;
 
     // Use this for initialization
     void Start () {
