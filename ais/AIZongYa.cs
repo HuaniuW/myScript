@@ -201,7 +201,7 @@ public class AIZongYa : MonoBehaviour,ISkill
         if (!_airGameBody.isAcing)
         {
             _airGameBody.GetAcMsg(QiShouACName);
-            if (S_Start) S_Start.Play();
+            
         }
 
 
@@ -227,6 +227,7 @@ public class AIZongYa : MonoBehaviour,ISkill
             if (!_startXiaYa)
             {
                 _startXiaYa = true;
+                if (S_Start) S_Start.Play();
                 if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
                 if (S_FeiXingChongCi) S_FeiXingChongCi.Play();
             }

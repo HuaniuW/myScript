@@ -36,6 +36,13 @@ public class RoleDate : MonoBehaviour {
     [Header("暴击倍率")]
     public float BaoJiShangHaiBeiLv = 0;
 
+    [Header("抗毒几率")]
+    public float KangDuJilv = 0;
+
+    [Header("抗毒伤害值几率")]
+    public float KangDuShanghaijilv = 0;
+
+
 
     public virtual float lan
     {
@@ -77,6 +84,9 @@ public class RoleDate : MonoBehaviour {
 
     public bool isCanBeHit = true;
 
+    //身体是否能被碰撞
+    public bool isBodyCanBeHit = true;
+
     public bool isBeHit = false;
     public bool isBeHiting = false;
 
@@ -89,6 +99,10 @@ public class RoleDate : MonoBehaviour {
 
     [Header("怪的类型")]
     public string enemyType = "enemy";
+
+    [Header("boss 发现 敌人 独白")]
+    public string DuBai = "";
+
 
     [Header("被击中X方向的推力倍数")]
     public float beHitXFScale = 1;
@@ -157,8 +171,8 @@ public class RoleDate : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        
+    }
 
     [Header("被动防御技能")]
     public List<string> passive_def_skill = new List<string> { };

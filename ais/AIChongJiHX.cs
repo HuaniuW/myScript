@@ -52,36 +52,176 @@ public class AIChongJiHX : AIChongji
 
     protected override void Starting()
     {
+        //print("  chongji  starting!!!! ");
+
+        if (_roleDate.isBeHiting)
+        {
+            print("被攻击了 ！！！！！！！！！！！！   ");
+        }
+        
+
+
         if (_roleDate.isDie || _roleDate.isBeHiting || _targetObj == null || _targetObj.GetComponent<RoleDate>().isDie)
         {
+            //print(" over!!! ");
+            //ChongjiOver();
             ReSetAll();
             return;
         }
 
-        if (!isTanSheing && GetNearTarget()) IsTongYing = true;
-
-        if (isTanSheing) {
-            if (!startTanShe && ChongjiYingZhi != 0) {
+        if (isTanSheing)
+        {
+            if (!startTanShe && ChongjiYingZhi != 0)
+            {
                 startTanShe = true;
                 if (S_HXChongJi) S_HXChongJi.Play();
                 _roleDate.addYZ(ChongjiYingZhi);
-                
+
             }
-            
-            Tanshe();
+
+            HXTanShe2();
             return;
         }
 
-        if (IsTongYing && GetComponent<AIAirRunNear>().GetMoveNearY(1f, 8)) {
-            if (!isTanSheing)
-            {
-                isTanSheing = true;
-            }
-            IsTongYing = false;
+
+
+        if (!IsTongYing&&!isTanSheing && GetNearTarget()) {
+            //IsTongYing = true;
+            print("   靠近目标！ ");
+            isTanSheing = true;
         }
-        
-        
+
+
+
+
+        //if (IsTongYing && GetComponent<AIAirRunNear>().GetMoveNearY(1.6f, 8))
+        //{
+        //    IsTongYing = false;
+        //    if (!isTanSheing)
+        //    {
+        //        isTanSheing = true;
+        //        print("开始 弹射了！！！！！");
+        //    }
+        //}
+
+
     }
+
+
+    [Header("横向冲击的 距离")]
+    public float HXChongjiDis = 20;
+
+    [Header("最大 冲击 速度")]
+    public float MaxChongjiSpeed = 20;
+
+    protected virtual void HXTanShe2()
+    {
+        //print("  HXTanShe2 ");
+        if (GetComponent<RoleDate>().isBeHiting || GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall)
+        {
+            //print("  IsHitWall " + GetComponent<GameBody>().IsHitWall + "  ------IsGround  " + GetComponent<GameBody>().IsGround);
+            //ChongjiOver();
+            ReSetAll();
+            return;
+        }
+
+
+        if (!IsStartChongji &&GetComponent<AirGameBody>().GetDB().animation.HasAnimation(ACName_ChongjiBegin) && GetComponent<AirGameBody>().GetDB().animation.HasAnimation(ACName_ChongjiStart))
+        {
+
+            //if (!IsStartChongji && !IsGenZongType)
+            //{
+            //    IsStartChongji = true;
+            //}
+            float __x = 0;
+            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiBegin && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiStart)
+            {
+
+                __x = this.transform.position.x > _targetObj.position.x ? this.transform.position.x - HXChongjiDis : this.transform.position.x + HXChongjiDis;
+
+                targetPos = new Vector2(__x, this.transform.position.y);
+                //转向
+                //朝向
+
+                _airGameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
+                if (this.transform.position.x < targetPos.x)
+                {
+                    _airGameBody.TurnRight();
+                }
+                else
+                {
+                    _airGameBody.TurnLeft();
+                }
+
+                if (!CJhitKuai.activeSelf)
+                {
+                    CJhitKuai.SetActive(true);
+                    _jnDate.atkPower = SkillPower;
+                }
+
+                if (ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(false);
+
+                //print("wo kao!!!!!!!!!");
+                if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
+
+
+
+                if (StartSound) StartSound.Play();
+                _airGameBody.isAcing = true;
+                //_airGameBody.GetDB().animation.GotoAndStopByFrame(ACName_ChongjiBegin);
+                _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiBegin, 0.1f);
+                print("start!!!");
+                deltaNums = 0;
+                return;
+            }
+
+
+            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == ACName_ChongjiBegin)
+            {
+                CJYanchiNums += Time.deltaTime;
+                //print("  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+                if (CJYanchiNums >= CJYanchiTime)
+                {
+                    _airGameBody.isAcing = true;
+                    _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiStart);
+                    IsStartChongji = true;
+
+                    if (_targetObj.position.y > this.transform.position.y)
+                    {
+                        targetPos = new Vector2(targetPos.x, this.transform.position.y + 2);
+                    }
+                    else if (_targetObj.position.y < this.transform.position.y)
+                    {
+                        targetPos = new Vector2(targetPos.x, this.transform.position.y - 2);
+                    }
+                }
+                return;
+            }
+
+          
+        }
+
+        //print("lastAnimationName   " + _airGameBody.GetDB().animation.lastAnimationName+ "   isAcing    "+ _airGameBody.isAcing);
+        //print("  是否撞墙   "+ _airGameBody.IsHitWall+"  持续时间      "+ deltaNums+ "  _tsTimes   "+ _tsTimes);
+        deltaNums += Time.deltaTime;
+        if (deltaNums >= _tsTimes || IsOutChongjiDistance() || GetComponent<AIAirRunNear>().MoveToPoint(targetPos, 0.1f, chongjiSpeed, false, false, MaxChongjiSpeed) || _airGameBody.IsHitWall)
+        {
+            //if (deltaNums >= _tsTimes) print("  超出 冲击 时间   ");
+            //if (IsOutChongjiDistance()) print("超出 冲击 距离结束");
+            //if (_airGameBody.IsHitWall) print("撞墙 结束！！！");
+            //print("**************************************************到达目标Ian附近 结束！！！");
+
+            //print(">>>>????????  冲击over  " + "  @@@@@@  deltaNums   " + deltaNums + "  _tsTimes  " + _tsTimes);
+            if (CJhitKuai) CJhitKuai.SetActive(false);
+            ChongjiOver();
+            if (!ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(true);
+            //ReSetAll();
+        }
+
+        CJYanmu.Play();
+
+    }
+
 
 
     public override void GetStart(GameObject targetObj)
@@ -91,7 +231,7 @@ public class AIChongJiHX : AIChongji
         if (GlobalTools.GetDistanceByTowPoint(this.transform.position, _targetObj.transform.position) < 2)
         {
             ReSetAll();
-            ChongjiOver();
+            //ChongjiOver();
             return;
         }
 
@@ -129,11 +269,22 @@ public class AIChongJiHX : AIChongji
         }
         __y = _targetObj.position.y+0.4f;
 
+        if(this.transform.position.y< _targetObj.position.y)
+        {
+            __y = _targetObj.position.y + 0.8f;
+        }
+        else
+        {
+            __y = _targetObj.position.y - 0.8f;
+        }
+
+
         return new Vector2(__x,__y);
     }
 
     public override void ReSetAll()
     {
+        ChongjiOver();
         if (CJhitKuai) CJhitKuai.SetActive(false);
         if (!ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(true);
         _jnDate.atkPower = _ysAtkPower;
@@ -142,7 +293,7 @@ public class AIChongJiHX : AIChongji
         CJYanmu.Stop();
         if (ChongjiYingZhi != 0) _roleDate.hfYZ(ChongjiYingZhi);
         isStarting = false;
-        isGetOver = false;
+        isGetOver = true;
         isTanSheing = false;
         IsStartChongji = false;
         CJYanchiNums = 0;
@@ -176,11 +327,13 @@ public class AIChongJiHX : AIChongji
     //    runNear.ResetAll();
 
 
-        
+
     //    startTanShe = false;
     //    //print("*************************************************************冲击 结束！！！！！");
     //}
 
+
+   
 
     protected override void Tanshe()
     {
@@ -191,7 +344,7 @@ public class AIChongJiHX : AIChongji
         {
             print("撞墙了！！！！");
             ReSetAll();
-            ChongjiOver();
+            //ChongjiOver();
             return;
         }
 
@@ -199,12 +352,12 @@ public class AIChongJiHX : AIChongji
         //做起始动作
         //起始动作完成 弹射 做第二个动作
         //完成后 还原动作
-        if (_airGameBody.GetDB().animation.HasAnimation("chongji_begin") && _airGameBody.GetDB().animation.HasAnimation("chongji_start"))
+        if (_airGameBody.GetDB().animation.HasAnimation(ACName_ChongjiBegin) && _airGameBody.GetDB().animation.HasAnimation(ACName_ChongjiStart))
         {
-            if (_airGameBody.GetDB().animation.lastAnimationName != "chongji_begin" && _airGameBody.GetDB().animation.lastAnimationName != "chongji_start")
+            if (_airGameBody.GetDB().animation.lastAnimationName != ACName_ChongjiBegin && _airGameBody.GetDB().animation.lastAnimationName != ACName_ChongjiStart)
             {
                 //转向 朝向玩家
-                _airGameBody.GetAcMsg("chongji_begin");
+                _airGameBody.GetAcMsg(ACName_ChongjiBegin);
                 _airGameBody.GetDB().animation.Stop();
                 _airGameBody.GetStop();
                 deltaNums = 0;
@@ -212,13 +365,13 @@ public class AIChongJiHX : AIChongji
             }
 
 
-            if (_airGameBody.GetDB().animation.lastAnimationName == "chongji_begin")
+            if (_airGameBody.GetDB().animation.lastAnimationName == ACName_ChongjiBegin)
             {
                 CJYanchiNums += Time.deltaTime;
                 //print("  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
                 if (CJYanchiNums >= CJYanchiTime)
                 {
-                    _airGameBody.GetAcMsg("chongji_start");
+                    _airGameBody.GetAcMsg(ACName_ChongjiStart);
                     if (!_airGameBody.GetDB().animation.isPlaying) _airGameBody.GetDB().animation.Play();
                 }
                 return;
@@ -249,7 +402,7 @@ public class AIChongJiHX : AIChongji
                 moveDistance = _atkDistance + 5;
             }
 
-            float __x1 = this.transform.position.x>targetPos.x? this.transform.position.x- moveDistance : this.transform.position.x + moveDistance;
+            float __x1 = this.transform.position.x>targetPos.x? this.transform.position.x- moveDistance-5 : this.transform.position.x + moveDistance+5;
             float __y1 = this.transform.position.y;
 
             targetPos = new Vector2(__x1, __y1);

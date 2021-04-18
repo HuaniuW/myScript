@@ -526,9 +526,9 @@ public class GetReMap : MonoBehaviour
         int guainum = 0;
         if (n < 40) {
             //出2只
-            guainum = 4;
+            guainum = 3;
         }
-        else if (n<100) {
+        else if (n<90) {
             //出1只
             guainum = 2;
         }
@@ -600,7 +600,7 @@ public class GetReMap : MonoBehaviour
             guaiListName = "xiaoGuai_" + Globals.mapTypeNums;
         }
 
-        print(CMapName+  " 怪物获取列表   "+ guaiListName);
+        //print(CMapName+  " 怪物获取列表   "+ guaiListName);
         nums = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance()).Count;
         guaiName = GetDateByName.GetInstance().GetListByName(guaiListName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
         g = GlobalTools.GetGameObjectByName(guaiName);
@@ -620,6 +620,7 @@ public class GetReMap : MonoBehaviour
         {
             tl = lianjiedian.GetComponent<DBBase>().tl.transform.position;
         }
+
         if((_cMapObj|| lianjiedian)&& DBType == "heng")
         {
             //_x = tl.x + GlobalTools.GetRandomDistanceNums(_cMapObj.GetComponent<DBBase>().GetWidth());
@@ -636,14 +637,14 @@ public class GetReMap : MonoBehaviour
             {
                 dx = lianjiedian.GetComponent<DBBase>().GetWidth() / (GuaiNums + 1);
             }
-            _x = tl.x + dx * i + dx * 0.5f;
-            if (Fx == "l") {
-                _x = tl.x+ _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f + dx * i;
-            }else if(Fx == "r")
-            {
-                Vector2 rd = _cMapObj.GetComponent<DBBase>().rd.transform.position;
-                _x = rd.x - _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f - dx * i;
-            }
+            _x = tl.x + dx * i;
+            //if (Fx == "l") {
+            //    _x = tl.x+ _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f + dx * i;
+            //}else if(Fx == "r")
+            //{
+            //    Vector2 rd = _cMapObj.GetComponent<DBBase>().rd.transform.position;
+            //    _x = rd.x - _cMapObj.GetComponent<DBBase>().GetWidth() * 0.5f - dx * i;
+            //}
 
 
             if (kongzhong)
@@ -666,7 +667,7 @@ public class GetReMap : MonoBehaviour
         }
         
 
-        _x = GlobalTools.GetRandomNum()>50?_x+GlobalTools.GetRandomDistanceNums(4): _x  - GlobalTools.GetRandomDistanceNums(4);
+        _x = GlobalTools.GetRandomNum()>50?_x+GlobalTools.GetRandomDistanceNums(dx): _x  - GlobalTools.GetRandomDistanceNums(dx);
 
 
         if (_cMapObj && _cMapObj.GetComponent<DBBase>().DXType == "tiaoyue") _y = tl.y + 4 + GlobalTools.GetRandomDistanceNums(4);
@@ -1037,7 +1038,7 @@ public class GetReMap : MonoBehaviour
         return GlobalTools.GetGameObjectByName(mapName);
     }
 
-
+    //当前生成的地板
     protected GameObject _cMapObj;
     protected List<GameObject> mapObjArr = new List<GameObject>() { };
     //参数    danFX单方向修正  
@@ -1370,7 +1371,7 @@ public class GetReMap : MonoBehaviour
     protected float l;
     protected float r;
 
-    protected void GetKuaiBianjie(List<GameObject> mapObjList)
+    protected void GetKuaiBianjie(List<GameObject> mapObjList,float bianjieyansheng = 15)
     {
         for(int i= 0; i < mapObjList.Count; i++)
         {
@@ -1395,7 +1396,7 @@ public class GetReMap : MonoBehaviour
         //print("-------------------------------------计算摄像头块的 大小 ！！！！！！！！！！");
         //print(" 地图组成数量    "+ mapObjList.Count);
         //边界延伸值
-        float bianjieyansheng = 15;
+        //float bianjieyansheng =15;
         Vector2 lu = new Vector2(l- bianjieyansheng, u+ bianjieyansheng);
         Vector2 rd = new Vector2(r+ bianjieyansheng, d- bianjieyansheng);
 

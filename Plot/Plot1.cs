@@ -73,7 +73,7 @@ public class Plot1 : MonoBehaviour
 
     void LongStart()
     {
-        if(player.transform.position.x>=B_long.transform.position.x)B_long.GetComponent<AIPlot>().GetPlotStart();
+        if(player.transform.position.x>=B_long.transform.position.x+14)B_long.GetComponent<AIPlot>().GetPlotStart();
     }
 
     public AudioSource fengsheng;

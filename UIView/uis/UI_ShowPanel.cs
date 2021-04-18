@@ -182,7 +182,7 @@ public class UI_ShowPanel : MonoBehaviour {
     void ReleaseSkill(UEvent e)
     {
         string str = e.eventParams.ToString();
-        //print("释放技能  "+str);
+        print("******************************************************释放技能  "+str);
         foreach(GameObject o in HZList)
         {
             //上下左右 4个位置的节能 如果和 str 传来的位置一致就释放

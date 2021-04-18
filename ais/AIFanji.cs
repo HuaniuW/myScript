@@ -84,13 +84,14 @@ public class AIFanji : MonoBehaviour {
     int beHitNum = 0;
     public void GetFanji()
     {
-        //print("   进入 AI反击 ！！  "+_gameBody.isAcing+"  v2  "+_gameBody.GetPlayerRigidbody2D().velocity);
+        print("  ************************************************反击*******************************************************************  ");
+        print("   进入 AI反击 ！！  "+_gameBody.isAcing+"  v2  "+_gameBody.GetPlayerRigidbody2D().velocity+ "   isFanjiing   "+ isFanjiing);
         if (isFanjiing) return;
-        //print(1);
+        print(1 + "    beHitNum  "+ beHitNum+ "   gameBody.beHitNum???  " + _gameBody.beHitNum);
         if (beHitNum == _gameBody.beHitNum) return;
-        //print(2);
+        print(2);
         beHitNum = _gameBody.beHitNum;
-        //print(3);
+        print(3);
         int n = (int)UnityEngine.Random.Range(0, 100);
         if (isJVCanZJ&&!IsBeHitCut())
         {
@@ -100,13 +101,22 @@ public class AIFanji : MonoBehaviour {
         }
         if (n <= (100 - fanjijilv- BeHitNum)) return;
 
-        print("   进入 AI反击 ！！  反击成功！！！！  ");
+        print("    、、、、、、、、、、、、、、、、///////////////// 反击成功！！！！  ");
         print("----------------------------------反击！！！   n:  "+n+"  ??:  "+(100-(fanjijilv + BeHitNum))+ "   BeHitNum   "+ BeHitNum+ "  fanjijilv   "+ fanjijilv);
         if (!isFanji)
         {
             isFanji = true;
             isFanjiing = true;
             print("  进入 反击    "+ _gameBody.isAcing);
+            if (GetComponent<AIAirBase>())
+            {
+                GetComponent<AIAirBase>().ReSetAll2();
+                GetComponent<AIAirBase>().QuXiaoAC();
+            }
+            else
+            {
+                //GetComponent<AIBase>()
+            }
             _gameBody.FanJiBeHitReSet();
             //清0速度
             _gameBody.SpeedXStop();
@@ -137,6 +147,9 @@ public class AIFanji : MonoBehaviour {
     GameBody _gameBody;
     // Update is called once per frame
     void Update () {
+        //print("----------------------------------------------------------------->     "+GlobalTools.GetRandomNum(2));
+
+
         JiShuQi();
 
         if (GetComponent<RoleDate>().isDie) {
@@ -196,7 +209,27 @@ public class AIFanji : MonoBehaviour {
                 //判断是否是技能攻击
                 if (skillAtkName!="")
                 {
-                    GetComponent<AIBase>().GetAtkFSByName(skillAtkName);
+                    string[] strArr = skillAtkName.Split('|');
+                    int length = strArr.Length;
+                    string _skilName = skillAtkName; 
+                    if (length > 1)
+                    {
+                        int i = GlobalTools.GetRandomNum(length);
+                        print("  fanjinums  i =     "+i);
+                        _skilName = strArr[i];
+                    }
+                    print(" ******************************************反击的 技能名字   "+ _skilName);
+
+
+                    if (GetComponent<AIAirBase>())
+                    {
+                        GetComponent<AIAirBase>().GetAtkFSByName(_skilName);
+                    }
+                    else
+                    {
+                        GetComponent<AIBase>().GetAtkFSByName(_skilName);
+                    }
+                    
                     init();
                     return;
                 }

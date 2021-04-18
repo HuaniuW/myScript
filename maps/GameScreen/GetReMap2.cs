@@ -113,9 +113,9 @@ public class GetReMap2 : GetReMap
 
         
 
-        print("menFXList   " + menFXList.ToString());
+        //print("menFXList   " + menFXList.ToString());
 
-        foreach (string m in menFXList) print("  menlist>////////////////////////:   "+m);
+        //foreach (string m in menFXList) print("  menlist>////////////////////////:   "+m);
         //这里要知道 从哪进来的 进入方向   保留一个门
         //-
 
@@ -132,13 +132,14 @@ public class GetReMap2 : GetReMap
         if (IsTiaoshi && CongNaGeMenjinru != "")
         {
             GlobalSetDate.instance.DanqianMenweizhi = CongNaGeMenjinru;
+           
         }
         else
         {
             //从哪个门进入的  r
             CongNaGeMenjinru = GlobalSetDate.instance.DanqianMenweizhi;
         }
-        //print("从哪个位置的门进来的  " + GlobalSetDate.instance.DanqianMenweizhi);
+        print("从哪个位置的门进来的  " + GlobalSetDate.instance.DanqianMenweizhi);
         //判断 全局数据中 是否有 地图地形数据 有的话  取出来
         string mapDateMsg = GetMapMsgDateByName(GlobalSetDate.instance.CReMapName);
         //print("  *** mapDateMsg??  "+ mapDateMsg);
@@ -171,9 +172,24 @@ public class GetReMap2 : GetReMap
 
         CreateMapByFX(_lianjiedibanType);
 
-        GetKuaiBianjie(mapObjArr);
+        if (_dixingType == GlobalMapDate.JINGYING_PINGDI)
+        {
+            print("缩小边界 视觉块！！！");
+            bianjieyanshengzhi = 0;
+        }
+        else
+        {
+            bianjieyanshengzhi = 15;
+        }
+
+        //视觉块 边界
+        GetKuaiBianjie(mapObjArr,bianjieyanshengzhi);
 
         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetPlayerPosByFX();
+        if (IsTiaoshi && CongNaGeMenjinru != "")
+        {
+            GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().TestPlayerDoorPos();
+        }
 
         return;
 
@@ -188,6 +204,8 @@ public class GetReMap2 : GetReMap
         //GetGuaiControlMen();
     }
 
+    //边界延伸值
+    float bianjieyanshengzhi = 15;
 
     GameObject lianjiedianY;
 
@@ -293,10 +311,10 @@ public class GetReMap2 : GetReMap
 
             int rnums = GlobalTools.GetRandomNum();
 
-            if (Globals.mapTypeNums == 1)
-            {
-                rnums = 90;
-            }
+            //if (Globals.mapTypeNums == 1)
+            //{
+            //    rnums = 90;
+            //}
 
             _JYGuaiName = "";
 
@@ -308,11 +326,11 @@ public class GetReMap2 : GetReMap
                 //跳跃
                 _dixingType = GlobalMapDate.TIAOYUE;
             }
-            else if (rnums < 5)
+            else if (rnums < 40)
             {
                 //洞内  
                 _dixingType = GlobalMapDate.DONGNEI;
-            }else if (rnums < 10)
+            }else if (rnums < 50)
             {
                 //多怪 精英 平地
                 _dixingType = GlobalMapDate.DUOGUAI_JINGYING_PINGDI;
@@ -323,8 +341,14 @@ public class GetReMap2 : GetReMap
                 _dixingType = GlobalMapDate.YIBAN;
             }
 
-
+            //测试 特殊地图
+            print("测试 特殊地图!!");
+            //GlobalMapDate.CurrentSpelMapType = "jingying^jingyingPingdi^1^G_jydj";
             string GlobalCMapType = GlobalMapDate.CurrentSpelMapType.Split('^')[0];
+
+            
+            
+
             //print("GlobalMapDate.CurrentSpelMapType   "+ GlobalMapDate.CurrentSpelMapType + "   GlobalCMapType  " + GlobalCMapType);
             if (GlobalCMapType == "dongnei")
             {
@@ -659,7 +683,7 @@ public class GetReMap2 : GetReMap
                 _isNearMenDuan = false;
             }
             //这里要 小段 有几个地图组成
-            int XiaoDiTuNums = 1 + GlobalTools.GetRandomNum(3);
+            int XiaoDiTuNums = 1 + GlobalTools.GetRandomNum(2);
             if (_dixingkuozhanNums != 0) XiaoDiTuNums = 1;
             if (fx == "l" || fx == "d")
             {
@@ -1484,11 +1508,12 @@ public class GetReMap2 : GetReMap
         if (fx == "l"|| fx == "d")
         {
             pos = new Vector2(LJDpos.x - mapObj.GetComponent<DBBase>().GetWidth(), LJDpos.y - mapObj.GetComponent<DBBase>().GetHight() * 0.5f - GlobalTools.GetRandomDistanceNums(1)- xiajiang);
-
+            mapObj.GetComponent<DBBase>().ShowCameraKuaiD("r");
         }
         else
         {
             pos = new Vector2(LJDpos.x , LJDpos.y - mapObj.GetComponent<DBBase>().GetHight() * 0.5f - GlobalTools.GetRandomDistanceNums(1)- xiajiang);
+            mapObj.GetComponent<DBBase>().ShowCameraKuaiD("l");
         }
 
 

@@ -8,7 +8,7 @@ public class TX_zidanSSGS : TX_zidan
     // Start is called before the first frame update
     void Start()
     {
-        print("子文档 start!!");
+        //print("子弹 start!!");
     }
 
 
@@ -19,6 +19,7 @@ public class TX_zidanSSGS : TX_zidan
         this.GetComponent<Rigidbody2D>().gravityScale = 4;
         isReset = false;
         isFaShe = false;
+        GenZongJiShi = 0;
         testN = 0;
     }
 
@@ -53,13 +54,13 @@ public class TX_zidanSSGS : TX_zidan
     [Header("是否是跟踪子弹")]
     public bool IsGZZiDan = false;
 
-    int testN = 0;
+    float GenZongJiShi = 0;
     [Header("数值越大 跟踪能力越强  可以模拟跟踪子弹 ")]
-    public int MaxTestN = 0;
+    public float MaxGenZongTimes= 0;
     void JiluSpeed()
     {
         
-        if (testN > MaxTestN) return;
+        if (GenZongJiShi > MaxGenZongTimes) return;
 
 
         if (!isFaShe)
@@ -75,11 +76,12 @@ public class TX_zidanSSGS : TX_zidan
                     
                 }
 
-               
-                
-                
-                
-                //print("??? ------------   testN    "+testN);
+                isUpStart = false;
+
+
+
+
+                //print("??? ------------   testN    "+ GenZongJiShi);
                 //设置飞行速度
                 SetZDSpeed(SpeedGS);
                 //print("player  ???  "+_player);
@@ -99,10 +101,11 @@ public class TX_zidanSSGS : TX_zidan
 
     void GenZong()
     {
+        //print("genzongzidan!!");
         if (!_player) return;
-        //print("??? ------------   testN    " + testN);
-        if (testN < MaxTestN) {
-            testN++;
+        //print(" gengzhong!!  ??? ------------   testN    " + GenZongJiShi);
+        if (GenZongJiShi < MaxGenZongTimes) {
+            GenZongJiShi += Time.deltaTime;
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
         }
         

@@ -60,6 +60,7 @@ public class AIAirRunNear : MonoBehaviour
         this.GetComponent<GameBody>().IsJiasu = false;
         if (_csSpeed!=0) _aiPath.maxSpeed = _csSpeed;
         _csSpeed = 0;
+        IsQuXianToPoint = false;
     }
 
     //public void ResetAll2()
@@ -160,11 +161,127 @@ public class AIAirRunNear : MonoBehaviour
     }
 
 
+    public bool MoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true, float MaxSpeedX = 18)
+    {
+        if (inDistance != 0) zuijiPosDisWC = inDistance;
+        Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+        Vector2 v2 = (point - thisV2) * TempSpeed;
+        if (MaxSpeedX != 0 && Mathf.Abs(v2.x) > MaxSpeedX)
+        {
+            v2.x = v2.x > 0 ? MaxSpeedX : -MaxSpeedX;
+            v2.y *= MaxSpeedX / Mathf.Abs(v2.x);
+        }
+
+        this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = v2;
+        this.GetComponent<GameBody>().IsJiasu = true;
+
+        if (IsTestHitWall && IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        {
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+        float _jinruDis = (thisV2 - point).sqrMagnitude;
+
+        //print("两点间距离 " + _jinruDis+"   ------进入距离的 误差 内  "+ zuijiPosDisWC+ "  inDistance   " + inDistance+"    我的位置  "+thisV2+"    目标点 "+ point);
+        //距离小于 误差内 直接结束
+        if (_jinruDis < zuijiPosDisWC)
+        {
+            print("进入 目标附近！！！");
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+        return false;
+    }
+
+    
+    float __tanli = 2;
+    float __vy = 0;
+    float _upY = 0;
+    float _downY = 0;
+    float togPosY = 0;
+    bool IsQuXianToPoint = false;
+
+    public bool MoveQuXianToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true, float MaxSpeedX = 18)
+    {
+        Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+        Vector2 v2 = (point - thisV2) * TempSpeed;
+
+        if (!IsQuXianToPoint)
+        {
+            IsQuXianToPoint = true;
+            __tanli = 0.2f;
+            __vy = 10;
+            _upY = thisV2.y + 1.5f;
+            _downY = thisV2.y - 1.5f;
+            togPosY = _upY;
+            v2.x = v2.x > 0 ? 2 : -2;
+        }
+        
+
+
+        //float __vx = v2.x;
+
+        if (thisV2.y >= _upY)
+        {
+            //togPosY = _downY;
+            __vy = -10;
+        }
+
+        if(thisV2.y <= _downY)
+        {
+            //togPosY = _upY;
+            __vy = 10;
+        }
+
+
+
+        //__vy+= (togPosY - thisV2.y) * __tanli;
+
+        if (MaxSpeedX != 0 && Mathf.Abs(v2.x) > MaxSpeedX)
+        {
+            v2.x = v2.x > 0 ? MaxSpeedX : -MaxSpeedX;
+            //v2.y *= MaxSpeedX / Mathf.Abs(v2.x);
+            
+        }
+        v2.y = __vy;
+
+        this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = v2;
+        this.GetComponent<GameBody>().IsJiasu = true;
+
+        if (IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        {
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+        float _jinruDis = (thisV2 - point).sqrMagnitude;
+        if (_jinruDis < zuijiPosDisWC)
+        {
+            print("进入 目标附近！！！");
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     public float zhijieZhuijiTanCeDistance = 1;
     //直接 去到目标点
     //inDistance 进入 范围直径
     public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true,float MaxSpeedX = 18)
     {
+
+        print("111***lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
         if (inDistance != 0) zuijiPosDisWC = inDistance;
         zhuijiRun(IsCanTurnFace);
 
@@ -281,12 +398,13 @@ public class AIAirRunNear : MonoBehaviour
                 _airGameBody.TurnLeft();
             }
         }
-        
 
+        //print("****************lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
         if (GetComponent<AIChongji>() && GetComponent<AIChongji>().isTanSheing) return;
         GetComponent<AirGameBody>().isRunYing = true;
         _airGameBody.Run();
-      
+        //print("****2222222222************lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
+
     }
 
 
@@ -732,14 +850,14 @@ public class AIAirRunNear : MonoBehaviour
         if (_obj.transform.position.y - transform.position.y > _moveDistance)
         {
             //目标在上 向上移动
-            //print("   上移动 ");
+            print("   上移动 ");
             _airGameBody.RunY(__speedY);
             return false;
         }
         else if (_obj.transform.position.y - transform.position.y < -_moveDistance)
         {
             //目标在下 向下移动
-            //print("   下移动 ！！！！！");
+            print("   下移动 ！！！！！");
             _airGameBody.RunY(-__speedY);
             return false;
         }

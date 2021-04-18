@@ -48,9 +48,14 @@ public class HitKuai2 : MonoBehaviour
 
     public float atkScaleX = 1;
 
+    [Header("是否能 击中boss")]
+    public bool IsCanHitBoss = true;
+
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        
+
 
         gameBody = Coll.GetComponent<GameBody>();
         roleDate = Coll.GetComponent<RoleDate>();
@@ -59,7 +64,12 @@ public class HitKuai2 : MonoBehaviour
         //atkObj = txObj.GetComponent<JN_base>().atkObj;
         //print(atkObj.name);
 
-      
+        print(" ---coll name "+Coll.name+"    roledate "+roleDate);
+
+        if (roleDate&&!IsCanHitBoss&& roleDate.enemyType == "boss")
+        {
+            return;
+        }
 
         JN_Date jn_date = GetComponent<JN_Date>();
 

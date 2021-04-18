@@ -43,7 +43,7 @@ public class JG_HitGuaiOut : MonoBehaviour
             {
                 _x = this.transform.position.x - ToCenterDis- GlobalTools.GetRandomDistanceNums(3);
             }
-            _y += GlobalTools.GetRandomDistanceNums(2);
+            _y += GlobalTools.GetRandomDistanceNums(4);
             Vector2 pos = new Vector2(_x,_y);
             GameObject guai = GlobalTools.GetGameObjectByName(GuaiList[i]);
             guai.transform.position = pos;

@@ -28,6 +28,7 @@ public class JG_gunshiCF : MonoBehaviour {
         if (Coll.tag == "Player")
         {
             this.transform.parent.GetComponent<JG_gunshi>().GetStart();
+           
         }
     }
 }

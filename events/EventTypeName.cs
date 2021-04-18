@@ -20,6 +20,7 @@ public class EventTypeName
     public const string CHANGE_HZ = "change_hz";
 
     public const string CHANEG_LIVE = "change_live";
+    public const string CHANEG_LAN = "change_lan";
 
     //角色是否能操控
     public const string ROLECANCONTROL = "roleCanControl";

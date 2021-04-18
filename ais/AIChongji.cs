@@ -40,6 +40,7 @@ public class AIChongji : MonoBehaviour, ISkill
 
     public bool IsChongjiOver()
     {
+        //print("   shifou chongji  over  >isGetOver  " + isGetOver);
         return isGetOver;
     }
 
@@ -66,7 +67,7 @@ public class AIChongji : MonoBehaviour, ISkill
     {
         IsTongYing = false;
         isStarting = false;
-        isGetOver = false;
+        //isGetOver = false;
         isTanSheing = false;
         isGetOver = true;
         deltaNums = 0;
@@ -74,6 +75,7 @@ public class AIChongji : MonoBehaviour, ISkill
         GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
         _IsHitGroundUp = false;
+        _airGameBody.isAcing = false;
     }
 
 
@@ -147,14 +149,23 @@ public class AIChongji : MonoBehaviour, ISkill
     [Header("冲击时的硬直")]
     public float ChongjiYingZhi = 1000;
 
+
+    [Header("动作名字 开始冲击")]
+    public string ACName_ChongjiStart = "chongji_start";
+    [Header("动作名字 准备冲击")]
+    public string ACName_ChongjiBegin = "chongji_begin";
+
+   
+
+
+
+
     protected virtual void Tanshe()
     {
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall) {
             print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
-
-
             ReSetAll();
-            ChongjiOver();
+            //ChongjiOver();
             return;
         }
 
@@ -162,12 +173,12 @@ public class AIChongji : MonoBehaviour, ISkill
         //做起始动作
         //起始动作完成 弹射 做第二个动作
         //完成后 还原动作
-        if (GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_begin")&& GetComponent<AirGameBody>().GetDB().animation.HasAnimation("chongji_start"))
+        if (GetComponent<AirGameBody>().GetDB().animation.HasAnimation(ACName_ChongjiBegin) && GetComponent<AirGameBody>().GetDB().animation.HasAnimation(ACName_ChongjiStart))
         {
-            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_begin" && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != "chongji_start")
+            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiBegin && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiStart)
             {
                 //转向 朝向玩家
-                GetComponent<AirGameBody>().GetAcMsg("chongji_begin");
+                GetComponent<AirGameBody>().GetAcMsg(ACName_ChongjiBegin);
                 //开始冲击时候的 怪物叫声
                 if (StartSound) StartSound.Play();
                 GetComponent<AirGameBody>().GetDB().animation.Stop();
@@ -177,13 +188,13 @@ public class AIChongji : MonoBehaviour, ISkill
             }
 
 
-            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == "chongji_begin")
+            if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == ACName_ChongjiBegin)
             {
                 CJYanchiNums += Time.deltaTime;
                 //print("  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
                 if (CJYanchiNums >= CJYanchiTime)
                 {
-                    GetComponent<AirGameBody>().GetAcMsg("chongji_start");
+                    GetComponent<AirGameBody>().GetAcMsg(ACName_ChongjiStart);
                     if(!GetComponent<AirGameBody>().GetDB().animation.isPlaying) GetComponent<AirGameBody>().GetDB().animation.Play();
                 }
                 return;
@@ -256,6 +267,7 @@ public class AIChongji : MonoBehaviour, ISkill
         GetComponent<AirGameBody>().SetACingfalse();
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
         _IsHitGroundUp = false;
+        _airGameBody.GetPlayerRigidbody2D().velocity *= 0.2f;
         //print("*************************************************************冲击 结束！！！！！");
     }
 
@@ -271,15 +283,15 @@ public class AIChongji : MonoBehaviour, ISkill
     //定位目标
     protected virtual bool GetNearTarget()
     {
-        print("鱼 冲击 接近目标----------------  接近 ");
+        //print("鱼 冲击 接近目标----------------  接近 ");
         if (this.transform.position.x > _targetObj.position.x)
         {
-            print("目标在左侧！！！  "+this.transform.position.x+"    -------x    "+ _targetObj.position.x);
+            //print("目标在左侧！！！  "+this.transform.position.x+"    -------x    "+ _targetObj.position.x);
             _airGameBody.TurnLeft();
         }
         else
         {
-            print("目标在---右侧！！！");
+            //print("目标在---右侧！！！");
             _airGameBody.TurnRight();
         }
         return runNear.Zhuiji(_atkDistance,false);

@@ -93,6 +93,11 @@ public class AIBase : MonoBehaviour {
         //    thePlayer = GlobalTools.FindObjByName("player");
         //    isAction = true;
         //}
+
+        if(GetComponent<RoleDate>().enemyType == "boss")
+        {
+            GetComponent<RoleDate>().isCanBeHit = false;
+        }
     }
 
 
@@ -120,6 +125,7 @@ public class AIBase : MonoBehaviour {
     void BossFight(UEvent e)
     {
         IsBossStop = false;
+        GetComponent<RoleDate>().isCanBeHit = true;
     }
 
     public bool isPlayerDie = false;
@@ -160,7 +166,16 @@ public class AIBase : MonoBehaviour {
         {
             GameObject guai = GlobalTools.GetGameObjectByName(_guaiName);
             //guai.GetComponent<AIBase>().isAction = true;
-            guai.transform.position = new Vector2(this.transform.position.x,this.transform.position.y+15);
+
+            float __x = GlobalTools.GetRandomNum() > 50 ? this.transform.position.x + GlobalTools.GetRandomDistanceNums(4) : this.transform.position.x - GlobalTools.GetRandomDistanceNums(4);
+
+            guai.transform.position = new Vector2(__x, this.transform.position.y+10+GlobalTools.GetRandomDistanceNums(5));
+
+            if (guai.GetComponent<AIAirBase>())
+            {
+                guai.GetComponent<AIAirBase>().isFindEnemy = true;
+            }
+
         }
     }
 
@@ -237,6 +252,23 @@ public class AIBase : MonoBehaviour {
 
     [Header("发现敌人 是否采取攻击")]
     public bool isNearAtkEnemy = true;
+
+
+    bool IsInDubai = false;
+    float dubaiTimes = 1;
+    float dubaiJiShi = 0;
+    bool IsInDuBai()
+    {
+        if (IsInDubai)
+        {
+            dubaiJiShi += Time.deltaTime;
+            if (dubaiJiShi >= dubaiTimes) IsInDubai = false;
+        }
+        return IsInDubai;
+    }
+
+
+
     protected bool IsFindEnemy()
     {
         if (!isNearAtkEnemy) return false;
@@ -247,6 +279,20 @@ public class AIBase : MonoBehaviour {
         //}
         if(Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
         {
+            print("发现敌人！！！");
+            string _msg = GetComponent<RoleDate>().DuBai;
+            if (GetComponent<RoleDate>().enemyType == "boss"&& _msg!="")
+            {
+                
+                GameObject _cBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TalkBar2") as GameObject);
+                Vector2 _talkPos = GetComponent<GameBody>().GetTalkPos();
+               
+                print("我是boss！！！！  boss 的 独白  是什么？？       "+_msg);
+                _cBar.GetComponent<UI_talkBar>().ShowTalkText(_msg, _talkPos, dubaiTimes);
+                IsInDubai = true;
+            }
+
+
             isFindEnemy = true;
             //isPatrol = false;
             GetComponent<GameBody>().InFightAtk();
@@ -328,6 +374,7 @@ public class AIBase : MonoBehaviour {
             if (!IsMastPatrol && GlobalTools.GetRandomNum() >= 60)
             {
                 isPatrol = false;
+                return;
             }
         }
         //print(" 我在巡逻？？？？？？？ ");
@@ -424,17 +471,23 @@ public class AIBase : MonoBehaviour {
 
     protected virtual void GetUpdate()
     {
+
+        
+
+
         if (GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
             return;
         }
-
-        if(_ycNums< _theYcNums)
+        
+        if (_ycNums< _theYcNums)
         {
             _ycNums += Time.deltaTime;
             return;
         }
+
         
+
 
         if (!thePlayer)
         {
@@ -473,7 +526,7 @@ public class AIBase : MonoBehaviour {
 
        
 
-        //print(" vx22 " + gameBody.GetPlayerRigidbody2D().velocity.x);
+        
 
         if (isYLHuiXue)
         {
@@ -865,10 +918,21 @@ public class AIBase : MonoBehaviour {
     //protected bool IsGetAtkFSByName = false;
     public virtual void GetAtkFSByName(string atkFSName)
     {
-        
+       
+
         //IsGetAtkFSByName = true;
         isAction = true;
         acName = atkFSName;
+        string[] strArr = atkFSName.Split('_');
+        if (strArr.Length >= 2)
+        {
+            acName = strArr[0];
+            if (acName == "AIZiDans")
+            {
+                GetComponent<AI_ZiDans>().SetZiDanType(int.Parse(strArr[1]));
+            }
+        }
+
         //isActioning = true;
     }
 
@@ -889,6 +953,10 @@ public class AIBase : MonoBehaviour {
         if (GetComponent<GameBody>() && GetComponent<GameBody>().GetDB().animation.lastAnimationName == "downOnGround_1") return;
         if (gameBody.isJumping) return;
         if (IsIfStopMoreTime())return;
+
+
+        if (IsInDuBai()) return;
+
         if (!isAction){
 			isAction = true;
 			acName = GetZS();
@@ -1287,13 +1355,18 @@ public class AIBase : MonoBehaviour {
         if (moretimes >= 5)
         {
             moretimes = 0;
-            print("   AI重启   ！！！！！！！！！！！！！！！！！！！！！！");
-            IsChongqi = true;
-            AIBeHit();
-            GetComponent<GameBody>().ResetAll();
+            AIReSetAll();
             return true;
         }
         return false;
+    }
+
+    void AIReSetAll()
+    {
+        print("   AI重启   ！！！！！！！！！！！！！！！！！！！！！！");
+        IsChongqi = true;
+        AIBeHit();
+        GetComponent<GameBody>().ResetAll();
     }
 
 
@@ -1312,6 +1385,30 @@ public class AIBase : MonoBehaviour {
         //isZSOver = false;
     }
 
+    //不能动的怪 给与招式重新启动 远离回血 或者 切换招式
+    protected float DontMoveAtkWiteTimes = 0;
+    protected float TheDontMoveAtkWiteTime = 3;
+    void DontMoveAtkChange()
+    {
+        DontMoveAtkWiteTimes += Time.deltaTime;
+        //print("  ????DontMoveAtkWiteTimes  " + DontMoveAtkWiteTimes);
+        if (DontMoveAtkWiteTimes >= TheDontMoveAtkWiteTime)
+        {
+            AIReSetAll();
+            if (GlobalTools.GetRandomNum() > 50)
+            {
+                if (GetComponent<AIYuanLiHuiXue>() != null)
+                {
+                    print("-------------------------------远离 回血！！！！！");
+                    YLHuiXue();
+                }
+            }
+            DontMoveAtkWiteTimes = 0;
+        }
+    }
+
+
+
     //用于连招的时候 可以连续动作打完再做其他普通攻击动作 注意前面+"lz"  攻击动作只能写成 "lz_xxx_x"或者"xxx_xx"
     protected bool DontNear = false;
 
@@ -1323,10 +1420,12 @@ public class AIBase : MonoBehaviour {
         //判断 是否hi不能动的怪物
         if (!IsCanNotMove)
         {
+            //print(" 攻击招式    "+acName);
             //这种如果再次超出攻击距离会再追踪
             if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
             {
                 isActioning = true;
+                
                 if (!DontNear) ZhuanXiang();
                 GetAtk();
             }
@@ -1339,6 +1438,7 @@ public class AIBase : MonoBehaviour {
             //print("  移动靠近目标 DontNear  "+ DontNear);
             if (!DontNear&&!IsInAtkDistance(atkDistance))
             {
+                DontMoveAtkChange();
                 //print("  靠近目标！！！isActioning     " + isActioning+ "  isAction  "+ isAction);
                 if (IsAtkOver())
                 {
@@ -1353,6 +1453,8 @@ public class AIBase : MonoBehaviour {
                 isActioning = true;
                 GetAtk();
             }
+
+            
         }
 
 
@@ -1575,7 +1677,7 @@ public class AIBase : MonoBehaviour {
 
     protected void JNAtk()
     {
-        print("技能攻击   距离是多少  atkDistance    " + atkDistance);
+        //print("技能攻击   距离是多少  atkDistance    " + atkDistance);
         //这种如果再次超出攻击距离会再追踪
         if (!isActioning && (NearRoleInDistance(atkDistance) || DontNear))
         {

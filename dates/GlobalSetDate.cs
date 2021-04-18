@@ -60,6 +60,7 @@ public class GlobalSetDate : MonoBehaviour {
         //XLuaTest("lua test  测试");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
         OtherDate = GetOtherDate();
+
     }
 
     //***********************************************other数据获取区*************************************************************
@@ -453,7 +454,7 @@ public class GlobalSetDate : MonoBehaviour {
 
     public void GetScreenChangeDate()
     {
-        print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
+        //print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
         //GlobalTools.FindObjByName("player")
         if (screenChangeDate == null) return;
         string[] roleDateArr = screenChangeDate.Split(',');

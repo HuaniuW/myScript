@@ -16,7 +16,22 @@ public class RoleAudio : MonoBehaviour {
     public AudioSource hitWallDown;
     public AudioSource longhou;
     public AudioSource die_1;
+
+    [Header("被攻击的 音效1名字")]
+    public string AUDIOBEHIT_1 = "BeHit_1";
+    [Header("被攻击的 音效2名字")]
+    public string AUDIOBEHIT_2 = "BeHit_2";
+
     public AudioSource BeHit_1;
+    public AudioSource BeHit_2;
+   
+    public AudioSource AudioAtk_1;
+    public AudioSource AudioAtk_2;
+    public AudioSource SkillAudio_1;
+
+
+    [Header("技能不能释放的 提示音")]
+    public AudioSource Alert_1;
 
     // Use this for initialization
     void Start () {
@@ -30,7 +45,21 @@ public class RoleAudio : MonoBehaviour {
         if (cAudio)
         {
             cAudio.volume = 0.2f * GlobalSetDate.instance.GetSoundEffectValue();
-            if (AudioName=="run1"|| AudioName == "run2"|| AudioName =="run3") cAudio.volume =  0.3f*GlobalSetDate.instance.GetSoundEffectValue();
+            if (AudioName=="run1"|| AudioName == "run2"|| AudioName =="run3") cAudio.volume =  0.1f*GlobalSetDate.instance.GetSoundEffectValue();
+            cAudio.Play();
+        }
+
+    }
+
+    public void PlayAudioYS(string AudioName)
+    {
+        //(this[AudioName] as AudioSource)
+        //print("-----------------------------------------------------------> diaoluode audio:  "+AudioName);
+        AudioSource cAudio = GetDicSSByName(AudioName, this);
+        if (cAudio)
+        {
+            //cAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
+            //if (AudioName == "run1" || AudioName == "run2" || AudioName == "run3") cAudio.volume = 0.3f * GlobalSetDate.instance.GetSoundEffectValue();
             cAudio.Play();
         }
 

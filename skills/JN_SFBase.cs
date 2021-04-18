@@ -152,7 +152,10 @@ public class JN_SFBase : MonoBehaviour, ISkill
 
     }
 
+    [Header("释放动作的 声音")]
+    public AudioSource ACAudio;
 
+    bool isHasPlayerACAudio = false;
 
     protected virtual void GetAC()
     {
@@ -177,6 +180,11 @@ public class JN_SFBase : MonoBehaviour, ISkill
         //角色 释放动作
         //print(" acName    "+ACName);
         _gameBody.GetAcMsg(ACName);
+        if (!isHasPlayerACAudio)
+        {
+            isHasPlayerACAudio = true;
+            if(ACAudio) ACAudio.Play();
+        }
 
         //print("  临时 提高硬直   "+AddYZ);
         if(AddYZ!=0) GetComponent<TempAddValues>().TempAddYZ(AddYZ, AddYZTimes);

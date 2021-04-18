@@ -50,6 +50,9 @@ public class VOAtk : MonoBehaviour {
     public float atkPower = 0;
 
 
+    public string AudioName = "";
+
+
 
 
 
@@ -145,6 +148,11 @@ public class VOAtk : MonoBehaviour {
         if (dict.ContainsKey("atkPower"))
         {
             this.atkPower = float.Parse(dict["atkPower"]);
+        }
+
+        if (dict.ContainsKey("AudioName"))
+        {
+            this.AudioName = dict["AudioName"];
         }
     }
 	

@@ -98,12 +98,30 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         }
 
 
+        Vector3 _targetPos = _player.transform.position;
 
 
+        if (ZiDanTypeNum == 10)
+        {
+
+            //毒子弹 1发
+            ZiDanName = "TX_zidandu1";
+            _targetPos = new Vector3(_targetPos.x, _targetPos.y+2.7f, _targetPos.z);
+        }
+        else if (ZiDanTypeNum == 11)
+        {
+            //毒子弹 3发
+            ZiDanName = "TX_zidandu1";
+            _targetPos = new Vector3(_targetPos.x, _targetPos.y+2.7f, _targetPos.z);
+        }
+        else if (ZiDanTypeNum == 12)
+        {
+            //中途会爆炸的 毒雾弹
+        }
 
 
         GameObject zidan = GetZiDan();
-        Vector2 v1 = _player.transform.position - ZiDanPos.position;
+        Vector2 v1 = _targetPos - ZiDanPos.position;
         zidan.GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByV2(v1, 10);
 
 
@@ -126,9 +144,21 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         {
             //连续 2层的 3子弹
         }
+        else if (ZiDanTypeNum == 10)
+        {
 
-        //连续3层  等。。。。
-        
+            //毒子弹 1发
+        }
+        else if (ZiDanTypeNum == 11)
+        {
+            //毒子弹 3发
+            SanLianSanDan(v1, 1);
+        }
+        else if (ZiDanTypeNum == 12)
+        {
+            //中途会爆炸的 毒雾弹
+        }
+
 
         _isFireOver = true;
     }

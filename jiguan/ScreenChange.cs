@@ -169,7 +169,7 @@ public class ScreenChange : MonoBehaviour {
             if (HitChangeGlobalMapType != 0) Globals.mapTypeNums = HitChangeGlobalMapType;
             GlobalMapDate.ClearGlobalCurrentMapMsg();
 
-            if (ReMapName == "" && IsTeShuShengChengDiTu(GoScreenName))
+            if (ReMapName == "" && IsSpeMap(GoScreenName))
             {
                 ReMapName = GlobalMapDate.CurrentSpelMapName;
                 GlobalSetDate.instance.GetMapMsgByName(ReMapName, MenFX, DangQianMenWeizhi);
@@ -201,8 +201,9 @@ public class ScreenChange : MonoBehaviour {
 
 
 
-    bool IsTeShuShengChengDiTu(string goScreenName)
+    bool IsSpeMap(string goScreenName)
     {
+        print("判断是否是 特殊地图！！！！   "+ goScreenName);
         foreach(string s in GlobalMapDate.TeShuShengchengDiTuList)
         {
             
@@ -260,7 +261,7 @@ public class ScreenChange : MonoBehaviour {
                 //loadingBar.rectTransform.se
                 playerUI.GetComponent<PlayerUI>().ShowLoadProgressNums(displayProgress);
                 //GlobalSetDate.instance.ShowLoadProgressNums(displayProgress);
-                print("screenChange progress: "+ displayProgress);
+                //print("screenChange progress: "+ displayProgress);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -270,7 +271,7 @@ public class ScreenChange : MonoBehaviour {
             ++displayProgress;
             //SetLoadingPercentage(displayProgress);
             playerUI.GetComponent<PlayerUI>().ShowLoadProgressNums(displayProgress);
-            print("screenChange progress: " + displayProgress);
+            //print("screenChange progress: " + displayProgress);
             yield return new WaitForEndOfFrame();
         }
         //设置为true 后 加载到100后直接自动跳转

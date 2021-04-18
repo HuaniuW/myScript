@@ -31,7 +31,7 @@ public class Diaoluowu : MonoBehaviour {
             {
                 IsOutRecorded = true;
                 //print(" --------------------------------------------------------爆出 物品记录   ");
-                var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);   //this.transform.parent.name.Replace("(Clone)", "");
+                string parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);   //this.transform.parent.name.Replace("(Clone)", "");
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName + "-1@" + this.transform.parent.transform.position.x + "#" + this.transform.parent.transform.position.y), this);
             }
         }
@@ -40,6 +40,7 @@ public class Diaoluowu : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (!IsCanTouch) return;
         if(Coll.tag == "Player")
         {
             //print("pengzhuang!!");
@@ -102,8 +103,27 @@ public class Diaoluowu : MonoBehaviour {
     public float moveSpeed = 0.00001f;
     public float thisY;
 
+    [Header("延迟拾取 计时过了 才能开始拾取")]
+    public bool YanChiTouchJiShi = true;
+
+    float YCJiShi = 0;
+    bool IsCanTouch = false;
+
     // Update is called once per frame
     void Update () {
+        if (YanChiTouchJiShi)
+        {
+            YCJiShi += Time.deltaTime;
+            if (YCJiShi >= 2)
+            {
+                IsCanTouch = true;
+            }
+        }
+        else
+        {
+            IsCanTouch = true;
+        }
+
         //return;
         if (this.up != null && this.down != null)
         {

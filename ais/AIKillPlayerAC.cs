@@ -21,11 +21,13 @@ public class AIKillPlayerAC : MonoBehaviour
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, playerDie);
     }
 
-    
 
+    [Header("击败玩家后的 声音")]
+    public AudioSource AudioPlayerDie;
 
     [Header("击败玩家后的 嘲讽语句")]
     public string[] ChaoFengStrArr;
+    [Header("是否显示 击败玩家后的 嘲讽语句")]
     public bool IsHasChaofeng = false;
 
     private void playerDie(UEvent evt)
@@ -47,14 +49,14 @@ public class AIKillPlayerAC : MonoBehaviour
 
       
 
-        if (evt.eventParams != null) print("dieout---------------------------------------------@@   "+evt.eventParams.ToString());
+        //if (evt.eventParams != null) print("dieout---------------------------------------------@@   "+evt.eventParams.ToString());
         if (evt.eventParams != null && evt.eventParams.ToString() == "Player")
         {
             GetComponent<AIBase>().isPlayerDie = true;
 
             //击败玩家  是否 就离开消失  存入数据中
 
-
+            if (AudioPlayerDie) AudioPlayerDie.Play();
 
             if (IsHasChaofeng && ChaoFengStrArr != null)
             {

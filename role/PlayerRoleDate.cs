@@ -7,11 +7,16 @@ public class PlayerRoleDate : RoleDate
     float _atk;
     float _def;
     float _theMaxLive;
+    float _theMaxLan;
     float _yingzhi;
     float _live;
     float _lan;
     float _shanghaijianmianLv;
-    
+
+    float _kangDuJilv;
+
+    float _kangDuShanghaijilv;
+
 
     public override float lan
     {
@@ -23,6 +28,7 @@ public class PlayerRoleDate : RoleDate
         {
             Lan = value;
             if (Lan < 0) Lan = 0;
+            //print("蓝 量改变  "+Lan);
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HUN, Lan), this);
         }
     }
@@ -95,12 +101,17 @@ public class PlayerRoleDate : RoleDate
         //    tx.transform.position = new Vector2(v.x, v.y);
         //}
         ;//new Vector2(0, -3);
-        //print("tx.transform.position     "+ tx.transform.position);
-        
+         //print("tx.transform.position     "+ tx.transform.position);
+
 
         //tx.transform.position = new Vector2(0,-3);
         //print("position  "+tx.transform.position);
-        StartCoroutine(IEDestory2ByTime(tx, 0.8f));
+        if(this.gameObject!=null && this.gameObject.activeSelf) print("this  player "+this.gameObject.name+"    "+ this.gameObject.activeSelf);
+        //if(this.gameObject.activeInHierarchy)
+        if (this.gameObject != null && this.gameObject.activeSelf) {
+            if (this.gameObject.activeSelf) StartCoroutine(IEDestory2ByTime(tx, 0.8f));
+        }
+        
     }
 
     public IEnumerator IEDestory2ByTime(GameObject obj, float time)
@@ -163,10 +174,15 @@ public class PlayerRoleDate : RoleDate
         _atk = this.atk;
         _def = this.def;
         _theMaxLive = this.maxLive;
+        _theMaxLan = this.maxLan;
         _live = this.live;
         _lan = this.lan;
         _yingzhi = this.yingzhi;
         _shanghaijianmianLv = this.shanghaijianmianLv;
+
+        _kangDuJilv = this.KangDuJilv;
+        _kangDuShanghaijilv = this.KangDuShanghaijilv;
+        
     }
 
     // Update is called once per frame
@@ -180,8 +196,14 @@ public class PlayerRoleDate : RoleDate
         this.atk = this._atk;
         this.def = _def;
         maxLive = _theMaxLive;
+        maxLan = _theMaxLan;
+        if (lan > maxLan) lan = maxLan;
         yingzhi = _yingzhi;
         shanghaijianmianLv = _shanghaijianmianLv;
+
+        this.KangDuJilv = _kangDuJilv;
+        this.KangDuShanghaijilv = _kangDuShanghaijilv;
+
     }
 
     void changeHZ(UEvent e)
@@ -208,6 +230,7 @@ public class PlayerRoleDate : RoleDate
         }
         print("------------------------------------------------------------气血徽章- 事件发送！！！！！");
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LAN, this.maxLan), this);
         GetPlayerMsg();
     }
 
@@ -216,12 +239,15 @@ public class PlayerRoleDate : RoleDate
     {
         string str =Globals.language == Globals.CHINESE ? "<color=#FDFEFE>角色信息</color>\n\n" : "<color=#FDFEFE>Player information</color>\n\n";
         string _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live+"/"+this.maxLive + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "/" + this.maxLive + "</color>\n";
+        string _lanStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>蓝量：+" + this.lan + "/" + this.maxLan + "</color>\n" : "<color=#5DADE2>lan：+" + this.lan + "/" + this.maxLan + "</color>\n";
         string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
         string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
         string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
         string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
         string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
-        str += _liveStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv;
+        string _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒几率：+" + this.KangDuJilv + "</color>\n" : "<color=#E74C3C>kangdu：+" + this.KangDuJilv + "</color>\n";
+        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒伤害几率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E74C3C>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
+        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv;
         return str;
     }
 
@@ -282,6 +308,11 @@ public class PlayerRoleDate : RoleDate
             //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ADD_MAX_LIVE,maxLive), this);
         }
 
+        if (hzdate.addLan != 0)
+        {
+            this.maxLan += hzdate.addLan;
+        }
+
         if (hzdate.defP != 0) beishuArr.Add("defP_"+hzdate.defP+"_"+hzdate.HZName);
         if (hzdate.atkP != 0) beishuArr.Add("atkP_" + hzdate.atkP + "_" + hzdate.HZName);
         if (hzdate.liveP != 0) {
@@ -302,7 +333,11 @@ public class PlayerRoleDate : RoleDate
                 this.shanghaijianmianLv = hzdate.ShanghaiJianmianBili;
             }
         }
-       
+
+
+        if (hzdate.KangDuJilv != 0) KangDuJilv += hzdate.KangDuJilv;
+
+        if (hzdate.KangDuShanghaijilv != 0) KangDuShanghaijilv += hzdate.KangDuShanghaijilv;
     }
 
 

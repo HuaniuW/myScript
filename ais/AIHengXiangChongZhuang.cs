@@ -7,6 +7,8 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
 
     protected GameObject _player;
     protected AirGameBody _airGameBody;
+    [Header("冲撞动作开始前的 喊声")]
+    public AudioSource StartAudio_1;
 
     public void GetStart(GameObject gameObj)
     {
@@ -123,6 +125,7 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
         {
             GetComponent<GameBody>().RunACChange(QiShiACName);
             GetComponent<GameBody>().GetAcMsg(QiShiACName);
+            if (StartAudio_1) StartAudio_1.Play();
         }
         
         if (_jishiTime>= QiShouYCTime)
@@ -192,11 +195,11 @@ public class AIHengXiangChongZhuang : MonoBehaviour,ISkill
         //print("开始 横向 冲击  ！！！！！！！！！");
         if (GetComponent<AirGameBody>().IsHitWall || GoToMoveToPoint(ChongJiPos, 1f, CJSpeedX)) {
 
-            print(2);
+            //print(2);
 
             if (GetComponent<AirGameBody>().IsHitWall)
             {
-                print(3);
+                //print(3);
                 _isHitWallOver = true;
             }
             else

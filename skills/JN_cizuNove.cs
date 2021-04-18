@@ -23,7 +23,7 @@ public class JN_cizuNove : MonoBehaviour
 
     private void OnEnable()
     {
-        ChushiX = this.transform.position.x;
+       
         //CiZu.transform.position = new Vector2(0,-1.56f);
         //HitKuai.transform.position = new Vector2();
         if (AudioS) AudioS.Play();
@@ -32,19 +32,22 @@ public class JN_cizuNove : MonoBehaviour
         if (HitKuai) HitKuai.transform.position = new Vector2(HitKuai.transform.position.x, HitKuai.transform.position.y - 1.42f);
         if (CiZu) CiZu.transform.position = new Vector2(CiZu.transform.position.x, CiZu.transform.position.y-1.42f);
 
-        print(" xzScaleX     " + GetComponent<JN_Date>().xzScaleX);
+        //print(" xzScaleX     " + GetComponent<JN_Date>().xzScaleX);
     }
 
+    bool SetChuShiX = false;
     float ChushiX = 0;
-    float MaxMoveDistance = 20;
+    float MaxMoveDistance = 60;
 
     void MoveMaxDistanceDisSelf()
     {
         if(Mathf.Abs(this.transform.position.x - ChushiX)>= MaxMoveDistance)
         {
-            //if (AudioS) AudioS.Stop();
-            //if (YanChen) YanChen.Stop();
-            //ObjectPools.GetInstance().DestoryObject2(this.gameObject);
+            //print(ChushiX+" ?-  "+this.transform.position.x);
+            if (AudioS) AudioS.Stop();
+            if (YanChen) YanChen.Stop();
+            SetChuShiX = false;
+            ObjectPools.GetInstance().DestoryObject2(this.gameObject);
         }
     }
 
@@ -55,6 +58,13 @@ public class JN_cizuNove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!SetChuShiX)
+        {
+            SetChuShiX = true;
+            ChushiX = this.transform.position.x;
+            //print("*****************************************************************************************************************");
+            //print("初始位置   " + ChushiX + "    ");
+        }
         if(this.CiZu.transform.position.y< TLPos.position.y)
         {
             //print("");
@@ -64,6 +74,6 @@ public class JN_cizuNove : MonoBehaviour
 
         this.transform.position = new Vector2(this.transform.position.x + MoveXSpeed * -this.transform.localScale.x, this.transform.position.y);
 
-        //MoveMaxDistanceDisSelf();
+        MoveMaxDistanceDisSelf();
     }
 }

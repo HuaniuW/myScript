@@ -65,7 +65,7 @@ public class DB_TiaoYue : DBBase
     protected bool IsPenSheZiDanJG = false;
     public void JiGuan_PenSheZiDanJG()
     {
-        if (GlobalTools.GetRandomNum() > 100)
+        if (GlobalTools.GetRandomNum() > 10)
         {
             IsPenSheZiDanJG = true;
             if (IsHasSetZDJG)

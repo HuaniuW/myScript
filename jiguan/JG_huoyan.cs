@@ -55,7 +55,11 @@ public class JG_huoyan : MonoBehaviour
         IsPHStart = false;
         HitKuai.SetActive(true);
         TheLight.gameObject.SetActive(true);
-        if (huoyan.isStopped) huoyan.Play();
+        if (huoyan.isStopped) {
+            huoyan.Play();
+            sounds.Play();
+        }
+        
         IsStop = false;
         //计时持续时间
         _TheTimer.TimesAdd(penfashijian, CallBackHuoYanCX);
@@ -67,7 +71,11 @@ public class JG_huoyan : MonoBehaviour
         IsPHStart = false;
         HitKuai.SetActive(false);
         TheLight.gameObject.SetActive(false);
-        if (huoyan.isPlaying) huoyan.Stop();
+        if (huoyan.isPlaying) {
+            huoyan.Stop();
+            sounds.Stop();
+        }
+        
         _TheTimer.TimesAdd(jiangeshijian, CallBackStop);
     }
 

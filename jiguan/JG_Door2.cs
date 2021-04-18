@@ -12,6 +12,13 @@ public class JG_Door2 : MonoBehaviour
         
     }
 
+    [Header("开关门的 声音")]
+    public AudioSource DoorSound;
+
+    void DoorSoundPlay()
+    {
+        if (DoorSound) DoorSound.Play();
+    }
 
     //----------------------------------检测 boss die后的记录 门关闭  判断的 是 boss的 activeSelf------这里不要乱勾  不知道是哪用到的了
 
@@ -73,7 +80,7 @@ public class JG_Door2 : MonoBehaviour
     public bool IsNeedCheck = true;
     public void AddDoorListener()
     {
-        print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 是否 检测 开门  ");
+        //print("  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 是否 检测 开门  ");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
         if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
@@ -92,16 +99,16 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
+        //print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
         if (e.eventParams.ToString() == "allDie") {
 
 
-            print("怪物数组 长度   " + GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count);
+            //print("怪物数组 长度   " + GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count);
             ////GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
 
             if (GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count == 0)
             {
-                print("--->  开门！！！！ ");
+                //print("--->  开门！！！！ ");
                 IsCanCloseDoorMap = false;
                 IsCloseDoor = false;
             }
@@ -120,6 +127,7 @@ public class JG_Door2 : MonoBehaviour
             IsCanCloseDoorMap = false;
             //print("iiiiiiii  没怪 不许关门");
             IsCloseDoor = false;
+            //DoorSoundPlay();
         }
         else if (e.eventParams.ToString() == "kyguanmen")
         {
@@ -134,8 +142,22 @@ public class JG_Door2 : MonoBehaviour
         }
         else
         {
-            print("  wokao!!!! 关门啊 啊啊啊啊啊啊啊啊啊啊啊！！！  ");
+            //print("  wokao!!!! 关门啊 啊啊啊啊啊啊啊啊啊啊啊！！！  ");
             IsCloseDoor = true;
+            
+        }
+    }
+
+
+    bool IsStartInDoor = true;
+    bool IsDoorAudioPlay = false;
+    void DoorAudioPlay()
+    {
+        if (IsStartInDoor) return;
+        if (!IsDoorAudioPlay)
+        {
+            IsDoorAudioPlay = true;
+            DoorSoundPlay();
         }
     }
 
@@ -146,11 +168,13 @@ public class JG_Door2 : MonoBehaviour
         if (IsCloseDoor)
         {
             CloseDoor();
+            DoorAudioPlay();
             //print("hahah !!!");
         }
         else
         {
             OpenDoor();
+            DoorAudioPlay();
         }
     }
 
@@ -180,15 +204,15 @@ public class JG_Door2 : MonoBehaviour
         if (IsStopHitJG) return;
 
         if (IsOnlyCanHitOne) IsStopHitJG = true;
-
+        
         if (Coll.tag == "Player")
         {
-            
+            IsStartInDoor = false;
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
             GetOtherJG1();
 
-            print(" **************  碰撞 关门机关！！！！   ");
+            //print(" **************  碰撞 关门机关！！！！   ");
         }
     }
 
@@ -204,6 +228,7 @@ public class JG_Door2 : MonoBehaviour
         if (IsCloseDoor && Door.transform.position.y > DownPos.transform.position.y)
         {
             //print("***************  关门！！！！！！**** ");
+            IsDoorAudioPlay = false;
             Door.transform.position = new Vector3(Door.transform.position.x, Door.transform.position.y - DoorSpeed, +Door.transform.position.z);
         }
     }
@@ -214,6 +239,7 @@ public class JG_Door2 : MonoBehaviour
         //print("kaimena !    "+ IsCloseDoor +"  ??  "+ Door.transform.position.y+"   ---uppos "+ UpPos.transform.position.y);
         if (!IsCloseDoor&&Door.transform.position.y < UpPos.transform.position.y)
         {
+            IsDoorAudioPlay = false;
             Door.transform.position = new Vector3(Door.transform.position.x, Door.transform.position.y+DoorSpeed,+Door.transform.position.z);
         }
     }

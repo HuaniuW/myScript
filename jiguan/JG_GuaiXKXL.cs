@@ -54,7 +54,7 @@ public class JG_GuaiXKXL : MonoBehaviour
 
                 for(var i=0;i< GuaiList.Count; i++)
                 {
-                    GuaiList[i].GetComponent<GameBody>().GetPlayerRigidbody2D().gravityScale = 8;
+                    if(GuaiList[i] !=null) GuaiList[i].GetComponent<GameBody>().GetPlayerRigidbody2D().gravityScale = 8;
                 }
             }
         }

@@ -11,8 +11,8 @@ public class JG_BossIn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        YanChiStart();
+    }
     //关联boss
     public string BossName;
     [Header("关联门1的名字  发送状态0")]
@@ -43,14 +43,49 @@ public class JG_BossIn : MonoBehaviour {
         }
         else
         {
-            if(GlobalTools.FindObjByName(BossName)==null) DistorySelf();
+            if (GlobalTools.FindObjByName(BossName) == null) {
+                DistorySelf();
+            }
+            else
+            {
+                //关门
+               
+                //延迟几秒 boss开始行动
+                //IsSatrtYC = true;
+            }
         }
         
     }
 
+    bool IsSatrtYC = false;
+    public float YCTimes = 2.5f;
+    float YCJiShi = 0;
+    void YanChiStart()
+    {
+        if (IsSatrtYC)
+        {
+            YCJiShi += Time.deltaTime;
+            if(YCJiShi>= YCTimes)
+            {
+                IsSatrtYC = false;
+                CloseDoor();
+                //显示 字幕
+                ShowSeeBossTxt();
+                //遇Boss音效
+                //Boss战音乐
+                SeeBossAudioPlay();
+                //显示Boss血条
+                ShowBossLiveBar();
+
+                DistorySelf();
+            }
+        }
+    }
+
+
     private void OnDisable()
     {
-        print("我被消除了！？？？？？？");
+        //print("我被消除了！？？？？？？");
     }
 
     [Header("1 下 0上")]
@@ -73,13 +108,13 @@ public class JG_BossIn : MonoBehaviour {
     {
         if (SeeBossAudio)
         {
-            SeeBossAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
+            //SeeBossAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
             SeeBossAudio.Play();
         }
 
         if (SeeBossBGAudio)
         {
-            SeeBossBGAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
+            //SeeBossBGAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
             SeeBossBGAudio.Play();
         }
     }
@@ -89,7 +124,7 @@ public class JG_BossIn : MonoBehaviour {
     {
         if (SeeBossBGAudio)
         {
-            SeeBossBGAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
+            //SeeBossBGAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
             SeeBossBGAudio.Stop();
         }
     }
@@ -110,6 +145,7 @@ public class JG_BossIn : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        //return;
         if (!IsPlayerIn&&Coll.tag == "Player")
         {
             IsPlayerIn = true;

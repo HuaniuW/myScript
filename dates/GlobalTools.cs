@@ -646,14 +646,14 @@ public class GlobalTools : MonoBehaviour {
             //判断 如果是大物件 就限制高度
             if (jingW >= 12 && jingH >= 3)
             {
-                print("  大物件**********************》》》》 "+jingObj.name + "  -w " + jingW + "   -h " + jingH);
+                //print("  大物件**********************》》》》 "+jingObj.name + "  -w " + jingW + "   -h " + jingH);
                 __y = _y - 0.4f + GetRandomDistanceNums(0.2f);
 			}else{
 				//__y = _y + jingH * 0.5f - 0.4f + GetRandomDistanceNums(0.4f);
                 __y = _y + jingH * 0.5f -0.4f+ GetRandomDistanceNums(0.3f);
                 if (jingObj.name == "hh_hua_8"|| jingObj.name == "hh_hua_8(Clone)")
                 {
-                    print("中中中中中中中中中中中中中中中中中中中中中中中中中中中中中!!!!!!");
+                    //print("中中中中中中中中中中中中中中中中中中中中中中中中中中中中中!!!!!!");
                     __y = _y + jingH * 0.5f - 0.6f + GetRandomDistanceNums(0.3f);
                 }
 			}

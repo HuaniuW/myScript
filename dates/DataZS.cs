@@ -88,8 +88,8 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_22 = new Dictionary<string, string> { { "atkName", "atk_22" }, { "xF", "6" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_001" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> atk_23 = new Dictionary<string, string> { { "atkName", "atk_23" }, { "xF", "4" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_ci_401" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> atk_24 = new Dictionary<string, string> { { "atkName", "atk_24" }, { "xF", "8" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_004" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" }, { "chongjili", "800" } };
-    static public Dictionary<string, string> atk_25 = new Dictionary<string, string> { { "atkName", "atk_25" }, { "xF", "16" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_ci_401" }, { "ox", "14" }, { "oy", "6" }, { "yanchi", "20" }, { "atkDistance", "6" } };
-
+    static public Dictionary<string, string> atk_25 = new Dictionary<string, string> { { "atkName", "atk_23" }, { "xF", "16" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_ci_401" }, { "ox", "14" }, { "oy", "6" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    //记得23 改25
     static public Dictionary<string, string> atk_31 = new Dictionary<string, string> { { "atkName", "atk_31" }, { "xF", "0" }, { "yF", "1" }, { "showTXFrame", "9" }, { "txName", "dg_602" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> jumpAtk_31 = new Dictionary<string, string> { { "atkName", "jumpAtk_31" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_602" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "1" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> jumpAtk_32 = new Dictionary<string, string> { { "atkName", "jumpAtk_32" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_603" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "18" }, { "atkDistance", "6" },{ "fantan","5"} };
@@ -99,17 +99,20 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string>[] jumpAtkZS = new Dictionary<string, string>[] {jumpAtk_21,jumpAtk_21};
     static public Dictionary<string, string>[] jumpAtkDownZS = new Dictionary<string, string>[] { jumpAtk_32};
     static public Dictionary<string, string>[] jumpAtkUpZS = new Dictionary<string, string>[] { jumpAtk_31};
-    static public Dictionary<string, string> jn_ci_1 = new Dictionary<string, string> { { "atkName", "atk_4" },{ "skillBeginEffect", ""} ,{ "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_ci_1" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "18" }, { "chongjili", "1800" } };
+    static public Dictionary<string, string> jn_ci_1 = new Dictionary<string, string> { { "atkName", "atk_4" },{ "skillBeginEffect", ""} ,{ "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_ci_1" }, { "ox", "10" }, { "oy", "10" },{ "qishouYC","15" }, { "yanchi", "15" }, { "atkDistance", "18" }, { "chongjili", "1800" } };
     static public Dictionary<string, string> jn_ci_2 = new Dictionary<string, string> { { "atkName", "atk_6" }, { "skillBeginEffect", "" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "jn_cizu" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "20" } };
     static public Dictionary<string, string> jn_chongjijian_2 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "skillBeginEffect", "" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "jn_chongjijian_2" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "20" } };
 
 
 
     //boss 花妖
-    static public Dictionary<string, string> atk_801 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_801" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "14" } };
+    static public Dictionary<string, string> atk_801 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_801" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "14" }, { "AudioName", "AudioAtk_2" } };
     static public Dictionary<string, string> atk_802 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "0" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_801" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "14" } };
     static public Dictionary<string, string> atk_803 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "0" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_803" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "14" } };
-    static public Dictionary<string, string> atk_804 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "JN_pensandan" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "24" } };
+    static public Dictionary<string, string> atk_804 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "JN_pensandan" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "24" },{ "AudioName","AudioAtk_1"} };
+    static public Dictionary<string, string> atk_807 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "JN_pensandanGZ" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "24" }, { "AudioName", "AudioAtk_1" } };
+    static public Dictionary<string, string> atk_806 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "JN_pensandan2" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "24" }, { "AudioName", "AudioAtk_1" } };
+    static public Dictionary<string, string> atk_805 = new Dictionary<string, string> { { "atkName", "atk_4" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "JN_pensandan_zxm" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "24" }, { "AudioName", "AudioAtk_1" } };
 
 
     //boss 斗笠武士 

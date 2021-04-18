@@ -133,6 +133,7 @@ public class AirGameBody : GameBody {
         if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
         {
             DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+            //DBBody.animation.FadeIn(STAND, 0.6f);
         }
 
         isDowning = false;
@@ -163,9 +164,10 @@ public class AirGameBody : GameBody {
         
         if (DBBody.animation.lastAnimationName != RUN)
         {
-            //print("?????run     "+ DBBody.animation.lastAnimationName);
+            //print("?????run     "+ DBBody.animation.lastAnimationName +"     RUN是什么动作  "+RUN);
             DBBody.animation.GotoAndPlayByFrame(RUN);
             if (RunAudio) RunAudio.Play();
+            //print("??run  "+ DBBody.animation.lastAnimationName);
         }
       
     }
@@ -262,7 +264,7 @@ public class AirGameBody : GameBody {
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
         //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
-
+        beHitNum++;
     }
 
 

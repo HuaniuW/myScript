@@ -64,9 +64,9 @@ public class JG_gunshi : MonoBehaviour {
 
              }*/
 
-            if (yshitou.GetComponent<Rigidbody2D>().velocity.x < 14)
+            if (yshitou.GetComponent<Rigidbody2D>().velocity.x < 16)
             {
-                yshitou.GetComponent<Rigidbody2D>().velocity = new Vector2(14, yshitou.GetComponent<Rigidbody2D>().velocity.y);
+                yshitou.GetComponent<Rigidbody2D>().velocity = new Vector2(16, yshitou.GetComponent<Rigidbody2D>().velocity.y);
             }
             else
             {
@@ -81,7 +81,8 @@ public class JG_gunshi : MonoBehaviour {
                 {
                     isStartShock = true;
                     ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-10000"), this);
-                   
+                    //玩家 进入 高速跑
+                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_RUN_AC_2, ""), this);
                 }
                 YanmuPlay();
                 ZdSoundPlay();

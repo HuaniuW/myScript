@@ -11,12 +11,15 @@ public class JN_penSanDan : MonoBehaviour
         ZiDanType();
     }
 
-
+    //喷射子弹
     const string PENSHE_ZIDAN = "TX_zidansan";
     //上升高速子弹
-    const string SSGS_ZIDAN = "TX_zidanUpGD";
+    const string SSGaoSu_ZIDAN = "TX_zidanUpGaoSu";
     //上升后的 慢速跟踪子弹
-    const string SSGZ_ZIDAN = "TX_zidanUpGZ";
+    const string SSGenZong_ZIDAN = "TX_zidanUpGZ";
+
+    //上升后一般慢速子弹
+    const string SSYiBanSuDu_ZIDAN = "TX_zidanUpYiBanSuDu";
 
 
     string zidanName = PENSHE_ZIDAN;
@@ -44,12 +47,13 @@ public class JN_penSanDan : MonoBehaviour
     public bool IsPenSanDanFront = false;
 
     [Header("跟踪弹 向上的")]
-    public bool IsPenGenzongdanUp = false;
+    public bool IsPenGenzongDanUp = false;
 
     [Header("先向上的 高速子弹")]
-    public bool IsPenGaoSudanUp = false;
+    public bool IsPenGaoSuZidanUp = false;
 
-
+    [Header("先向上的 一般速度子弹")]
+    public bool IsYiBanSuDuZidanUp = false;
 
 
     [Header("子弹的 初始速度")]
@@ -70,14 +74,20 @@ public class JN_penSanDan : MonoBehaviour
             IsFaSheSelf = false;
             zidanName = PENSHE_ZIDAN;
         }
-        else if(IsPenGaoSudanUp)
+        else if(IsPenGaoSuZidanUp)
         {
+            //高速
             IsFaSheSelf = true;
-            zidanName = SSGS_ZIDAN;
-        }else if (IsPenGenzongdanUp)
+            zidanName = SSGaoSu_ZIDAN;
+        }else if (IsPenGenzongDanUp)
         {
+            //跟踪
             IsFaSheSelf = true;
-            zidanName = SSGZ_ZIDAN;
+            zidanName = SSGenZong_ZIDAN;
+        }else if (IsYiBanSuDuZidanUp)
+        {
+            IsFaSheSelf = false;
+            zidanName = SSYiBanSuDu_ZIDAN;
         }
     }
 
@@ -98,9 +108,14 @@ public class JN_penSanDan : MonoBehaviour
         //int nums = int.Parse(FSNums/2);
         PiLiangFaSheYC();
         PiLiangFaSheYC(false);
+
+        //IsFaSheing = true;
+        //IsFaSheingL = true;
+        //print(" >>>>>>>>>>>>>>>发射数量    "+FSNums);
+
     }
 
-    //同时发射
+    //同时发射  批量发射
     void PiLiangFaShe(bool isLeft = true)
     {
         for (int i = 0; i < FSNums; i++)
@@ -118,21 +133,110 @@ public class JN_penSanDan : MonoBehaviour
 
         for (int i = 0; i < FSNums; i++)
         {
-            yctime = GlobalTools.GetRandomDistanceNums(1);
+            //print("总发射子弹数量   "+ FSNums+"    i    "+i);
+            yctime = GlobalTools.GetRandomDistanceNums(0.6f);
             //如果长度 只有1  直接发射 无延迟
             if (FSNums == 1) yctime = 0;
             //print("yctimes      "+yctime);
             StartCoroutine(IEFaShe(isLeft, i, yctime));
             //创建 子弹
-            //FaShei(isLeft,i);
+            //FaShei(isLeft, i);
         }
 
     }
 
+    void ReSetAll()
+    {
+        IsFaSheing = false;
+        IsStartFaShe = false;
+        _YCJiShiTimes = 0;
+        _YCTime = 0;
+        _i = 0;
+
+        IsFaSheingL = false;
+        IsStartFaSheL = false;
+        _YCJiShiTimesL = 0;
+        _YCTimeL = 0;
+        _iL = 0;
+    }
+
+
+    bool IsFaSheing = false;
+    bool IsStartFaShe = false;
+    float _YCJiShiTimes = 0;
+    float _YCTime = 0;
+    int _i = 0;
+
+    void ZiDanFaShe()
+    {
+        if (!IsFaSheing) return;
+        if (!IsStartFaShe)
+        {
+            IsStartFaShe = true;
+            _YCTime = GlobalTools.GetRandomDistanceNums(0.3f);
+            _YCJiShiTimes = 0;
+        }
+
+        _YCJiShiTimes += Time.deltaTime;
+        if (_YCJiShiTimes >= _YCTime)
+        {
+            _YCJiShiTimes = 0;
+            _i++;
+            if (_i<= FSNums)
+            {
+                FaShei(false, _i);
+            }
+            else
+            {
+                _i = 0;
+                IsFaSheing = false;
+            }
+        }
+    }
+
+
+
+    bool IsFaSheingL = false;
+    bool IsStartFaSheL = false;
+    float _YCJiShiTimesL = 0;
+    float _YCTimeL = 0;
+    int _iL = 0;
+
+    //朝左 发射
+    void ZiDanFaSheL()
+    {
+        if (!IsFaSheingL) return;
+        if (!IsStartFaSheL)
+        {
+            IsStartFaSheL = true;
+            _YCTimeL = GlobalTools.GetRandomDistanceNums(0.3f);
+            _YCJiShiTimesL = 0;
+        }
+
+        _YCJiShiTimesL += Time.deltaTime;
+        if (_YCJiShiTimesL >= _YCTimeL)
+        {
+            _YCJiShiTimesL = 0;
+            _iL++;
+            if (_iL <= FSNums)
+            {
+                FaShei(true, _iL);
+            }
+            else
+            {
+                _iL = 0;
+                IsFaSheingL = false;
+            }
+        }
+    }
+
+
+
+
 
     public IEnumerator IEFaShe(bool isLeft = true, int i = 0, float time = 1)
     {
-        //Debug.Log("time   "+time);
+        //Debug.Log("i:   "+i+"   time   "+time);
         yield return new WaitForSeconds(time);
         //print("发射！！！！！    "+time);
         FaShei(isLeft, i);
@@ -141,7 +245,7 @@ public class JN_penSanDan : MonoBehaviour
     }
 
 
-
+    
 
     void FaShei(bool isLeft = true,int i = 0)
     {
@@ -176,7 +280,43 @@ public class JN_penSanDan : MonoBehaviour
         }
 
         float _y = this.transform.position.y + PSHeight + GlobalTools.GetRandomDistanceNums(RandomHeight);
-        Vector2 pos = new Vector2(_x, _y);
+
+        float xiuzheng = 1;
+
+        if(PenSheType == 1)
+        {
+            xiuzheng = 1;
+        }
+        else if (PenSheType == 2)
+        {
+            if (GlobalTools.FindObjByName("player").transform.position.x > this.transform.position.x)
+            {
+                //在右
+                xiuzheng = 1 + GlobalTools.GetRandomDistanceNums(1f);
+            }
+            else
+            {
+                xiuzheng = 0.6f + GlobalTools.GetRandomDistanceNums(0.4f);
+            }
+        }
+        else
+        {
+            if (GlobalTools.FindObjByName("player").transform.position.x > this.transform.position.x)
+            {
+                //在右
+                xiuzheng = 1.2f + GlobalTools.GetRandomDistanceNums(0.8f);
+            }
+            else
+            {
+                xiuzheng = 0.2f + GlobalTools.GetRandomDistanceNums(0.4f);
+            }
+        }
+
+       
+
+
+
+        Vector2 pos = new Vector2(_x* xiuzheng, _y);
         //发射
         if (!IsFaSheSelf) {
             zidan.GetComponent<TX_zidan>().GetDiretionByV2(pos, SpeedZD);
@@ -189,8 +329,8 @@ public class JN_penSanDan : MonoBehaviour
     }
 
 
-    
-    
+    [Header("喷射的类型 1正常 2稍微偏向玩家方向 3多偏向玩家")]
+    public int PenSheType = 1;
 
    
 
@@ -208,6 +348,7 @@ public class JN_penSanDan : MonoBehaviour
             //print("发射子弹！！！！！！！！！！！！！");
             PenSanDanUp();
         }
-        
+        //ZiDanFaShe();
+        //ZiDanFaSheL();
     }
 }

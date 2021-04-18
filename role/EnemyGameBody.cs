@@ -196,12 +196,24 @@ public class EnemyGameBody : GameBody {
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))
             {
+                print("behit in air!!!!!!");
                 DBBody.animation.GotoAndPlayByFrame(BEHITINAIR, 0, 1);
                 return;
             }
         }
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
 
+        if (roleAudio)
+        {
+            string BeHitStr = roleAudio.AUDIOBEHIT_1;
+            if (roleAudio.BeHit_2 != null)
+            {
+                if(GlobalTools.GetRandomNum()>50) BeHitStr = roleAudio.AUDIOBEHIT_2;
+            }
+            roleAudio.PlayAudioYS(BeHitStr);
+        }
+
+        print("behit!!!!!!");
         beHitNum++;
     }
 
@@ -264,7 +276,7 @@ public class EnemyGameBody : GameBody {
         if (IsSFSkill) return;
         if (type == EventObject.SOUND_EVENT)
         {
-            //print("eventName:  "+eventObject.name);
+            print("sound  ????? eventName:  "+eventObject.name);
             //print(playerRigidbody2D.velocity.x+"  ?    "+this.transform.localScale);
             if (eventObject.name == "jumpHitWall")
             {
@@ -312,8 +324,13 @@ public class EnemyGameBody : GameBody {
                 }
                 else
                 {
-                    //print("普通攻击的特效名字  "+vOAtk.txName);
+                    //print(">>>普通攻击的特效名字        "+vOAtk.txName);
                     //GetPause(0.1f);
+                    //if (vOAtk.AudioName != "")
+                    //{
+                    //    print("  >>>>攻击音效名字  "+ vOAtk.AudioName);
+                    //    roleAudio.PlayAudio(vOAtk.AudioName);
+                    //}
                     GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName);
                     isTXShow = false;
                 }
@@ -374,7 +391,7 @@ public class EnemyGameBody : GameBody {
 
         if (roleDate.isBeHiting)
         {
-            print(this.name + "  ***********************************************  " + GetPlayerRigidbody2D().velocity+"   是否固定 推力中  "+IsGuDingTuili);
+            //print(this.name + "  ***********************************************  " + GetPlayerRigidbody2D().velocity+"   是否固定 推力中  "+IsGuDingTuili);
             ControlSpeed(30);
             GetBeHit();
             return;

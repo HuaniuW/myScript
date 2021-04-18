@@ -19,15 +19,19 @@ public class AIYuanLiHuiXue : MonoBehaviour,ISkill
     [Header("每秒回血量")]
     public float MeiMiaoHX = 300;
 
-    TheTimer _theTimer;
+    [Header("远离回血的音效")]
+    public AudioSource SkillAudio;
+
+    //TheTimer _theTimer;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!_theTimer) _theTimer = GetComponent<TheTimer>();
+        //if (!_theTimer) _theTimer = GetComponent<TheTimer>();
         if (HuixueTX) HuixueTX.Stop();
+        _roleDate = GetComponent<RoleDate>();
     }
-
+    RoleDate _roleDate;
 
     private void OnEnable()
     {
@@ -36,28 +40,55 @@ public class AIYuanLiHuiXue : MonoBehaviour,ISkill
 
     public void GetStart(GameObject obj)
     {
-        _theTimer.ContinuouslyTimesAdd(Hxtimes,1,callBack);
-        _theTimer.GetContinuouslyTimesStart();
+        //_theTimer.ContinuouslyTimesAdd(Hxtimes,1,callBack);
+        //_theTimer.GetContinuouslyTimesStart();
         isStarting = true;
         //特效播放
         HuixueTX.Play();
         //持续动作
         GetHXAC();
-        GetComponent<RoleDate>().addYZ(10000);
+        _roleDate.addYZ(10000);
+        if (SkillAudio) SkillAudio.Play();
+        IsStartHuixue = true;
     }
 
+
+    float JishiNums = 0;
+    bool IsStartHuixue = false;
+    float ChiXuZongShijian = 0;
+
+    void HuiXue()
+    {
+        if (!IsStartHuixue) return;
+        JishiNums += Time.deltaTime;
+        ChiXuZongShijian+= Time.deltaTime;
+        if (JishiNums >= 1)
+        {
+            JishiNums = 0;
+            _roleDate.live += MeiMiaoHX;
+        }
+        if(ChiXuZongShijian>= Hxtimes|| _roleDate.live>= _roleDate.maxLive)
+        {
+            ChiXuZongShijian = 0;
+            IsStartHuixue = false;
+            ReSetAll();
+        }
+    }
 
     bool isResetAll = false;
     public void ReSetAll()
     {
 
-        
-        GetComponent<RoleDate>().hfYZ(10000);
+
+        _roleDate.hfYZ(10000);
         GetComponent<GameBody>().isAcing = false;
         HuixueTX.Stop();
-        _theTimer.StopAllCoroutines();
+        //_theTimer.StopAllCoroutines();
         //结束
         isStarting = false;
+        JishiNums = 0;
+        ChiXuZongShijian = 0;
+        IsStartHuixue = false;
     }
 
     void callBack(float nums)
@@ -68,7 +99,7 @@ public class AIYuanLiHuiXue : MonoBehaviour,ISkill
             return;
         }
 
-        GetComponent<RoleDate>().live += MeiMiaoHX;
+        _roleDate.live += MeiMiaoHX;
         
     }
 
@@ -82,7 +113,7 @@ public class AIYuanLiHuiXue : MonoBehaviour,ISkill
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<RoleDate>().isDie)
+        if (_roleDate.isDie)
         {
             if (!isResetAll)
             {
@@ -94,6 +125,7 @@ public class AIYuanLiHuiXue : MonoBehaviour,ISkill
         }
 
         GetHXAC();
+        HuiXue();
     }
 
     void GetHXAC()

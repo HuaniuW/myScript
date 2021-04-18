@@ -185,6 +185,10 @@ public class HitKuai : MonoBehaviour {
 
             if (BeHitRoleDate.isDie) return;
             if(!BeHitRoleDate.isCanBeHit) return;
+
+            
+
+
             //if (!IsHasChixuHit && !BeHitRoleDate.isCanBeHit) return;
             //IsHasChixuHit = true;
             //print(Coll.);
@@ -249,7 +253,9 @@ public class HitKuai : MonoBehaviour {
             //力作用  这个可以防止 推力重叠 导致人物飞出去
             Vector2 tempV3 = _BeHitRigidbody2D.velocity;
             _BeHitRigidbody2D.velocity = new Vector3(0, tempV3.y);
-            if (jn_date != null && BeHitGameBody != null&&jn_date.HitInSpecialEffectsType!=5)
+            //if (jn_date != null && BeHitGameBody != null && jn_date.HitInSpecialEffectsType != 5)
+            //之前是 攻击类型 不能是5 不知道为什么 现在去掉 因为 花防 会被卡住 不能恢复动作  ---应该进入 了 受伤 动作 又进入了 花防 所以导致的 卡住  
+            if (jn_date != null && BeHitGameBody != null)
             {
                 ObjV3Zero(Coll.gameObject);
                 //gameBody.GetPause(0.2f);
@@ -285,8 +291,10 @@ public class HitKuai : MonoBehaviour {
                         {
                             //defSkill.GetComponent<UI_Skill>().isCanBeUseSkill();
                             //defSkill.GetComponent<UI_Skill>().Play_Def_Skill_Effect();
-
+                            beHitObj.GetComponent<GameBody>().ResetAll();
                             BeHitGameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
+                            
+
                             //print(" 无伤害 播放 被动防御 特效！！！1 ");
                             // 弹开攻击者
                             ObjV3Zero(atkObj);
@@ -317,20 +325,32 @@ public class HitKuai : MonoBehaviour {
                                 {
                                     print(" atkObj.name    " + atkObj.name);
                                     //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
-                                    if (jn_date.chongjili != 0) {
-                                        atkObj.GetComponent<GameBody>().HasBeHit(-10);
+                                    float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 + jn_date.FanTuili : -400 - jn_date.FanTuili;
+                                    if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) < 100)
+                                    {
+                                        if (jn_date.chongjili != 0)
+                                        {
+                                            atkObj.GetComponent<GameBody>().HasBeHit(-10);
+                                        }
+                                        else
+                                        {
+                                            atkObj.GetComponent<GameBody>().HasBeHit();
+                                        }
+                                        atkObj.GetComponent<GameBody>().GetTuili(tuili, 1f, true);
                                     }
                                     else
                                     {
-                                        atkObj.GetComponent<GameBody>().HasBeHit();
-                                    } 
+                                        beHitObj.GetComponent<GameBody>().GetTuili(-tuili, 1f, true);
+                                    }
+
+                                 
                                     atkObj.GetComponent<GameBody>().GetPause(2, 0.2f);
                                     //_atkRigidbody2D.AddForce(new Vector2(-1000 * _roleScaleX, 0));
                                     //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes();
-                                    float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400+ jn_date.FanTuili : -400- jn_date.FanTuili;
+                                   
                                     //if (jn_date.FanTuili != 0) tuili -= jn_date.FanTuili;
                                     //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> tuili  是多少： " + tuili);
-                                    atkObj.GetComponent<GameBody>().GetTuili(tuili, 1f, true);
+                                    
                                 }
                               
 
@@ -349,6 +369,20 @@ public class HitKuai : MonoBehaviour {
                         //触发后 特效显示 
                     }
 
+                }
+
+
+                //身体碰撞类型 检查 是否有碰撞保护
+                if (jn_date.HitInSpecialEffectsType == 5)
+                {
+                    if (!beHitObj.GetComponent<RoleDate>().isBodyCanBeHit) return;
+                    beHitObj.GetComponent<GameBody>().StartBodyHitProtect();
+
+                }
+
+                if (jn_date.HitInSpecialEffectsType == 6)
+                {
+                    beHitObj.GetComponent<GameBody>().StartBodyHitProtect();
                 }
 
                 //print("硬直  "+ atkObj.GetComponent<RoleDate>().yingzhi+"   敌人硬直   "+ roleDate.yingzhi+"   方向  "+atkObj.transform.localScale.x);
@@ -584,6 +618,16 @@ public class HitKuai : MonoBehaviour {
                 //附带效果
                 BeHitGameBody.FudaiXiaoguo(jn_date.JiZhongFDXiaoguo);
                 //if (Coll.tag != "Player")
+
+                if (jn_date.DuChixuShanghai!= 0)
+                {
+                    beHitObj.GetComponent<ChiXuShangHai>().InDu(jn_date.DuChixuShanghai,jn_date.DuChixuShanghaiTime);
+                }
+
+                if (jn_date.HuoChixuShanghai!= 0)
+                {
+
+                }
             }
 
             //print("sudu-------------------------------------------11111   " + Coll.GetComponent<Rigidbody2D>().velocity.x);
@@ -724,6 +768,12 @@ public class HitKuai : MonoBehaviour {
                 atkObj.GetComponent<GameBody>().HasBeHit(_fanTuili, false);
                 atkObj.GetComponent<GameBody>().GetZongTuili(new Vector2(_fanTuili, 0));
             }
+            else if (atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi > 100)
+            {
+                beHitObj.GetComponent<GameBody>().HasBeHit(-_fanTuili, false);
+                beHitObj.GetComponent<GameBody>().GetZongTuili(new Vector2(-_fanTuili, 0), true);
+            }
+
             return;
         }
 
@@ -731,7 +781,7 @@ public class HitKuai : MonoBehaviour {
         if (jn_date.HitInSpecialEffectsType == 6)
         {
             print("66666666666  型的攻击被撞击  刺鱼  刺猬等");
-            //是身体碰撞 只显示光圈
+            //是身体碰撞 显示光圈 和 攻击特效
             GameObject hitTx_1 = Resources.Load("TX_hitGuangquan") as GameObject;
             hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
             HitTXPos(hitTx_1);
@@ -758,6 +808,7 @@ public class HitKuai : MonoBehaviour {
             GameObject hitTx_1 = Resources.Load("TX_hitGuangquanBJ") as GameObject;
             hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
             HitTXPos(hitTx_1);
+            //if (jn_date.HitInSpecialEffectsType != 3) HitTX(_psScaleX, "jizhongBJ", BeHitRoleDate.beHitVudio, 3, true, true);
         }
     }
 

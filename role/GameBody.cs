@@ -83,6 +83,19 @@ public class GameBody : MonoBehaviour, IRole {
     public bool IsNeedHitPos = true;
 
 
+    protected float bodyHitTimesRecord = 0;
+    //身体 保护持续时间
+    protected float bodyHitProtectTimes = 2;
+
+    public void StartBodyHitProtect()
+    {
+        bodyHitTimesRecord = 0;
+        roleDate.isBodyCanBeHit = false;
+    }
+
+   
+
+
     //[Header("被 击中的 叫声   1")]
     //public AudioSource BeHitSound_1;
 
@@ -410,41 +423,49 @@ public class GameBody : MonoBehaviour, IRole {
     protected HZDate jn;
     public void ShowSkill(GameObject hzObj)
     {
-        if (IsHitWall) return;
+        
         if (roleDate.isBeHiting || roleDate.isDie || isDodgeing || isAtking || isBackUping ||isAcing) return;
         //print(" >>>   释放技能");
         jn = hzObj.GetComponent<UI_Skill>().GetHZDate();// GlobalTools.FindObjByName(urlName).GetComponent<SkillBox>().GetSkillHZDate();
-       
+
+
+        if (jn.skillACName != "" && IsHitWall) return;
+
+
         if (jn.type == "bd") return;
 
       
         if (jn != null)
         {
-            //print(" jnCD?     "+ jn.IsCDOver());
+            print(" jnCD?     "+ jn.IsCDOver());
             if (jn.IsCDOver())
             {
                 if (roleDate.lan - jn.xyLan < 0) {
                     //蓝不够释放技能
-                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NO_HUN_PROMPT, null), this); 
+                    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NO_HUN_PROMPT, null), this);
+                    roleAudio.PlayAudioYS("Alert_1");
                     return;
                 }
 
                 if (roleDate.live - jn.xyXue < 1) {
                     //释放技能的血量不够
+                    roleAudio.PlayAudioYS("Alert_1");
                     return;
                 }
-                //print("hi! 释放技能");
-                if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
+                print("hi! 释放技能");
 
                 //在空中的话 没有主动技能释放动作  也返回   没有动作 无法释放  相当于控制无法使用该技能
                 if (isInAiring && jn.type != "bd")
                 {
-                    if (jn.skillACNameInAir == "")
+                    if (jn.skillACName != "" && jn.skillACNameInAir == "")
                     {
+                        print("在地面有 释放 动作 但是 在空中没有释放动作  在空中 无法释放");
                         return;
                     }
 
                 }
+
+                if (!hzObj.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
 
                 roleDate.lan -= jn.xyLan;
                 roleDate.live -= jn.xyXue;
@@ -463,7 +484,7 @@ public class GameBody : MonoBehaviour, IRole {
 
 
                 //jn.StartCD();
-                //if(Globals.isDebug)print("---------------------------> 释放技能！！"+ jn.skillACName);
+                if(Globals.isDebug)print("---------------------------> 释放技能！！"+ jn.skillACName);
                 //this.GetComponent<GetHitKuai>().GetKuai("jn_yueguang","1");
                 //是否包含 技能动作
                 if (jn.skillACName != null && DBBody.animation.HasAnimation(jn.skillACName))
@@ -491,7 +512,10 @@ public class GameBody : MonoBehaviour, IRole {
                         GetAcMsg(jn.skillACName);
                     }
                     
-                    //print("-----------------------------------------------------技能释放动作    "+jn.skillACName);
+                    print("-----------------------------------------------------技能释放动作    "+jn.skillACName);
+
+                    if(jn.AudioName!="")roleAudio.PlayAudio(jn.AudioName);
+
                     playerRigidbody2D.velocity = Vector2.zero;
                     if (jn.ACyanchi > 0)
                     {
@@ -501,8 +525,31 @@ public class GameBody : MonoBehaviour, IRole {
                 }
                 else {
                     //测试用 正式的要配动作
-                    //print("????????????????????????????????????????????????????????????");
-                    GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                    print("????????????????????????????????????????????????????????????    "+jn.TXName);
+                    
+                    if(jn.TXName == "TX_zidanDun"|| jn.TXName == "TX_shengmingye")
+                    {
+                        //生成一个 放到 主角身体里面
+                        GameObject TX_zidanduan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(jn.TXName) as GameObject);     //GlobalTools.GetGameObjectByName(jn.TXName);
+                        //TX_zidanduan = Instantiate(TX_zidanduan);
+                        print(TX_zidanduan.transform.position + "   玩家位置  "+ this.gameObject.transform.position);
+                        TX_zidanduan.transform.position = this.gameObject.transform.position;
+                        TX_zidanduan.transform.parent = this.gameObject.transform;
+                        //print("特效name    "+ TX_zidanduan.name+"   weizhi  " + TX_zidanduan.transform.position);
+                        //TX_zidanduan.transform.position = Vector3.zero;
+                        //print("特效位置222222    " + TX_zidanduan.transform.position);
+                        //TX_zidanduan.transform.position = new Vector2(0, 0);
+
+                        if (jn.TXName == "TX_shengmingye")
+                        {
+                            roleDate.live += 400;
+                        }
+                    }
+                    else
+                    {
+                        GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                    }
+
                 }
 
 
@@ -956,7 +1003,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
-        //print(this.name+"  看看谁给的 力 "+v2);
+        //print(this.name+" ************************************************ 看看谁给的 力 "+v2);
         if (!playerRigidbody2D) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
@@ -981,7 +1028,9 @@ public class GameBody : MonoBehaviour, IRole {
             acingTime += Time.deltaTime;
             if (acingTime >= acTimeDelta)
             {
+                print("  ACingTimes  延迟 还原？？？？？？？？？？？？  ");
                 isAcing = false;
+                acingTime = 0;
             }
         }
     }
@@ -1287,6 +1336,10 @@ public class GameBody : MonoBehaviour, IRole {
                 isAtking = false;
                 isAtk = false;
                 isJumping2 = false;
+                if (roleAudio)
+                {
+                    roleAudio.PlayAudioYS("downOnGround");
+                }
                 MoveVX(0);
             }
         }
@@ -1448,7 +1501,7 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
-    protected RoleAudio roleAudio;
+    public RoleAudio roleAudio;
     protected PlayerUI thePlayerUI;
     protected virtual void GetStart()
     {
@@ -1606,7 +1659,8 @@ public class GameBody : MonoBehaviour, IRole {
         if (!IsGetDieOut)
         {
             IsGetDieOut = true;
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+            
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,roleDate.enemyType), this);
         }
 
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
@@ -1893,7 +1947,7 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-        ACingTimes();
+        if (this.tag != "Player") ACingTimes();
 
         //if (CurrentAcName != BEHIT || CurrentAcName != BEHITINAIR || CurrentAcName != DIE)
         //{
@@ -1946,27 +2000,27 @@ public class GameBody : MonoBehaviour, IRole {
         
         if(!IsJiasu && !isAtking)ControlSpeed();
 
+       
 
 
 
-        
         InAir();
         IsCanShanjinAndJump();
-        
 
         if (isAcing)
         {
-            //print("isAcing");
+            //print("isAcing  "+isAcing);
             GetAcMsg(_acName);
             return;
         }
 
-       
 
-       /* if (isJumping)
-        {
-            Jump();
-        }*/
+
+
+        /* if (isJumping)
+         {
+             Jump();
+         }*/
 
         if (isAtking)
         {
@@ -2182,10 +2236,10 @@ public class GameBody : MonoBehaviour, IRole {
 
     public string GetAcMsg(string acName)
     {
-
+        if (acName == null) return null;
         //获取技能VO
         //GetSkillVOByName(acName);
-        //print("------------------------------------------------------------------  "+acName);
+        //if(this.name == "player")print(this.name+"  》》》》》》------------  "+acName);
         if (!DBBody.animation.HasAnimation(acName)) return null;
         //print("------------------------------------------------------------------22  " + acName);
         
@@ -2194,6 +2248,7 @@ public class GameBody : MonoBehaviour, IRole {
         {
             acNums+= Time.deltaTime;
             yanchiMaxNum = yanchiTime;
+            //if (this.name == "player") print(this.name+"   动作 已完成------------------------------------------------------------------  " + acName);
             //isACCompletedYanchi = true;
             if (acNums > yanchiNum)
             {
@@ -2221,7 +2276,7 @@ public class GameBody : MonoBehaviour, IRole {
                 {
                     if(DBBody.animation.HasAnimation(JUMPDOWN)) DBBody.animation.GotoAndPlayByFrame(JUMPDOWN, 0, 1);
                 }
-
+                //if (this.name == "player") print("  -------动作完成isAcing   " + isAcing+ "     lastAnimationName    "+ DBBody.animation.lastAnimationName);
                 return "completed";
             }
             return "acYanChi";
@@ -2233,13 +2288,14 @@ public class GameBody : MonoBehaviour, IRole {
             acNums = 0;
             isAcing = true;
 			_acName = acName;
-            //print("acName  进来没？？？？");
+
+            //if (this.name == "player") print(this.name+"   acName  进来没？？？？  ACName     "+ acName);
             return "start";
         }
-        
+        //if (this.name == "player") print(this.name+"   ?????? lastAnimationName  " + DBBody.animation.lastAnimationName);
         if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isPlaying)
         {
-			//print("acName "+_acName);
+            //if (this.name == "player") print( this.name+ "  *******  acName "+_acName+"   ---  "+isAcing);
 			return "playing_"+acNums;
         }
         
@@ -2249,7 +2305,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     void AcYanChiCallBack(float n)
     {
-        print("------------------------------------->    callback   延迟结束！！！！！ ");
+        //print("------------------------------------->    callback   延迟结束！！！！！ ");
         isAcing = false;
         isACCompletedYanchi = false;
         _acName = null;
@@ -2334,6 +2390,36 @@ public class GameBody : MonoBehaviour, IRole {
                 }
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
+
+
+                if (vOAtk.AudioName != "")
+                {
+                    roleAudio.PlayAudioYS(vOAtk.AudioName);
+                }
+                else
+                {
+                    if (roleAudio.AudioAtk_1)
+                    {
+                        if (GlobalTools.GetRandomNum() > 50)
+                        {
+                            if (GlobalTools.GetRandomNum() > 50)
+                            {
+                                print("  -----------------------------> AudioAtk_1 ");
+                                roleAudio.PlayAudioYS("AudioAtk_1");
+                            }
+                            else
+                            {
+                                print("  -----------------------------> AudioAtk_22222222222 ");
+                                roleAudio.PlayAudioYS("AudioAtk_2");
+                            }
+                        }
+                    }
+                }
+
+               
+               
+
+
             }
 
             MoveVX(vOAtk.xF,true);
@@ -2371,7 +2457,8 @@ public class GameBody : MonoBehaviour, IRole {
         //DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
         //GetAtk(skillName);
         GetAcMsg(vOAtk.atkName);
-        isSkillOut = true;
+        if (roleAudio.SkillAudio_1) roleAudio.PlayAudioYS("SkillAudio_1");
+         isSkillOut = true;
     }
 
   
@@ -2424,12 +2511,12 @@ public class GameBody : MonoBehaviour, IRole {
                     else
                     {
                         if (jn == null) {
-                            //print("******************************************************************************** 技能为空 ");
-                            //print("******************************************************************************** 技能为空 ");
+                            print("******************************************************************************** 技能为空 ");
+                            print("******************************************************************************** 技能为空 ");
                             return;
                         }
                         
-                        //print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
+                        print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
                         GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
                         isTXShow = false;

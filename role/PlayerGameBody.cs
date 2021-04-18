@@ -11,10 +11,42 @@ public class PlayerGameBody : GameBody {
 
     // Update is called once per frame
     float flyVx = 0;
+
+
+
+    public AudioSource AudioAtk_1;
+    public AudioSource AudioAtk_2;
+    public AudioSource AudioBeHit_1;
+    public AudioSource AudioJump_1;
+
+    [Header("身体碰撞保护")]
+    public ParticleSystem BodyHitProtect;
+
+    protected void BodyHitProtecting()
+    {
+        if (roleDate.isBodyCanBeHit) return;
+        bodyHitTimesRecord += Time.deltaTime;
+        if (BodyHitProtect.isStopped)
+        {
+            BodyHitProtect.Play();
+        }
+        //显示 保护特效
+        //print("----------- >>>> bodyHitTimesRecord "+ bodyHitTimesRecord);
+        if (bodyHitTimesRecord >= bodyHitProtectTimes)
+        {
+            bodyHitTimesRecord = 0;
+            roleDate.isBodyCanBeHit = true;
+            BodyHitProtect.Stop();
+            //关闭 保护特效
+            //print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&可以碰撞了！！！！");
+        }
+    }
+
+
     void Update()
     {
-
-        if(IsInFighting)InFingting();
+        BodyHitProtecting();
+        if (IsInFighting)InFingting();
 
         DimianAtkHuanYuan();
         //攻击修正 防卡死
@@ -80,7 +112,7 @@ public class PlayerGameBody : GameBody {
     protected bool IsChiXueRunAC = false;
     protected void ChangeRunAC2(UEvent e)
     {
-        print("  进入boss战。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。 ");
+        print("  进入boss战  改变跑步姿势。 ");
         IsChiXueRunAC = true;
         IsInFighting = true;
         ChangeACNum(4);
@@ -700,6 +732,7 @@ public class PlayerGameBody : GameBody {
     //地面攻击还原
     void DimianAtkHuanYuan()
     {
+        if (isAcing) return;
         if (IsAtkDown && IsGround)
         {
             IsAtkDown = false;
@@ -872,6 +905,20 @@ public class PlayerGameBody : GameBody {
 
             //print(6);
 
+            //随机播放声音
+            if (GlobalTools.GetRandomNum() > 50)
+            {
+                if (GlobalTools.GetRandomNum() > 50)
+                {
+                    if(AudioAtk_1) AudioAtk_1.Play();
+                }
+                else
+                {
+                    if (AudioAtk_2) AudioAtk_2.Play();
+                }
+            }
+
+
             MoveVX(vOAtk.xF, true);
             //MoveVX(0, true);
 
@@ -1009,6 +1056,14 @@ public class PlayerGameBody : GameBody {
             float rnum = Random.Range(0, 2);
             if (DBBody.animation.HasAnimation("beHit_2")) BEHIT = rnum >= 1 ? "beHit_1" : "beHit_2";
         }
+
+        //播放被攻击 声音
+        if (GlobalTools.GetRandomNum() > 50)
+        {
+            if(AudioBeHit_1) AudioBeHit_1.Play();
+        }
+
+
         if (!DBBody.animation.HasAnimation(BEHITINAIR)) BEHIT = "beHit_1";
 
         //print(speedX);
@@ -1096,6 +1151,7 @@ public class PlayerGameBody : GameBody {
             //***找到起始特效点 找骨骼动画的点 或者其他办法
             if (isInAiring)
             {
+                print("在空中 skillACName " + bdjn.skillACNameInAir);
                 GetAcMsg(bdjn.skillACNameInAir);
             }
             else
@@ -1266,7 +1322,7 @@ public class PlayerGameBody : GameBody {
             Hongyan.Stop();
             //这里控制 碰墙后 速度
             GetPlayerRigidbody2D().velocity = Vector2.zero;
-            //print("jinlai  mei         ");
+            print("jinlai  mei     碰到 面前的 墙    ");
             return;
         }
 
@@ -1319,6 +1375,12 @@ public class PlayerGameBody : GameBody {
                     //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.6"), this);
                     if (GaochuTiaoxiaYC) GaochuTiaoxiaYC.Play();
                     MoveVX(0);
+
+                    //高处落下
+                    if (GlobalTools.GetRandomNum() > 40)
+                    {
+                        if (AudioJump_1) AudioJump_1.Play();
+                    }
                 }
 
 
@@ -1438,6 +1500,14 @@ public class PlayerGameBody : GameBody {
                 playerRigidbody2D.velocity = newSpeed;
                 //playerRigidbody2D.AddForce(Vector2.up * yForce);
                 GetZongTuili(Vector2.up * yForce);
+
+
+                //播放起跳声音
+                if (GlobalTools.GetRandomNum() > 70)
+                {
+                    if (AudioJump_1) AudioJump_1.Play();
+                }
+
             }
         }
         else
@@ -1466,7 +1536,11 @@ public class PlayerGameBody : GameBody {
                 //playerRigidbody2D.AddForce(Vector2.up * yForce);
                 GetZongTuili(Vector2.up * yForce);
             }
+
+         
         }
+
+      
     }
 
     void JumpHitWall()

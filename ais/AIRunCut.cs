@@ -71,7 +71,7 @@ public class AIRunCut : MonoBehaviour,ISkill{
             }
             oldRunName = gameBody.GetRunName();
             oldRunSpeedX = gameBody.maxSpeedX;
-            print("---------------->AtkName    " + AtkName + "   RunName  " + RunName+ "     oldRunName  "+ oldRunName);
+            //print("---------------->AtkName    " + AtkName + "   RunName  " + RunName+ "     oldRunName  "+ oldRunName);
 
             gameBody.RunACChange(RunName, moveSpeedX);
         }

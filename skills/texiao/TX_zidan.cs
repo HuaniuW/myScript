@@ -139,16 +139,16 @@ public class TX_zidan : MonoBehaviour
     public int bzType = 1;
 
 
-    int testN = 0;
+    protected int testN = 0;
     public bool IsCanHit = true;
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
-        if(Coll.tag == "Player"||Coll.tag == "diban")
+        if (Coll.tag == "Player"||Coll.tag == "diban"|| Coll.tag == "zidanDun")
         {
             if (!IsCanHit) return;
-            //print(testN+"   Coll.tag  碰到了什么鬼：    " + Coll.tag);
+            //print(testN + "   Coll.tag  碰到了什么鬼：    " + Coll.tag);
             if (Coll.tag == "Player" && Coll.GetComponent<RoleDate>().isCanBeHit == false) return;
             //生成爆炸
             if(testN == 0)

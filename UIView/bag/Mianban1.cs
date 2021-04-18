@@ -123,7 +123,7 @@ public class Mianban1 : MonoBehaviour {
    //将背包数据 物品放入背包格子
     void GetInHZ()
     {
-        print("  将背包数据 物品放入背包格子   "+ hzIdList.Count);
+        //print("  将背包数据 物品放入背包格子   "+ hzIdList.Count);
         for(var i = 0; i < hzIdList.Count; i++)
         {
             if (hzIdList[i] != "")

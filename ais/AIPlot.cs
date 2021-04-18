@@ -53,6 +53,10 @@ public class AIPlot : MonoBehaviour
     float _z = 0;
 
 
+    float RunSpeedX = 0.19f;
+    float RunSpeedY = -0.03f;
+
+
     //飞的动作
     public void GetRun()
     {
@@ -75,8 +79,12 @@ public class AIPlot : MonoBehaviour
             yanmu5.Play();
         }
         //GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = v;
-        this.gameObject.transform.position = new Vector3(this.transform.position.x+0.07f,this.transform.position.y+0.16f, this.transform.position.z+_z);
+        this.gameObject.transform.position = new Vector3(this.transform.position.x+ RunSpeedX, this.transform.position.y+ RunSpeedY, this.transform.position.z+_z);
 
+        if (this.gameObject.transform.position.y<=1.9f)
+        {
+            RunSpeedY = 0.1f;
+        }
 
         //if (!IsLongHou && this.transform.position.x>GlobalTools.FindObjByName("player").transform.position.x)
         //{

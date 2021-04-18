@@ -44,10 +44,20 @@ public class AITheWay_dcr : MonoBehaviour {
     public string[] GetZSArrays(int lie = 0)
     {
         if (zs_way.Count == 0 || zs_way.Count == 1) return zsArr1;
-        print("lie   "+lie+ "  atkArrs   "+ atkArrs.Length);
+        //print("lie   "+lie+ "  atkArrs   "+ atkArrs.Length);
 
         string[] zss = (string[])atkArrs[lie];
         return zss;
+    }
+
+    [Header("血少于一半时候 显示的 特效")]
+    public ParticleSystem LiveHalfShow;
+    void ShowHalfTX()
+    {
+        if (LiveHalfShow&& LiveHalfShow.isStopped && theLive / this.GetComponent<RoleDate>().live >= 2)
+        {
+            LiveHalfShow.Play();
+        }
     }
 
     void GetNewZSListByCLive()
@@ -55,6 +65,8 @@ public class AITheWay_dcr : MonoBehaviour {
         float _xueliangN = theLive / zs_way.Count;
 
         //print("zs_way.Count    "+ zs_way.Count);
+
+        ShowHalfTX();
 
         for (var i = 0; i < zs_way.Count; i++)
         {
@@ -66,7 +78,7 @@ public class AITheWay_dcr : MonoBehaviour {
                 if (n <= i) n = i;
                 //获取 招式数组列表
                 _zsList = zs_way[n];
-                //print("_zsList   "+ _zsList);
+                //print("_zsList ******************************************  "+ _zsList);
             }
         }
         //通过招式数组列表 获取 招式数组

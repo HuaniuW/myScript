@@ -53,7 +53,7 @@ public class MapNames : MonoBehaviour
 
 
     //地板
-    public List<string> db_pd_1 = new List<string> { "db_pd_1" };
+    public List<string> db_pd_1 = new List<string> { "db_pd_1", "db_pd_3" };
 
     public List<string> tiaoyue_1 = new List<string> { "db_ty_1"};
 
@@ -82,9 +82,9 @@ public class MapNames : MonoBehaviour
     //门 下方的 前景
     public List<string> men_qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
     //前景 下方
-    public List<string> qjd_1 = new List<string> { "qjd_1_3", "qjd_1_6", "qjd_1_8" };
-    public List<string> qjd2_1 = new List<string> { "qjd_1_1", "qjd_1_5", "qjd_1_7", "qjd_1_10" };
-    public List<string> qjd3_1 = new List<string> { "qjd_1_9", "qjd_1_10" };
+    public List<string> qjd_1 = new List<string> { "qjd_1_1", "qjd_1_3", "qjd_1_6", "qjd_1_8" };//, "qjd_1_5", "qjd_1_7"
+    public List<string> qjd2_1 = new List<string> { "qjd_1_3", "qjd_1_6"};
+    public List<string> qjd3_1 = new List<string> { "qjd_1_1", "qjd_1_8"};//9 ,10是大景
 
 
     //装饰物

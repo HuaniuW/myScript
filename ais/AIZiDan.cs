@@ -51,6 +51,7 @@ public class AIZiDan : MonoBehaviour
 
     public void ReSetAll()
     {
+        IsHasFire = false;
         _isBehaviorOver = false;
         IsFindRoading = false;
         IsGetFireTest = false;
@@ -66,11 +67,12 @@ public class AIZiDan : MonoBehaviour
     //找到目标点  移动到攻击范围
     public void GetStart(GameObject targetObj)
     {
+        //ReSetAll();
         _targetObj = targetObj;
         _isBehaviorOver = false;
         IsFindRoading = true;
         _isStart = true;
-        //print("---------------------------------------------------> 子弹！！！！！！！");
+        //print("---------------------------------------------------> 子弹！！！！！！！"+ _targetObj);
     }
 
     public bool IsBehaviorOver()
@@ -93,7 +95,7 @@ public class AIZiDan : MonoBehaviour
 
         if (IsGoToNewPoint)
         {
-            print("-------------------------------> 对点");
+            //print("-------------------------------> 对点");
             GoToNewPoint();
             return;
         }
@@ -209,17 +211,22 @@ public class AIZiDan : MonoBehaviour
 
 
     //这里做个延迟可以
-
+    bool IsHasFire = false;
     void GetFire()
     {
+        //print("fire ac     "+ ACName);
+        IsHasFire = true;
         _gameBody.GetAcMsg(ACName);
+        _gameBody.roleAudio.PlayAudioYS("AudioAtk_1");
     }
 
 
     protected virtual void ShowACTX(string type, EventObject eventObject)
     {
+        //print(type+"  ???????   "+ eventObject.name);
         if (type == EventObject.FRAME_EVENT)
         {
+            //print("子弹事件    "+ eventObject.name);
             if (eventObject.name == "zd"|| eventObject.name == "zd2") {
                 //闪一下点特效
                 GameObject shanGuang = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TX_zidan1shan") as GameObject);  //GlobalTools.GetGameObjectByName("TX_zidan1shan");
@@ -256,6 +263,8 @@ public class AIZiDan : MonoBehaviour
         if (GetComponent<RoleDate>().isBeHiting)
         {
             ReSetAll();
+            //print("behit!!!!!!!!!!!");
+            _isBehaviorOver = true;
             return;
         }
         if (_isStart)
@@ -263,7 +272,21 @@ public class AIZiDan : MonoBehaviour
             Starting();
         }
 
+
+
+        //print(_gameBody.GetDB().animation.lastAnimationName + "   ACName????   " + ACName);
+
+        
+
         if(_gameBody.GetDB().animation.lastAnimationName == ACName&& _gameBody.GetDB().animation.isCompleted)
+        {
+            //print("  AC DONGZUO JIESHU!!!!  ");
+            ReSetAll();
+            _isBehaviorOver = true;
+            return;
+        }
+
+        if (IsHasFire && _gameBody.GetDB().animation.lastAnimationName != ACName)
         {
             ReSetAll();
             _isBehaviorOver = true;

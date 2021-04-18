@@ -19,12 +19,12 @@ public class XueTiao : MonoBehaviour {
     public Image zzTiao;
 
 
-    float _cLive = 1000;
-    float _maxLive = 1000;
+    protected float _cLive = 1000;
+    protected float _maxLive = 1000;
     [Header("血条最大值的宽度")]
     public float _maxW = 10;
-    float BaseMaxW = 0; //基础最大宽度
-    float BaseDiW = 0;
+    protected float BaseMaxW = 0; //基础最大宽度
+    protected float BaseDiW = 0;
     /// <summary>
     /// 长条的第一层显示
     /// </summary>
@@ -32,7 +32,7 @@ public class XueTiao : MonoBehaviour {
     /// <summary>
     /// 长条的第二条显示 缓动跟随_w
     /// </summary>
-    float _w2 = 10;
+    protected float _w2 = 10;
     public float _h=10;
     public GameObject gameObj;
 
@@ -61,7 +61,7 @@ public class XueTiao : MonoBehaviour {
 
     [Header("血条显示误差 默认为50")]
     public float XueTiaoXianshiWucha = 50;
-    void LiveBarInit()
+    protected virtual void LiveBarInit()
     {
         float xueTiaoDiW = XueTiaoDi.GetComponent<RectTransform>().rect.width;
         _maxW = xueTiaoDiW - XueTiaoXianshiWucha;
@@ -84,7 +84,7 @@ public class XueTiao : MonoBehaviour {
     /// 增加最大生命上限
     /// </summary>
     /// <param name="AddLivesNum">增加的生命上限值</param>
-    public void AddMaxLiveBar(float AddLivesNum)
+    public virtual void AddMaxLiveBar(float AddLivesNum)
     {
         
         float OldMaxLive = _maxLive;
@@ -101,7 +101,7 @@ public class XueTiao : MonoBehaviour {
     }
 
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         //print("血条 我被销毁了？？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
@@ -115,9 +115,9 @@ public class XueTiao : MonoBehaviour {
         GlobalTools.CanvasGroupAlpha(GetComponent<CanvasGroup>(), alphaNum);
     }
 
- 
 
-    void IsHasZZ(UEvent e) {
+
+    protected void IsHasZZ(UEvent e) {
         if (zzTiao == null) return;
         if ((bool)e.eventParams)
         {
@@ -160,9 +160,9 @@ public class XueTiao : MonoBehaviour {
         Wh(xue2, _w2, _h);
     }
 
-    RoleDate roleDate;
+    protected RoleDate roleDate;
     //初始化 血条的 长度  数据匹配到链接的角色
-    public void GetGameObj()
+    public virtual void GetGameObj()
     {
         if (gameObj != null)
         {
@@ -177,7 +177,7 @@ public class XueTiao : MonoBehaviour {
         }
     }
 
-    void LiveChange(UEvent e)
+    protected virtual void LiveChange(UEvent e)
     {
         if (gameObj == null)
         {
@@ -212,11 +212,11 @@ public class XueTiao : MonoBehaviour {
         Wh(xue1, _w, _h);
     }
 
-    float testNums = 1000;
+    protected float testNums = 1000;
 
-    float lastXue = 0;
+    protected float lastXue = 0;
     // 血效果根据 标的角色数据变化
-    void XueChange() {
+    protected virtual void XueChange() {
         //print("hiiiii     "+_maxLive+ "   roleDate.maxLive   "+roleDate.maxLive);
         //if (_maxLive != roleDate.maxLive)
         //{
@@ -239,9 +239,9 @@ public class XueTiao : MonoBehaviour {
     }
 
 
-    bool isChage = false;
+    protected bool isChage = false;
     //缓动跟随效果
-    void Xue2W()
+    protected void Xue2W()
     {
         if (_w2 > _w)
         {
@@ -299,15 +299,17 @@ public class XueTiao : MonoBehaviour {
 
 
 
-    void Wh(Image obj, float w, float h = 10)
+    protected void Wh(Image obj, float w, float h = 10)
     {
+        if (obj == null) return;
         var rt = obj.GetComponent<RectTransform>();
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, w);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, h);
     }
 
-    void WhBg(Image obj)
+    protected void WhBg(Image obj)
     {
+        if (obj == null) return;
         var rt = obj.GetComponent<RectTransform>();
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _maxW + 4);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _h + 4);

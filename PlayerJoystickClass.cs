@@ -13,7 +13,7 @@ public class PlayerJoystickClass : MonoBehaviour
     // Use this for initialization 
     void Start()
     {
-
+        //print("帧数显示！！！");
     }
     // Update is called once per frame 
     void Update()
@@ -33,7 +33,7 @@ public class PlayerJoystickClass : MonoBehaviour
     void OnGUI()
     {
         //GUI.TextArea(new Rect(0, 0, 250, 40), "Current Button : " + currentButton);//使用GUI在屏幕上面实时打印当前按下的按键
-        Zhenshu();
+        //Zhenshu();
     }
 
 

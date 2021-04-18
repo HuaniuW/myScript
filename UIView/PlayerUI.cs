@@ -166,13 +166,13 @@ public class PlayerUI : MonoBehaviour {
     void GetScreenChange()
     {
         if (!IsScreenChangeing) return;
-        print("场景切换 遮罩调用  ZZAlphaNums： "+ ZZAlphaNums);
+        //print("场景切换 遮罩调用  ZZAlphaNums： "+ ZZAlphaNums);
         if (this.screenChangeZZ != null)
         {
             this.screenChangeZZ.GetComponent<CanvasGroup>().alpha += (ZZAlphaNums - this.screenChangeZZ.GetComponent<CanvasGroup>().alpha) * 0.1f;
             if(ZZAlphaNums == 0&&this.screenChangeZZ.GetComponent<CanvasGroup>().alpha <= 0.2)
             {
-                print("??????????????????????????????????????   >>>>>>>>>>>>>>  "+ ZZAlphaNums);
+                //print("??????????????????????????????????????   >>>>>>>>>>>>>>  "+ ZZAlphaNums);
                 this.screenChangeZZ.GetComponent<CanvasGroup>().alpha = 0;
                 IsScreenChangeing = false;
                 //防止遮挡鼠标事件

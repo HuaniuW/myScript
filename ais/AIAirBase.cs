@@ -10,6 +10,7 @@ public class AIAirBase : AIBase
     // Use this for initialization
     void Start()
     {
+       
         GetStart();
         if (!_AIYinshen) _AIYinshen = GetComponent<AIYinshen>();
         air_aiNear = GetComponent<AIAirRunNear>();
@@ -160,7 +161,7 @@ public class AIAirBase : AIBase
         isFindEnemy = true;
         isPatrolRest = false;
         isNearAtkEnemy = true;
-        
+        //print("AI BE HITTTTTTTTT!!!");
         AIReSet();
         if (aiFanji != null) aiFanji.GetFanji();
         if (_AIYinshen != null) _AIYinshen.BeHitHide();
@@ -238,11 +239,12 @@ public class AIAirBase : AIBase
         }
 
         if (IsBeHitRunAwaying) {
+            //print("?????????????behit ranaway");
             BeHitRunAwaying();
             return;
         }
-        
-        
+
+        //print(" vx " + gameBody.GetPlayerRigidbody2D().velocity.x);
 
         if (isPatrol && !IsFindEnemy())
         {
@@ -250,6 +252,8 @@ public class AIAirBase : AIBase
             Patrol();
             return;
         }
+
+        //print(">>>??????  进来没！！ ");
 
 
         if (!isActioning && IsHitWallOrNoWay)
@@ -486,7 +490,7 @@ public class AIAirBase : AIBase
             acName = GetZS();
             //IsGetAtkFSByName = false;
 
-            //print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
+            print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -855,6 +859,7 @@ public class AIAirBase : AIBase
 
         isAction = false;
         isActioning = false;
+        //acName = "";
         if (GetComponent<JN_YueGuanZhan>()) GetComponent<JN_YueGuanZhan>().ReSetAll();
         if (GetComponent<AIChongji>()) GetComponent<AIChongji>().ReSetAll();
         if (GetComponent<AIAirRunAway>()) GetComponent<AIAirRunAway>().ReSetAll();
@@ -927,6 +932,7 @@ public class AIAirBase : AIBase
 
     void GetZiDanFire()
     {
+        //print("ffffff");
         if (!isActioning)
         {
             isActioning = true;
@@ -935,8 +941,11 @@ public class AIAirBase : AIBase
             return;
         }
 
+        //print("ac  "+acName+"   isActioning   " + isActioning+ "    -------- IsBehaviorOver   "+ GetComponent<AIZiDan>().IsBehaviorOver());
+
         if (isActioning && GetComponent<AIZiDan>().IsBehaviorOver())
         {
+            //print("   zidan  wanjie????? ");
             ZhuanXiang();
             isAction = false;
             isActioning = false;

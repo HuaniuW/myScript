@@ -36,7 +36,7 @@ public class DieOut : MonoBehaviour {
     [Header("自身的碰撞块")]
     public GameObject HitKuai;
 
-    [Header("自身的碰撞块")]
+    [Header("自身的碰撞块2 一般是冲击的碰撞块")]
     public GameObject HitKuai2;
 
 
@@ -52,6 +52,11 @@ public class DieOut : MonoBehaviour {
             if (HitKuai) HitKuai.SetActive(false);
             if (HitKuai2) HitKuai2.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
+
+            if (GetComponent<RoleAudio>())
+            {
+                GetComponent<RoleAudio>().PlayAudioYS("die_1");
+            }
 
             //判断是否 在自动地图里面
             if (GlobalTools.FindObjByName("maps") != null)
@@ -128,11 +133,15 @@ public class DieOut : MonoBehaviour {
     //掉落物
     void Diaoluowu()
     {
-        if (diaoluowu == ""|| !this.GetComponent<AIBase>().thePlayer) return;
+        
+        GameObject player = GlobalTools.FindObjByName("player");
+        if (diaoluowu == ""|| player == null) return;
+       
         int jv = Random.Range(0, 100);
-        int fx = this.transform.position.x > this.GetComponent<AIBase>().thePlayer.transform.position.x ? 1 : -1;
+        int fx = this.transform.position.x > player.transform.position.x ? 1 : -1;
         string[] diaoluowuArr = diaoluowu.Split('|');
-        //print("掉落物  "+ diaoluowuArr.Length);
+        //print("name 掉落物  "+ diaoluowuArr.Length);
+        //print("name --------------> " + this.name + " diaoluowu   " + diaoluowu+"   当前几率 "+jv);
         for (var i = 0; i < diaoluowuArr.Length; i++) 
         {
             string objName = diaoluowuArr[i].Split('-')[0];

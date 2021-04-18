@@ -66,7 +66,18 @@ public class FuDong : MonoBehaviour
 
         this.transform.position = new Vector3(moveX, moveY, this.transform.position.z + MoveSpeedZ);
 
-        if (!IsCanHitPlayer) return;
+        if (!IsCanHitPlayer) {
+            if (this.transform.position.x > _thisX + MoveXDistance || this.transform.position.x < _thisX - MoveXDistance)
+            {
+                MoveSpeedX *= -1;
+            }
+
+            if (this.transform.position.y > _thisY + MoveYDistance || this.transform.position.y < _thisY - MoveYDistance)
+            {
+                MoveSpeedY *= -1;
+            }
+            return;
+        } 
         var cubeF = GameObject.Find("/MainCamera");
         foreach (Transform t in objList)
         {

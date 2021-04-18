@@ -164,6 +164,8 @@ public class CameraController : MonoBehaviour
     bool isInEdge = false;
     bool isFeidaoGS = true;
 
+    float CamereMoveSpeed = 0.4f;
+
     void Update()
     {
         if (!player) return;
@@ -325,12 +327,12 @@ public class CameraController : MonoBehaviour
                             {
                                 if (player.transform.localScale.x > 0)
                                 {
-                                    x = Mathf.Lerp(x, player.position.x - Margin.x, 1 * Time.deltaTime);
+                                    x = Mathf.Lerp(x, player.position.x - Margin.x, CamereMoveSpeed * Time.deltaTime);
 
                                 }
                                 else
                                 {
-                                    x = Mathf.Lerp(x, player.position.x + Margin.x, 1 * Time.deltaTime);
+                                    x = Mathf.Lerp(x, player.position.x + Margin.x, CamereMoveSpeed * Time.deltaTime);
                                 }
                             }
 
@@ -379,7 +381,7 @@ public class CameraController : MonoBehaviour
             else
             {
                 y = Mathf.Lerp(y, CameraKuaiY, smoothing.y * Time.deltaTime);
-                if (Mathf.Abs(y - CameraKuaiY) < 0.1) y = CameraKuaiY;
+                if (Mathf.Abs(y - CameraKuaiY) < 0.04f) y = CameraKuaiY;
             }
         }
 
@@ -416,7 +418,7 @@ public class CameraController : MonoBehaviour
 
         if (IsHitCameraKuai && _IsSuoDingY)
         {
-            y += (CameraKuaiY - y) * 0.16f ;
+            y += (CameraKuaiY - y) * 0.12f ;
         }
 
 

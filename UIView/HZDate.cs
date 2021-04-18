@@ -26,11 +26,21 @@ public class HZDate : MonoBehaviour {
     public float live;
     [Header("增加生命的比例")]
     public float liveP;
+
+    [Header("增加蓝量")]
+    public float addLan;
+
+
     [Header("附带技能")]
     public string skill;
 
     [Header("附带技能动作")]
     public string skillACName;
+
+
+    [Header("技能动作的 喊声")]
+    public string AudioName;
+
     [Header("附带技能动作  空中")]
     public string skillACNameInAir;
     [Header("空中释放技能 悬停时间")]
@@ -102,6 +112,12 @@ public class HZDate : MonoBehaviour {
     [Header("暴击伤害倍数")]
     public float BaoJiShangHaiBeiLv = 0;
 
+
+
+    [Header("抗毒几率")]
+    public float KangDuJilv = 0;
+    [Header("抗中毒伤害几率")]
+    public float KangDuShanghaijilv = 0;
 
 
     void Start () {
