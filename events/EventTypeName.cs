@@ -127,8 +127,11 @@ public class EventTypeName
     //角色状态
     public const string PLAYER_ZT = "player_zt";
 
-
-
    
+    
+
+
+
+
 
 }

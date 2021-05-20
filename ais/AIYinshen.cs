@@ -55,11 +55,22 @@ public class AIYinshen : MonoBehaviour
     //float BeHitYingshenJiShi = 0;
     ////被攻击隐身 重置 时间上限
     //float YinShenjishiCZTime = 1;
+    float biHitJishi = 0;
+    float ChongZhiBehitHideTimes = 1;
+
     void YinshenXianzhiJishi()
     {
+        biHitJishi += Time.deltaTime;
+        if(biHitJishi>= ChongZhiBehitHideTimes)
+        {
+            IsBeHitingHide = false;
+            biHitJishi = 0;
+            return;
+        }
         if (IsBeHitingHide&&!_roledate.isBeHiting)
         {
             IsBeHitingHide = false;
+            biHitJishi = 0;
         }
     }
 
@@ -74,6 +85,7 @@ public class AIYinshen : MonoBehaviour
         if (IsBeHitingHide) return;
         if (_roledate.isDie) return;
         IsBeHitingHide = true;
+        biHitJishi = 0;
         //if (IsBeHitingHide &&!GetComponent<RoleDate>().isBeHiting)
         //{
         //    IsBeHitingHide = false;
@@ -83,6 +95,7 @@ public class AIYinshen : MonoBehaviour
         print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl    " + jl + "        " + BeHitHideJL);
         if (jl<=BeHitHideJL)
         {
+            
             if (YinShenType == 2)
             {
                 ShowYinShenTX();
@@ -102,23 +115,29 @@ public class AIYinshen : MonoBehaviour
             //隐身 接口
             print("------------------被攻击后 隐身");
             ReSetAll();
-            _aiAirBase.GetAtkFSByName("yinshen");
-           
 
+            //_aiAirBase.
+            _aiAirBase.GetAtkFSByName("yinshen");
+
+            
 
         }
         
 
     }
 
+    [Header("隐身 反击 几率")]
+    public float YinshenFJJL = 100;
+
     bool IsInBeHitFJ = false;
     //被攻击后 反击 AC
     public void BeHitFanjiAC()
     {
+        if (GlobalTools.GetRandomNum() > YinshenFJJL) return;
+
         if (IsInBeHitFJ)
         {
             //print("  被攻击 反击   "+ HideAtkName);
-
             if (HideAtkName != "") {
                 _aiAirBase.GetReSet();
                 _aiAirBase.GetAtkFSByName(HideAtkName);
@@ -156,6 +175,8 @@ public class AIYinshen : MonoBehaviour
         YinShenJiShi = 0;
 
         IsStartYinShen = false;
+
+        biHitJishi = 0; 
         //_aiAirBase.QuXiaoAC();
     }
 
@@ -220,7 +241,7 @@ public class AIYinshen : MonoBehaviour
     bool IsStartYinShen = false;
 
 
-    [Header("隐身时候 播放的声音")]
+    [Header("隐身时候 播放的 特效的 声音")]
     public AudioSource AudioYinShen;
 
 
@@ -253,6 +274,7 @@ public class AIYinshen : MonoBehaviour
     Vector2 yinshenQianPos = Vector2.zero;
     public bool IsGetHide()
     {
+        //print("IsGetHide!!! ");
         if (!IsHideing) return false;
 
         //这里按类型 分类 如果是 替身术 有烟幕的 另外写 
@@ -290,7 +312,9 @@ public class AIYinshen : MonoBehaviour
         if (_db.animation.lastAnimationName == HideACName && _db.animation.isCompleted)
         {
             IsHideing = false;
+            print("隐身 动作 完成-------------->   "+ _db.animation.lastAnimationName);
             _db.animation.Stop();
+            _roledate.isCanBeHit = false;
             //开始显示流程
             return true;
         }
@@ -334,14 +358,15 @@ public class AIYinshen : MonoBehaviour
 
 
 
-
+        print("隐身后 显示 show!!!!");
 
 
         if (!_db.animation.HasAnimation(ShowACName))
         {
             IsShowing = false;
-            _roledate.isCanBeHit = true;
-            //print("  没有显示动作  隐身流程走完！！！！  ");
+            //_roledate.isCanBeHit = true;
+            ShowEnd();
+            print("  没有显示动作  隐身流程走完！！！！  ");
             return true;
         }
 
@@ -353,14 +378,8 @@ public class AIYinshen : MonoBehaviour
 
             //print(2);
 
-            _db.animation.Stop();
-            //防止闪烁
-            _gameBody.GetStand();
-            _roledate.isCanBeHit = true;
-            _aiAirBase.ZhuanXiang();
-            _gameBody.SetACPlayScale(1);
-            //print("     ----->   显示? ????");
-            ShowXuetiao();
+            ShowEnd();
+            print("     ----->  隐身 显示 完成！！！！！");
             return true;
         }
 
@@ -371,6 +390,19 @@ public class AIYinshen : MonoBehaviour
             _gameBody.SetACPlayScale(showACSpeed);
         }
         return false;
+    }
+
+
+    void ShowEnd()
+    {
+        _db.animation.Stop();
+        //防止闪烁
+        _gameBody.GetStand();
+        _roledate.isCanBeHit = true;
+        _aiAirBase.ZhuanXiang();
+        _gameBody.SetACPlayScale(1);
+        
+        ShowXuetiao();
     }
 
 
@@ -430,10 +462,6 @@ public class AIYinshen : MonoBehaviour
                     __y = thePlayer.transform.position.y - 1 + GlobalTools.GetRandomDistanceNums(4);
                 }
             }
-
-
-
-           
         }
         else
         {
@@ -523,12 +551,15 @@ public class AIYinshen : MonoBehaviour
     {
         if (!IsShowing|| IsOver) return;
         if (IsShowOut()) IsOver = true;
-        _aiAirBase.QuXiaoAC();
+        //_aiAirBase.QuXiaoAC();
     }
 
     [Header("显示时候 动作速度")]
     public float showACSpeed = 1;
     //int tn = 0;
+
+    [Header("隐身时候的 怪物的叫声 声音")]
+    public AudioSource YinshengAuido;
 
     GameObject thePlayer;
     public void GetStart(GameObject obj)
@@ -537,6 +568,7 @@ public class AIYinshen : MonoBehaviour
         thePlayer = obj;
         IsOver = false;
         IsHideing = true;
+        if (YinshengAuido && !YinshengAuido.isPlaying) YinshengAuido.Play();
     }
 
     public bool IsGetOver()
@@ -547,7 +579,7 @@ public class AIYinshen : MonoBehaviour
             IsInBeHitFJ = false;
             ReSetAll();
         }
-        
+        //print("执行 隐身！！！！！");
         GetHide();
         Showing();
         

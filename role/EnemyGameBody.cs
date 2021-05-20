@@ -347,7 +347,7 @@ public class EnemyGameBody : GameBody {
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
 
-       
+        //if (!DBBody) return;
 
         CurrentAcName = DBBody.animation.lastAnimationName;
         //print("CurrentAcName    "+ CurrentAcName);

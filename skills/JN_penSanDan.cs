@@ -121,7 +121,7 @@ public class JN_penSanDan : MonoBehaviour
         for (int i = 0; i < FSNums; i++)
         {
             //创建 子弹
-            FaShei(isLeft,i);
+            FaShe(isLeft,i);
         }
 
     }
@@ -184,7 +184,7 @@ public class JN_penSanDan : MonoBehaviour
             _i++;
             if (_i<= FSNums)
             {
-                FaShei(false, _i);
+                FaShe(false, _i);
             }
             else
             {
@@ -220,7 +220,7 @@ public class JN_penSanDan : MonoBehaviour
             _iL++;
             if (_iL <= FSNums)
             {
-                FaShei(true, _iL);
+                FaShe(true, _iL);
             }
             else
             {
@@ -239,7 +239,7 @@ public class JN_penSanDan : MonoBehaviour
         //Debug.Log("i:   "+i+"   time   "+time);
         yield return new WaitForSeconds(time);
         //print("发射！！！！！    "+time);
-        FaShei(isLeft, i);
+        FaShe(isLeft, i);
         //yield return new WaitForSeconds(time);
         //GetInstance().DestoryObject(gameObject);
     }
@@ -247,7 +247,7 @@ public class JN_penSanDan : MonoBehaviour
 
     
 
-    void FaShei(bool isLeft = true,int i = 0)
+    void FaShe(bool isLeft = true,int i = 0)
     {
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(zidanName) as GameObject);
         //GlobalTools.GetGameObjectByName(PENSHE_ZIDAN);

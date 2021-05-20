@@ -12,7 +12,7 @@ public class AIChongji : MonoBehaviour, ISkill
         runAway = GetComponent<AIAirRunAway>();
         _roleDate = GetComponent<RoleDate>();
         _airGameBody = GetComponent<AirGameBody>();
-        CJYanmu.Stop();
+        if(CJYanmu) CJYanmu.Stop();
     }
 
 
@@ -71,7 +71,7 @@ public class AIChongji : MonoBehaviour, ISkill
         isTanSheing = false;
         isGetOver = true;
         deltaNums = 0;
-        CJYanmu.Stop();
+        if(CJYanmu) CJYanmu.Stop();
         GetComponent<AirGameBody>().GetDB().animation.timeScale = 1f;
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
         _IsHitGroundUp = false;
@@ -245,7 +245,7 @@ public class AIChongji : MonoBehaviour, ISkill
             ChongjiOver();
         }
 
-        CJYanmu.Play();
+        if (CJYanmu) CJYanmu.Play();
     }
 
     [Header("冲击到身后的 距离 是0的话就不计算")]
@@ -255,7 +255,7 @@ public class AIChongji : MonoBehaviour, ISkill
     {
         IsTongYing = false;
         deltaNums = 0;
-        CJYanmu.Stop();
+        if(CJYanmu) CJYanmu.Stop();
         if (ChongjiYingZhi != 0) GetComponent<RoleDate>().hfYZ(ChongjiYingZhi);
         //CJYanmu.loop = false;
         isStarting = false;

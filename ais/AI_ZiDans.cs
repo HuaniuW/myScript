@@ -69,6 +69,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
             {
                 GetComponent<GameBody>().TurnRight();
             }
+            if (QSAudio) QSAudio.Play();
         }
 
         _qishiACJS += Time.deltaTime;
@@ -117,6 +118,8 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         else if (ZiDanTypeNum == 12)
         {
             //中途会爆炸的 毒雾弹
+            ZiDanName = "TX_zidandu2";
+            _targetPos = new Vector3(_targetPos.x, _targetPos.y, _targetPos.z);
         }
 
 
@@ -157,6 +160,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         else if (ZiDanTypeNum == 12)
         {
             //中途会爆炸的 毒雾弹
+
         }
 
 

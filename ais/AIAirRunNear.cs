@@ -121,6 +121,8 @@ public class AIAirRunNear : MonoBehaviour
     //原来的速度
     float _csSpeed = 0;
 
+    [Header("是否直接 判断 X的 攻击距离来行动")]
+    public bool IsOnlyFindXDistance = false;
 
     [Header("追击的速度")]
     [Range(10,30)]
@@ -152,10 +154,22 @@ public class AIAirRunNear : MonoBehaviour
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
         //print("thisV2  " + thisV2 + "  point " + point + "  zuijiPosDisWC  "+ zuijiPosDisWC);
         //print(" ---->  "+ (thisV2 - point).sqrMagnitude);
-        if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
+
+        if (IsOnlyFindXDistance)
         {
-            ResetAll();
-            return true;
+            if (Mathf.Abs(thisV2.x - point.x) < zuijiPosDisWC)
+            {
+                ResetAll();
+                return true;
+            }
+        }
+        else
+        {
+            if ((thisV2 - point).sqrMagnitude < zuijiPosDisWC)
+            {
+                ResetAll();
+                return true;
+            }
         }
         return false;
     }
@@ -281,7 +295,7 @@ public class AIAirRunNear : MonoBehaviour
     public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true,float MaxSpeedX = 18)
     {
 
-        print("111***lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
+        //print("111***lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
         if (inDistance != 0) zuijiPosDisWC = inDistance;
         zhuijiRun(IsCanTurnFace);
 
@@ -387,7 +401,7 @@ public class AIAirRunNear : MonoBehaviour
     //跑动作 和转向
     protected void zhuijiRun(bool IsCanTurnFace = true)
     {
-        if (IsCanTurnFace)
+        if (_obj!=null&&IsCanTurnFace)
         {
             if (this.transform.position.x < _obj.transform.position.x)
             {
@@ -441,8 +455,6 @@ public class AIAirRunNear : MonoBehaviour
         //先左后右？    按朝向 来
         if (this.transform.position.x > _obj.transform.position.x)
         {
-            //怪在左边
-
             //如果在右边
             if (Mathf.Abs(this.transform.position.x - _obj.transform.position.x) < atkdistance)
             {
@@ -576,7 +588,7 @@ public class AIAirRunNear : MonoBehaviour
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
         print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
         if (_zjDistance ==0) _zjDistance = atkdistance;
-        _zjDistanceY = 0;
+        //_zjDistanceY = 0;
         _zjDistanceY = atkDistanceY;
 
         //print(" _zjDistanceY >    " + _zjDistanceY);
@@ -591,6 +603,18 @@ public class AIAirRunNear : MonoBehaviour
         //纯寻路的 追击
         //1.找到位置点  判断位置点和位置点周围 是否 碰到墙壁  找不到直接返回去   触发无法到达 取消 AI动作
 
+
+
+        //类型4
+        if (zuijiType == 4)
+        {
+            //直接选点目标位置 判断 位置高度 能否容纳自己   判断 上和下 是否会碰撞 
+            //判断 是否 中间 有障碍物 （用定点 和 底点连线判断）         有障碍物 启动自动寻路
+            //如果 触地 目标点改为  (tag.x,self.y+0.2f)
+            //如果 x1-x2<=atkD  攻击
+
+            return false;
+        }
         
 
         if (zuijiType == 3)
@@ -655,7 +679,7 @@ public class AIAirRunNear : MonoBehaviour
         }
 
 
-
+        //找点 追击
         if(zuijiType == 2)
         {
             //if (!IsZhuijiPosing)

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class AI_hitkuaiShenTi : MonoBehaviour
 {
+    public bool IsNeedHideHitKuai = false;
     // Start is called before the first frame update
     void Start()
     {
         _roleDate = GetComponent<RoleDate>();
-        if (HitKuai) HitKuai.SetActive(false);
+        if (IsNeedHideHitKuai &&HitKuai) HitKuai.SetActive(false);
         ChuCiXiaLuoHit();
 
     }
@@ -57,7 +58,7 @@ public class AI_hitkuaiShenTi : MonoBehaviour
 
         if (_roleDate.isDie||_roleDate.isBeHiting||GetComponent<GameBody>().IsDownOnGround())
         {
-            if(HitKuai) HitKuai.SetActive(false);
+            if(IsNeedHideHitKuai && HitKuai) HitKuai.SetActive(false);
         }
 
         if (GetComponent<GameBody>().IsDownOnGround())

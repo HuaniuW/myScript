@@ -179,6 +179,7 @@ public class GameBody : MonoBehaviour, IRole {
         isQianhua = false;
         isQianhuaing = false;
         isAcing = false;
+        _acName = "";
         //isYanchi = false;
         isSkilling = false;
         IsSFSkill = false;
@@ -192,6 +193,7 @@ public class GameBody : MonoBehaviour, IRole {
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= _recordGravity) playerRigidbody2D.gravityScale = _recordGravity;
 
         acingTime = 0;
+
     }
 
     protected RoleDate roleDate;
@@ -1003,7 +1005,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
-        //print(this.name+" ************************************************ 看看谁给的 力 "+v2);
+        print(this.name+" ************************************************ 看看谁给的 力 "+v2);
         if (!playerRigidbody2D) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
@@ -1420,7 +1422,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
             if (this.tag == "player") {
                 //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
-                DBBody.animation.FadeIn(STAND, 0.1f, 1);
+                DBBody.animation.FadeIn(STAND, 0.1f);
             }
             else
             {
@@ -1545,7 +1547,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected float _KuangDowny = -100;
     void GetKuangDownY()
     {
-        _KuangDowny = GlobalTools.FindObjByName("kuang").transform.position.y + GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-10;
+        _KuangDowny = GlobalTools.FindObjByName("kuang").transform.position.y + GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y - GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y-15;
         IsCanOutYDie = true;
         //print(""+ GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.extents.y + " -------------------------------------------------> shendushiduoshao????     "+ GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>().bounds.size.y);
         //print(" *****************************************************************************************  "+ _KuangDowny);
@@ -1609,7 +1611,17 @@ public class GameBody : MonoBehaviour, IRole {
     
     protected void DieBoomOutObj()
     {
-        if (FlyObjList.Count == 0) return;
+        if (FlyObjList.Count == 0) {
+            int objNums = 8 + GlobalTools.GetRandomNum(20);
+            for (int i = 0; i < objNums; i++)
+            {
+                GameObject _obj = ObjectPools.GetInstance().SwpanObject2(Resources.Load("baozha_tuowei") as GameObject);
+                _obj.transform.position = this.transform.position;
+                _obj.GetComponent<FlyOutObj>().BeHitFlyOut(80+GlobalTools.GetRandomDistanceNums(30));
+            }
+            return;
+        }
+        
         //一件不飞
         int nums = FlyObjList.Count;// GlobalTools.GetRandomNum(FlyObjList.Count);
         for (int i=0;i<nums;i++)
@@ -1631,10 +1643,11 @@ public class GameBody : MonoBehaviour, IRole {
             if (GetDB().armature.GetSlot(BoneName) != null) {
                 GetDB().armature.GetSlot(BoneName).displayIndex = -1;
             }
-            
-            GameObject _obj = GlobalTools.GetGameObjectByName(FlyObjName);
-            if (_obj == null) _obj = GlobalTools.GetGameObjectByName("ciwei_ci2");
+
+            GameObject _obj = ObjectPools.GetInstance().SwpanObject2(Resources.Load(FlyObjName) as GameObject); //GlobalTools.GetGameObjectByName(FlyObjName);
+            if (_obj == null) _obj = ObjectPools.GetInstance().SwpanObject2(Resources.Load("ciwei_ci2") as GameObject);
             _obj.transform.position = this.transform.position;
+            _obj.GetComponent<FlyOutObj>().BeHitFlyOut(80);
         }
 
     }
@@ -1736,7 +1749,9 @@ public class GameBody : MonoBehaviour, IRole {
 
         if(n == 3)
         {
+            //持续时间
             cxTime = float.Parse(fdStr.Split('_')[1]);
+            //每秒伤害
             meimiaoSH = float.Parse(fdStr.Split('_')[2]);
 
         }
@@ -1768,11 +1783,11 @@ public class GameBody : MonoBehaviour, IRole {
         _mbTimes += Time.deltaTime;
         //print("附带 麻痹 效果  "+_mbMaxTimes);
 
-        //DBBody.animation.timeScale = 0.5f;
+        DBBody.animation.timeScale = 0.1f;
         GetPlayerRigidbody2D().velocity = Vector2.zero;
         //GetPlayerRigidbody2D().gravityScale = 0;
 
-        if (_mbTimes>= _mbMaxTimes)
+        if (_mbTimes>= _mbMaxTimes||roleDate.isDie)
         {
             IsMabi = false;
             DBBody.animation.timeScale = 1;
@@ -1947,7 +1962,7 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
-        if (this.tag != "Player") ACingTimes();
+        //if (this.tag != "Player") ACingTimes();
 
         //if (CurrentAcName != BEHIT || CurrentAcName != BEHITINAIR || CurrentAcName != DIE)
         //{

@@ -43,6 +43,9 @@ public class AudioControl : MonoBehaviour {
         if (IsGradualValue) m_AudioSource.volume = 0;
     }
 
+    [Header("是否在 距离内 音量不变 超出 就为0")]
+    public bool IsInDistanceDontChange = false;
+
     void GetValueByPlayerDistance()
     {
         
@@ -56,6 +59,11 @@ public class AudioControl : MonoBehaviour {
             if(player&&Mathf.Abs(player.transform.position.x - this.transform.position.x)> distance)
             {
                 m_AudioSource.volume = 0;
+                return;
+            }
+
+            if (IsInDistanceDontChange)
+            {
                 return;
             }
             

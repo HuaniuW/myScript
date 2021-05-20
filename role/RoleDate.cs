@@ -42,6 +42,13 @@ public class RoleDate : MonoBehaviour {
     [Header("抗毒伤害值几率")]
     public float KangDuShanghaijilv = 0;
 
+    [Header("抗麻痹伤害值几率")]
+    public float KangMabiJilv = 0;
+
+
+    [Header("体型 默认1  用来控制被击飞程度等")]
+    public int TiXing = 1;
+
 
 
     public virtual float lan

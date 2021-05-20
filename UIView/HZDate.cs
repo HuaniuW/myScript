@@ -117,7 +117,10 @@ public class HZDate : MonoBehaviour {
     [Header("抗毒几率")]
     public float KangDuJilv = 0;
     [Header("抗中毒伤害几率")]
-    public float KangDuShanghaijilv = 0;
+    public float KangDuShanghaiJilv = 0;
+
+    [Header("抗中麻痹几率")]
+    public float KangMabiJilv = 0;
 
 
     void Start () {

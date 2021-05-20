@@ -51,13 +51,13 @@ public class JN_SFBase : MonoBehaviour, ISkill
     public float AddYZTimes = 0;
 
 
-    GameObject _player;
+    protected GameObject _player;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual  void Start()
     {
         if (IsGetBody) {
-            //print("??  start! ");
+            print("  释放技能 ??  start! ");
             _gameBody = GetComponent<GameBody>();
             _gameBody.GetDB().AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         }
@@ -74,22 +74,34 @@ public class JN_SFBase : MonoBehaviour, ISkill
     public bool IsZhiJieShiFangJN = false;
 
 
+    //bool IsStartAtkAC = false;
+
     protected virtual void GetUpDate()
     {
+        if (!IsStarting) return;
+        //print("---------->shi fang jineng !!!!!!!");
+        
+
+
         if (GetComponent<AIBase>().IsTuihuiFangshouquing)
         {
             ReSetAll();
+            print("  yueguangzhan tuihuifangshouqu!!!!!! ");
             return;
         }
 
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
+            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
+            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
+            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
+            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
             ReSetAll();
             return;
         }
 
 
-        //print("0");
+        print("0   IsStarting "+ IsStarting);
         if (IsStarting)
         {
             //直接释放技能 不用走近
@@ -98,13 +110,17 @@ public class JN_SFBase : MonoBehaviour, ISkill
                 if (!IsInAtkDistance)
                 {
                     IsInAtkDistance = true;
-                    NearRoleInDistance(AtkDistance, AtkDistanceY);
+                    //print("------->  直接释放 ");
+                    //NearRoleInDistance(AtkDistance, AtkDistanceY);
                     if (IsStopMove) StopMove();
                     GetAC();
+                    //_gameBody.isAcing = true;
+                    //IsStartAtkAC = true;
                 }
+                //return;
             }
 
-
+            print("------------------>shifangjineng  start!!!!!");
 
             //if (TXName == "TX_LuanRen") print("  ???? gameBody speed   " + _gameBody.GetComponent<Rigidbody2D>().velocity+ "   IsInAtkDistance  "+ IsInAtkDistance);
             //if (IsInAtkDistance)
@@ -113,10 +129,10 @@ public class JN_SFBase : MonoBehaviour, ISkill
             //    StopMove();
                 
             //}
-            //print("2");
+            print("2");
             if (!IsInAtkDistance)
             {
-                //print("3");
+                print("3");
                 if (NearRoleInDistance(AtkDistance, AtkDistanceY))
                 {
                     //print("4");
@@ -134,6 +150,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
                     //角色动作走完
                     IsStarting = false;
                     testnums = 0;
+                    print("5 zhijiezouwan ac fang jineng");
                 }
             }
            
@@ -155,7 +172,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
     [Header("释放动作的 声音")]
     public AudioSource ACAudio;
 
-    bool isHasPlayerACAudio = false;
+    //bool isHasPlayerACAudio = false;
 
     protected virtual void GetAC()
     {
@@ -163,7 +180,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
         //判断有没有 攻击动作 没有直接退出
         if (!_gameBody.GetDB().animation.HasAnimation(ACName))
         {
-            //print("没有攻击动作 直接退出！！");
+            print("没有攻击动作 直接退出！！");
             ReSetAll();
             return;
         }
@@ -178,16 +195,16 @@ public class JN_SFBase : MonoBehaviour, ISkill
         if (ACOverYCTimes != 0) _gameBody.GetACMsgOverYC(ACOverYCTimes);
 
         //角色 释放动作
-        //print(" acName    "+ACName);
+        print(" ********************************************************** @@@@@@@@@@@@@@@   acName    "+ACName);
         _gameBody.GetAcMsg(ACName);
-        if (!isHasPlayerACAudio)
-        {
-            isHasPlayerACAudio = true;
-            if(ACAudio) ACAudio.Play();
-        }
-
+        //if (!isHasPlayerACAudio)
+        //{
+        //    isHasPlayerACAudio = true;
+            
+        //}
+        if (ACAudio) ACAudio.Play();
         //print("  临时 提高硬直   "+AddYZ);
-        if(AddYZ!=0) GetComponent<TempAddValues>().TempAddYZ(AddYZ, AddYZTimes);
+        if (AddYZ!=0) GetComponent<TempAddValues>().TempAddYZ(AddYZ, AddYZTimes);
 
         //起始效果 提示音 光 提示特效 等
 
@@ -219,12 +236,23 @@ public class JN_SFBase : MonoBehaviour, ISkill
     public ParticleSystem SFTX;
 
     public virtual bool IsGetOver() {
-        
+
+
+        //print(">>>>>>>_gameBody.isAcing:     "+ _gameBody.isAcing);
+        //if (IsStartAtkAC &&!_gameBody.isAcing)
+        //{
+        //    //角色动作走完
+        //    IsStarting = false;
+        //    testnums = 0;
+        //    print("5 zhijiezouwan ac fang jineng");
+        //}
+
+
         if (!IsStarting)
         {
+            if (SFTX) SFTX.Stop();
             ReSetAll();
             //print("  IsStarting  over ////////////////    " + IsStarting);
-            if (SFTX) SFTX.Stop();
         }
         return !IsStarting;
     }
@@ -241,13 +269,13 @@ public class JN_SFBase : MonoBehaviour, ISkill
 
 
 
-    int testnums = 0;
+    protected int testnums = 0;
     protected virtual void ShowACTX(string type, EventObject eventObject)
     {
         testnums++;
         //print("type:  "+type);
         //print("eventObject  ????  " + eventObject);
-        //if(IsStarting)print( testnums + "  ___________________________________________________________________________________________________________________________name    "+ eventObject.name);
+        if(IsStarting)print( testnums + "  ___________________________________________________________________________________________________________________________name    "+ eventObject.name);
        
         
 
@@ -256,7 +284,12 @@ public class JN_SFBase : MonoBehaviour, ISkill
             if (!IsStarting) return;
             if (eventObject.name == "ac")
             {
-                //print("?? 特效TXName " + TXName);
+                print("?? 特效TXName " + TXName);
+                if (TXName == "diandings")
+                {
+                    return;
+                }
+
                 GetComponent<ShowOutSkill>().ShowOutSkillByName(TXName, true);
                 
                 OtherTX();

@@ -60,5 +60,11 @@ public class GetDateByName : MonoBehaviour {
         return fieldInfo.GetValue(obj) as ParticleSystem;
     }
 
-
+    public Transform GetTransformByName(string _name, System.Object obj)
+    {
+        Type type = obj.GetType();
+        FieldInfo fieldInfo = type.GetField(_name);
+        if (fieldInfo == null) return null;
+        return fieldInfo.GetValue(obj) as Transform;
+    }
 }

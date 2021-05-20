@@ -7,14 +7,26 @@ public class TX_zidan : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ZidanTest();
     }
+
+
+    void ZidanTest()
+    {
+        SetV2Speed(new Vector2(0, -6));
+        _isFSByFX = true;
+        isFaShe = false;
+        fire();
+    }
+
 
     protected GameObject _player;
     protected bool isFaShe = false;
     public float speeds = 20;
     //Vector2 v2;
 
+    [Header("技能队伍")]
+    public float team = 2;
 
     private void OnEnable()
     {
@@ -142,25 +154,51 @@ public class TX_zidan : MonoBehaviour
     protected int testN = 0;
     public bool IsCanHit = true;
 
+    public bool IsCanHitDiban = true;
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
-        if (Coll.tag == "Player"||Coll.tag == "diban"|| Coll.tag == "zidanDun")
+        if (Coll.tag == "Player"||(IsCanHitDiban && Coll.tag == "diban")|| Coll.tag == "zidanDun")
         {
             if (!IsCanHit) return;
             //print(testN + "   Coll.tag  碰到了什么鬼：    " + Coll.tag);
             if (Coll.tag == "Player" && Coll.GetComponent<RoleDate>().isCanBeHit == false) return;
             //生成爆炸
-            if(testN == 0)
-            {
-                testN++;
-                string bzName = "TX_zidan" + bzType + "_bz";
-                GameObject baozha = ObjectPools.GetInstance().SwpanObject2(Resources.Load(bzName) as GameObject);
-                baozha.transform.position = this.transform.position;
-                GetComponent<Rigidbody2D>().velocity = Vector2.zero;                
-            }
+            Boom();
             RemoveSelf();
 
+        }
+    }
+
+
+    void Boom()
+    {
+        if (testN == 0)
+        {
+            testN++;
+            string bzName = "TX_zidan" + bzType + "_bz";
+            GameObject baozha = ObjectPools.GetInstance().SwpanObject2(Resources.Load(bzName) as GameObject);
+            baozha.transform.position = this.transform.position;
+            if(baozha.GetComponent<JN_Date>()) baozha.GetComponent<JN_Date>().team = this.GetComponent<JN_Date>().team;
+            baozha.GetComponent<ParticleSystem>().Play();
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        }
+    }
+
+    public float BoomByTimesNum = 0;
+    float boomJishi = 0;
+    void RemoveByTimes()
+    {
+        if (BoomByTimesNum != 0)
+        {
+            boomJishi += Time.deltaTime;
+            if (boomJishi >= BoomByTimesNum) {
+                boomJishi = 0;
+                Boom();
+                RemoveSelf();
+            }
+            
         }
     }
 
@@ -170,6 +208,7 @@ public class TX_zidan : MonoBehaviour
         if (IsAtkAuto) {
             fire();
         }
+        RemoveByTimes();
         //print("sudu   "+ GetComponent<Rigidbody2D>().velocity);
     }
 
@@ -178,6 +217,7 @@ public class TX_zidan : MonoBehaviour
     {
         //testN = 0;
         _isFSByFX = false;
+        boomJishi = 0;
     }
 
     public virtual void RemoveSelf()

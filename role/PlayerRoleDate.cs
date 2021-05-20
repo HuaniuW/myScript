@@ -17,6 +17,8 @@ public class PlayerRoleDate : RoleDate
 
     float _kangDuShanghaijilv;
 
+    float _kangMabiJilv;
+
 
     public override float lan
     {
@@ -182,7 +184,10 @@ public class PlayerRoleDate : RoleDate
 
         _kangDuJilv = this.KangDuJilv;
         _kangDuShanghaijilv = this.KangDuShanghaijilv;
-        
+
+        _kangMabiJilv = this.KangMabiJilv;
+
+
     }
 
     // Update is called once per frame
@@ -203,6 +208,7 @@ public class PlayerRoleDate : RoleDate
 
         this.KangDuJilv = _kangDuJilv;
         this.KangDuShanghaijilv = _kangDuShanghaijilv;
+        this.KangMabiJilv = _kangMabiJilv;
 
     }
 
@@ -246,8 +252,9 @@ public class PlayerRoleDate : RoleDate
         string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
         string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
         string _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒几率：+" + this.KangDuJilv + "</color>\n" : "<color=#E74C3C>kangdu：+" + this.KangDuJilv + "</color>\n";
-        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒伤害几率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E74C3C>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
-        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv;
+        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>抗毒伤害几率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
+        string _kangmabilv = Globals.language == Globals.CHINESE ? "<color=#E7fC0C>抗麻痹几率：+" + this.KangMabiJilv + "</color>\n" : "<color=#E7fC0C>kangdu：+" + this.KangMabiJilv + "</color>\n";
+        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv+ _kangmabilv;
         return str;
     }
 
@@ -337,7 +344,9 @@ public class PlayerRoleDate : RoleDate
 
         if (hzdate.KangDuJilv != 0) KangDuJilv += hzdate.KangDuJilv;
 
-        if (hzdate.KangDuShanghaijilv != 0) KangDuShanghaijilv += hzdate.KangDuShanghaijilv;
+        if (hzdate.KangDuShanghaiJilv != 0) KangDuShanghaijilv += hzdate.KangDuShanghaiJilv;
+
+        if (hzdate.KangMabiJilv != 0) KangMabiJilv += hzdate.KangMabiJilv;
     }
 
 

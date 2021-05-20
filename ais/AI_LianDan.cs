@@ -86,6 +86,10 @@ public class AI_LianDan : MonoBehaviour,ISkill
         }
     }
 
+    [Header("子弹发射声音")]
+    public AudioSource FireAudio;
+
+
     [Header("子弹发射点")]
     public Transform BulletShotPot;
 
@@ -93,6 +97,7 @@ public class AI_LianDan : MonoBehaviour,ISkill
     public string BulletName = "TX_zidan1";
     void Fire()
     {
+        if (FireAudio) FireAudio.Play();
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(BulletName) as GameObject);
         zidan.transform.position = BulletShotPot.position;
         zidan.GetComponent<TX_zidan>().IsAtkAuto = true;

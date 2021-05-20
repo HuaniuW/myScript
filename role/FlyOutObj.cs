@@ -7,10 +7,10 @@ public class FlyOutObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BeHitFlyOut(80);
+        //BeHitFlyOut(80);
     }
 
-    protected virtual void BeHitFlyOut(float power)
+    public virtual void BeHitFlyOut(float power)
     {
         //print("@@@@@@@@@---------------------------------------->!!!!!!!  ");
         float __x =  GlobalTools.GetRandomNum()>50?this.transform.position.x - GlobalTools.GetRandomDistanceNums(4): this.transform.position.x + GlobalTools.GetRandomDistanceNums(4);
@@ -30,7 +30,8 @@ public class FlyOutObj : MonoBehaviour
     public IEnumerator IEDieDestory(float time)
     {
         yield return new WaitForSeconds(time);
-        this.gameObject.SetActive(false);
+        ObjectPools.GetInstance().DestoryObject2(this.gameObject);
+        //this.gameObject.SetActive(false);
     }
 
 

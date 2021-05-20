@@ -7,7 +7,7 @@ public class DB_xialuo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _startY = this.transform.position.y;
     }
 
     [Header("震动 声音")]
@@ -17,6 +17,7 @@ public class DB_xialuo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        OutYRemoveSelf();
         TanSheing();
         if (IsXiaLuoBegin)
         {
@@ -26,6 +27,14 @@ public class DB_xialuo : MonoBehaviour
                 IsXiaLuoBegin = false;
                 Xialuo();
             }
+        }
+    }
+
+    float _startY = 0;
+    void OutYRemoveSelf() {
+        if(Mathf.Abs(this.transform.position.y - _startY) >= 40)
+        {
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -92,16 +101,6 @@ public class DB_xialuo : MonoBehaviour
                 IsTanSheing = true;
                 cubeF = GameObject.Find("/MainCamera");
                 if (!objList.Contains(Coll.collider.transform)) objList.Add(Coll.collider.transform);
-
-
-
-
-
-
-
-
-
-
 
             }
             else

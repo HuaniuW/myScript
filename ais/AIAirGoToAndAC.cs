@@ -8,7 +8,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     //几种类型
 
     //2是用来 下压的    怎么过去 1.飞过去（控制 移动速度） 2.隐身过去 
-    [Header("类型 1.固定位置点 2.在玩家上方多高")]
+    [Header("类型 1.固定位置点 2.在玩家上方多高 3.同Y固定X 4.围绕一个点给出位置 5.在玩家前方固定距离")]
     public int TypeNum = 1;
 
     //eg    2_3|-3_4|7_9    
@@ -22,8 +22,13 @@ public class AIAirGoToAndAC : MonoBehaviour
         _obj = obj;
         IsOver = false;
         ChosePos();
+        if (!_aiRunNear) _aiRunNear = GetComponent<AIAirRunNear>();
     }
 
+
+    [Header("是否需要判断 击碎地板")]
+    public float ToDisX = 4;
+    public float ToDisY = 4;
 
 
     [Header("是否需要判断 击碎地板")]
@@ -72,6 +77,7 @@ public class AIAirGoToAndAC : MonoBehaviour
                     if (tempZT.Length == 1)
                     {
                         chosePos = new Vector2(float.Parse(tempZT[0].Split('_')[0]), float.Parse(tempZT[0].Split('_')[1]));
+                        print(" --------> goto pos   "+ chosePos);
                         gudingZBList.Add(chosePos);
                     }
                     else
@@ -119,6 +125,33 @@ public class AIAirGoToAndAC : MonoBehaviour
             gudingZBList.Add(v2);
             chosePos = ChoseAndCheckPointInList();
             IsStartMove = true;
+        }else if (TypeNum == 5)
+        {
+            //直接飞到 玩家 最近的 攻击点  前上方 一点 固定X距离
+            float _toX = 0;
+            float _toY = 0;
+
+            float _toPlayerDisX = ToDisX;
+            float _toPlayerDisY = ToDisY;
+
+            if(this.transform.position.x> _obj.transform.position.x)
+            {
+                _toX = _obj.transform.position.x + _toPlayerDisX;
+                _toY = _obj.transform.position.y + _toPlayerDisY;
+            }
+            else
+            {
+                _toX = _obj.transform.position.x - _toPlayerDisX;
+                _toY = _obj.transform.position.y + _toPlayerDisY;
+            }
+
+            chosePos = new Vector2(_toX, _toY);
+            IsStartMove = true;
+            //if (!IsPointHitWall(v2))
+            //{
+            //    IsStartMove = true;
+            //}
+
         }
         //运动到目标点
 
@@ -175,7 +208,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     {
 
         if (!IsStartMove) return;
-        print("  ---------------------------- IsStartMove "+ IsStartMove);
+        //print("  ---------------------------- IsStartMove "+ IsStartMove);
 
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
@@ -201,7 +234,7 @@ public class AIAirGoToAndAC : MonoBehaviour
                 //print("   zhijie yi dong!!! MoveSpeed     " + MoveSpeed);
                 if (_aiRunNear.ZhijieMoveToPoint(chosePos, 1, MoveSpeed))
                 {
-                    
+                    print(" dao da mubiao dian weizhi !!! ");
                     StartAtkAC();
                 }
             }
@@ -268,15 +301,17 @@ public class AIAirGoToAndAC : MonoBehaviour
             else
             {
                 //技能攻击
-
+                print("隐身 技能攻击");
                 //GetComponent<AIAirBase>().GetReSet();
                 //GetComponent<AIAirBase>().GetAtkFSByName(AtkACName);
                 ReSetAll();
+                //print(">>>GotoAndAC Over!!");
             }
 
         }
         else
         {
+            print("GotoAndAC Over!!");
             ReSetAll();
         }
         

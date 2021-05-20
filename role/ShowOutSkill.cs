@@ -51,7 +51,22 @@ public class ShowOutSkill : MonoBehaviour {
             return;
         }
         skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+        //skill.transform.parent = this.transform.parent;
 
+        print("parent  >>>   " + skill.transform.parent+"    playerpARENT   "+GlobalTools.FindObjByName("player").transform.position);
+
+
+        if (skill.GetComponent<TX_Dianqiang>())
+        {
+            //***以后 所有 可以直接丢出去的 技能 在这里 做  统一接口************
+            //电墙  
+            skill.transform.position =  new Vector2(this.transform.position.x, skill.GetComponent<TX_Dianqiang>().PosY);
+            skill.GetComponent<JN_base>().atkObj = this.gameObject;
+            skill.GetComponent<JN_Date>().team = GetComponent<RoleDate>().team;
+            skill.GetComponent<TX_Dianqiang>().GetStart();
+            skill.GetComponent<TX_Dianqiang>().SetSpeedFX(-this.transform.localScale.x);
+            return;
+        }
 
 
 
@@ -62,9 +77,9 @@ public class ShowOutSkill : MonoBehaviour {
                 GameObject shanGuang = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TX_zidan1shan") as GameObject);  //GlobalTools.GetGameObjectByName("TX_zidan1shan");
                 shanGuang.transform.position = this.GetComponent<GameBody>().zidanPos.position;
                 skill.transform.position = this.GetComponent<GameBody>().zidanPos.position;
+                skill.GetComponent<TX_zidan>().team = GetComponent<RoleDate>().team;
             }
 
-            
             skill.transform.localScale = this.transform.localScale;
             return;
         }
@@ -103,7 +118,7 @@ public class ShowOutSkill : MonoBehaviour {
 
         //print("攻击时玩家的x周速度  "+this.GetComponent<Rigidbody2D>().velocity.x);
         //print("----------------------------------->????  " + skill.GetComponent<JN_base>());
-        if(skill)skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject, isSkill);
+        if(skill && skill.GetComponent<JN_base>()) skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team,this.transform.localScale.x,this.gameObject, isSkill);
         //skill.GetComponent<JN_Date>().GetCallBackStart();
         
         //TXPlay2(skill);

@@ -118,6 +118,7 @@ public class AirGameBody : GameBody {
         isQianhua = false;
         isQianhuaing = false;
         isAcing = false;
+        _acName = "";
         //isYanchi = false;
         isSkilling = false;
         isSkillOut = false;
@@ -216,7 +217,7 @@ public class AirGameBody : GameBody {
                 if (hitKuai) hitKuai.SetActive(false);
                 //print("------------------------------------------> " + GetPlayerRigidbody2D().freezeRotation);
                 //print("废除取 之前 我的 速度   "+ GetPlayerRigidbody2D().velocity);
-                BeHitFlyOut(100);
+                if(roleDate.TiXing<=2)BeHitFlyOut(100);
                 //if(IsDieFlyOut) GetPlayerRigidbody2D().freezeRotation = false;
             }
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
@@ -224,9 +225,10 @@ public class AirGameBody : GameBody {
 
             if (roleAudio)
             {
-                if (GlobalTools.GetRandomNum() >= 40)
+                if (GlobalTools.GetRandomNum() >= 30)
                 {
-                    roleAudio.PlayAudio("die_1");
+                    //roleAudio.PlayAudio("die_1");
+                    if (roleAudio.die_1) roleAudio.die_1.Play();
                 }
             }
 
@@ -237,13 +239,18 @@ public class AirGameBody : GameBody {
         if (isDieRemove) StartCoroutine(IEDieDestory(5f));
     }
 
-
     public override void HasBeHit(float chongjili = 0,bool IsOther = true)
     {
         if (!DBBody) return;
         if (DBBody.animation.lastAnimationName == DODGE1) return;
         ResetAll();
         roleDate.isBeHiting = true;
+
+        //if (GetComponent<AIZhaohuan>())
+        //{
+        //    print("beihit in zhaohuan!!!");
+        //    GetComponent<AIZhaohuan>().LiveInZhaohuan();
+        //}
 
         if (roleAudio && roleDate.live>=0)
         {
@@ -265,6 +272,9 @@ public class AirGameBody : GameBody {
         DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
         //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
         beHitNum++;
+
+       
+
     }
 
 

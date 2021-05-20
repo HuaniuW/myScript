@@ -54,6 +54,8 @@ public class AIChongJiHX : AIChongji
     {
         //print("  chongji  starting!!!! ");
 
+        print(" 横向冲击时候的 动作NAME    "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+
         if (_roleDate.isBeHiting)
         {
             print("被攻击了 ！！！！！！！！！！！！   ");
@@ -87,7 +89,7 @@ public class AIChongJiHX : AIChongji
 
         if (!IsTongYing&&!isTanSheing && GetNearTarget()) {
             //IsTongYing = true;
-            print("   靠近目标！ ");
+            print("   靠近目标！ kashi tanshe !!   "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
             isTanSheing = true;
         }
 
@@ -116,7 +118,7 @@ public class AIChongJiHX : AIChongji
 
     protected virtual void HXTanShe2()
     {
-        //print("  HXTanShe2 ");
+        print(" 为什么一直进来 HXTanShe2********************************************************** ");
         if (GetComponent<RoleDate>().isBeHiting || GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall)
         {
             //print("  IsHitWall " + GetComponent<GameBody>().IsHitWall + "  ------IsGround  " + GetComponent<GameBody>().IsGround);
@@ -133,6 +135,9 @@ public class AIChongJiHX : AIChongji
             //{
             //    IsStartChongji = true;
             //}
+
+            //print("横向冲击 acName: "+_airGameBody.GetDB().animation.lastAnimationName);
+
             float __x = 0;
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiBegin && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiStart)
             {
@@ -163,14 +168,15 @@ public class AIChongJiHX : AIChongji
 
                 //print("wo kao!!!!!!!!!");
                 if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
-
-
+                print("start!!!   ACName_ChongjiBegin " + ACName_ChongjiBegin+ " lastAnimationName:   " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
 
                 if (StartSound) StartSound.Play();
                 _airGameBody.isAcing = true;
-                //_airGameBody.GetDB().animation.GotoAndStopByFrame(ACName_ChongjiBegin);
-                _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiBegin, 0.1f);
-                print("start!!!");
+                _airGameBody.GetDB().animation.Stop();
+                _airGameBody.GetDB().animation.GotoAndStopByFrame(ACName_ChongjiBegin);
+                //****************不要用 FadeIn  有bug 会卡主 游戏****************
+                //_airGameBody.GetDB().animation.FadeIn(ACName_ChongjiBegin, 0.1f);
+                
                 deltaNums = 0;
                 return;
             }
@@ -179,21 +185,52 @@ public class AIChongJiHX : AIChongji
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName == ACName_ChongjiBegin)
             {
                 CJYanchiNums += Time.deltaTime;
-                //print("  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+
+
+                //print("  播放进度 "+ GetComponent<AirGameBody>().GetDB().animation.GetState(ACName_ChongjiBegin));
+                //if (GetComponent<AirGameBody>().GetDB().animation.isCompleted) GetComponent<AirGameBody>().GetDB().animation.Stop();
+                
+
+                //print("  冲击准备阶段  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
                 if (CJYanchiNums >= CJYanchiTime)
                 {
                     _airGameBody.isAcing = true;
                     _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiStart);
                     IsStartChongji = true;
 
-                    if (_targetObj.position.y > this.transform.position.y)
+
+
+                    //判断 是否 碰到地板
+
+                    if (_gameBody.IsHitWall)
                     {
                         targetPos = new Vector2(targetPos.x, this.transform.position.y + 2);
                     }
-                    else if (_targetObj.position.y < this.transform.position.y)
+                    else
                     {
-                        targetPos = new Vector2(targetPos.x, this.transform.position.y - 2);
+                        if (ChoseYPosType == 1)
+                        {
+                            //有一定的 Y偏移
+                            if (_targetObj.position.y > this.transform.position.y)
+                            {
+                                targetPos = new Vector2(targetPos.x, this.transform.position.y + YPianyi);
+                            }
+                            else if (_targetObj.position.y < this.transform.position.y)
+                            {
+                                targetPos = new Vector2(targetPos.x, this.transform.position.y - YPianyi);
+                            }
+                        }
+                        else if (ChoseYPosType == 2)
+                        {
+                            //直线
+                            targetPos = new Vector2(targetPos.x, this.transform.position.y);
+                        }
                     }
+
+
+                  
+
+                   
                 }
                 return;
             }
@@ -201,28 +238,38 @@ public class AIChongJiHX : AIChongji
           
         }
 
+
+        if (!IsStartChongji) return;
+
         //print("lastAnimationName   " + _airGameBody.GetDB().animation.lastAnimationName+ "   isAcing    "+ _airGameBody.isAcing);
         //print("  是否撞墙   "+ _airGameBody.IsHitWall+"  持续时间      "+ deltaNums+ "  _tsTimes   "+ _tsTimes);
         deltaNums += Time.deltaTime;
-        if (deltaNums >= _tsTimes || IsOutChongjiDistance() || GetComponent<AIAirRunNear>().MoveToPoint(targetPos, 0.1f, chongjiSpeed, false, false, MaxChongjiSpeed) || _airGameBody.IsHitWall)
+        //print("冲击的时候 自己的 速度是多少  " + _gameBody.GetPlayerRigidbody2D().velocity.x+ "     ---- deltaNums   " + deltaNums+"  ???  "+ _tsTimes * 0.6f);
+        if (deltaNums >= _tsTimes || IsOutChongjiDistance() || GetComponent<AIAirRunNear>().MoveToPoint(targetPos, 0.1f, chongjiSpeed, false, false, MaxChongjiSpeed) || _airGameBody.IsHitWall|| (deltaNums>= _tsTimes*0.6f && MinStopSpeed != 0&&  Mathf.Abs(_gameBody.GetPlayerRigidbody2D().velocity.x) <=MinStopSpeed))
         {
             //if (deltaNums >= _tsTimes) print("  超出 冲击 时间   ");
             //if (IsOutChongjiDistance()) print("超出 冲击 距离结束");
             //if (_airGameBody.IsHitWall) print("撞墙 结束！！！");
             //print("**************************************************到达目标Ian附近 结束！！！");
-
             //print(">>>>????????  冲击over  " + "  @@@@@@  deltaNums   " + deltaNums + "  _tsTimes  " + _tsTimes);
             if (CJhitKuai) CJhitKuai.SetActive(false);
             ChongjiOver();
             if (!ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(true);
-            //ReSetAll();
+            ReSetAll();
         }
 
-        CJYanmu.Play();
+        if(CJYanmu) CJYanmu.Play();
 
     }
 
+    [Header("冲击 最小 停止速度  =0的时候 不处理")]
+    public float MinStopSpeed = 0;
 
+    [Header("Y冲击位置偏移")]
+    public float YPianyi = 2;
+
+
+    GameBody _gameBody;
 
     public override void GetStart(GameObject targetObj)
     {
@@ -238,17 +285,33 @@ public class AIChongJiHX : AIChongji
         isGetOver = false;
         
         isStarting = true;
+
+        _gameBody = GetComponent<GameBody>();
         //print("this.transform.position：   " + this.transform.position);
     }
 
 
+    [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置")]
+    public int ChoseYPosType = 1;
+
     protected override bool GetNearTarget()
     {
+        //print(" IsHasChosePos   "+ IsHasChosePos);
+        //if (!IsHasChosePos)
+        //{
+        //    IsHasChosePos = true;
+           
+        //    print("目标 坐标点 _targetPos    " + _targetPos+"  自身的Y坐标 "+this.transform.position.y);
+        //}
+
         _targetPos = GetTongYZuoBiao();
-        //print("  _atkDistance@@@@@@@@@   "+ _atkDistance);
+
+        //print("  _atkDistance@@@@@@@@@   "+ _atkDistance+ "    ChoseYPosType "+ ChoseYPosType+"  ------------>  "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName+"    isAcing "+ GetComponent<AirGameBody>().isAcing);
         return runNear.ZhuijiZuoBiao(_targetPos,_atkDistance);
     }
 
+
+    bool IsHasChosePos = false;
 
     float __x = 0;
     float __y = 0;
@@ -267,30 +330,42 @@ public class AIChongJiHX : AIChongji
             //我在左
             __x = _targetObj.position.x - _atkDistance + 0.8f;
         }
-        __y = _targetObj.position.y+0.4f;
 
-        if(this.transform.position.y< _targetObj.position.y)
-        {
-            __y = _targetObj.position.y + 0.8f;
-        }
-        else
-        {
-            __y = _targetObj.position.y - 0.8f;
-        }
+      
 
+        if (ChoseYPosType == 1)
+        {
+            __y = _targetObj.position.y + 0.4f;
+
+            if (this.transform.position.y < _targetObj.position.y)
+            {
+                __y = _targetObj.position.y + 0.8f;
+            }
+            else
+            {
+                __y = _targetObj.position.y - 0.8f;
+            }
+        }
+        else if (ChoseYPosType == 2)
+        {
+            print("xian dian zishen Y!!!!!");
+            __y = this.transform.position.y;
+        }
 
         return new Vector2(__x,__y);
     }
 
     public override void ReSetAll()
     {
+        print("横向冲击 结束！！！！！！");
         ChongjiOver();
+        IsHasChosePos = false;
         if (CJhitKuai) CJhitKuai.SetActive(false);
         if (!ZiShenhitKuai.activeSelf) ZiShenhitKuai.SetActive(true);
         _jnDate.atkPower = _ysAtkPower;
         IsTongYing = false;
         deltaNums = 0;
-        CJYanmu.Stop();
+        if (CJYanmu) CJYanmu.Stop();
         if (ChongjiYingZhi != 0) _roleDate.hfYZ(ChongjiYingZhi);
         isStarting = false;
         isGetOver = true;
@@ -446,6 +521,6 @@ public class AIChongJiHX : AIChongji
             //ReSetAll();
         }
 
-        CJYanmu.Play();
+        if (CJYanmu) CJYanmu.Play();
     }
 }

@@ -101,6 +101,12 @@ public class JN_Date : MonoBehaviour {
 
 
 
+
+    [Header("技能的 硬值 如果不等于0 优先用技能硬直")]
+    public float JNYingzhi = 0;
+
+
+
     //public Dictionary<string, float> atk_date = new Dictionary<string, float> { { "atkPower", 100 },{ "_xdx", -1.5f }, { "_xdy", 0f },{ "_scaleW", 2f }, { "_scaleH", 1.8f }, { "_disTime", 1 }};
     // Use this for initialization
     void Start () {

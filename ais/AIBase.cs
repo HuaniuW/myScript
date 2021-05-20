@@ -10,6 +10,8 @@ public class AIBase : MonoBehaviour {
     public GameObject thePlayer;
     protected AIQiShou aiQishou;
     protected AIFanji aiFanji;
+    protected RoleDate _roleDate;
+
 
     [Header("是否是不能动的 怪物")]
     public bool IsCanNotMove = false;
@@ -77,6 +79,7 @@ public class AIBase : MonoBehaviour {
     {
         //GetKuangDownY();//获取 kuang 底部的 y
         GetGameBody();
+        _roleDate = GetComponent<RoleDate>();
         if (GetComponent<AIQiShou>()) aiQishou = GetComponent<AIQiShou>();
         if (!aiFanji) aiFanji = GetComponent<AIFanji>();
         _ChuSshiX = this.transform.position.x;
@@ -344,6 +347,8 @@ public class AIBase : MonoBehaviour {
 
     protected bool isRunLeft = true;
     protected bool isRunRight = false;
+
+    [Header("巡逻 距离")]
     public float patrolDistance = 6;
     protected Vector3 myPosition;
    
@@ -357,9 +362,12 @@ public class AIBase : MonoBehaviour {
 
     [Header("巡逻的移动速度")]
     public float PatrolSpeed = 0.4f;
+
+
+
     protected virtual void Patrol()
     {
-        
+        if (_roleDate.isDie) return;
 
         if (isPatrolRest) {
             PatrolResting();
@@ -370,6 +378,14 @@ public class AIBase : MonoBehaviour {
         {
             IsPatrolRandom = false;
             PatrolSpeed = PatrolSpeed + GlobalTools.GetRandomDistanceNums(0.6f);
+            patrolDistance =4 + GlobalTools.GetRandomDistanceNums(4);
+            if (GlobalTools.GetRandomNum() > 50)
+            {
+                isRunLeft = false;
+                isRunRight = true;
+            }
+
+
             //print("随机的 巡逻推力    "+ PatrolSpeed);
             if (!IsMastPatrol && GlobalTools.GetRandomNum() >= 60)
             {
@@ -377,7 +393,7 @@ public class AIBase : MonoBehaviour {
                 return;
             }
         }
-        //print(" 我在巡逻？？？？？？？ ");
+        //print(this.name+"  我在巡逻？？？？？？？ ");
 
         if (isRunLeft)
         {
@@ -963,7 +979,7 @@ public class AIBase : MonoBehaviour {
             //IsGetAtkFSByName = false;
            
             
-            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
+            print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
             if (acName == "walkBack") return;
 
@@ -1346,13 +1362,16 @@ public class AIBase : MonoBehaviour {
     }
 
     float moretimes = 0;
+    [Header("是否可以重启 防止 卡死")]
     public bool IsChongqi = false;
 
+    public float ChongQiJishi = 5;
+
     //当怪物 卡死 长时间后 自动 重启ai
-    bool IsIfStopMoreTime()
+    protected bool IsIfStopMoreTime()
     {
         moretimes += Time.deltaTime;
-        if (moretimes >= 5)
+        if (moretimes >= ChongQiJishi)
         {
             moretimes = 0;
             AIReSetAll();
@@ -1361,8 +1380,9 @@ public class AIBase : MonoBehaviour {
         return false;
     }
 
-    void AIReSetAll()
+    protected void AIReSetAll()
     {
+        if (IsBossStop||!isFindEnemy) return;
         print("   AI重启   ！！！！！！！！！！！！！！！！！！！！！！");
         IsChongqi = true;
         AIBeHit();

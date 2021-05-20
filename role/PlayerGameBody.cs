@@ -910,11 +910,13 @@ public class PlayerGameBody : GameBody {
             {
                 if (GlobalTools.GetRandomNum() > 50)
                 {
-                    if(AudioAtk_1) AudioAtk_1.Play();
+                    //if(AudioAtk_1) AudioAtk_1.Play();
+                    if(roleAudio.AudioAtk_1) roleAudio.AudioAtk_1.Play();
                 }
                 else
                 {
-                    if (AudioAtk_2) AudioAtk_2.Play();
+                    //if (AudioAtk_2) AudioAtk_2.Play();
+                    if (roleAudio.AudioAtk_2) roleAudio.AudioAtk_2.Play();
                 }
             }
 
@@ -1060,7 +1062,8 @@ public class PlayerGameBody : GameBody {
         //播放被攻击 声音
         if (GlobalTools.GetRandomNum() > 50)
         {
-            if(AudioBeHit_1) AudioBeHit_1.Play();
+            //if(AudioBeHit_1) AudioBeHit_1.Play();
+            if (roleAudio.BeHit_1) roleAudio.BeHit_1.Play();
         }
 
 
@@ -1206,6 +1209,7 @@ public class PlayerGameBody : GameBody {
             DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             DBBody.animation.Play(DIE,1);
             Time.timeScale = 0.2f;
+            Bianbai();
         }
 
         //print(DBBody.animation.lastAnimationState.fadeTotalTime+"  ------->  "+ DBBody.animation.lastAnimationState.currentPlayTimes+"  @@  "+ DBBody.animation.lastAnimationState.currentTime);
@@ -1379,7 +1383,8 @@ public class PlayerGameBody : GameBody {
                     //高处落下
                     if (GlobalTools.GetRandomNum() > 40)
                     {
-                        if (AudioJump_1) AudioJump_1.Play();
+                        //if (AudioJump_1) AudioJump_1.Play();
+                        if (roleAudio.jumpUp2) roleAudio.jumpUp2.Play();
                     }
                 }
 

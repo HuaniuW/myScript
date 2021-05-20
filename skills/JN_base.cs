@@ -21,7 +21,10 @@ public class JN_base : MonoBehaviour
     }
 
 
-
+    public void GetAtkObjIn(GameObject theAtkObj)
+    {
+        atkObj = theAtkObj;
+    }
 
 
     private void OnEnable()
@@ -45,6 +48,8 @@ public class JN_base : MonoBehaviour
         //print( jn_date.name+"    xdx "+  jn_date._xdx     + "   、、、、///////////////////----------------------------------_position     "+ _position);
         //指定特效位置
         this.transform.position = _position;
+        //this.transform.parent = obj.transform.parent;
+        //print("parent    "+this.transform.parent);
         //print("jn_date._scaleW     "+jn_date._scaleW);
         //print();
         //this.transform.localScale = new Vector3(jn_date._scaleW,jn_date._scaleH,1);
@@ -103,6 +108,13 @@ public class JN_base : MonoBehaviour
             jn_date.moveXSpeed *= -_sacaleX;
             //StartCoroutine(ObjectPools.GetInstance().IEDestory2ByTime(hitKuai,jn_date._disTime));
         }
+
+        if (jn_date._type == "6")
+        {
+            GetComponent<TX_Dianqiang>().GetStart();
+            GetComponent<TX_Dianqiang>().SetSpeedFX(_sacaleX);
+        }
+
 
         //GetKuai(_atkVVo, _position);
         //StartCoroutine(ObjectPools.GetInstance().IEDestory2(hitKuai));
