@@ -680,7 +680,7 @@ public class GameBody2 : MonoBehaviour, IRole
     public int canMoveNums = 100;
     bool isAcing = false;
     string _acName;
-    public string GetAcMsg(string acName)
+    public string GetAcMsg(string acName,int type =1, float FadeInTimes = 0.2f)
     {
 
         //获取技能VO

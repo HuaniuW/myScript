@@ -236,7 +236,6 @@ public class AIZongYa : MonoBehaviour,ISkill
     }
 
 
-
     [Header("在 角色 上方的 Y距离")]
     public float TheDistanceYToPlayer = 9;
     Vector2 GoToPos = new Vector2(1000, 1000);
@@ -244,6 +243,7 @@ public class AIZongYa : MonoBehaviour,ISkill
     {
         if (_player == null) return GoToPos;
         float __y = 0;
+
         if (GaoXZPos)
         {
             __y = GaoXZPos.transform.position.y > _player.transform.position.y + TheDistanceYToPlayer ? _player.transform.position.y + TheDistanceYToPlayer : GaoXZPos.transform.position.y;

@@ -7,7 +7,7 @@ public class TX_zidan : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ZidanTest();
+        //ZidanTest();
     }
 
 

@@ -26,6 +26,11 @@ public class JG_BossIn : MonoBehaviour {
     [Header("改变摄像机边界")]
     public string ChangeKuaiName = "kuang1";
 
+
+    [Header("特殊 遇见boss龙  吼声")]
+    public AudioSource LongHou;
+
+
     [Header("摄像机是否跟随玩家和boss距离改变Z")]
     public bool IsChangeZByBossAndPlayerDistance = false;
     //防止重复碰撞播放
@@ -116,6 +121,13 @@ public class JG_BossIn : MonoBehaviour {
         {
             //SeeBossBGAudio.volume = GlobalSetDate.instance.GetSoundEffectValue();
             SeeBossBGAudio.Play();
+        }
+
+
+        if (LongHou)
+        {
+            LongHou.Play();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.4"), this);
         }
     }
 

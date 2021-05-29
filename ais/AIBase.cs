@@ -280,7 +280,12 @@ public class AIBase : MonoBehaviour {
         //{
         //    thePlayer = GlobalTools.FindObjByName("Player");
         //}
-        if(Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
+
+        //print("**********************************************************************************************************************");
+        //print(Mathf.Abs(thePlayer.transform.position.x - transform.position.x)+ "   findEnemyDistance  "+ findEnemyDistance);
+        //print(Mathf.Abs(thePlayer.transform.position.y - transform.position.y) + "   findEnemyDistance  " + findEnemyDistance);
+
+        if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
         {
             print("发现敌人！！！");
             string _msg = GetComponent<RoleDate>().DuBai;
@@ -308,8 +313,8 @@ public class AIBase : MonoBehaviour {
     //战斗后 感知距离增加
     void FightingDistanceAdd()
     {
-        findEnemyDistance = 30;
-        outDistance = 30;
+        if(findEnemyDistance<30) findEnemyDistance = 30;
+        if(outDistance<30) outDistance = 30;
     }
 
     public float outDistance = 15;
@@ -671,7 +676,7 @@ public class AIBase : MonoBehaviour {
     protected VOAtk atkvo;
     protected VOAtk GetAtkVOByName(string _name, System.Object obj)
     {
-        //print("_name   "+_name);
+        print("_name   "+_name);
         Dictionary<string, string> dict = GetDateByName.GetInstance().GetDicSSByName(_name, obj);
         atkvo = GetComponent<VOAtk>();//new VOAtk();
         if (dict == null) return null;
@@ -1296,7 +1301,12 @@ public class AIBase : MonoBehaviour {
         if (!isActioning)
         {
             isActioning = true;
-            if(GetComponent<AIRest>().isZhuanXiang) ZhuanXiang();
+            //print(gameBody.GetDB().animation.lastAnimationName);
+            if (!gameBody.IsZJToStandType && gameBody.GetDB().animation.lastAnimationName != gameBody.GetStandACName())
+            {
+                gameBody.GetDB().animation.FadeIn(gameBody.GetStandACName(), 0.15f);
+            }
+            if (GetComponent<AIRest>().isZhuanXiang) ZhuanXiang();
             gameBody.GetStand();
             atkNum++;
             GetAtkNumReSet();

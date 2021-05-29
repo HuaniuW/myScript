@@ -56,10 +56,10 @@ public class AIChongJiHX : AIChongji
 
         print(" 横向冲击时候的 动作NAME    "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
 
-        if (_roleDate.isBeHiting)
-        {
-            print("被攻击了 ！！！！！！！！！！！！   ");
-        }
+        //if (_roleDate.isBeHiting)
+        //{
+        //    print("被攻击了 ！！！！！！！！！！！！   ");
+        //}
         
 
 
@@ -76,6 +76,7 @@ public class AIChongJiHX : AIChongji
             if (!startTanShe && ChongjiYingZhi != 0)
             {
                 startTanShe = true;
+                //横向冲击 音效
                 if (S_HXChongJi) S_HXChongJi.Play();
                 _roleDate.addYZ(ChongjiYingZhi);
 
@@ -118,7 +119,7 @@ public class AIChongJiHX : AIChongji
 
     protected virtual void HXTanShe2()
     {
-        print(" 为什么一直进来 HXTanShe2********************************************************** ");
+        //print(" 为什么一直进来 HXTanShe2********************************************************** ");
         if (GetComponent<RoleDate>().isBeHiting || GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall)
         {
             //print("  IsHitWall " + GetComponent<GameBody>().IsHitWall + "  ------IsGround  " + GetComponent<GameBody>().IsGround);
@@ -136,7 +137,7 @@ public class AIChongJiHX : AIChongji
             //    IsStartChongji = true;
             //}
 
-            //print("横向冲击 acName: "+_airGameBody.GetDB().animation.lastAnimationName);
+            print(" 准备阶段 横向冲击 acName: "+_airGameBody.GetDB().animation.lastAnimationName);
 
             float __x = 0;
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiBegin && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiStart)
@@ -191,14 +192,14 @@ public class AIChongJiHX : AIChongji
                 //if (GetComponent<AirGameBody>().GetDB().animation.isCompleted) GetComponent<AirGameBody>().GetDB().animation.Stop();
                 
 
-                //print("  冲击准备阶段  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+                print("  冲击准备阶段  CJYanchiNums   " + CJYanchiNums + "   GetComponent<AirGameBody>().GetDB().animation  " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
                 if (CJYanchiNums >= CJYanchiTime)
                 {
                     _airGameBody.isAcing = true;
                     _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiStart);
                     IsStartChongji = true;
 
-
+                    print("  KAISHI CHONGJI!!!!!!!!   ");
 
                     //判断 是否 碰到地板
 
@@ -291,7 +292,7 @@ public class AIChongJiHX : AIChongji
     }
 
 
-    [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置")]
+    [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置  3是固定点位置 4原地开始冲击")]
     public int ChoseYPosType = 1;
 
     protected override bool GetNearTarget()
@@ -300,11 +301,23 @@ public class AIChongJiHX : AIChongji
         //if (!IsHasChosePos)
         //{
         //    IsHasChosePos = true;
-           
+
         //    print("目标 坐标点 _targetPos    " + _targetPos+"  自身的Y坐标 "+this.transform.position.y);
         //}
 
-        _targetPos = GetTongYZuoBiao();
+        if (ChoseYPosType == 4)
+        {
+            //直接 开始
+            return true;
+        }else if(ChoseYPosType == 3)
+        {
+            //固定点位置 2个点 哪个近 去哪个
+        }
+        else
+        {
+            _targetPos = GetTongYZuoBiao();
+        }
+        
 
         //print("  _atkDistance@@@@@@@@@   "+ _atkDistance+ "    ChoseYPosType "+ ChoseYPosType+"  ------------>  "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName+"    isAcing "+ GetComponent<AirGameBody>().isAcing);
         return runNear.ZhuijiZuoBiao(_targetPos,_atkDistance);

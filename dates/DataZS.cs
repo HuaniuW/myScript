@@ -14,7 +14,7 @@ public class DataZS : MonoBehaviour
 
     //Object[] atkZS = new Object[] {10,100,10,10,100,100};
 
-    //名字 x移动力量 y移动力量 特效出现帧 特效名字 特效相对x位置 特效相对y位置 攻击完后延迟帧数 
+    //名字 x移动力量 y移动力量 特效出现帧 特效名字 特效相对x位置 特效相对y位置 yc攻击完后延迟帧数 
 
 
 
@@ -137,6 +137,10 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> atk_1201 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" } ,{ "chongjili","3000"} ,{"hitKuaiOX","1.5"},{"hitKuaiOY","0" },{"hitKuaiSX","5"},{"hitKuaiSY","0"},{"atkPower","400"},{"TXSX","0"},{"TXOX","-1.4" },{"TXOY","0" } };
     static public Dictionary<string, string> atk_1202 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" }, { "chongjili", "3000" }, { "hitKuaiOX", "1.5" }, { "hitKuaiOY", "0" }, { "hitKuaiSX", "5" }, { "hitKuaiSY", "0" }, { "atkPower", "400" }, { "TXSX", "0" }, { "TXOX", "-1.4" }, { "TXOY", "0" } };
     static public Dictionary<string, string> atk_1203 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "8" }, { "atkDistanceY", "0" }, { "chongjili", "500" } };
+
+
+    //火龙
+    static public Dictionary<string, string> atk_1401 = new Dictionary<string, string> { { "atkName", "shuaiwei_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1401" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "5" }, { "atkDistance", "36" }, { "atkDistanceY", "36" }, { "chongjili", "3000" }};
 
     //public string Tt
     //{

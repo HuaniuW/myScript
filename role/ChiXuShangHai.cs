@@ -45,7 +45,7 @@ public class ChiXuShangHai : MonoBehaviour
         if (GlobalTools.GetRandomDistanceNums(100) < _roledate.KangDuJilv) return;
 
         _HuoShanghai = ShangHai;
-        print(" --火伤害 🔥  "+ _HuoShanghai);
+        //print(" --火伤害 🔥  "+ _HuoShanghai);
         _HuoShanghaiTimes = CXTimes;
         //是否叠加  叠加 还是覆盖
         ChiXuHuoTX();

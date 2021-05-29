@@ -63,6 +63,19 @@ public class AIAirRunNear : MonoBehaviour
         IsQuXianToPoint = false;
     }
 
+    public void TurnToPlayer()
+    {
+        if (this.transform.position.x > _obj.transform.position.x)
+        {
+            _airGameBody.TurnLeft();
+        }
+        else
+        {
+            _airGameBody.TurnRight();
+        }
+    }
+
+
     //public void ResetAll2()
     //{
     //    isStartXY = false;

@@ -81,15 +81,33 @@ public class HitKuai : MonoBehaviour {
         Vector2 p1 = this.GetComponent<BoxCollider2D>().bounds.center;
         Vector2 s1 = this.GetComponent<BoxCollider2D>().bounds.extents;
         Vector2 p2 = Vector2.zero;
-        if(BeHitGameBody) p2 =  BeHitGameBody.GetComponent<CapsuleCollider2D>().bounds.center;
+        if (BeHitGameBody && BeHitGameBody.GetComponent<CapsuleCollider2D>()) {
+            p2 = BeHitGameBody.GetComponent<CapsuleCollider2D>().bounds.center;
+        }
+        else if(BeHitGameBody && BeHitGameBody.GetComponent<EdgeCollider2D>())
+        {
+            p2 = BeHitGameBody.GetComponent<EdgeCollider2D>().bounds.center;
+        }
+        
         Vector2 s2 = Vector2.zero;
-        if(BeHitGameBody) s2 =  BeHitGameBody.GetComponent<CapsuleCollider2D>().bounds.extents;
+        if (BeHitGameBody && BeHitGameBody.GetComponent<CapsuleCollider2D>())
+        {
+            s2 = BeHitGameBody.GetComponent<CapsuleCollider2D>().bounds.extents;
+        }
+        else if (BeHitGameBody && BeHitGameBody.GetComponent<EdgeCollider2D>())
+        {
+            s2 = BeHitGameBody.GetComponent<EdgeCollider2D>().bounds.extents;
+        }
 
 
-        if (BehitGameObject)
+        if (BeHitGameBody && BeHitGameBody.GetComponent<CapsuleCollider2D>())
         {
             p2 = BehitGameObject.GetComponent<CapsuleCollider2D>().bounds.center;
             s2 = BehitGameObject.GetComponent<CapsuleCollider2D>().bounds.extents;
+        }else if (BeHitGameBody && BeHitGameBody.GetComponent<EdgeCollider2D>())
+        {
+            p2 = BehitGameObject.GetComponent<EdgeCollider2D>().bounds.center;
+            s2 = BehitGameObject.GetComponent<EdgeCollider2D>().bounds.extents;
         }
 
 
@@ -569,7 +587,7 @@ public class HitKuai : MonoBehaviour {
                             {
                                 if (BeHitGameBody)
                                 {
-                                    //print("  ------------------------> jinlaimei  ");
+                                    print(" chongjili ------------------------> jinlaimei  "+ jn_date.chongjili);
                                     if (_BeHitRigidbody2D) {
                                         //print("/////////>>>>>>>>>>>>>@!  ?????????   ");
                                         //_BeHitRigidbody2D.velocity = new Vector2(20 * -_fx, _BeHitRigidbody2D.velocity.y);

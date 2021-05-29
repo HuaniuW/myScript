@@ -40,6 +40,11 @@ public class DieOut : MonoBehaviour {
     public GameObject HitKuai2;
 
 
+    [Header("Die 特效显示")]
+    public ParticleSystem DieTX;
+    [Header("飞行怪 die 下落")]
+    public bool IsFlyGuaiDieDown = true;
+
 
     [Header("标记 检查 是否 怪都die了")]
     public bool IsBiaojiAllDieStart = true;
@@ -57,6 +62,18 @@ public class DieOut : MonoBehaviour {
             {
                 GetComponent<RoleAudio>().PlayAudioYS("die_1");
             }
+
+
+            //显示 die特效
+            if (DieTX != null) DieTX.Play();
+
+            //飞行怪物 die下落
+            if (!GetComponent<GameBody>().IsDieFlyOut && IsFlyGuaiDieDown)
+            {
+                GetComponent<Rigidbody2D>().gravityScale = 2;
+            }
+
+
 
             //判断是否 在自动地图里面
             if (GlobalTools.FindObjByName("maps") != null)
@@ -120,7 +137,7 @@ public class DieOut : MonoBehaviour {
         }
     }
 
-
+    [Header("是否 die 变黑")]
     public bool IsOrter1 = false;
     void DieBeBlack()
     {

@@ -207,8 +207,19 @@ public class GlobalTools : MonoBehaviour {
 
 
 
+    // 消耗小 用作比较用
+    public static float GetDistanceByTowPointBySqrMagnitude(Vector2 pos1, Vector2 pos2)
+    {
+        //Vector2 v1 = new Vector2(1, 1);
+        //Vector2 v2 = new Vector2(4, 4);
+        //这个是求 平方根magnitude
+        //float dis1 = (v2 - v1).magnitude;
+        //print("@@@@@dis---------------->   "+dis1);
+        // (v2 - v1).sqrMagnitude 这个是 (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)
+        //注意区分  sqrMagnitude 这个消耗小 用来 比较距离长度可以
 
-    
+        return (pos1 - pos2).sqrMagnitude; ;
+    }
 
 
 

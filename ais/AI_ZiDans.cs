@@ -20,16 +20,24 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     bool IsTrunFace = false;
 
 
-    RoleDate _roleDate;
+    protected RoleDate _roleDate;
+    protected GameBody _gameBody;
 
     // Start is called before the first frame update
     void Start()
     {
         _roleDate = GetComponent<RoleDate>();
+        _gameBody = GetComponent<GameBody>();
+        StartMove();
+    }
+
+    protected virtual void StartMove()
+    {
+
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (_roleDate.isDie || _roleDate.isBeHiting)
         {
@@ -88,6 +96,15 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         }
     }
 
+
+   
+    protected virtual Vector2 ZidanFX()
+    {
+        return _player.transform.position - ZiDanPos.position;
+    }
+
+
+
     protected bool _isFire = false;
     protected virtual void Fire()
     {
@@ -98,7 +115,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
             FireAudio.Play();
         }
 
-
+        ZiDanName = "TX_zidan1";
         Vector3 _targetPos = _player.transform.position;
 
 
@@ -121,10 +138,25 @@ public class AI_ZiDans : MonoBehaviour,ISkill
             ZiDanName = "TX_zidandu2";
             _targetPos = new Vector3(_targetPos.x, _targetPos.y, _targetPos.z);
         }
+        else if (ZiDanTypeNum == 14)
+        {
+            //一般 火子弹
+            ZiDanName = "TX_zidan7";
+        }
+        else if (ZiDanTypeNum == 15)
+        {
+            //火爆弹
+            ZiDanName = "TX_huoyanDan";
+        }
+        else if (ZiDanTypeNum == 16)
+        {
+            //火爆弹
+            ZiDanName = "TX_huoyanDan";
+        }
 
 
         GameObject zidan = GetZiDan();
-        Vector2 v1 = _targetPos - ZiDanPos.position;
+        Vector2 v1 = ZidanFX();
         zidan.GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByV2(v1, 10);
 
 
@@ -161,6 +193,23 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         {
             //中途会爆炸的 毒雾弹
 
+        }else if (ZiDanTypeNum == 14)
+        {
+            //龙的 3发子弹
+            SanLianSanDan(v1, 1);
+
+        }
+        else if (ZiDanTypeNum == 15)
+        {
+            //火爆弹
+            
+            //SanLianSanDan(v1, 1);
+        }
+        else if (ZiDanTypeNum == 16)
+        {
+            //3发 火爆弹
+
+            SanLianSanDan(v1, 1);
         }
 
 
@@ -194,29 +243,23 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     
 
 
-    GameObject GetZiDan()
+    protected GameObject GetZiDan()
     {
-        //print("ZiDanName   "+ ZiDanName);
+        //print("************************************************ZiDanName   " + ZiDanName);
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(ZiDanName) as GameObject);
         //print("  zidan "+zidan);
+
+        if (ZiDanTypeNum == 15|| ZiDanTypeNum == 16)
+        {
+            //火焰弹 
+            zidan.GetComponent<OnLziHit>().SetCanHit();
+        }
         zidan.transform.position = ZiDanPos.position;
         zidan.GetComponent<TX_zidan>().CloseAutoFire();
         zidan.transform.localScale = this.transform.localScale;
         zidan.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         return zidan;
     } 
-
-
-
-    void CreateZiDan(int nums)
-    {
-        
-    }
-
-    
-
-
-
 
 
 
@@ -244,11 +287,17 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         _fireOverJS = 0;
         _qishiACJS = 0;
         IsTrunFace = false;
+        ResetAllMore();
     }
 
 
-    GameObject _player;
-    public void GetStart(GameObject gameObj)
+    protected virtual void ResetAllMore()
+    {
+
+    }
+
+    protected GameObject _player;
+    public virtual void GetStart(GameObject gameObj)
     {
         //print(" 子弹s "+ZiDanTypeNum);
         _player = gameObj;
@@ -257,7 +306,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         
     }
 
-    bool _isGetOver = false;
+    protected bool _isGetOver = false;
     public bool IsGetOver()
     {
         return _isGetOver;

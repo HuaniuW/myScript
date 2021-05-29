@@ -23,7 +23,7 @@ public class AIAirBase : AIBase
     public float PatrolRestTimes = 0.1f;
     protected override void Patrol()
     {
-        print("AI 巡逻！！！！！！！！！！！！！！！！！！！！！！！！！！！！"+ isPatrol);
+        //print("AI 巡逻！！！！！！！！！！！！！！！！！！！！！！！！！！！！"+ isPatrol);
 
         if (_roleDate.isDie) return;
 
@@ -525,7 +525,7 @@ public class AIAirBase : AIBase
 
         if (IsIfStopMoreTime()) return;
 
-
+        //print("IsBossStop   "+ IsBossStop);
         if (IsBossStop) return;
         
         if (!isAction)
@@ -537,6 +537,12 @@ public class AIAirBase : AIBase
 
             print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
             string[] strArr = acName.Split('_');
+
+            if (strArr.Length > 1&& strArr[0]!="atk")
+            {
+                acName = strArr[0];
+            }
+
             if (acName == "walkBack") return;
 
             if (strArr[0] == "lz")
@@ -558,7 +564,28 @@ public class AIAirBase : AIBase
                 return;
             }
 
-            if(acName == "hengXiangChongZhuang")
+            if (strArr[0] == "AIZiDanDingxiang")
+            {
+                acName = strArr[0];
+                GetComponent<AI_ZidanDingxiang>().SetZiDanType(int.Parse(strArr[1]));
+                return;
+            }
+
+            if (strArr[0] == "AIFlyPenhuo")
+            {
+                acName = strArr[0];
+                if (strArr.Length > 1) {
+                    GetComponent<AIFlyPenghuo>().SetTimeAndMoveSpeed(strArr[1]);
+                }
+                else
+                {
+                    GetComponent<AIFlyPenghuo>().SetTimeAndMoveSpeed("");
+                }
+                
+                return;
+            }
+
+            if (acName == "hengXiangChongZhuang")
             {
                 return;
             }
@@ -576,6 +603,12 @@ public class AIAirBase : AIBase
 
             if (acName == "zongYa")
             {
+                return;
+            }
+
+            if (acName == "gddZongYa")
+            {
+                //固定点 重压
                 return;
             }
 
@@ -623,6 +656,35 @@ public class AIAirBase : AIBase
                 return;
             }
 
+            if (strArr[0] == "flyToPot1")
+            {
+                //取到哪个点
+                acName = "flyToPot1";
+                if (strArr.Length > 1) {
+                    GetComponent<AIFlyToPot1>().SetPotType(int.Parse(strArr[1]));
+                }
+                else
+                {
+                    GetComponent<AIFlyToPot1>().SetPotType();
+                }
+                
+                return;
+            }
+
+            if (strArr[0] == "flyToPot2GD")
+            {
+                //取到哪个 点 固定位置
+                if (strArr.Length > 1) {
+                    GetComponent<AIFlyToPot2GD>().SetPotType(int.Parse(strArr[1]));
+                }
+                else
+                {
+                    GetComponent<AIFlyToPot2GD>().SetPotType();
+                }
+                acName = "flyToPot2GD";
+                return;
+            }
+
             if (acName == "runCut")
             {
                 //冲砍
@@ -642,7 +704,13 @@ public class AIAirBase : AIBase
                 return;
             }
 
-            
+            if (acName == "chongjiHX2")
+            {
+                acName = "chongjiHX2";
+                return;
+            }
+
+
 
             if (acName == "zidan")
             {
@@ -679,7 +747,7 @@ public class AIAirBase : AIBase
 
             //if (acName.Split('|').Length > 1)
             //{
-               
+
             //}
             //else
             //{
@@ -687,7 +755,7 @@ public class AIAirBase : AIBase
             //    atkDistanceY = GetAtkVOByName(acName, DataZS.GetInstance()).atkDistanceY;
             //}
 
-
+            print("  acName "+ acName);
             atkDistance = GetAtkVOByName(acName.Split('|')[0], DataZS.GetInstance()).atkDistance;
             atkDistanceY = GetAtkVOByName(acName.Split('|')[0], DataZS.GetInstance()).atkDistanceY;
 
@@ -733,6 +801,13 @@ public class AIAirBase : AIBase
         if (acName == "zongYa")
         {
             GetZongYa();
+            return;
+        }
+
+        if (acName == "gddZongYa")
+        {
+            //固定点 重压
+            GetGDDZongYa();
             return;
         }
 
@@ -804,7 +879,11 @@ public class AIAirBase : AIBase
             return;
         }
 
-        
+        if (acName == "chongjiHX2")
+        {
+            GetChongJiHX2();
+            return;
+        }
 
         if (acName == "zidan")
         {
@@ -818,7 +897,19 @@ public class AIAirBase : AIBase
             return;
         }
 
-     
+        if (acName == "flyToPot1")
+        {
+            GetFlyToPot1();
+            return;
+        }
+
+        if (acName == "flyToPot2GD")
+        {
+            GetFlyToPot2GD();
+            return;
+        }
+
+
 
         if (acName == "yueguangzhan")
         {
@@ -828,12 +919,14 @@ public class AIAirBase : AIBase
 
         if (acName == "dianqiang")
         {
+            //电墙
             GetDianqiang();
             return;
         }
 
         if (acName == "diandings")
         {
+            //电钉
             GetDianding();
             return;
         }
@@ -871,6 +964,20 @@ public class AIAirBase : AIBase
             GetAIZiDans();
             return;
         }
+
+        if (acName == "AIZiDanDingxiang")
+        {
+            //固定方向子弹
+            GetAIZiDanDingxiang();
+            return;
+        }
+
+        if (acName == "AIFlyPenhuo")
+        {
+            GetAIFlyPenhuo();
+            return;
+        }
+
 
 
         print("    -------->acName "+ acName);
@@ -977,11 +1084,18 @@ public class AIAirBase : AIBase
         if (GetComponent<AIZiDan>()) GetComponent<AIZiDan>().ReSetAll();
         if (GetComponent<AIAirGoToAndAC>()) GetComponent<AIAirGoToAndAC>().ReSetAll();
         if (GetComponent<JN_Dazhan>()) GetComponent<JN_Dazhan>().ReSetAll();
+        
         if (GetComponent<AIZongYa>()) GetComponent<AIZongYa>().ReSetAll();
         if (GetComponent<AIHengXiangChongZhuang>()) GetComponent<AIHengXiangChongZhuang>().ReSetAll();
         if (GetComponent<AIChongJiHX>()) GetComponent<AIChongJiHX>().ReSetAll();
         if (GetComponent<AIYinshen>()) GetComponent<AIYinshen>().ReSetAll();
         if (GetComponent<JN_3Dianqiu>()) GetComponent<JN_3Dianqiu>().ReSetAll();
+        if (GetComponent<AIFlyPenghuo>()) GetComponent<AIFlyPenghuo>().ReSetAll();
+        if (GetComponent<AI_ZidanDingxiang>()) GetComponent<AI_ZidanDingxiang>().ReSetAll();
+        if (GetComponent<AI_ZiDans>()) GetComponent<AI_ZiDans>().ReSetAll();
+
+        if (GetComponent<AI_HXChongji2>()) GetComponent<AI_HXChongji2>().ReSetAll();
+        if (GetComponent<AI_GDPotZhongya>()) GetComponent<AI_GDPotZhongya>().ReSetAll();
     }
 
     void Get3dianqiu()
@@ -1063,6 +1177,25 @@ public class AIAirBase : AIBase
         }
     }
 
+    void GetChongJiHX2()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AI_HXChongji2>().GetStart(thePlayer);
+            atkNum++;
+            //GetAtkNumReSet();
+            return;
+        }
+
+        if (isActioning && GetComponent<AI_HXChongji2>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
     void GetZiDanFire()
     {
         //print("ffffff");
@@ -1102,6 +1235,45 @@ public class AIAirBase : AIBase
             isActioning = false;
         }
     }
+
+    
+     void GetFlyToPot1()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIFlyToPot1>().GetStart(thePlayer);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIFlyToPot1>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    void GetFlyToPot2GD()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIFlyToPot2GD>().GetStart(thePlayer);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIFlyToPot2GD>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
 
     void GetYinshen()
     {
@@ -1209,6 +1381,25 @@ public class AIAirBase : AIBase
         }
     }
 
+    void GetGDDZongYa()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AI_GDPotZhongya>().GetStart(thePlayer);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AI_GDPotZhongya>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+
 
     void GetAIZiDans()
     {
@@ -1221,6 +1412,44 @@ public class AIAirBase : AIBase
         }
 
         if (isActioning && GetComponent<AI_ZiDans>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    void GetAIZiDanDingxiang()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AI_ZidanDingxiang>().GetStart(thePlayer);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AI_ZidanDingxiang>().IsGetOver())
+        {
+            ZhuanXiang();
+            isAction = false;
+            isActioning = false;
+        }
+    }
+
+    
+
+    void GetAIFlyPenhuo()
+    {
+        if (!isActioning)
+        {
+            isActioning = true;
+            GetComponent<AIFlyPenghuo>().GetStart(thePlayer);
+            atkNum++;
+            return;
+        }
+
+        if (isActioning && GetComponent<AIFlyPenghuo>().IsGetOver())
         {
             ZhuanXiang();
             isAction = false;

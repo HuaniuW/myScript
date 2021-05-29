@@ -42,9 +42,28 @@ public class PlayerGameBody : GameBody {
         }
     }
 
+    [Header("是否让初始朝向 朝右")]
+    public bool IsTurnToRight = false;
+    void ChushiTurnToRight()
+    {
+        //print("我的 朝向  " + this.transform.localScale.x);
+
+        if (IsTurnToRight)
+        {
+            IsTurnToRight = false;
+            if (this.transform.localScale.x == 1)
+            {
+                TurnRight();
+            }
+        }
+    }
+
 
     void Update()
     {
+        ChushiTurnToRight();
+
+
         BodyHitProtecting();
         if (IsInFighting)InFingting();
 

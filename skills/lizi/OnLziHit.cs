@@ -8,12 +8,33 @@ public class OnLziHit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //print(" ************************************************ this.position " + this.transform.position);
         SetAtkObject();
     }
 
+
+    public void GetStart()
+    {
+        print(" ----爆炸震动 ");
+        ChuxianZhengdong();
+    }
+
+    [Header("是否 附带 震动")]
+    public bool IsShowShock = false;
+    void ChuxianZhengdong()
+    {
+        //出现的时候 会震动
+        if (IsShowShock)
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.4"), this);
+        }
+    }
+
+
     private void Awake()
     {
-       
+        //print(" ----爆炸震动 ");
+        //ChuxianZhengdong();
     }
 
 
@@ -73,14 +94,23 @@ public class OnLziHit : MonoBehaviour
     public bool IsHitDisSelf = false;
 
 
+    bool IsCanHit = true;
+    public void SetCanHit()
+    {
+        IsCanHit = true;
+    }
 
 
 
     //发生粒子碰撞的回调函数
     private void OnParticleCollision(GameObject other)
     {
+
+
+        //print(this.name + "  IsCanHit  " + IsCanHit);
+        if (!IsCanHit) return;
         //print(other.name);
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             //IsHitPlayer = true;
             //if (!HitOnceTest)
@@ -121,8 +151,13 @@ public class OnLziHit : MonoBehaviour
                 GameObject DisShowZiLizi = ObjectPools.GetInstance().SwpanObject2(Resources.Load(DisShowZiLiziName) as GameObject);
                 DisShowZiLizi.transform.position = this.transform.position;
                 DisShowZiLizi.GetComponent<JN_base>().atkObj = atkObj;
-                DisShowZiLizi.GetComponent<OnLziHit>().SetAtkObject();
+                if (DisShowZiLizi.GetComponent<OnLziHit>())
+                {
+                    DisShowZiLizi.GetComponent<OnLziHit>().SetAtkObject();
+                    DisShowZiLizi.GetComponent<OnLziHit>().GetStart();
+                }
             }
+            IsCanHit = false;
             ObjectPools.GetInstance().DestoryObject2(this.gameObject);
         }
 

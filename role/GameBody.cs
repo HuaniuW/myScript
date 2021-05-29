@@ -213,7 +213,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected string DODGE1 = "dodge_1";
     protected string DODGE2 = "dodge_2";
     protected string BEHIT = "beHit_1";
-    protected string DIE = "die_1";
+    public string DIE = "die_1";
     //前滑动
     protected string QIANHUA = "qianhua_1";
 
@@ -876,6 +876,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public string GetRunName()
     {
+        print(" 我的默认 跑动 动作 "+RUN);
         return RUN;
     }
 
@@ -1005,7 +1006,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
-        print(this.name+" ************************************************ 看看谁给的 力 "+v2);
+        //print(this.name+" ************************************************ 看看谁给的 力 "+v2);
         if (!playerRigidbody2D) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
@@ -1406,6 +1407,9 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
+    [Header("返回 站立姿势 的 类型 true是直接goto false是动画过去（可能有bug）")]
+    public bool IsZJToStandType = true;
+
 
     protected virtual void Stand()
     {
@@ -1418,8 +1422,9 @@ public class GameBody : MonoBehaviour, IRole {
         {
             STAND = "stand_1";
         }
-        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
+        if (this.tag != "player") print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
+            print(" ******************************************* ---->inStands ");
             if (this.tag == "player") {
                 //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 DBBody.animation.FadeIn(STAND, 0.1f);
@@ -1432,6 +1437,8 @@ public class GameBody : MonoBehaviour, IRole {
 
                 //DBBody.animation.FadeIn(STAND, 0.01f, 1);
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //print(" ///////// fadein stand!!");
+                //DBBody.animation.FadeIn(STAND, 0.5f, 1);
             }
             
         }
@@ -1466,6 +1473,12 @@ public class GameBody : MonoBehaviour, IRole {
         StopVSpeed();
 
 
+    }
+
+
+    public string GetStandACName()
+    {
+        return STAND;
     }
 
     public void StopVSpeed(bool isSetSpeedZero = true)
@@ -2249,7 +2262,7 @@ public class GameBody : MonoBehaviour, IRole {
         yanchiTime = ycTimes;
     }
 
-    public string GetAcMsg(string acName)
+    public string GetAcMsg(string acName,int type = 1,float FadeInTimes = 0.2f)
     {
         if (acName == null) return null;
         //获取技能VO
@@ -2299,7 +2312,15 @@ public class GameBody : MonoBehaviour, IRole {
         //print("DBBody.animation.lastAnimationName     " + DBBody.animation.lastAnimationName);
         if (DBBody.animation.HasAnimation(acName)&&DBBody.animation.lastAnimationName!=acName)
         {
-            DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
+            if(type == 1)
+            {
+                DBBody.animation.GotoAndPlayByFrame(acName, 0, 1);
+            }
+            else
+            {
+                DBBody.animation.FadeIn(acName, FadeInTimes, 1);
+            }
+            
             acNums = 0;
             isAcing = true;
 			_acName = acName;

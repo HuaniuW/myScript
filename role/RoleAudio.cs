@@ -45,7 +45,7 @@ public class RoleAudio : MonoBehaviour {
         if (cAudio)
         {
             cAudio.volume = 0.2f * GlobalSetDate.instance.GetSoundEffectValue();
-            if (AudioName=="run1"|| AudioName == "run2"|| AudioName =="run3") cAudio.volume =  0.1f*GlobalSetDate.instance.GetSoundEffectValue();
+            if (this.name!="B_Huolong" && (AudioName=="run1"|| AudioName == "run2"|| AudioName =="run3")) cAudio.volume =  0.1f*GlobalSetDate.instance.GetSoundEffectValue();
             cAudio.Play();
         }
 

@@ -125,17 +125,34 @@ public class AirGameBody : GameBody {
         if (roleDate) roleDate.isBeHiting = false;
     }
 
+    
+
     protected override void Stand()
     {
         if (CJYanmu) CJYanmu.Stop();
         if (GetComponent<RoleDate>().isDie) return;
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
-        //print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking);
-        if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
+        //print("@@@@@@@@@@@@@@@@@  >  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  ??stand  "+STAND);
+        if (IsZJToStandType)
         {
-            DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
-            //DBBody.animation.FadeIn(STAND, 0.6f);
+            if (DBBody.animation.lastAnimationName != STAND || (DBBody.animation.lastAnimationName == STAND && DBBody.animation.isCompleted))
+            {
+                DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //print(" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ fadein stand!!!!!! ");
+                //DBBody.animation.FadeIn(STAND, 0.2f);
+            }
         }
+        else
+        {
+            //print(" stand!!!! jinlaile  mei!!!! "+ DBBody.animation.lastAnimationName);
+            if (DBBody.animation.lastAnimationName != STAND)
+            {
+                //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
+                //print(" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ fadein stand!!!!!! ");
+                DBBody.animation.FadeIn(STAND, 0.6f);
+            }
+        }
+       
 
         isDowning = false;
         if (newSpeed.x > slideNum)
@@ -162,13 +179,23 @@ public class AirGameBody : GameBody {
             if (RunAudio && RunAudio.isPlaying) RunAudio.Stop();
             return;
         }
-        
+
+        //print(">>>>>>>>>>>>>>>>>>>>>>>>>>> !!!! run  为什么进不来！！！！ "+ DBBody.animation.lastAnimationName+"  播放速率  "+ DBBody.animation.timeScale+"   ----  "+isAcing);
+
         if (DBBody.animation.lastAnimationName != RUN)
         {
             //print("?????run     "+ DBBody.animation.lastAnimationName +"     RUN是什么动作  "+RUN);
             DBBody.animation.GotoAndPlayByFrame(RUN);
             if (RunAudio) RunAudio.Play();
             //print("??run  "+ DBBody.animation.lastAnimationName);
+        }
+        else
+        {
+            if (!DBBody.animation.isPlaying) {
+                //print("@@@@@@  进入这里 引动了 ");
+                DBBody.animation.Play();
+            }
+           
         }
       
     }
@@ -220,12 +247,20 @@ public class AirGameBody : GameBody {
                 if(roleDate.TiXing<=2)BeHitFlyOut(100);
                 //if(IsDieFlyOut) GetPlayerRigidbody2D().freezeRotation = false;
             }
+
+
+            print("  DIE "+DIE);
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
 
             if (roleAudio)
             {
-                if (GlobalTools.GetRandomNum() >= 30)
+                print("  die audio!!!!! ");
+                if(roleDate.enemyType == "boss")
+                {
+                    if (roleAudio.die_1) roleAudio.die_1.Play();
+                }
+                else if (GlobalTools.GetRandomNum() >= 30)
                 {
                     //roleAudio.PlayAudio("die_1");
                     if (roleAudio.die_1) roleAudio.die_1.Play();
@@ -260,6 +295,7 @@ public class AirGameBody : GameBody {
             }
         }
 
+
         if (isInAiring)
         {
             if (DBBody.animation.HasAnimation(BEHITINAIR))
@@ -269,7 +305,7 @@ public class AirGameBody : GameBody {
                 return;
             }
         }
-        DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
+        if(DBBody.animation.HasAnimation(BEHIT)) DBBody.animation.GotoAndPlayByFrame(BEHIT, 0, 1);
         //if (GetComponent<AIBase>()) GetComponent<AIBase>().AIGetBeHit();
         beHitNum++;
 
@@ -405,8 +441,19 @@ public class AirGameBody : GameBody {
         }
         else
         {
-           // print(" isBeHiting! 但是没有进入 behit 动作 "+DBBody.animationName);
-            
+            // print(" isBeHiting! 但是没有进入 behit 动作 "+DBBody.animationName);
+            if (!DBBody.animation.HasAnimation(BEHITINAIR) && !DBBody.animation.HasAnimation(BEHIT))
+            {
+                roleDate.isBeHiting = false;
+                GetPause(0.7f);
+                //print("wo bei hit in   in      *********************************IsBehitJingkong     " + IsBehitJingkong);
+                if (IsGround) GetStand();
+                //惊恐
+                if (IsBehitJingkong) JingKong();
+                //呆住
+                if (IsDaiXie) DaiXie();
+                return;
+            }
         }
     }
 

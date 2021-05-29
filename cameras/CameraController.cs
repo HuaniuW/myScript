@@ -684,14 +684,17 @@ public class CameraController : MonoBehaviour
     void GetShockZ2(float stillNums,int type = 1)
     {
         newZ22 = this.transform.position.z;
+        print(" isShockZ2  "+ isShockZ2);
+        ShockTimes = 0;
         if (!isShockZ2)
         {
             isShockZ2 = true;
             isShockZing2 = true;
+            print("*******************************************进入 开始 震动！！！！！！！！！！！！！！！！！");
             if(type == 1)
             {
-                targetZ2 = newZ22 + 0.3f;
-                targetZ21 = newZ22 - 0.3f;
+                targetZ2 = newZ22 + 0.4f;
+                targetZ21 = newZ22 - 0.4f;
             }
             else
             {
@@ -703,12 +706,12 @@ public class CameraController : MonoBehaviour
             theTargetZ = targetZ2;
 
             yuanshiZ = this.transform.position.z;
-            GetComponent<TheTimer>().GetStopByTime(theStillNums);
+            //GetComponent<TheTimer>().GetStopByTime(theStillNums);
         }
     }
 
-    
 
+    float ShockTimes = 0;
 
 
     float GetShockZing2()
@@ -728,23 +731,43 @@ public class CameraController : MonoBehaviour
                 theTargetZ = targetZ2;
             }
 
-            if (GetComponent<TheTimer>().isStart&& GetComponent<TheTimer>().IsPauseTimeOver())
+            //print("********************************************************************zhengdong!!! ");
+
+            ShockTimes += Time.deltaTime;
+            if(ShockTimes>= theStillNums)
             {
                 isShockZing2 = false;
+                ShockTimes = 0;
                 isShockZ2 = false;
-                this.transform.position =new Vector3(this.transform.position.x,this.transform.position.y,yuanshiZ);
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, yuanshiZ);
             }
+
+            //if (GetComponent<TheTimer>().isStart&& GetComponent<TheTimer>().IsPauseTimeOver())
+            //{
+            //    isShockZing2 = false;
+            //    isShockZ2 = false;
+            //    this.transform.position =new Vector3(this.transform.position.x,this.transform.position.y,yuanshiZ);
+            //}
         }
         return newZ22;
     }
 
 
-    void Shock2Stop()
+    public void GetShockZing2Stop()
     {
-        GetComponent<TheTimer>().End();
         isShockZing2 = false;
+        ShockTimes = 0;
         isShockZ2 = false;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, yuanshiZ);
+    }
+
+    void Shock2Stop()
+    {
+        GetShockZing2Stop();
+        GetComponent<TheTimer>().End();
+        //isShockZing2 = false;
+        //isShockZ2 = false;
+        //this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, yuanshiZ);
     }
 
 
