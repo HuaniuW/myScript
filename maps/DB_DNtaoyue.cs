@@ -364,7 +364,7 @@ public class DB_DNtaoyue : DBBase
     }
 
     //装饰物 是单个 等 什么的 只要单个的   一个底面只要一个 位置随机
-    protected override void Zhuanshiwu(string JName = "zsw")
+    protected override void Zhuangshiwu(string JName = "zsw")
     {
         string zswArrName = MapNames.GetInstance().GetJingArrNameByGKKey(JName);
         if (zswArrName == "") return;

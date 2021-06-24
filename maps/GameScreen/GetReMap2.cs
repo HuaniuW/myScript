@@ -179,7 +179,7 @@ public class GetReMap2 : GetReMap
         }
         else
         {
-            bianjieyanshengzhi = 15;
+            bianjieyanshengzhi = 3;
         }
 
         //视觉块 边界

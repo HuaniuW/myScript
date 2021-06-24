@@ -64,7 +64,7 @@ public class MapNames : MonoBehaviour
 
 
     //下层近景 近景 下 jin jing  down =jjd
-    public List<string> jjd_1 = new List<string> { "jjd_1_1", "jing_caoh_2" , "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "hh_zhiwu_14" };
+    public List<string> jjd_1 = new List<string> { "jjd_1_1", "jing_caoh_2" , "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "hh_zhiwu_14" };
     public List<string> jjd2_1 = new List<string> { "jjd_1_6", "jjd_1_7", "jjd_1_4", "jjd_1_5" };
     public List<string> shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
 
@@ -87,8 +87,14 @@ public class MapNames : MonoBehaviour
     public List<string> qjd3_1 = new List<string> { "qjd_1_1", "qjd_1_8"};//9 ,10是大景
 
 
+    //中远背景的 草皮
+    public List<string> ZYBJCaopi_1 = new List<string> { "ZYBJCaopi_hong", "ZYBJCaopi_lv", "ZYBJCaopi_lan" };
+
+
+
     //装饰物
-    public List<string> zsw_1 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2", "guangHua_min1_36" };
+    //public List<string> zsw_1 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2", "guangHua_min1_36" };
+    public List<string> zsw_1 = new List<string> { "lj_j_muzhalan-1", "lj_j_muzhalan-2"};
     public List<string> qZsw_1 = new List<string> { "lj_qj_muzhalan-1", "qj_muzhalan-1", "lj_qj_muzhalan-2", "qj_muzhalan-2","qj_muzhalan-3","qj_muzhalan-4" };
 
     public List<string> zswDuo_1 = new List<string> { "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5",  "hh_zhiwu_14" };

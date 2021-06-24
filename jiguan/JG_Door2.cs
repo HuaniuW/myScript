@@ -71,7 +71,7 @@ public class JG_Door2 : MonoBehaviour
         IsJGOver = true;
         GameObject cm = GlobalTools.FindObjByName("MainCamera");
         cm.GetComponent<CameraController>().GetBounds(Kuai, true);
-        cm.GetComponent<CameraController>().SetNewPosition(new Vector3(cm.transform.position.x, cm.transform.position.y, -14));
+        cm.GetComponent<CameraController>().SetNewPosition(new Vector3(cm.transform.position.x, cm.transform.position.y, -16));
     }
     //----------------------------------------------------------------------
 

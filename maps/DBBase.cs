@@ -309,7 +309,7 @@ public class DBBase : MonoBehaviour
     {
         InitStart();
         if (!GlobalSetDate.instance.IsCMapHasCreated&&!IsDangBan) {
-
+            print(" 已经生成了 这个 场景。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。  ");
             if (!IsShowDingDB)
             {
                 //隐藏顶部地板
@@ -340,7 +340,9 @@ public class DBBase : MonoBehaviour
     //补充一个 灯光
     void AddPointLight()
     {
+        print("dengguang! ");
         if (light2d2==null || light2d3 == null || GlobalTools.GetRandomNum() > 50) return;
+        print("bu dengguang!!!!!!!!!!!!");
         GameObject _light = GlobalTools.GetGameObjectByName("Light_bu1");
         float lightX = GlobalTools.GetRandomNum()>50? light2d2.transform.position.x: light2d3.transform.position.x;
         float lightY = light2d.transform.position.y + 1 + GlobalTools.GetRandomDistanceNums(1.4f); 
@@ -349,7 +351,7 @@ public class DBBase : MonoBehaviour
 
         //颜色 和 亮度
         _light.GetComponent<Light2D>().color = GlobalTools.RandomColor();
-        _light.GetComponent<Light2D>().intensity = 1.4f + GlobalTools.GetRandomDistanceNums(0.6f);
+        _light.GetComponent<Light2D>().intensity = 0.4f + GlobalTools.GetRandomDistanceNums(0.6f);
     }
 
 
@@ -417,7 +419,7 @@ public class DBBase : MonoBehaviour
     protected GameObject maps;
 
     //左右景布置  这里 后面会根据全局 来判断和调整 景是哪些内容  区别后缀不要用数字
-    public void GetJing()
+    public virtual void GetJing()
     {
         //这里根据 当前 关卡  来判断  是否 生成 树 背景远景 等 复杂的 类型       ***** 判断  用哪个大关卡的 景
 
@@ -453,8 +455,8 @@ public class DBBase : MonoBehaviour
         //装饰物
         if (IsZhuangshiwu) {
             //栏杆 栅栏 等
-            Zhuanshiwu();
-            Zhuanshiwu("qZsw");
+            Zhuangshiwu();
+            Zhuangshiwu("qZsw");
         } 
 
         //顶部的景
@@ -553,7 +555,7 @@ public class DBBase : MonoBehaviour
     public bool IsZhuangshiwu = false;
     //栅栏什么的 可以放进 近景
     //装饰物 是单个 等 什么的 只要单个的   一个底面只要一个 位置随机
-    protected virtual void Zhuanshiwu(string JName = "zsw")
+    protected virtual void Zhuangshiwu(string JName = "zsw")
     {
         string zswArrName = MapNames.GetInstance().GetJingArrNameByGKKey(JName);
         if (zswArrName == "") return;
@@ -612,7 +614,7 @@ public class DBBase : MonoBehaviour
                 jingH = GlobalTools.GetJingH(Jobj);
 
                 __x = tl.position.x + jingW * 0.5f;
-                __y = tl.position.y + jingH * 0.5f + GlobalTools.GetRandomDistanceNums(0.3f);
+                __y = tl.position.y + jingH * 0.5f - GlobalTools.GetRandomDistanceNums(0.3f) - 0.5f;
                 
             }
 
@@ -859,6 +861,7 @@ public class DBBase : MonoBehaviour
             _wuName = "wu_qWu_1";
         }
         GameObject _wu = GlobalTools.GetGameObjectByName(_wuName);
+        print("  wu " +_wu.name+"  pos "+_wu.transform.position);
         //补的雾 看后面的需求
         //GameObject _wu2 = GlobalTools.GetGameObjectByName(_wuName);
         _wu.transform.parent = GlobalTools.FindObjByName("maps").transform;
@@ -874,7 +877,7 @@ public class DBBase : MonoBehaviour
         }
         else
         {
-            _wu.transform.position = new Vector3(qidian.x + _w2 * 0.5f + (_w2 - GlobalTools.GetJingW(_wu)) * 0.5f, zhongdian.y + GlobalTools.GetJingH(_wu) * 0.5f +  GlobalTools.GetRandomDistanceNums(1),-0.2f-GlobalTools.GetRandomDistanceNums(2.6f));
+            _wu.transform.position = new Vector3(qidian.x + _w2 * 0.5f + (_w2 - GlobalTools.GetJingW(_wu)) * 0.5f, zhongdian.y + GlobalTools.GetJingH(_wu) * 0.5f +  GlobalTools.GetRandomDistanceNums(1),-0.8f-GlobalTools.GetRandomDistanceNums(1.8f));
         }
 
         //print(">?????????????????????????????????????????????????????????????    "+ _w+"  >-缩放后  " +GlobalTools.GetJingW(_wu));
@@ -942,7 +945,7 @@ public class DBBase : MonoBehaviour
         //怎么根据 关卡来判断出来的 景数量？？？之要判断数量？  还有位置  关于旋转？？树好像有旋转  看看怎么写进去
         string jjdArrName = MapNames.GetInstance().GetJingArrNameByGKKey("jjd");
         if (jjdArrName == "") return;
-        int nums = 8 + GlobalTools.GetRandomNum(8);
+        int nums = 2 + GlobalTools.GetRandomNum(3);
         Vector2 pos1 = tl.position;
         Vector2 pos2 = new Vector2(rd.position.x,tl.position.y);
         
@@ -1140,7 +1143,7 @@ public class DBBase : MonoBehaviour
         float _outerRadius = 3.9f + GlobalTools.GetRandomDistanceNums(0.5f);
         light2d.GetComponent<Light2D>().pointLightInnerRadius = _innerRadius;
         light2d.GetComponent<Light2D>().pointLightOuterRadius = _outerRadius;
-        light2d.GetComponent<Light2D>().intensity = 0.8f + GlobalTools.GetRandomDistanceNums(0.6f);
+        light2d.GetComponent<Light2D>().intensity = 0.5f + GlobalTools.GetRandomDistanceNums(0.6f);
 
         if (light2d2&& light2d3)
         {
@@ -1159,8 +1162,8 @@ public class DBBase : MonoBehaviour
             //light2d2.GetComponent<Light2D>().color = GlobalTools.RandomColor();
             //light2d3.GetComponent<Light2D>().color = GlobalTools.RandomColor();
             //亮度
-            light2d2.GetComponent<Light2D>().intensity = 0.8f + GlobalTools.GetRandomDistanceNums(0.6f);
-            light2d3.GetComponent<Light2D>().intensity = 0.8f + GlobalTools.GetRandomDistanceNums(0.6f);
+            light2d2.GetComponent<Light2D>().intensity = 0.5f + GlobalTools.GetRandomDistanceNums(0.6f);
+            light2d3.GetComponent<Light2D>().intensity = 0.5f + GlobalTools.GetRandomDistanceNums(0.6f);
 
         }
 

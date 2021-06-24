@@ -1371,7 +1371,8 @@ public class GetReMap : MonoBehaviour
     protected float l;
     protected float r;
 
-    protected void GetKuaiBianjie(List<GameObject> mapObjList,float bianjieyansheng = 15)
+    //获取框 的边界
+    protected void GetKuaiBianjie(List<GameObject> mapObjList,float bianjieyansheng = 8)
     {
         for(int i= 0; i < mapObjList.Count; i++)
         {
@@ -1397,8 +1398,10 @@ public class GetReMap : MonoBehaviour
         //print(" 地图组成数量    "+ mapObjList.Count);
         //边界延伸值
         //float bianjieyansheng =15;
-        Vector2 lu = new Vector2(l- bianjieyansheng, u+ bianjieyansheng);
-        Vector2 rd = new Vector2(r+ bianjieyansheng, d- bianjieyansheng);
+        float biajieyanshengUpDpwn = 15;
+        if (biajieyanshengUpDpwn < bianjieyansheng) biajieyanshengUpDpwn = bianjieyansheng;
+        Vector2 lu = new Vector2(l- bianjieyansheng, u+ biajieyanshengUpDpwn);
+        Vector2 rd = new Vector2(r+ bianjieyansheng, d- biajieyanshengUpDpwn);
 
         //print("左上角位置  "+lu+"   右下角位置  "+rd);
 
@@ -1408,7 +1411,7 @@ public class GetReMap : MonoBehaviour
 
         Vector2 zhongxindian = new Vector2((r+l)*0.5f,(u+d)*0.5f);
         float w = Mathf.Abs(r - l + 2* bianjieyansheng);
-        float h = Mathf.Abs(u - d + 2* bianjieyansheng) < kuang.GetComponent<BoxCollider2D>().size.y ? kuang.GetComponent<BoxCollider2D>().size.y : Mathf.Abs(u - d + 2 * bianjieyansheng);
+        float h = Mathf.Abs(u - d + 2* bianjieyansheng) < kuang.GetComponent<BoxCollider2D>().size.y ? kuang.GetComponent<BoxCollider2D>().size.y : Mathf.Abs(u - d + 2 * biajieyanshengUpDpwn);
         kuang.transform.position = zhongxindian;
         kuang.GetComponent<BoxCollider2D>().size = new Vector2(w,h);
 

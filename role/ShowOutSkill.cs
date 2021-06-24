@@ -53,7 +53,7 @@ public class ShowOutSkill : MonoBehaviour {
         skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
         //skill.transform.parent = this.transform.parent;
 
-        print("parent  >>>   " + skill.transform.parent+"    playerpARENT   "+GlobalTools.FindObjByName("player").transform.position);
+        //print("parent  >>>   " + skill.transform.parent+"    playerpARENT   "+GlobalTools.FindObjByName("player").transform.position);
 
 
         if (skill.GetComponent<TX_Dianqiang>())

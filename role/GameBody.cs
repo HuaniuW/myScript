@@ -1422,9 +1422,9 @@ public class GameBody : MonoBehaviour, IRole {
         {
             STAND = "stand_1";
         }
-        if (this.tag != "player") print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
+        //if (this.tag != "player") print(">  "+DBBody.animation.lastAnimationName+"   atking "+isAtking+"  isInAiring "+isInAiring);
         if (DBBody.animation.lastAnimationName != STAND|| (DBBody.animation.lastAnimationName == STAND&& DBBody.animation.isCompleted)) {
-            print(" ******************************************* ---->inStands ");
+            //print(" ******************************************* ---->inStands ");
             if (this.tag == "player") {
                 //DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 DBBody.animation.FadeIn(STAND, 0.1f);

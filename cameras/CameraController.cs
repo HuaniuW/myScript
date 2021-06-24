@@ -164,7 +164,8 @@ public class CameraController : MonoBehaviour
     bool isInEdge = false;
     bool isFeidaoGS = true;
 
-    float CamereMoveSpeed = 0.4f;
+    //控制摄像头X移动速度
+    float CamereMoveSpeed = 0.2f;
 
     void Update()
     {

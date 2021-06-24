@@ -477,7 +477,7 @@ public class DB_shui : DBBase
 
 
 
-    protected override void Zhuanshiwu(string JName = "zsw")
+    protected override void Zhuangshiwu(string JName = "zsw")
     {
 
         //水面地板
