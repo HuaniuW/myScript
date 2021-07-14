@@ -165,7 +165,7 @@ public class CameraController : MonoBehaviour
     bool isFeidaoGS = true;
 
     //控制摄像头X移动速度
-    float CamereMoveSpeed = 0.2f;
+    float CamereMoveSpeed = 0.3f;
 
     void Update()
     {

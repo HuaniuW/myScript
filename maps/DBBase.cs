@@ -463,6 +463,7 @@ public class DBBase : MonoBehaviour
         if (IsTopJ) GetTopJ();
         if (IsTopJ2) GetTopJ2();
 
+        //远前景
         if (IsCanGetYQJ) GetYQJ();
 
         GetYQJ();
@@ -471,12 +472,15 @@ public class DBBase : MonoBehaviour
         GetYBJ();
 
 
-
         //机关 隐刺
         if (IsGetYinCi) JiGuan_YinCi();
 
 
     }
+
+
+  
+
 
 
     //近远背景

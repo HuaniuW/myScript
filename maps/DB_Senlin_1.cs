@@ -6,7 +6,10 @@ using UnityEngine;
 public class DB_Senlin_1 : DBBase
 {
 
-
+    public void GetNoShu()
+    {
+        IsHasShu = false;
+    }
 
 
     public override void GetJing()
@@ -34,7 +37,7 @@ public class DB_Senlin_1 : DBBase
         //}
 
 
-        GetShu();
+        if(IsHasShu||GlobalTools.GetRandomNum()>=90)GetShu();
         if (GlobalTools.GetRandomNum() > 0)
         {
             //从左到右 摆放
@@ -69,11 +72,13 @@ public class DB_Senlin_1 : DBBase
         //GetYQJ();
 
 
+        if (IsEWaiZYBJ) GetEWaiZYBJ();
+
 
         //*************************************关键点************************************************
         //如果是 默认给出的 景  比如 远背景  要动的话（移动位置等）默认就不显示 并且 做好动态物品（可以动态取）
 
-        //******************************************************************************************
+            //******************************************************************************************
 
 
 
@@ -90,6 +95,35 @@ public class DB_Senlin_1 : DBBase
 
 
     }
+
+
+
+    [Header("额外的 中远背景")]
+    public bool IsEWaiZYBJ = true;
+
+    protected virtual void GetEWaiZYBJ()
+    {
+        //现在 只有一个 草皮
+
+        string CaopiName = "ZYBJ_caopi_1";
+
+        GameObject jing = GlobalTools.GetGameObjectByName(CaopiName);
+        jing.transform.parent = maps.transform;
+
+
+        float W = GlobalTools.GetJingW(jing);
+
+        float __x = tl.position.x + W * 0.5f - 1 + GlobalTools.GetRandomDistanceNums((GetWidth() - W + 2));
+        float __y = tl.position.y + GlobalTools.GetRandomDistanceNums(0.6f);
+        float __z = 1.53f;
+
+        jing.GetComponent<SpriteRenderer>().sortingOrder = -30;
+
+
+        jing.transform.position = new Vector3(__x, __y, __z);
+    }
+
+
 
 
     //近前景
