@@ -44,6 +44,18 @@ public class MyController : MonoBehaviour {
         return true;
     }
 
+    public void detectPressedKeyOrButton()
+    {
+        foreach (KeyCode kcode in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(kcode))
+                Debug.Log("KeyCode down: " + kcode);
+        }
+
+    }
+
+
+
     private string currentButton;
     void ShouBing()
     {
@@ -53,14 +65,25 @@ public class MyController : MonoBehaviour {
             if (Input.GetKeyDown((KeyCode)values.GetValue(x)))
             {
                 currentButton = values.GetValue(x).ToString();//遍历并获取当前按下的按键
-                print("手柄按键  "+ currentButton);
+                //print("手柄按键  " + currentButton);
             }
         }
+        //detectPressedKeyOrButton();
+
+        //float hl = Input.GetAxis("Horizontal_L");
+        //float vl = Input.GetAxis("Vertical_L");
+
+        //print("  hl "+hl);
+        //print("  vl " + vl);
+
 
 
         horizontalDirection = Input.GetAxis(HORIZONTAL);
 
         verticalDirection = Input.GetAxis(VERTICAL);
+
+
+
         if (horizontalDirection > 0)
         {
             if (IsCanControl()) _body.RunRight(horizontalDirection);
@@ -74,7 +97,7 @@ public class MyController : MonoBehaviour {
             if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
         }
 
-        print("verticalDirection    " + verticalDirection);
+        //print("verticalDirection    " + verticalDirection);
 
         if (verticalDirection > 0.6)
         {
@@ -94,33 +117,64 @@ public class MyController : MonoBehaviour {
 
 
 
+        //if (Input.GetKeyDown("Joystick1Button0"))
+        //{
+        //    if (Globals.IsHitPlotKuai) return;
+        //    //print(">>>>>>>>>>>???????  JJJJJJJ  Globals.isKeyUp    "+ Globals.isKeyUp);
+        //    if (IsCanControl()) _body.GetAtk();
+        //}
+        //if (Input.GetKeyDown("Joystick1Button1"))
+        //{
+        //    if (IsCanControl()) _body.GetJump();
+        //}
 
-        if (currentButton == "Joystick2Button0")
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    //if (IsCanControl()) _body.GetSkill1();
+        //}
+
+        //if (Input.GetKeyDown("Joystick1Button3"))
+        //{
+        //    if (IsCanControl()) _body.GetSkill2();
+        //}
+
+        //if (Input.GetKeyDown("Joystick1Button2"))
+        //{
+        //    if (IsCanControl()) _body.GetDodge1();
+        //}
+
+
+
+
+        //Debug.Log("手柄按钮控制！！");
+
+        if (currentButton == "Joystick1Button0" || currentButton == "JoystickButton0")
         {
+            //Debug.Log("Joystick1Button0 !!!!! ");
             if (Globals.IsHitPlotKuai) return;
             if (IsCanControl()) _body.GetAtk();
             currentButton = "";
         }
 
-        if (currentButton == "Joystick2Button1")
+        if (currentButton == "Joystick1Button1")
         {
             if (IsCanControl()) _body.GetJump();
             currentButton = "";
         }
 
-        if (currentButton == "Joystick2Button2")
+        if (currentButton == "Joystick1Button2")
         {
             if (IsCanControl()) _body.GetDodge1();
             currentButton = "";
         }
 
-        if (currentButton == "Joystick2Button3")
+        if (currentButton == "Joystick1Button3")
         {
             currentButton = "";
         }
 
 
-       
+
 
     }
 
@@ -129,7 +183,7 @@ public class MyController : MonoBehaviour {
     void NewKey()
     {
 
-        
+        //ShouBing();
 
         if (Input.GetKeyDown(KeyCode.U)&& Input.GetKey(KeyCode.D))
         {
@@ -191,6 +245,7 @@ public class MyController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.W))
         {
+            //print("   W----upupupupupup!!! ");
             Globals.isKeyUp = true;
         }
 
@@ -269,10 +324,10 @@ public class MyController : MonoBehaviour {
 
     void Update () {
 
-
+        //ShouBing();
         NewKey();
 
-        //ShouBing();
+
 
         //OldKey();
     }

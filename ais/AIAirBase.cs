@@ -535,7 +535,7 @@ public class AIAirBase : AIBase
             //gameBody.isAcing = false;
             //IsGetAtkFSByName = false;
 
-            print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
+            //print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
             string[] strArr = acName.Split('_');
 
             if (strArr.Length > 1&& strArr[0]!="atk")

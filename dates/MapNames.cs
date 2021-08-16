@@ -31,14 +31,19 @@ public class MapNames : MonoBehaviour
 
     public string GetGKKey()
     {
+
+        //这里来 匹配 关卡景
+        //特殊景 几率
+
         return Globals.mapTypeNums.ToString();
     }
 
     // 通过关卡 标记 获取 元素数组名 
     public string GetJingArrNameByGKKey(string jingArrName)
     {
-        string JingArrName = jingArrName + "_" + GetGKKey();
-        if(GetDateByName.GetInstance().GetListByName(JingArrName, MapNames.GetInstance()) == null)
+        //string JingArrName = jingArrName + "_" + GetGKKey();
+        string JingArrName = jingArrName;
+        if (GetDateByName.GetInstance().GetListByName(JingArrName, MapNames.GetInstance()) == null)
         {
             JingArrName = "";
         }
@@ -53,7 +58,7 @@ public class MapNames : MonoBehaviour
 
 
     //地板
-    public List<string> db_pd_1 = new List<string> { "db_pd_1", "db_pd_3" };
+    public List<string> db_pd_1 = new List<string> { "db_pd_1"};//, "db_pd_3" 
 
     public List<string> tiaoyue_1 = new List<string> { "db_ty_1"};
 
@@ -64,13 +69,17 @@ public class MapNames : MonoBehaviour
 
 
     //下层近景 近景 下 jin jing  down =jjd
-    public List<string> jjd_1 = new List<string> { "jjd_1_1", "jing_caoh_2" , "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "hh_zhiwu_14" };
-    public List<string> jjd2_1 = new List<string> { "jjd_1_6", "jjd_1_7", "jjd_1_4", "jjd_1_5" };
-    public List<string> shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
+    public List<string> JinBeijing_1 = new List<string> { "jjd_1_1", "jing_caoh_2" , "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "hh_zhiwu_14" };
+    public List<string> JinBeijing_2 = new List<string> { "jjd_1_6", "jjd_1_7", "jjd_1_4", "jjd_1_5" };
+    public List<string> Shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
 
     //远背景
     public List<string> jybj_1 = new List<string> { "jybj_1_1", "jybj_1_2", "jybj_1_3", "jybj_1_4", "jybj_1_5", "jybj_1_6" };
-    public List<string> ybj_1 = new List<string> { "ybj_1_4" };
+
+    //特殊的 中远背景
+    public List<string> jybj2_1 = new List<string> { "ZYBJCaopi_hong1", "ZYBJCaopi_lan1", "ZYBJCaopi_lv1"};
+
+    public List<string> ybj_1 = new List<string> { "ybj_1_4", "ybj_1_1", "ybj_1_2", "ybj_1_3" };
     public List<string> ybj2_1 = new List<string> { "ybj2_1_1", "ybj2_1_2" };
 
     //门 下方的近景
@@ -82,20 +91,27 @@ public class MapNames : MonoBehaviour
     //门 下方的 前景
     public List<string> men_qjd_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6" };
     //前景 下方
-    public List<string> qjd_1 = new List<string> { "qjd_1_1", "qjd_1_3", "qjd_1_6", "qjd_1_8" };//, "qjd_1_5", "qjd_1_7"
-    public List<string> qjd2_1 = new List<string> { "qjd_1_3", "qjd_1_6"};
-    public List<string> qjd3_1 = new List<string> { "qjd_1_1", "qjd_1_8"};//9 ,10是大景
-
+    public List<string> Qianjing_1 = new List<string> { "qjd_1_1", "qjd_1_3", "qjd_1_6", "qjd_1_8" };//, "qjd_1_5", "qjd_1_7"
+    public List<string> Qianjing_2 = new List<string> { "qjd_1_3", "qjd_1_6"};
+    public List<string> Qianjing_3 = new List<string> { "qjd_1_1", "qjd_1_8"};//9 ,10是大景
+    public List<string> YuanQianjing_1 = new List<string> { "qjd_d3_1" };
 
     //中远背景的 草皮
     public List<string> ZYBJCaopi_1 = new List<string> { "ZYBJCaopi_hong", "ZYBJCaopi_lv", "ZYBJCaopi_lan" };
 
 
 
+
+    //平地前景1
+    public List<string> PDQJ_1 = new List<string> { "PD_Qianjingcaoduis"};
+
+
+
+
     //装饰物
     //public List<string> zsw_1 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2", "guangHua_min1_36" };
-    public List<string> zsw_1 = new List<string> { "lj_j_muzhalan-1", "lj_j_muzhalan-2"};
-    public List<string> qZsw_1 = new List<string> { "lj_qj_muzhalan-1", "qj_muzhalan-1", "lj_qj_muzhalan-2", "qj_muzhalan-2","qj_muzhalan-3","qj_muzhalan-4" };
+    public List<string> Zhuangshiwu_1 = new List<string> { "lj_j_muzhalan-1", "lj_j_muzhalan-2"};
+    public List<string> QianZhuangshiwu_1 = new List<string> { "lj_qj_muzhalan-1", "qj_muzhalan-1", "lj_qj_muzhalan-2", "qj_muzhalan-2","qj_muzhalan-3","qj_muzhalan-4" };
 
     public List<string> zswDuo_1 = new List<string> { "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5",  "hh_zhiwu_14" };
 
@@ -106,16 +122,16 @@ public class MapNames : MonoBehaviour
     public List<string> LXZsw_1 = new List<string> { };
 
 
-    public List<string> yqj_1 = new List<string> {  "qjd_1_3",  "qjd_1_6", "qjd_1_7", "qjd_1_8"};
+    public List<string> yqj_1 = new List<string> { };//"qjd_1_3",  "qjd_1_6", "qjd_1_7", "qjd_1_8"
     //public List<string> yqj_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6", "qjd_1_7", "qjd_1_8", "qjd_1_12" };
-    public List<string> yqj2_1 = new List<string> { "qjd_1_1"};
-    public List<string> yqj3_1 = new List<string> { "qjd_d3_1"};
+    public List<string> yqj2_1 = new List<string> {};
+   
 
     //前远景大
     public List<string> qyjd_1 = new List<string> { "qjd_1_9", "qjd_1_10", "qyj_1_1" };
     //前景上方 倒挂的景
-    public List<string> qju2_1 = new List<string> { "ju_caodui_1", "ju_caodui_2"};
-    public List<string> qju_1 = new List<string> { "jju_1_1", "jju_1_3", "jju_1_4" };
+    public List<string> qju2_1 = new List<string> { "ju_caodui_1", "ju_caodui_2", "jju_1_4" };
+    public List<string> qju_1 = new List<string> { "jju_1_1", "jju_1_3"};//jju_1_4
 
 
     //较大的 前景 w>13 h>4
@@ -125,11 +141,11 @@ public class MapNames : MonoBehaviour
 
     public List<string> qyj_1 = new List<string> { "qyj_1_1" };
     //近远景
-    public List<string> jyj_1 = new List<string> { "jyj_1_1", "jyj_1_2", "jyj_1_3", "jyj_1_4", "jyj_1_5", "jyj_1_6" };
+    public List<string> JinYuanBeijing_1 = new List<string> { "jyj_1_1", "jyj_1_2", "jyj_1_3", "jyj_1_4", "jyj_1_5", "jyj_1_6" };
     //中远景
-    public List<string> zyj_1 = new List<string> { "zyj_1_1", "zyj_1_2", "zyj_1_3", "zyj_1_4", "zyj_1_5", "zyj_1_6", "zyj_1_7" };
+    public List<string> ZhongYuanBeijing_1 = new List<string> { "zyj_1_1", "zyj_1_2", "zyj_1_3", "zyj_1_4", "zyj_1_5", "zyj_1_6", "zyj_1_7" };
     //大远景
-    public List<string> dyj_1 = new List<string> { "dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
+    public List<string> DaYuanBeijing_1 = new List<string> { "dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
 
     //粒子落叶
     public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };

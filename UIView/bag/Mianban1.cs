@@ -48,8 +48,8 @@ public class Mianban1 : MonoBehaviour {
     //被选中的物品
     RectTransform beChoseWP = null;
     void Start() {
-        print("************************************************************************************************************************************************************************************");
-        print("************************************************************************************************************************************************************************************");
+        //print("************************************************************************************************************************************************************************************");
+        //print("************************************************************************************************************************************************************************************");
         //装备徽章格子+技能徽章格子
         RectTransform[] HZzbz = { gezi21, gezi22, gezi23, gezi24, gezi25, gezi26, gezi27 };
         HZzhuangbeizu.AddRange(HZzbz);
@@ -298,7 +298,7 @@ public class Mianban1 : MonoBehaviour {
     {
         //print("  获取徽章》>  ");
         if (GlobalSetDate.instance.CurrentMapMsgDate == null) return;
-        print("  游戏 开始 获取 背包 徽章数据！   "+ GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
+        //print("  游戏 开始 获取 背包 徽章数据！   "+ GlobalSetDate.instance.CurrentMapMsgDate.bagDate);
         print("  游戏 开始 获取 背包 徽章数据！CurrentUserDate  " + GlobalSetDate.instance.CurrentUserDate.bagDate);
         string tempDateStr = GlobalSetDate.instance.CurrentMapMsgDate.bagDate;// "huizhang1_0-huizhang2_2";
         print("tempDateStr>     " + tempDateStr);

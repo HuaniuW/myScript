@@ -14,10 +14,10 @@ public class DB_shui : DBBase
     public bool IsChaoChang = false;
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 
     //地板类型  悬空  会出机关刺的地板  踩上去 会下沉的地板  突出的地板（一般地板）
     //-- 长短 板  一般 付出面板   和踩上会下沉地板   悬浮地板（上面会出刺）  竖着的地板  上面有刺 
@@ -137,7 +137,7 @@ public class DB_shui : DBBase
 
 
     //近前景
-    protected override void GetJQJ()
+    protected override void GetQianJing()
     {
         int nums = 0;
         Vector2 pos1 = tl.position;
@@ -274,7 +274,7 @@ public class DB_shui : DBBase
 
 
 
-    protected override void GetYQJ()
+    protected override void GetYuanQianJing()
     {
         return;
         int nums = 1 + GlobalTools.GetRandomNum(2);
@@ -298,7 +298,7 @@ public class DB_shui : DBBase
 
 
     //近远背景
-    protected override void GetYBJ()
+    protected override void GetYuanBeiJing()
     {
         int nums = 1;
         Vector2 pos1 = tl.position;
@@ -345,7 +345,7 @@ public class DB_shui : DBBase
     }
 
     //近远景
-    protected override void GetJYJ()
+    protected override void GetJinYuanBeiJing()
     {
         //控制数量  要不根据 宽来定数量
         string jyjArrName = MapNames.GetInstance().GetJingArrNameByGKKey("jyj");

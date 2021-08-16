@@ -62,6 +62,7 @@ public class JG_Door2 : MonoBehaviour
 
     //-------------------------------------触发关门 同时 触发其他机关的 设定
     public bool IsOtherJG1 = false;
+    [Header("改变的 摄像机 碰撞块")]
     public BoxCollider2D Kuai;
     bool IsJGOver = false;
     void GetOtherJG1()
@@ -99,7 +100,7 @@ public class JG_Door2 : MonoBehaviour
 
     void GetDoorEvent(UEvent e)
     {
-        //print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
+        print(" ******************************************************************************* //////////////////////////@@@   "+e.eventParams.ToString());
         if (e.eventParams.ToString() == "allDie") {
 
 
@@ -108,7 +109,7 @@ public class JG_Door2 : MonoBehaviour
 
             if (GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Count == 0)
             {
-                //print("--->  开门！！！！ ");
+                print("--->  开门！！！！ ");
                 IsCanCloseDoorMap = false;
                 IsCloseDoor = false;
             }
@@ -168,13 +169,13 @@ public class JG_Door2 : MonoBehaviour
         if (IsCloseDoor)
         {
             CloseDoor();
-            DoorAudioPlay();
+           
             //print("hahah !!!");
         }
         else
         {
             OpenDoor();
-            DoorAudioPlay();
+           
         }
     }
 
@@ -212,7 +213,7 @@ public class JG_Door2 : MonoBehaviour
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "close"), this);
             GetOtherJG1();
 
-            //print(" **************  碰撞 关门机关！！！！   ");
+            print(" **************  碰撞 关门机关！！！！   ");
         }
     }
 
@@ -230,6 +231,7 @@ public class JG_Door2 : MonoBehaviour
             //print("***************  关门！！！！！！**** ");
             IsDoorAudioPlay = false;
             Door.transform.position = new Vector3(Door.transform.position.x, Door.transform.position.y - DoorSpeed, +Door.transform.position.z);
+            DoorAudioPlay();
         }
     }
 
@@ -241,6 +243,7 @@ public class JG_Door2 : MonoBehaviour
         {
             IsDoorAudioPlay = false;
             Door.transform.position = new Vector3(Door.transform.position.x, Door.transform.position.y+DoorSpeed,+Door.transform.position.z);
+            DoorAudioPlay();
         }
     }
 

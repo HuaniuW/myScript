@@ -23,6 +23,19 @@ public class GameControl : MonoBehaviour {
         //float dj = 39*0.7f*0.55f;
         //float zong = 10000000;
         //print("1000万收入 需要卖出多少份   "+zong/dj);
+
+        for (int i=0;i<20;i++)
+        {
+            float jl = GlobalTools.GetRandomDistanceNums(1000);
+            print(i+ "  ----   jl >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   " + jl);
+
+            if (jl <= 8)
+            {
+                print(i+   "  zhong!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        }
+       
+
     }
 
     public bool IsInPlot = false;
@@ -153,7 +166,7 @@ public class GameControl : MonoBehaviour {
             player.GetComponent<PlayerGameBody>().TrunFXStrLeft();
         }
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+2.6f, this.transform.position.z);
-
+        
         //print("------222222》  " + player.transform.localScale);
     }
 
@@ -444,7 +457,14 @@ public class GameControl : MonoBehaviour {
                 print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
                 if (guai != null) {
                     GuaiList.Remove(guai);
-                    if (GlobalTools.FindObjByName("maps") && GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(guai)) guai.SetActive(false);
+                    if (GlobalTools.FindObjByName("maps") && GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(guai)) {
+                        guai.SetActive(false);
+                    }
+                    else
+                    {
+                        guai.SetActive(false);
+                    }
+                    
                     CheckGuaiDoor();
                 }
             }
@@ -477,13 +497,20 @@ public class GameControl : MonoBehaviour {
 
 
 
-
+    bool IsTetsPos = false;
 
     // Update is called once per frame
     void Update () {
         //print(player.transform.position);
         //if(player) player.GetComponent<GameBody>().TurnRight();
-
+        //if (!IsTetsPos)
+        //{
+        //    IsTetsPos = true;
+        //    print("摄像机--------");
+        //    print("摄像机  :::::::::  " + this.transform.position);
+        //    this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 15.6f, this.transform.position.z);
+        //}
+        
 
         //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>  "+Time.time);
         //if(Time.time>=10) print("Time.realtimeSinceStartup    " + Time.realtimeSinceStartup);
@@ -560,7 +587,7 @@ public class GameControl : MonoBehaviour {
         
         //摄像机位置跟随
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
-        if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+2f, mainCamera.transform.position.z);
+        if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 3.5f, mainCamera.transform.position.z);
         //玩家站立
         player.GetComponent<GameBody>().SetV0();
         //当前是什么状态 新进游戏（不管是取档 还是新游戏）
@@ -623,6 +650,10 @@ public class GameControl : MonoBehaviour {
         //print("hi");
         this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ENEMY), null);
+        //print("摄像机  kaishi zuobiao  "+ this.transform.position);
+        //this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 15.6f, this.transform.position.z);
+        //print(" 控制 摄像机 位置！！！！！！！！ ");
+        //print("摄像机  houlai------ zuobiao  " + this.transform.position);
     }
 
 }

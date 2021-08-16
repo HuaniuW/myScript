@@ -186,7 +186,7 @@ public class XueTiao : MonoBehaviour {
             //GetGameObj();
         }
         //print("XT  gameObj>  " + gameObj);
-        print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive+"  _maxLive "+_maxLive+"   传进来数据  "+e.eventParams);
+        //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive+"  _maxLive "+_maxLive+"   传进来数据  "+e.eventParams);
         GlobalSetDate.instance.GetScreenChangeDate();
         if (gameObj == null) return;
         if (gameObj.tag == "Player" && roleDate)

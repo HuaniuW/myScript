@@ -56,7 +56,7 @@ public class GetReMap2 : GetReMap
 
 
         //判断 是否 有这个地图的数据 有的话 直接按数据生成地图
-        print("************************************************************************************************************************");
+        print("**********************************************************GetInDate 生成地图 **************************************************************");
         _dixingkuozhanNums = 0;
         maps = GlobalTools.FindObjByName("maps");
 
@@ -373,6 +373,8 @@ public class GetReMap2 : GetReMap
                 _dixingkuozhanNums = int.Parse(GlobalMapDate.CurrentSpelMapType.Split('^')[2]);
                 //怪物名字
                 _JYGuaiName = GlobalMapDate.CurrentSpelMapType.Split('^')[3];
+                //特殊景 数据 怎么安排
+
             }else if(GlobalCMapType == GlobalMapDate.CUNDANG_PINGDI)
             {
                 //存档平地
@@ -388,6 +390,7 @@ public class GetReMap2 : GetReMap
             }
             else if (GlobalCMapType == GlobalMapDate.DUOGUAI_JSY_PINGDI)
             {
+                //多怪 警示鱼 平地
                 _dixingType = GlobalMapDate.DUOGUAI_JSY_PINGDI;
 
             }
@@ -411,7 +414,11 @@ public class GetReMap2 : GetReMap
         //测试用 不用了就删掉
         //_dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
         //_dixingType = GlobalMapDate.PINGDI;
-        print(" ******************************************************************************************* _dixingType  地形类型   "+ _dixingType);
+        _dixingType = GlobalMapDate.YIBAN;
+        _dixingkuozhanNums = 2;
+        Globals.mapType = _dixingType;
+        print("Jing 整体 地形 是什么 ❓  " + Globals.mapType);
+        print("Jing  ******************************************************************************************* _dixingType  地形类型   " + _dixingType);
 
         //根据不同地形 生成的 中心连接点 也不一样  还要根据 坐标 和nums判断 地板和 景类型
         if (_dixingType == GlobalMapDate.YIBAN)
@@ -1268,7 +1275,7 @@ public class GetReMap2 : GetReMap
         float __XDistance = 0;
         float __YDistance = GlobalTools.GetRandomDistanceNums(2);
         //**洞内****
-        if (_dixingType == "dongnei")
+        if (_dixingType == GlobalMapDate.DONGNEI)
         {
             //全洞内 直线  洞内的时候 是先 有 _dixingType == lr作为前置判断的 所以这里只可能是lr
             mapObj = GetDiBanByName();
@@ -1277,7 +1284,7 @@ public class GetReMap2 : GetReMap
             print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             print("fx   "+FX+"   >>>>>>>>>>>洞内图!!!!  duanNums是多少  "+ duanNums+"   i "+i);
 
-            if (GetDongNeiLuType() == "shangsheng")
+            if (GetDongNeiLuType() == "shangsheng") 
             {
                 
                 __XDistance = FX == "l" ? 4 : -4;
@@ -1319,13 +1326,14 @@ public class GetReMap2 : GetReMap
 
 
 
-        if (Globals.mapType=="1")
+        if (Globals.mapType==GlobalMapDate.YIBAN)
         {
             //如果是第一关 在自动地图里面 都是 上下交错的 没有平地
             ReNums = 50 + GlobalTools.GetRandomNum(50);
+            print(" 地板 jinlamei  "+ ReNums);
         }
 
-
+        print("  地板  的生成 随机数 -- "+ ReNums+ "  Globals.mapType  "+ Globals.mapType);
 
         if (ReNums < 30)
         {
@@ -1344,6 +1352,7 @@ public class GetReMap2 : GetReMap
             //跳跃
             if (_morenKeyiShengChengTiaoyue)
             {
+                //默认可以生成 跳跃的 地板
                 mapObj = GetDiBanByName("tiaoyue");
                 if (i != duanNums - 1)
                 {
@@ -1422,7 +1431,8 @@ public class GetReMap2 : GetReMap
                     mapObj.GetComponent<DBBase>().ShowDingDB(__YDistance, __XDistance);
                 }
             }
-            GetYinci();
+            //隐刺机关
+            //GetYinci();
 
         }
     }

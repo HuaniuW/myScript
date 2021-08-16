@@ -4,6 +4,7 @@ public class EventTypeName
 {
     public const string CUBE_CLICK = "cube_click";
     public const string OPEN_DOOR = "open_door";
+    public const string NEW_OPEN_DOOR = "new_open_door";
 
     public const string JINGSHI = "jingshi";
 

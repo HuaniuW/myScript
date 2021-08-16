@@ -219,7 +219,7 @@ public class DB_DNtaoyue : DBBase
 
 
     //近前景
-    protected override void GetJQJ()
+    protected override void GetQianJing()
     {
         int nums = 0;
         Vector2 pos1 = tl.position;
@@ -331,7 +331,7 @@ public class DB_DNtaoyue : DBBase
 
 
     //近远景
-    protected override void GetJYJ()
+    protected override void GetJinYuanBeiJing()
     {
         //控制数量  要不根据 宽来定数量
         string jyjArrName = MapNames.GetInstance().GetJingArrNameByGKKey("jyj");
@@ -487,7 +487,7 @@ public class DB_DNtaoyue : DBBase
     }
 
 
-    protected override void GetYQJ()
+    protected override void GetYuanQianJing()
     {
         int nums = 1 + GlobalTools.GetRandomNum(1);
         Vector2 pos1 = tl.position;
@@ -511,7 +511,7 @@ public class DB_DNtaoyue : DBBase
     }
 
     //近远背景
-    protected override void GetYBJ()
+    protected override void GetYuanBeiJing()
     {
         int nums = 1;
         Vector2 pos1 = tl.position;

@@ -108,7 +108,7 @@ public class PlayerRoleDate : RoleDate
 
         //tx.transform.position = new Vector2(0,-3);
         //print("position  "+tx.transform.position);
-        if(this.gameObject!=null && this.gameObject.activeSelf) print("this  player "+this.gameObject.name+"    "+ this.gameObject.activeSelf);
+        //if(this.gameObject!=null && this.gameObject.activeSelf) print("this  player "+this.gameObject.name+"    "+ this.gameObject.activeSelf);
         //if(this.gameObject.activeInHierarchy)
         if (this.gameObject != null && this.gameObject.activeSelf) {
             if (this.gameObject.activeSelf) StartCoroutine(IEDestory2ByTime(tx, 0.8f));
@@ -234,7 +234,7 @@ public class PlayerRoleDate : RoleDate
             IsHasZZ = false;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
-        print("------------------------------------------------------------气血徽章- 事件发送！！！！！");
+        //print("------------------------------------------------------------气血徽章- 事件发送！！！！！");
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LAN, this.maxLan), this);
         GetPlayerMsg();

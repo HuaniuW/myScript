@@ -685,13 +685,13 @@ public class CameraController : MonoBehaviour
     void GetShockZ2(float stillNums,int type = 1)
     {
         newZ22 = this.transform.position.z;
-        print(" isShockZ2  "+ isShockZ2);
+        //print(" isShockZ2  "+ isShockZ2);
         ShockTimes = 0;
         if (!isShockZ2)
         {
             isShockZ2 = true;
             isShockZing2 = true;
-            print("*******************************************进入 开始 震动！！！！！！！！！！！！！！！！！");
+            //print("*******************************************进入 开始 震动！！！！！！！！！！！！！！！！！");
             if(type == 1)
             {
                 targetZ2 = newZ22 + 0.4f;

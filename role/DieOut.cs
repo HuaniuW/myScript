@@ -152,13 +152,33 @@ public class DieOut : MonoBehaviour {
     {
         
         GameObject player = GlobalTools.FindObjByName("player");
-        if (diaoluowu == ""|| player == null) return;
+
+        if (player == null) return;
+
+
+        if (!IsBoss)
+        {
+            if (IsDieRecord)
+            {
+                print("记录  怪物die  --name: " + this.name);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.name), this);
+            }
+
+            if (IsNeedReSetCameraKuai) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_KUAI_REDUCTION, null), this);
+        }
+
+        if (diaoluowu == "") return;
        
         int jv = Random.Range(0, 100);
         int fx = this.transform.position.x > player.transform.position.x ? 1 : -1;
         string[] diaoluowuArr = diaoluowu.Split('|');
         //print("name 掉落物  "+ diaoluowuArr.Length);
         //print("name --------------> " + this.name + " diaoluowu   " + diaoluowu+"   当前几率 "+jv);
+
+
+      
+
+
         for (var i = 0; i < diaoluowuArr.Length; i++) 
         {
             string objName = diaoluowuArr[i].Split('-')[0];
@@ -184,13 +204,16 @@ public class DieOut : MonoBehaviour {
                     }
                 }else
                 {
+                    //print("记录  非boss 记录点，，，。。。。");
                     o.transform.position = this.transform.position;
                     o.GetComponent<Wupinlan>().GetXFX(Random.Range(100, 300) * fx);
-                    if(IsDieRecord) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, this.name), this);
-                    if(IsNeedReSetCameraKuai) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_KUAI_REDUCTION, null), this);
+                  
                 }
                 
             }
+
+
+          
         }
     }
 
@@ -280,6 +303,11 @@ public class DieOut : MonoBehaviour {
         {
             if (Door1 && Door1.GetComponent<JG_Door2>()) Door1.GetComponent<JG_Door2>().IsCloseDoor = false;
             if (Door2 && Door2.GetComponent<JG_Door2>()) Door2.GetComponent<JG_Door2>().IsCloseDoor = false;
+
+
+            if (Door1 && Door1.GetComponent<JG_NewDoor>()) Door1.GetComponent<JG_NewDoor>().IsOpening = true;
+            if (Door2 && Door2.GetComponent<JG_NewDoor>()) Door2.GetComponent<JG_NewDoor>().IsOpening = true;
+
         }
 
 

@@ -287,7 +287,7 @@ public class AIBase : MonoBehaviour {
 
         if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
         {
-            print("发现敌人！！！");
+            //print("发现敌人！！！");
             string _msg = GetComponent<RoleDate>().DuBai;
             if (GetComponent<RoleDate>().enemyType == "boss"&& _msg!="")
             {
@@ -412,6 +412,7 @@ public class AIBase : MonoBehaviour {
                 }
                 isRunLeft = false;
                 isRunRight = true;
+                CurrentAIName = "Patrol";
             }
         }else if (isRunRight)
         {
@@ -426,6 +427,7 @@ public class AIBase : MonoBehaviour {
                 
                 isRunLeft = true;
                 isRunRight = false;
+                CurrentAIName = "Patrol";
             }
         }
     }
@@ -676,7 +678,7 @@ public class AIBase : MonoBehaviour {
     protected VOAtk atkvo;
     protected VOAtk GetAtkVOByName(string _name, System.Object obj)
     {
-        print("_name   "+_name);
+        //print("_name   "+_name);
         Dictionary<string, string> dict = GetDateByName.GetInstance().GetDicSSByName(_name, obj);
         atkvo = GetComponent<VOAtk>();//new VOAtk();
         if (dict == null) return null;
@@ -957,6 +959,10 @@ public class AIBase : MonoBehaviour {
         //isActioning = true;
     }
 
+
+    [Header("当前 AI的名字")]
+    public string CurrentAIName = "";
+
     public bool IsCanAtk = true;
     //动作名称
     protected string acName = "";
@@ -982,10 +988,14 @@ public class AIBase : MonoBehaviour {
 			isAction = true;
 			acName = GetZS();
             //IsGetAtkFSByName = false;
-           
+
             
-            print(atkNum + "????------------------------------------------------------------->    name " + acName);
+
+            //print(atkNum + "????------------------------------------------------------------->    name " + acName);
             string[] strArr = acName.Split('_');
+
+            CurrentAIName = strArr[0];
+
             if (acName == "walkBack") return;
 
             if (strArr[0] == "lz")

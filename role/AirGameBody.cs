@@ -249,13 +249,13 @@ public class AirGameBody : GameBody {
             }
 
 
-            print("  DIE "+DIE);
+            //print("  DIE "+DIE);
             if (!isDieAc)DBBody.animation.GotoAndPlayByFrame(DIE, 0, 1);
             isDieAc = true;
 
             if (roleAudio)
             {
-                print("  die audio!!!!! ");
+                //print("  die audio!!!!! ");
                 if(roleDate.enemyType == "boss")
                 {
                     if (roleAudio.die_1) roleAudio.die_1.Play();

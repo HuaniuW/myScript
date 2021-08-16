@@ -54,7 +54,7 @@ public class DB_Senlin_1 : DBBase
         if (IsSCWu) GetWus();
 
         //近背景
-        if (IsPingDiJing) GetLRJinBG();
+        if (IsJinBeijings) GetLRJinBG();
 
 
         //中远背景的 3个草皮
@@ -84,9 +84,9 @@ public class DB_Senlin_1 : DBBase
 
         return;
 
-     
+
         //远背景
-        GetYBJ();
+        GetYuanBeiJing();
 
 
 
@@ -127,7 +127,7 @@ public class DB_Senlin_1 : DBBase
 
 
     //近前景
-    protected override void GetJQJ()
+    protected override void GetQianJing()
     {
         int nums = 0;
         Vector2 pos1 = tl.position;

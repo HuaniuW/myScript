@@ -488,7 +488,7 @@ public class HitKuai : MonoBehaviour {
                     }
                     else
                     {
-                        print("   >>>>>>>>>>>地面怪被攻击 冲击力！ "+jn_date.chongjili+"     ");
+                        //print("   >>>>>>>>>>>地面怪被攻击 冲击力！ "+jn_date.chongjili+"     ");
                         //_BeHitRigidbody2D.AddForce(new Vector2(jn_date.chongjili * -_fx * beHitXFScale, 0));
                         beHitObj.GetComponent<GameBody>().GetZongTuili(new Vector2(jn_date.chongjili * __tuiliFX * beHitXFScale, 0));
                     }

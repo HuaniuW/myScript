@@ -887,14 +887,14 @@ public class AIAirRunNear : MonoBehaviour
         if (_obj.transform.position.y - transform.position.y > _moveDistance)
         {
             //目标在上 向上移动
-            print("   上移动 ");
+            //print("   上移动 ");
             _airGameBody.RunY(__speedY);
             return false;
         }
         else if (_obj.transform.position.y - transform.position.y < -_moveDistance)
         {
             //目标在下 向下移动
-            print("   下移动 ！！！！！");
+            //print("   下移动 ！！！！！");
             _airGameBody.RunY(-__speedY);
             return false;
         }

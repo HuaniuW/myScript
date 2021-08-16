@@ -15,8 +15,8 @@ public class DB_shuimian : MonoBehaviour
     bool IsPlayerHitCeWall = false;
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 }

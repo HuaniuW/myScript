@@ -163,7 +163,7 @@ public class AIChongji : MonoBehaviour, ISkill
     protected virtual void Tanshe()
     {
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall) {
-            print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
+            //print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
             ReSetAll();
             //ChongjiOver();
             return;

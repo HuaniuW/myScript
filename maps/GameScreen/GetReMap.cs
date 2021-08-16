@@ -439,6 +439,9 @@ public class GetReMap : MonoBehaviour
                     {
                         mapObj.GetComponent<J_SPBase>().SetDengLiziColor(_color2);
                     }
+                }else if (mapObj.GetComponent<JingBase>())
+                {
+                    mapObj.GetComponent<JingBase>().SetSD(theSD);
                 }
                 else
                 {
@@ -834,9 +837,13 @@ public class GetReMap : MonoBehaviour
             string _pos = child.position.x + "#" + child.position.y + "#" + child.position.z;
             string _sd = "";
             string _rotation = child.transform.localEulerAngles.ToString();
-           
 
-            if (child.GetComponent<DBBase>())
+
+            if (child.GetComponent<JingBase>())
+            {
+                _sd = child.GetComponent<JingBase>().GetSD().ToString();
+            }
+            else if (child.GetComponent<DBBase>())
             {
                 _sd = child.GetComponent<DBBase>().GetSD().ToString();
             }
@@ -1411,7 +1418,7 @@ public class GetReMap : MonoBehaviour
 
         Vector2 zhongxindian = new Vector2((r+l)*0.5f,(u+d)*0.5f);
         float w = Mathf.Abs(r - l + 2* bianjieyansheng);
-        float h = Mathf.Abs(u - d + 2* bianjieyansheng) < kuang.GetComponent<BoxCollider2D>().size.y ? kuang.GetComponent<BoxCollider2D>().size.y : Mathf.Abs(u - d + 2 * biajieyanshengUpDpwn);
+        float h = Mathf.Abs(u - d + 2* biajieyanshengUpDpwn) < kuang.GetComponent<BoxCollider2D>().size.y ? kuang.GetComponent<BoxCollider2D>().size.y : Mathf.Abs(u - d + 2 * biajieyanshengUpDpwn);
         kuang.transform.position = zhongxindian;
         kuang.GetComponent<BoxCollider2D>().size = new Vector2(w,h);
 

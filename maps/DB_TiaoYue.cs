@@ -24,10 +24,10 @@ public class DB_TiaoYue : DBBase
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 
 
     protected bool IsHasSetDB = false;

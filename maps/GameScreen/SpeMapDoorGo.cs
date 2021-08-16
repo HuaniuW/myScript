@@ -29,7 +29,7 @@ public class SpeMapDoorGo : MonoBehaviour
     {
         print("设置门的 信息");
         //在特殊数据中找到自己
-        print(GlobalSetDate.instance.CReMapName);
+        //print(GlobalSetDate.instance.CReMapName);
         //配置 各个方向的 地图
         //map_r+map_r-1!0#0!r:map_r-2^u:map_r-3|map_r-2!1#0!r:map_r-4@map_u+map_u-1!0#0!r:map_u-2|map_u-2!1#0!map_u-3
         print(GameMapDate.BigMapDate);

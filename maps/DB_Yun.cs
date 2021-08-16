@@ -20,7 +20,7 @@ public class DB_Yun : DB_TiaoYue
                 //隐藏顶部地板
                 HideDingDB();
                 //显示 远背景
-                GetYBJ();
+                GetYuanBeiJing();
             }
             else
             {
@@ -33,7 +33,7 @@ public class DB_Yun : DB_TiaoYue
             OtherStart();
             SetDBPos();
             SetZiDanJG();
-            GetJQJ();
+            GetQianJing();
         }
 
         print("?????????  地板云");
@@ -124,7 +124,7 @@ public class DB_Yun : DB_TiaoYue
     //前景
 
     //近前景
-    protected override void GetJQJ()
+    protected override void GetQianJing()
     {
         int nums = 0;
         Vector2 pos1 = tl.position;
