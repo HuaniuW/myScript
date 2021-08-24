@@ -32,7 +32,11 @@ public class JingBase : MonoBehaviour
 
     public virtual void SetSD(int sd)
     {
-        if (Diban1) Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder = sd;
+        if (Diban1) {
+            Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder = sd;
+            print(sd+" *********************sd   "+ Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder);
+        }
+        
       
     }
 

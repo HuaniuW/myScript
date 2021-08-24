@@ -113,10 +113,11 @@ public class MoveDiban : MonoBehaviour {
         float moveX = diban.transform.position.x + mspeed;
         diban.transform.position = new Vector3( moveX, diban.transform.position.y, diban.transform.position.z);
         foreach (Transform t in objList)
-         {
-             float cx = t.transform.position.x + mspeed;
-             t.transform.position = new Vector3(cx, t.transform.position.y, t.transform.position.z);
-         }
+        {
+            if (t == null || t.transform == null) return;
+            float cx = t.transform.position.x + mspeed;
+            t.transform.position = new Vector3(cx, t.transform.position.y, t.transform.position.z);
+        }
 
         //print(objList.Count);
 

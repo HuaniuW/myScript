@@ -211,12 +211,12 @@ public class JG_NewDoor : MonoBehaviour
         for(int i= GuaiList.Count - 1; i >= 0; i--)
         {
             print(GuaiList[i]);
-            if(GuaiList[i] == o)
+            if(GuaiList[i] == o|| GuaiList[i] == null)
             {
                 GuaiList.RemoveAt(i);
             }
         }
-
+        print("Guailist >>>>>>  "+ GuaiList.Count);
         if(GuaiList.Count == 0) OpenTheDoor();
     }
 

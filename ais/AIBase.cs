@@ -368,11 +368,38 @@ public class AIBase : MonoBehaviour {
     [Header("巡逻的移动速度")]
     public float PatrolSpeed = 0.4f;
 
-
+    float BeHitStopPatrolTimes = 3;
+    float BeHitStopPartolJishi = 0;
+    bool IsBeHitStopPartol = false;
 
     protected virtual void Patrol()
     {
         if (_roleDate.isDie) return;
+        
+        //被攻击后 停3秒 才能进巡逻
+        if (IsBeHitStopPartol)
+        {
+            print("BeHitStopPartolJishi-- jinlaimei!!  " + BeHitStopPartolJishi);
+            BeHitStopPartolJishi += Time.deltaTime;
+            if(BeHitStopPartolJishi >= BeHitStopPatrolTimes)
+            {
+                BeHitStopPartolJishi = 0;
+                IsBeHitStopPartol = false;
+            }
+            return;
+        }
+
+
+        if (_roleDate.isBeHiting) {
+            IsBeHitStopPartol = true;
+            BeHitStopPartolJishi = 0;
+            print(" xunluo!!!!!! ");
+            return;
+        }
+
+
+       
+
 
         if (isPatrolRest) {
             PatrolResting();
@@ -559,10 +586,12 @@ public class AIBase : MonoBehaviour {
         }
 
         //被攻击没有重置 isAction所以不能继续攻击了
-        if (GetComponent<RoleDate>().isBeHiting)
+        if (_roleDate.isBeHiting)
         {
-            AIBeHit();
+            //print("isBeHiting!!!!");
             gameBody.ResetAll();
+            _roleDate.isBeHiting = true;
+            AIBeHit();
             GetJingshi();
             return;
         }

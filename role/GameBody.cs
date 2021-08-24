@@ -885,6 +885,8 @@ public class GameBody : MonoBehaviour, IRole {
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         //print("r "+isAtking);
         //print("-------------->  isAcing   " + isAcing);
+        //print(" run速度  horizontalDirection   "+ horizontalDirection);
+
         isBackUping = false;
         
         if (roleDate.isBeHiting) return;
@@ -1006,7 +1008,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
-        //print(this.name+" ************************************************ 看看谁给的 力 "+v2);
+        if(this.name!="player"&& roleDate.isBeHiting) print(this.name+" ************************************************ 看看谁给的 力 "+v2+"   是否被攻击:     "+roleDate.isBeHiting);
         if (!playerRigidbody2D) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
@@ -1063,16 +1065,14 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void Run()
     {
-        //print("   >>>>>>>> run   !!! ");
+        //print("********************************   "+this.transform.localScale.x);
+        //print("   >>>>>>>> run   !!! "+ DBBody.animation.lastAnimationName+"   isrun player  "+ DBBody.animation.isPlaying);
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
         
         //print("isJumping   " + isJumping + "    isDowning  " + isDowning + "   isBeHiting  " + roleDate.isBeHiting + "isInAiring" + isInAiring + "   isDodgeing  " + isDodgeing);
         if (isJumping || isInAiring || isDowning || isDodgeing || roleDate.isBeHiting) return;
-        //print(DBBody.animation.lastAnimationName + "  -------------->?????????              " + RUN);
-        //print("??????   "+isRunLefting +"    "+isRunRighting);
-        //if (DBBody.animation.lastAnimationName == RUN|| DBBody.animation.lastAnimationName == STAND) return;
-
-        if (DBBody.animation.lastAnimationName != RUN)
+        //print(" ----run  "+ DBBody.animation.lastAnimationName+"   ??isPlayering  "+ DBBody.animation.isPlaying);
+        if (DBBody.animation.lastAnimationName != RUN || (DBBody.animation.lastAnimationName == RUN && !DBBody.animation.isPlaying))
         {
             DBBody.animation.GotoAndPlayByFrame(RUN);
         }
@@ -2148,6 +2148,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         //print("jinde shi nage???");
         if((DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted) {
+            //print("????  hasBeHit!!!!  ");
             roleDate.isBeHiting = false;
             if (IsGround) GetStand();
         }
@@ -2163,6 +2164,7 @@ public class GameBody : MonoBehaviour, IRole {
     //反击 被攻击动作清零
     public void FanJiBeHitReSet()
     {
+        print("反击！！！");
         isSkilling = false;
         isSkillOut = false;
         IsSFSkill = false;

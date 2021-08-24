@@ -71,7 +71,7 @@ public class DB_NewBase : DBBase
 
 
 
-        SetTongYongXiushiJing();
+        SetTongYongXiushiJing(TongYongXiushiJing,_TongYongXiushiJing);
 
 
 
@@ -84,6 +84,8 @@ public class DB_NewBase : DBBase
             Zhuangshiwu(QianZhuangshiwu_1);
         }
 
+        if (IsSCWu) GetWus();
+
 
         //**********************后加 的 平地前景
         if (Globals.mapType == GlobalMapDate.PINGDI)
@@ -95,40 +97,8 @@ public class DB_NewBase : DBBase
     }
 
 
-    [Header("顶地板景1")]
-    public Transform DingDBJings;
-    protected List<string> _DingDBJings = new List<string>();
+    
 
-
-
-
-    protected override void GetTopJ3()
-    {
-        GetObjListNameList(DingDBJings, _DingDBJings);
-        if (_DingDBJings.Count == 0) return;
-        //string qjuArrName = MapNames.GetInstance().GetJingArrNameByGKKey("qju");
-        //if (qjuArrName == "") return;
-        int nums = 2 + GlobalTools.GetRandomNum(4);
-        //DingDBPosL.transform.parent = GlobalTools.FindObjByName("maps").transform;
-        //DingDBPosR.transform.parent = GlobalTools.FindObjByName("maps").transform;
-        //print("  ??>>>>>>>>>**qjuArrName   " + qjuArrName+"   pos  "+ DingDBPosL.transform.position);
-        Vector2 pos1 = DingDBPosL.position;
-        Vector2 pos2 = DingDBPosR.position;
-        SetJingByDistanceU2(_DingDBJings, nums, pos1, pos2, pos1.y - 2, 0, 0, 50, "d");
-    }
-
-
-    protected override void GetTopJ4()
-    {
-        GetObjListNameList(DingDBJings, _DingDBJings);
-        if (_DingDBJings.Count == 0) return;
-        int nums = 1 + GlobalTools.GetRandomNum(1);
-        //DingDBPosL.transform.parent = GlobalTools.FindObjByName("maps").transform;
-        //DingDBPosR.transform.parent = GlobalTools.FindObjByName("maps").transform;
-        Vector2 pos1 = DingDBPosL.position;
-        Vector2 pos2 = DingDBPosR.position;
-        SetJingByDistanceU2(_DingDBJings, nums, pos1, pos2, pos1.y - 1.3f, -0.3f, 0, 20, "d");
-    }
 
 
 
@@ -335,12 +305,12 @@ public class DB_NewBase : DBBase
         Vector2 pos1 = tl.position;
         Vector2 pos2 = new Vector2(rd.position.x, tl.position.y);
         nums = 1 + GlobalTools.GetRandomNum(3);
-        SetJingByDistanceU2(_JinBeijings, nums, pos1, pos2, pos1.y - 1.7f - GlobalTools.GetRandomDistanceNums(1), 0.4f, 0.4f, -30, "u");
+        SetJingByDistanceU2(_JinBeijings, nums, pos1, pos2, pos1.y - 1.7f - GlobalTools.GetRandomDistanceNums(1), 0.4f, 0.2f, -30, "u");
 
 
 
-        nums = GlobalTools.GetRandomNum(2);
-        if(nums!=0)SetJingByDistanceU2(_JinBeijings3, nums, pos1, pos2, pos1.y - 1.9f - GlobalTools.GetRandomDistanceNums(1f), 0.6f, 0.8f, -40, "u");
+        nums = 1+GlobalTools.GetRandomNum(2);
+        if(nums!=0)SetJingByDistanceU2(_JinBeijings3, nums, pos1, pos2, pos1.y - 1.9f - GlobalTools.GetRandomDistanceNums(1f), 0.6f, 0.4f, -40, "u");
 
 
 
@@ -355,11 +325,11 @@ public class DB_NewBase : DBBase
         //}
 
 
-        if (GlobalTools.GetRandomNum() > 60)
+        if (GlobalTools.GetRandomNum() > 20)
         {
             GetObjListNameList(YuanBeijings1, _YuanBeijings1);
             //ybjArrName = MapNames.GetInstance().GetJingArrNameByGKKey(DaYuanBeijing_1);
-            SetDaYuanBeijing(_YuanBeijings1, 1, pos1, pos2, pos1.y + 2.8f + _YJmoveY, 2.8f, 1.5f, -70, "u",6.4f);
+            SetDaYuanBeijing(_YuanBeijings1, 1, pos1, pos2, pos1.y + 2.8f + _YJmoveY, 2.8f, 0.5f, -70, "u",6.4f);
         }
 
         ////return;
@@ -368,7 +338,7 @@ public class DB_NewBase : DBBase
         if (GlobalTools.GetRandomNum() > 90)
         {
             GetObjListNameList(DaYuanBeijings1, _DaYuanBeijings1);
-            SetDaYuanBeijing(_DaYuanBeijings1, 1, pos1, pos2, pos1.y, 4.6f, 1.5f, -80, "u", -0.2f);
+            SetDaYuanBeijing(_DaYuanBeijings1, 1, pos1, pos2, pos1.y, 4.6f, 0.5f, -80, "u", -0.2f);
         }
 
 
@@ -504,16 +474,35 @@ public class DB_NewBase : DBBase
         }
     }
 
+    [Header("****顶地板景1")]
+    public Transform DingDBJings;
+    protected List<string> _DingDBJings = new List<string>();
+
+    [Header("****顶地板景1-背景墙")]
+    public Transform DingDBJingsQiang;
+    protected List<string> _DingDBJingsQiang = new List<string>();
 
 
-
-
-
-
-    protected virtual void GetTopDingJing()
+    //顶部地板的 倒挂景
+    protected override void DingDBJing()
     {
-        GetObjListNameList(DingDBJings, _DingDBJings);
-        if (_DingDBJings.Count == 0) return;
+        GetTopDingJing(DingDBJings, _DingDBJings,10);
+        GetTopDingJing(DingDBJingsQiang, _DingDBJingsQiang,GlobalTools.GetRandomNum(2));
+        if (IsShowDingDB)
+        {
+            //生成喷火机关
+            //JiGuan_Penghuo();
+        }
+
+    }
+
+
+
+    
+    protected virtual void GetTopDingJing(Transform JingTrans, List<string> JingNameList, int JingNums = 0)
+    {
+        GetObjListNameList(JingTrans, JingNameList);
+        if (JingNameList.Count == 0) return;
 
         Vector2 pos1 = DingDBPosL.position;
         Vector2 pos2 = DingDBPosR.position;
@@ -524,11 +513,19 @@ public class DB_NewBase : DBBase
         float _topPosY = DingDBPosL.transform.position.y;
         float _w = Mathf.Abs(_l - _r);
 
-        int nums = 5 + GlobalTools.GetRandomNum(_DingDBJings.Count);
+        int nums = 0;
+        if (JingNums != 0)
+        {
+            nums = JingNums;
+        }
+        else
+        {
+            nums = 5 + GlobalTools.GetRandomNum(JingNameList.Count);
+        }
 
         for (int i = 0; i < nums; i++)
         {
-            string objName = _TongYongXiushiJing[GlobalTools.GetRandomNum(_DingDBJings.Count)];
+            string objName = JingNameList[GlobalTools.GetRandomNum(JingNameList.Count)];
             print(" xs objName  " + objName);
 
             GameObject jingObj = GlobalTools.GetGameObjectByName(objName);
@@ -540,6 +537,7 @@ public class DB_NewBase : DBBase
             float _x = 0;
             float _y = 0;
             float _z = 0;
+            int sd = 0;
 
             if (jingObj.GetComponent<JingBase>())
             {
@@ -553,25 +551,99 @@ public class DB_NewBase : DBBase
             }
 
             string touName = objName.Split('_')[0];
-            string touNmae2 = objName.Split('_')[1];
-            if (touName == "Qiang")
+            string touNmae2 = "";//objName.Split('_')[1];
+            if(objName.Split('_')[1]!=null) touNmae2 = objName.Split('_')[1];
+
+            if (touName == "qj") {
+                if (JingW >= 8f)
+                {
+                    print("XXXX1  jingW "+JingW+"  _w "+_w);
+                    _x = _l + JingW * 0.5f + GlobalTools.GetRandomDistanceNums(_w - JingW - 0.3f);
+                    _y = _topPosY + JingH * 0.5f - GlobalTools.GetRandomDistanceNums(0.5f);
+                    _z = -GlobalTools.GetRandomDistanceNums(0.3f);
+                    sd = 30 + i % 8;
+                }else if (JingW <= 4.4f)
+                {
+                    print("XXXX2  jingW " + JingW + "  _w " + _w);
+                    _x = _l + JingW * 0.5f + _w * 0.2f + GlobalTools.GetRandomDistanceNums(_w * 0.6f);
+                    _y = _topPosY + JingH * 0.5f - GlobalTools.GetRandomDistanceNums(0.5f);
+                    _z = -0.6f + -GlobalTools.GetRandomDistanceNums(0.6f);
+                    sd = 50 + i % 8;
+                }
+                else
+                {
+                    _x = _l + JingW * 0.5f + _w * 0.2f + GlobalTools.GetRandomDistanceNums(_w * 0.6f);
+                    _y = _topPosY + JingH * 0.5f - GlobalTools.GetRandomDistanceNums(0.3f);
+                    _z =  -GlobalTools.GetRandomDistanceNums(0.3f);
+                    sd = 40 + i % 8;
+                }
+            }
+            else if (touName == "Qiang")
             {
                 //墙 越宽 越靠前
-
+                if (JingW >= 8f)
+                {
+                    _x = _l + JingW*0.5f + GlobalTools.GetRandomDistanceNums(_w - JingW - 0.3f);
+                    _y = _topPosY + GlobalTools.GetRandomDistanceNums(JingH * 0.2f);
+                    _z = -0.3f - GlobalTools.GetRandomDistanceNums(0.3f);
+                    sd = -10 - i % 8;
+                }
+                else if (JingW  <= 4.4f)
+                {
+                    _x = _l + JingW * 0.5f + _w*0.2f + GlobalTools.GetRandomDistanceNums(_w*0.6f);
+                    _y = _topPosY - GlobalTools.GetRandomDistanceNums(JingH * 0.5f);
+                    _z = 0.8f + GlobalTools.GetRandomDistanceNums(0.6f);
+                    sd = -70 - i % 8;
+                }
+                else
+                {
+                    _x = _l + JingW * 0.5f + _w * 0.2f + GlobalTools.GetRandomDistanceNums(_w * 0.6f);
+                    _y = _topPosY - GlobalTools.GetRandomDistanceNums(JingH * 0.5f);
+                    _z = 0.4f+ GlobalTools.GetRandomDistanceNums(0.6f);
+                    sd = -60 - i % 8;
+                }
             }
             else
             {
                 //顶部的 零碎景
-               
+                _x = _l+JingW*0.5f +  GlobalTools.GetRandomDistanceNums(_w - JingW-0.3f);
+                _y = _topPosY - JingH * 0.3f + GlobalTools.GetRandomDistanceNums(JingH*0.8f);
+                _z = GlobalTools.GetRandomDistanceNums(0.3f);
+
+                //前 还是后
+                _z = GlobalTools.GetRandomNum() > 50 ? _z : -_z;
+                if (_z >= 0)
+                {
+                    sd = 22 + i % 8;
+                }
+                else
+                {
+                    sd = -10 - i % 8;
+                    //_z = -GlobalTools.GetRandomDistanceNums(0.3f);
+                }
 
             }
 
 
             if (touName == "wy"|| touNmae2 == "wy")
             {
-
+                JingNameList.Remove(objName);
             }
+
+            if (jingObj.GetComponent<JingBase>())
+            {
+                jingObj.GetComponent<JingBase>().SetSD(sd);
+            }
+            else
+            {
+                GlobalTools.SetMapObjOrder(jingObj, sd);
+            }
+            
+            jingObj.transform.position = new Vector3(_x,_y,_z);
         }
+
+        
+
     }
 
 
@@ -585,11 +657,11 @@ public class DB_NewBase : DBBase
 
 
 
-    protected virtual void SetTongYongXiushiJing()
+    protected virtual void SetTongYongXiushiJing(Transform JingTrans,List<string> JingNameList,int JingNums = 0)
     {
         print(" xs   width   "+GetWidth()*0.6f);
-        GetObjListNameList(TongYongXiushiJing, _TongYongXiushiJing);
-        if (_TongYongXiushiJing.Count == 0) return;
+        GetObjListNameList(JingTrans, JingNameList);
+        if (JingNameList.Count == 0) return;
 
         //有字节头的 特殊处理  eg:  qj_    yqj_    ybj_
         //其他根据 大小来 判断 位置
@@ -598,13 +670,23 @@ public class DB_NewBase : DBBase
         float _r = rd.transform.position.x;
         float _topPosY = tl.transform.position.y;
         float _w = GetWidth();
-        int nums = 1 + GlobalTools.GetRandomNum(_TongYongXiushiJing.Count);
+        int nums = 0;
+        if(JingNums!= 0)
+        {
+            nums = JingNums;
+        }
+        else
+        {
+            nums = 1 + GlobalTools.GetRandomNum(JingNameList.Count);
+        }
+
+
 
         print(" xs  nums "+nums);
 
         for (int i=0;i<nums;i++)
         {
-            string objName = _TongYongXiushiJing[GlobalTools.GetRandomNum(_TongYongXiushiJing.Count)];
+            string objName = JingNameList[GlobalTools.GetRandomNum(JingNameList.Count)];
             print(" xs objName  "+ objName);
 
             GameObject jingObj = GlobalTools.GetGameObjectByName(objName);
@@ -674,7 +756,7 @@ public class DB_NewBase : DBBase
             }
             else
             {
-                if (JingW / GetWidth() >= 0.6f || JingH >= 4)
+                if (JingW  >= 7.6f || JingH >= 4)
                 {
                     //居中靠后型的
                     _z = 1 + GlobalTools.GetRandomDistanceNums(1);
@@ -682,7 +764,7 @@ public class DB_NewBase : DBBase
                     _dy = 0.5f + GlobalTools.GetRandomDistanceNums(2f);
                     sd = -60 - i % 8;
                 }
-                else if (JingW / GetWidth() <= 0.4f)
+                else if (JingW  <= 4f)
                 {
                     _z = GlobalTools.GetRandomDistanceNums(0.4f);
                     _x = LeftPosX + JingW * 0.6f + GlobalTools.GetRandomDistanceNums(GetWidth() - JingW * 1.2f);
@@ -714,7 +796,7 @@ public class DB_NewBase : DBBase
             if (touName == "wy"|| S2Name!="")
             {
                 //唯一  直接在 数组内取出删除
-                _TongYongXiushiJing.Remove(objName);
+                JingNameList.Remove(objName);
 
             }
 

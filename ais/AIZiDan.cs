@@ -208,7 +208,11 @@ public class AIZiDan : MonoBehaviour
 
     }
 
+    [Header("攻击起手声音")]
+    public AudioSource QishouAudio;
 
+    [Header("子弹 发射 声音")]
+    public AudioSource ZidanFireAudio;
 
     //这里做个延迟可以
     bool IsHasFire = false;
@@ -218,6 +222,8 @@ public class AIZiDan : MonoBehaviour
         IsHasFire = true;
         _gameBody.GetAcMsg(ACName);
         _gameBody.roleAudio.PlayAudioYS("AudioAtk_1");
+        if (QishouAudio) QishouAudio.Play();
+        if (ZidanFireAudio&&GlobalTools.GetRandomNum()>=50) ZidanFireAudio.Play();
     }
 
 

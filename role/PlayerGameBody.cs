@@ -65,7 +65,7 @@ public class PlayerGameBody : GameBody {
 
 
         BodyHitProtecting();
-        if (IsInFighting)InFingting();
+        if (Globals.IsInFighting)InFingting();
 
         DimianAtkHuanYuan();
         //攻击修正 防卡死
@@ -133,32 +133,32 @@ public class PlayerGameBody : GameBody {
     {
         print("  进入boss战  改变跑步姿势。 ");
         IsChiXueRunAC = true;
-        IsInFighting = true;
+        Globals.IsInFighting = true;
         ChangeACNum(4);
         RUN = "run_5";
         FightingNums = 0;
         if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
         maxSpeedX = _maxSpeedXRecord;
-        maxSpeedX += 2;
+        maxSpeedX += 0.9f;
     }
 
 
 
 
 
-    protected bool IsInFighting = false;
+    //protected bool IsInFighting = false;
     //记录初始的 最大X速度
     protected float _maxSpeedXRecord = 0;
     protected void ChangeRunAC(UEvent e)
     {
         if (IsChiXueRunAC) return;
-        IsInFighting = true;
+        Globals.IsInFighting = true;
         ChangeACNum(4);
         RUN = "run_5";
         FightingNums = 0;
         if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
         maxSpeedX = _maxSpeedXRecord;
-        maxSpeedX += 2;
+        maxSpeedX += 0.9f;
 
     }
 
@@ -170,7 +170,7 @@ public class PlayerGameBody : GameBody {
         FightingNums += Time.deltaTime;
         if (FightingNums >= TheFightingNums)
         {
-            IsInFighting = false;
+            Globals.IsInFighting = false;
             RUN = "run_3";
             maxSpeedX = _maxSpeedXRecord;
             _maxSpeedXRecord = 0;

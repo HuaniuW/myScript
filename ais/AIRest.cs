@@ -37,6 +37,7 @@ public class AIRest : MonoBehaviour {
         if (isStart)
         {
             //print("休息    "+ GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
+            if (GetComponent<RoleDate>().isBeHiting) return;
             if (!GetComponent<GameBody>()) return;
             GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             _times -= Time.deltaTime;

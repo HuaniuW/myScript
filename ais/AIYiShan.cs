@@ -31,6 +31,10 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         return !isStart;
     }
 
+    [Header("一闪起手 音效")]
+    public AudioSource Audio_YishanQishou;
+
+
 
     protected UnityArmatureComponent DBBody;
     public void GetStart(GameObject gameObj)
@@ -100,6 +104,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
             //_gameBody.GetACByName(acName, true);
             GetComponent<EnemyGameBody>()._isHasAtkTX = true;
             _gameBody.GetAcMsg(acName);
+            if(Audio_YishanQishou) Audio_YishanQishou.Play();
         }
 
         

@@ -413,9 +413,9 @@ public class GetReMap2 : GetReMap
 
         //测试用 不用了就删掉
         //_dixingType = GlobalMapDate.DONGNEI_TIAOYUE_1;
-        //_dixingType = GlobalMapDate.PINGDI;
-        _dixingType = GlobalMapDate.YIBAN;
-        _dixingkuozhanNums = 2;
+        _dixingType = GlobalMapDate.PINGDI;
+        //_dixingType = GlobalMapDate.YIBAN;
+        _dixingkuozhanNums = 4;
         Globals.mapType = _dixingType;
         print("Jing 整体 地形 是什么 ❓  " + Globals.mapType);
         print("Jing  ******************************************************************************************* _dixingType  地形类型   " + _dixingType);
@@ -1037,6 +1037,7 @@ public class GetReMap2 : GetReMap
         if (DibanType != "") mapArrName += "_" + Globals.mapTypeNums;
         int nums = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance()).Count;
         string mapName = GetDateByName.GetInstance().GetListByName(mapArrName, MapNames.GetInstance())[GlobalTools.GetRandomNum(nums)];
+        print(" mapName  "+mapName);
         return GlobalTools.GetGameObjectByName(mapName);
     }
 
@@ -1329,7 +1330,7 @@ public class GetReMap2 : GetReMap
         if (Globals.mapType==GlobalMapDate.YIBAN)
         {
             //如果是第一关 在自动地图里面 都是 上下交错的 没有平地
-            ReNums = 50 + GlobalTools.GetRandomNum(50);
+            ReNums = 10 + GlobalTools.GetRandomNum(90);
             print(" 地板 jinlamei  "+ ReNums);
         }
 

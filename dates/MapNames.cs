@@ -58,7 +58,7 @@ public class MapNames : MonoBehaviour
 
 
     //地板
-    public List<string> db_pd_1 = new List<string> { "db_pd_1"};//, "db_pd_3" 
+    public List<string> db_pd_1 = new List<string> { "db_pd_senlin", "db_pd_Shitou_1", "db_pd_senlin_2" };//, "db_pd_3" 
 
     public List<string> tiaoyue_1 = new List<string> { "db_ty_1"};
 

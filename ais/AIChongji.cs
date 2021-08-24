@@ -207,7 +207,7 @@ public class AIChongji : MonoBehaviour, ISkill
         if (!IsStartChongji&&!IsGenZongType) {
             IsStartChongji = true;
             targetPos = _targetObj.position;
-
+            //冲击身后距离
             if (ChongJiShenHouDis != 0)
             {
                 //这个点 要在靠后一点

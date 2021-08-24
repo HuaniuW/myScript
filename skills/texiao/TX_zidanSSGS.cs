@@ -11,6 +11,8 @@ public class TX_zidanSSGS : TX_zidan
         //print("子弹 start!!");
     }
 
+    [Header("起始音效")]
+    public AudioSource QishiAudio;
 
 
     void ReSetAll()
@@ -43,6 +45,10 @@ public class TX_zidanSSGS : TX_zidan
             float upPos = 2 + GlobalTools.GetRandomDistanceNums(2);
             Vector2 v2 = new Vector2(this.transform.position.x, this.transform.position.y + upPos);
             GetDiretionByV2(v2,SpeedUp);
+            if (QishiAudio) {
+                //print("播放起始 音效   "+ QishiAudio.name);
+                QishiAudio.Play();
+            }
         }
     }
 

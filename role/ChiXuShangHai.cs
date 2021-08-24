@@ -177,7 +177,7 @@ public class ChiXuShangHai : MonoBehaviour
     //火
     const string HUO = "huo";
 
-    bool IsDu = false;
+    public bool IsDu = false;
     float _DuShanghai = 0;
     float _DuShanghaiTimes = 0;
     float _DuJishi = 0;

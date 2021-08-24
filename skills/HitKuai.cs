@@ -861,6 +861,7 @@ public class HitKuai : MonoBehaviour {
             HitTXPos(hitTx_1);
             //被撞击者 退后
             float _fanTuili = 1000;
+            _fanTuili = jn_date.FanTuili;
             _fanTuili = atkObj.transform.position.x > beHitObj.transform.position.x ? _fanTuili : -_fanTuili;
             if (atkObj.GetComponent<RoleDate>())
             {
@@ -890,7 +891,7 @@ public class HitKuai : MonoBehaviour {
             hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
             HitTXPos(hitTx_1);
             //被撞击者 退后
-            float _fanTuili = 1000;
+            float _fanTuili = atkObj.GetComponent<JN_Date>().FanTuili; // 1000;
             _fanTuili = atkObj.transform.position.x > beHitObj.transform.position.x ? _fanTuili : -_fanTuili;
             if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) <= 100)
             {

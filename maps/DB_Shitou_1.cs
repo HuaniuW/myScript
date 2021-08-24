@@ -27,7 +27,7 @@ public class DB_Shitou_1 : DB_NewBase
         //}
 
         //ShowDingDB();
-        SetDingDBPos();
+        //SetDingDBPos();
 
         //print("子对象数量   " + JinBeijings1.childCount);
 
@@ -66,7 +66,7 @@ public class DB_Shitou_1 : DB_NewBase
         GetObjListNameList(JinBeijings3, _JinBeijings3);
         GetYuanBeiJing();
 
-        SetTongYongXiushiJing();
+        SetTongYongXiushiJing(TongYongXiushiJing,_TongYongXiushiJing);
 
         //*********************装饰物
         if (IsZhuangshiwu)
@@ -76,6 +76,8 @@ public class DB_Shitou_1 : DB_NewBase
             //print(" wcao QianZhuangshiwu_1  "+ QianZhuangshiwu_1);
             Zhuangshiwu(QianZhuangshiwu_1);
         }
+
+        //if (IsSCWu) GetWus();
 
 
         //**********************后加 的 平地前景

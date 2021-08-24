@@ -9,6 +9,7 @@ public class AIYidongZidan : MonoBehaviour
     {
         gameBody = GetComponent<GameBody>();
         myPosition = this.transform.position;
+        if (!_player) _player = GlobalTools.FindObjByName("player");
     }
 
     // Update is called once per frame
@@ -49,18 +50,63 @@ public class AIYidongZidan : MonoBehaviour
     }
 
 
+   
+
+
+
+
+
+
+    float _ZhuangxiangJishi = 0;
+    float _ZhuanxiangTimes = 2;
+
     bool isRunLeft = true;
     bool isRunRight = false;
     GameBody gameBody;
+    GameObject _player;
     Vector2 myPosition;
 
     private void Move()
     {
+
+        if (this.transform.position.x > _player.transform.position.x &&this.transform.localScale.x == -1)
+        {
+            //玩家 在我左边  左转向
+            _ZhuangxiangJishi += Time.deltaTime;
+            if(_ZhuangxiangJishi>= _ZhuanxiangTimes)
+            {
+                _ZhuangxiangJishi = 0;
+                isRunLeft = true;
+                isRunRight = false;
+            }
+        }
+        else if(this.transform.position.x < _player.transform.position.x && this.transform.localScale.x == 1)
+        {
+            //右转向
+            _ZhuangxiangJishi += Time.deltaTime;
+            if (_ZhuangxiangJishi >= _ZhuanxiangTimes)
+            {
+                _ZhuangxiangJishi = 0;
+                isRunLeft = false;
+                isRunRight = true;
+            }
+        }
+        else
+        {
+            _ZhuangxiangJishi = 0;
+        }
+
+        if(gameBody.IsEndGround || gameBody.IsHitWall)
+        {
+            return;
+        }
+
+
         if (isRunLeft)
         {
             gameBody.RunLeft(flyXSpeed);
             //print("   左 "+flySpeed);
-            if (this.transform.position.x - myPosition.x < -patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+            if (gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 isRunLeft = false;
                 isRunRight = true;
@@ -71,13 +117,38 @@ public class AIYidongZidan : MonoBehaviour
         {
             gameBody.RunRight(flyXSpeed);
             //print("   右！！！ " + flySpeed);
-            if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+            if (gameBody.IsEndGround || gameBody.IsHitWall)
             {
                 isRunLeft = true;
                 isRunRight = false;
 
             }
         }
+
+
+        //if (isRunLeft)
+        //{
+        //    gameBody.RunLeft(flyXSpeed);
+        //    //print("   左 "+flySpeed);
+        //    if (this.transform.position.x - myPosition.x < -patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+        //    {
+        //        isRunLeft = false;
+        //        isRunRight = true;
+
+        //    }
+        //}
+        //else if (isRunRight)
+        //{
+        //    gameBody.RunRight(flyXSpeed);
+        //    //print("   右！！！ " + flySpeed);
+        //    if (this.transform.position.x - myPosition.x > patrolDistance || gameBody.IsEndGround || gameBody.IsHitWall)
+        //    {
+        //        isRunLeft = true;
+        //        isRunRight = false;
+
+        //    }
+        //}
+
     }
 
     bool IsAtking = false;

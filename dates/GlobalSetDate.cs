@@ -279,15 +279,19 @@ public class GlobalSetDate : MonoBehaviour {
             GameObject door = GlobalTools.FindObjByName(doorName);
             print(" ----------->>>   "+door.name);
             playerInScreenPosition = door.transform.position;
+            //door.GetComponent<ScreenChange>().OutPosition;
             if (door.transform.localRotation.z < 0)
             {
                 roleDirection = "r";
-                playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.transform.position.y - 1f);
+                //playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.transform.position.y - 1f);
+                playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
+
             }
             else
             {
                 roleDirection = "l";
-                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1f);
+                //playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1f);
+                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
             }
             doorName = "";
         }

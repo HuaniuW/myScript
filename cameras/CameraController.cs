@@ -105,6 +105,10 @@ public class CameraController : MonoBehaviour
         _max = Bounds.bounds.max;//初始化边界最大值(边界右上角)
     }
 
+
+   
+
+
     void GetPlayer()
     {
         if (player)
@@ -167,7 +171,32 @@ public class CameraController : MonoBehaviour
     //控制摄像头X移动速度
     float CamereMoveSpeed = 0.3f;
 
-    void Update()
+    float cameraHalfWidth = 0;
+    bool IsHasTestInCenter = false;
+    bool IsGetCenterPosX = false;
+    float _centerX = 0;
+    void GetCenterPosX()
+    {
+        if (Mathf.Abs(_min.x - _max.x) <= cameraHalfWidth * 2)
+        {
+            IsGetCenterPosX = true;
+            _centerX = _min.x + Mathf.Abs(_min.x - _max.x) * 0.5f;
+            print("锁死 x 点 在中间位置");
+        }
+        else
+        {
+            IsGetCenterPosX = false;
+        }
+    }
+
+
+    //private void LateUpdate()
+    //{
+        
+    //}
+
+
+    void LateUpdate()
     {
         if (!player) return;
         var x = transform.position.x;
@@ -175,9 +204,17 @@ public class CameraController : MonoBehaviour
         
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
         //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
-        var cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
+        cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
 
         //print(cameraHalfWidth + "   wwwwwwwwww   "+ Bounds.size);
+
+
+        if (!IsHasTestInCenter)
+        {
+            IsHasTestInCenter = true;
+            GetCenterPosX();
+        }
+
 
 
         if (IsFollowing)
@@ -301,7 +338,7 @@ public class CameraController : MonoBehaviour
                     else
                     {
                         var vx = player.GetComponent<Rigidbody2D>().velocity.x;
-                        var xzX = 3f;//值小会出现边缘卡顿 原因未理清
+                        var xzX = 6f;//值小会出现边缘卡顿 原因未理清
 
                         if (Mathf.Abs(vx) >= xzX)
                         {
@@ -313,7 +350,29 @@ public class CameraController : MonoBehaviour
                             else
                             {
                                 //速度过快 让摄像机直接跟随 不缓动跟随了
-                                x = player.position.x - distanceX;
+                                //x = player.position.x - distanceX;
+
+                                if (Globals.IsInFighting)
+                                {
+                                    if (player.transform.localScale.x > 0)
+                                    {
+                                        x = Mathf.Lerp(x, player.position.x - Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
+
+                                    }
+                                    else
+                                    {
+                                        x = Mathf.Lerp(x, player.position.x + Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
+                                    }
+                                    distanceX = player.position.x - x;
+                                }
+                                else
+                                {
+                                    x = player.position.x - distanceX;
+                                }
+
+
+
+
                             }
                         }
                         else
@@ -431,6 +490,9 @@ public class CameraController : MonoBehaviour
         if(isShockZing2) z = GetShockZing2();
 
         if (IsSetNewAddXPos) x =player.transform.position.x+ _addPosX;
+
+        if (IsGetCenterPosX) x = _centerX;
+
         transform.position = new Vector3(x, y, z);//改变相机的位置
         //print("playerpos    "+player.transform.position+  "2  " + transform.position.y + "  ---  " + CameraKuaiY + "  >> " + y + "   IsHitCameraKuai  " + IsHitCameraKuai + "    IsFollowing   " + IsFollowing);
 

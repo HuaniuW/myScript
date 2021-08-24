@@ -64,7 +64,11 @@ public class Globals : MonoBehaviour {
     }
 
 
-   
+    //是否进入战斗状态
+    public static bool IsInFighting = false;
+
+
+
 
     void Start () {
 		
