@@ -115,7 +115,7 @@ public class PlayerGameBody : GameBody {
         hongdian.Stop();
         _playerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
 
-
+        _maxSpeedXRecord = 0;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC_2, this.ChangeRunAC2);
         //PlayTXByTXName("huafang");//测试用 看看能不能播

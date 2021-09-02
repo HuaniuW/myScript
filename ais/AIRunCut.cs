@@ -18,6 +18,10 @@ public class AIRunCut : MonoBehaviour,ISkill{
     [Header("攻击动作信息 配置的招式 在ZSDate 里面找")]
     public string AtkMsgName = "atk_407";
 
+    [Header("冲砍的 起始准喊叫声音")]
+    public AudioSource AudioRunCut;
+
+
     AIBase _aiBase;
 	// Use this for initialization
 	void Start () {
@@ -74,6 +78,8 @@ public class AIRunCut : MonoBehaviour,ISkill{
             //print("---------------->AtkName    " + AtkName + "   RunName  " + RunName+ "     oldRunName  "+ oldRunName);
 
             gameBody.RunACChange(RunName, moveSpeedX);
+
+            if (AudioRunCut) AudioRunCut.Play();
         }
     }
 

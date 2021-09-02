@@ -147,6 +147,11 @@ public class Plot_Str : MonoBehaviour
        "acType:talk-talkObjName:B_dlws-msg:好吧！这个徽章给你吧，路途艰险，多加小心。-choseType:dan-id:5-nextId:6|";
 
 
+
+
+    //G6 boss对话
+    //string plotStr = "acType:talk-talkObjName:B_dlws-msg:这么晚了不睡觉来挑战我？有信心吗-choseType:dan-id:1-nextId:2|acType:talk-talkObjName:player-msg:我等这一刻很久了！#4^event$test@我也想去睡觉！。#3-choseType:duo-id:2-nextId:3|acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$over-choseType:dan-id:3-nextId:6|acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight-choseType:dan-id:4-nextId:5";
+
     private void OnEnable()
     {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.NEXT_ID, GetNextId);

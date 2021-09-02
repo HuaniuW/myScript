@@ -120,6 +120,7 @@ public class AIFanji : MonoBehaviour {
             _gameBody.FanJiBeHitReSet();
             //清0速度
             _gameBody.SpeedXStop();
+            print("fj >>>>>>   "+ HouShanValue);
             _gameBody.GetBackUp(HouShanValue);
         }
         

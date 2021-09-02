@@ -450,7 +450,27 @@ public class CameraController : MonoBehaviour
         //float targetX;
         if (_isChangeKuang)
         {
-            x = player.position.x;
+            //x = player.position.x;
+
+            //print("  改变视觉 边界！！！！！！ ");
+
+           if(x> _max.x - cameraHalfWidth)
+            {
+                x = Mathf.Lerp(x, _max.x - cameraHalfWidth-4, CamereMoveSpeed*10 * Time.deltaTime);
+            }else if (x < _min.x + cameraHalfWidth)
+            {
+                x = Mathf.Lerp(x, _min.x + cameraHalfWidth+4, CamereMoveSpeed*10 * Time.deltaTime);
+            }
+            else
+            {
+                _isChangeKuang = false;
+            }
+
+
+           //如果 是切入 中心点  直接
+
+
+
             if (x < _min.x + cameraHalfWidth)
             {
                 if (Mathf.Abs(_min.x + cameraHalfWidth - x) < 0.2f)
@@ -459,7 +479,7 @@ public class CameraController : MonoBehaviour
                 }
 
             }
-            else if (x > _min.x + cameraHalfWidth)
+            else if (x > _max.x - cameraHalfWidth)
             {
                 if (Mathf.Abs(_max.x - cameraHalfWidth - x) < 0.2f)
                 {

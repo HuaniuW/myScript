@@ -51,6 +51,11 @@ public class JN_SFBase : MonoBehaviour, ISkill
     public float AddYZTimes = 0;
 
 
+
+    //[Header("技能发动 的声音")]
+    //public AudioSource AudioFadong;
+
+
     protected GameObject _player;
 
     // Start is called before the first frame update

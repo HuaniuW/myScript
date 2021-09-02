@@ -455,6 +455,10 @@ public class AIYinshen : MonoBehaviour
                     //上方
                     __x = thePlayer.transform.position.x;
                     __y = __y = thePlayer.transform.position.y + 5 + GlobalTools.GetRandomDistanceNums(3);
+                }else if (_yinShenPosType == "zy")
+                {
+                    __x = GlobalTools.GetRandomNum() > 50 ? thePlayer.transform.position.x - atkDistanceX : thePlayer.transform.position.x + atkDistanceX;
+                    __y = thePlayer.transform.position.y +1+ GlobalTools.GetRandomDistanceNums(1);
                 }
                 else
                 {

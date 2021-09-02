@@ -221,7 +221,12 @@ public class Plot_playByStr : MonoBehaviour
     //camera topos
     //talk text
     //ac acname
-    //isCanJump 
+    //isCanJump
+
+
+    //talk-2.8-B_yg-居然还有人类存在？哈哈哈哈！|talk-2.8-B_yg-弱小就不应该存在。乖乖的等我消灭吧 哈哈哈哈哈！啊哈哈哈哈哈哈哈！阿阿阿阿阿阿阿阿阿阿阿阿阿？哈哈哈哈！
+
+
     [Header("内容 为什么把说话的对象 放在数组内 应为 会切换对象 所以没有单独拿出来")]
     public string plotStr = "talk-2.8-B_yg-居然还有人类存在？哈哈哈哈！|talk-2.8-B_yg-弱小就不应该存在。乖乖的等我消灭吧 哈哈哈哈哈！啊哈哈哈哈哈哈哈！阿阿阿阿阿阿阿阿阿阿阿阿阿？哈哈哈哈！";
     [Header("是否停止角色的行动 这里 在角色确定打开才停止")]

@@ -174,8 +174,10 @@ public class AudioControl : MonoBehaviour {
     void DieOut(UEvent e)
     {
         if (e.eventParams == null) return;
-        //print("  -------- "+ e.eventParams.ToString());
-        if(e.eventParams.ToString() == "Player")
+        //print(e.eventParams.ToString());
+        //print((e.target as GameObject).name);
+        //print(" audio -------- "+ e.eventParams.ToString());
+        if(e.eventParams.ToString() == GlobalTag.Player)
         {
             if (IsPlayerDieGraduaMin)
             {
@@ -184,7 +186,14 @@ public class AudioControl : MonoBehaviour {
             }
         }
 
-        if (e.eventParams.ToString() == "boss")
+        if (e.eventParams.ToString() == GlobalTag.BOSS)
+        {
+            IsPlayerDieGraduaMining = true;
+            return;
+        }
+
+
+        if (e.eventParams.ToString() == GlobalTag.JINGYING)
         {
             IsPlayerDieGraduaMining = true;
         }

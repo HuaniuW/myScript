@@ -14,4 +14,6 @@ public class GlobalTag : MonoBehaviour
     public static string Player = "Player";
     public static string Diren = "diren";
     public static string AirEmeny = "AirEmeny";
+    public static string JINGYING = "jingying";
+    public static string BOSS = "boss";
 }

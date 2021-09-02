@@ -8,7 +8,7 @@ public class UI_txtBar : MonoBehaviour
 
     public Image bgImg;
     public Text StrText;
-
+    public Image ChoseImg;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,7 @@ public class UI_txtBar : MonoBehaviour
         _yColor = bgImg.color;
         _txtColor = StrText.color;
         _yPos = this.transform.position;
-
+        ChoseImg.gameObject.SetActive(false);
         if (IsHasChose) GetBeChose();
         //print(" _txtColor   " + _txtColor+ "   _yColor   "+ _yColor);
 
@@ -79,6 +79,7 @@ public class UI_txtBar : MonoBehaviour
         StrText.color = _txtColor;
         this.transform.position = _yPos;
         IsHasChose = false;
+        ChoseImg.gameObject.SetActive(false); 
     }
 
 
@@ -105,6 +106,7 @@ public class UI_txtBar : MonoBehaviour
         bgImg.color = new Color(0.2f, 0.2f, 0.2f);
         StrText.color = new Color(1,1,1);
         IsGetChose = true;
+        ChoseImg.gameObject.SetActive(true);
     }
 
     bool IsGetChose = false;

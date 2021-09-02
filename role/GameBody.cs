@@ -1134,14 +1134,16 @@ public class GameBody : MonoBehaviour, IRole {
         if (bodyScale.x < 0)
         {
             //playerRigidbody2D.AddForce(Vector2.left * _vx);
-            GetZongTuili(Vector2.left * _vx,true);
+            //GetZongTuili(Vector2.left * _vx,true);
+            GetZongTuili(new Vector2(-10,2)* _vx, true);
             //newSpeed = new Vector2(-_vx, 0);
         }
         else if (bodyScale.x > 0)
         {
             //newSpeed = new Vector2(_vx, 0);
             //playerRigidbody2D.AddForce(Vector2.right * _vx);
-            GetZongTuili(Vector2.right * _vx, true);
+            GetZongTuili(new Vector2(10, 2) * _vx, true);
+            //GetZongTuili(Vector2.right * _vx, true);
         }
         
         //playerRigidbody2D.velocity = newSpeed;

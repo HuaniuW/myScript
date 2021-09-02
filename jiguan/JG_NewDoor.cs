@@ -51,14 +51,18 @@ public class JG_NewDoor : MonoBehaviour
     {
         //throw new NotImplementedException();
         String str = evt.eventParams.ToString();
+        //print("sj  men test");
+
+        if (str == "open")
+        {
+            OpenTheDoor();
+        }
+
         if (!IsCanDoorClose) return;
+        //print(" sj "+ str);
         if(str == "close")
         {
             CloseTheDoor();
-        }
-        else if (str == "open")
-        {
-            OpenTheDoor();
         }
     }
 
@@ -92,7 +96,7 @@ public class JG_NewDoor : MonoBehaviour
     void CheckIsNoBossCloseDoor()
     {
         if (!IsNoBossNeedCloseDoor || !IsCanDoorClose) return;
-        print("****************************!!!!");
+        //print("****************************!!!!");
         IsNoBossNeedCloseDoor = false;
         //print(" >>>   "+(BossOrJY == null));
         if (!BossOrJY.activeSelf)
@@ -115,7 +119,7 @@ public class JG_NewDoor : MonoBehaviour
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NEW_OPEN_DOOR, "close"), this);
             //IsCloseing = true;
-            print(" **************  碰撞 关门机关！！！！   ");
+            //print(" **************  碰撞 关门机关！！！！   ");
             
         }
     }
@@ -216,7 +220,7 @@ public class JG_NewDoor : MonoBehaviour
                 GuaiList.RemoveAt(i);
             }
         }
-        print("Guailist >>>>>>  "+ GuaiList.Count);
+        //print("Guailist >>>>>>  "+ GuaiList.Count);
         if(GuaiList.Count == 0) OpenTheDoor();
     }
 

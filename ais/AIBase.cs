@@ -289,7 +289,7 @@ public class AIBase : MonoBehaviour {
         {
             //print("发现敌人！！！");
             string _msg = GetComponent<RoleDate>().DuBai;
-            if (GetComponent<RoleDate>().enemyType == "boss"&& _msg!="")
+            if ((GetComponent<RoleDate>().enemyType == GlobalTag.BOSS|| GetComponent<RoleDate>().enemyType == GlobalTag.JINGYING) && _msg!="")
             {
                 
                 GameObject _cBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TalkBar2") as GameObject);
@@ -794,7 +794,7 @@ public class AIBase : MonoBehaviour {
     public virtual bool NearRoleInDistance(float distance,float nearSpeed  =1.9f)
     {
 
-        if (GlobalTools.FindObjByName("player").GetComponent<RoleDate>().isDie)
+        if (GlobalTools.FindObjByName("player")!=null&& GlobalTools.FindObjByName("player").GetComponent<RoleDate>().isDie)
         {
             //print("  ////  --------------------- -------------getStand!!!!!!");
             
@@ -888,6 +888,7 @@ public class AIBase : MonoBehaviour {
 
     bool GetMove(float distance,float nearSpeed)
     {
+        if (thePlayer == null) return false;
         if (thePlayer.transform.position.x - transform.position.x > distance)
         {
             //目标在右
