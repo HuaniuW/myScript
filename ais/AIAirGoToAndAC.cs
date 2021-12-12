@@ -16,6 +16,11 @@ public class AIAirGoToAndAC : MonoBehaviour
     public string PosArr = "";
 
 
+
+    [Header("类型2 用 固定点数组 字符串")]
+    public List<GameObject> PointArr = new List<GameObject>() { };
+
+
     GameObject _obj;
     public void GetStart(GameObject obj)
     {
@@ -59,13 +64,15 @@ public class AIAirGoToAndAC : MonoBehaviour
         }
 
 
-
+        //print(" gt ----typeNum  "+ TypeNum);
         //typeNum = 1 就是4个随机点  2就是 在玩家的x 处 的固定高位 可以下压
         if(TypeNum == 1)
         {
             if(PosArr == "")
             {
+               
                 IsOver = true;
+
                 return;
             }
             else
@@ -146,12 +153,37 @@ public class AIAirGoToAndAC : MonoBehaviour
             }
 
             chosePos = new Vector2(_toX, _toY);
+            //print("  move     chosePos " + chosePos);
             IsStartMove = true;
             //if (!IsPointHitWall(v2))
             //{
             //    IsStartMove = true;
             //}
 
+        }else if (TypeNum == 6)
+        {
+            //固定 点 数组
+            if (PointArr.Count != 0)
+            {
+                foreach (GameObject o in PointArr)
+                {
+                    gudingZBList.Add(o.transform.position);
+                }
+
+                //开始 找点
+                chosePos = ChoseAndCheckPointInList();
+                print(" goto寻找到的 点     " + chosePos);
+                if (chosePos == new Vector2(1000, 1000))
+                {
+                    IsOver = true;
+                    return;
+                }
+                IsStartMove = true;
+            }
+            else
+            {
+                IsOver = true;
+            }
         }
         //运动到目标点
 
@@ -177,7 +209,7 @@ public class AIAirGoToAndAC : MonoBehaviour
     AIAirRunNear _aiRunNear;
     //探测 点 4个方向距离 防止 有墙
     public float TcDistance = 2;
-    bool IsPointHitWall(Vector2 pos) {
+    protected bool IsPointHitWall(Vector2 pos) {
         if (!_aiRunNear) _aiRunNear = GetComponent<AIAirRunNear>();
         if (_aiRunNear == null) return true;
         //检测 点是否撞墙

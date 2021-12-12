@@ -94,7 +94,7 @@ public class DataZS : MonoBehaviour
     static public Dictionary<string, string> jumpAtk_31 = new Dictionary<string, string> { { "atkName", "jumpAtk_31" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_602" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "1" }, { "atkDistance", "6" } };
     static public Dictionary<string, string> jumpAtk_32 = new Dictionary<string, string> { { "atkName", "jumpAtk_32" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "9" }, { "txName", "dg_603" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "18" }, { "atkDistance", "6" },{ "fantan","5"} };
 
-    static public Dictionary<string, string>[] atkZS = new Dictionary<string, string>[] {atk_21,atk_22,atk_25,atk_24};
+    static public Dictionary<string, string>[] atkZS = new Dictionary<string, string>[] {atk_21,atk_22,atk_24};
     static public Dictionary<string, string>[] atkUpZS = new Dictionary<string, string>[] { atk_31};
     static public Dictionary<string, string>[] jumpAtkZS = new Dictionary<string, string>[] {jumpAtk_21,jumpAtk_21};
     static public Dictionary<string, string>[] jumpAtkDownZS = new Dictionary<string, string>[] { jumpAtk_32};
@@ -122,11 +122,11 @@ public class DataZS : MonoBehaviour
 
 
     //幽灵boss
-    static public Dictionary<string, string> atk_1001 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "1" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" },{"qishouYC","0" } };
+    static public Dictionary<string, string> atk_1001 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "1" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" },{"qishouYC","0" } };
     //这个是没有 起手动作的 快速砍击
-    static public Dictionary<string, string> atk_1001s = new Dictionary<string, string> { { "atkName", "atk_11" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
-    static public Dictionary<string, string> atk_1002 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "1" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "25" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
-    static public Dictionary<string, string> atk_1004 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "6" }, { "qishouYC", "0.3" } };
+    static public Dictionary<string, string> atk_1001s = new Dictionary<string, string> { { "atkName", "atk_11" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" }, { "qishouYC", "0.3" } };
+    static public Dictionary<string, string> atk_1002 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "1" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1002" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "25" }, { "atkDistance", "4" }, { "qishouYC", "0.3" } };
+    static public Dictionary<string, string> atk_1004 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "7" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1001" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" }, { "qishouYC", "0.3" } };
 
     //电球恶魔boss
     static public Dictionary<string, string> atk_1104 = new Dictionary<string, string> { { "atkName", "skill_genzong1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "TX_dianqiu" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "30" }, { "atkDistanceY", "4" } };

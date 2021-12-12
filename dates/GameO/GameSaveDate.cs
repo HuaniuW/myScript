@@ -102,6 +102,7 @@ public class GameSaveDate{
         string s = SerializeObject(date, typeof(OtherSaveDate));
         //创建XML文件且写入数据
         CreateTextFile(_fileURL2, s, false);
+        Debug.Log("ot 其他数据写入  "+s+"    路径> "+ _fileURL2+"   date内容  "+date.GlobalOtherDate);
     }
 
 
@@ -110,13 +111,14 @@ public class GameSaveDate{
     {
         // _fileName = Application.persistentDataPath + "/" + _fileName;
         string str = Application.persistentDataPath + "/" + cGKDateName;
+        Debug.Log("ot 取other数据路径  "+ str);
         //if(Globals.isDebug)Debug.Log(str);
         try
         {
             string strTemp = LoadTextFile(str, false);
             //反序列化对象
             OtherSaveDate userD = DeserializeObject(strTemp, typeof(OtherSaveDate)) as OtherSaveDate;
-            //if (Globals.isDebug) Debug.Log(userD.userName);
+            if (Globals.isDebug) Debug.Log("  ot 取到other数据  "+userD );
             return userD;
         }
         catch

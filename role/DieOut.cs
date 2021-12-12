@@ -10,6 +10,10 @@ public class DieOut : MonoBehaviour {
 
     [Header("boss Die后 奖励物品出现位置")]
     public Transform bossDieOutPos;
+
+    [Header("精英怪自带的 音乐")]
+    public AudioSource JYAudio;
+
 	// Use this for initialization
 	void Start () {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
@@ -58,6 +62,10 @@ public class DieOut : MonoBehaviour {
             if (HitKuai2) HitKuai2.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
 
+            DieBeBlack();
+            DiePlayACJiasu();
+
+
             if (GetComponent<RoleAudio>())
             {
                 GetComponent<RoleAudio>().PlayAudioYS("die_1");
@@ -86,6 +94,7 @@ public class DieOut : MonoBehaviour {
                     if (GlobalTools.FindObjByName("MainCamera") != null)
                     {
                         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Remove(this.gameObject);
+                        GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>().TheGuaiList.Remove(this.gameObject);
                     }
                 }
 
@@ -116,6 +125,10 @@ public class DieOut : MonoBehaviour {
 
                 if (IsJingying)
                 {
+                    if (JYAudio)
+                    {
+                        JYAudio.GetComponent<AudioControl>().GetIsPlayerDieGraduaMining();
+                    }
                     //开门
                     DoorDo();
                 }
@@ -273,6 +286,7 @@ public class DieOut : MonoBehaviour {
         }
     }
 
+    [Header("非boss怪die记录自身")]
     public bool IsDieRecord = false;
     [Header("die 后多久 销毁自己")]
     public float DieDisSelfTime = 2;
@@ -326,7 +340,46 @@ public class DieOut : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+        if (JYAudio&& !JYAudio.isPlaying && GetComponent<AIBase>().isFindEnemy)
+        {
+            if(!JYAudio.isPlaying) JYAudio.Play();
+            //JYAudio.GetComponent<AudioControl>()
+        }
+
+
         DieOutDo();
         SlowTime();
     }
+
+
+
+    //是否需要 变黑 加速  处理蛇boss die 不自然
+    [Header("是否die 变黑")]
+    public bool IsDieBianhei = false;
+
+    void DieBianhei()
+    {
+        if (IsDieBianhei)
+        {
+            //Color _color = Color.black;
+            GetComponent<GameBody>().GetBoneColorChange(Color.black);
+        }
+    }
+
+
+    [Header("是否die 动作加速")]
+    public bool IsDiePlayACJiasu = false;
+    void DiePlayACJiasu()
+    {
+        if (IsDiePlayACJiasu)
+        {
+            GetComponent<GameBody>().GetPause(2, 2);
+        }
+        
+    }
+
+
+
+
 }

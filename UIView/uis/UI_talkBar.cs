@@ -33,6 +33,7 @@ public class UI_talkBar : MonoBehaviour
     {
         CanClickShow();
         ShowOut();
+        WeizhiGensui();
     }
 
 
@@ -134,11 +135,23 @@ public class UI_talkBar : MonoBehaviour
     }
 
 
-    string StrEvents = "";
-    public void ShowTalkText(string txts,Vector2 pos,float disTime = 1,string talkObjName = "")
+
+    void WeizhiGensui()
     {
+        if (TalkPos != null)
+        {
+            this.transform.position = TalkPos.position;
+        }
+    }
+
+    Transform TalkPos;
+    string StrEvents = "";
+    public void ShowTalkText(string txts,Vector2 pos,float disTime = 1,string talkObjName = "", Transform talkObj = null)
+    {
+        TalkPos = null;
         this._talkObjName = talkObjName;
         this.transform.position = pos;
+        TalkPos = talkObj;
         string msgs = "";
         if (txts.Split('^').Length > 1)
         {

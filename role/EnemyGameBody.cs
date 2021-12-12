@@ -171,6 +171,7 @@ public class EnemyGameBody : GameBody {
         ResetAll();
         roleDate.isBeHiting = true;
         inFightNums = 0;
+        //切换进入战斗
         InFightAtk();
         ChangeStandAndRunAC();
         //print("speedX   "+ speedX);

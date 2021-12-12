@@ -25,7 +25,10 @@ public class AIAirRunNear : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (GetComponent<RoleDate>().isBeHiting)
+        {
+            ResetAll();
+        }
     }
 
 
@@ -106,6 +109,7 @@ public class AIAirRunNear : MonoBehaviour
         setter.SetV2(point);
         if (!_aiPath.canMove) _aiPath.canMove = true;
         zhuijiRun(IsCanTurnFace);
+        if (MoveToPoint(point, inDistance)) return true;
         if ((transform.position - _obj.transform.position).magnitude < _zjDistance)
         {
             ResetAll();
@@ -216,7 +220,7 @@ public class AIAirRunNear : MonoBehaviour
         //距离小于 误差内 直接结束
         if (_jinruDis < zuijiPosDisWC)
         {
-            print("进入 目标附近！！！");
+            //print("进入 目标附近！！！");
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;
@@ -338,9 +342,21 @@ public class AIAirRunNear : MonoBehaviour
         this.GetComponent<GameBody>().IsJiasu = true;
         //如果 行动中撞墙  直接返回true
 
+
+        //判断 点 是否 在自己上方  左边 右边  下边  如果是上边 则 下边 不做撞击判断
+
+        if (point.y > thisV2.y)
+        {
+            //目标点 在我上方
+            //print("目标点 在我上方！！！！ ");
+
+        }
+
+
+
         if (IsTestHitWall && IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
         {
-            //print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             ResetAll();
             return true;
@@ -370,35 +386,67 @@ public class AIAirRunNear : MonoBehaviour
         Vector2 endPoint1 = Vector2.zero;
         Vector2 endPoint2 = Vector2.zero;
 
+
+        //print("speed   "+speed);
+
+
+        float tcUp = speed.y < 0 ? 0 : TCDistance;
+        float tcDown = speed.y > 0 ? 0 : TCDistance;
+
+        float tcLeft = speed.x > 0 ? 0 : TCDistance;
+        float tcRight = speed.x < 0 ? 0 : TCDistance;
+
+
+        float _posYXiuzheng = speed.y > 0 ? 1.8f : 0;
+
+
         if (speed.x < 0)
         {
-            tcPoint = new Vector2(pos.x - TCDistance, pos.y);
-            endPoint1 = new Vector2(tcPoint.x,tcPoint.y+TCDistance);
-            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - TCDistance);
-            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+            tcPoint = new Vector2(pos.x - TCDistance, pos.y+ _posYXiuzheng);
+            
+            endPoint1 = new Vector2(tcPoint.x,tcPoint.y+ tcUp);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - tcDown);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) {
+                //print( "  hit   x <0 ");
+                //Time.timeScale = 0;
+                return true;
+            }
+            
         }else if (speed.x > 0)
         {
-            tcPoint = new Vector2(pos.x + TCDistance, pos.y);
-            endPoint1 = new Vector2(tcPoint.x, tcPoint.y + TCDistance);
-            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - TCDistance);
-            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+            tcPoint = new Vector2(pos.x + TCDistance, pos.y+ _posYXiuzheng);
+            endPoint1 = new Vector2(tcPoint.x, tcPoint.y + tcDown);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - tcUp);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) {
+                //print("  hit   x >>>>0 ");
+                return true;
+            }
+            
         }
 
         //print("  speed ??????     "+speed);
         if (speed.y > 0)
         {
             tcPoint = new Vector2(pos.x , pos.y+TCDistance);
-            endPoint1 = new Vector2(tcPoint.x + TCDistance, tcPoint.y);
-            endPoint2 = new Vector2(tcPoint.x - TCDistance, tcPoint.y);
+            endPoint1 = new Vector2(tcPoint.x + tcRight, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - tcLeft, tcPoint.y);
             //print("    上面 碰撞  ");
-            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) {
+                //print("  hit   y*** >>>>0 ");
+                return true;
+            }
+            
         }else if (speed.y < 0)
         {
             tcPoint = new Vector2(pos.x, pos.y - TCDistance);
-            endPoint1 = new Vector2(tcPoint.x + TCDistance, tcPoint.y);
-            endPoint2 = new Vector2(tcPoint.x - TCDistance, tcPoint.y);
+            endPoint1 = new Vector2(tcPoint.x + tcRight, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - tcLeft, tcPoint.y);
             //print("    下面  碰撞----  ");
-            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2)) return true;
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print("  hit   y*** <<<<<<<<<<<0 ");
+                return true;
+            }
         }
 
         return false;
@@ -427,7 +475,12 @@ public class AIAirRunNear : MonoBehaviour
         }
 
         //print("****************lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
-        if (GetComponent<AIChongji>() && GetComponent<AIChongji>().isTanSheing) return;
+        //print("  #########  弹射 过程！！！！追击 ");
+        if (GetComponent<AIChongji>() && GetComponent<AIChongji>().isTanSheing) {
+            //print("弹射！！！！！！！！");
+            return;
+        }
+        
         GetComponent<AirGameBody>().isRunYing = true;
         _airGameBody.Run();
         //print("****2222222222************lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
@@ -435,9 +488,13 @@ public class AIAirRunNear : MonoBehaviour
     }
 
 
-    public bool IsHitDiBanByFX(Vector2 pos1, Vector2 pos2)
+    public bool IsHitDiBanByFX(Vector2 pos1, Vector2 pos2,bool tiaoshi = false)
     {
         Debug.DrawLine(pos1, pos2, Color.red);
+        //if (tiaoshi && Physics2D.Linecast(pos1, pos2, GetComponent<AirGameBody>().groundLayer))
+        //{
+        //    Time.timeScale = 0;
+        //}
         return Physics2D.Linecast(pos1, pos2, GetComponent<AirGameBody>().groundLayer);
     }
 
@@ -459,6 +516,74 @@ public class AIAirRunNear : MonoBehaviour
         
         return Physics2D.Linecast(start, end, GetComponent<AirGameBody>().groundLayer);        
     }
+
+
+
+
+    Vector2 FindAtkToPos2(float atkdistance = 0, float atkdistanceY = 0)
+    {
+        Vector2 v2 = new Vector2(1000, 1000);
+        //只找左右点
+        //Vector2 PotLeft = new Vector2(1000,1000);
+        //Vector2 PotRight = new Vector2(1000, 1000);
+
+        float __x = 0;
+        float __y = 0;
+
+
+        if (this.transform.position.x > _obj.transform.position.x)
+        {
+            //如果 我在 对象 右边  先找右点
+            __x = _obj.transform.position.x + atkdistance;
+            __y = _obj.transform.position.y + atkdistanceY;
+            v2 = new Vector2(__x,__y);
+            if (!IsHitDiBan(v2, tancejuli) && !IsHitDiBan(v2, -tancejuli) && !IsHitDiBan(v2, tancejuli, "") && !IsHitDiBan(v2, -tancejuli, ""))
+            {
+                return v2;
+            }
+            else
+            {
+                __x = _obj.transform.position.x - atkdistance;
+                __y = _obj.transform.position.y + atkdistanceY;
+                v2 = new Vector2(__x, __y);
+                if (!IsHitDiBan(v2, tancejuli) && !IsHitDiBan(v2, -tancejuli) && !IsHitDiBan(v2, tancejuli, "") && !IsHitDiBan(v2, -tancejuli, ""))
+                {
+                    return v2;
+                }
+                else
+                {
+                    return new Vector2(1000,1000);
+                }
+            }
+
+
+        }
+        else
+        {
+            __x = _obj.transform.position.x - atkdistance;
+            __y = _obj.transform.position.y + atkdistanceY;
+            v2 = new Vector2(__x, __y);
+            if (!IsHitDiBan(v2, tancejuli) && !IsHitDiBan(v2, -tancejuli) && !IsHitDiBan(v2, tancejuli, "") && !IsHitDiBan(v2, -tancejuli, ""))
+            {
+                return v2;
+            }
+            else
+            {
+                __x = _obj.transform.position.x + atkdistance;
+                __y = _obj.transform.position.y + atkdistanceY;
+                v2 = new Vector2(__x, __y);
+                if (!IsHitDiBan(v2, tancejuli) && !IsHitDiBan(v2, -tancejuli) && !IsHitDiBan(v2, tancejuli, "") && !IsHitDiBan(v2, -tancejuli, ""))
+                {
+                    return v2;
+                }
+                else
+                {
+                    return new Vector2(1000, 1000);
+                }
+            }
+        }
+    }
+
    
     
     Vector2 FindAtkToPos(float atkdistance = 0, float atkdistanceY = 0)
@@ -599,7 +724,7 @@ public class AIAirRunNear : MonoBehaviour
 
     //靠XY来追击 不是寻路
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
-        print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
+        //print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
         if (_zjDistance ==0) _zjDistance = atkdistance;
         //_zjDistanceY = 0;
         _zjDistanceY = atkDistanceY;
@@ -700,21 +825,25 @@ public class AIAirRunNear : MonoBehaviour
             //    IsZhuijiPosing = true;
             //    v2 = FindAtkToPos(atkdistance, _zjDistanceY);
             //}
-            v2 = FindAtkToPos(atkdistance, _zjDistanceY);
+            v2 = FindAtkToPos2(atkdistance, _zjDistanceY);
 
             if (v2 == new Vector2(1000, 1000))
             {
                 print(" 取消动作！！！！！！ ");
                 IsZhuijiPosing = false;
                 //找不到 目标点 直接 取消动作
+                ResetAll();
                 GetComponent<AIAirBase>().QuXiaoAC();
+                GetComponent<AIAirBase>().ReSetAll2();
                 return false;
             }
             else
             {
-                print("  找到追击点    "+v2);
+                
 
                 bool _isToPos = ZhuijiPointZuoBiao(v2);
+
+                //print("  找到追击点    " + v2+ "  _isToPos    "+ _isToPos);
 
                 //if (_isToPos)
                 //{

@@ -39,8 +39,17 @@ public class JG_BossIn : MonoBehaviour {
     [Header("是否是在BOSS中使用  如果不是 就是没有boss 防止自己删除自己")]
     public bool IsInBoss = true;
     //关联boss是否存在 不存在就销毁自身
+
+
+
+    [Header("boss 机关门1")]
+    public GameObject Door1;
+    [Header("boss 机关门2")]
+    public GameObject Door2;
+
     void IsBeingBoss()
     {
+        if (Boss && !Boss.activeSelf) return;
         if (!IsInBoss) return;
         if (BossName == null)
         {
@@ -88,6 +97,10 @@ public class JG_BossIn : MonoBehaviour {
     }
 
 
+   
+
+
+
     private void OnDisable()
     {
         //print("我被消除了！？？？？？？");
@@ -100,6 +113,13 @@ public class JG_BossIn : MonoBehaviour {
     {
         if (Door1Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door1Name + "-"+ OpenOrClose), this);
         if (Door2Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door2Name + "-"+ OpenOrClose), this);
+
+
+        if (Door1)
+        {
+            //Door1.
+        }
+
     }
 
     //遇见boss显示的字幕
@@ -153,10 +173,31 @@ public class JG_BossIn : MonoBehaviour {
     }
 
 
+    [Header("boss")]
+    public GameObject Boss;
+
+    [Header("boss 出现位置")]
+    public Transform BossOutPos;
+
+    public bool IsBossInPos = false;
+
     public string otherEvent;
+    [Header("boss出现时候 显示特效")]
+    public ParticleSystem TX_ShowBossTX;
+
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (IsSatrtYC) return;
+        if(BossOutPos && Boss && !IsBossInPos)
+        {
+            IsBossInPos = true;
+            TX_ShowBossTX.Play();
+            Boss.transform.position = BossOutPos.position;
+
+        }
+
+
         //return;
         if (!IsPlayerIn&&Coll.tag == "Player")
         {
@@ -179,7 +220,9 @@ public class JG_BossIn : MonoBehaviour {
                 //显示Boss血条
                 ShowBossLiveBar();
 
-                DistorySelf();
+               
+
+                if(!IsSatrtYC)DistorySelf();
             }
             
 

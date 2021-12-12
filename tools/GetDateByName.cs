@@ -11,9 +11,10 @@ public class GetDateByName : MonoBehaviour {
     public static GetDateByName GetInstance()
     {
         if (instance == null) {
-            GameObject go = new GameObject("GetDateByName");
+            //GameObject go = new GameObject("GetDateByName");
             //DontDestroyOnLoad(go);
-            instance = go.AddComponent<GetDateByName>();
+            //instance = go.AddComponent<GetDateByName>();
+            instance = new GetDateByName();
         }
         //instance = new GetDateByName();
         return instance;

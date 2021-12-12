@@ -19,6 +19,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
     public float addYZNum = 0;
 
     EnemyGameBody _gameBody;
+    RoleDate _roleDate;
 
     // Use this for initialization
     [Header("烟尘 ")]
@@ -51,7 +52,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
             start = this.transform.position;
             end = new Vector2(start.x + atkDistance+2, start.y);
             Debug.DrawLine(start, end, Color.yellow);
-            if (Physics2D.Linecast(start, end, GetComponent<GameBody>().groundLayer))
+            if (Physics2D.Linecast(start, end, _gameBody.groundLayer))
             {
                 //Time.timeScale = 0;
                 //print("撞墙 右！！！");
@@ -65,7 +66,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
             start = this.transform.position;
             end = new Vector2(start.x - atkDistance-2, start.y);
             Debug.DrawLine(start, end, Color.yellow);
-            if (Physics2D.Linecast(start, end, GetComponent<GameBody>().groundLayer))
+            if (Physics2D.Linecast(start, end, _gameBody.groundLayer))
             {
                 //Time.timeScale = 0;
                 //print("撞墙 左！！！");
@@ -81,14 +82,13 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
 
         if (!isStart) isStart = true;
-        _gameBody = GetComponent<EnemyGameBody>();
         //检测是否有悬崖 会冲出去    判断是否动作名是空    判断是否有需要的动作
         if (IsGetOutLand() || acName == "" || !_gameBody.IsHanAC(acName)) {
             GetOver();
             return;
         }
 
-        if(addYZNum!=0) GetComponent<RoleDate>().addYZ(addYZNum);
+        if(addYZNum!=0) _roleDate.addYZ(addYZNum);
 
         if (!DBBody) DBBody = _gameBody.GetDB();
 
@@ -102,8 +102,11 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         //摆出动作
         if (DBBody.animation.HasAnimation(acName)) {
             //_gameBody.GetACByName(acName, true);
-            GetComponent<EnemyGameBody>()._isHasAtkTX = true;
-            _gameBody.GetAcMsg(acName);
+            _gameBody._isHasAtkTX = true;
+            //_gameBody.GetAcMsg(acName);
+            _gameBody.GetDB().animation.GotoAndPlayByFrame(acName,0,1);
+            _gameBody.isAcing = true;
+
             if(Audio_YishanQishou) Audio_YishanQishou.Play();
         }
 
@@ -118,13 +121,16 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         _isShowTX = false;
         _isOutDistance = false;
         _isSpeedStart = false;
-        GetComponent<RoleDate>().hfYZ(addYZNum);
+        _roleDate.hfYZ(addYZNum);
         GetComponent<TheTimer>().ReSet();
-        GetComponent<EnemyGameBody>()._isHasAtkTX = false;
-        GetComponent<EnemyGameBody>().IsJiasu = false;
+        _gameBody._isHasAtkTX = false;
+        _gameBody.IsJiasu = false;
         TempDis = 0;
         if(YanChen) YanChen.Stop();
         _XZtimes = 0;
+        _gameBody.isAcing = false;
+        _gameBody.SetV0();
+        //print("一闪结束！！！！！！！！！");
         //if(DBBody) DBBody.RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         //DBBody = null;
 
@@ -150,6 +156,10 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
 	void Start () {
         if (YanChen) YanChen.Stop();
+
+        _gameBody = GetComponent<EnemyGameBody>();
+        _roleDate = GetComponent<RoleDate>();
+
     }
 
     protected void ShowACTX2(string type, EventObject eventObject)
@@ -175,7 +185,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
                 speedX = this.transform.localScale.x < 0 ? Mathf.Abs(speedX) : -Mathf.Abs(speedX);
                 //GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, 0);
                 _isSpeedStart = true;
-                GetComponent<EnemyGameBody>().IsJiasu = true;
+                _gameBody.IsJiasu = true;
             }
         }
 
@@ -202,12 +212,19 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
     // Update is called once per frame
     void Update () {
-      
 
+
+
+
+        if (_roleDate.isDie||_roleDate.isBeHiting)
+        {
+            GetOver();
+            return;
+        }
 
         if (_isOutDistance)
         {
-            print("----------------> ?????????????/????  "+ GetComponent<Rigidbody2D>().velocity.x);
+            //print("----------------> ?????????????/????  "+ GetComponent<Rigidbody2D>().velocity.x);
             _XZtimes += Time.deltaTime;
             if (_XZtimes >= _overACStopTime)
             {
@@ -226,7 +243,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         }
 
 
-        print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
+        //print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
         
         if (_gameBody.isInAiring)
         {
@@ -235,15 +252,15 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         }
 
         //被击中 或者 悬空 就结束
-        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
+        if (_roleDate.isBeHiting|| _roleDate.isDie)
         {
             GetOver();
             //print("------> 进来没？？   "+ GetComponent<Rigidbody2D>().velocity);
-            if(GetComponent<RoleDate>().isDie) GetComponent<Rigidbody2D>().velocity = new Vector2(speedX*0.1f, 0);
+            if(_roleDate.isDie) GetComponent<Rigidbody2D>().velocity = new Vector2(speedX*0.1f, 0);
             return;
         }
 
-        if (GetComponent<GameBody>().IsHitWall)
+        if (_gameBody.IsHitWall)
         {
             GetOver();
             return;
@@ -279,7 +296,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
                 TempDis = dis;
                 //print("   -------->  x位上的 速度     speedX   " + speedX +"  sudu  "+ GetComponent<Rigidbody2D>().velocity.x);
-                //print("---------------------------移动距离 " + dis+"    总距离    "+ SJDistance);
+                print("---------------------------移动距离 " + dis+"    总距离    "+ SJDistance);
                 if (dis > SJDistance || _gameBody.IsHitWall)
                 {
                     //Time.timeScale = 0;
@@ -301,7 +318,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
         }
 
-        print("  22222222222-------s x:    " + GetComponent<Rigidbody2D>().velocity.x);
+        //print("  22222222222-------s x:    " + GetComponent<Rigidbody2D>().velocity.x);
     }
 
 
@@ -313,6 +330,8 @@ public class AIYiShan : MonoBehaviour ,ISkill {
     bool IsAtkACOver()
     {
         if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted) {
+            //这里需要 停在最后一帧
+            print("   是否 停顿！！！！！！  动作完成------    "+acName+ "    isAcing   " + _gameBody.isAcing);
             DBBody.animation.Stop();
             return true;
         }

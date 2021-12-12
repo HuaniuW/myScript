@@ -7,6 +7,9 @@ using System.Reflection;
 
 using System;
 
+using UnityEngine.Internal;
+using UnityEngine.SceneManagement;
+
 public class GlobalTools : MonoBehaviour {
 
     // Use this for initialization
@@ -38,6 +41,13 @@ public class GlobalTools : MonoBehaviour {
         return obj;
     }
 
+    public static GameObject FindObjByNameInGuais(string _urlName)
+    {
+        GameObject obj = GameObject.Find("maps/Guais/" + _urlName) as GameObject;
+        if (obj == null) obj = GameObject.Find("maps/Guais/" + _urlName + "(Clone)") as GameObject;
+        return obj;
+    }
+
 
     //
     /// <summary>
@@ -53,6 +63,38 @@ public class GlobalTools : MonoBehaviour {
         obj = Instantiate(obj);
         return obj;
     }
+
+
+
+    /// <summary>
+    /// 对象池 生成对象
+    /// </summary>
+    /// <param name="ObjName"></param>
+    /// <returns></returns>
+    public static GameObject GetGameObjectInObjPoolByName(string ObjName)
+    {
+        //print("ObjName    "+ ObjName);
+        GameObject obj = Resources.Load(ObjName) as GameObject;
+        if (obj == null) return null;
+        obj = ObjectPools.GetInstance().SwpanObject2(obj);
+        return obj;
+    }
+
+    internal static List<Transform> GetChildCollections(Transform transform)
+    {
+        //throw new NotImplementedException();
+
+        List<Transform> list = new List<Transform>();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            list.Add(transform.GetChild(i));
+        }
+        return list;
+
+
+    }
+
+
 
     //Text text = btn.transform.Find("Text").GetComponent<Text>();
 
@@ -823,8 +865,13 @@ public class GlobalTools : MonoBehaviour {
 
 
 
+    public static string GetCScreenName()
+    {
+        return SceneManager.GetActiveScene().name;
+    }
 
-    
+
+
 
 
 

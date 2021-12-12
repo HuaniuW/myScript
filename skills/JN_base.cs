@@ -21,16 +21,73 @@ public class JN_base : MonoBehaviour
     }
 
 
+    [Header("附带特效 eg 刀的火焰 电等")]
+    public GameObject TX_fudaiTX;
+    public void ShowTXFudai()
+    {
+        //print(this.name + " TX_fudaiTX   " + TX_fudaiTX.activeSelf);
+        if (TX_fudaiTX != null) {
+            TX_fudaiTX.SetActive(true);
+            //这个是 碰撞器 允许碰撞
+            TX_fudaiTX.GetComponent<CapsuleCollider2D>().enabled = true;
+        }
+
+        //TX_fudaiTX.transform.localScale = this.transform.localScale;
+        //TX_fudaiTX.transform.localRotation = this.transform.localRotation;
+        //TX_fudaiTX.transform.parent = this.transform.parent;
+
+
+        StartCoroutine(IEDestory2());
+
+    }
+
+    //这里解决了 特效出现后跟着玩家跑  依然可以 点燃敌人的 问题*********注意  一定在下一帧 取消掉碰撞机
+    public IEnumerator IEDestory2()
+    {
+        yield return new WaitForFixedUpdate();
+        if(TX_fudaiTX) TX_fudaiTX.GetComponent<CapsuleCollider2D>().enabled = false;
+    }
+
+
+
     public void GetAtkObjIn(GameObject theAtkObj)
     {
         atkObj = theAtkObj;
+       
     }
 
+    //private void Awake()
+    //{
+    //    print("111111");
+    //}
 
     private void OnEnable()
     {
         //transform.Find("jn_fk").GetComponent<HitKuai>().CanHit();
         IsCanMove = true;
+        if (TX_fudaiTX != null) TX_fudaiTX.SetActive(false);
+
+        //print("name  ---> "+this.name);
+        //print("有进来这个地方 jnbase");
+      
+
+        //if(atkObj)print("  ************** ?  " + atkObj.name);
+        //if (hitKuai) print("  **************   " + hitKuai.activeSelf);
+    }
+
+
+    [Header("是否自测 带火焰")]
+    public bool IsZiceDaiHuo = false;
+    public void GetFuDaiTX(GameObject theAtkObj = null)
+    {
+        //print(" IsZiceDaiHuo "+ IsZiceDaiHuo+ "    atkObj  "+ atkObj);
+        if (!IsZiceDaiHuo) return;
+        if (theAtkObj != null) atkObj = theAtkObj;
+        //print("  jinlaimei????    " + atkObj + "      " + atkObj.GetComponent<RoleDate>().IsHasHZHuo() + "   TX_fudaiTX " + TX_fudaiTX);
+        if (atkObj && atkObj.GetComponent<RoleDate>().IsHasHZHuo())
+        {
+            ShowTXFudai();
+        }
     }
 
 
@@ -55,10 +112,12 @@ public class JN_base : MonoBehaviour
         //this.transform.localScale = new Vector3(jn_date._scaleW,jn_date._scaleH,1);
         //TX_weizhiyupan();
 
+        GetFuDaiTX();
+
+
         //print("-------------------------->>>>????   " + obj.name + "  _sacaleX   " + _sacaleX+ "   this.transform.localScale.x   " + this.transform.localScale.x);
         if (!isSkill)
         {
-            
             ShowHitFK();
         }
         else {

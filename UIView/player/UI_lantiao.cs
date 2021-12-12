@@ -85,15 +85,21 @@ public class UI_lantiao : XueTiao
 
     protected void LanChange(UEvent e)
     {
+        //return;
         if (gameObj == null)
         {
             gameObj = GlobalTools.FindObjByName("player");
             roleDate = gameObj.GetComponent<RoleDate>();
+            //print("roleDate%%%%    "+ roleDate.live);
             //GetGameObj();
         }
         //print("XT  gameObj>  " + gameObj);
+
+        //print("roleDate%%%%    " + roleDate.live);
         //print("蓝量Change change!  roleDate.maxLive    " + roleDate.maxLan + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams);
+        //GlobalSetDate.instance.ScreenChangeDateRecord();
         GlobalSetDate.instance.GetScreenChangeDate();
+        //print("roleDate%%%%    " + roleDate.live);
         if (gameObj == null) return;
         if (gameObj.tag == "Player" && roleDate)
         {
@@ -119,7 +125,7 @@ public class UI_lantiao : XueTiao
         WhBg(xueBg);
     }
 
-    public override void GetGameObj()
+    public override void GetGameObj(RoleDate _roleDate = null)
     {
         if (gameObj != null)
         {

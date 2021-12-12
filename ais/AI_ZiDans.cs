@@ -69,29 +69,39 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         if (IsFaceToTarget&&!IsTrunFace)
         {
             IsTrunFace = true;
+
+            _gameBody.SetV0();
+
             if (this.transform.position.x > _player.transform.position.x)
             {
-                GetComponent<GameBody>().TurnLeft();
+                _gameBody.TurnLeft();
             }
             else
             {
-                GetComponent<GameBody>().TurnRight();
+                _gameBody.TurnRight();
             }
             if (QSAudio) QSAudio.Play();
         }
 
         _qishiACJS += Time.deltaTime;
 
-        if (TX_Qishi && TX_Qishi.isStopped)
+        //print("_qishiACJS    "+ _qishiACJS+ "    TX_Qishi isplaying :   " + TX_Qishi.isPlaying);
+
+        if (TX_Qishi&&!TX_Qishi.isPlaying)
         {
+            //print(ZiDanName+"    ---------------------------------------------->播放 起始粒子！！！！" + _qishiACJS);
+            //_qishiACJS = 0;
+            //TX_Qishi.Simulate(0.0f);
+            if (QSAudio) QSAudio.Play();
             TX_Qishi.Play();
         }
 
 
         if (_qishiACJS>= QiShiACYCTimes)
         {
-            ReSetAll();
             _qishiACJS = 0;
+            if (QSAudio) QSAudio.Stop();
+            ReSetAll();
             Fire();
         }
     }
@@ -156,6 +166,10 @@ public class AI_ZiDans : MonoBehaviour,ISkill
 
 
         GameObject zidan = GetZiDan();
+        if (zidan == null) {
+            _isFireOver = true;
+            return;
+        } 
         Vector2 v1 = ZidanFX();
         zidan.GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByV2(v1, 10);
 
@@ -248,12 +262,15 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         //print("************************************************ZiDanName   " + ZiDanName);
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(ZiDanName) as GameObject);
         //print("  zidan "+zidan);
-
+        if (zidan == null || ZiDanPos == null) return null;
         if (ZiDanTypeNum == 15|| ZiDanTypeNum == 16)
         {
             //火焰弹 
             zidan.GetComponent<OnLziHit>().SetCanHit();
         }
+
+        
+
         zidan.transform.position = ZiDanPos.position;
         zidan.GetComponent<TX_zidan>().CloseAutoFire();
         zidan.transform.localScale = this.transform.localScale;
@@ -268,6 +285,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     protected bool _isFireOver = false;
     protected virtual void FireOver()
     {
+        //print("  进来没  fireOver!!! ");
         _fireOverJS += Time.deltaTime;
         if (_fireOverJS>= _fireOverTimes)
         {
@@ -282,11 +300,14 @@ public class AI_ZiDans : MonoBehaviour,ISkill
     public void ReSetAll()
     {
         _isQiShiAC = false;
-        _isGetOver = false;
+        //_isGetOver = false;
         _isFireOver = false;
         _fireOverJS = 0;
         _qishiACJS = 0;
         IsTrunFace = false;
+        //TX_Qishi.Pause();
+        TX_Qishi.Stop();
+        TX_Qishi.gameObject.SetActive(false);
         ResetAllMore();
     }
 
@@ -303,12 +324,18 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         _player = gameObj;
         _isGetOver = false;
         _isQiShiAC = true;
-        
+        //print("Getstart is TXplayering :  "+TX_Qishi.isPlaying);
+        //TX_Qishi.Pause();
+        TX_Qishi.gameObject.SetActive(true);
+        TX_Qishi.Stop();
+         
+        //print("2222Getstart is TXplayering :  " + TX_Qishi.isPlaying);
     }
 
     protected bool _isGetOver = false;
     public bool IsGetOver()
     {
+        //print("  zidans Over????   "+_isGetOver);
         return _isGetOver;
     }
 }

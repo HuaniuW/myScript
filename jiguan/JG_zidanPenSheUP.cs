@@ -25,8 +25,8 @@ public class JG_zidanPenSheUP : MonoBehaviour
     void GetInit()
     {
         PenSheShiJianJianGe = 1f + GlobalTools.GetRandomDistanceNums(2);
-        PenSheSpeedY = 30+ GlobalTools.GetRandomDistanceNums(20);
-        speedV2 = new Vector2(0, PenSheSpeedY);
+        //PenSheSpeedY = 30 + GlobalTools.GetRandomDistanceNums(PenSheSpeedY);
+        speedV2 = GetSpeedV2();
     }
 
 
@@ -35,7 +35,7 @@ public class JG_zidanPenSheUP : MonoBehaviour
     {
         float __x = GlobalTools.GetRandomDistanceNums(1);
         __x = GlobalTools.GetRandomNum() > 50 ? __x : -__x;
-        float __y = 30+ GlobalTools.GetRandomDistanceNums(20);
+        float __y = 30 + GlobalTools.GetRandomDistanceNums(PenSheSpeedY);
         return new Vector2(__x,__y);
     }
 

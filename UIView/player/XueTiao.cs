@@ -51,6 +51,8 @@ public class XueTiao : MonoBehaviour {
         GetXueNum(0);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
+
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.XUETIAO_ZHIJIEGENSUI, this.GenSuiXuetiaoW2ToPos);
         //AddMaxLiveBar(200);
     }
 
@@ -107,6 +109,7 @@ public class XueTiao : MonoBehaviour {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANEG_LIVE, this.LiveChange);
         //是否有诅咒条
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GET_ZUZHOU, this.IsHasZZ);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.XUETIAO_ZHIJIEGENSUI, this.GenSuiXuetiaoW2ToPos);
     }
 
 
@@ -162,16 +165,33 @@ public class XueTiao : MonoBehaviour {
 
     protected RoleDate roleDate;
     //初始化 血条的 长度  数据匹配到链接的角色
-    public virtual void GetGameObj()
+    public virtual void GetGameObj(RoleDate _roleDate = null)
     {
         if (gameObj != null)
         {
-            //print("gameObj-------------->    " + gameObj);
-            roleDate = gameObj.GetComponent<RoleDate>();
+            //gameObj = GlobalTools.FindObjByName("player");
+            //print("   gameObjName "+gameObj.name);
+           
+            if (_roleDate != null){
+                roleDate = _roleDate;
+                //print(" @@ _roleDate  "+ _roleDate.live);
+            }
+            else
+            {
+                roleDate = gameObj.GetComponent<RoleDate>();
+            }
+            
             //print("roleDate------------->   "+ roleDate);
             _maxLive = roleDate.maxLive;
-            roleDate.live = roleDate.live > roleDate.maxLive ? roleDate.maxLive : roleDate.live;
-            _cLive = roleDate.live;
+            print(gameObj.name+"  当前xuel "+ roleDate.live+"   max "+roleDate.maxLive);
+            //print("111111111  当前 血量是多少   " + _cLive + "   传进来的 当前血量roleDate.live  " + roleDate.live);
+            //_cLive = _cLive > roleDate.maxLive ? roleDate.maxLive : _cLive;
+            _cLive = roleDate.maxLive;
+            //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---clive " + _cLive + "    ----roledateLive " + roleDate.live);
+            print("  当前 血量是多少   "+_cLive+ "   传进来的 当前血量roleDate.live  "+ roleDate.live);
+            //_cLive = roleDate.live;
+            roleDate.live = _cLive;
+            print("roledetelive   "+roleDate.live);
             GetXueNum(0);
             //isChage = true;
         }
@@ -179,23 +199,38 @@ public class XueTiao : MonoBehaviour {
 
     protected virtual void LiveChange(UEvent e)
     {
+        if (gameObj &&gameObj.tag != GlobalTag.Player) return;
         if (gameObj == null)
         {
             gameObj = GlobalTools.FindObjByName("player");
-            roleDate = gameObj.GetComponent<RoleDate>();
+            //print("  gameObj  "+gameObj.name);
             //GetGameObj();
         }
+       
+
+        roleDate = gameObj.GetComponent<RoleDate>();
         //print("XT  gameObj>  " + gameObj);
-        //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive+"  _maxLive "+_maxLive+"   传进来数据  "+e.eventParams);
-        GlobalSetDate.instance.GetScreenChangeDate();
-        if (gameObj == null) return;
-        if (gameObj.tag == "Player" && roleDate)
+
+        if (gameObj != null)
         {
-            AddMaxLiveBar((float)e.eventParams - _maxLive);
-            GetGameObj();
+            print("  name " + gameObj.name);
+            print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---clive " + _cLive + "    ----roledateLive " + roleDate.live);
         }
 
-        
+
+        roleDate.live = _cLive;
+        //print("2222222roledetelive   " + roleDate.live);
+        //GlobalSetDate.instance.ScreenChangeDateRecord();
+        GlobalSetDate.instance.GetScreenChangeDate();
+        if (gameObj == null) return;
+        if (gameObj.tag == GlobalTag.Player && roleDate)
+        {
+            AddMaxLiveBar((float)e.eventParams - _maxLive);
+            //print(" ???@roledate   "+roleDate.live);
+            GetGameObj(roleDate);
+        }
+
+        //print("333333333333333roledetelive   " + roleDate.live);
 
     }
 
@@ -212,7 +247,7 @@ public class XueTiao : MonoBehaviour {
         Wh(xue1, _w, _h);
     }
 
-    protected float testNums = 1000;
+    //protected float testNums = 1000;
 
     protected float lastXue = 0;
     // 血效果根据 标的角色数据变化
@@ -226,7 +261,8 @@ public class XueTiao : MonoBehaviour {
         
         //_cLive = testNums;
         _cLive = roleDate.live;
-        if (gameObj.tag!="Player"&& _cLive <= 0) this.gameObject.SetActive(false);
+        //print(gameObj.name+" roleDate.live    "+ roleDate.live);
+        if (gameObj.tag!=GlobalTag.Player&& _cLive <= 0) this.gameObject.SetActive(false);
         if (_cLive == lastXue) return;
         if (_cLive < 0) _cLive = 0;
         _w = _cLive / _maxLive * _maxW;
@@ -261,6 +297,18 @@ public class XueTiao : MonoBehaviour {
         {
             isChage = false;
         }
+    }
+
+    public bool IsPlayerXuetiao = false;
+    //场景切换 跟随的 血条直接到位置
+    public void GenSuiXuetiaoW2ToPos(UEvent e)
+    {
+        
+        if (!IsPlayerXuetiao) return;
+        //print("血条 直接 跟随！！！"+_w2+"   w "+_w+"  血量 "+ roleDate.live);
+        XueChange();
+        _w2 = _w;
+        Wh(xue2, _w2, _h);
     }
 
 

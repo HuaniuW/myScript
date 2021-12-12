@@ -53,6 +53,9 @@ public class Plot1 : MonoBehaviour
 
     }
 
+   
+
+
     public bool IsHasPlayed = false;
 
     Vector3 txtCSPos = Vector3.zero;
@@ -139,11 +142,14 @@ public class Plot1 : MonoBehaviour
 
 
 
-    List<string> txtList = new List<string> {_str2};
+    List<string> txtList = new List<string> {_str1};
     int listI = 0;
 
-    const string _str1 = "“传说月之石可以穿越时空！于是有悔恨的人们对它趋之若鹜”";
-    const string _str2 = "“It is said that Moonlight Gem can travel through time and space, so people with regrets want it very much.”";
+
+    //時間を遡ることができるなら、誰に一番会いたいですか
+    //const string _str1 = "“如果能回到过去，你最想见谁。”";
+    const string _str1 = "“時間を遡ることができるなら、誰に一番会いたいですか”";
+    const string _str2 = "“If you can go back in time, who do you want to see most.”";
 
     bool isTxtStart = false;
     float _y = 0;

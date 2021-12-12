@@ -60,23 +60,29 @@ public class GlobalSetDate : MonoBehaviour {
         //XLuaTest("lua test  测试");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
         OtherDate = GetOtherDate();
-
+        print("OtherDate    "+ OtherDate);
     }
 
     //***********************************************other数据获取区*************************************************************
     public OtherSaveDate GetOtherDate()
     {
-        print("  获取了 otherdate!! ");
         if(OtherDate == null)
         {
             OtherDate = new OtherSaveDate();
-            OtherDate = GameSaveDate.GetInstance().GetOtherSaveDateByName();
         }
+        OtherDate = GameSaveDate.GetInstance().GetOtherSaveDateByName();
+        print("  获取了 otherdate!!   "+OtherDate.GlobalOtherDate);
         return OtherDate;
     }
 
     public string GetOtherDateValueByKey(string key)
     {
+        print("其他数据 中 的键值key   "+key);
+        if (OtherDate.GlobalOtherDate == "") {
+            print("其他数据中 没有数据！！！！！");
+            return "";
+        }
+        
         string[] otherDateArr = OtherDate.GlobalOtherDate.Split('|');
         List<string> otherDateList = new List<string>(otherDateArr);
         foreach (string str in otherDateList)
@@ -95,6 +101,15 @@ public class GlobalSetDate : MonoBehaviour {
     {
         string key = str.Split('*')[0];
         string value = str.Split('*')[1];
+
+
+        print(" 传入数据是什么吗 str "+str+"  ---键值Key  "+key);
+        if (key == "") {
+            print("键值为空 ！！！！");
+            return;
+        }
+        
+
         if (GetOtherDateValueByKey(key) != "")
         {
             string _dateStr = "";
@@ -116,6 +131,7 @@ public class GlobalSetDate : MonoBehaviour {
         {
             OtherDate.GlobalOtherDate += "|" + str;
         }
+        print("ot  其他数据内容OtherDate   "+ OtherDate);
         GameSaveDate.GetInstance().SaveOtherDateByURLName(OtherDate);
     }
 
@@ -452,24 +468,31 @@ public class GlobalSetDate : MonoBehaviour {
     public void ScreenChangeDateRecord()
     {
         RoleDate _roleDate = GlobalTools.FindObjByName("player").GetComponent<RoleDate>();
-        screenChangeDate = "cLive=" +_roleDate.live+","+"cL="+_roleDate.lan+",cYingzhi="+_roleDate.yingzhi+",cFangyu="+_roleDate.def;
+        screenChangeDate = "cLive=" +_roleDate.live+","+"cLan="+_roleDate.lan+",cYingzhi="+_roleDate.yingzhi+",cFangyu="+_roleDate.def;
         print("  角色转场前 存储的 角色状态信息  》》》》》》   "+ screenChangeDate);
+        //Time.timeScale = 0;
+
     }
 
     public void GetScreenChangeDate()
     {
-        //print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
+        print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
         //GlobalTools.FindObjByName("player")
         if (screenChangeDate == null) return;
         string[] roleDateArr = screenChangeDate.Split(',');
         for(var i = 0; i < roleDateArr.Length; i++) {
             string _date = roleDateArr[i];
-            if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
+            //print(i+"  ------  "+ roleDateArr[i]);
+            if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().live = float.Parse(_date.Split('=')[1]);
+            //if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
             if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().Lan = float.Parse(_date.Split('=')[1]);
             //print(_date.Split('=')[0]+"   --->   "+ _date.Split('=')[1]);
             if(_date.Split('=')[0] == "cYingzhi") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().yingzhi = float.Parse(_date.Split('=')[1]);
             if (_date.Split('=')[0] == "cFangyu") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().def = float.Parse(_date.Split('=')[1]);
         }
+
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.XUETIAO_ZHIJIEGENSUI, this.GenSuiXuetiaoW2ToPos);
+        
         //screenChangeDate = null;
     }
 

@@ -51,6 +51,8 @@ public class GameControl : MonoBehaviour {
 
         //GameSaveDate.GetInstance().GetTestSave();
         if (Globals.isDebug) print("游戏关卡控制类 启动 当前场景名字   "+ SceneManager.GetActiveScene().name);
+
+        Globals.IsInCameraKuai = false;
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
         //GlobalSetDate.instance.Init();
@@ -361,7 +363,7 @@ public class GameControl : MonoBehaviour {
         string TempGKDateStr = GlobalDateControl.GetCGKName() + ":" + TempCurrentGKDate;
 
         if (TempCurrentGKDate != null) GlobalDateControl.SetCurrentGKDateInZGKTempDate(TempGKDateStr);
-        //print("记录数据  "+TempGKDateStr);
+        print("记录数据   TempCurrentGKDate        " + TempGKDateStr);
         //print("TempCurrentGKDate:    " + TempCurrentGKDate);
         if (type == "boss"||type == "G"|| type == "B"|| type == "WP")
         {
@@ -418,9 +420,16 @@ public class GameControl : MonoBehaviour {
                     GlobalTools.FindObjByName(s).GetComponent<Door>().HasOpen();
                 }
             }
-            else if (sName == "BOSS")
+            else if (sName == "BOSS"|| sName == "B")
             {
-                if(GlobalTools.FindObjByName(s)!=null) GlobalTools.FindObjByName(s).SetActive(false);
+                print("匹配到 boss名字 :   "+s);
+                GameObject boss = GlobalTools.FindObjByName(s);
+                if (boss != null) {
+                    print(">>>进来没！！！");
+                    boss.SetActive(false);
+                    DestroyImmediate(boss, true);
+                }
+                
             } else if (sName == "WP") {
                 //GlobalTools.FindObjByName(s).SetActive(false);
                 if (zt == "1")
@@ -428,6 +437,7 @@ public class GameControl : MonoBehaviour {
                     print("s   ------>   "+s);
                     //生成一个
                     GameObject o =  GlobalTools.GetGameObjectByName(s);
+                    if (o == null) return;
                     string posStr = strArr[i].Split('@')[1];
                     Vector2 pos = new Vector2(float.Parse(posStr.Split('#')[0]), float.Parse(posStr.Split('#')[1]));
                     o.transform.position = pos;
@@ -453,9 +463,21 @@ public class GameControl : MonoBehaviour {
                     //非生成地图
                     guai = GlobalTools.FindObjByName(s);
                 }
+
+
+                if(guai == null)
+                {
+                    print("******************************怪物名字    "+s);
+                    guai = GlobalTools.FindObjByNameInGuais(s);
+                    GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>().TheGuaiList.Remove(guai);
+                    if(guai)guai.SetActive(false);
+                    return;
+                }
+
+
                 //要在 maps 里面找
                 print("  >////////////////////guai sname   " + s+"   是否匹配到怪  "+ guai);
-                if (guai != null) {
+                if (GuaiList.Count!=0 && guai != null) {
                     GuaiList.Remove(guai);
                     if (GlobalTools.FindObjByName("maps") && GlobalTools.FindObjByName("maps").GetComponent<GetReMap2>().GuaiList.Remove(guai)) {
                         guai.SetActive(false);
@@ -466,6 +488,10 @@ public class GameControl : MonoBehaviour {
                     }
                     
                     CheckGuaiDoor();
+                }
+                else
+                {
+                    guai.SetActive(false); 
                 }
             }
             else if (sName == "JG")
@@ -501,6 +527,8 @@ public class GameControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        //print(GlobalTools.GetRandomNum(1)+"   ----  "+ GlobalTools.GetRandomNum(2)+"   -  "+ GlobalTools.GetRandomNum(0));
+
         //print(player.transform.position);
         //if(player) player.GetComponent<GameBody>().TurnRight();
         //if (!IsTetsPos)
@@ -510,7 +538,7 @@ public class GameControl : MonoBehaviour {
         //    print("摄像机  :::::::::  " + this.transform.position);
         //    this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 15.6f, this.transform.position.z);
         //}
-        
+
 
         //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>  "+Time.time);
         //if(Time.time>=10) print("Time.realtimeSinceStartup    " + Time.realtimeSinceStartup);
@@ -655,5 +683,8 @@ public class GameControl : MonoBehaviour {
         //print(" 控制 摄像机 位置！！！！！！！！ ");
         //print("摄像机  houlai------ zuobiao  " + this.transform.position);
     }
+
+
+  
 
 }

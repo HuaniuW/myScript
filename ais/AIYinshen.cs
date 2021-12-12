@@ -92,7 +92,7 @@ public class AIYinshen : MonoBehaviour
         //}
         //计算几率
         int jl = GlobalTools.GetRandomNum();
-        print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl    " + jl + "        " + BeHitHideJL);
+        //print("/////////////////////////////@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@---------------------------------->   jl    " + jl + "        " + BeHitHideJL);
         if (jl<=BeHitHideJL)
         {
             
@@ -137,7 +137,7 @@ public class AIYinshen : MonoBehaviour
 
         if (IsInBeHitFJ)
         {
-            //print("  被攻击 反击   "+ HideAtkName);
+            print("  被攻击 反击   "+ HideAtkName);
             if (HideAtkName != "") {
                 _aiAirBase.GetReSet();
                 _aiAirBase.GetAtkFSByName(HideAtkName);
@@ -358,7 +358,7 @@ public class AIYinshen : MonoBehaviour
 
 
 
-        print("隐身后 显示 show!!!!");
+        //print("隐身后 显示 show!!!!");
 
 
         if (!_db.animation.HasAnimation(ShowACName))
@@ -568,7 +568,7 @@ public class AIYinshen : MonoBehaviour
     GameObject thePlayer;
     public void GetStart(GameObject obj)
     {
-        print("*****************************************************************************************yinshen start!!!   "+GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
+        //print("*****************************************************************************************yinshen start!!!   "+GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity);
         thePlayer = obj;
         IsOver = false;
         IsHideing = true;
@@ -579,7 +579,7 @@ public class AIYinshen : MonoBehaviour
     {
         //如果可以被攻击 并且 在隐身期间被攻击 的话 重置 跳出
         if (_roledate.isBeHiting) {
-            print("----------------------------------------------------是否进来 behiting了");
+            //print("----------------------------------------------------是否进来 behiting了");
             IsInBeHitFJ = false;
             ReSetAll();
         }

@@ -58,7 +58,7 @@ public class UI_Shanbi : UI_Skill
             {
                 GetComponent<TheTimer>().CDQing0();
                 CDStart();                
-                _player.GetComponent<RoleDate>().live -= 100;
+                _player.GetComponent<RoleDate>().live -= 50;
                 shanbiNums = skillCanUseTimes - 1;
                 return true;
             }

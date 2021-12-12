@@ -21,9 +21,10 @@ public class MapNames : MonoBehaviour
     {
         if (instance == null)
         {
-            GameObject go = new GameObject("MapNames");
+            //GameObject go = new GameObject("MapNames");
             //DontDestroyOnLoad(go);
-            instance = go.AddComponent<MapNames>();
+            //instance = go.AddComponent<MapNames>();
+            instance = new MapNames();
         }
         return instance;
     }
@@ -38,7 +39,7 @@ public class MapNames : MonoBehaviour
         return Globals.mapTypeNums.ToString();
     }
 
-    // 通过关卡 标记 获取 元素数组名 
+    // 通过关卡 标记 获取 元素数组名  判断 是否有数组
     public string GetJingArrNameByGKKey(string jingArrName)
     {
         //string JingArrName = jingArrName + "_" + GetGKKey();
@@ -57,10 +58,66 @@ public class MapNames : MonoBehaviour
     }
 
 
+
+
+    //装饰物
+    //public List<string> zsw_1 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2", "guangHua_min1_36" };
+
+    //用于石头地板的装饰物 栅栏 路灯等
+    //粒子落叶
+    public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };
+    //粒子 雾
+    public List<string> liziWu_1 = new List<string> { "liziWu_1_1" };
+
+    public List<string> liziWu2_1 = new List<string> { "lizi_wu3" };
+
+    public List<string> Zhuangshiwu_2 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2", "deng_j_ludeng_1" };
+    //public List<string> QianZhuangshiwu_2 = new List<string> {};
+
+    //用于森林图的 装饰物 木栅栏
+    public List<string> Zhuangshiwu_1 = new List<string> { "lj_j_muzhalan-1", "lj_j_muzhalan-2", "deng_j_ludeng_1" };
+    public List<string> QianZhuangshiwu_1 = new List<string> { "lj_qj_muzhalan-1", "qj_muzhalan-1", "lj_qj_muzhalan-2", "qj_muzhalan-2", "qj_muzhalan-3", "qj_muzhalan-4" };
+
+    public List<string> zswDuo_1 = new List<string> { "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_14" };
+
+    //特殊的 修饰物 地标类型
+    public List<string> zswTS_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2", "lj_j_muzhalan-1", "lj_j_muzhalan-2" };
+
+    //连续的装饰物  比如 栅栏   
+    public List<string> LXZsw_1 = new List<string> { };
+
+
+
+
+
+
+    public List<string> Guai_7 = new List<string> {"G_TiaotiaoDu", "G_TiaotiaoHuo", "G_dcrj1" };
+    public List<string> GuaiKong_7 = new List<string> {"G_xemF","G_xemL" };
+
+
+    public List<string> HitYincangGuaiJG = new List<string> { "JG_GuaiHideOut" };
+
+
+    //树
+    public List<string> Shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
+
+
+
     //地板
     public List<string> db_pd_1 = new List<string> { "db_pd_senlin", "db_pd_Shitou_1", "db_pd_senlin_2" };//, "db_pd_3" 
 
     public List<string> tiaoyue_1 = new List<string> { "db_ty_1"};
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -71,7 +128,6 @@ public class MapNames : MonoBehaviour
     //下层近景 近景 下 jin jing  down =jjd
     public List<string> JinBeijing_1 = new List<string> { "jjd_1_1", "jing_caoh_2" , "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_zhiwu_4", "hh_zhiwu_5", "hh_zhiwu_6", "hh_zhiwu_14" };
     public List<string> JinBeijing_2 = new List<string> { "jjd_1_6", "jjd_1_7", "jjd_1_4", "jjd_1_5" };
-    public List<string> Shu_1 = new List<string> { "shu_1_1", "shu_1_2", "shu_1_3", "shu_1_4", "shu_1_5", "shu_1_6", "shu_1_8" };
 
     //远背景
     public List<string> jybj_1 = new List<string> { "jybj_1_1", "jybj_1_2", "jybj_1_3", "jybj_1_4", "jybj_1_5", "jybj_1_6" };
@@ -108,19 +164,7 @@ public class MapNames : MonoBehaviour
 
 
 
-    //装饰物
-    //public List<string> zsw_1 = new List<string> { "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2", "guangHua_min1_36" };
-    public List<string> Zhuangshiwu_1 = new List<string> { "lj_j_muzhalan-1", "lj_j_muzhalan-2"};
-    public List<string> QianZhuangshiwu_1 = new List<string> { "lj_qj_muzhalan-1", "qj_muzhalan-1", "lj_qj_muzhalan-2", "qj_muzhalan-2","qj_muzhalan-3","qj_muzhalan-4" };
-
-    public List<string> zswDuo_1 = new List<string> { "hh_caocong_3", "hh_hua_4", "hh_hua_5", "hh_hua_8", "hh_zhiwu_4", "hh_zhiwu_5",  "hh_zhiwu_14" };
-
-    //特殊的 修饰物 地标类型
-    public List<string> zswTS_1 = new List<string> { "deng_j_ludeng_1", "j_lupai_1", "lj_j_zhalan-1", "lj_j_zhalan-2" , "lj_j_muzhalan-1", "lj_j_muzhalan-2" };
-
-    //连续的装饰物  比如 栅栏   
-    public List<string> LXZsw_1 = new List<string> { };
-
+   
 
     public List<string> yqj_1 = new List<string> { };//"qjd_1_3",  "qjd_1_6", "qjd_1_7", "qjd_1_8"
     //public List<string> yqj_1 = new List<string> { "qjd_1_3", "qjd_1_4", "qjd_1_5", "qjd_1_6", "qjd_1_7", "qjd_1_8", "qjd_1_12" };
@@ -147,12 +191,7 @@ public class MapNames : MonoBehaviour
     //大远景
     public List<string> DaYuanBeijing_1 = new List<string> { "dyj_1_1", "dyj_1_2", "dyj_1_3", "dyj_1_4", "dyj_1_5" };
 
-    //粒子落叶
-    public List<string> liziLY_1 = new List<string> { "liziLY_1_1" };
-    //粒子 雾
-    public List<string> liziWu_1 = new List<string> { "liziWu_1_1"};
-
-    public List<string> liziWu2_1 = new List<string> { "lizi_wu3" };
+   
 
 
 

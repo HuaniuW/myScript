@@ -34,7 +34,7 @@ public class JingBase : MonoBehaviour
     {
         if (Diban1) {
             Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder = sd;
-            print(sd+" *********************sd   "+ Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder);
+            //print(sd+" *********************sd   "+ Diban1.GetComponent<Ferr2DT_PathTerrain>().GetComponent<Renderer>().sortingOrder);
         }
         
       

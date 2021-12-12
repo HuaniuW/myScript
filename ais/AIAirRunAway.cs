@@ -198,6 +198,17 @@ public class AIAirRunAway : MonoBehaviour
 
     public bool GetYuanliOver()
     {
+        //先判断 我是否 在地面
+        if (GetComponent<GameBody>().IsGround)
+        {
+            print("***************************************我是飞行怪**********我在 地面！！！！！！！");
+            GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = new Vector2(0, 1);
+            return false;
+        }
+
+
+
+
         //print("?????>>>>>>>>>GetYuanliOver!!!");
         if (GetComponent<RoleDate>().isBeHiting || fxListq.Count == 0|| fxListh.Count == 0||fxList.Count == 0) {
             //print(" 远离 结束了啊！！！！！！" + "fxListq.Count    " + fxListq.Count + "    xListh.Count  " + fxListh.Count + "     fxList.Count   " + fxList.Count + "    isBeHiting  " + GetComponent<RoleDate>().isBeHiting);
@@ -209,10 +220,11 @@ public class AIAirRunAway : MonoBehaviour
             isStart = true;
 
             yuanliPos = ChoseYuanliPos();
+            print(" ???远离的目标点-------------------------》 ************     " + yuanliPos);
             if (yuanliPos == Vector2.zero) return true;
             //yuanliVector2 = GlobalTools.GetVector2ByPostion(yuanliPos, this.transform.position, this.GetComponent<GameBody>().speedX);
             //isStarting = true;
-            //print(" ???远离的目标点-------------------------》      "+ yuanliPos);
+            print(" ???远离的目标点-------------------------》      "+ yuanliPos);
             //_behavior.ZhuijiZuoBiao(yuanliPos, 0);
             
             //_airGameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;

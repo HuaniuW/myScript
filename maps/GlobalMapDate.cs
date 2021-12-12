@@ -5,18 +5,40 @@ using UnityEngine;
 public class GlobalMapDate : MonoBehaviour {
 
     // Use this for initialization
+    //平地
+    public const string PINGDI = "pingdi";
+    public const string XIAJIANG = "xiajiang";
+    public const string SHANGSHENG = "shangsheng";
+    public const string BODONG = "bodong";
+
 
 
     //boss平地
     public const string BOSS_PINGDI = "bossPingdi";
     //存档平地
     public const string CUNDANG_PINGDI = "cundangPingdi";
-    //平地
-    public const string PINGDI = "pingdi";
+  
+
+    //混合平地
+    public const string PINGDI_HUNHE = "pingdi_hunhe";
+
+   
+
     //跳跃
     public const string TIAOYUE = "tiaoyue";
     //洞内
     public const string DONGNEI = "dongnei";
+
+
+    public const string DONGNEI_PINGDI = "dongnei_pingdi";
+    public const string DONGNEI_SHANGSHENG = "dongnei_shangsheng";
+    public const string DONGNEI_XIAJIANG = "dongnei_xiajiang";
+
+    public const string DONGNEI_HUNHE = "dongnei_hunhe";
+
+    public const string HUNHE = "hunhe";
+
+
     //一般
     public const string YIBAN = "yiban";
     //剧情平地

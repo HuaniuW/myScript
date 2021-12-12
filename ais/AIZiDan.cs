@@ -62,6 +62,11 @@ public class AIZiDan : MonoBehaviour
         _isStart = false;
 
         if(_behavior) _behavior.StopJS();
+
+
+        QishouYanchiJishi = 0;
+        IsStartFire = false;
+        if(QishiLizi) QishiLizi.Stop();
     }
 
     //找到目标点  移动到攻击范围
@@ -72,7 +77,7 @@ public class AIZiDan : MonoBehaviour
         _isBehaviorOver = false;
         IsFindRoading = true;
         _isStart = true;
-        //print("---------------------------------------------------> 子弹！！！！！！！"+ _targetObj);
+        print("---------------------------------------------------> 子弹！！！！！！！"+ _targetObj);
     }
 
     public bool IsBehaviorOver()
@@ -109,6 +114,11 @@ public class AIZiDan : MonoBehaviour
             GoToNewPoint();
             return;
         }
+
+
+       
+
+
         if (IsGetFireTest)
         {
             IsGetFireTest = false;
@@ -120,16 +130,71 @@ public class AIZiDan : MonoBehaviour
                 GetToNewPoint();
                 return;
             }
+            IsStartFire = true;
+            print("------------------------------进入粒子系统延迟-------------------------------------");
+            if (QishiLizi && QishiLizi.isStopped&& QishouYanchiTimes!=0)
+            {
+                QishiLizi.Play();
+                QishouAudio.Play();
+                _gameBody.GetPlayerRigidbody2D().velocity *= 0.1f;
+            }
+        }
+
+        //这里 显示特效 并且 延迟
+        if (QishouYanchiTimes != 0)
+        {
+            if (!StartQishouYanchi()) return;
+        }
+
+
+        if (IsStartFire)
+        {
+            IsStartFire = false;
             //print("开火的时候 速度是多少   "+_gameBody.GetPlayerRigidbody2D().velocity);
             //_gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             //这里做一个缓动减速
             _behavior.StartJS();
             //朝向攻击目标
-            GetComponent<GameBody>().TurnDirection(_targetObj); 
+            GetComponent<GameBody>().TurnDirection(_targetObj);
             GetFire();
         }
+
        
     }
+
+
+    bool IsStartFire = false;
+    [Header("起手延迟时间")]
+    public float QishouYanchiTimes = 0;
+    float QishouYanchiJishi = 0;
+    [Header("起手延迟播放的特效")]
+    public ParticleSystem QishiLizi;
+    bool StartQishouYanchi()
+    {
+        
+
+        if (QishouYanchiJishi>= QishouYanchiTimes)
+        {
+            //print("延迟结束》》》》》》》》》   QishouYanchiJishi： " + QishouYanchiJishi);
+            if (QishiLizi)
+            {
+                if (QishiLizi.isPlaying)
+                {
+                    QishiLizi.Stop();
+                }
+            }
+            QishouYanchiJishi = 0;
+            return true;
+        }
+        
+
+        QishouYanchiJishi += Time.deltaTime;
+        //print("子弹 QishouYanchiJishi-------  " + QishouYanchiJishi + "  延迟时间是多少  " + QishouYanchiTimes + "   粒子效果有吗    " + QishiLizi);
+        return false;
+    }
+
+
+
 
 
     int _zdType = 1;
@@ -236,6 +301,7 @@ public class AIZiDan : MonoBehaviour
             if (eventObject.name == "zd"|| eventObject.name == "zd2") {
                 //闪一下点特效
                 GameObject shanGuang = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TX_zidan1shan") as GameObject);  //GlobalTools.GetGameObjectByName("TX_zidan1shan");
+                print(shanGuang+"  ------ ?? "+zidanDian);
                 shanGuang.transform.position = zidanDian.position;
 
                 //判断子弹类型 和 动作类型
@@ -247,6 +313,8 @@ public class AIZiDan : MonoBehaviour
                 GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(ZDName) as GameObject);
                 zidan.transform.position = zidanDian.position;
                 zidan.transform.localScale = this.transform.localScale;
+                //*************这里如果不加 如果有个 3散弹 的 对象池 就会 无法射击出去 注意************
+                zidan.GetComponent<TX_zidan>().IsAtkAuto = true;
                 //放出子弹 子弹方向   点位置 - 目标位置+ -Y
                 //print("发射子弹！！！！！！！！！！！！！！！！！！");
             }

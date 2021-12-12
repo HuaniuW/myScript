@@ -93,7 +93,7 @@ public class DB_xialuo : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D Coll)
     {
         if (Coll.collider.tag == "Player") {
-            print(" hit!!!!!!!!!! ");
+            //print(" hit!!!!!!!!!! ");
             
             if (IsTanShe)
             {

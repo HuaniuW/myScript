@@ -89,6 +89,10 @@ public class JN_Zidan_XZ : MonoBehaviour ,ISkill
                 //_bullet.transform.position = GetDateByName.GetInstance().GetTransformByName("pos" + i, this).transform.position;
 
                 _bullet.transform.position = GetXYPosByRadian(i, radian * i, r)+v2;
+                if (_bullet.GetComponent<JN_ZidanWeirao>())
+                {
+                    _bullet.GetComponent<JN_ZidanWeirao>().GetTheCenterObj(this.gameObject);
+                }
             }
         }
     }

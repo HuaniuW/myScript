@@ -14,11 +14,32 @@ public class Diaoluowu : MonoBehaviour {
     /// </summary>
     public int type = 1;
 
+    [Header("打过boss后 徽章获得 徽章 声音播放")]
+    public bool IsHuzihangAudioPlay = true;
     // Use this for initialization
     void Start () {
-       //thisY = this.transform.position.y;
-      
+        //thisY = this.transform.position.y;
+       
     }
+
+    //[Header("显示粒子 ")]
+    //public ParticleSystem XSLizi;
+
+    private void LateUpdate()
+    {
+        if (type == 1 && IsHuzihangAudioPlay)
+        {
+            IsHuzihangAudioPlay = false;
+            GameObject TX_huoquhuizhang = GlobalTools.GetGameObjectByName("TX_HuizhangOut");
+            TX_huoquhuizhang.transform.position = this.transform.position;
+
+            //XSLizi.Play();
+            string AudioName = "Audio_HuizhangJiangli";
+            GameObject _audioObj = GlobalTools.GetGameObjectByName(AudioName);
+            if (_audioObj != null) _audioObj.GetComponent<AudioSource>().Play();
+        }
+    }
+
 
     public bool IsCanBeRecord = false;
     bool IsOutRecorded = false;
@@ -53,7 +74,7 @@ public class Diaoluowu : MonoBehaviour {
                 //print(this.transform.parent.name);
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
                 var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName+ "-0"),this);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName + "-0"), this);
                 //显示 获取徽章的 提示UI
                 GameObject ui_huizhangMsg = GlobalTools.FindObjByName("Canvas_HZMsg");
                 if (!ui_huizhangMsg)
@@ -63,6 +84,9 @@ public class Diaoluowu : MonoBehaviour {
                 GameObject HZ_obj = Resources.Load(objName) as GameObject;
                 string HZ_Msg = HZ_obj.GetComponent<HZDate>().GetHZ_information_str();
                 ui_huizhangMsg.GetComponent<UI_HZMsg>().StartShowBar("img_"+objName, HZ_Msg);
+
+               
+
 
             }
             else if (type == 2) {

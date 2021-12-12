@@ -48,16 +48,29 @@ public class Feichuan : MonoBehaviour {
         }
     }
 
+    [Header("玩家 上船 才开始移动！！")]
+    public bool IsNeedHitPlayerStart = false;
+    bool IsHitPlayer = false;
 
     public bool IsMoveX = true;
 	// Update is called once per frame
 	void Update () {
+
+        if (IsNeedHitPlayerStart)
+        {
+            if (!IsHitPlayer) return;
+        }
+
+
+
         if (IsStandUp) return;
 
         if (IsHitWall) {
             Daoan();
             return;
         }
+
+       
         
         if (IsMoveY) MoveY();
         
@@ -70,6 +83,17 @@ public class Feichuan : MonoBehaviour {
     {
         return IsStandUp;
     }
+
+
+
+    [Header("下船后的 钢琴音")]
+    public AudioSource Audio_Gangqing;
+    //播放下船后的 钢琴音
+    void XiachuanGangqing()
+    {
+        if(Audio_Gangqing) Audio_Gangqing.Play();
+    }
+
 
 
     bool IsCloseDoor = false;
@@ -88,6 +112,7 @@ public class Feichuan : MonoBehaviour {
             IsCloseDoor = true;
             player = GlobalTools.FindObjByName("player");
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"Men_1-1"), this);
+            XiachuanGangqing();
         }
 
         ycNums += Time.deltaTime;
@@ -137,6 +162,9 @@ public class Feichuan : MonoBehaviour {
     {
         //print("Trigger - A");
         //obj2 = collision.collider.transform;
+
+        if (collision.gameObject.tag == GlobalTag.Player) IsHitPlayer = true;
+
         if (!objList.Contains(collision.collider.transform)) objList.Add(collision.collider.transform);
 
     }
@@ -164,6 +192,7 @@ public class Feichuan : MonoBehaviour {
         transform.position = new Vector3(transform.position.x, moveY, transform.position.z);
         foreach (Transform t in objList)
         {
+            if (t == null || !t.gameObject.activeSelf) continue;
             //print(t.tag);
             if (t.tag == "Player")
             {
@@ -195,6 +224,7 @@ public class Feichuan : MonoBehaviour {
         this.transform.position = new Vector3(moveX, this.transform.position.y, this.transform.position.z);
         foreach (Transform t in objList)
         {
+            if (t == null || !t.gameObject.activeSelf) continue;
             float cx = t.transform.position.x + speedX;
             t.transform.position = new Vector3(cx, t.transform.position.y, t.transform.position.z);
         }

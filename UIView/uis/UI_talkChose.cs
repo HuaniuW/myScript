@@ -38,6 +38,7 @@ public class UI_talkChose : MonoBehaviour
     int MaxLength = 3;
     public void GetStrMsg(string msg)
     {
+        print(" msg "+msg);
         string[] strArr = msg.Split('@');
         MaxLength = strArr.Length;
         

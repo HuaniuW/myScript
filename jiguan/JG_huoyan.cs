@@ -57,6 +57,7 @@ public class JG_huoyan : MonoBehaviour
         TheLight.gameObject.SetActive(true);
         if (huoyan.isStopped) {
             huoyan.Play();
+            huoyan.GetComponent<BoxCollider2D>().enabled = true;
             sounds.Play();
         }
         
@@ -73,6 +74,7 @@ public class JG_huoyan : MonoBehaviour
         TheLight.gameObject.SetActive(false);
         if (huoyan.isPlaying) {
             huoyan.Stop();
+            huoyan.GetComponent<BoxCollider2D>().enabled = false;
             sounds.Stop();
         }
         

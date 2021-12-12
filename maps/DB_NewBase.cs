@@ -31,7 +31,7 @@ public class DB_NewBase : DBBase
         //ShowDingDB();
         //SetDingDBPos();
 
-        print("子对象数量   "+ JinBeijings1.childCount);
+        //print("子对象数量   "+ JinBeijings1.childCount);
 
         //foreach (Transform child in Jinjings)
         //{
@@ -839,7 +839,7 @@ public class DB_NewBase : DBBase
             //print("  ----------------------------- 前景名字  "+ objName);
             GameObject jingObj = GlobalTools.GetGameObjectByName(objName);
             if (jingObj == null) continue;
-            jingObj.transform.parent = maps.transform;
+            if(maps)jingObj.transform.parent = maps.transform;
             //大于宽度的景 直接删除了
             bool IsShu = false;
             //if ((_jinglistNameTou != "ybj" && _jinglistNameTou != "ybj2") && _jinglistNameTou != "Shu")

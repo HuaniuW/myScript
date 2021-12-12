@@ -12,7 +12,7 @@ public class PlayerGameBody : GameBody {
     // Update is called once per frame
     float flyVx = 0;
 
-
+    
 
     public AudioSource AudioAtk_1;
     public AudioSource AudioAtk_2;
@@ -21,6 +21,10 @@ public class PlayerGameBody : GameBody {
 
     [Header("身体碰撞保护")]
     public ParticleSystem BodyHitProtect;
+
+    
+
+
 
     protected void BodyHitProtecting()
     {
@@ -115,7 +119,7 @@ public class PlayerGameBody : GameBody {
         hongdian.Stop();
         _playerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
 
-        _maxSpeedXRecord = 0;
+        _maxSpeedXRecord = 10;
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC, this.ChangeRunAC);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_RUN_AC_2, this.ChangeRunAC2);
         //PlayTXByTXName("huafang");//测试用 看看能不能播
@@ -137,7 +141,7 @@ public class PlayerGameBody : GameBody {
         ChangeACNum(4);
         RUN = "run_5";
         FightingNums = 0;
-        if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
+        if (_maxSpeedXRecord == 10) _maxSpeedXRecord = maxSpeedX;
         maxSpeedX = _maxSpeedXRecord;
         maxSpeedX += 0.9f;
     }
@@ -148,7 +152,7 @@ public class PlayerGameBody : GameBody {
 
     //protected bool IsInFighting = false;
     //记录初始的 最大X速度
-    protected float _maxSpeedXRecord = 0;
+    protected float _maxSpeedXRecord = 10;
     protected void ChangeRunAC(UEvent e)
     {
         if (IsChiXueRunAC) return;
@@ -156,7 +160,7 @@ public class PlayerGameBody : GameBody {
         ChangeACNum(4);
         RUN = "run_5";
         FightingNums = 0;
-        if (_maxSpeedXRecord == 0) _maxSpeedXRecord = maxSpeedX;
+        if (_maxSpeedXRecord == 10) _maxSpeedXRecord = maxSpeedX;
         maxSpeedX = _maxSpeedXRecord;
         maxSpeedX += 0.9f;
 
@@ -173,7 +177,7 @@ public class PlayerGameBody : GameBody {
             Globals.IsInFighting = false;
             RUN = "run_3";
             maxSpeedX = _maxSpeedXRecord;
-            _maxSpeedXRecord = 0;
+            _maxSpeedXRecord = 10;
         }
     }
 
@@ -247,7 +251,7 @@ public class PlayerGameBody : GameBody {
     [Header("花防 粒子特效")]
     public ParticleSystem TX_huafang_x;
     [Header("火刀 粒子特效")]
-    public ParticleSystem TX_huodao_x;
+    public ParticleSystem TX_Huoren_x;
     [Header("电刀 粒子特效")]
     public ParticleSystem TX_diandao_x;
     [Header("毒刀 粒子特效")]
@@ -261,7 +265,7 @@ public class PlayerGameBody : GameBody {
     public void StopAllHZInTX()
     {
         if (TX_huafang_x) TX_huafang_x.Stop();
-        if (TX_huodao_x) TX_huodao_x.Stop();
+        if (TX_Huoren_x) TX_Huoren_x.Stop();
         if (TX_diandao_x) TX_diandao_x.Stop();
         if (TX_dudao_x) TX_dudao_x.Stop();
         if (TX_diandun_x) TX_diandun_x.Stop();
@@ -272,7 +276,9 @@ public class PlayerGameBody : GameBody {
     public void PlayHZInTXByTXName(string TXName)
     {
         string _txName = "TX_" + TXName + "_x";
+        //print(" _txName "+ _txName);
         ParticleSystem _tx = GetDateByName.GetInstance().GetTXByName(_txName, this);
+        //print("  显示特效是什么   "+_tx);
         if (_tx) _tx.Play();
     }
 
@@ -1060,6 +1066,7 @@ public class PlayerGameBody : GameBody {
         inFightNums = 0;
         mnum = 0;
         InFightAtk();
+        GetDB().animation.Reset();
         //ChangeStandAndRunAC();
         Time.timeScale = 0.5f;
         //print(" Time.timeScale  "+ Time.timeScale);
@@ -1165,6 +1172,13 @@ public class PlayerGameBody : GameBody {
 
         //取消闪进
         ShanjinStop();
+
+        print("bdjn " + bdjn.HZZBTXName);
+        //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
+        if (bdjn.HZZBTXName == GlobalTag.HUAFANG)
+        {
+            IsHuaFang = true;
+        }
 
 
         //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效

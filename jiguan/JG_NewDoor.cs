@@ -28,14 +28,34 @@ public class JG_NewDoor : MonoBehaviour
         AddEventListeners();
         IsOpenOrClose();
         CheckDoorByDate();
+        CheckAllGuaiIsDie();
+        ZDDTScreenGuaiCheck();
     }
 
+    GameObject _MainCamera;
+    private void ZDDTScreenGuaiCheck()
+    {
+        //throw new NotImplementedException();
+        if (!_MainCamera) _MainCamera = GlobalTools.FindObjByName("MainCamera");
+        if (_MainCamera.GetComponent<ScreenDoorGuaiControl>().TheMaxGuaiNums == -1) return;
+        if (_MainCamera.GetComponent<ScreenDoorGuaiControl>().IsManGuai())
+        {
+            IsCanDoorClose = true;
+        }
+        else
+        {
+            IsCanDoorClose = false;
+        }
+    }
 
     void AddEventListeners()
     {
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.NEW_OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GUAI_DIE, this.GuaiListAllDieOpenDoor);
-        
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_DIE, this.name), this);
+
+        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_DIE,this.GuaiListAllDieOpenDoor);
+
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
         //if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
     }
@@ -45,6 +65,7 @@ public class JG_NewDoor : MonoBehaviour
         //print("我被消除了！？？？？？？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.NEW_OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GUAI_DIE, this.GuaiListAllDieOpenDoor);
+        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_DIE, this.GuaiListAllDieOpenDoor);
     }
 
     private void GetDoorEvent(UEvent evt)
@@ -59,7 +80,7 @@ public class JG_NewDoor : MonoBehaviour
         }
 
         if (!IsCanDoorClose) return;
-        //print(" sj "+ str);
+        print(" sj "+ str);
         if(str == "close")
         {
             CloseTheDoor();
@@ -71,6 +92,7 @@ public class JG_NewDoor : MonoBehaviour
         IsCloseing = false;
         IsOpening = true;
         DoorSource.Play();
+        if(!IsAllGuaiDieOpenDoorAfterHasJYorBossCanCloseDoor&&BossOrJY!=null) IsCanDoorClose = false;
     }
 
 
@@ -119,7 +141,7 @@ public class JG_NewDoor : MonoBehaviour
             //关门
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NEW_OPEN_DOOR, "close"), this);
             //IsCloseing = true;
-            //print(" **************  碰撞 关门机关！！！！   ");
+            print(" **************  碰撞 关门机关！！！！   ");
             
         }
     }
@@ -130,6 +152,7 @@ public class JG_NewDoor : MonoBehaviour
     void CheckDoorByDate()
     {
         
+
     }
 
 
@@ -190,6 +213,7 @@ public class JG_NewDoor : MonoBehaviour
             IsCloseing = false;
             DoorSource.Stop();
             IsCanDoorClose = false;
+            print(" IsCanDoorClose?  已经关门！！！！！ ");
             return;
         }
 
@@ -206,22 +230,49 @@ public class JG_NewDoor : MonoBehaviour
 
     void GuaiListAllDieOpenDoor(UEvent e)
     {
+        
         if (!IsGuaiListAllDieOpenDoor) return;
         GameObject o = e.eventParams as GameObject;
+        print(" guaidie------------   "+o.name);
+        print(e.eventParams);
 
-        //print(e.eventParams);
-
-        //print("GuaiList.Count    " + GuaiList.Count);
+        print("guaidie  GuaiList.Count    " + GuaiList.Count);
         for(int i= GuaiList.Count - 1; i >= 0; i--)
         {
             print(GuaiList[i]);
             if(GuaiList[i] == o|| GuaiList[i] == null)
             {
+                print("guaidie   " + o.name);
                 GuaiList.RemoveAt(i);
             }
         }
-        //print("Guailist >>>>>>  "+ GuaiList.Count);
+        print("guaidie  Guailist >>>>>>  " + GuaiList.Count);
         if(GuaiList.Count == 0) OpenTheDoor();
+    }
+
+    [Header("怪都 清理后 是否还能 关闭 门 还有精英或者boss时候能再次关门")]
+    public bool IsAllGuaiDieOpenDoorAfterHasJYorBossCanCloseDoor = false;
+    void CheckAllGuaiIsDie()
+    {
+        if (IsNoBossNeedCloseDoor) return;
+
+        for (int i = GuaiList.Count - 1; i >= 0; i--)
+        {
+            print("  检查 是否 有怪 么怪就 不能关门  "+GuaiList[i]+"    ---  "+ GuaiList[i].activeSelf);
+            if (GuaiList[i] == null||GuaiList[i].activeSelf == false)
+            {
+                GuaiList.RemoveAt(i);
+            }
+        }
+
+        print("检查 怪物数量   " + GuaiList.Count);
+
+        if (GuaiList.Count == 0) {
+            IsCanDoorClose = false;
+            OpenTheDoor();
+        }
+        
+        
     }
 
 

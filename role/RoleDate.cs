@@ -36,14 +36,31 @@ public class RoleDate : MonoBehaviour {
     [Header("暴击倍率")]
     public float BaoJiShangHaiBeiLv = 0;
 
-    [Header("抗毒几率")]
+    [Header("抗*毒几率")]
     public float KangDuJilv = 0;
 
-    [Header("抗毒伤害值几率")]
+    [Header("抗*毒*伤害值抵抗率")]
     public float KangDuShanghaijilv = 0;
 
-    [Header("抗麻痹伤害值几率")]
-    public float KangMabiJilv = 0;
+
+
+    [Header("抗 火 几率")]
+    public float KangHuoJilv = 0;
+
+    [Header("抗 火 伤害值抵抗率")]
+    public float KangHuoShanghaijilv = 0;
+
+
+
+    
+
+    [Header("抗-电几率")]
+    public float KangDianJilv = 0;
+
+    [Header("抗电-麻痹 几率")]
+    public float KangDianMabiJilv = 0;
+
+
 
 
     [Header("体型 默认1  用来控制被击飞程度等")]
@@ -183,4 +200,28 @@ public class RoleDate : MonoBehaviour {
 
     [Header("被动防御技能")]
     public List<string> passive_def_skill = new List<string> { };
+
+
+
+
+    public bool IsHasHZHuo()
+    {
+        if (this.tag != GlobalTag.Player) return false;
+        HZDate huoren = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().IsHasHuoren();
+        if (huoren != null)
+        {
+            if (lan >= huoren.xyLan)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        return false;
+    }
+
+
 }

@@ -155,16 +155,22 @@ public class AirGameBody : GameBody {
        
 
         isDowning = false;
-        if (newSpeed.x > slideNum)
-        {
-            newSpeed.x = slideNum - 1;
-        }
-        else if (newSpeed.x < -slideNum)
-        {
-            newSpeed.x = -slideNum + 1;
-        }
+        //if (newSpeed.x > slideNum)
+        //{
+        //    newSpeed.x = slideNum - 1;
+        //}
+        //else if (newSpeed.x < -slideNum)
+        //{
+        //    newSpeed.x = -slideNum + 1;
+        //}
 
-        playerRigidbody2D.velocity = newSpeed;
+        //playerRigidbody2D.velocity = newSpeed;
+
+
+        //这里防止 怪物 站立的时候 飘走  速度设为0
+
+        playerRigidbody2D.velocity = Vector2.zero;
+
     }
 
     [Header("飞行怪物 移动时候的 声音")]
@@ -270,7 +276,7 @@ public class AirGameBody : GameBody {
 
             if (IsDieBoomOutObj) DieBoomOutObj();
         }
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DIE_OUT,roleDate.enemyType), this);
         if (isDieRemove) StartCoroutine(IEDieDestory(5f));
     }
 
@@ -428,6 +434,8 @@ public class AirGameBody : GameBody {
         //playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x*0.9f, playerRigidbody2D.velocity.y * 0.9f);
         //print("-------------------------------------------------------->  "+ playerRigidbody2D.velocity);
 
+        //print("  被攻击动作 ing!!!!!!!!!!!!!!!!!!!!!!!!  " + GetPlayerRigidbody2D().velocity);
+
         if ((DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == BEHITINAIR) && DBBody.animation.isCompleted)
         {
             roleDate.isBeHiting = false;
@@ -438,6 +446,8 @@ public class AirGameBody : GameBody {
             if (IsBehitJingkong) JingKong();
             //呆住
             if (IsDaiXie) DaiXie();
+
+            print("  被攻击动作 完成   "+GetPlayerRigidbody2D().velocity);
         }
         else
         {
@@ -452,6 +462,7 @@ public class AirGameBody : GameBody {
                 if (IsBehitJingkong) JingKong();
                 //呆住
                 if (IsDaiXie) DaiXie();
+                
                 return;
             }
         }

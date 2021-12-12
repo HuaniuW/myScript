@@ -48,6 +48,7 @@ public class CameraKuaiZ : MonoBehaviour {
         if (!cm) return;
         if (Coll.tag == "Player")
         {
+            Globals.IsInCameraKuai = true;
             _player = Coll.gameObject;
             IsOutKuai = true;
             //print("In");
@@ -70,6 +71,7 @@ public class CameraKuaiZ : MonoBehaviour {
         if (Coll.tag == "Player")
         {
             //print("out");
+            Globals.IsInCameraKuai = false;
             cm.GetComponent<CameraController>().OutHitCameraKuaiY();
             //cm.SetNewPosition(cameraPosition);
             cm.SetNewPosition(new Vector3(cameraPosition.x, cameraPosition.y, OutKuaiCameraZ));
@@ -80,27 +82,33 @@ public class CameraKuaiZ : MonoBehaviour {
     }
 
     //这里不打开 如果是 CameraKuai 拼接 角色从一个快进入另一个 会丢失导致 Z 还原
-    [Header("是否 持续运作 控制摄像机z")]
-    public bool IsHitStayDo = false;
+    //[Header("是否 持续运作 控制摄像机z")]
+    //public bool IsHitStayDo = false;
     void OnTriggerStay2D(Collider2D Coll)
     {
         //print(Coll.tag);
+        if (Globals.IsInCameraKuai) return;
+        
 
-        if (IsHitStayDo)
+        if (Coll.tag == "Player")
         {
-            if (Coll.tag == "Player")
+            Globals.IsInCameraKuai = true;
+            _player = Coll.gameObject;
+            IsOutKuai = true;
+            cameraPosition = GameObject.Find("/MainCamera").transform.position;
+            if (IsSetY)
             {
-                _player = Coll.gameObject;
-                IsOutKuai = true;
-                cameraPosition = GameObject.Find("/MainCamera").transform.position;
-                if (IsSetY)
-                {
-                    cm.GetHitCameraKuaiY(cameraY.transform.position.y);
-                }
-
-                cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + DistanceY, cameraZ));
+                cm.GetHitCameraKuaiY(cameraY.transform.position.y);
             }
+
+            cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + DistanceY, cameraZ));
         }
+
+
+        //if (IsHitStayDo)
+        //{
+           
+        //}
 
 
         //print("Trigger - C");

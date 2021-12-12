@@ -42,6 +42,46 @@ public class GameBody : MonoBehaviour, IRole {
     public UnityEngine.Transform groundCheck3;
 
 
+    [Header("紧挨身体的 前探测点")]
+    public UnityEngine.Transform ShentiQianmianTCDian;
+
+
+    public bool IsShentiHitWall
+    {
+        get
+        {
+            if (ShentiQianmianTCDian == null) return false;
+            Vector2 start = ShentiQianmianTCDian.position;
+            float __x = this.transform.localScale.x > 0 ? start.x - 1 : start.x + 1;
+            Vector2 end = new Vector2(__x, start.y);
+            Debug.DrawLine(start, end, Color.yellow);
+            bool isShentiHitWall = Physics2D.Linecast(start, end, groundLayer);
+
+            return isShentiHitWall;
+        }
+    }
+
+
+
+    [Header("头顶判断")]
+    public UnityEngine.Transform TopPoint;
+    public bool IsHitTopWall
+    {
+        get
+        {
+            if (TopPoint == null) return false;
+            Vector2 start = TopPoint.position;
+            //float __x = this.transform.localScale.x;
+            Vector2 end = new Vector2(start.x, start.y+1.5f);
+            Debug.DrawLine(start, end, Color.yellow);
+            bool _IsHitTopWall = Physics2D.Linecast(start, end, groundLayer);
+
+            return _IsHitTopWall;
+        }
+    }
+
+
+
     [Header("感应与面前墙的距离")]
     [Range(0, 1)]
     public float distanceMQ = 0.13f;
@@ -154,6 +194,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public bool isTXShow = false;
 
+    [Header("打开 加速开关 不限制最大速度")]
     public bool IsJiasu = false;
 
     public virtual void ResetAll()
@@ -193,6 +234,11 @@ public class GameBody : MonoBehaviour, IRole {
         if(playerRigidbody2D!=null && playerRigidbody2D.gravityScale!= _recordGravity) playerRigidbody2D.gravityScale = _recordGravity;
 
         acingTime = 0;
+
+        IsInACingYancheng = false;
+        IsHuaFang = false;
+
+        //if (GetDB()) GetDB().animation.Reset();
 
     }
 
@@ -259,8 +305,9 @@ public class GameBody : MonoBehaviour, IRole {
             //newSpeed.x = 0;
             //newSpeed.y = 0;
             //playerRigidbody2D.velocity = newSpeed;
-            //print("huitiao");
+            print("fj------>  当前速度是多少 "+ playerRigidbody2D.velocity+"     vx  "+vx);
             playerRigidbody2D.velocity = Vector2.zero;
+
             BackJumpVX(vx);
             //打开有bug
             //MoveVY(200);
@@ -272,15 +319,17 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected void GetBackUping()
     {
-        print("  backUping!!!!! ");
+        //print("  backUping!!!!! ");
         if (isBackUping)
         {
-            print("时间 xiuzheng");
+            //print("时间 xiuzheng");
             buckUpXZTimes += Time.deltaTime;
-            if (buckUpXZTimes >= 1)
+            if (buckUpXZTimes >= 3)
             {
+                buckUpXZTimes = 0;
                 BackUpOver();
             }
+            //print("fj------>  当前速度是多少 >>???????   " + playerRigidbody2D.velocity);
         }
 
 
@@ -319,12 +368,12 @@ public class GameBody : MonoBehaviour, IRole {
             isQianhua = true;
             if (DBBody.animation.lastAnimationName != QIANHUA) DBBody.animation.GotoAndPlayByFrame(QIANHUA, 0, 1);
             isQianhuaing = true;
-            roleDate.isCanBeHit = false;
-            newSpeed.x = 0;
-            newSpeed.y = 0;
-            playerRigidbody2D.velocity = newSpeed;
-            print("********************************************************前滑！！！ huitiao");
-            BackJumpVX(200);
+            //roleDate.isCanBeHit = false;
+            //newSpeed.x = 0;
+            //newSpeed.y = 0;
+            //playerRigidbody2D.velocity = newSpeed;
+            //print("********************************************************前滑！！！ huitiao");
+            //BackJumpVX(-100);
             MoveVX(vx,true);
             //打开有bug
             //MoveVY(200);
@@ -377,6 +426,21 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
+    protected string GETDANG1 = "gedang_1";
+    protected string AIRGETDANG2 = "airGedang_2";
+    protected bool IsGedangOver()
+    {
+        if ((GetDB().animation.lastAnimationName == GETDANG1|| GetDB().animation.lastAnimationName == AIRGETDANG2) && GetDB().animation.isCompleted)
+        {
+            return true;
+        }
+        //if (IsHuaFang || GetDB().animation.lastAnimationName != GETDANG1&& GetDB().animation.lastAnimationName != AIRGETDANG2) return true;
+        return false;
+    }
+
+
+
+    protected bool IsHuaFang = false;
     //被动技能
     protected HZDate bdjn;
     //释放被动技能    补一个被动技能的释放  是否有被动技能 有的话 直接释放  被动技能是否 配有动作？
@@ -388,7 +452,13 @@ public class GameBody : MonoBehaviour, IRole {
         roleDate.lan -= bdjn.xyLan;
         roleDate.live -= bdjn.xyXue;
 
+        print("bdjn "+bdjn.HZZBTXName);
         //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
+        if (bdjn.HZZBTXName == GlobalTag.HUAFANG)
+        {
+            IsHuaFang = true;
+        }
+
 
         if (bdjn.skillACName != null && DBBody.animation.HasAnimation(bdjn.skillACName))
         {
@@ -578,6 +648,10 @@ public class GameBody : MonoBehaviour, IRole {
     protected bool isDodge = false;
     protected bool isDodgeing = false;
     protected bool isCanShanjin = true;
+    public void ResetShanJin()
+    {
+        //isCanShanjin = true;
+    }
 
     public void GetDodge1()
     {
@@ -592,6 +666,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (DBBody.animation.lastAnimationName == DOWNONGROUND || DBBody.animation.lastAnimationName == JUMPUP|| DBBody.animation.lastAnimationName == JUMPHITWALL) return;
         if(!thePlayerUI) thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
+        if (isInAiring && !isCanShanjin) return;
         if (!thePlayerUI.ui_shanbi.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
         //if (!GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().ui_shanbi.GetComponent<UI_Skill>().isCanBeUseSkill()) return;
         float testSpeed;
@@ -601,6 +676,8 @@ public class GameBody : MonoBehaviour, IRole {
             isCanShanjin = false;
             DODGE2 = "shanjin_1";
             testSpeed = 30;
+            DBBody.animation.timeScale = 1;
+            Time.timeScale = 1;
         }
         else
         {
@@ -674,7 +751,7 @@ public class GameBody : MonoBehaviour, IRole {
                 isShanjin = true;
                 shanjinjuli = this.transform.position.x;
             }
-            if (Mathf.Abs(this.transform.position.x - shanjinjuli) >= 10)
+            if (Mathf.Abs(this.transform.position.x - shanjinjuli) >= 9)
             {
                 DodgeOver();
                 shanjinjuli = 0;
@@ -761,9 +838,18 @@ public class GameBody : MonoBehaviour, IRole {
     {
         if (qianmianjiance == null) return false;
         if (isInAiring) return false;
+        
         Vector2 start = qianmianjiance.position;
-        Vector2 end = new Vector2(start.x, start.y - 10f);
-        Debug.DrawLine(start, end, Color.red);
+        Vector2 end = new Vector2(start.x, start.y - 7f);
+        //float qianmianTCDistance = this.transform.localScale.x > 0 ? 0.5f : -0.5f;
+        //Vector2 endQianmian = new Vector2(start.x+qianmianTCDistance,start.y);
+        //Debug.DrawLine(start, endQianmian, Color.green);
+        //if (Physics2D.Linecast(start, endQianmian, groundLayer2)) {
+        //    //print("探测下面能不能走 但是 前面 被堵住了 ！");
+        //    return false;
+        //}
+        
+        Debug.DrawLine(start, end, Color.green);
         bool isHitGroundDown = Physics2D.Linecast(start, end, groundLayer2);
         return isHitGroundDown;
     }
@@ -842,6 +928,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         speedX = playerRigidbody2D.velocity.x;
         speedY = playerRigidbody2D.velocity.y;
+        //print("进入 速度限制！！！！！！  speedX  " + speedX+ "       maxSpeedX ---    " + maxSpeedX);
         //钳制 speedX 被限制在 -maxSpeedX  maxSpeedX 之间
         float newSpeedX;
         if (vx == 0) {
@@ -898,10 +985,12 @@ public class GameBody : MonoBehaviour, IRole {
 
         if (isTXShow) return;
 
-        if (!isWalk && bodyScale.x == -1)
+        //print("  isWalk  "+ isWalk+"    我的朝向 "+ bodyScale.x);
+        if (!isWalk && this.transform.localScale.x == -1)
         {
-            bodyScale.x = 1;
-            this.transform.localScale = bodyScale;
+            //bodyScale.x = 1;
+            //this.transform.localScale = bodyScale;
+            TurnLeft();
             AtkReSet();
         }
 
@@ -933,6 +1022,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void TurnRight()
     {
+        //print(" youzhuang!! ");
         if (GetComponent<RoleDate>().isDie) return;
         this.transform.localScale = new Vector3(-1, 1,1);
        
@@ -940,6 +1030,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void TurnLeft()
     {
+        //print(" 左转 !! ");
         if (GetComponent<RoleDate>().isDie) return;
         this.transform.localScale = new Vector3(1, 1, 1);
     }
@@ -956,10 +1047,11 @@ public class GameBody : MonoBehaviour, IRole {
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
         if (isTXShow) return;
-        if (!isWalk && bodyScale.x == 1)
+        if (!isWalk && this.transform.localScale.x == 1)
         {
-            bodyScale.x = -1;
-            this.transform.localScale = bodyScale;
+            //bodyScale.x = -1;
+            //this.transform.localScale = bodyScale;
+            TurnRight();
             AtkReSet();
         }
 
@@ -987,7 +1079,11 @@ public class GameBody : MonoBehaviour, IRole {
             _gudingTuiliTime = times;
         } 
         GetZongTuili(new Vector2(tuili, 0),true);
+
+        IsInACingYancheng = true;
     }
+
+    protected bool IsInACingYancheng = false;
 
 
     protected float _gudingTuiliTime = 0;
@@ -1008,11 +1104,12 @@ public class GameBody : MonoBehaviour, IRole {
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
-        if(this.name!="player"&& roleDate.isBeHiting) print(this.name+" ************************************************ 看看谁给的 力 "+v2+"   是否被攻击:     "+roleDate.isBeHiting);
-        if (!playerRigidbody2D) return;
+        //if(this.name!="player"&& roleDate.isBeHiting) print(this.name+"tl ************************************************ 看看谁给的 力 "+v2+"   是否被攻击:     "+roleDate.isBeHiting);
+        if (!playerRigidbody2D||isBackUping) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
         playerRigidbody2D.AddForce(v2);
+        //print("IsSetZero   "+ IsSetZero+"  -------------推力是多少  "+v2+"     速度是多少   "+ playerRigidbody2D.velocity+"     acname "+GetDB().animation.lastAnimationName);
     }
 
 
@@ -1033,7 +1130,7 @@ public class GameBody : MonoBehaviour, IRole {
             acingTime += Time.deltaTime;
             if (acingTime >= acTimeDelta)
             {
-                print("  ACingTimes  延迟 还原？？？？？？？？？？？？  ");
+                //print("  ACingTimes  延迟 还原？？？？？？？？？？？？  ");
                 isAcing = false;
                 acingTime = 0;
             }
@@ -1131,21 +1228,35 @@ public class GameBody : MonoBehaviour, IRole {
         var _vx = Mathf.Abs(vx);
         if (GetComponent<RoleDate>().isDie) return;
         playerRigidbody2D.velocity = Vector2.zero;
+        //print("fj- bodyScale.x?  "+ bodyScale.x);
+
+        //print("   后闪 推力 "+vx);
+
+        Vector2 v2 = Vector2.zero;
+
         if (bodyScale.x < 0)
         {
             //playerRigidbody2D.AddForce(Vector2.left * _vx);
             //GetZongTuili(Vector2.left * _vx,true);
-            GetZongTuili(new Vector2(-10,2)* _vx, true);
+            //GetZongTuili(new Vector2(-12, 1) * _vx, true);
+            v2 = new Vector2(-12, 2) * _vx;
+           
+
+            //playerRigidbody2D.velocity = new Vector2(-6, 2);
             //newSpeed = new Vector2(-_vx, 0);
         }
         else if (bodyScale.x > 0)
         {
+            //playerRigidbody2D.velocity = new Vector2(6, 2);
             //newSpeed = new Vector2(_vx, 0);
+            v2 = new Vector2(12, 2) * _vx;
             //playerRigidbody2D.AddForce(Vector2.right * _vx);
-            GetZongTuili(new Vector2(10, 2) * _vx, true);
+            //GetZongTuili(new Vector2(12, 1) * _vx, true);
             //GetZongTuili(Vector2.right * _vx, true);
         }
-        
+        playerRigidbody2D.AddForce(v2);
+
+        //print("fj- 后闪 推力！！！！！！！！！！！！！ "+vx+"     -----  "+ playerRigidbody2D.velocity);
         //playerRigidbody2D.velocity = newSpeed;
         //MoveVX(newSpeed,true);
     }
@@ -1160,16 +1271,19 @@ public class GameBody : MonoBehaviour, IRole {
     {
 
         if (IsGuDingTuili) return;
-        var _vx = Mathf.Abs(vx);
-        if (isNoAbs) _vx = vx;
-        playerRigidbody2D.velocity = new Vector2(vx, playerRigidbody2D.velocity.y);//Vector2.zero;
-        //newSpeed.x = 0;
-
-
+        //var _vx = Mathf.Abs(vx);
+        //if (isNoAbs) _vx = vx;
+        playerRigidbody2D.velocity = new Vector2(0, playerRigidbody2D.velocity.y);//Vector2.zero;
+        newSpeed.x = 0;
+        //这里没有 取this.transform.localScale 导致 角色攻击 倒移bug
+        bodyScale = this.transform.localScale;
+        //print("@@@@@@ bodyScale.x:  " + bodyScale.x + "    velocity    " + playerRigidbody2D.velocity + "   vx " + vx + "  newSpeed   " + newSpeed);
         if (bodyScale.x < 0)
         {
             if (isSpeed) {
+                
                 newSpeed = new Vector2(vx, playerRigidbody2D.velocity.y);
+                //print("朝 左！！"+newSpeed);
             }
             else
             {
@@ -1181,7 +1295,9 @@ public class GameBody : MonoBehaviour, IRole {
         else if (bodyScale.x > 0)
         {
             if (isSpeed) {
+                
                 newSpeed = new Vector2(-vx, playerRigidbody2D.velocity.y);
+                //print("朝 *****右！！"+newSpeed);
             }
             else
             {
@@ -1190,7 +1306,7 @@ public class GameBody : MonoBehaviour, IRole {
             }
         }
 
-        //print("---vx2    " + playerRigidbody2D.velocity);
+        //print(" bodyScale.x:  " + bodyScale.x+ "    velocity    " + playerRigidbody2D.velocity+"   vx "+vx+ "  newSpeed   "+ newSpeed);
 
 
         playerRigidbody2D.velocity = newSpeed;
@@ -1437,7 +1553,7 @@ public class GameBody : MonoBehaviour, IRole {
                 //时间0.01f  0.1秒 慢了会报错（位置错误）
                 //print("stand!!!");
 
-                //DBBody.animation.FadeIn(STAND, 0.01f, 1);
+                //DBBody.animation.FadeIn(STAND, 0.1f);
                 DBBody.animation.GotoAndPlayByFrame(STAND, 0, 1);
                 //print(" ///////// fadein stand!!");
                 //DBBody.animation.FadeIn(STAND, 0.5f, 1);
@@ -2027,6 +2143,13 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
+        if (IsHuaFang)
+        {
+            if (IsGedangOver()) IsHuaFang = false;
+            ControlSpeed(20);
+            return;
+        }
+
         
         if(!IsJiasu && !isAtking)ControlSpeed();
 
@@ -2166,7 +2289,7 @@ public class GameBody : MonoBehaviour, IRole {
     //反击 被攻击动作清零
     public void FanJiBeHitReSet()
     {
-        print("反击！！！");
+        //print("反击！！！");
         isSkilling = false;
         isSkillOut = false;
         IsSFSkill = false;
@@ -2186,6 +2309,11 @@ public class GameBody : MonoBehaviour, IRole {
             return;
         }
 
+        if (IsInACingYancheng&&isAcing&&IsGround)
+        {
+            _yanmu.Play();
+            return;
+        }
 
         if(IsGround && DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
@@ -2266,6 +2394,13 @@ public class GameBody : MonoBehaviour, IRole {
         yanchiTime = ycTimes;
     }
 
+    /// <summary>
+    /// 执行动作
+    /// </summary>
+    /// <param name="acName">动作名称 </param>
+    /// <param name="type"> 执行方式1是直接 goto  其他是fadein</param>
+    /// <param name="FadeInTimes"> fadeIn 用的 时间</param>
+    /// <returns></returns>
     public string GetAcMsg(string acName,int type = 1,float FadeInTimes = 0.2f)
     {
         if (acName == null) return null;
@@ -2282,6 +2417,7 @@ public class GameBody : MonoBehaviour, IRole {
             yanchiMaxNum = yanchiTime;
             //if (this.name == "player") print(this.name+"   动作 已完成------------------------------------------------------------------  " + acName);
             //isACCompletedYanchi = true;
+            //if (IsHuaFang) IsHuaFang = false;
             if (acNums > yanchiNum)
             {
                 //可以切换招式
@@ -2322,6 +2458,7 @@ public class GameBody : MonoBehaviour, IRole {
             }
             else
             {
+                print(" acName  "+ acName);
                 DBBody.animation.FadeIn(acName, FadeInTimes, 1);
             }
             
@@ -2418,7 +2555,8 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //GetPause(0.5f,0.5f);
                 string _atkName = atkName;
-                //print("----------------------------------atkname  "+atkName);
+                //print("ZS----------------------------------atkname  "+atkName+"    是否在空中   "+isInAiring);
+                //if (isInAiring|| atkName == "jumpCut") return;
                 //atk_1201|0.1-0.1        延迟时间-减速的速度
                 if (atkName.Split('|').Length > 1)
                 {
@@ -2428,9 +2566,10 @@ public class GameBody : MonoBehaviour, IRole {
                     if (atkName.Split('|')[1].Split('-').Length!=1) scales = float.Parse(atkName.Split('|')[1].Split('-')[1]);
                     GetPause(times, scales);
                 }
+                //print(" ZS   ----->_atkName   " + _atkName+ "    atkName "+ atkName);
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-
+                //print("ZS--->>> "+ vOAtk.atkName+"    tx  "+ vOAtk.txName+ "  --- vOAtk.xF " + vOAtk.xF);
 
                 if (vOAtk.AudioName != "")
                 {
@@ -2444,12 +2583,12 @@ public class GameBody : MonoBehaviour, IRole {
                         {
                             if (GlobalTools.GetRandomNum() > 50)
                             {
-                                print("  -----------------------------> AudioAtk_1 ");
+                                //print("  -----------------------------> AudioAtk_1 ");
                                 roleAudio.PlayAudioYS("AudioAtk_1");
                             }
                             else
                             {
-                                print("  -----------------------------> AudioAtk_22222222222 ");
+                                //print("  -----------------------------> AudioAtk_22222222222 ");
                                 roleAudio.PlayAudioYS("AudioAtk_2");
                             }
                         }
@@ -2465,6 +2604,7 @@ public class GameBody : MonoBehaviour, IRole {
             MoveVX(vOAtk.xF,true);
             if (newSpeed.y < 0)
             {
+                //print(" newSpeed   "+ newSpeed);
                 newSpeed.y = 1;
                 playerRigidbody2D.velocity = newSpeed;
                 MoveVY(vOAtk.yF);
@@ -2498,12 +2638,19 @@ public class GameBody : MonoBehaviour, IRole {
         //GetAtk(skillName);
         GetAcMsg(vOAtk.atkName);
         if (roleAudio.SkillAudio_1) roleAudio.PlayAudioYS("SkillAudio_1");
-         isSkillOut = true;
+        isSkillOut = true;
     }
 
-  
+
+    [Header("闪光")]
+    public ParticleSystem TX_shanguang;
+
+    [Header("技能释放点 1")]
+    public UnityEngine.Transform JinengShifangDian1;
 
     protected bool isSkillOut = false;
+
+   
 
     //显示动作特效 龙骨的侦听事件
     protected virtual void ShowACTX(string type, EventObject eventObject)
@@ -2558,15 +2705,167 @@ public class GameBody : MonoBehaviour, IRole {
                         
                         print("--------------------------------------------------"+ jn.TXName +"----------------------------------------------->2222222222222222222222  vOAtk.txName  " + vOAtk.txName);
                         //技能释放点
-                        GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+
+                        if (jn.HZZBTXName == "dianqiang")
+                        {
+                            //电墙
+                            GameObject skillObj = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            skillObj.name = jn.TXName;
+                            float __x = this.transform.localScale.x > 0 ? JinengShifangDian1.position.x - 1.5f : JinengShifangDian1.position.x + 1.5f;
+                            float __y = JinengShifangDian1.position.y + 1f;
+                            skillObj.transform.position = new Vector2(__x, __y);
+                            skillObj.transform.parent = this.transform.parent;
+                            float speedX = Mathf.Abs(skillObj.GetComponent<TX_Dianqiang>().MoveSpeed);
+                            
+                            //print(this.transform.localScale.x + "    speed  " + skillObj.GetComponent<TX_Dianqiang>().MoveSpeed);
+                            skillObj.GetComponent<TX_Dianqiang>().GetStart();
+                            skillObj.GetComponent<TX_Dianqiang>().MoveSpeed = this.transform.localScale.x > 0 ? -speedX : speedX;
+
+
+                            //skillObj.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            //skillObj.name = jn.TXName;
+
+                            GameObject dianqiangFashe = GlobalTools.GetGameObjectInObjPoolByName("TX_DianqiangFashe");
+                            dianqiangFashe.name = "TX_DianqiangFashe";
+                            dianqiangFashe.transform.position = JinengShifangDian1.position;
+                            dianqiangFashe.transform.parent = this.transform.parent;
+
+
+
+                        }
+                        else if (jn.HZZBTXName == "shengmingye")
+                        {
+                            //生命叶
+                            print("  shengmingye > " + jn.HZZBTXName);
+                            GameObject skillObj = Resources.Load(jn.TXName) as GameObject;
+
+
+                            if (skillObj == null)
+                            {
+                                return;
+                            }
+                            GameObject TX_skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+                            TX_skill.transform.position = JinengShifangDian1.position;
+                            this.roleDate.live += jn.HuifuXue;
+                            if (GetComponent<PlayerRoleDate>()) GetComponent<PlayerRoleDate>().GetTX("jiaxue");
+
+                        } else if (jn.HZZBTXName == "luanren")
+                        {
+                            TX_shanguang.Play();
+                            //GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+
+                            GameObject skill = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            
+                            skill.GetComponent<JN_base>().GetPositionAndTeam(this.transform.position, this.transform.GetComponent<RoleDate>().team, this.transform.localScale.x, this.gameObject, true);
+                            skill.GetComponent<JN_LuanRen>().GetStart(this.gameObject);
+
+                        } else if (jn.HZZBTXName == "duzhadan") {
+                            GameObject skillObj = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            skillObj.name = jn.TXName;
+                            float __x = this.transform.localScale.x > 0 ? JinengShifangDian1.position.x - 0.5f : JinengShifangDian1.position.x + 0.5f;
+                            float __y = JinengShifangDian1.position.y - 0.4f;
+                            skillObj.transform.position = new Vector2(__x,__y);
+                            skillObj.transform.parent = this.transform.parent;
+
+                            skillObj.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            if (this.transform.localScale.x > 0)
+                            {
+                                skillObj.GetComponent<Rigidbody2D>().velocity = new Vector2(-10,10);
+                            }
+                            else
+                            {
+                                skillObj.GetComponent<Rigidbody2D>().velocity = new Vector2(10, 10);
+                            }
+
+
+                        }else if (jn.HZZBTXName == "duyunzhadan")
+                        {
+                            GameObject duzhadan1 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan1.name = jn.TXName;
+                            GameObject duzhadan2 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan2.name = jn.TXName;
+                            GameObject duzhadan3 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan3.name = jn.TXName;
+                            float __x = this.transform.localScale.x > 0 ? JinengShifangDian1.position.x - 0.5f : JinengShifangDian1.position.x + 0.5f;
+                            float __y = JinengShifangDian1.position.y - 0.4f;
+                            duzhadan1.transform.position = new Vector2(__x, __y);
+                            duzhadan1.transform.parent = this.transform.parent;
+                            duzhadan2.transform.position = new Vector2(__x, __y);
+                            duzhadan2.transform.parent = this.transform.parent;
+                            duzhadan3.transform.position = new Vector2(__x, __y);
+                            duzhadan3.transform.parent = this.transform.parent;
+
+                            duzhadan1.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            duzhadan2.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            duzhadan3.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+
+                            float ___fx = this.transform.localScale.x > 0?-2:2;
+                            float ___fy = 0;
+
+
+
+                            if (isInAiring)
+                            {
+                                ___fy = -9;
+                            }
+                            else
+                            {
+                                ___fy = 18;
+                            }
+                            duzhadan1.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx, ___fy);
+                            duzhadan2.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx*5f, ___fy-1);
+                            duzhadan3.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx*9f, ___fy-2);
+
+                        }
+                        else
+                        {
+                            GetComponent<ShowOutSkill>().ShowOutSkillByName(jn.TXName, true);
+                        }
                         isTXShow = false;
+
                     }
                    
                 }
                 else {
                     //GetPause(0.1f);
-                    //print("vOAtk.txName    " + vOAtk.txName);
-                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName,false,vOAtk);
+
+
+
+                    //print(" zs  vOAtk.txName    " + vOAtk.txName);
+
+
+                    //IsHasHuo = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().IsHasHuoren();
+                    //print("zs   是否 有火刃？？？？？？？？？？？？？？？？ "+IsHasHuo);
+
+
+                    //if (roleDate.IsHasHZHuo())
+                    //{
+                    //    roleDate.lan -= huoren.xyLan;
+
+                    //}
+
+                    bool IsHasHuo = false;
+                    HZDate huoren = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().IsHasHuoren();
+                    if (huoren != null)
+                    {
+                        if (roleDate.lan >= huoren.xyLan)
+                        {
+                            roleDate.lan -= huoren.xyLan;
+                            IsHasHuo = true;
+                        }
+                        else
+                        {
+                            IsHasHuo = false;
+                        }
+
+                    }
+                    else
+                    {
+                        IsHasHuo = false;
+                    }
+
+
+                    GetComponent<ShowOutSkill>().ShowOutSkillByName(vOAtk.txName, false, vOAtk, IsHasHuo);
                     isTXShow = false;
                 }
                 

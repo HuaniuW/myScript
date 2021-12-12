@@ -128,10 +128,15 @@ public class EventTypeName
     //角色状态
     public const string PLAYER_ZT = "player_zt";
 
-   
-    
+    //自动技能
+    public const string ZD_SKILL_SHOW = "zd_skill_show";
+    //自动技能结束
+    public const string ZD_SKILL_OVER = "zd_skill_over";
+    //取消所有 自动技能
+    public const string ZD_SKILL_OVER_ALL = "zd_skill_over_all";
 
-
+    //血条跟随的 直接跟随  切换场景使用
+    public const string XUETIAO_ZHIJIEGENSUI = "xuetiao_zhijiegensui";
 
 
 

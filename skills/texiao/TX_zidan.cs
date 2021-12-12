@@ -94,7 +94,7 @@ public class TX_zidan : MonoBehaviour
 
         if (_player&& isFaShe) {
             isFaShe = false;
-            //print("----------------------------------------->>  fire!!!!! "+speeds);
+            print("----------------------------------------->>  fire!!!!! "+speeds);
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
             //print("   sudu   "+ GetComponent<Rigidbody2D>().velocity);
         } 
@@ -137,7 +137,7 @@ public class TX_zidan : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(v2, this.transform.position, speeds);
     }
 
-    bool _isFSByFX = false;
+    protected bool _isFSByFX = false;
     public Vector2 FSFXV2 = new Vector2(1, 0);
     public void SetZiDanSpeedByFX(float scaleX)
     {
@@ -174,6 +174,7 @@ public class TX_zidan : MonoBehaviour
 
     void Boom()
     {
+        
         if (testN == 0)
         {
             testN++;
@@ -187,7 +188,7 @@ public class TX_zidan : MonoBehaviour
     }
 
     public float BoomByTimesNum = 0;
-    float boomJishi = 0;
+    protected float boomJishi = 0;
     void RemoveByTimes()
     {
         if (BoomByTimesNum != 0)

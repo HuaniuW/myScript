@@ -20,6 +20,14 @@ public class PlayerRoleDate : RoleDate
     float _kangMabiJilv;
 
 
+
+    float _kangDianJilv;
+    float _KangDianMabiJilv;
+
+
+    float _kangHuoJilv;
+    float _kangHuoShanghaiJilv;
+
     public override float lan
     {
         get
@@ -79,8 +87,8 @@ public class PlayerRoleDate : RoleDate
     }
 
 
-    GameObject tx;
-    void GetTX(string txName)
+    protected GameObject tx;
+    public void GetTX(string txName)
     {
         tx = null;
         tx = GlobalTools.GetGameObjectByName(txName);
@@ -116,7 +124,7 @@ public class PlayerRoleDate : RoleDate
         
     }
 
-    public IEnumerator IEDestory2ByTime(GameObject obj, float time)
+    protected IEnumerator IEDestory2ByTime(GameObject obj, float time)
     {
         yield return new WaitForSeconds(time);
         DestroyImmediate(obj, true);
@@ -155,6 +163,9 @@ public class PlayerRoleDate : RoleDate
             print("存档点加血");
             this.live += 5000;
             GetTX("jiaxue");
+            this.lan += 5000;
+
+            //存档点 加不加蓝 看设计
         }
         if (!IsHasZZ)
         {
@@ -185,8 +196,13 @@ public class PlayerRoleDate : RoleDate
         _kangDuJilv = this.KangDuJilv;
         _kangDuShanghaijilv = this.KangDuShanghaijilv;
 
-        _kangMabiJilv = this.KangMabiJilv;
+        _kangDianJilv = this.KangDianJilv;
+        _KangDianMabiJilv = this.KangDianMabiJilv;
 
+
+
+        _kangHuoJilv = this.KangHuoJilv;
+        _kangHuoShanghaiJilv = this.KangHuoShanghaijilv;
 
     }
 
@@ -208,9 +224,20 @@ public class PlayerRoleDate : RoleDate
 
         this.KangDuJilv = _kangDuJilv;
         this.KangDuShanghaijilv = _kangDuShanghaijilv;
-        this.KangMabiJilv = _kangMabiJilv;
+
+
+        this.KangHuoJilv = _kangHuoJilv;
+        this.KangHuoShanghaijilv = _kangHuoShanghaiJilv;
+
+        this.KangDianJilv = _kangDianJilv;
+        this.KangDianMabiJilv = _KangDianMabiJilv;
+        this.BaoJiShangHaiBeiLv = 0;
+        this.BaoJiLv = 0;
+        //this.KangMabiJilv = _kangMabiJilv;
 
     }
+
+    bool IsInScreen = false;
 
     void changeHZ(UEvent e)
     {
@@ -234,11 +261,27 @@ public class PlayerRoleDate : RoleDate
             IsHasZZ = false;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
-        //print("------------------------------------------------------------气血徽章- 事件发送！！！！！");
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE,this.maxLive), this);
+        //print("------------------------------------------------------------气血徽章- 事件发送！！！！！"+ "  当前血量是多少????    " + live);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE, this.maxLive), this);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LAN, this.maxLan), this);
         GetPlayerMsg();
+        //print("  当前血量是多少????    "+live);
+
+        if (!IsInScreen)
+        {
+            IsInScreen = true;
+            //切换场景时候 调用
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.XUETIAO_ZHIJIEGENSUI, null), this);
+        }
+
+
     }
+
+
+
+   
+
+
 
     //获取玩家数据信息
     public string GetPlayerMsg()
@@ -251,10 +294,18 @@ public class PlayerRoleDate : RoleDate
         string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
         string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
         string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
+
         string _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒几率：+" + this.KangDuJilv + "</color>\n" : "<color=#E74C3C>kangdu：+" + this.KangDuJilv + "</color>\n";
-        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>抗毒伤害几率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
-        string _kangmabilv = Globals.language == Globals.CHINESE ? "<color=#E7fC0C>抗麻痹几率：+" + this.KangMabiJilv + "</color>\n" : "<color=#E7fC0C>kangdu：+" + this.KangMabiJilv + "</color>\n";
-        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv+ _kangmabilv;
+        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>毒伤害抵抗率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
+
+        string _kanghuojilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗火点燃几率：+" + this.KangHuoJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangHuoJilv + "</color>\n";
+        string _kanghuoshanghaijilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>火伤害抵抗率：+" + this.KangHuoShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangHuoShanghaijilv + "</color>\n";
+
+        string _kangdianjilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗电几率：+" + this.KangDianJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangDianJilv + "</color>\n";
+        string _kangdianmabijilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗电麻痹几率：+" + this.KangDianMabiJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangDianMabiJilv + "</color>\n";
+
+        
+        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv+ _kanghuojilv+ _kanghuoshanghaijilv+ _kangdianjilv+ _kangdianmabijilv;
         return str;
     }
 
@@ -292,6 +343,8 @@ public class PlayerRoleDate : RoleDate
 
     List<string> beishuArr = new List<string>();
 
+    //float _CurrentBaojiBeishu = 0;
+
     //徽章的数据加成
     void GetHZDate(HZDate hzdate)
     {
@@ -300,7 +353,15 @@ public class PlayerRoleDate : RoleDate
         if (hzdate.def != 0) this.def += hzdate.def;
         if (hzdate.atk != 0) this.atk += hzdate.atk;
         if (hzdate.BaoJiLv != 0) this.BaoJiLv += hzdate.BaoJiLv;
-        if (hzdate.BaoJiShangHaiBeiLv != 0) this.BaoJiShangHaiBeiLv += hzdate.BaoJiShangHaiBeiLv;
+        if (hzdate.BaoJiShangHaiBeiLv != 0) {
+            if(this.BaoJiShangHaiBeiLv< hzdate.BaoJiShangHaiBeiLv)
+            {
+                this.BaoJiShangHaiBeiLv = hzdate.BaoJiShangHaiBeiLv;
+                //_CurrentBaojiBeishu = this.BaoJiShangHaiBeiLv;
+            }
+          
+        }
+        
         if (hzdate.yingzhi != 0)
         {
             this.yingzhi += hzdate.yingzhi;
@@ -343,10 +404,18 @@ public class PlayerRoleDate : RoleDate
 
 
         if (hzdate.KangDuJilv != 0) KangDuJilv += hzdate.KangDuJilv;
-
         if (hzdate.KangDuShanghaiJilv != 0) KangDuShanghaijilv += hzdate.KangDuShanghaiJilv;
 
-        if (hzdate.KangMabiJilv != 0) KangMabiJilv += hzdate.KangMabiJilv;
+
+
+        if (hzdate.KangHuoJilv != 0) KangHuoJilv += hzdate.KangHuoJilv;
+        if (hzdate.KangHuoShanghaiJilv != 0) KangHuoShanghaijilv += hzdate.KangHuoShanghaiJilv;
+
+
+
+        if (hzdate.KangDianJilv != 0) KangDianJilv += hzdate.KangDianJilv;
+        if (hzdate.KangDianMabiJilv != 0) KangDianMabiJilv = hzdate.KangDianMabiJilv;
+
     }
 
 

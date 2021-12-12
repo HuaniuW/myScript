@@ -69,7 +69,7 @@ public class JN_Date : MonoBehaviour {
     public string atkDirection = "";
     [Header("空中攻击的反推力")]
     public float fasntuili = 0;
-    [Header("击中特效类型 5是撞击 7是毒")]
+    [Header("击中特效类型 5是撞击 7是毒 8是撞击型怪物（防止碰撞保护）")]
     public int HitInSpecialEffectsType = 1;
 
     [Header("击中特效偏移位置X")]
@@ -99,11 +99,19 @@ public class JN_Date : MonoBehaviour {
     [Header("火持续伤害时间")]
     public float HuoChixuShanghaiTime = 0;
 
+    [Header("电*伤害")]
+    public float DianShanghai = 0;
+    [Header("电*伤害*麻痹时间")]
+    public float DianShanghaiMabiTime = 0;
+
 
 
 
     [Header("技能的 硬值 如果不等于0 优先用技能硬直")]
     public float JNYingzhi = 0;
+
+    [Header("是否 击中特效 偏移*现在用于乱刃 ")]
+    public bool IsHitTXPianyi = false;
 
 
 

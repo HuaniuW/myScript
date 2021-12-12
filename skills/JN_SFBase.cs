@@ -62,7 +62,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
     protected virtual  void Start()
     {
         if (IsGetBody) {
-            print("  释放技能 ??  start! ");
+            //print("  释放技能 ??  start! ");
             _gameBody = GetComponent<GameBody>();
             _gameBody.GetDB().AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         }
@@ -106,7 +106,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
         }
 
 
-        print("0   IsStarting "+ IsStarting);
+        //print("0   IsStarting "+ IsStarting);
         if (IsStarting)
         {
             //直接释放技能 不用走近
@@ -115,7 +115,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
                 if (!IsInAtkDistance)
                 {
                     IsInAtkDistance = true;
-                    //print("------->  直接释放 ");
+                    print("------->  直接释放 ");
                     //NearRoleInDistance(AtkDistance, AtkDistanceY);
                     if (IsStopMove) StopMove();
                     GetAC();
@@ -125,7 +125,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
                 //return;
             }
 
-            print("------------------>shifangjineng  start!!!!!");
+            //print("------------------>shifangjineng  start!!!!!");
 
             //if (TXName == "TX_LuanRen") print("  ???? gameBody speed   " + _gameBody.GetComponent<Rigidbody2D>().velocity+ "   IsInAtkDistance  "+ IsInAtkDistance);
             //if (IsInAtkDistance)
@@ -134,10 +134,10 @@ public class JN_SFBase : MonoBehaviour, ISkill
             //    StopMove();
                 
             //}
-            print("2");
+            //print("2");
             if (!IsInAtkDistance)
             {
-                print("3");
+                //print("3");
                 if (NearRoleInDistance(AtkDistance, AtkDistanceY))
                 {
                     //print("4");
@@ -155,7 +155,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
                     //角色动作走完
                     IsStarting = false;
                     testnums = 0;
-                    print("5 zhijiezouwan ac fang jineng");
+                    //print("5 zhijiezouwan ac fang jineng");
                 }
             }
            
@@ -266,6 +266,7 @@ public class JN_SFBase : MonoBehaviour, ISkill
 
     public virtual void ReSetAll()
     {
+        print("技能释放 resetAll!!!!!!!!!!!");
         _gameBody.IsSFSkill = false;
         IsInAtkDistance = false;
         IsStarting = false;

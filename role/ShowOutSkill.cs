@@ -20,7 +20,7 @@ public class ShowOutSkill : MonoBehaviour {
     /// </summary>
     /// <param name="hzSkillName">特效名字</param>
     /// <param name="isSkill">是否是技能</param>
-    internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false,VOAtk vOAtk = null)
+    internal void ShowOutSkillByName(string hzSkillName,bool isSkill = false,VOAtk vOAtk = null,bool IsHuoren = false)
     {
 
         //if(Globals.isDebug)print(" hzSkillName  "+ hzSkillName);
@@ -51,11 +51,12 @@ public class ShowOutSkill : MonoBehaviour {
             return;
         }
         skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+        skill.name = hzSkillName;
         //skill.transform.parent = this.transform.parent;
 
         //print("parent  >>>   " + skill.transform.parent+"    playerpARENT   "+GlobalTools.FindObjByName("player").transform.position);
 
-
+        //电墙
         if (skill.GetComponent<TX_Dianqiang>())
         {
             //***以后 所有 可以直接丢出去的 技能 在这里 做  统一接口************
@@ -99,6 +100,11 @@ public class ShowOutSkill : MonoBehaviour {
             //print(" __xdx  "+ skill.GetComponent<JN_Date>()._xdx+"   ------->>>>>>  "+ vOAtk.TXOX);
             if (vOAtk.TXOY != 0) skill.GetComponent<JN_Date>()._xdy = vOAtk.TXOY;
             if (vOAtk.TXSX != 0) skill.GetComponent<JN_Date>()._scaleW = vOAtk.TXSX;
+
+            if (IsHuoren)
+            {
+                skill.GetComponent<JN_base>().ShowTXFudai();
+            }
         }
 
 

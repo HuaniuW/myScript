@@ -7,10 +7,10 @@ using System;
 
 public class UI_ShowPanel : MonoBehaviour {
 
-    public Image top;
-    public Image down;
-    public Image right;
-    public Image center;
+    public Image topImg;
+    public Image downImg;
+    public Image rightImg;
+    public Image centerImg;
 
     GameObject _player;
 
@@ -27,6 +27,24 @@ public class UI_ShowPanel : MonoBehaviour {
         //ComparedSkillUse(_skillUseDate);
         //print(" UI_ShowPanel  启动 新建的是否 新进来了   top "+top);
         //print("??  "+this.GetType().GetProperty("top").GetValue(this, null));
+    }
+
+
+    public List<GameObject> GetHZList()
+    {
+        return HZList;
+    }
+
+
+    public HZDate IsHasHuoren()
+    {
+        //print("zs HZList "+ HZList.Count);
+        foreach (GameObject o in HZList)
+        {
+            print("zs--------   "+o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName);
+            if (o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName == "Huoren") return o.GetComponent<UI_Skill>().GetHZDate();
+        }
+        return null;
     }
 
 
@@ -220,8 +238,8 @@ public class UI_ShowPanel : MonoBehaviour {
             //匹配 HZlist
 
 
-            string name = o.GetComponent<HZDate>().zd_skill_ui_Name;
-            if (name == "") continue;
+            string hz_ui_name = o.GetComponent<HZDate>().zd_skill_ui_Name;
+            if (hz_ui_name == "") continue;
             int posNum = 0;// int.Parse(e.eventParams.ToString().Split('_')[1]);
             string str = o.GetComponent<HZDate>().RQName;
 
@@ -249,16 +267,16 @@ public class UI_ShowPanel : MonoBehaviour {
                 case 1:
                     //print("topimg   "+ top);
                     //if (top == null) top = this.transform.Find("top");
-                    if (posNum == 1) GetInObj(top, name, o.GetComponent<HZDate>(),"up");
+                    if (posNum == 1) GetInObj(topImg, hz_ui_name, o.GetComponent<HZDate>(),"up");
                     break;
                 case 2:
-                    if (posNum == 2) GetInObj(down, name, o.GetComponent<HZDate>(),"down");
+                    if (posNum == 2) GetInObj(downImg, hz_ui_name, o.GetComponent<HZDate>(),"down");
                     break;
                 case 3:
-                    if (posNum == 3) GetInObj(center, name, o.GetComponent<HZDate>(),"center");
+                    if (posNum == 3) GetInObj(centerImg, hz_ui_name, o.GetComponent<HZDate>(),"center");
                     break;
                 case 4:
-                    if (posNum == 4) GetInObj(right, name, o.GetComponent<HZDate>(),"right");
+                    if (posNum == 4) GetInObj(rightImg, hz_ui_name, o.GetComponent<HZDate>(),"right");
                     break;
 
             }
@@ -298,10 +316,16 @@ public class UI_ShowPanel : MonoBehaviour {
         }   
     }
 
-    void GetInObj(Image img,string objName, HZDate hzDate,string hzPos)
+    void GetInObj(Image img,string hz_ui_Name, HZDate hzDate,string hzPos)
     {
         //print("-------------->   "+objName);
-        GameObject hz = ObjectPools.GetInstance().SwpanObject2(Resources.Load(objName) as GameObject);
+        GameObject hz;
+
+        //if(hz_ui_Name != "")
+        //{
+            
+        //}
+        hz = ObjectPools.GetInstance().SwpanObject2(Resources.Load(hz_ui_Name) as GameObject);
         //print("hz ---------------> "+ hz);
         //print("img-------------->  " + img);
         hz.transform.position = img.transform.position;

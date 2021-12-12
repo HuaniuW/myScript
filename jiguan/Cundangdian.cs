@@ -6,6 +6,11 @@ public class Cundangdian : MonoBehaviour {
     public AudioSource saveAudio;
     // Use this for initialization
     public ParticleSystem huixuetexiao;
+
+
+
+    
+
     void Start () {
         if (huixuetexiao != null)
         {
@@ -20,9 +25,16 @@ public class Cundangdian : MonoBehaviour {
 	}
 
 
-
+    [Header("是否被点亮 判定")]
     public string RemoveSelfOtherCheckStr = "";
-    
+
+    [Header("神树 点亮的 特效")]
+    public ParticleSystem TX_Dianliang;
+
+    //是否能存档
+    bool IsCanCundang = true;
+
+
     void GetOtherCheckRemoveSelf()
     {
         //print(" 存档点 自我检测---------------***************：  "+ RemoveSelfOtherCheckStr);
@@ -31,8 +43,9 @@ public class Cundangdian : MonoBehaviour {
         //print("  value值是多少？  "+ value);
         if (value == "1")
         {
-            
-            RemoveSelf();
+            if(TX_Dianliang) TX_Dianliang.Stop();
+            //RemoveSelf();
+            IsCanCundang = false;
         }
     }
 
@@ -44,6 +57,7 @@ public class Cundangdian : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (!IsCanCundang) return;
         if (Coll.tag == "Player")
         {
             //print("存档！！！"+this.name);

@@ -167,7 +167,7 @@ public class AIAirBase : AIBase
 
     AIYinshen _AIYinshen;
 
-    protected override void AIBeHit()
+    public override void AIBeHit()
     {
         //AI闪现
         if (aisx != null) aisx.ReSet();
@@ -204,7 +204,7 @@ public class AIAirBase : AIBase
         AIReSet();
     }
 
-    protected override void AIReSet()
+    public override void AIReSet()
     {
         isAction = false;
         isActioning = false;
@@ -227,6 +227,7 @@ public class AIAirBase : AIBase
         QuXiaoAC();
         isAction = true;
         acName = atkFSName;
+        print(" ********************************************************** acName  "+acName);
         string[] strArr = atkFSName.Split('_');
         if (strArr.Length >= 2)
         {
@@ -234,10 +235,19 @@ public class AIAirBase : AIBase
             if (acName == "AIZiDans")
             {
                 GetComponent<AI_ZiDans>().SetZiDanType(int.Parse(strArr[1]));
+            }else if (acName == "atk")
+            {
+                print("  普通攻击！！！ "+ acName);
+                atkDistance = GetAtkVOByName(atkFSName.Split('|')[0], DataZS.GetInstance()).atkDistance;
+                atkDistanceY = GetAtkVOByName(atkFSName.Split('|')[0], DataZS.GetInstance()).atkDistanceY;
             }
         }
+        else
+        {
+            //isActioning = true;
+        }
 
-        //isActioning = true;
+
     }
 
 
@@ -254,19 +264,21 @@ public class AIAirBase : AIBase
 
     protected virtual void GetUpdate2()
     {
+        //print("----1");
         if (!thePlayer)
         {
             thePlayer = GlobalTools.FindObjByName("player");
+            if (_roleDate.enemyType == GlobalTag.BOSS) ZhuanXiang();
             return;
         }
-
+        //print("----2");
         if (thePlayer.GetComponent<RoleDate>().isDie||Globals.IsHitDoorStop)
         {
             gameBody.ResetAll();
             //gameBody.Stand();
             return;
         }
-
+        //print("----3");
         //被攻击没有重置 isAction所以不能继续攻击了
         if (GetComponent<RoleDate>().isBeHiting)
         {
@@ -274,18 +286,18 @@ public class AIAirBase : AIBase
             GetJingshi();
             return;
         }
-
+        //print("----4");
         if (gameBody.tag != "AirEnemy" && !gameBody.IsGround)
         {
             return;
         }
-
+        //print("----5");
         if (IsBeHitRunAwaying) {
             //print("?????????????behit ranaway");
             BeHitRunAwaying();
             return;
         }
-
+        //print("----6");
         //print(" vx " + gameBody.GetPlayerRigidbody2D().velocity.x);
 
         if (isPatrol && !IsFindEnemy())
@@ -294,7 +306,7 @@ public class AIAirBase : AIBase
             Patrol();
             return;
         }
-
+        //print("----7");
         //print(">>>??????  进来没！！ ");
 
 
@@ -305,12 +317,13 @@ public class AIAirBase : AIBase
             gameBody.GetStand();
             return;
         }
-
+        //print("----8");
 
         //超出追击范围
         IsEnemyOutAtkDistance();
-
+        //print("----9");
         if (!IsFindEnemy()) return;
+        //print("----10");
         GetAtkFS();
     }
 
@@ -421,12 +434,14 @@ public class AIAirBase : AIBase
         {
             //print("  ****** right ");
             //目标在右
-            gameBody.RunRight(flyXSpeed);
+            //gameBody.RunRight(flyXSpeed);
+            gameBody.TurnRight();
         }
         else
         {
             //print("  ****** left ");
-            gameBody.RunLeft(flyXSpeed);
+            //gameBody.RunLeft(flyXSpeed);
+            gameBody.TurnLeft();
         }
     }
 
@@ -478,7 +493,7 @@ public class AIAirBase : AIBase
          {
              if (!Tongshi()) return;
          }*/
-        print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance + "  atkDistanceY  " + atkDistanceY);
+        //print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance + "  atkDistanceY  " + atkDistanceY);
 
         if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance,1,atkDistanceY)||DontNear)) return;
 
@@ -517,17 +532,24 @@ public class AIAirBase : AIBase
 
     protected override void GetAtkFS()
     {
+        //print(1);
         if (GetComponent<RoleDate>().isDie||!thePlayer|| thePlayer.GetComponent<RoleDate>().isDie) {
             GetComponent<AIDestinationSetter>().ReSetAll();
             GetComponent<AIPath>().canMove = false;
             return;
         }
-
+        //print(2);
         if (IsIfStopMoreTime()) return;
-
+        //print(3);
         //print("IsBossStop   "+ IsBossStop);
         if (IsBossStop) return;
-        
+        //print(4);
+
+        if (IsInDuBai()) return;
+        //print(5);
+        if (IsInZDAcing) return;
+        //print(6);
+
         if (!isAction)
         {
             isAction = true;
@@ -535,8 +557,32 @@ public class AIAirBase : AIBase
             //gameBody.isAcing = false;
             //IsGetAtkFSByName = false;
 
-            //print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
+            print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
             string[] strArr = acName.Split('_');
+
+
+            CurrentAIName = strArr[0];
+
+            if (CurrentAIName == "ZD")
+            {
+                //进入自动攻击流程
+                print("***自动攻击的 AI 技能   " + acName);
+                if (!isActioning)
+                {
+                    isActioning = true;
+                    IsInZDAcing = true;
+                    atkNum++;
+                }
+
+                moretimes = 0;
+                string str = this.gameObject.GetInstanceID() + "@" + acName;
+
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ZD_SKILL_SHOW, str), this);
+
+                return;
+            }
+
+
 
             if (strArr.Length > 1&& strArr[0]!="atk")
             {
@@ -980,7 +1026,7 @@ public class AIAirBase : AIBase
 
 
 
-        print("    -------->acName "+ acName);
+        //print("    -------->acName "+ acName);
         PtAtk();
        
     }
@@ -1255,6 +1301,7 @@ public class AIAirBase : AIBase
         }
     }
 
+    //飞到2个固定点
     void GetFlyToPot2GD()
     {
         if (!isActioning)

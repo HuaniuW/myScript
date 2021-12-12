@@ -35,12 +35,12 @@ public class AIFlyToPot1 : MonoBehaviour,ISkill
         {
             Pot_1 = Pot1.position;
             Pot_2 = Pot2.position;
-            print("1111111111111111111hi!!!!!   "+Pot_1);
+            //print("1111111111111111111hi!!!!!   "+Pot_1);
         }else if (PotType == 2)
         {
             Pot_1 = Pot3.position;
             Pot_2 = Pot4.position;
-            print("  ------------------------------------------22222222222222222222222222222222222222222222  ");
+            //print("  ------------------------------------------22222222222222222222222222222222222222222222  ");
         }
         else if (PotType == 3)
         {
@@ -93,6 +93,13 @@ public class AIFlyToPot1 : MonoBehaviour,ISkill
     bool IsStartFlying = false;
     void FlyToChosePoint()
     {
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
+        {
+            ReSetAll();
+        }
+
+
+
         if (!IsStartFlying) return;
         if (_aiAirRunNear.ZhijieMoveToPoint(ChosePos, 1, FlySpeed, false,true,FlyMaxSpeed))
         {

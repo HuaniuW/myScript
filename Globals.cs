@@ -16,7 +16,7 @@ public class Globals : MonoBehaviour {
     /// </summary>
     public const string USE_XP = "z";
 
-    public static bool isDebug = false;
+    public static bool isDebug = true;
 
     public static bool isPC = true;
 
@@ -49,6 +49,10 @@ public class Globals : MonoBehaviour {
     public static bool IsHitPlotKuai = false;
 
 
+
+    public static bool IsNeedSetJingInMaps = true;
+
+
     internal static string mapType;
     //控制 地图 基本类型的 参数  （使用的 地板 景会变化）
     internal static int mapTypeNums = 1;
@@ -66,6 +70,9 @@ public class Globals : MonoBehaviour {
 
     //是否进入战斗状态
     public static bool IsInFighting = false;
+
+    //是否在 摄像机 碰撞块内
+    public static bool IsInCameraKuai = false;
 
 
 

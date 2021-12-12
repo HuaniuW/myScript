@@ -13,7 +13,13 @@ public class GlobalTag : MonoBehaviour
     // Update is called once per frame
     public static string Player = "Player";
     public static string Diren = "diren";
+    public static string ENEMY = "enemy";
     public static string AirEmeny = "AirEmeny";
     public static string JINGYING = "jingying";
     public static string BOSS = "boss";
+
+    public static string HUOYAN = "Huoyan";
+    public static string DIAN = "Dian";
+    public static string HUAFANG = "huafang";
+    public static string WATER = "Water";
 }

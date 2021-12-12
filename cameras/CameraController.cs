@@ -352,25 +352,25 @@ public class CameraController : MonoBehaviour
                                 //速度过快 让摄像机直接跟随 不缓动跟随了
                                 //x = player.position.x - distanceX;
 
-                                if (Globals.IsInFighting)
-                                {
-                                    if (player.transform.localScale.x > 0)
-                                    {
-                                        x = Mathf.Lerp(x, player.position.x - Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
+                                //if (Globals.IsInFighting)
+                                //{
+                                //    if (player.transform.localScale.x > 0)
+                                //    {
+                                //        x = Mathf.Lerp(x, player.position.x - Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
 
-                                    }
-                                    else
-                                    {
-                                        x = Mathf.Lerp(x, player.position.x + Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
-                                    }
-                                    distanceX = player.position.x - x;
-                                }
-                                else
-                                {
-                                    x = player.position.x - distanceX;
-                                }
+                                //    }
+                                //    else
+                                //    {
+                                //        x = Mathf.Lerp(x, player.position.x + Margin.x, CamereMoveSpeed * 6 * Time.deltaTime);
+                                //    }
+                                //    distanceX = player.position.x - x;
+                                //}
+                                //else
+                                //{
+                                //    x = player.position.x - distanceX;
+                                //}
 
-
+                                x = player.position.x - distanceX;
 
 
                             }
@@ -537,7 +537,7 @@ public class CameraController : MonoBehaviour
 
 
     Vector3 newPositon;
-    bool setNewPosition = false;
+    public bool setNewPosition = false;
     public void SetNewPosition(Vector3 pos)
     {
         newPositon = pos;

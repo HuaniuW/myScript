@@ -43,7 +43,7 @@ public class JN_LuanRen : MonoBehaviour
         //GetAtkObjInHitKuai();
     }
 
-  
+
 
     //void HideHitKuai()
     //{
@@ -66,11 +66,43 @@ public class JN_LuanRen : MonoBehaviour
     //    if (hitkuai6) hitkuai6.SetActive(true);
     //}
 
+    [Header("火特效！！")]
+    public GameObject TX_Huo;
 
-
-    public void GetStart()
+    public void GetStart(GameObject atkObj)
     {
-        AddYZ();
+        print("luanren  getstart!!!!!");
+        //AddYZ();
+        //if (tx1 && !tx1.activeSelf) tx1.gameObject.SetActive(true);
+        //if (tx2 && !tx2.activeSelf) tx2.gameObject.SetActive(true);
+        //if (tx3 && !tx3.activeSelf) tx3.gameObject.SetActive(true);
+        //if (tx4 && !tx4.activeSelf) tx4.gameObject.SetActive(true);
+        //if (tx5 && !tx5.activeSelf) tx5.gameObject.SetActive(true);
+        //if (tx6 && !tx6.activeSelf) tx6.gameObject.SetActive(true);
+
+        if (TX_Huo)
+        {
+            TX_Huo.SetActive(false);
+        }
+
+
+        if (atkObj.GetComponent<RoleDate>().IsHasHZHuo())
+        {
+            if (TX_Huo && !TX_Huo.activeSelf) {
+                print("  txhuo!!! jinlaimei  ");
+                TX_Huo.SetActive(true);
+            }
+            
+        }
+
+
+        //if (tx1) tx1.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+        //if (tx2) tx2.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+        //if (tx3) tx3.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+        //if (tx4) tx4.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+        //if (tx5) tx5.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+        //if (tx6) tx6.GetComponent<JN_base>().GetFuDaiTX(atkObj);
+
     }
 
     //int inNums = 0;
@@ -185,7 +217,7 @@ public class JN_LuanRen : MonoBehaviour
                 if (!IsHitKuai1)
                 {
                     IsHitKuai1 = true;
-                    //print("hitkuai--->  1");
+                    print("hitkuai--->  1   luanren");
                     hitkuai1.GetComponent<HitKuai>().GetTXObj(this.gameObject);
                 }
                 

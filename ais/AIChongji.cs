@@ -32,6 +32,13 @@ public class AIChongji : MonoBehaviour, ISkill
     // Update is called once per frame
     void Update()
     {
+        if (isGetOver) return;
+        if (GetComponent<RoleDate>().isBeHiting)
+        {
+            ChongjiOver();
+            isGetOver = true;
+            return;
+        }
         if (isStarting) Starting();
     }
 
@@ -58,7 +65,7 @@ public class AIChongji : MonoBehaviour, ISkill
         isGetOver = false;
         if(ChongjiYingZhi!=0)GetComponent<RoleDate>().addYZ(ChongjiYingZhi);
         isStarting = true;
-        //print("this.transform.position：   " + this.transform.position);
+        print("横向冲击  this.transform.position：   " + this.transform.position);
     }
 
     protected bool IsTongYing = false;
@@ -93,13 +100,13 @@ public class AIChongji : MonoBehaviour, ISkill
 
     protected virtual void Starting()
     {
-        
+        print("hengxiang chongji ");
         if (GetComponent<RoleDate>().isDie|| _targetObj==null||_targetObj.GetComponent<RoleDate>().isDie)
         {
             ReSetAll();
             return;
         }
-        //print("_IsHitGroundUp    "+ _IsHitGroundUp);
+        print("_IsHitGroundUp    "+ _IsHitGroundUp);
 
         //if (!isTanSheing &&runNear.IsHitDiBanByFX(this.transform.position,new Vector2(this.transform.position.x,this.transform.position.y-1.5f)))
         //{
@@ -113,7 +120,7 @@ public class AIChongji : MonoBehaviour, ISkill
         //        runNear.ResetAll();
         //        upPos = new Vector2(this.transform.position.x, this.transform.position.y + 1);
         //    }
-            
+
         //}
 
         //if (_IsHitGroundUp) {
@@ -122,6 +129,7 @@ public class AIChongji : MonoBehaviour, ISkill
         //}
 
         //print("isTanSheing    "+ isTanSheing);
+        print("  tanshe starting !!!    "+ isTanSheing);
         if (!isTanSheing && GetNearTarget()) {
             isTanSheing = true;
             if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
@@ -162,7 +170,8 @@ public class AIChongji : MonoBehaviour, ISkill
 
     protected virtual void Tanshe()
     {
-        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall) {
+        //这里GlobalSetDate.instance.IsChangeScreening 判断是否切换 场景 是构架失误  应该统一update
+        if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie || GetComponent<GameBody>().IsHitWall|| GlobalSetDate.instance.IsChangeScreening) {
             //print("  IsHitWall "+ GetComponent<GameBody>().IsHitWall+ "  ------IsGround  "+ GetComponent<GameBody>().IsGround);
             ReSetAll();
             //ChongjiOver();
@@ -180,6 +189,7 @@ public class AIChongji : MonoBehaviour, ISkill
                 //转向 朝向玩家
                 GetComponent<AirGameBody>().GetAcMsg(ACName_ChongjiBegin);
                 //开始冲击时候的 怪物叫声
+                //print("  卡住了？？？？？？？？？？？？？？？？？？？？    "+GlobalSetDate.instance.IsChangeScreening);
                 if (StartSound) StartSound.Play();
                 GetComponent<AirGameBody>().GetDB().animation.Stop();
                 GetComponent<AirGameBody>().GetStop();
@@ -283,7 +293,7 @@ public class AIChongji : MonoBehaviour, ISkill
     //定位目标
     protected virtual bool GetNearTarget()
     {
-        //print("鱼 冲击 接近目标----------------  接近 ");
+        print("鱼 冲击 接近目标----------------  接近 ");
         if (this.transform.position.x > _targetObj.position.x)
         {
             //print("目标在左侧！！！  "+this.transform.position.x+"    -------x    "+ _targetObj.position.x);

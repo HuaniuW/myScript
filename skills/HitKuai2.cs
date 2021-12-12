@@ -118,11 +118,33 @@ public class HitKuai2 : MonoBehaviour
                 }
                 
             }
-            
+
+
+            //毒伤害
+            if (jn_date.DuChixuShanghai != 0)
+            {
+                //print(beHitObj.name + "  --beihitteam  " + BeHitRoleDate.team + "  jnteam  " + jn_date.team + "   atkObjname " + atkObj.name);
+                if (gameBody != null && roleDate.team != jn_date.team) gameBody.GetComponent<ChiXuShangHai>().InDu(jn_date.DuChixuShanghai, jn_date.DuChixuShanghaiTime);
+            }
+
+            if (jn_date.HuoChixuShanghai != 0)
+            {
+                if (gameBody != null && roleDate.team != jn_date.team) gameBody.GetComponent<ChiXuShangHai>().InHuo(jn_date.HuoChixuShanghai, jn_date.HuoChixuShanghaiTime);
+            }
+
+
+
+
         }
+
+
+
+
+
     }
 
 
+    GameBody BeHitGameBody;
     public void GetBeHit(JN_Date jn_date, float sx)
     {
         if (roleDate.isDie) return;
@@ -145,10 +167,59 @@ public class HitKuai2 : MonoBehaviour
         //HitTX(_psScaleX, "BloodSplatCritical2D1");
         //HitTX(_psScaleX, "jizhong", roleDate.beHitVudio);
 
+
+        string tx_1 = "";
+        if (BeHitGameBody) tx_1 = BeHitGameBody.GetComponent<RoleDate>().BeHitTX_1;
+        if (tx_1 != "")
+        {
+            print("  >>tx_1 " + tx_1);
+
+            GameObject hitTx_1 = Resources.Load(tx_1) as GameObject;
+            hitTx_1 = ObjectPools.GetInstance().SwpanObject2(hitTx_1);
+            HitTXPos(hitTx_1);
+        }
+
+
+        //击中特效类型 8 和 9 都是 火焰类的
+        if (jn_date.HitInSpecialEffectsType == 8 || jn_date.HitInSpecialEffectsType == 9)
+        {
+
+            //一般粒子 特殊的 击中
+            //HitTX(_psScaleX, "BloodSplatCritical3", "", 2, false, false, -txPos);
+            return;
+        }
+
+
+
         HitTX(_psScaleX, "BloodSplatCritical3", "", 2, false, false);
         if (jn_date.HitInSpecialEffectsType != 3) HitTX(_psScaleX, "jizhong", roleDate.beHitVudio, 4, true, true);
     }
     //JN_Date jn_date;
+
+
+    Vector2 HitPos = Vector2.zero;
+    void HitTXPos(GameObject hitTx, float hy = 0)
+    {
+        if (BeHitGameBody)
+        {
+            if (BeHitGameBody.GetComponent<GameBody>().IsNeedHitPos)
+            {
+                hitTx.transform.position = HitPos;
+            }
+            else
+            {
+                //大块头怪 击中点位置计算
+               // hitTx.transform.position = new Vector3(BeHitGameBody.transform.position.x - hy * -_atkObjScaleX, BeHitGameBody.transform.position.y, BeHitGameBody.transform.position.z);
+            }
+        }
+        else
+        {
+            hitTx.transform.position = HitPos;
+        }
+
+    }
+
+
 
     void HitTX(float psScaleX, string txName, string hitVudio = "", float beishu = 3, bool isSJJD = false, bool isZX = true, float hy = 0)
     {

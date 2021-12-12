@@ -97,7 +97,7 @@ public class GlobalDateControl : MonoBehaviour
     public static bool IsHasDateByName(string KeyName)
     {
         string mapMsg = GetCurrentGKDate();
-        //print(" mapMsg "+ (mapMsg == null)+"    ????? "+mapMsg+"   查询的 key是什么  "+KeyName);
+        print(" mapMsg "+ (mapMsg == null)+"    ????? "+mapMsg+"   查询的 key是什么  "+KeyName);
         //if (mapMsg != null && mapMsg == "") mapMsg = GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GetTempCGKDate();
         if (mapMsg == null|| mapMsg == "") return false;
 
@@ -106,6 +106,7 @@ public class GlobalDateControl : MonoBehaviour
 
 
         string CGKDateMsg = mapMsg.Split(':')[1];
+        print("ot 当前关卡数据是什么 CGKDateMsg   "+ CGKDateMsg);
         string[] dateArr = CGKDateMsg.Split(',');
 
         for(int i=0;i< dateArr.Length; i++)
@@ -231,7 +232,7 @@ public class GlobalDateControl : MonoBehaviour
         if(IsNeedSave) SaveMapDate();
         if (IsNeedSaveAllDate) GlobalSetDate.instance.GetSave();
 
-        //print(" 写入 全局数据后的  全局数据  "+ GlobalSetDate.instance.TempZGuanKaStr);
+        print(" 写入 全局数据后的  全局数据  "+ GlobalSetDate.instance.TempZGuanKaStr);
 
     }
 
@@ -240,13 +241,17 @@ public class GlobalDateControl : MonoBehaviour
     //将当前关卡数据 加到总关卡数据中
     public static void SetCurrentGKDateInZGKTempDate(string CurrentGKDate)
     {
-        //print(" 传入的 参数CurrentGKDate    "+ CurrentGKDate);
+        print("数据  传入的 参数CurrentGKDate    "+ CurrentGKDate);
         RemoveCurrentGKDateFromZGKDateByCurrentGKName(CurrentGKDate.Split(':')[0]);
-        //print("************************************移除记录后的 数据   TempZGuanKaStr "+ GlobalSetDate.instance.TempZGuanKaStr);
+        print("数据 ************************************移除记录后的 数据   TempZGuanKaStr "+ GlobalSetDate.instance.TempZGuanKaStr);
 
         GlobalSetDate.instance.TempZGuanKaStr += CurrentGKDate + "|";
 
-        //if (Globals.isDebug) print("将当前关卡数据 加入到总关卡数据---  加完后的全局数据！！！ " + GlobalSetDate.instance.TempZGuanKaStr);
+        if (Globals.isDebug) print("数据  将当前关卡数据 加入到总关卡数据---  加完后的全局数据！！！ " + GlobalSetDate.instance.TempZGuanKaStr);
+
+
+
+        print("数据  当前关卡的数据是什么   "+GlobalSetDate.instance.CurrentMapMsgDate);
     }
 
 

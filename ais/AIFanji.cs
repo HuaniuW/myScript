@@ -11,6 +11,8 @@ public class AIFanji : MonoBehaviour {
 
     public string SHANBI = "houshan_1";
 
+
+    [Header("反击前 后闪 速度 **不要超过100")]
     public float HouShanValue = 40;
 
     public string FANJI = "atk_1";
@@ -84,10 +86,15 @@ public class AIFanji : MonoBehaviour {
     int beHitNum = 0;
     public void GetFanji()
     {
-        print("  ************************************************反击*******************************************************************  ");
-        print("   进入 AI反击 ！！  "+_gameBody.isAcing+"  v2  "+_gameBody.GetPlayerRigidbody2D().velocity+ "   isFanjiing   "+ isFanjiing);
+        //print("  ************************************************反击*******************************************************************  ");
+        //print("   进入 AI反击 ！！  "+_gameBody.isAcing+"  v2  "+_gameBody.GetPlayerRigidbody2D().velocity+ "   isFanjiing   "+ isFanjiing);
+
+
+        //print(" 进入反击 几率 动作是什么 ？ "+_gameBody.GetDB().animation.lastAnimationName);
+
+
         if (isFanjiing) return;
-        print(1 + "    beHitNum  "+ beHitNum+ "   gameBody.beHitNum???  " + _gameBody.beHitNum);
+        //print(1 + "    beHitNum  "+ beHitNum+ "   gameBody.beHitNum???  " + _gameBody.beHitNum);
         if (beHitNum == _gameBody.beHitNum) return;
         print(2);
         beHitNum = _gameBody.beHitNum;
@@ -102,7 +109,7 @@ public class AIFanji : MonoBehaviour {
         if (n <= (100 - fanjijilv- BeHitNum)) return;
 
         print("    、、、、、、、、、、、、、、、、///////////////// 反击成功！！！！  ");
-        print("----------------------------------反击！！！   n:  "+n+"  ??:  "+(100-(fanjijilv + BeHitNum))+ "   BeHitNum   "+ BeHitNum+ "  fanjijilv   "+ fanjijilv);
+        //print("----------------------------------反击！！！   n:  "+n+"  ??:  "+(100-(fanjijilv + BeHitNum))+ "   BeHitNum   "+ BeHitNum+ "  fanjijilv   "+ fanjijilv);
         if (!isFanji)
         {
             isFanji = true;
@@ -112,6 +119,8 @@ public class AIFanji : MonoBehaviour {
             {
                 GetComponent<AIAirBase>().ReSetAll2();
                 GetComponent<AIAirBase>().QuXiaoAC();
+                //print("  空怪 反击  这个时候的 速度是多少 " + _gameBody.GetPlayerRigidbody2D().velocity);
+                //_gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             }
             else
             {
@@ -120,7 +129,7 @@ public class AIFanji : MonoBehaviour {
             _gameBody.FanJiBeHitReSet();
             //清0速度
             _gameBody.SpeedXStop();
-            print("fj >>>>>>   "+ HouShanValue);
+            //print("fj >>>>>>   "+ HouShanValue);
             _gameBody.GetBackUp(HouShanValue);
         }
         

@@ -25,6 +25,14 @@ public class Plot_Str : MonoBehaviour
     {
         //开始 来看 是否需要删除
         if (IsPlotHasPlayed() && IsOverMoveSelf) OverDelSelf();
+
+        string value = GlobalSetDate.instance.GetOtherDateValueByKey(CheckOtherStr);
+        print(CheckOtherStr+"  ------------------------ ！！！！    " + value);
+        if (value == "0" && TalkID == "talk022")
+        {
+            OverDelSelf();
+        }
+
     }
 
 
@@ -98,6 +106,15 @@ public class Plot_Str : MonoBehaviour
     //    "acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight-choseType:dan-id:4-nextId:5";
 
 
+
+    /**
+     G2 和斗笠武士的对
+    id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:我等你好久了，你准备好挑战我了吗？|id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:来吧！#4@不想做无谓的战斗。#3|id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$openDoor|id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight|
+     
+     */
+
+
+
     //string plotStr = "acType:talk-talkObjName:B_dlws-msg:你就是来渡我们的使者吧。-choseType:dan-id:1-nextId:2|" +
     //    "acType:talk-talkObjName:player-msg:。。。。。。！-choseType:dan-id:2-nextId:3|" +
     //  "acType:talk-talkObjName:B_dlws-msg:我发现很多人就算到了这里也依然没有勇气面对他们想去面对的人！你也有不敢面对的人吗！-choseType:dan-id:3-nextId:4|" +
@@ -120,13 +137,60 @@ public class Plot_Str : MonoBehaviour
     //   "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
 
 
+    public string plotStr = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:你喜欢花吗 ？|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜欢#4@不喜欢#3|" +
+       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:我以前也不喜欢 后来发现只是因为花太少。|" +
+       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:是吧 谁会不喜欢花呢。|" +
+       "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:有机会我会为你种满 漫山遍野的鲜花。|" +
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
+       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:我把我的一些力量融进徽章放在门后了。";
+
+
+    //"id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:你喜欢花吗 ？|id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜欢#4@不喜欢#3|id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:我以前也不喜欢 后来发现只是因为花太少。|id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:是吧 谁会不喜欢花呢。|id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:有机会我会为你种满 漫山遍野的鲜花。|id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:我把我的一些力量融进徽章放在门后了。"
+
+
+    //坚定 选择
+    //string plotStr = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:你喜欢花吗 ？|" +
+    //  "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜欢#4@不喜欢#3|" +
+    //  "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:我以前也不喜欢 后来发现只是因为花太少。|" +
+    //  "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:是吧 谁会不喜欢花呢。|" +
+    //  "id:5-choseType:duo-nextId:6-acType:talk-talkObjName:player-msg:当然确定。#6^event$jianding*1@开玩笑的，哈哈！#7^event$over|" +
+    //  "acType:talk-talkObjName:B_dlws-msg:终于有一个有坚定品质的人了，我的力量就在终点口，到时候就会给与你我的力量。-choseType:dan-id:6-nextId:8";
+
+
+
+    //G2 NPC 对话
+    /**id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:我的能量只能在徽章和神树二选一，你是要徽章还是点亮神树。|id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:徽章#4^event$jianding*1@点亮神树#3^event$jianding*0|id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:好吧。那到时候我帮你点亮神树|id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:那我就不给神树冲能了，路上你要自己注意了,没有神树就靠你的意志了，路上要小心。|id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Bll-msg:记得，不要和剑圣战斗
+     
+     
+     */
+
+
+
+    //G2 第二次 NPC对话
+    /**
+     
+     id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:力量已经汇聚完成了，流刃之火。好好利用。
+     */
+
+
+
+    /**
+     id:1-choseType:dan-nextId:2-acType:talk-talkObjName:player-msg:当时你为什么躲在树后面不出来 ？|id:2-choseType:dan-nextId:3-acType:talk-talkObjName:B_dlws-msg:当时你是天使，我是恶魔啊，我也想让自己变成天使再出来。|id:3-choseType:dan-nextId:4-acType:talk-talkObjName:player-msg:。。。。。。。。 |id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:现在我开始接受我是恶魔了。|
+     
+     
+     
+     */
+
+
 
     public string CheckOtherStr = "0";
 
     void CheckNeedGetCiPlot()
     {
         string value = GlobalSetDate.instance.GetOtherDateValueByKey(CheckOtherStr);
-        if (value == "1")
+        print("  检测 是否选用第二个剧情文本 ！！！！    "+value);
+        if (value == "1"&&TalkID == "talk02")
         {
             plotStr = ci2PlotStr1;
         }
@@ -134,19 +198,19 @@ public class Plot_Str : MonoBehaviour
 
 
     string ci2PlotStr1 = "acType:talk-talkObjName:B_dlws-msg:你好，探索的怎么样？-choseType:dan-id:1-nextId:2|" +
-        "acType:talk-talkObjName:player-msg:没事#9@我不是一个坚定的人#3^event$jianding*0-choseType:duo-id:2-nextId:3|" +
+        "acType:talk-talkObjName:player-msg:没事#9^event$dontRemove*0@我不是一个坚定的人#3^event$jianding*0-choseType:duo-id:2-nextId:3|" +
         "acType:talk-talkObjName:B_dlws-msg:好吧，不出我所料，你和大部分人一样。^event$over-choseType:dan-id:3-nextId:6";
 
 
 
 
-    public string plotStr = "acType:talk-talkObjName:B_dlws-msg:你也是要来拿月之石的吧？-choseType:dan-id:1-nextId:2|" +
-       "acType:talk-talkObjName:player-msg:。。。。。。。。。-choseType:dan-id:2-nextId:3|" +
-       "acType:talk-talkObjName:B_dlws-msg:看来是的了。你也有什么悔恨的事需要月之石吗？-choseType:dan-id:3-nextId:4|" +
-       "acType:talk-talkObjName:player-msg:我只是想要而已。-choseType:dan-id:4-nextId:5|" +
-       "acType:talk-talkObjName:B_dlws-msg:好吧！这个徽章给你吧，路途艰险，多加小心。-choseType:dan-id:5-nextId:6|";
+    //public string plotStr = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:你也是要来拿月之石的吧？|" +
+    //   "id:2--choseType:dan-nextId:3-acType:talk-talkObjName:player-msg:。。。。。。。。。|" +
+    //   "id:3-choseType:dan-nextId:4-acType:talk-talkObjName:B_dlws-msg:看来是的了。你也有什么悔恨的事需要月之石吗？|" +
+    //   "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:player-msg:我只是想要而已。|" +
+    //   "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:好吧！这个徽章给你吧，路途艰险，多加小心。|";
 
-
+    //public string plotStr = "acType:talk-talkObjName:B_dlws-msg:我一直以为我不喜欢花，原来是花太少。-choseType:dan-id:1-nextId:2|";
 
 
     //G6 boss对话
@@ -180,8 +244,34 @@ public class Plot_Str : MonoBehaviour
     {
         ChoseEventStr = e.eventParams.ToString();
         print(" ------ choseEventName    "+e.eventParams.ToString());
+
+        //加一个 不删除 自身的 事件
+        string eventName = ChoseEventStr.Split('*')[0];
+
+
+        if (eventName == "openDoor")
+        {
+            if (NPC) NPC.GetComponent<RoleDate>().isCanBeHit = true;
+        }
+
+        if (eventName == "startfight")
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NEW_OPEN_DOOR, "close"), this);
+            if (NPC) NPC.GetComponent<RoleDate>().isCanBeHit = true;
+        }
+
+
+        //event$dontRemove
+        if (eventName == "dontRemove")
+        {
+            IsOverMoveSelf = false;
+            IsCanBeHit = false;
+            IsNeedRecordByOver = false;
+            return;
+        }
+
         //记录关卡 剧情 记录的 事件
-        if (ChoseEventStr.Split('*')[0] == "jianding")
+        if (eventName == "jianding")
         {
             if(ChoseEventStr.Split('*')[1] == "1")
             {
@@ -193,12 +283,12 @@ public class Plot_Str : MonoBehaviour
                 //存入全局数据 是坚定  无法显示 跳跃关卡 存档点
 
                 
-                print("选择的 是 坚定！！！！！！");
+                print("选择的 是 坚定！！！！！！   选的 是徽章 ");
             }
             else
             {
                 //选择的是 不坚定  现在 谈话结束后 可以消失
-                print("选择的是 不 坚定！！");
+                print("选择的是 不 坚定！！   选择神树！！！");
             }
             GlobalSetDate.instance.SaveInOtherDate(ChoseEventStr);
         }
@@ -244,10 +334,24 @@ public class Plot_Str : MonoBehaviour
     //判断 剧情是否 播过
     bool IsPlotHasPlayed()
     {
+        print(" 检测剧情是否已经播过！！！！   "+ TalkID);
         return GlobalDateControl.IsHasDateByName(TalkID);
     }
 
-
+    //NPC朝向
+    public GameObject NPC;
+    void NPCChaoxiang()
+    {
+        if (NPC == null) return;
+        if (NPC.transform.position.x >= player.transform.position.x)
+        {
+            NPC.transform.localScale = new Vector2(NPC.transform.localScale.x, NPC.transform.localScale.y);
+        }
+        else
+        {
+            NPC.transform.localScale = new Vector2(-NPC.transform.localScale.x, NPC.transform.localScale.y);
+        }
+    }
 
 
 
@@ -259,12 +363,17 @@ public class Plot_Str : MonoBehaviour
         if (!IsCanBeHit) return;
         if (Coll.tag == "Player")
         {
+            print(" 玩家 碰撞到 剧情块！！！ ");
+            player = Coll.gameObject;
             //判断 剧情是否已经播过 播过的话就 不进入了
-            if (IsPlotHasPlayed()) return;
-            IsStartPlot = true;
+            //if (IsPlotHasPlayed()) return;
+
+            NPCChaoxiang();
             PlayerHitStop();
             GetStr();
             //ShowPlotStr();
+
+            IsStartPlot = true;
         }
     }
 
@@ -295,6 +404,8 @@ public class Plot_Str : MonoBehaviour
     List<string> plotStrList = new List<string>() { };
     void GetStr()
     {
+
+        //print("剧情内容>>>>>>>>: "+ plotStr);
         string[] strArr = plotStr.Split('|');
         plotStrList = new List<string>(strArr);//strArr.ToList();
     }
@@ -328,13 +439,14 @@ public class Plot_Str : MonoBehaviour
             if (key == "talkObjName") _talkObjName = theMsg;
             //print(" --------- _talkObjName    "+ _talkObjName);
             if (key == "msg") _msg = theMsg;
+            //print("  内容 "+_msg);
             if (key == "choseType") _choseType = theMsg;
             if (key == "nextId") _nextId = int.Parse(theMsg);
         }
     }
 
 
-
+    public bool IsBarGensui = false;
     GameObject _cBar;
     void GetTalkBar()
     {
@@ -349,16 +461,28 @@ public class Plot_Str : MonoBehaviour
 
         GameObject talkObj = GlobalTools.FindObjByName(_talkObjName);
 
+        Transform talkPos;
         if (talkObj)
         {
             _talkPos = talkObj.GetComponent<GameBody>().GetTalkPos();
+            talkPos = talkObj.GetComponent<GameBody>().TalkPos.transform;
         }
         else
         {
             _talkPos = this.TalkPosObj.transform.position;
+            talkPos = this.TalkPosObj.transform;
         }
 
-        _cBar.GetComponent<UI_talkBar>().ShowTalkText(_msg, _talkPos, times, _talkObjName);
+        if (IsBarGensui)
+        {
+            _cBar.GetComponent<UI_talkBar>().ShowTalkText(_msg, _talkPos, times, _talkObjName, talkPos);
+        }
+        else
+        {
+            _cBar.GetComponent<UI_talkBar>().ShowTalkText(_msg, _talkPos, times, _talkObjName);
+        }
+
+        
         _clickJishiSatrt = true;
 
     }
@@ -397,7 +521,7 @@ public class Plot_Str : MonoBehaviour
             GameObject ui_choseBar = GlobalTools.GetGameObjectByName("UI_talkChoseBar");
             ui_choseBar.transform.position = new Vector2(player.transform.position.x+3.6f* player.transform.localScale.x, player.transform.position.y);      //player.transform.position;
             ui_choseBar.GetComponent<UI_talkChose>().GetStrMsg(_msg);
-
+            
         }
 
 
@@ -406,7 +530,7 @@ public class Plot_Str : MonoBehaviour
 
     void PlotOver()
     {
-        print("没有文本了！！！！");
+        print("剧情 没有文本了！！！！ 结束剧情");
         //结束剧情
         ClickJishiReSet();
         if (IsNeedRecordByOver)
@@ -452,7 +576,7 @@ public class Plot_Str : MonoBehaviour
             print("    ??????? ");
             OverOutObj();
             print("是否有 CHOSE_EVENT 事件 " + ChoseEventStr);
-            if (ChoseEventStr == "over")
+            if (ChoseEventStr == "over"|| ChoseEventStr == "openDoor" || ChoseEventStr == "startfight")
             {
                 //存档 数据 存入哪些东西
                 PlotOverSave();

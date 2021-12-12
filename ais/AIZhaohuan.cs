@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AIZhaohuan : MonoBehaviour
 {
+    public bool IsCanZhaohuan = true;
     //召唤
     // Start is called before the first frame update
     RoleDate _roledate;
@@ -44,6 +45,6 @@ public class AIZhaohuan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        LiveInZhaohuan();
+        if(IsCanZhaohuan)LiveInZhaohuan();
     }
 }

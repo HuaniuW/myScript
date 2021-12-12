@@ -56,6 +56,7 @@ public class XialuoGuaizu : MonoBehaviour
         if(GuaiList.Count == 0)
         {
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.NEW_OPEN_DOOR,"open"),this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, "open"), this);
         }
 
     }

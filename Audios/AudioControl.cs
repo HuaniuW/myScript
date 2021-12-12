@@ -95,25 +95,25 @@ public class AudioControl : MonoBehaviour {
 
     void ScreenChange(UEvent e)
     {
-        m_AudioSource.Stop();
+        //print("??????????? 切换场景！！！！ ");
+        if(m_AudioSource) m_AudioSource.Stop();
     }
 
 
     public void audioValue(UEvent e)
     {
-        if (!IsGradualValue) {
+        if (!IsGradualValue&& m_AudioSource) {
             CVolume = GlobalSetDate.instance.GetSoundEffectValue();
             m_AudioSource.volume = CVolume;
         }
         
     }
 
-
     void Update()
     {
         GetValueByPlayerDistance();
         GradualValue();
-        if (IsPlayerDieGraduaMining) PlayerDieGraduaMin();
+        if (IsPlayerDieGraduaMining) AudioValueGraduaMin();
     }
 
 
@@ -153,9 +153,9 @@ public class AudioControl : MonoBehaviour {
     public bool IsPlayerDieGraduaMin = false;
 
     bool IsPlayerDieGraduaMining = false;
-    void PlayerDieGraduaMin()
+    void AudioValueGraduaMin()
     {
-        if (m_AudioSource.isPlaying && IsPlayerDieGraduaMin)
+        if (m_AudioSource.isPlaying && (IsPlayerDieGraduaMin||IsBossFIGHTAudioDown))
         {
             IsGradualValue = false;
             //m_AudioSource.volume += (CVolume - m_AudioSource.volume) * GraduaNums;
@@ -163,20 +163,31 @@ public class AudioControl : MonoBehaviour {
             if (CVolume <= 0.02f)
             {
                 CVolume = 0;
-                IsPlayerDieGraduaMin = false;
+                //IsPlayerDieGraduaMin = false;
                 IsPlayerDieGraduaMining = false;
+                //IsBossFIGHTAudioDown = false;
             }
             m_AudioSource.volume = CVolume;
             //print(" *****************m_AudioSource.volume "+ m_AudioSource.volume);
         }
     }
 
+
+    public void GetIsPlayerDieGraduaMining()
+    {
+        IsPlayerDieGraduaMining = true;
+    }
+
+
+    public bool IsBossFIGHTAudioDown = false;
+
+
     void DieOut(UEvent e)
     {
         if (e.eventParams == null) return;
         //print(e.eventParams.ToString());
         //print((e.target as GameObject).name);
-        //print(" audio -------- "+ e.eventParams.ToString());
+        //print(" yy  audio -------- "+ e.eventParams.ToString());
         if(e.eventParams.ToString() == GlobalTag.Player)
         {
             if (IsPlayerDieGraduaMin)
@@ -186,7 +197,7 @@ public class AudioControl : MonoBehaviour {
             }
         }
 
-        if (e.eventParams.ToString() == GlobalTag.BOSS)
+        if (e.eventParams.ToString() == GlobalTag.BOSS&& IsBossFIGHTAudioDown)
         {
             IsPlayerDieGraduaMining = true;
             return;

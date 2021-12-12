@@ -101,7 +101,7 @@ public class AIChongJiHX : AIChongji
 
         if (!IsTongYing&&!isTanSheing && GetNearTarget()) {
             //IsTongYing = true;
-            print("   靠近目标！ kashi tanshe !!   "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+            //print("   靠近目标！ kashi tanshe !!   "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
             isTanSheing = true;
         }
 
@@ -136,7 +136,7 @@ public class AIChongJiHX : AIChongji
             //print("  IsHitWall " + GetComponent<GameBody>().IsHitWall + "  ------IsGround  " + GetComponent<GameBody>().IsGround);
             //ChongjiOver();
 
-            print("cj  被攻击 或者die ---或者 撞墙   Over!! ");
+            //print("cj  被攻击 或者die ---或者 撞墙   Over!! ");
 
             ReSetAll();
             return;
@@ -151,7 +151,7 @@ public class AIChongJiHX : AIChongji
             //    IsStartChongji = true;
             //}
 
-            print(" 准备阶段 横向冲击 acName: "+_airGameBody.GetDB().animation.lastAnimationName);
+            //print(" 准备阶段 横向冲击 acName: "+_airGameBody.GetDB().animation.lastAnimationName);
 
             float __x = 0;
             if (GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiBegin && GetComponent<AirGameBody>().GetDB().animation.lastAnimationName != ACName_ChongjiStart)
@@ -183,15 +183,15 @@ public class AIChongJiHX : AIChongji
 
                 //print("wo kao!!!!!!!!!");
                 if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 1;
-                print("start!!!   ACName_ChongjiBegin " + ACName_ChongjiBegin+ " lastAnimationName:   " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
+                //print("start!!!   ACName_ChongjiBegin " + ACName_ChongjiBegin+ " lastAnimationName:   " + GetComponent<AirGameBody>().GetDB().animation.lastAnimationName);
 
                 if (StartSound) StartSound.Play();
                 _airGameBody.isAcing = true;
                 _airGameBody.GetDB().animation.Stop();
-                _airGameBody.GetDB().animation.GotoAndStopByFrame(ACName_ChongjiBegin);
+                //_airGameBody.GetDB().animation.GotoAndStopByFrame(ACName_ChongjiBegin);
                 //****************不要用 FadeIn  有bug 会卡主 游戏****************
-                //_airGameBody.GetDB().animation.FadeIn(ACName_ChongjiBegin, 0.1f);
-                
+                _airGameBody.GetDB().animation.FadeIn(ACName_ChongjiBegin, 0.1f);
+
                 deltaNums = 0;
                 return;
             }
@@ -324,6 +324,7 @@ public class AIChongJiHX : AIChongji
         isGetOver = false;
         
         isStarting = true;
+        IsGetTargetPos = false;
 
         _gameBody = GetComponent<GameBody>();
         //print("this.transform.position：   " + this.transform.position);
@@ -333,6 +334,8 @@ public class AIChongJiHX : AIChongji
     [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置  3是固定点位置 4原地开始冲击")]
     public int ChoseYPosType = 1;
 
+
+    bool IsGetTargetPos = false;
     protected override bool GetNearTarget()
     {
         //print(" IsHasChosePos   "+ IsHasChosePos);
@@ -353,7 +356,12 @@ public class AIChongJiHX : AIChongji
         }
         else
         {
-            _targetPos = GetTongYZuoBiao();
+            if (!IsGetTargetPos)
+            {
+                IsGetTargetPos = true;
+                _targetPos = GetTongYZuoBiao();
+            }
+            
         }
         
 
@@ -390,11 +398,11 @@ public class AIChongJiHX : AIChongji
 
             if (this.transform.position.y < _targetObj.position.y)
             {
-                __y = _targetObj.position.y + 0.8f;
+                __y = _targetObj.position.y + 1.8f;
             }
             else
             {
-                __y = _targetObj.position.y - 0.8f;
+                __y = _targetObj.position.y - 1.8f;
             }
         }
         else if (ChoseYPosType == 2)
@@ -425,8 +433,10 @@ public class AIChongJiHX : AIChongji
         CJYanchiNums = 0;
         runNear.ResetAll();
         _airGameBody.SetACingfalse();
+        IsGetTargetPos = false;
 
         _airGameBody.GetDB().animation.timeScale = 1f;
+        _airGameBody.GetStand();
         startTanShe = false;
         if (GetComponent<JN_Date>()) GetComponent<JN_Date>().HitInSpecialEffectsType = 5;
 
@@ -483,7 +493,7 @@ public class AIChongJiHX : AIChongji
             if (_airGameBody.GetDB().animation.lastAnimationName != ACName_ChongjiBegin && _airGameBody.GetDB().animation.lastAnimationName != ACName_ChongjiStart)
             {
                 //转向 朝向玩家
-                _airGameBody.GetAcMsg(ACName_ChongjiBegin);
+                _airGameBody.GetAcMsg(ACName_ChongjiBegin,0,1);
                 _airGameBody.GetDB().animation.Stop();
                 _airGameBody.GetStop();
                 deltaNums = 0;

@@ -119,8 +119,22 @@ public class HZDate : MonoBehaviour {
     [Header("抗中毒伤害几率")]
     public float KangDuShanghaiJilv = 0;
 
-    [Header("抗中麻痹几率")]
-    public float KangMabiJilv = 0;
+
+    [Header("抗 *火点燃* 几率")]
+    public float KangHuoJilv = 0;
+    [Header("*火* 伤害抵抗率")]
+    public float KangHuoShanghaiJilv = 0;
+
+
+    [Header("抗 *电* 几率")]
+    public float KangDianJilv = 0;
+    [Header("*电* 麻痹抵抗率")]
+    public float KangDianMabiJilv = 0;
+
+
+    [Header("*技能 恢复血量**")]
+    public float HuifuXue = 0;
+
 
 
     void Start () {
@@ -153,6 +167,15 @@ public class HZDate : MonoBehaviour {
     string hz_baojilv = "暴击率：";
     string hz_baojishanghaibeishu = "暴击伤害倍数：";
 
+
+    string hz_kangdujilv = "抗毒几率：";
+    string hz_kangdushanghaijilv = "毒伤害抵抗率：";
+
+    string hz_kanghuojilv = "抗火几率：";
+    string hz_kanghuoshanghaijilv = "火伤害抵抗率：";
+
+    string hz_kangdianjilv = "抗电几率：";
+    string hz_kangdianmabijilv = "抗电麻痹几率：";
 
     public string GetHZ_information_str()
     {
@@ -223,6 +246,64 @@ public class HZDate : MonoBehaviour {
             _baojishanghaibeishu = Globals.language == Globals.CHINESE ? "<color=#76D704>" + hz_baojishanghaibeishu + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#76D7C4>live P：" + this.BaoJiShangHaiBeiLv + "</color>\n";
         }
         str += _baojishanghaibeishu;
+
+
+
+
+        string _kanghuojilv = "";
+        if (KangHuoJilv!=0)
+        {
+            _kanghuojilv = Globals.language == Globals.CHINESE ? "<color=#BBFFFF>" + hz_kanghuojilv + this.KangHuoJilv + "</color>\n" : "<color=#BBFFFF>live P：" + this.KangHuoJilv + "</color>\n";
+        }
+        str += _kanghuojilv;
+
+        string _kanghuoshanghaijilv = "";
+        if (KangHuoShanghaiJilv != 0)
+        {
+            _kanghuoshanghaijilv = Globals.language == Globals.CHINESE ? "<color=#BBFFFF>" + this.hz_kanghuoshanghaijilv + this.KangHuoShanghaiJilv + "</color>\n" : "<color=#BBFFFF>live P：" + this.KangHuoShanghaiJilv + "</color>\n";
+        }
+        str += _kanghuoshanghaijilv;
+
+
+
+
+
+
+        string _kangdujilv = "";
+        if (this.KangDuJilv != 0)
+        {
+            _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#8EE5EE>" + this.hz_kangdujilv + this.KangDuJilv + "</color>\n" : "<color=#8EE5EE>live P：" + this.KangDuJilv + "</color>\n";
+        }
+        str += _kangdujilv;
+
+        string _kangdushanghaijiv = "";
+        if (this.KangDuShanghaiJilv != 0)
+        {
+            _kangdushanghaijiv = Globals.language == Globals.CHINESE ? "<color=#8EE5EE>" + this.hz_kangdushanghaijilv + this.KangDuShanghaiJilv + "</color>\n" : "<color=#8EE5EE>live P：" + this.KangDuShanghaiJilv + "</color>\n";
+        }
+        str += _kangdushanghaijiv;
+
+
+
+
+
+
+        string _kangdianjilv = "";
+        if (this.KangDianJilv != 0)
+        {
+            _kangdianjilv = Globals.language == Globals.CHINESE ? "<color=#00E5EE>" + this.hz_kangdianjilv + this.KangDianJilv + "</color>\n" : "<color=#00E5EE>live P：" + this.KangDianJilv + "</color>\n";
+        }
+        str += _kangdianjilv;
+
+
+        string _kangdianmabijilv = "";
+        if (this.KangDianMabiJilv != 0)
+        {
+            _kangdianmabijilv = Globals.language == Globals.CHINESE ? "<color=#00E5EE>" + this.hz_kangdianmabijilv + this.KangDianMabiJilv + "</color>\n" : "<color=#00E5EE>live P：" + this.KangDianMabiJilv + "</color>\n";
+        }
+        str += _kangdianmabijilv;
+
+
 
 
         string _information = "";
