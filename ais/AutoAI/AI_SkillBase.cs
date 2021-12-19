@@ -16,7 +16,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     [Header("起手粒子特效显示")]
     public ParticleSystem StartParticle;
 
-    bool IsStartParticle = false;
+    protected bool IsStartParticle = false;
 
     [Header("招式的名字 用来判断 接收事件")]
     public string ZSName = "";
@@ -92,11 +92,43 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     protected string GetZSName = "";
     protected virtual void ZDSkillShow(UEvent e)
     {
+        print("--------------------------->"+e.eventParams.ToString());
         GetZSName = "";
+        //e.eventParams.ToString() ->  12345@ZD_lz_ZDDiu3Huo_1
         string[] strArr = e.eventParams.ToString().Split('@');
+        //主动AI的 全名 包含参数
         ZDAIName = strArr[1];
+        //ZD_lz_ZDDiu3Huo_1
         string id = strArr[0];
-        GetZSName = strArr[1].Split('_')[1];
+        if(ZDAIName.Split('_')[1] == "lz")
+        {
+            GetZSName = ZDAIName.Split('_')[2];
+            IsCanZhuanxiang = false;
+        }
+        else
+        {
+            GetZSName = ZDAIName.Split('_')[1];
+            IsCanZhuanxiang = true;
+        }
+
+        string[] sArr = ZDAIName.Split('_');
+        string s = "";
+        for(int i = 0; i < sArr.Length; i++)
+        {
+            if (sArr[i] != "lz")
+            {
+                if (i == 0)
+                {
+                    s = sArr[i];
+                }
+                else
+                {
+                    s += "_" + sArr[i];
+                }
+            }
+        }
+
+        ZDAIName = s;
 
         //print("zd 自动技能 释放 接收 参数 " + e.eventParams.ToString() + "   本技能名字  " + ZSName+ " GetZSName   "+ GetZSName);
 
@@ -121,7 +153,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 
 
 
-    bool IsSkillShowOut = false;
+    protected bool IsSkillShowOut = false;
     [Header("技能动作名字")]
     public string ACName = "skill_1";
 
@@ -140,6 +172,11 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     {
 
     }
+
+    protected virtual void DieOrBehit()
+    {
+
+    }
     
 
 
@@ -155,7 +192,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
         {
             ReSetAll();
             TheSkillOver();
-            
+            DieOrBehit();
             _isGetOver = true;
             //_gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
             print(this.name +"    ----over !!! ");
@@ -170,7 +207,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 
         if (_player == null) return;
 
-        if (AtkDistances != 0&& !IsInAtkDistances)
+        if (IsCanZhuanxiang && AtkDistances != 0 && !IsInAtkDistances)
         {
             if (GetComponent<AIAirBase>())
             {
@@ -215,14 +252,16 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
             if (!IsZhuangxiang)
             {
                 IsZhuangxiang = true;
-                if (GetComponent<AIBase>().thePlayer.transform.position.x > this.gameObject.transform.position.x)
-                {
-                    GetComponent<GameBody>().TurnRight();
-                }
-                else
-                {
-                    GetComponent<GameBody>().TurnLeft();
-                }
+                if(IsCanZhuanxiang) GetComponent<AIBase>().ZhuanXiang();
+                _gameBody.GetStand();
+                //if (GetComponent<AIBase>().thePlayer.transform.position.x > this.gameObject.transform.position.x)
+                //{
+                //    GetComponent<GameBody>().TurnRight();
+                //}
+                //else
+                //{
+                //    GetComponent<GameBody>().TurnLeft();
+                //}
                
             }
             SkillStarting();
@@ -232,7 +271,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
        
     }
 
-
+    protected bool IsCanZhuanxiang = true;
 
     protected virtual void ChixuSkillStarting()
     {
@@ -365,6 +404,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 
     protected void TheSkillOver()
     {
+        GetZSName = "";
         OtherOver();
         if (StartAudio) StartAudio.Stop();
         if (StartParticle != null) {
@@ -373,7 +413,9 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
         }
         
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ZD_SKILL_OVER, this.gameObject.GetInstanceID()), this);
+        ReSetAll();
         _isGetOver = true;
+        
     }
 
 
@@ -462,6 +504,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 
     public virtual void ReSetAll()
     {
+        
         _isGetOver = false;
         _isGetStart = false;
         IsSkillShowOut = false;
@@ -473,6 +516,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
         IsZhuangxiang = false;
         IsStopSelf = false;
         IsACSkillShowOut = false;
+        
     }
 
 

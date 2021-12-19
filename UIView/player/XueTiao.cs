@@ -186,7 +186,7 @@ public class XueTiao : MonoBehaviour {
             print(gameObj.name+"  当前xuel "+ roleDate.live+"   max "+roleDate.maxLive);
             //print("111111111  当前 血量是多少   " + _cLive + "   传进来的 当前血量roleDate.live  " + roleDate.live);
             //_cLive = _cLive > roleDate.maxLive ? roleDate.maxLive : _cLive;
-            _cLive = roleDate.maxLive;
+            _cLive = roleDate.live;
             //print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---clive " + _cLive + "    ----roledateLive " + roleDate.live);
             print("  当前 血量是多少   "+_cLive+ "   传进来的 当前血量roleDate.live  "+ roleDate.live);
             //_cLive = roleDate.live;

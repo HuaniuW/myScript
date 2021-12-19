@@ -45,11 +45,14 @@ public class OnLziHit : MonoBehaviour
         }
     }
 
+    float LiziJishi = 0;
 
     private void Awake()
     {
         IsCanHit = true;
         DisSelfJishi = 0;
+        LiziJishi = 0;
+        HitObjList.Clear();
     }
 
 
@@ -84,6 +87,7 @@ public class OnLziHit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LiziJishi += Time.deltaTime;
         JishiDisSelf();
     }
 
@@ -134,7 +138,8 @@ public class OnLziHit : MonoBehaviour
 
 
 
-    List<GameObject> HitObjList = new List<GameObject>() { };
+    List<string> HitObjList = new List<string>() { };
+
 
     //bool HitOnceTest = false;
 
@@ -165,22 +170,58 @@ public class OnLziHit : MonoBehaviour
     private void OnParticleCollision(GameObject other)
     {
 
+        //if (other.tag == "zidanDun")
+        //{
+        //    print("   粒子击中 防御盾  ");
+        //}
+        print(this.name + "  IsCanHit  " + IsCanHit+"   $$$$$  "+other.tag);
 
-        //print(this.name + "  IsCanHit  " + IsCanHit+"   $$$$$  "+other.name);
+
+        //print(" this  "+this.tag+"    -----   "+ other.tag);
+        if (this.tag == GlobalTag.HUOYAN)
+        {
+            if (other.tag == GlobalTag.ENEMY || other.tag == GlobalTag.BOSS || other.tag == GlobalTag.Diren)
+            {
+                if (other.GetComponent<RoleDate>().KangHuoJilv == 100)
+                {
+                    print("  this -----  100 抵抗火 ");
+                    return;
+                }
+
+            }
+        }
+
+        if (this.tag == GlobalTag.DIAN)
+        {
+            if (other.tag == GlobalTag.ENEMY || other.tag == GlobalTag.BOSS || other.tag == GlobalTag.Diren)
+            {
+                if (other.GetComponent<RoleDate>().KangDuJilv == 100)
+                {
+                    print("  this -----  100 抵抗毒  ！！！！ ");
+                    return;
+                }
+
+            }
+        }
+
+
         if (!IsCanHit) return;
         //print(other.tag);
         if (other.tag == GlobalTag.Player|| other.tag == GlobalTag.JINGYING|| other.tag == GlobalTag.ENEMY|| other.tag == GlobalTag.AirEmeny|| other.tag == GlobalTag.BOSS|| other.tag == GlobalTag.Diren)
         {
            
-            foreach (GameObject o in HitObjList)
+            foreach (string str in HitObjList)
             {
-                if (o == other)
+                int id = int.Parse(str.Split('_')[0]);
+                float times = float.Parse(str.Split('_')[1]);
+                if (id == other.GetInstanceID()&&LiziJishi - times<=0.4f)
                 {
                     return;
                 }
             }
             print("  粒子击中敌人！！！！！ " + other.name);
-            HitObjList.Add(other);
+            string o = other.GetInstanceID() + "_" + LiziJishi;
+            HitObjList.Add(o);
             GetComponent<HitKuai>().LiziHit(other);
 
 

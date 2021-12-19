@@ -368,7 +368,7 @@ public class ChiXuShangHai : MonoBehaviour
 
         //float dianshanghai = _DianShanghai * (1 - _roledate.KangDuShanghaijilv);
         //if (dianshanghai < 0) dianshanghai = 0;
-        float TheDushanghai = _DuShanghai*(1-_roledate.KangDuShanghaijilv);
+        float TheDushanghai = _DuShanghai*(100-_roledate.KangDuShanghaijilv)*0.01f;
         if (_roledate.KangDuJilv<0) TheDushanghai *= Mathf.Abs(_roledate.KangDuJilv);
         _roledate.live -= TheDushanghai;
 

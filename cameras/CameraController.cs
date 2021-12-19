@@ -551,6 +551,7 @@ public class CameraController : MonoBehaviour
         {
             //transform.position = newPositon;
             setNewPosition = false;
+            //Globals.IsInCameraKuai = false;
             return;
         }
 

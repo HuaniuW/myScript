@@ -25,6 +25,10 @@ public class AIYiShan : MonoBehaviour ,ISkill {
     [Header("烟尘 ")]
     public ParticleSystem YanChen;
 
+
+
+    
+
     bool isStart = false;
     bool isFirstAddListener = true;
     public bool IsAcOver()
@@ -43,10 +47,11 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
         //判断 前面距离
         Vector2 start;
-
-
         //前面的距离测试 
         Vector2 end;
+        //print("ZSyishanZSys -1");
+        jishiNums = 0;
+        _XZtimes = 0;
         if (this.transform.localScale.x < 0)
         {
             start = this.transform.position;
@@ -74,21 +79,24 @@ public class AIYiShan : MonoBehaviour ,ISkill {
                 return;
             }
         }
+        //print("ZSyishanZSys -2");
         if (isStart) return;
 
 
-
+        //print("ZSyishanZSys -3");
 
 
 
         if (!isStart) isStart = true;
         //检测是否有悬崖 会冲出去    判断是否动作名是空    判断是否有需要的动作
         if (IsGetOutLand() || acName == "" || !_gameBody.IsHanAC(acName)) {
+            //print("ZSyishanZSys -4");
             GetOver();
             return;
         }
 
-        if(addYZNum!=0) _roleDate.addYZ(addYZNum);
+        //print("ZSyishanZSys -5");
+        if (addYZNum!=0) _roleDate.addYZ(addYZNum);
 
         if (!DBBody) DBBody = _gameBody.GetDB();
 
@@ -97,7 +105,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
             DBBody.AddDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX2);
         }
 
-
+        //print("ZSyishanZSys -6");
 
         //摆出动作
         if (DBBody.animation.HasAnimation(acName)) {
@@ -109,14 +117,15 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
             if(Audio_YishanQishou) Audio_YishanQishou.Play();
         }
+        //print("ZSyishanZSys -7");
 
-        
         //停顿时间
         _gameBody.GetPause(StartZSStopTimes, pauseNums);
     }
 
     void GetOver()
     {
+        print("ys over!!");
         isStart = false;
         _isShowTX = false;
         _isOutDistance = false;
@@ -128,6 +137,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
         TempDis = 0;
         if(YanChen) YanChen.Stop();
         _XZtimes = 0;
+        jishiNums = 0;
         _gameBody.isAcing = false;
         _gameBody.SetV0();
         //print("一闪结束！！！！！！！！！");
@@ -210,18 +220,55 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
     float _XZtimes = 0;
 
+    public UnityEngine.Transform qianmianjiance;
+    [Header("是否 撞墙探测")]
+    public bool IsHitQiangQainmian;
+    [Header("地面图层 包括机关")]
+    public LayerMask groundLayer;
+    public bool IsHitWall2
+    {
+        get
+        {
+            if (qianmianjiance == null) return false;
+            Vector2 start = qianmianjiance.position;
+            float __x = this.transform.localScale.x > 0 ? start.x - 2 : start.x + 2;
+            Vector2 end = new Vector2(__x, start.y);
+            Debug.DrawLine(start, end, Color.yellow);
+            IsHitQiangQainmian = Physics2D.Linecast(start, end, groundLayer);
+            return IsHitQiangQainmian;
+        }
+    }
+
+
+    float jishiNums = 0;
+    float Jishi = 5;
+    bool AIJishiReset()
+    {
+        if (!isStart) return false;
+        jishiNums += Time.deltaTime;
+        if (jishiNums>= Jishi)
+        {
+            jishiNums = 0;
+            GetOver();
+            return true;
+        }
+        return false;
+    }
+
     // Update is called once per frame
     void Update () {
 
 
-
-
+        //print("ZSyishanZSys 1");
+        if (!isStart) return;
         if (_roleDate.isDie||_roleDate.isBeHiting)
         {
             GetOver();
             return;
         }
-
+        //print("ZSyishanZSys 2");
+        if (AIJishiReset()) return;
+        //print("ZSyishanZSys 3");
         if (_isOutDistance)
         {
             //print("----------------> ?????????????/????  "+ GetComponent<Rigidbody2D>().velocity.x);
@@ -232,25 +279,25 @@ public class AIYiShan : MonoBehaviour ,ISkill {
                 GetOver();
             }
         }
+        //print("ZSyishanZSys 4");
 
-
-        if (!isStart) return;
-
+        
+        //print("ZSyishanZSys 5");
         if (!GetComponent<AIBase>().isActioning)
         {
             GetOver();
             return;
         }
-
+        //print("ZSyishanZSys 6");
 
         //print("  ?????? -------s x:    "+GetComponent<Rigidbody2D>().velocity.x);
-        
+
         if (_gameBody.isInAiring)
         {
             GetOver();
             return;
         }
-
+        //print("ZSyishanZSys 7");
         //被击中 或者 悬空 就结束
         if (_roleDate.isBeHiting|| _roleDate.isDie)
         {
@@ -259,18 +306,28 @@ public class AIYiShan : MonoBehaviour ,ISkill {
             if(_roleDate.isDie) GetComponent<Rigidbody2D>().velocity = new Vector2(speedX*0.1f, 0);
             return;
         }
-
-        if (_gameBody.IsHitWall)
+        //print("ZSyishanZSys 8");
+        if (_gameBody.IsHitWall|| IsHitWall2)
         {
             GetOver();
             return;
         }
-
+        //print("ZSyishanZSys 9");
         if (_isSpeedStart)
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, 0);
-            if (YanChen) YanChen.Play();
+            //print("ZSyishan   " + _gameBody.GetDB().animation.lastAnimationName+ " ------------  acName  "+ acName+"     是否在isAcing  "+_gameBody.isAcing);
+            if (_gameBody.GetDB().animation.lastAnimationName == acName)
+            {
+                GetComponent<Rigidbody2D>().velocity = new Vector2(speedX, 0);
+                if (YanChen) YanChen.Play();
+            }
+            else
+            {
+                GetOver();
+            }
+            
         }
+        //print("ZSys 10");
 
         if (isStart)
         {
@@ -296,7 +353,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
 
                 TempDis = dis;
                 //print("   -------->  x位上的 速度     speedX   " + speedX +"  sudu  "+ GetComponent<Rigidbody2D>().velocity.x);
-                print("---------------------------移动距离 " + dis+"    总距离    "+ SJDistance);
+                //print("---------------------------移动距离 " + dis+"    总距离    "+ SJDistance);
                 if (dis > SJDistance || _gameBody.IsHitWall)
                 {
                     //Time.timeScale = 0;
@@ -331,7 +388,7 @@ public class AIYiShan : MonoBehaviour ,ISkill {
     {
         if(DBBody.animation.lastAnimationName == acName && DBBody.animation.isCompleted) {
             //这里需要 停在最后一帧
-            print("   是否 停顿！！！！！！  动作完成------    "+acName+ "    isAcing   " + _gameBody.isAcing);
+            //print("ZSyishan   是否 停顿！！！！！！  动作完成------    "+acName+ "    isAcing   " + _gameBody.isAcing);
             DBBody.animation.Stop();
             return true;
         }

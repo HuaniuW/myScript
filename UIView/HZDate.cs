@@ -8,7 +8,7 @@ public class HZDate : MonoBehaviour {
     public string id = "";
     [Header("名字")]
     public string HZName;
-    [Header("徽章装配特效的名字")]
+    [Header("徽章装配特效的名字(用于徽章显示特效自动调用)")]
     public string HZZBTXName = "";
     [Header("出现特效的名字")]
     public string TXName;
@@ -56,7 +56,7 @@ public class HZDate : MonoBehaviour {
     [Header("是被动技能还是主动技能")]
     public string type = "bd";
 
-    [Header("主动技能 名字")]
+    [Header("有UI的技能 **名字(显示UI的名字)")]
     public string zd_skill_ui_Name = "";
     [Header("技能CD")]
     public int cd = 0;
@@ -94,7 +94,7 @@ public class HZDate : MonoBehaviour {
     public float ShanghaiJianmianBili = 0;
 
 
-    [Header(" >> 临时伤害减免比例")]
+    [Header(" >> 临时伤害减免比例（0-100）")]
     public float TempShanghaiJianmianBili = 0;
     [Header(" -- 临时伤害减免比例 持续时间")]
     public float tempJSTimes = 0;

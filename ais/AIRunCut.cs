@@ -23,13 +23,27 @@ public class AIRunCut : MonoBehaviour,ISkill{
 
 
     AIBase _aiBase;
+
+    RoleDate _roleDate;
 	// Use this for initialization
 	void Start () {
-		
-	}
+        _roleDate = GetComponent<RoleDate>();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        if(_roleDate.isBeHiting|| _roleDate.isDie)
+        {
+            print("   被攻击后 停止！！！！！！  ");
+            GetComponent<GameBody>().isAcing = false;
+            if (_aiBase) _aiBase.AIReSet();
+            AcOver();
+            //ReSetAll();
+            return;
+        }
+
+
         if (isAcing)
         {
             if (GetComponent<AIBase>().IsTuihuiFangshouquing) {
@@ -100,9 +114,10 @@ public class AIRunCut : MonoBehaviour,ISkill{
     public string Ac2Name = "";
     void GetAtk()
     {
+        print("  getAtk!!!   isAtking "+ isAtking);
         if (GetComponent<RoleDate>().isBeHiting)
         {
-            //print("------------------------------------------------->被击中打断！");
+            print("------------------------------------------------->被击中打断！");
             AcOver();
             return;
         }
@@ -125,6 +140,12 @@ public class AIRunCut : MonoBehaviour,ISkill{
             gameBody.GetAtk(AtkMsgName);
         }
 
+
+        if (isAtking&& gameBody.GetDB().animation.lastAnimationName!= AtkName)
+        {
+            AcOver();
+        }
+
         
     }
 
@@ -139,6 +160,8 @@ public class AIRunCut : MonoBehaviour,ISkill{
             isRunNear = false;
             GetComponent<RoleDate>().hfYZ(addYZNum);
             gameBody.RunACChange(oldRunName, oldRunSpeedX);
+            GetComponent<GameBody>().isAcing = false;
+           
         }
     }
 

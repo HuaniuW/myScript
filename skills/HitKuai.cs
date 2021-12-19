@@ -161,6 +161,287 @@ public class HitKuai : MonoBehaviour {
     }
 
 
+    List<GameObject> skill_list = new List<GameObject> { };
+
+    //被动弹开 用于被动技能 弹开 攻击者  花防 神佑
+    void BeiDongTankai()
+    {
+        // 弹开攻击者
+        ObjV3Zero(atkObj);
+
+        if (__tuiliFX > 0)
+        {
+            BeHitGameBody.GetComponent<GameBody>().TurnLeft();
+            //BeHitGameBody.transform.position = new Vector2(BeHitGameBody.transform.position.x-0.01f, BeHitGameBody.transform.position.y);
+            //BeHitGameBody.GetComponent<GameBody>().GetPlayerRigidbody2D().AddForce(new Vector2(-10, 0));
+        }
+        else
+        {
+            BeHitGameBody.GetComponent<GameBody>().TurnRight();
+        }
+
+        //弹开攻击者
+
+        // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
+        if (!atkObj || !atkObj.GetComponent<GameBody>())
+        {
+
+        }
+        else
+        {
+
+            print("hf -------------------》技能的 类型  " + jn_date._type + "    jienneg name " + jn_date.name);
+            print("hf  硬直是多少  atkyz   " + atkObj.GetComponent<RoleDate>().yingzhi + "    behitYZ  " + beHitObj.GetComponent<RoleDate>().yingzhi);
+            if (jn_date._type == "1" || jn_date._type == "2" || jn_date._type == "4")
+            {
+                print(" atkObj.name    " + atkObj.name);
+                //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
+                float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 + jn_date.FanTuili : -400 - jn_date.FanTuili;
+                float YinzhiCha = atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi;
+                if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) < 100)
+                {
+                    if (jn_date.chongjili != 0)
+                    {
+                        atkObj.GetComponent<GameBody>().HasBeHit(-10);
+                    }
+                    else
+                    {
+                        atkObj.GetComponent<GameBody>().HasBeHit();
+                    }
+                    atkObj.GetComponent<GameBody>().GetTuili(tuili, 1f, true);
+                }
+                else
+                {
+                    print(" hf 进来没  推力测试 在哪 ??  " + -tuili);
+                    if (YinzhiCha >= 300)
+                    {
+                        beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 5, 1f, true);
+                    }
+                    else
+                    {
+                        beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 2, 1f, true);
+                    }
+
+                }
+
+
+                atkObj.GetComponent<GameBody>().GetPause(2, 0.2f);
+                //_atkRigidbody2D.AddForce(new Vector2(-1000 * _roleScaleX, 0));
+                //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes();
+
+                //if (jn_date.FanTuili != 0) tuili -= jn_date.FanTuili;
+                //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> tuili  是多少： " + tuili);
+
+            }
+
+
+        }
+    }
+
+
+    //无视硬直弹开 攻击者
+    void AtkerBeiTankai()
+    {
+        // 弹开攻击者
+        ObjV3Zero(atkObj);
+
+        if (__tuiliFX > 0)
+        {
+            BeHitGameBody.GetComponent<GameBody>().TurnLeft();
+            //BeHitGameBody.transform.position = new Vector2(BeHitGameBody.transform.position.x-0.01f, BeHitGameBody.transform.position.y);
+            //BeHitGameBody.GetComponent<GameBody>().GetPlayerRigidbody2D().AddForce(new Vector2(-10, 0));
+        }
+        else
+        {
+            BeHitGameBody.GetComponent<GameBody>().TurnRight();
+        }
+
+        //弹开攻击者
+
+        // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
+        if (!atkObj || !atkObj.GetComponent<GameBody>())
+        {
+
+        }
+        else
+        {
+
+            print("hf -------------------》技能的 类型  " + jn_date._type + "    jienneg name " + jn_date.name);
+            print("hf  硬直是多少  atkyz   " + atkObj.GetComponent<RoleDate>().yingzhi + "    behitYZ  " + beHitObj.GetComponent<RoleDate>().yingzhi);
+            if (jn_date._type == "1" || jn_date._type == "2" || jn_date._type == "4")
+            {
+                print(" atkObj.name    " + atkObj.name);
+                //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
+                float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 + jn_date.FanTuili : -400 - jn_date.FanTuili;
+                float YinzhiCha = atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi;
+
+                if (YinzhiCha >= 300)
+                {
+                    beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 5, 1f, true);
+                }
+                else
+                {
+                    beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 2, 1f, true);
+                }
+
+
+                atkObj.GetComponent<GameBody>().GetPause(2, 0.2f);
+                //_atkRigidbody2D.AddForce(new Vector2(-1000 * _roleScaleX, 0));
+                //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes();
+
+                //if (jn_date.FanTuili != 0) tuili -= jn_date.FanTuili;
+                //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> tuili  是多少： " + tuili);
+
+            }
+
+
+        }
+    }
+
+
+
+    bool GetShenyou()
+    {
+        print("神佑！！！     +   "+ skill_list.Count);
+        if (BeHitGameBody.tag == "Player" && skill_list.Count != 0)
+        {
+            foreach (GameObject defSkill in skill_list)
+            {
+                //获取技能信息
+                //GameObject obj = Resources.Load(defSkill) as GameObject;
+
+                if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+                if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "shenyou")
+                {
+                    //是否有蓝
+                    if (BeHitGameBody.GetComponent<RoleDate>().lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) return false;
+                    //是否冷却  还是只能找 玩家装备的技能
+                    if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) return false;
+
+                    //防御几率
+                    float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
+                    //获取触发几率 
+                    float cfjv = GlobalTools.GetRandomDistanceNums(100);
+                    if (cfjv > jv) return false;
+                    //触发
+                    //加血
+                    //无伤害
+                    //判断 蓝够不够
+
+
+                    //伤害减免
+                    print("进入神佑技能！！！！");
+                    //计算 生命值 和伤害
+                    print(" 神佑 进来没？？？？？ ");
+                    BeHitRoleDate.live = BeHitRoleDate.maxLive * 0.5f;
+
+                    //BeiDongTankai();
+                    AtkerBeiTankai();
+
+                    // 减帧数
+                    GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.2f, 0.3f);
+                    BeHitGameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+
+    //花防
+    bool IsGetHuafang()
+    {
+        if (BeHitGameBody.tag == "Player" && skill_list.Count != 0)
+        {
+            foreach (GameObject defSkill in skill_list)
+            {
+                //获取技能信息
+                //GameObject obj = Resources.Load(defSkill) as GameObject;
+
+                if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+                if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "wushanghai")
+                {
+                    //是否有蓝
+                    if (BeHitGameBody.GetComponent<RoleDate>().lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) return false;
+                    //是否冷却  还是只能找 玩家装备的技能
+                    if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) return false;
+
+                    //防御几率
+                    float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
+                    //获取触发几率 
+                    float cfjv = GlobalTools.GetRandomDistanceNums(100);
+                    if (cfjv > jv) return false;
+
+                    beHitObj.GetComponent<GameBody>().ResetAll();
+                    BeHitGameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
+
+
+                    //print(" 无伤害 播放 被动防御 特效！！！1 ");
+                    BeiDongTankai();
+
+                    // 减帧数
+                    GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.2f, 0.3f);
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+
+
+    //伤害减免 护盾
+    void ShanghaiJianmianHD()
+    {
+        foreach (GameObject defSkill in skill_list)
+        {
+            //获取技能信息
+            //GameObject obj = Resources.Load(defSkill) as GameObject;
+
+            if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+           
+
+
+            if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "shanghaijianmianDun")
+            {
+
+                //是否有蓝
+                if (BeHitGameBody.GetComponent<RoleDate>().lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) return;
+                //是否冷却  还是只能找 玩家装备的技能
+                if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) return;
+
+                //防御几率
+                float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
+                //获取触发几率 
+                float cfjv = GlobalTools.GetRandomDistanceNums(100);
+                if (cfjv > jv) return;
+                //触发
+                //加血
+                //无伤害
+                //判断 蓝够不够
+
+
+
+                AtkerBeiTankai();
+
+                //伤害减免
+                print("触发伤害 减免 盾**** 的 防御型 技能");
+                //专用？ 给一个 判定参数  显示 特效 被攻击 显示 减免特效？
+                //关掉原来的 盾圈特效 低亮
+                //出一个 盾圈特效 高亮 3秒后结束
+                BeHitGameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
+                return;
+            }
+
+        }
+    }
+
+
+
+
     public void LiziHit(GameObject o)
     {
         GetHit(o.GetComponent<Collider2D>());
@@ -169,6 +450,8 @@ public class HitKuai : MonoBehaviour {
 
     [Header("是否两边推力 被攻击这在身后 方向就是身后")]
     public bool IsLiangbianTuiLi = false;
+
+    int __tuiliFX = 1;
 
     void GetHit(Collider2D Coll)
     {
@@ -218,7 +501,7 @@ public class HitKuai : MonoBehaviour {
 
 
         //推力方向 默认是 左推
-        int __tuiliFX = -1;
+        __tuiliFX = -1;
         if (atkObj && beHitObj)
         {
             __tuiliFX = atkObj.transform.position.x > beHitObj.transform.position.x ? -1 : 1;
@@ -322,122 +605,14 @@ public class HitKuai : MonoBehaviour {
                 //print("持续 ---------------- 3 ");
                 //List<string> passive_def_skill = gameBody.GetComponent<RoleDate>().passive_def_skill;
                 //---------------------------------------被击中 启动被动防御技能
-                List<GameObject> skill_list = _playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().GetHZList();  //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().HZList;
+                skill_list = _playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().GetHZList();  //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().HZList;
                 if (BeHitGameBody.tag == "Player" && skill_list.Count != 0)
                 {
-                    foreach (GameObject defSkill in skill_list)
-                    {
-                        //获取技能信息
-                        //GameObject obj = Resources.Load(defSkill) as GameObject;
+                    if (IsGetHuafang()) return;
 
-                        if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
-                        //是否有蓝
-                        if (BeHitGameBody.GetComponent<RoleDate>().lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) continue;
-                        //是否冷却  还是只能找 玩家装备的技能
-                        if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) continue;
 
-                        //防御几率
-                        float jv = defSkill.GetComponent<UI_Skill>().GetHZDate().Chance_of_Passive_Skills;
-                        //获取触发几率 
-                        float cfjv = GlobalTools.GetRandomDistanceNums(100);
-                        if (cfjv > jv) continue;
-                        //触发
-                        //加血
-                        //无伤害
-                        //判断 蓝够不够
 
-                        if (defSkill.GetComponent<UI_Skill>().GetHZDate().def_effect == "wushanghai")
-                        {
-                            //defSkill.GetComponent<UI_Skill>().isCanBeUseSkill();
-                            //defSkill.GetComponent<UI_Skill>().Play_Def_Skill_Effect();
-                            beHitObj.GetComponent<GameBody>().ResetAll();
-                            BeHitGameBody.GetComponent<GameBody>().ShowPassiveSkill(defSkill);
-                            
-
-                            //print(" 无伤害 播放 被动防御 特效！！！1 ");
-                            // 弹开攻击者
-                            ObjV3Zero(atkObj);
-
-                            if (__tuiliFX > 0)
-                            {
-                                BeHitGameBody.GetComponent<GameBody>().TurnLeft();
-                                //BeHitGameBody.transform.position = new Vector2(BeHitGameBody.transform.position.x-0.01f, BeHitGameBody.transform.position.y);
-                                //BeHitGameBody.GetComponent<GameBody>().GetPlayerRigidbody2D().AddForce(new Vector2(-10, 0));
-                            }
-                            else
-                            {
-                                BeHitGameBody.GetComponent<GameBody>().TurnRight();
-                            }
-
-                            //弹开攻击者
-                            
-                            // 进入 BeHit里面 判断 角色的 硬直 来判断 是否进入
-                            if (!atkObj || !atkObj.GetComponent<GameBody>())
-                            {
-
-                            }
-                            else
-                            {
-
-                                print("hf -------------------》技能的 类型  "+jn_date._type+"    jienneg name "+jn_date.name);
-                                print("hf  硬直是多少  atkyz   "+ atkObj.GetComponent<RoleDate>().yingzhi+"    behitYZ  "+ beHitObj.GetComponent<RoleDate>().yingzhi);
-                                if (jn_date._type == "1"|| jn_date._type == "2" || jn_date._type == "4")
-                                {
-                                    print(" atkObj.name    " + atkObj.name);
-                                    //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
-                                    float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 + jn_date.FanTuili : -400 - jn_date.FanTuili;
-                                    float YinzhiCha = atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi;
-                                    if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) < 100)
-                                    {
-                                        if (jn_date.chongjili != 0)
-                                        {
-                                            atkObj.GetComponent<GameBody>().HasBeHit(-10);
-                                        }
-                                        else
-                                        {
-                                            atkObj.GetComponent<GameBody>().HasBeHit();
-                                        }
-                                        atkObj.GetComponent<GameBody>().GetTuili(tuili, 1f, true);
-                                    }
-                                    else
-                                    {
-                                        print(" hf 进来没  推力测试 在哪 ??  "+ -tuili);
-                                        if (YinzhiCha >= 300)
-                                        {
-                                            beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 5, 1f, true);
-                                        }
-                                        else
-                                        {
-                                            beHitObj.GetComponent<GameBody>().GetTuili(-tuili * 2, 1f, true);
-                                        }
-                                        
-                                    }
-
-                                 
-                                    atkObj.GetComponent<GameBody>().GetPause(2, 0.2f);
-                                    //_atkRigidbody2D.AddForce(new Vector2(-1000 * _roleScaleX, 0));
-                                    //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes();
-                                   
-                                    //if (jn_date.FanTuili != 0) tuili -= jn_date.FanTuili;
-                                    //print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> tuili  是多少： " + tuili);
-                                    
-                                }
-                              
-
-                            }
-
-                            // 减帧数
-                            GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetSlowByTimes(0.2f,0.3f);
-                            return;
-                        }
-
-                        //无被攻击动作
-                        //反震 这个是另外的 特效攻击
-                        //是否触发
-
-                        //触发效果
-                        //触发后 特效显示 
-                    }
+                    ShanghaiJianmianHD();
 
                 }
 
@@ -865,7 +1040,7 @@ public class HitKuai : MonoBehaviour {
         //print(" isCanBeHit>2:  "+ BeHitRoleDate.isCanBeHit);
         if (!BeHitRoleDate.isCanBeHit) return;
         float addxue = jn_date.atkPower - BeHitRoleDate.def;
-        if (atkObj && atkObj.GetComponent<RoleDate>())
+        if (atkObj && atkObj.GetComponent<RoleDate>()&& jn_date.HitInSpecialEffectsType != 5)
         {
             float _atkPower = atkObj.GetComponent<RoleDate>().atk + jn_date.atkPower;
             //print("  攻击力： "+_atkPower+"  被攻击者防御力  "+ BeHitRoleDate.def);
@@ -875,11 +1050,29 @@ public class HitKuai : MonoBehaviour {
             } 
             addxue = _atkPower - BeHitRoleDate.def;
         }
+        
         addxue = addxue > 0 ? addxue : 1;
+        //if (jn_date.HitInSpecialEffectsType == 5) addxue = 50;
         //计算伤害减免比率
         if (BeHitRoleDate.shanghaijianmianLv != 0) addxue *= (100 - BeHitRoleDate.shanghaijianmianLv)*0.01f;
-        BeHitRoleDate.live -= addxue;
-        if (BeHitRoleDate.live < 0) BeHitRoleDate.live = 0;
+        if (BeHitRoleDate.live - addxue<0)
+        {
+            if (!GetShenyou())
+            {
+                BeHitRoleDate.live -= addxue;
+            }
+        }
+        else
+        {
+            BeHitRoleDate.live -= addxue;
+           
+        }
+
+        if (BeHitRoleDate.live < 0)
+        {
+            BeHitRoleDate.live = 0;
+        }
+
 
         if (BeHitGameBody&& BeHitGameBody.tag != "Player"&& BeHitRoleDate.live != 0)
         {
@@ -889,6 +1082,14 @@ public class HitKuai : MonoBehaviour {
 
         //击退 判断方向
         float _psScaleX = sx;
+
+
+
+        if (BeHitGameBody.GetComponent<GameBody>().IsJianmianDun)
+        {
+            GameObject TX_jianmian = GlobalTools.GetGameObjectInObjPoolByName("BeHit_Jianmian");
+            HitTXPos(TX_jianmian);
+        }
 
 
         string tx_1 = "";

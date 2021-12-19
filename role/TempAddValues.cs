@@ -24,6 +24,10 @@ public class TempAddValues : MonoBehaviour
     float TempYZJiShi = 0;
     public virtual void TempAddYZ(float AddYZNum, float TempTime = 1)
     {
+        if (TempTime< TempYZTimes)
+        {
+            return;
+        }
         if (IsAddTempYZ)
         {
             HYYZ();
@@ -140,9 +144,14 @@ public class TempAddValues : MonoBehaviour
 
     public void TempJianShangBL(float bl,float JSCXTimes)
     {
-
+        if (JSCXTimes < _JSCXTimes)
+        {
+            //如果有新的 调用 对比时间  小于 原来的时间就直接返回
+            return;
+        }
         if (IsTempJianShangbili)
         {
+            //如果有新调用 先重置原来的 调用
             TempJSReSet();
         }
 
@@ -163,6 +172,7 @@ public class TempAddValues : MonoBehaviour
             if(_TempJSJSQ> _JSCXTimes)
             {
                 TempJSReSet();
+                if (GetComponent<GameBody>() && GetComponent<GameBody>().IsJianmianDun) GetComponent<GameBody>().IsJianmianDun = false;
             }
         }
     }

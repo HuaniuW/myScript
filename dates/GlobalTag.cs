@@ -22,4 +22,9 @@ public class GlobalTag : MonoBehaviour
     public static string DIAN = "Dian";
     public static string HUAFANG = "huafang";
     public static string WATER = "Water";
+    //减免盾
+    public static string JIANMIANDUN = "jianmiandun";
+    //神佑
+    public static string SHENYOU = "shenyou";
+    public static string ZIDANDUAN = "zidanDun";
 }

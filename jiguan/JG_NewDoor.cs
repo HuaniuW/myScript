@@ -35,6 +35,7 @@ public class JG_NewDoor : MonoBehaviour
     GameObject _MainCamera;
     private void ZDDTScreenGuaiCheck()
     {
+        if (BossOrJY!=null) return;
         //throw new NotImplementedException();
         if (!_MainCamera) _MainCamera = GlobalTools.FindObjByName("MainCamera");
         if (_MainCamera.GetComponent<ScreenDoorGuaiControl>().TheMaxGuaiNums == -1) return;
@@ -258,7 +259,7 @@ public class JG_NewDoor : MonoBehaviour
 
         for (int i = GuaiList.Count - 1; i >= 0; i--)
         {
-            print("  检查 是否 有怪 么怪就 不能关门  "+GuaiList[i]+"    ---  "+ GuaiList[i].activeSelf);
+            if(GuaiList[i]!=null) print("  检查 是否 有怪 么怪就 不能关门  "+GuaiList[i]+"    ---  "+ GuaiList[i].activeSelf);
             if (GuaiList[i] == null||GuaiList[i].activeSelf == false)
             {
                 GuaiList.RemoveAt(i);

@@ -40,11 +40,12 @@ public class JN_buff : MonoBehaviour
         IsDuration = false;
     }
 
-
+    GameObject Player;
 
     protected virtual void GetStart()
     {
         IsDuration = true;
+        if (!Player) Player = GlobalTools.FindObjByName("player");
         if (buffAudio) buffAudio.Play();
     }
 
@@ -74,5 +75,6 @@ public class JN_buff : MonoBehaviour
     void Update()
     {
         InDuration();
+        if(Player)this.transform.position = Player.transform.position;
     }
 }

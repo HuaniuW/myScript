@@ -294,7 +294,7 @@ public class PlayerRoleDate : RoleDate
         string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
         string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
         string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
-
+        string _shanghaijianmianlv= Globals.language == Globals.CHINESE ? "<color=#E74C3C>伤害减免率：+" + this.shanghaijianmianLv + "</color>\n" : "<color=#E74C3C>shjmlv：+" + this.shanghaijianmianLv + "</color>\n";
         string _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒几率：+" + this.KangDuJilv + "</color>\n" : "<color=#E74C3C>kangdu：+" + this.KangDuJilv + "</color>\n";
         string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>毒伤害抵抗率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
 
@@ -305,7 +305,7 @@ public class PlayerRoleDate : RoleDate
         string _kangdianmabijilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗电麻痹几率：+" + this.KangDianMabiJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangDianMabiJilv + "</color>\n";
 
         
-        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _kangdujilv+ _kangduShanghaiJilv+ _kanghuojilv+ _kanghuoshanghaijilv+ _kangdianjilv+ _kangdianmabijilv;
+        str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _shanghaijianmianlv + _kangdujilv+ _kangduShanghaiJilv+ _kanghuojilv+ _kanghuoshanghaijilv+ _kangdianjilv+ _kangdianmabijilv;
         return str;
     }
 

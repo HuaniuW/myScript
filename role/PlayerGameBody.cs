@@ -245,7 +245,12 @@ public class PlayerGameBody : GameBody {
     }
 
 
+    [Header("神佑* 粒子特效")]
+    public ParticleSystem TX_shenyou_x;
 
+
+    [Header("伤害减免盾 粒子特效")]
+    public ParticleSystem TX_jianmianDun_x;
 
 
     [Header("花防 粒子特效")]
@@ -264,12 +269,14 @@ public class PlayerGameBody : GameBody {
 
     public void StopAllHZInTX()
     {
+        if (TX_shenyou_x) TX_shenyou_x.Stop();
         if (TX_huafang_x) TX_huafang_x.Stop();
         if (TX_Huoren_x) TX_Huoren_x.Stop();
         if (TX_diandao_x) TX_diandao_x.Stop();
         if (TX_dudao_x) TX_dudao_x.Stop();
         if (TX_diandun_x) TX_diandun_x.Stop();
         if (TX_longdun_x) TX_longdun_x.Stop();
+        if(TX_jianmianDun_x) TX_jianmianDun_x.Stop();
     }
 
 
@@ -1160,6 +1167,8 @@ public class PlayerGameBody : GameBody {
         }
     }
 
+    [Header("大减免盾特效 进入 发动减免技能时候 显示")]
+    public ParticleSystem TX_JianmianDunDa;
 
     public override void ShowPassiveSkill(GameObject hzObj)
     {
@@ -1178,6 +1187,23 @@ public class PlayerGameBody : GameBody {
         if (bdjn.HZZBTXName == GlobalTag.HUAFANG)
         {
             IsHuaFang = true;
+        }
+        else if (bdjn.HZZBTXName == GlobalTag.JIANMIANDUN)
+        {
+            IsJianmianDun = true;
+            GetComponent<TempAddValues>().TempAddYZ(bdjn.TempAddYingZhi, bdjn.TempAddYingZhiTimes);
+            GetComponent<TempAddValues>().TempJianShangBL(bdjn.TempShanghaiJianmianBili, bdjn.tempJSTimes);
+            //显示 高亮 大圈圈 特效
+            TX_JianmianDunDa.Play();
+            return;
+        }
+        else if (bdjn.HZZBTXName == GlobalTag.SHENYOU)
+        {
+            print("  进入 神佑特效 ");
+            GetComponent<TempAddValues>().TempAddYZ(bdjn.TempAddYingZhi, bdjn.TempAddYingZhiTimes);
+            GetComponent<TempAddValues>().TempJianShangBL(bdjn.TempShanghaiJianmianBili, bdjn.tempJSTimes);
+            ShowShenyou();
+            return;
         }
 
 

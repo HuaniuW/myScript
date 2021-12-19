@@ -28,16 +28,42 @@ public class JN_Diu : MonoBehaviour
         IsHasBaozha = false;
     }
 
+    [Header("***********敌我类型 分类")]
+    public int IntType = 1;
+
     //碰撞 地面 敌人
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //print("   碰撞》》》》》》》》 "+Coll.tag);
-        if (!IsHasBaozha && (Coll.tag == "diban"|| Coll.tag == "diren"|| Coll.tag == "boss")) {
-            IsHasBaozha = true;
-            print("  发生碰撞 "+Coll.tag);
-            Baozha();
-            Removeself();
+        if (IntType == 1)
+        {
+            if (!IsHasBaozha && (Coll.tag == "diban" || Coll.tag == "diren" || Coll.tag == "boss"))
+            {
+                IsHasBaozha = true;
+                print("  发生碰撞 " + Coll.tag);
+                Baozha();
+                Removeself();
+            }
         }
+        else if(IntType == 2)
+        {
+            if(!IsHasBaozha && Coll.tag == GlobalTag.ZIDANDUAN)
+            {
+                Vector2 v2 = this.GetComponent<Rigidbody2D>().velocity;
+                this.GetComponent<Rigidbody2D>().velocity = new Vector2(-v2.x, v2.y);
+                return;
+            }
+
+
+            if (!IsHasBaozha && (Coll.tag == "diban" || Coll.tag == GlobalTag.Player))
+            {
+                IsHasBaozha = true;
+                print("  发生碰撞 " + Coll.tag);
+                Baozha();
+                Removeself();
+            }
+        }
+       
 
     }
 
@@ -59,8 +85,8 @@ public class JN_Diu : MonoBehaviour
         }
     }
 
-
-    string BaozhaName = "TX_zidan11_bz";
+    [Header("丢出去爆炸物的 名字")]
+    public string BaozhaName = "TX_zidan11_bz";
     //生成 爆炸特效
     protected void Baozha()
     {

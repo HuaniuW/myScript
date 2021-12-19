@@ -438,7 +438,7 @@ public class GameBody : MonoBehaviour, IRole {
         return false;
     }
 
-
+    public bool IsJianmianDun = false;
 
     protected bool IsHuaFang = false;
     //被动技能
@@ -457,6 +457,19 @@ public class GameBody : MonoBehaviour, IRole {
         if (bdjn.HZZBTXName == GlobalTag.HUAFANG)
         {
             IsHuaFang = true;
+        }else if (bdjn.HZZBTXName == GlobalTag.JIANMIANDUN)
+        {
+            IsJianmianDun = true;
+            GetComponent<TempAddValues>().TempAddYZ(bdjn.TempAddYingZhi,bdjn.TempAddYingZhiTimes);
+            GetComponent<TempAddValues>().TempJianShangBL(bdjn.TempShanghaiJianmianBili,bdjn.tempJSTimes);
+            return;
+        }else if (bdjn.HZZBTXName == GlobalTag.SHENYOU)
+        {
+            print("  进入 神佑特效 ");
+            GetComponent<TempAddValues>().TempAddYZ(bdjn.TempAddYingZhi, bdjn.TempAddYingZhiTimes);
+            GetComponent<TempAddValues>().TempJianShangBL(bdjn.TempShanghaiJianmianBili, bdjn.tempJSTimes);
+            ShowShenyou();
+            return;
         }
 
 
@@ -583,6 +596,12 @@ public class GameBody : MonoBehaviour, IRole {
                     {
                         GetAcMsg(jn.skillACName);
                     }
+
+
+                    if (jn.HZZBTXName == "yueguang")
+                    {
+                        if(TX_YueguangQS) TX_YueguangQS.Play();
+                    }
                     
                     print("-----------------------------------------------------技能释放动作    "+jn.skillACName);
 
@@ -606,7 +625,7 @@ public class GameBody : MonoBehaviour, IRole {
                         //TX_zidanduan = Instantiate(TX_zidanduan);
                         print(TX_zidanduan.transform.position + "   玩家位置  "+ this.gameObject.transform.position);
                         TX_zidanduan.transform.position = this.gameObject.transform.position;
-                        TX_zidanduan.transform.parent = this.gameObject.transform;
+                        
                         //print("特效name    "+ TX_zidanduan.name+"   weizhi  " + TX_zidanduan.transform.position);
                         //TX_zidanduan.transform.position = Vector3.zero;
                         //print("特效位置222222    " + TX_zidanduan.transform.position);
@@ -615,6 +634,7 @@ public class GameBody : MonoBehaviour, IRole {
                         if (jn.TXName == "TX_shengmingye")
                         {
                             roleDate.live += 400;
+                            TX_zidanduan.transform.parent = this.gameObject.transform;
                         }
                     }
                     else
@@ -678,6 +698,9 @@ public class GameBody : MonoBehaviour, IRole {
             testSpeed = 30;
             DBBody.animation.timeScale = 1;
             Time.timeScale = 1;
+            //IsHuaFang = false;
+            //ControlSpeed(60);
+            //_theTimer.GetFull();
         }
         else
         {
@@ -2609,6 +2632,11 @@ public class GameBody : MonoBehaviour, IRole {
                 playerRigidbody2D.velocity = newSpeed;
                 MoveVY(vOAtk.yF);
             }
+
+            if (vOAtk.yF > 10)
+            {
+                MoveVY(vOAtk.yF);
+            }
             //print(newSpeed.y);
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
@@ -2650,7 +2678,8 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected bool isSkillOut = false;
 
-   
+    [Header("月光起手 特效")]
+    public ParticleSystem TX_YueguangQS;
 
     //显示动作特效 龙骨的侦听事件
     protected virtual void ShowACTX(string type, EventObject eventObject)
@@ -2807,6 +2836,8 @@ public class GameBody : MonoBehaviour, IRole {
                             if (isInAiring)
                             {
                                 ___fy = -9;
+                                float fy = GetPlayerRigidbody2D().velocity.y + 8;
+                                GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x, fy);
                             }
                             else
                             {
@@ -2815,6 +2846,48 @@ public class GameBody : MonoBehaviour, IRole {
                             duzhadan1.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx, ___fy);
                             duzhadan2.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx*5f, ___fy-1);
                             duzhadan3.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx*9f, ___fy-2);
+
+                        }
+                        else if (jn.HZZBTXName == "dihuo")
+                        {
+                            //地火
+                            GameObject duzhadan1 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan1.name = jn.TXName;
+                            GameObject duzhadan2 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan2.name = jn.TXName;
+                            GameObject duzhadan3 = GlobalTools.GetGameObjectInObjPoolByName(jn.TXName);
+                            duzhadan3.name = jn.TXName;
+                            float __x = this.transform.localScale.x > 0 ? JinengShifangDian1.position.x - 0.5f : JinengShifangDian1.position.x + 0.5f;
+                            float __y = JinengShifangDian1.position.y - 0.4f;
+                            duzhadan1.transform.position = new Vector2(__x, __y);
+                            duzhadan1.transform.parent = this.transform.parent;
+                            duzhadan2.transform.position = new Vector2(__x, __y);
+                            duzhadan2.transform.parent = this.transform.parent;
+                            duzhadan3.transform.position = new Vector2(__x, __y);
+                            duzhadan3.transform.parent = this.transform.parent;
+
+                            duzhadan1.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            duzhadan2.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+                            duzhadan3.GetComponent<JN_Diu>().GetAtkObj(this.gameObject);
+
+                            float ___fx = this.transform.localScale.x > 0 ? -2 : 2;
+                            float ___fy = 0;
+
+
+
+                            if (isInAiring)
+                            {
+                                ___fy = -10;
+                                float fy = GetPlayerRigidbody2D().velocity.y + 8;
+                                GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x,fy);
+                            }
+                            else
+                            {
+                                ___fy = 18;
+                            }
+                            duzhadan1.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx*-2f, ___fy);
+                            duzhadan2.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx * 1f, ___fy + 2);
+                            duzhadan3.GetComponent<Rigidbody2D>().velocity = new Vector2(___fx * 5f, ___fy + 4);
 
                         }
                         else
@@ -2893,6 +2966,14 @@ public class GameBody : MonoBehaviour, IRole {
     protected int kuaisujishu = 0;
     protected int kuaisujishuNums = 0;
     protected bool IsKuaisuAtkReset = false;
+    [Header("神佑特效")]
+    public ParticleSystem TX_Shenyou;
+    public void ShowShenyou()
+    {
+        print("神佑  tx！！");
+        if (TX_Shenyou) TX_Shenyou.Play();
+    }
+
     public void IsAtkKuaijiReSet()
     {
         kuaisujishuNums = 0;

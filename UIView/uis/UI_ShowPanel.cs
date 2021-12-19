@@ -41,7 +41,7 @@ public class UI_ShowPanel : MonoBehaviour {
         //print("zs HZList "+ HZList.Count);
         foreach (GameObject o in HZList)
         {
-            print("zs--------   "+o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName);
+            //print("zs--------   "+o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName);
             if (o.GetComponent<UI_Skill>().GetHZDate().HZZBTXName == "Huoren") return o.GetComponent<UI_Skill>().GetHZDate();
         }
         return null;

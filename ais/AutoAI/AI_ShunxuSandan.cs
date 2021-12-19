@@ -17,6 +17,10 @@ public class AI_ShunxuSandan :AI_SkillBase
 
     }
 
+    [Header("子弹发射 声音")]
+    public AudioSource Audio_ZidanFashe;
+
+
 
     protected override void GetTheStart()
     {
@@ -77,7 +81,7 @@ public class AI_ShunxuSandan :AI_SkillBase
             ReSetAll();
             TheSkillOver();
         }
-        print("  ----------------------------chuxu!!!!! ");
+        //print("  ----------------------------chixu!!!!! ");
         if(TempMaxZidanNums == 0)
         {
             ReSetAll();
@@ -116,6 +120,13 @@ public class AI_ShunxuSandan :AI_SkillBase
 
 
         zidan = GetZiDan();
+
+        if (Audio_ZidanFashe)
+        {
+            print(" -------------------------------------------  子弹发射 声音 ");
+            Audio_ZidanFashe.Play();
+        }
+
         _hudu = hudu * ( qishiNums+1-nums) * 3.14f / 180;
         Vector2 v2 = GlobalTools.GetNewV2ByHuDu(_hudu, v1);
         zidan.GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByV2(v2, 10);
@@ -154,6 +165,8 @@ public class AI_ShunxuSandan :AI_SkillBase
         zidan.GetComponent<TX_zidan>().CloseAutoFire();
         zidan.transform.localScale = this.transform.localScale;
         zidan.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+       
+        
         return zidan;
     }
 

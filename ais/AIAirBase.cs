@@ -1116,7 +1116,7 @@ public class AIAirBase : AIBase
 
 
 
-    public void QuXiaoAC()
+    public override void QuXiaoAC()
     {
         //这里还要 清除掉 招式里面的 resetAll
         //print("直接取消！！！！！！");

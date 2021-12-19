@@ -141,10 +141,11 @@ public class AIBase : MonoBehaviour {
     [Header("被卡住的时候 的 推力")]
     public float BeiKazhuTuili = 300;
 
-
+    public bool AIBaseJump = true;
     protected float Kazhujishi = 0;
     protected bool IsBeiKazhu()
     {
+        if (!AIBaseJump) return false;
         if(gameBody.GetPlayerRigidbody2D().velocity == Vector2.zero&&gameBody.GetDB().animation.lastAnimationName == "jumpDown_1")
         {
             if (!gameBody.IsGround)
@@ -1151,8 +1152,23 @@ public class AIBase : MonoBehaviour {
        
 
         //IsGetAtkFSByName = true;
+        //isAction = true;
+        //acName = atkFSName;
+        //string[] strArr = atkFSName.Split('_');
+        //if (strArr.Length >= 2)
+        //{
+        //    acName = strArr[0];
+        //    if (acName == "AIZiDans")
+        //    {
+        //        GetComponent<AI_ZiDans>().SetZiDanType(int.Parse(strArr[1]));
+        //    }
+        //}
+
+
+        QuXiaoAC();
         isAction = true;
         acName = atkFSName;
+        print("********************************************************** acName  " + acName);
         string[] strArr = atkFSName.Split('_');
         if (strArr.Length >= 2)
         {
@@ -1161,6 +1177,16 @@ public class AIBase : MonoBehaviour {
             {
                 GetComponent<AI_ZiDans>().SetZiDanType(int.Parse(strArr[1]));
             }
+            else if (acName == "atk")
+            {
+                print("  普通攻击！！！ " + acName);
+                atkDistance = GetAtkVOByName(atkFSName.Split('|')[0], DataZS.GetInstance()).atkDistance;
+                atkDistanceY = GetAtkVOByName(atkFSName.Split('|')[0], DataZS.GetInstance()).atkDistanceY;
+            }
+        }
+        else
+        {
+            //isActioning = true;
         }
 
         //isActioning = true;
@@ -1196,9 +1222,10 @@ public class AIBase : MonoBehaviour {
         //print(6);
         if (IsIfStopMoreTime())return;
         //print(7);
-
+        //print("当前招式 是什么 isAction  " + isAction+ "   >>>isActioning:   " + isActioning+ "    acName     "+ acName);
         if (IsInDuBai()) return;
         if (IsInZDAcing) return;
+        //print("8");
         if (!isAction){
 			isAction = true;
 			acName = GetZS();
@@ -1232,6 +1259,13 @@ public class AIBase : MonoBehaviour {
 
                 return;
             }
+
+
+
+            //if (strArr.Length > 1 && strArr[0] != "atk")
+            //{
+            //    acName = strArr[0];
+            //}
 
 
 
@@ -2035,6 +2069,39 @@ public class AIBase : MonoBehaviour {
                 print("远离 回血 over！！！！！！！");
             }
         }
+    }
+
+
+    public virtual void QuXiaoAC()
+    {
+        //这里还要 清除掉 招式里面的 resetAll
+        //print("直接取消！！！！！！");
+
+        isAction = false;
+        isActioning = false;
+        //acName = "";
+        if (GetComponent<JN_YueGuanZhan>()) GetComponent<JN_YueGuanZhan>().ReSetAll();
+        if (GetComponent<AIYiShan>()) GetComponent<AIYiShan>().ReSetAll();
+        if (GetComponent<JN_LuanRen2>()) GetComponent<JN_LuanRen2>().ReSetAll();
+        if (GetComponent<AIYuanLiHuiXue>()) GetComponent<AIYuanLiHuiXue>().ReSetAll();
+        //重甲精英斧头 用的
+        if (GetComponent<JN_JumpCut>()) GetComponent<JN_JumpCut>().ReSetAll();
+        if (GetComponent<AIRunCut>()) GetComponent<AIRunCut>().ReSetAll();
+
+
+
+
+        if (GetComponent<AIZongYa>()) GetComponent<AIZongYa>().ReSetAll();
+        if (GetComponent<AIHengXiangChongZhuang>()) GetComponent<AIHengXiangChongZhuang>().ReSetAll();
+        if (GetComponent<AIChongJiHX>()) GetComponent<AIChongJiHX>().ReSetAll();
+        if (GetComponent<AIYinshen>()) GetComponent<AIYinshen>().ReSetAll();
+        if (GetComponent<JN_3Dianqiu>()) GetComponent<JN_3Dianqiu>().ReSetAll();
+        if (GetComponent<AIFlyPenghuo>()) GetComponent<AIFlyPenghuo>().ReSetAll();
+        if (GetComponent<AI_ZidanDingxiang>()) GetComponent<AI_ZidanDingxiang>().ReSetAll();
+        if (GetComponent<AI_ZiDans>()) GetComponent<AI_ZiDans>().ReSetAll();
+
+        if (GetComponent<AI_HXChongji2>()) GetComponent<AI_HXChongji2>().ReSetAll();
+        if (GetComponent<AI_GDPotZhongya>()) GetComponent<AI_GDPotZhongya>().ReSetAll();
     }
 
 }

@@ -45,6 +45,11 @@ public class CameraKuaiZ : MonoBehaviour {
     GameObject _player;
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (Globals.IsInCameraKuai) {
+            //说明之前有碰撞到 碰撞快
+            return;
+        }
+        
         if (!cm) return;
         if (Coll.tag == "Player")
         {
@@ -67,7 +72,7 @@ public class CameraKuaiZ : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D Coll)
     {
-
+        if (Globals.IsInCameraKuai) return;
         if (Coll.tag == "Player")
         {
             //print("out");
@@ -84,33 +89,26 @@ public class CameraKuaiZ : MonoBehaviour {
     //这里不打开 如果是 CameraKuai 拼接 角色从一个快进入另一个 会丢失导致 Z 还原
     //[Header("是否 持续运作 控制摄像机z")]
     //public bool IsHitStayDo = false;
-    void OnTriggerStay2D(Collider2D Coll)
-    {
-        //print(Coll.tag);
-        if (Globals.IsInCameraKuai) return;
-        
-
-        if (Coll.tag == "Player")
-        {
-            Globals.IsInCameraKuai = true;
-            _player = Coll.gameObject;
-            IsOutKuai = true;
-            cameraPosition = GameObject.Find("/MainCamera").transform.position;
-            if (IsSetY)
-            {
-                cm.GetHitCameraKuaiY(cameraY.transform.position.y);
-            }
-
-            cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + DistanceY, cameraZ));
-        }
+    //void OnTriggerStay2D(Collider2D Coll)
+    //{
+    //    if (Globals.IsInCameraKuai) return;
 
 
-        //if (IsHitStayDo)
-        //{
-           
-        //}
+    //    if (Coll.tag == "Player")
+    //    {
+    //        Globals.IsInCameraKuai = true;
+    //        _player = Coll.gameObject;
+    //        IsOutKuai = true;
+    //        cameraPosition = GameObject.Find("/MainCamera").transform.position;
+    //        if (IsSetY)
+    //        {
+    //            cm.GetHitCameraKuaiY(cameraY.transform.position.y);
+    //        }
+
+    //        cm.SetNewPosition(new Vector3(cm.transform.position.x, Coll.transform.position.y + DistanceY, cameraZ));
+    //    }
 
 
-        //print("Trigger - C");
-    }
+    //    //print("Trigger - C");
+    //}
 }

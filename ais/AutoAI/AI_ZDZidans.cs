@@ -92,7 +92,7 @@ public class AI_ZDZidans : AI_SkillBase
             print("   liandan sheji!!!!!!!!!!!! " );
             LiandanJishi = 0;
             LiandanJishu++;
-            Fire(); 
+            Fire();
         }
     }
 
@@ -121,7 +121,7 @@ public class AI_ZDZidans : AI_SkillBase
         //print(">>fashezidan!!  发射 什么 子弹 都这里控制");
         if (FireAudio)
         {
-            //print("  -------------------------------------------------- 子弹发射声音  ");
+            print("  -------------------------------------------------- 子弹发射声音  ");
             FireAudio.Play();
         }
 

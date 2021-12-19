@@ -187,13 +187,14 @@ public class TX_Dianqiang : MonoBehaviour
 
             this.transform.position = new Vector2(this.transform.position.x + MoveSpeed, this.transform.position.y);
         }
-        
-        //print("ysX "+_thisX+"  ----   "+   this.transform.position.x+ "    --  MoveSpeed  " + MoveSpeed);
+
+        print("ysX " + _thisX + "  ----   " + this.transform.position.x + "    --  MoveSpeed  " + MoveSpeed);
     }
 
     //设置 速度方向
     public void SetSpeedFX(float _fx)
     {
+        MoveSpeed = Mathf.Abs(MoveSpeed);
         MoveSpeed *= _fx;
     }
 
@@ -201,7 +202,7 @@ public class TX_Dianqiang : MonoBehaviour
     {
         DisTimes = 0;
         IsStarting = false;
-        MoveSpeed = 0.2f;
+        //MoveSpeed = 0.2f;
 
         //_liziMain = Lizi_DianQiang.main;
         //_liziMain.loop = true;
