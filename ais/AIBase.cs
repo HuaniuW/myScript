@@ -1713,6 +1713,7 @@ public class AIBase : MonoBehaviour {
         print("   AI重启   ！！！！！！！！！！！！！！！！！！！！！！");
         IsChongqi = true;
         AIBeHit();
+        QuXiaoAC();
         GetComponent<GameBody>().ResetAll();
     }
 

@@ -30,6 +30,15 @@ public class PlayerUI : MonoBehaviour {
     public RectTransform screenChangeZZ;
     public Text screenLoadTxt;
 
+    [Header("干扰弹 数量")]
+    public Text Txt_ganraodan;
+    [Header("机炮 数量")]
+    public Text Txt_jipao;
+
+    [Header("导弹 数量")]
+    public Text Txt_daodan;
+
+
     public GameObject skill_bar;
     public GameObject ui_hun;
     public GameObject ui_feidao;

@@ -15,6 +15,17 @@ public class CameraController : MonoBehaviour
     [Header("下降时摄像机的角色最大Y距离")]
     public float maxPlayerCameraYDistanceDown = 4;
 
+    [Header("摄像机块 限制前放X位置")]
+    public Transform CameraAirPosX;
+    [Header("摄像机块 限制左*** X 位置")]
+    public Transform CameraAirPosLeftX;
+
+    [Header("摄像机块 空中 终点")]
+    public Transform CameraAirEnd;
+
+
+
+
     private Vector3 _min;//边界最大值
     private Vector3 _max;//边界最小值
 
@@ -195,6 +206,8 @@ public class CameraController : MonoBehaviour
         
     //}
 
+
+    public bool DontSetX = false;
 
     void LateUpdate()
     {
@@ -489,8 +502,33 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
-            x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
+            if (DontSetX)
+            {
+                if (player.transform.position.x> CameraAirPosX.position.x)
+                {
+                    CameraAirPosX.position = new Vector2(player.transform.position.x, CameraAirPosX.position.y); //player.transform.position;
+                }
+                if (player.transform.position.x < CameraAirPosLeftX.position.x)
+                {
+                    player.transform.position = new Vector3(CameraAirPosLeftX.position.x, player.transform.position.y, player.transform.position.z);
+                }
+                
+                x = CameraAirPosX.position.x + 2;
+
+
+                if (CameraAirEnd&& x>= CameraAirEnd.position.x)
+                {
+                    CameraAirPosX.position = CameraAirEnd.position;
+                    x = CameraAirEnd.position.x;
+                }
+            }
+            else
+            {
+                //做个限制x的 数组  超过数组中块的x 就设为最小限制 否则设置初始的位置
+                x = Mathf.Clamp(x, _min.x + cameraHalfWidth, _max.x - cameraHalfWidth);//限定x值
+            }
+            
+
         }
 
 

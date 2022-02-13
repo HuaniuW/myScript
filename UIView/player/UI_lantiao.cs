@@ -18,15 +18,36 @@ public class UI_lantiao : XueTiao
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANEG_LAN, this.LanChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HUN, this.ChangeHun);
     }
+    [Header("**** 数值条")]
+    public GameObject Bar;
 
-   
+    public virtual void HideSelf()
+    {
+        Bar.gameObject.SetActive(false);
+
+    }
+
+    public virtual void ShowSelf()
+    {
+        Bar.gameObject.SetActive(true);
+    }
+
+
 
     void ChangeHun(UEvent e)
     {
         //hun_num_text.text = e.eventParams.ToString();
         if (roleDate == null) return;
         SetLanText(roleDate.maxLan, roleDate.lan);
-        GlobalSetDate.instance.CurrentUserDate.curLan = GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan.ToString();
+        if (GlobalTools.FindObjByName("player"))
+        {
+            GlobalSetDate.instance.CurrentUserDate.curLan = GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan.ToString();
+        }
+        else
+        {
+            GlobalSetDate.instance.CurrentUserDate.curLan = GlobalTools.FindObjByName("player_jijia").GetComponent<RoleDate>().Lan.ToString();
+        }
+        
 
         //GetComponent<UIShake>().GetShake();
     }
@@ -89,6 +110,10 @@ public class UI_lantiao : XueTiao
         if (gameObj == null)
         {
             gameObj = GlobalTools.FindObjByName("player");
+            if (gameObj==null)
+            {
+                gameObj = GlobalTools.FindObjByName("player_jijia");
+            }
             roleDate = gameObj.GetComponent<RoleDate>();
             //print("roleDate%%%%    "+ roleDate.live);
             //GetGameObj();

@@ -12,6 +12,10 @@ public class GlobalTag : MonoBehaviour
 
     // Update is called once per frame
     public static string Player = "Player";
+    public static string PlayerObj = "player";
+    public static string PlayerJijiaObj = "player_jijia";
+
+
     public static string Diren = "diren";
     public static string ENEMY = "enemy";
     public static string AirEmeny = "AirEmeny";
@@ -27,4 +31,16 @@ public class GlobalTag : MonoBehaviour
     //神佑
     public static string SHENYOU = "shenyou";
     public static string ZIDANDUAN = "zidanDun";
+    internal static string MAINCAMERA = "MainCamera";
+
+    public static string PLAYERUI = "PlayerUI";
+
+    public static string KUANG = "kuang";
+
+    public static string DIBAN = "diban";
+    public static string ZIDAN = "zidan";
+
+    public static string GUAIS = "Guais";
+
+    public static string JIGUANG = "jiguang";
 }

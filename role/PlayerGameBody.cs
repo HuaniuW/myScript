@@ -63,8 +63,14 @@ public class PlayerGameBody : GameBody {
     }
 
 
+  
+
+
+
+
     void Update()
     {
+
         ChushiTurnToRight();
 
 
@@ -512,6 +518,7 @@ public class PlayerGameBody : GameBody {
 
     public override void RunRight(float horizontalDirection, bool isWalk = false)
     {
+        //print("right");
         if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao)
         {
             MoveVX(0);
@@ -521,6 +528,14 @@ public class PlayerGameBody : GameBody {
         if (DBBody.animation.lastAnimationName == STAND) DodgeOver();
         isBackUping = false;
         if (roleDate.isBeHiting) return;
+        if (IsGedanging)
+        {
+            if (!isWalk && this.transform.localScale.x == 1)
+            {
+                TurnRight();
+            }
+            return;
+        }
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
@@ -566,6 +581,18 @@ public class PlayerGameBody : GameBody {
         //print("r "+isAtking);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
+
+        if (IsGedanging)
+        {
+            if (!isWalk && this.transform.localScale.x == -1)
+            {
+                //print("左转");
+                TurnLeft();
+            }
+            return;
+        }
+
+
         if (isAcing) return;
         if (isDodgeing) return;
         if (!DBBody.animation.HasAnimation(WALK)) isWalk = false;
@@ -1711,7 +1738,7 @@ public class PlayerGameBody : GameBody {
     {
         //print("?????????????");
         //print("回到 stand   isatking> " + isAtking + "  isAtk " + isAtk + "  isDown " + isDowning + "  isJump2  " + isJump2 + "  isjumping2 " + isJumping2 + "  isjumping " + isJumping);
-        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
+        if (!roleDate.isBeHiting&&!IsGedanging && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
         {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
 
@@ -1852,4 +1879,8 @@ public class PlayerGameBody : GameBody {
             Globals.isInPlot = false;
         }
     }
+
+   
+
+
 }

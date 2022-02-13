@@ -138,6 +138,15 @@ public class EventTypeName
     //血条跟随的 直接跟随  切换场景使用
     public const string XUETIAO_ZHIJIEGENSUI = "xuetiao_zhijiegensui";
 
+    //助推器 脱离事件
+    public const string ZHUTUIQI_TUOLI = "zhutuiqi_tuoli";
+    //机甲爆炸
+    public const string JIJIA_BAOZHA = "jijia_baozha";
 
 
+    public const string LAIXI_JINGGAO = "laixi_jinggao";
+
+    public const string DAOJISHI = "daojishi";
+
+    public const string STOP_DAOJISHI = "stop_daojishi";
 }

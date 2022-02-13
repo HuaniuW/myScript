@@ -6,6 +6,8 @@ using System;
 
 public class GameBody : MonoBehaviour, IRole {
     //增加到十个特效 或者更多 看需求
+    [Header("*****是否是在驾驶机甲")]
+    public bool IsInJijia = false;
 
     [Header("水平速度")]
     public float speedX;
@@ -18,7 +20,7 @@ public class GameBody : MonoBehaviour, IRole {
     public float xForce;
 
     //目前垂直速度
-    float speedY;
+    protected float speedY;
 
     [Header("水平最大速度")]
     public float maxSpeedX;
@@ -238,6 +240,9 @@ public class GameBody : MonoBehaviour, IRole {
         IsInACingYancheng = false;
         IsHuaFang = false;
 
+
+        GedangReset();
+
         //if (GetDB()) GetDB().animation.Reset();
 
     }
@@ -246,7 +251,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public float gravityScaleNums = 4.5f;
     protected float _recordGravity = 4.5f;
-    protected string RUN = "run_3";
+    public string RUN = "run_3";
     protected string STAND = "stand_1";
     protected const string RUNBEGIN = "runBegin_1";
     protected const string RUNSTOP = "runStop_1";
@@ -790,7 +795,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected bool isShanjin = false;
     protected bool isCanJump = false;
     
-    protected void DodgeOver()
+    public void DodgeOver()
     {
         if (isInAiring)
         {
@@ -937,9 +942,9 @@ public class GameBody : MonoBehaviour, IRole {
     {
         get
         {
-            Vector2 start = qianmian.position;
-            Vector2 end = new Vector2(start.x - distanceMQ * bodyScale.x, start.y);
-            Debug.DrawLine(start, end, Color.red);
+            Vector3 start = qianmian.position;
+            Vector3 end = new Vector3(start.x - distanceMQ * bodyScale.x, start.y,start.z);
+            Debug.DrawLine(start, end, Color.white);
             hidWalled = Physics2D.Linecast(start, end, groundLayer);
             return hidWalled;
         }
@@ -947,7 +952,7 @@ public class GameBody : MonoBehaviour, IRole {
 
 
 
-    public void ControlSpeed(float vx = 0)
+    public virtual void ControlSpeed(float vx = 0)
     {
         speedX = playerRigidbody2D.velocity.x;
         speedY = playerRigidbody2D.velocity.y;
@@ -1000,6 +1005,15 @@ public class GameBody : MonoBehaviour, IRole {
         isBackUping = false;
         
         if (roleDate.isBeHiting) return;
+        if (IsGedanging)
+        {
+            //if (!isWalk && this.transform.localScale.x == -1)
+            //{
+            //    print("左转");
+            //    TurnLeft();
+            //}
+            return;
+        }
         if (isInAiring && (!isJumping || !isJumping2)) return;
 
         if (isAcing) return;
@@ -1065,6 +1079,14 @@ public class GameBody : MonoBehaviour, IRole {
         //print(" --------------------------- ???? isAcing  "+ isAcing);
         isBackUping = false;
         if (roleDate.isBeHiting) return;
+        if (IsGedanging) {
+            //if (!isWalk && this.transform.localScale.x == 1)
+            //{
+            //    TurnRight();
+            //}
+            return;
+        }
+        
         if (isInAiring && (!isJumping || !isJumping2)) return;
         if (isAcing) return;
         if (isDodgeing) return;
@@ -1123,7 +1145,8 @@ public class GameBody : MonoBehaviour, IRole {
         }
     }
 
-
+    [Header("**********最小移动速度 如果不=0 就设置最小速度")]
+    public float MinSpeed = 0;
 
     public virtual void GetZongTuili(Vector2 v2,bool IsSetZero = false)
     {
@@ -1131,8 +1154,29 @@ public class GameBody : MonoBehaviour, IRole {
         if (!playerRigidbody2D||isBackUping) return;
         //print("  22222  ");
         if(IsSetZero) playerRigidbody2D.velocity = Vector2.zero;
+        if (MinSpeed != 0)
+        {
+            if (this.transform.localScale.x > 0)
+            {
+                //右
+                if (playerRigidbody2D.velocity.x > -MinSpeed)
+                {
+                    playerRigidbody2D.velocity = new Vector2(-MinSpeed, playerRigidbody2D.velocity.y);
+                }
+            }
+            else
+            {
+                //左
+                if (playerRigidbody2D.velocity.x < MinSpeed)
+                {
+                    playerRigidbody2D.velocity = new Vector2(MinSpeed, playerRigidbody2D.velocity.y);
+                }
+            }
+        }
+      
         playerRigidbody2D.AddForce(v2);
-        //print("IsSetZero   "+ IsSetZero+"  -------------推力是多少  "+v2+"     速度是多少   "+ playerRigidbody2D.velocity+"     acname "+GetDB().animation.lastAnimationName);
+
+        //print("IsSetZero   " + IsSetZero + "  -------------推力是多少  " + v2 + "     速度是多少   " + playerRigidbody2D.velocity + "     acname " + GetDB().animation.lastAnimationName);
     }
 
 
@@ -1144,7 +1188,7 @@ public class GameBody : MonoBehaviour, IRole {
         playerRigidbody2D.AddForce(v2);
     }
 
-    float acingTime = 0;
+    protected float acingTime = 0;
     float acTimeDelta = 1; 
     protected virtual void ACingTimes()
     {
@@ -1364,16 +1408,17 @@ public class GameBody : MonoBehaviour, IRole {
             DBBody.animation.GotoAndPlayByFrame(JUMPUP, 0, 1);
         }
 
+
         if (isCanJump && !isQiTiao && DBBody.animation.lastAnimationName == JUMPUP)
         {
             isQiTiao = true;
             isCanJump = false;
             playerRigidbody2D.velocity = new Vector2(playerRigidbody2D.velocity.x, 0);
             //playerRigidbody2D.AddForce(Vector2.up * yForce);
+            print("  yForce-------> "+ yForce);
             GetZongTuili(Vector2.up * yForce);
             return;
         }
-
 
         if (isInAiring)
         {
@@ -1404,7 +1449,6 @@ public class GameBody : MonoBehaviour, IRole {
                 return;
             }
         }
-
     }
 
 
@@ -1445,14 +1489,17 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
 
+
+
         if (isDodgeing||isAcing) return;
         isInAiring = !IsGround;
         if (IsGround&&DBBody.animation.lastAnimationName == DOWNONGROUND)
         {
+            
             //print("???????????");
             if (DBBody.animation.isCompleted)
             {
-                //print("luodidongzuo zuowan");
+                print("luodidongzuo zuowan");
                 isDowning = false;
                 isJumping = false;
                 isJumping2 = false;
@@ -1469,12 +1516,14 @@ public class GameBody : MonoBehaviour, IRole {
 
 
         //print("isqitiao  "+isQiTiao);
-
+        
         if (IsGround&&!isBackUping&&(DBBody.animation.lastAnimationName == BEHIT || DBBody.animation.lastAnimationName == JUMPDOWN|| DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL))
         {
+         
             //落地动作
             if (DBBody.animation.lastAnimationName != DOWNONGROUND)
             {
+                
                 DBBody.animation.GotoAndPlayByFrame(DOWNONGROUND, 0, 1);
                 isAtkYc = false;
                 isAtking = false;
@@ -1513,14 +1562,15 @@ public class GameBody : MonoBehaviour, IRole {
             isDowning = false;
             return;
         }
+
+
         
-
-
         if (isInAiring)
         {
             if(roleDate.isBeHiting|| DBBody.animation.lastAnimationName == BEHIT|| DBBody.animation.lastAnimationName==BEHITINAIR) return;
             if (newSpeed.y <= 0)
             {
+                //print("  下降 ！！！ ");
                 if (!isDowning)
                 {
                     //下降
@@ -1532,9 +1582,11 @@ public class GameBody : MonoBehaviour, IRole {
             }
             else
             {
+                //print(" 上升！！！！------ ");
                 if (isJumping2 && (DBBody.animation.lastAnimationName == JUMP2DUAN|| DBBody.animation.lastAnimationName == JUMPHITWALL|| DBBody.animation.lastAnimationName == RUNBEGIN) && !DBBody.animation.isCompleted) return;
                 if (DBBody.animation.lastAnimationName != JUMPDOWN)
                 {
+                    
                     //上升
                     //print("shangsheng");
                     //newSpeed.y >0 的时候是上升  这个是起跳动作完成后 上升的时候 停留在下降的最后一帧 
@@ -1677,9 +1729,9 @@ public class GameBody : MonoBehaviour, IRole {
         DBBody.AddDBEventListener("atks", this.Test);
         bodyScale = new Vector3(1, 1, 1);
         vOAtk = GetComponent<VOAtk>();
-        this.transform.localScale = bodyScale;
+        //this.transform.localScale = bodyScale;
         if(_yanmu2) _yanmu2.Stop();
-        _yanmu.Stop();
+        if(_yanmu) _yanmu.Stop();
         GetYuanColor();
         //thePlayerUI = GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>();
 
@@ -1833,7 +1885,7 @@ public class GameBody : MonoBehaviour, IRole {
         if (isDieRemove) StartCoroutine(IEDieDestory(2f));
     }
 
-    public IEnumerator IEDieDestory(float time)
+    public virtual IEnumerator IEDieDestory(float time)
     {
         //Debug.Log("time   "+time);
         //yield return new WaitForFixedUpdate();
@@ -2068,6 +2120,101 @@ public class GameBody : MonoBehaviour, IRole {
     }
 
 
+    protected string GEDANG = "gedang_1";
+    protected bool IsGedang = false;
+    public bool IsGedanging = false;
+    protected float GedangTimes = 0.4F;
+    protected float GedangJishiNums = 0;
+
+    protected void GedangReset()
+    {
+        IsGedang = false;
+        IsGedanging = false;
+        GedangJishiNums = 0;
+        isAcing = false;
+        IsGeDangAC = false;
+    }
+
+
+
+    public virtual void Gedang()
+    {
+        if (IsGedanging) return;
+        if (!IsGedanging && !isInAiring && !isAtking && !isAcing && GetDB().animation.lastAnimationName != GEDANG)
+        {
+            print("gedang-----------------------格挡！！！！！！！！！！！！！！！！！！");
+            ResetAll();
+            IsGedanging = true;
+            isAcing = true;
+            IsGedang = true;
+            playerRigidbody2D.velocity = Vector2.zero;
+            DBBody.animation.Reset();
+            DBBody.animation.GotoAndStopByFrame(GEDANG, 0);
+            //DBBody.animation.FadeIn(GEDANG, 0.06F);
+
+        }
+    }
+
+
+    public virtual void GetGedang()
+    {
+        IsGedanging = true;
+        IsGeDangAC = true;
+        DBBody.animation.GotoAndPlayByFrame(GEDANG, 0, 1);
+        //播放粒子特效 击退
+        GameObject o = GlobalTools.GetGameObjectInObjPoolByName("TX_gedang");
+        o.transform.position = this.transform.position;
+        o.transform.parent = this.transform.parent;
+        GedangJishiNums = 0;
+    }
+
+    public bool IsGeDangAC = false;
+
+
+
+    public virtual void Gedanging()
+    {
+
+        //print("currentTime: " + DBBody.animation.lastAnimationState.currentPlayTimes + "  totalTime: " + DBBody.animation.lastAnimationState.totalTime + "   ?  " +  DBBody.animation.lastAnimationName + "   -----  " + GEDANG);
+        //print(" >> "+ DBBody.animation.lastAnimationState.currentTime);
+        //print("   ddddd " + (DBBody.animation.lastAnimationState.currentTime >= DBBody.animation.lastAnimationState.totalTime) + "   --  " + (DBBody.animation.lastAnimationName == GEDANG));
+        //(DBBody.animation.lastAnimationState.currentTime >= DBBody.animation.lastAnimationState.totalTime)
+       
+
+        if (IsGeDangAC)
+        {
+            if (DBBody.animation.lastAnimationName == GEDANG && DBBody.animation.isCompleted)
+            {
+                print("1------------>gedang  ");
+                GedangReset();
+                GetStand();
+                return;
+            }
+            return;
+        }
+        else
+        {
+            if (IsGedang)
+            {
+                GedangJishiNums += Time.deltaTime;
+                if (GedangJishiNums >= GedangTimes)
+                {
+                    //GedangJishiNums = 0;
+                    print("2-------------->gedang   " + DBBody.animation.lastAnimationName);
+                    IsGedang = false;
+                    GedangReset();
+                    GetStand();
+                    //if(DBBody.animation.lastAnimationName!=GEDANG) DBBody.animation.GotoAndPlayByFrame(GEDANG,0,1);
+                    //DBBody.animation.Play();
+                }
+            }
+        }
+
+
+       
+       
+    }
+
     public bool TSACControl = false;
     protected virtual void GetUpdate()
     {
@@ -2133,7 +2280,12 @@ public class GameBody : MonoBehaviour, IRole {
         //    //DBBody.animation.timeScale = 1;
         //}
 
-
+        if (IsGedanging)
+        {
+            ControlSpeed(10);
+            Gedanging();
+            return;
+        }
 
 
         if (isQianhuaing)
@@ -2193,10 +2345,10 @@ public class GameBody : MonoBehaviour, IRole {
 
 
 
-        /* if (isJumping)
-         {
-             Jump();
-         }*/
+        //if (isJumping)
+        // {
+        //     Jump();
+        // }
 
         if (isAtking)
         {
@@ -2217,7 +2369,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     protected virtual void InStand()
     {
-        if (!roleDate.isBeHiting && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting&&!isRunYing && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
+        if (!roleDate.isBeHiting && !IsGedanging && !isQianhuaing && !isInAiring && !isDowning && !isRunLefting && !isRunRighting && !isRunYing && !isJumping && !isJumping2 && !isAtking && !isDodgeing && !isAtkYc && !isBackUping)
         {
             //if (this.tag != "diren") print("stand" + "  ? " + isRunLefting + "   " + DBBody.animation.lastAnimationName);
 
@@ -2408,7 +2560,7 @@ public class GameBody : MonoBehaviour, IRole {
     public int canMoveNums = 100;
     public bool isAcing = false;
 	protected string _acName;
-    float yanchiTime = 0;
+    protected float yanchiTime = 0;
 
 
     public void GetACMsgOverYC(float ycTimes)
@@ -2535,6 +2687,16 @@ public class GameBody : MonoBehaviour, IRole {
     {
         print("hi 接口！！");
     }
+
+
+
+  
+
+
+
+
+
+
 
 
     protected float atkNums = 0;

@@ -18,6 +18,7 @@ public class AIAirRunNear : MonoBehaviour
         _aiPath = GetComponent<AIPath>();
         _aiPath.canMove = false;
         _obj = GlobalTools.FindObjByName("player");
+        if(_obj == null)_obj = GlobalTools.FindObjByName("player_jijia");
         setter.target = _obj.transform;
         
     }

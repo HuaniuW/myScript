@@ -9,7 +9,6 @@ public class AI_ZDJumpJN : AI_SkillBase
 
 
     //ZD_ZDJumpJN
-   
     protected override void TheStart()
     {
         this.ZSName = "ZDJumpJN";
@@ -52,11 +51,10 @@ public class AI_ZDJumpJN : AI_SkillBase
 
     bool IsAtking = false;
 
+
+
     protected override void ChixuSkillStarting()
     {
-
-
-
         //print("--1");
         if (!_isGetStart) {
 
@@ -77,8 +75,6 @@ public class AI_ZDJumpJN : AI_SkillBase
 
         if (_roleDate.isBeHiting || _roleDate.isDie)
         {
-            
-
             TheSkillOver();
             //print("------> 进来没？？   "+ GetComponent<Rigidbody2D>().velocity);
             if (_roleDate.isDie) GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
@@ -107,7 +103,7 @@ public class AI_ZDJumpJN : AI_SkillBase
         {
             if (_gameBody.GetPlayerRigidbody2D().velocity.y < 0)
             {
-                if (!IsAtking && IsACOver("atk_1"))
+                if (!IsAtking && IsACOver(SkillSFACName))
                 {
                     IsAtking = true;
                 }
@@ -116,7 +112,6 @@ public class AI_ZDJumpJN : AI_SkillBase
         }
         else
         {
-
             //print("isACing  " + _gameBody.isAcing + "   ----------   " + _gameBody.IsGround);
             if (IsAtking && (_gameBody.GetDB().animation.lastAnimationName == "downOnGround_1" || _gameBody.GetDB().animation.lastAnimationName == "stand_1"))
             {
@@ -132,7 +127,7 @@ public class AI_ZDJumpJN : AI_SkillBase
 
     }
 
-
+    string SkillSFACName = "atk_1";
 
     bool IsACOver(string ACName)
     {
@@ -148,7 +143,13 @@ public class AI_ZDJumpJN : AI_SkillBase
         {
             _gameBody.isAcing = true;
             _gameBody.GetDB().animation.GotoAndPlayByFrame(ACName, 0, 1);
-            
+            if (StartParticle&& ACName == SkillSFACName)
+            {
+                print("  ---*****----------- 播放起手特效！！！！ ");
+                StartParticle.gameObject.SetActive(true);
+                StartParticle.Play();
+            }
+
         }
         return false;
     }
@@ -158,32 +159,61 @@ public class AI_ZDJumpJN : AI_SkillBase
 
     protected override void ACSkillShowOut()
     {
-        base.ACSkillShowOut();
-        ShowOutSkill();
+       
+        //base.ACSkillShowOut();
+        if (SkillType == "1"|| SkillType == "x4rzb")
+        {
+            //4忍者镖
+            Kongzhong4Renzhebiao();
+        }else
+        {
+            KongzhongDiu3Huo();
+        }
+        
         _gameBody.GetPlayerRigidbody2D().velocity = Vector2.zero;
         _gameBody.GetPlayerRigidbody2D().AddForce(new Vector2(0, 100));
         print("show skill out!!!!!!!!!!!!!!!!!");
        
     }
 
+    private void Kongzhong4Renzhebiao()
+    {
+        //throw new NotImplementedException();
+        ObjName = "AQ_renzhebiao";
+
+        GetObjOut(2, -18,true);
+        GetObjOut(12, -18,true);
+        GetObjOut(22, -18,true);
+
+    }
 
     string ObjName = "jn_dihuo_3";
-    void ShowOutSkill()
+    void KongzhongDiu3Huo()
     {
+        ObjName = "jn_dihuo_3";
         GetObjOut(8, 8);
         GetObjOut(12, 8);
         GetObjOut(18, 8);
     }
 
 
-    void GetObjOut(float __x,float __y)
+    void GetObjOut(float __x,float __y,bool isRZB = false)
     {
         GameObject o = GlobalTools.GetGameObjectInObjPoolByName(ObjName);
         __x = this.transform.localScale.x > 0 ? -__x : __x;
-        __y = 8;
         o.transform.position = zidanDian1.position;
         o.transform.parent = this.transform.parent;
-        o.GetComponent<Rigidbody2D>().velocity = new Vector2(__x, __y);
+        o.name = ObjName;
+        if (isRZB)
+        {
+            o.GetComponent<TX_RenzheBiao>().SetV2Speed(new Vector2(__x, __y));
+            o.GetComponent<TX_RenzheBiao>().GetSpeedV2();
+        }
+        else
+        {
+            o.GetComponent<Rigidbody2D>().velocity = new Vector2(__x, __y);
+        }
+        
     }
 
 

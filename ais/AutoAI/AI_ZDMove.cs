@@ -10,6 +10,7 @@ public class AI_ZDMove : AI_SkillBase
     {
         //开启 特殊 技能释放  这里 就进入持续技能里面  ChixuSkillStarting
         IsSpeAISkill = true;
+        IsResetInStand = false;
         this.ZSName = "ZDMoveAwayX";
         if (_player == null) _player = GlobalTools.FindObjByName("player");
     }
@@ -204,28 +205,32 @@ public class AI_ZDMove : AI_SkillBase
     {
         if (!IsStartMove) return;
 
-
+        print("yd1");
 
         ZidanZhandou();
         if (Liandan)
         {
+            print("yd2");
             //MoveToPoint(_TargetPos, 10);
-            if(this.transform.position.x>=RightPos.position.x|| this.transform.position.x <= LeftPos.position.x)
+            if (this.transform.position.x>=RightPos.position.x|| this.transform.position.x <= LeftPos.position.x)
             {
                 this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             }
 
             return;
         }
+        print("yd3   _TargetPos "+ _TargetPos);
 
         if (MoveToPoint(_TargetPos,10))
         {
+            print("yd4");
             TheResetAll();
             ReSetAll();
             TheSkillOver();
             _gameBody.GetStand();
             print("远离 移动结束！！！！！！！");
         }
+        print("yd5");
     }
 
 
@@ -273,10 +278,10 @@ public class AI_ZDMove : AI_SkillBase
     protected bool MoveToPoint(Vector2 TargetPos,float TempSpeed,float MaxSpeedX = 15)
     {
         Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
-        //print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
+        print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
         Vector2 v2 = (TargetPos - thisV2) * TempSpeed;// GlobalTools.GetVector2ByPostion(point, thisV2, TempSpeed);
 
-        //print("直接移动速度 v2 >>>>>>>>>>>>>>>>>>  " + v2);
+        print("直接移动速度 v2 >>>>>>>>>>>>>>>>>>  " + v2);
         if (MaxSpeedX != 0 && Mathf.Abs(v2.x) > MaxSpeedX)
         {
             v2.x = v2.x > 0 ? MaxSpeedX : -MaxSpeedX;
@@ -285,7 +290,7 @@ public class AI_ZDMove : AI_SkillBase
 
         _gameBody.GetPlayerRigidbody2D().velocity = v2;
         //_gameBody.IsJiasu = true;
-
+        print("_gameBody.GetPlayerRigidbody2D().velocity>>>>>>>>>>>>>>>>>>  " + _gameBody.GetPlayerRigidbody2D().velocity);
         if (GetComponent<AIAirRunNear>().IsHitWallByFX(v2, 2, thisV2))
         {
             print("   撞墙了！！！！！！！！！！！！！！！！！！  ");
@@ -294,12 +299,12 @@ public class AI_ZDMove : AI_SkillBase
         }
 
         float _jinruDis = (thisV2 - TargetPos).sqrMagnitude;
-
+        print(" _jinruDis  "+ _jinruDis);
         //print("两点间距离 " + _jinruDis+"   ------进入距离的 误差 内  "+ zuijiPosDisWC+ "  inDistance   " + inDistance+"    我的位置  "+thisV2+"    目标点 "+ point);
         //距离小于 误差内 直接结束
         if (_jinruDis < 1.8F)
         {
-            //print(thisV2+ "  --point  "+ point);
+            print(thisV2 + "_jinruDis  --point   over!!! ");
             this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
             return true;
         }

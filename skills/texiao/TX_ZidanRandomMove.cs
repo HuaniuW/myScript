@@ -70,11 +70,11 @@ public class TX_ZidanRandomMove : MonoBehaviour
         if (!IsStart) return;
         GetComponent<Rigidbody2D>().velocity = v2;
         jishi += Time.deltaTime;
-        print("jishi:  "+jishi+"  siduV2   "+v2+ "   IsStart  "+ IsStart);
+        //print("jishi:  "+jishi+"  siduV2   "+v2+ "   IsStart  "+ IsStart);
         if (jishi>=jishiTime)
         {
             IsStart = false;
-            print("******************************************* 计时结束 ");
+            //print("******************************************* 计时结束 ");
             jishi = 0;
 
             //Time.timeScale = 0;

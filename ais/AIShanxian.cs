@@ -15,7 +15,15 @@ public class AIShanxian : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		_objTras = GlobalTools.FindObjByName("player").transform;
+        if (GlobalTools.FindObjByName("player"))
+        {
+			_objTras = GlobalTools.FindObjByName("player").transform;
+		}
+        else
+        {
+			_objTras = GlobalTools.FindObjByName("player_jijia").transform;
+		}
+		
 	}
 
 	public float sxDistance = 15;

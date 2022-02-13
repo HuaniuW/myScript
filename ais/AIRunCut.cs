@@ -35,7 +35,7 @@ public class AIRunCut : MonoBehaviour,ISkill{
 	void Update () {
         if(_roleDate.isBeHiting|| _roleDate.isDie)
         {
-            print("   被攻击后 停止！！！！！！  ");
+            //print("   被攻击后 停止！！！！！！  ");
             GetComponent<GameBody>().isAcing = false;
             if (_aiBase) _aiBase.AIReSet();
             AcOver();

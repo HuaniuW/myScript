@@ -55,7 +55,7 @@ public class JG_NewDoor : MonoBehaviour
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GUAI_DIE, this.GuaiListAllDieOpenDoor);
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_DIE, this.name), this);
 
-        //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_DIE,this.GuaiListAllDieOpenDoor);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_IS_DIE, this.GuaiListAllDieOpenDoor);
 
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.All_DIE_OPEN_DOOR, this.GetDoorEvent);
         //if (IsNeedCheck) GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().CheckGuaiDoor();
@@ -66,7 +66,7 @@ public class JG_NewDoor : MonoBehaviour
         //print("我被消除了！？？？？？？");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.NEW_OPEN_DOOR, this.GetDoorEvent);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GUAI_DIE, this.GuaiListAllDieOpenDoor);
-        //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_DIE, this.GuaiListAllDieOpenDoor);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_IS_DIE, this.GuaiListAllDieOpenDoor);
     }
 
     private void GetDoorEvent(UEvent evt)
@@ -136,6 +136,8 @@ public class JG_NewDoor : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
+        print(" IsCanDoorClose --------------->   " + IsCanDoorClose);
+
         if (!IsCanDoorClose) return;
         if (Coll.tag == "Player")
         {

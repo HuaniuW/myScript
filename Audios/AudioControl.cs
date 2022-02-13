@@ -54,6 +54,10 @@ public class AudioControl : MonoBehaviour {
             if (player == null)
             {
                 player = GlobalTools.FindObjByName("player");
+                if (player == null)
+                {
+                    player = GlobalTools.FindObjByName(GlobalTag.PlayerJijiaObj);
+                }
             }
 
             if(player&&Mathf.Abs(player.transform.position.x - this.transform.position.x)> distance)

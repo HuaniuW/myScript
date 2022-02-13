@@ -169,20 +169,20 @@ public class OnLziHit : MonoBehaviour
     //发生粒子碰撞的回调函数
     private void OnParticleCollision(GameObject other)
     {
-
+        print("  碰到什么没？？？？？？  ");
         //if (other.tag == "zidanDun")
         //{
         //    print("   粒子击中 防御盾  ");
         //}
-        print(this.name + "  IsCanHit  " + IsCanHit+"   $$$$$  "+other.tag);
+        //print(this.name + "  IsCanHit  " + IsCanHit+"   $$$$$  "+other.tag);
 
 
-        //print(" this  "+this.tag+"    -----   "+ other.tag);
+        print(" this  "+this.tag+"    -----   "+ other.tag+ "  other  "+ other.name);
         if (this.tag == GlobalTag.HUOYAN)
         {
             if (other.tag == GlobalTag.ENEMY || other.tag == GlobalTag.BOSS || other.tag == GlobalTag.Diren)
             {
-                if (other.GetComponent<RoleDate>().KangHuoJilv == 100)
+                if (other.GetComponent<RoleDate>() && other.GetComponent<RoleDate>().KangHuoJilv == 100)
                 {
                     print("  this -----  100 抵抗火 ");
                     return;
@@ -195,7 +195,7 @@ public class OnLziHit : MonoBehaviour
         {
             if (other.tag == GlobalTag.ENEMY || other.tag == GlobalTag.BOSS || other.tag == GlobalTag.Diren)
             {
-                if (other.GetComponent<RoleDate>().KangDuJilv == 100)
+                if (other.GetComponent<RoleDate>() && other.GetComponent<RoleDate>().KangDuJilv == 100)
                 {
                     print("  this -----  100 抵抗毒  ！！！！ ");
                     return;
@@ -206,7 +206,7 @@ public class OnLziHit : MonoBehaviour
 
 
         if (!IsCanHit) return;
-        //print(other.tag);
+        print("  粒子击中敌人！！！！！ "+other.tag);
         if (other.tag == GlobalTag.Player|| other.tag == GlobalTag.JINGYING|| other.tag == GlobalTag.ENEMY|| other.tag == GlobalTag.AirEmeny|| other.tag == GlobalTag.BOSS|| other.tag == GlobalTag.Diren)
         {
            
@@ -286,6 +286,28 @@ public class OnLziHit : MonoBehaviour
     private void ResetAll()
     {
         HitObjList.Clear();
+    }
+
+    protected void OnTriggerEnter2D(Collider2D Coll)
+    {
+        //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
+        if (Coll.tag == GlobalTag.Diren || Coll.tag == GlobalTag.DIBAN || Coll.tag == "zidan")
+        {
+            if (Coll.tag == GlobalTag.Diren&& Coll.GetComponent<G_Feixingqi>())
+            {
+                print("击中 敌人 ??????????????  " + Coll.GetComponent<RoleDate>().live+"  ---->   "+Coll.name);
+                Coll.GetComponent<RoleDate>().live -= 1000;
+                print("击中 敌人 ?????????????? 22222222 " + Coll.GetComponent<RoleDate>().live + "  ---->   " + Coll.name);
+                //Coll.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                //float ForceY = 400;
+                //if (Coll.transform.position.y <= this.transform.position.y)
+                //{
+                //    ForceY = -400;
+                //}
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.8"), this);
+                //Coll.GetComponent<Rigidbody2D>().AddForce(new Vector2(500, ForceY));
+            }
+        }
     }
 
 

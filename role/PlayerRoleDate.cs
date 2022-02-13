@@ -43,7 +43,8 @@ public class PlayerRoleDate : RoleDate
         }
     }
 
-    bool IsStart = false;
+    [Header("是否 初始化 血量等 基础信息")]
+    public bool IsStart = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +60,7 @@ public class PlayerRoleDate : RoleDate
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_HZ, changeHZ);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GET_DIAOLUOWU, this.GetDiaoLuo);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.JIAXUE, this.JiaXue);
+        
         IsStart = true;
     }
 
@@ -187,6 +189,7 @@ public class PlayerRoleDate : RoleDate
         _atk = this.atk;
         _def = this.def;
         _theMaxLive = this.maxLive;
+        print("    初始化  血量是多少  "+ _theMaxLive);
         _theMaxLan = this.maxLan;
         _live = this.live;
         _lan = this.lan;

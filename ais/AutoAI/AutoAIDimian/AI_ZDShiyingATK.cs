@@ -41,7 +41,8 @@ public class AI_ZDShiyingATK : AI_SkillBase
 
     }
 
-   
+    [Header("临时提高硬直")]
+    public float TempAddYingzhi = 800;
 
     bool IsAtk = false;
 
@@ -53,6 +54,9 @@ public class AI_ZDShiyingATK : AI_SkillBase
         if (!IsAtk)
         {
             IsAtk = true;
+
+            GetComponent<TempAddValues>().TempAddYZ(TempAddYingzhi,1);
+
             if (_player.transform.position.y > this.transform.position.y + 1 && Mathf.Abs(_player.transform.position.x - this.transform.position.x) <= 3)
             {
                 _gameBody.GetAtk(AtkUpACName);

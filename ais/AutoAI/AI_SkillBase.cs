@@ -2,11 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DragonBones;
+using System;
 
 public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 {
     protected float StartTimes = 0;
     protected float OverTimes = 0;
+
+    [Header("重启计时")]
+    public float CQJishis = 7;
+    protected float CQJishiNums = 0;
+
+
+    protected float _AtkDistances = 0;
+    //控制 动作结束 延迟
+    protected float _yuanshiOverDelayTimes = 0;
+
+    protected void ChongqiOver()
+    {
+        //防止 卡住 强行结束
+        if(CQJishiNums != -1) CQJishiNums += Time.deltaTime;
+        //print(" CQJishiNums   重启时间  "+ CQJishiNums);
+        if (CQJishiNums >= CQJishis)
+        {
+            print("重启 over！！！！！");
+            CQJishiNums = 0;
+            TheSkillOver();
+        }
+    }
+
+
+
 
     [Header("技能开始 的延迟时间")]
     public float StartDelayTimes = 0;
@@ -67,6 +93,9 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ZD_SKILL_OVER, ZDSkillOver);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ZD_SKILL_OVER_ALL, ZDSkillOverAll);
         //print(" zd **********************  正厅了 ");
+
+        _yuanshiOverDelayTimes = OverDelayTimes;
+        _AtkDistances = AtkDistances;
         TheStart();
     }
 
@@ -90,6 +119,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
 
     protected string ZDAIName = "";
     protected string GetZSName = "";
+    protected string SkillType = "";
     protected virtual void ZDSkillShow(UEvent e)
     {
         print("--------------------------->"+e.eventParams.ToString());
@@ -128,8 +158,9 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
             }
         }
 
+        print("  ZDAIName  "+ ZDAIName);
         ZDAIName = s;
-
+        if(ZDAIName.Split('_').Length>=3) SkillType = ZDAIName.Split('_')[2];
         //print("zd 自动技能 释放 接收 参数 " + e.eventParams.ToString() + "   本技能名字  " + ZSName+ " GetZSName   "+ GetZSName);
 
         if (id == this.gameObject.GetInstanceID().ToString()&& GetZSName == ZSName)
@@ -161,6 +192,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     public virtual void GetStart(GameObject gameObj)
     {
         ReSetAll();
+        
         if (StartAudio) StartAudio.Play();
         //print("zd getStart *****************************************************************自动技能开始");
         _isGetStart = true;
@@ -187,6 +219,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     // Update is called once per frame
     void Update()
     {
+        
         if (_isGetOver) return;
         if (_roleDate.isDie || _roleDate.isBeHiting)
         {
@@ -200,7 +233,9 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
             return;
         }
 
-        if(_player == null)
+        ChongqiOver();
+
+        if (_player == null)
         {
             _player = GlobalTools.FindObjByName("player");
         }
@@ -229,16 +264,18 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
                         GetComponent<AIBase>().ZhuanXiang();
                     }
                 }
-
-
             }
             else
             {
+
+                print(" rzb    "+ AtkDistances);
+
                 if (GetComponent<AIBase>() && GetComponent<AIBase>().NearRoleInDistance(AtkDistances))
                 {
                     if (!IsInAtkDistances)
                     {
                         IsInAtkDistances = true;
+                        CQJishiNums = 0;
                         GetComponent<AIBase>().ZhuanXiang();
                     }
                 }
@@ -252,8 +289,10 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
             if (!IsZhuangxiang)
             {
                 IsZhuangxiang = true;
-                if(IsCanZhuanxiang) GetComponent<AIBase>().ZhuanXiang();
-                _gameBody.GetStand();
+                CQJishiNums = 0;
+                if (IsCanZhuanxiang) GetComponent<AIBase>().ZhuanXiang();
+                //这里 要 特别 注意 很多 怪不能动 就是这里 导致的  GetStand 会ResetAll(); **** 注意处理  不能动 就  -->> IsResetInStand = false
+                if (IsResetInStand) _gameBody.GetStand();
                 //if (GetComponent<AIBase>().thePlayer.transform.position.x > this.gameObject.transform.position.x)
                 //{
                 //    GetComponent<GameBody>().TurnRight();
@@ -262,14 +301,14 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
                 //{
                 //    GetComponent<GameBody>().TurnLeft();
                 //}
-               
+                print("?????zhuanxiang  stand!!!");
             }
+            print("  ----> SkillStarting!!!");
             SkillStarting();
         }
-
-
-       
     }
+
+    protected bool IsResetInStand = true;
 
     protected bool IsCanZhuanxiang = true;
 
@@ -324,6 +363,9 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
                         _gameBody.GetDB().animation.FadeIn(ACName,0.2f,1);
                         //_gameBody.GetAcMsg(ACName);
                         //print(" zd    当前播放的技能动作  "+ _gameBody.GetDB().animation.lastAnimationName);
+
+                        QishouTexiao();
+
                     }
                     else
                     {
@@ -397,6 +439,16 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
                    
                 }
             }
+        }
+    }
+
+    protected virtual void QishouTexiao()
+    {
+        //throw new NotImplementedException();
+        if (StartParticle)
+        {
+            StartParticle.gameObject.SetActive(true);
+            StartParticle.Play();
         }
     }
 
@@ -516,6 +568,7 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
         IsZhuangxiang = false;
         IsStopSelf = false;
         IsACSkillShowOut = false;
+        CQJishiNums = -1;
         
     }
 

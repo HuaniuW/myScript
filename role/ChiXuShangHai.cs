@@ -81,7 +81,7 @@ public class ChiXuShangHai : MonoBehaviour
     {
         get
         {
-            if (_gameBody.TopPoint == null) return false;
+            if (_gameBody==null||_gameBody.TopPoint == null) return false;
             Vector2 start = _gameBody.TopPoint.position;
             float __x = start.x;
             Vector2 end = new Vector2(__x, start.y-1);
@@ -175,7 +175,7 @@ public class ChiXuShangHai : MonoBehaviour
 
 
 
-        float huoshanghai = _HuoShanghai * (1 - _roledate.KangDuShanghaijilv);
+        float huoshanghai = _HuoShanghai * (100 - _roledate.KangHuoShanghaijilv)*0.01f;
         if (_roledate.KangHuoJilv < 0) huoshanghai *= Mathf.Abs(_roledate.KangHuoJilv);
         if (huoshanghai < 0) huoshanghai = 0;
         _roledate.live -= huoshanghai;
@@ -183,7 +183,7 @@ public class ChiXuShangHai : MonoBehaviour
         if (GlobalTools.GetRandomNum() > 70)
         {
             //if (_audioBeHit && !_audioBeHit.isPlaying) _audioBeHit.Play();
-            if (_roleAudio.BeHit_1 && !_roleAudio.BeHit_1.isPlaying) _roleAudio.BeHit_1.Play();
+            if (_roleAudio&&_roleAudio.BeHit_1 && !_roleAudio.BeHit_1.isPlaying) _roleAudio.BeHit_1.Play();
         }
 
 
@@ -191,7 +191,7 @@ public class ChiXuShangHai : MonoBehaviour
         {
             HuoTXDaShow();
             //if (_audioDie && !_audioDie.isPlaying) _audioDie.Play();
-            if (_roleAudio.BeHit_1 && !_roleAudio.BeHit_1.isPlaying) _roleAudio.BeHit_1.Play();
+            if (_roleAudio&&_roleAudio.BeHit_1 && !_roleAudio.BeHit_1.isPlaying) _roleAudio.BeHit_1.Play();
         }
         //其他 什么效果 比如 减速  声音-可以放在特效里   被攻击动作 等
     }
@@ -295,6 +295,8 @@ public class ChiXuShangHai : MonoBehaviour
     protected List<GameObject> ChixuDuodianTXList = new List<GameObject>() { };
     bool IshasNameTX = false;
 
+    [Header("持续伤害特效 放大 倍数 默认0 不做处理")]
+    public float TXBeishu = 0;
     //大型怪 持续伤害效果显示 多点显示
     protected void DuodianShowChixuXiaoguo(string TXName)
     {
@@ -309,6 +311,10 @@ public class ChiXuShangHai : MonoBehaviour
             tx.gameObject.SetActive(true);
             tx.transform.position = DuodianTXList[i].position;
             tx.transform.parent = this.transform;
+            if (TXBeishu!=0)
+            {
+                tx.transform.localScale = new Vector3(TXBeishu, TXBeishu, TXBeishu);
+            }
             //print("  shengchengde shihou  "+ tx.name);
             tx.name = TXName;
             //print("  shengchengde shihou >>>>>>>>>>>> " + tx.name);

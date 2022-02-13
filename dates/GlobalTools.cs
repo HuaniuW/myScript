@@ -90,8 +90,16 @@ public class GlobalTools : MonoBehaviour {
             list.Add(transform.GetChild(i));
         }
         return list;
+    }
 
-
+    public static List<string> GetChildsNamesList(GameObject obj)
+    {
+        List<string> NameLists = new List<string> { };
+        for (int i = 0; i < obj.transform.childCount; i++)
+        {
+            NameLists.Add(obj.transform.GetChild(i).name);
+        }
+        return NameLists;
     }
 
 

@@ -111,7 +111,7 @@ public class GameControl : MonoBehaviour {
         print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
         player.GetComponent<GameBody>().IsNeedDieOutDownY = true;
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
-
+        if (IsJijisGK) return;
         SetPlayerPos();
 
         //print("---------------------  在 GameControl 中控制 玩家位置！！！ ");
@@ -391,9 +391,10 @@ public class GameControl : MonoBehaviour {
         //开始匹配关卡数据
         string[] strArr = TempCurrentGKDate.Split(',');
         //if (Globals.isDebug) print("匹配！！TempCurrentGKDate：   "+ TempCurrentGKDate);
-        //print(" 匹配关卡记录数据------------------------ >  "+ strArr);
+        print(" 匹配关卡记录数据------------------------ >  "+ strArr+"  length   "+ strArr.Length);
         for (var i = 0; i < strArr.Length; i++)
         {
+            print("*******************************************************************************************"+strArr[i]);
             if (strArr[i] == "") continue;
             string s = strArr[i].Split('-')[0];
             s = GlobalTools.GetNewStrQuDiaoClone(s);
@@ -471,7 +472,7 @@ public class GameControl : MonoBehaviour {
                     guai = GlobalTools.FindObjByNameInGuais(s);
                     GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>().TheGuaiList.Remove(guai);
                     if(guai)guai.SetActive(false);
-                    return;
+                    continue;
                 }
 
 
@@ -563,11 +564,22 @@ public class GameControl : MonoBehaviour {
     //找到主角
     void GetPlayer()
     {
+
+       
+
         
         if (GlobalTools.FindObjByName("player") == null)
         {
-            //print("   获取玩家信息1  没有角色 生成玩家player  ");
-            player = InstancePrefabByName("player");
+            if (GlobalTools.FindObjByName("player_jijia") != null)
+            {
+                player = GlobalTools.FindObjByName("player_jijia");
+                IsJijisGK = true;
+            }
+            else
+            {
+                //print("   获取玩家信息1  没有角色 生成玩家player  ");
+                player = InstancePrefabByName("player");
+            }
         }
         else
         {
@@ -579,12 +591,13 @@ public class GameControl : MonoBehaviour {
         if (player!=null) player.GetComponent<PlayerRoleDate>().GetStart();
     }
 
-    
+    //是否是 机甲 关卡
+    bool IsJijisGK = false;
 
     void GetPlayerStatus()
     {
         //print("玩家状态******************************************************************************************************************************》》》》》》》》       ");
-        if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        if(!IsJijisGK && GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
        
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
@@ -676,7 +689,15 @@ public class GameControl : MonoBehaviour {
     public void GetCamersTargetToPlayer()
     {
         //print("hi");
-        this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);
+        if (GlobalTools.FindObjByName("player") == null)
+        {
+            this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player_jijia").transform);
+        }
+        else
+        {
+            this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);
+        }
+        
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ENEMY), null);
         //print("摄像机  kaishi zuobiao  "+ this.transform.position);
         //this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 15.6f, this.transform.position.z);

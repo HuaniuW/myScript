@@ -5,6 +5,7 @@ using System;
 
 public class MyController : MonoBehaviour {
     GameBody _body;
+    JijiaGamebody _jijiaBody;
 
     [Header("水平方向")]
     public float horizontalDirection;
@@ -19,6 +20,7 @@ public class MyController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _body = GetComponent<GameBody>();
+        _jijiaBody = GetComponent<JijiaGamebody>();
         //print("body: "+_body.);
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.ROLECANCONTROL, this.IsRoleCanControl);
     }
@@ -217,7 +219,9 @@ public class MyController : MonoBehaviour {
             return;
         }
 
-       
+
+      
+
 
 
         if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.W))
@@ -293,6 +297,16 @@ public class MyController : MonoBehaviour {
             if (IsCanControl() && !Globals.isXNBtn) _body.ReSetLR();
         }*/
 
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            //if (IsCanControl()) _body.GetSkill1();
+            //print("技能释放---------   center");
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RELEASE_SKILL, "center"), this);
+
+            if (IsCanControl()) _body.Gedang();
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.J))
         {
             if (Globals.IsHitPlotKuai) return;
@@ -321,16 +335,221 @@ public class MyController : MonoBehaviour {
 
     }
 
+    public bool IsCanContolJijis = true;
 
     void Update () {
 
         //ShouBing();
-        NewKey();
+        if (_body.IsInJijia)
+        {
+            print("  在机甲里面？？？？？？？？？？？？？？ ");
+            //驾驶机甲
+            JijiaControl();
+        }
+        else
+        {
+            if (!IsCanContolJijis) return;
+            NewKey();
+        }
+       
 
 
 
         //OldKey();
     }
+
+
+
+    bool IsNengliangPao = false;
+    bool IsJiali = false;
+    void JijiaControl()
+    {
+
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (IsCanControl()) {
+                IsNengliangPao = true;
+                _jijiaBody.ShowNengliangPao();
+            }
+            
+        }
+
+        if (Input.GetKeyUp(KeyCode.U))
+        {
+            if (IsCanControl()) {
+                IsNengliangPao = false;
+                _jijiaBody.ShowNengliangPao(false);
+            } 
+        }
+
+
+
+
+        if (Input.GetKey(KeyCode.L)&&!IsNengliangPao)
+        {
+            if (Input.GetKey(KeyCode.J))
+            {
+                if (IsCanControl()) _jijiaBody.Jipao();
+            }
+            else
+            {
+                if (IsCanControl()) _jijiaBody.Jipao(false);
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                if (IsCanControl()) _jijiaBody.FlyUp();
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                if (IsCanControl()) _jijiaBody.FlyDown();
+            }
+            else
+            {
+                if (IsCanControl()) _jijiaBody.FlyUp(false);
+                if (IsCanControl()) _jijiaBody.FlyDown(false);
+            }
+
+
+            if (Input.GetKey(KeyCode.I))
+            {
+                if (IsCanControl()) _jijiaBody.Ganraodan();
+            }
+            else
+            {
+                if (IsCanControl()) _jijiaBody.Ganraodan(false);
+            }
+
+          
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                if (IsCanControl()) _jijiaBody.GZDaodan();
+            }
+
+            if (Input.GetKeyUp(KeyCode.K))
+            {
+                if (IsCanControl()) _jijiaBody.GZDaodan(false);
+            }
+
+
+
+
+            IsJiali = true;
+            if (IsCanControl()) _jijiaBody.GaosuFly();
+            return;
+        }
+        else
+        {
+            IsJiali = false;
+            if (IsCanControl()) _jijiaBody.GaosuFly(false);
+        }
+
+        //if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    if (IsCanControl()) _jijiaBody.Jipao();
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.J))
+        //{
+        //    if (IsCanControl()) _jijiaBody.Jipao(false);
+        //}
+
+        if (Input.GetKey(KeyCode.J))
+        {
+            if (IsCanControl()) _jijiaBody.Jipao();
+        }
+        else
+        {
+            if (IsCanControl()) _jijiaBody.Jipao(false);
+        }
+
+
+        //if (Input.GetKeyUp(KeyCode.W))
+        //{
+        //    Debug.Log("您抬起了W键");
+        //    if (IsCanControl()) _jijiaBody.FlyUp(false);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.S))
+        //{
+        //    Debug.Log("您抬起了S键");
+        //    if (IsCanControl()) _jijiaBody.FlyDown(false);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.A))
+        //{
+        //    Debug.Log("您抬起了A键");
+        //    if (IsCanControl()) _jijiaBody.FlyHou(false);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.D))
+        //{
+        //    Debug.Log("您抬起了D键");
+        //    if (IsCanControl()) _jijiaBody.FlyQian(false);
+        //}
+
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            if (IsCanControl()) _jijiaBody.FlyUp();
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            if (IsCanControl()) _jijiaBody.FlyDown();
+        }
+        else
+        {
+            if (IsCanControl()) _jijiaBody.FlyUp(false);
+            if (IsCanControl()) _jijiaBody.FlyDown(false);
+        }
+
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            if (!IsJiali)
+            {
+                if (IsCanControl() || !Input.GetKeyDown(KeyCode.J)) _jijiaBody.FlyHou();
+            }
+           
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            if (IsCanControl()) _jijiaBody.FlyQian();
+        }
+        else
+        {
+            if (IsCanControl()) _jijiaBody.FlyHou(false);
+            if (IsCanControl()) _jijiaBody.FlyQian(false);
+        }
+
+
+     
+             
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (IsCanControl()) _jijiaBody.Ganraodan();
+        }
+
+        if (Input.GetKeyUp(KeyCode.I))
+        {
+            if (IsCanControl()) _jijiaBody.Ganraodan(false);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (IsCanControl()) _jijiaBody.GZDaodan();
+        }
+
+        if (Input.GetKeyUp(KeyCode.K))
+        {
+            if (IsCanControl()) _jijiaBody.GZDaodan(false);
+        }
+
+    }
+
 
 
     void OldKey()

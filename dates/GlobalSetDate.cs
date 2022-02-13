@@ -60,6 +60,7 @@ public class GlobalSetDate : MonoBehaviour {
         //XLuaTest("lua test  测试");
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_OVER, this.GameOver);
         OtherDate = GetOtherDate();
+        Application.targetFrameRate = 60;
         print("OtherDate    "+ OtherDate);
     }
 
@@ -464,10 +465,20 @@ public class GlobalSetDate : MonoBehaviour {
 
     }
 
+    GameObject _player;
     string screenChangeDate;
     public void ScreenChangeDateRecord()
     {
-        RoleDate _roleDate = GlobalTools.FindObjByName("player").GetComponent<RoleDate>();
+        if(_player == null)
+        {
+            _player = GlobalTools.FindObjByName(GlobalTag.PlayerObj);
+            if(_player == null)
+            {
+                _player = GlobalTools.FindObjByName(GlobalTag.PlayerJijiaObj);
+            }
+        }
+
+        RoleDate _roleDate = _player.GetComponent<RoleDate>();
         screenChangeDate = "cLive=" +_roleDate.live+","+"cLan="+_roleDate.lan+",cYingzhi="+_roleDate.yingzhi+",cFangyu="+_roleDate.def;
         print("  角色转场前 存储的 角色状态信息  》》》》》》   "+ screenChangeDate);
         //Time.timeScale = 0;

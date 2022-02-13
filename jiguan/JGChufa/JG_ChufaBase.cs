@@ -21,7 +21,7 @@ public class JG_ChufaBase : MonoBehaviour
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //return;
-        if (!IsHitChufa && Coll.tag == GlobalTag.Player)
+        if (!IsHitChufa && Coll.tag == GlobalTag.Player&&Coll.GetComponent<JijiaGamebody>() == null)
         {
             IsHitChufa = true;
 

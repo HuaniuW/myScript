@@ -205,7 +205,12 @@ public class XueTiao : MonoBehaviour {
             gameObj = GlobalTools.FindObjByName("player");
             //print("  gameObj  "+gameObj.name);
             //GetGameObj();
+            if (gameObj == null)
+            {
+                gameObj = GlobalTools.FindObjByName("player_jijia");
+            }
         }
+        
        
 
         roleDate = gameObj.GetComponent<RoleDate>();
@@ -215,6 +220,7 @@ public class XueTiao : MonoBehaviour {
         {
             print("  name " + gameObj.name);
             print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---clive " + _cLive + "    ----roledateLive " + roleDate.live);
+            _cLive = int.Parse(e.eventParams.ToString());
         }
 
 
@@ -236,7 +242,7 @@ public class XueTiao : MonoBehaviour {
 
 
     //参数 >= 0的时候 直接跳到结果 可以做为开场预设  +血和预设
-    public void GetXueNum(float nums)
+    public virtual void GetXueNum(float nums)
     {
         //_cLive = roleDate.live;
         _cLive = _cLive+nums > _maxLive?_maxLive: _cLive + nums;

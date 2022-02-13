@@ -306,8 +306,8 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         _qishiACJS = 0;
         IsTrunFace = false;
         //TX_Qishi.Pause();
-        TX_Qishi.Stop();
-        TX_Qishi.gameObject.SetActive(false);
+        if(TX_Qishi) TX_Qishi.Stop();
+        if (TX_Qishi) TX_Qishi.gameObject.SetActive(false);
         ResetAllMore();
     }
 

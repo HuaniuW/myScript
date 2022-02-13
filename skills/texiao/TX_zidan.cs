@@ -8,8 +8,13 @@ public class TX_zidan : MonoBehaviour
     void Start()
     {
         //ZidanTest();
+        TheStart();
     }
 
+    protected virtual void TheStart()
+    {
+
+    }
 
     void ZidanTest()
     {
@@ -30,11 +35,20 @@ public class TX_zidan : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_player) _player = GlobalTools.FindObjByName("player");
+        if (!_player) {
+            _player = GlobalTools.FindObjByName("player");
+            if(_player == null)
+            {
+                _player = GlobalTools.FindObjByName(GlobalTag.PlayerJijiaObj);
+            }
+        }
+        
         //HitKuai
         //获取角速度
         isFaShe = true;
         testN = 0;
+
+
         //v2 = GlobalTools.GetVector2ByPostion(_player.transform.position,this.transform.position,speeds);
         /*  v2 = _player.transform.position - this.transform.position;
           print("_player.transform.position    " + _player.transform.position + "  this.transform.position   " + this.transform.position+  "-----------------------zd>  " +v2);
@@ -43,6 +57,13 @@ public class TX_zidan : MonoBehaviour
 
         //isFire = false;
         //isShangshen = false;
+
+        OtherOnEnable();
+    }
+
+    protected virtual void OtherOnEnable()
+    {
+
     }
 
 
@@ -82,6 +103,8 @@ public class TX_zidan : MonoBehaviour
     }
 
 
+  
+
     protected virtual void fire()
     {
 
@@ -90,14 +113,16 @@ public class TX_zidan : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = FSFXV2;
             return;
         }
-
-
         if (_player&& isFaShe) {
             isFaShe = false;
             print("----------------------------------------->>  fire!!!!! "+speeds);
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
             //print("   sudu   "+ GetComponent<Rigidbody2D>().velocity);
-        } 
+            FSFXV2 = GetComponent<Rigidbody2D>().velocity;
+
+        }
+
+        
     }
 
     [Header("是否自行开启向 玩家的 攻击")]
@@ -137,8 +162,14 @@ public class TX_zidan : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(v2, this.transform.position, speeds);
     }
 
+
+    public void Resetfsfxv2()
+    {
+        FSFXV2 = new Vector2(Mathf.Abs(FSFXV2.x), 0);
+    }
+
     protected bool _isFSByFX = false;
-    public Vector2 FSFXV2 = new Vector2(1, 0);
+    public Vector2 FSFXV2 = new Vector2(0, 0);
     public void SetZiDanSpeedByFX(float scaleX)
     {
         _isFSByFX = true;
@@ -156,23 +187,29 @@ public class TX_zidan : MonoBehaviour
 
     public bool IsCanHitDiban = true;
 
-    void OnTriggerEnter2D(Collider2D Coll)
+    protected virtual void OnTriggerEnter2D(Collider2D Coll)
     {
         //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
-        if (Coll.tag == "Player"||(IsCanHitDiban && Coll.tag == "diban")|| Coll.tag == "zidanDun")
+        if (Coll.tag == "Player"||(IsCanHitDiban && Coll.tag == "diban")|| Coll.tag == "zidanDun"||Coll.tag == GlobalTag.JIGUANG)
         {
             if (!IsCanHit) return;
             //print(testN + "   Coll.tag  碰到了什么鬼：    " + Coll.tag);
             if (Coll.tag == "Player" && Coll.GetComponent<RoleDate>().isCanBeHit == false) return;
             //生成爆炸
-            Boom();
-            RemoveSelf();
+            HitObj();
 
         }
     }
 
 
-    void Boom()
+    protected virtual void HitObj()
+    {
+        Boom();
+        RemoveSelf();
+    }
+
+
+    protected virtual void Boom()
     {
         
         if (testN == 0)
@@ -206,11 +243,18 @@ public class TX_zidan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        OtherUpdate();
         if (IsAtkAuto) {
             fire();
         }
         RemoveByTimes();
         //print("sudu   "+ GetComponent<Rigidbody2D>().velocity);
+    }
+
+
+    protected virtual void OtherUpdate()
+    {
+
     }
 
 

@@ -17,7 +17,6 @@ public class DieOut : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
-      
     }
 
    
@@ -94,7 +93,7 @@ public class DieOut : MonoBehaviour {
                     if (GlobalTools.FindObjByName("MainCamera") != null)
                     {
                         GlobalTools.FindObjByName("MainCamera").GetComponent<GameControl>().GuaiList.Remove(this.gameObject);
-                        GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>().TheGuaiList.Remove(this.gameObject);
+                        if(GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>()) GlobalTools.FindObjByName("MainCamera").GetComponent<ScreenDoorGuaiControl>().TheGuaiList.Remove(this.gameObject);
                     }
                 }
 
