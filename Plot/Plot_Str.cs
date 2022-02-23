@@ -464,6 +464,7 @@ public class Plot_Str : MonoBehaviour
         Transform talkPos;
         if (talkObj)
         {
+            print("talkObj name   "+ talkObj.name);
             _talkPos = talkObj.GetComponent<GameBody>().GetTalkPos();
             talkPos = talkObj.GetComponent<GameBody>().TalkPos.transform;
         }

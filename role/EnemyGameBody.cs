@@ -384,7 +384,7 @@ public class EnemyGameBody : GameBody {
             roleDate.isDie = true;
         }
 
-
+        OutDownYDie();
 
 
         if (Globals.isInPlot) return;

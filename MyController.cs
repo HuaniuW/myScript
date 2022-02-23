@@ -342,7 +342,7 @@ public class MyController : MonoBehaviour {
         //ShouBing();
         if (_body.IsInJijia)
         {
-            print("  在机甲里面？？？？？？？？？？？？？？ ");
+            //print("  在机甲里面？？？？？？？？？？？？？？ ");
             //驾驶机甲
             JijiaControl();
         }

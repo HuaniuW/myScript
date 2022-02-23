@@ -95,6 +95,7 @@ public class HitKuai : MonoBehaviour {
         }
         else if(this.GetComponent<CapsuleCollider2D>())
         {
+            print("  556666s ");
             p1 = this.GetComponent<CapsuleCollider2D>().bounds.center;
             s1 = this.GetComponent<CapsuleCollider2D>().bounds.extents;
         }
@@ -1164,7 +1165,11 @@ public class HitKuai : MonoBehaviour {
         //击退 判断方向
         float _psScaleX = sx;
 
-
+        //无特效 伤害 毒 火等 避免 光圈显示位置 错误
+        if (jn_date.HitInSpecialEffectsType == 21)
+        {
+            return;
+        }
 
         if (BeHitGameBody&&BeHitGameBody.GetComponent<GameBody>().IsJianmianDun)
         {

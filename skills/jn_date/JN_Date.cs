@@ -69,7 +69,7 @@ public class JN_Date : MonoBehaviour {
     public string atkDirection = "";
     [Header("空中攻击的反推力")]
     public float fasntuili = 0;
-    [Header("击中特效类型 5是撞击 7是毒 8是撞击型怪物（防止碰撞保护）11是属性攻击 12是不可格挡攻击")]
+    [Header("击中特效类型 5是撞击 7是毒 8是撞击型怪物（防止碰撞保护）11是属性攻击 12是不可格挡攻击 21雾特效伤害")]
     public int HitInSpecialEffectsType = 1;
 
     [Header("击中特效偏移位置X")]

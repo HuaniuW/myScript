@@ -265,7 +265,7 @@ public class PlayerRoleDate : RoleDate
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
         //print("------------------------------------------------------------气血徽章- 事件发送！！！！！"+ "  当前血量是多少????    " + live);
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE, this.maxLive), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE, this.maxLive+"_max"), this);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LAN, this.maxLan), this);
         GetPlayerMsg();
         //print("  当前血量是多少????    "+live);

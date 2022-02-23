@@ -216,22 +216,33 @@ public class XueTiao : MonoBehaviour {
         roleDate = gameObj.GetComponent<RoleDate>();
         //print("XT  gameObj>  " + gameObj);
 
+        bool isHZChange = false;
+        float NewMaxLive = _maxLive;
+
         if (gameObj != null)
         {
             print("  name " + gameObj.name);
-            print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---clive " + _cLive + "    ----roledateLive " + roleDate.live);
-            _cLive = int.Parse(e.eventParams.ToString());
+            print("最大血上线xue change!  roleDate.maxLive    " + roleDate.maxLive + "  _maxLive " + _maxLive + "   传进来数据  " + e.eventParams + "    ---_clive " + _cLive + "    ----roledateLive " + roleDate.live);
+            //_cLive = int.Parse(e.eventParams.ToString());
+            print("  传进来的 clive  "+ e.eventParams.ToString());
+            string liveStr = e.eventParams.ToString();
+            _cLive = roleDate.live;
+            if (liveStr.Split('_').Length >= 2)
+            {
+                NewMaxLive = float.Parse(liveStr.Split('_')[0]);
+                isHZChange = true;
+            }
         }
 
 
         roleDate.live = _cLive;
-        //print("2222222roledetelive   " + roleDate.live);
-        //GlobalSetDate.instance.ScreenChangeDateRecord();
+        print("2222222roledetelive   " + roleDate.live);
+        if(isHZChange) GlobalSetDate.instance.ScreenChangeDateRecord();
         GlobalSetDate.instance.GetScreenChangeDate();
         if (gameObj == null) return;
         if (gameObj.tag == GlobalTag.Player && roleDate)
         {
-            AddMaxLiveBar((float)e.eventParams - _maxLive);
+            AddMaxLiveBar(NewMaxLive - _maxLive);
             //print(" ???@roledate   "+roleDate.live);
             GetGameObj(roleDate);
         }

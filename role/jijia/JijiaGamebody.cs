@@ -7,6 +7,8 @@ using DragonBones;
 public class JijiaGamebody : GameBody
 {
     PlayerUI _playerUI;
+    [Header("推进器 是否用完")]
+    public bool IsJijiaGKOver = false;
     protected override void GetStart()
     {
         base.GetStart();
@@ -17,6 +19,11 @@ public class JijiaGamebody : GameBody
         if (IsInOnGroundSrop) {
             InOnGroundStop();
             GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<UI_Nengliangtiao>().HideSelf();
+            if (IsJijiaGKOver)
+            {
+                //隐藏 推进器
+                GetComponent<Jijia_Zhutuiqis>().HideZhutuiqi();
+            }
         }
         else
         {
@@ -922,7 +929,7 @@ public class JijiaGamebody : GameBody
 
     }
 
-    string GZDaodanName = "DD_GZDaodanPlayer";
+    string GZDaodanName = "DD_GZDaodanPlayer";            
     private void ShowGZDaodan()
     {
         if (daodanNums == 0) {

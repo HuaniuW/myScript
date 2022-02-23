@@ -30,10 +30,7 @@ public class Jijia_Zhutuiqis : MonoBehaviour
     private void ZhutuiqiTuoli(UEvent evt)
     {
         //隐藏 助推器
-        GetComponent<GameBody>().GetDB().armature.GetSlot("JYHuojianTong1")._SetDisplayIndex(-1);
-        GetComponent<GameBody>().GetDB().armature.GetSlot("JYHuojianTong2")._SetDisplayIndex(-1);
-        GetComponent<GameBody>().GetDB().armature.GetSlot("JZHuojian2")._SetDisplayIndex(-1);
-        GetComponent<GameBody>().GetDB().armature.GetSlot("JZHuojian1")._SetDisplayIndex(-1);
+        HideZhutuiqi();
 
         //throw new NotImplementedException();
         PaoZhutuiqi(Zhutuiqi1);
@@ -42,6 +39,14 @@ public class Jijia_Zhutuiqis : MonoBehaviour
         PaoZhutuiqi(Zhutuiqi4);
         IsHasPaoqiZhutuiqi = true;
 
+    }
+
+    public void HideZhutuiqi()
+    {
+        GetComponent<GameBody>().GetDB().armature.GetSlot("JYHuojianTong1")._SetDisplayIndex(-1);
+        GetComponent<GameBody>().GetDB().armature.GetSlot("JYHuojianTong2")._SetDisplayIndex(-1);
+        GetComponent<GameBody>().GetDB().armature.GetSlot("JZHuojian2")._SetDisplayIndex(-1);
+        GetComponent<GameBody>().GetDB().armature.GetSlot("JZHuojian1")._SetDisplayIndex(-1);
     }
 
     private void OnDestroy()

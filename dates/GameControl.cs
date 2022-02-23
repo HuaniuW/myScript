@@ -108,7 +108,7 @@ public class GameControl : MonoBehaviour {
     //通过方向 来判断 门 和放置玩家的位置
     public void GetPlayerPosByFX()
     {
-        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame);
+        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame+ "  IsJijisGK  "+ IsJijisGK);
         player.GetComponent<GameBody>().IsNeedDieOutDownY = true;
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
         if (IsJijisGK) return;
@@ -619,7 +619,7 @@ public class GameControl : MonoBehaviour {
 
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             //指定当前数值
-            //GlobalSetDate.instance.GetScreenChangeDate();
+            GlobalSetDate.instance.GetScreenChangeDate();
         } else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.TEMP_SCREEN) {
             if (Globals.isDebug) print("临时 直接重场景进入的游戏");
             GlobalSetDate.instance.GetSave();

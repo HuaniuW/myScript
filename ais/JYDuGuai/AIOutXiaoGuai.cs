@@ -52,8 +52,9 @@ public class AIOutXiaoGuai : MonoBehaviour
         {
             guai = ObjectPools.GetInstance().SwpanObject2(guai);
             guai.transform.position = GuaiOutPos.position;
+            guai.name = OutGuaiName;
 
-            if(Audio_GuaiOut) Audio_GuaiOut.Play();
+            if (Audio_GuaiOut) Audio_GuaiOut.Play();
             if(TX_OutGuai) TX_OutGuai.Play();
 
         }

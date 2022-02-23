@@ -21,6 +21,11 @@ public class Map_JijiaControl : MonoBehaviour
         CreateMaps();
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DAOJISHI, "239"), this);
         CX = player_jijia.transform.position.x;
+
+        print("  --------cundang!!!  ");
+        //直接存档
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GAME_SAVEING, null), this);
+        //GlobalSetDate.instance.GetSave();
     }
 
     float CX = 0;
@@ -217,7 +222,7 @@ public class Map_JijiaControl : MonoBehaviour
 
         }
 
-        //Jiguan();
+        Jiguan();
 
     }
 
@@ -240,10 +245,10 @@ public class Map_JijiaControl : MonoBehaviour
     void Jiguan()
     {
 
-        print(player_jijia.transform.position.x - CX);
+        //print(player_jijia.transform.position.x - CX);
 
         GuankaJishi += Time.deltaTime;
-        print("  关卡 进行时间  " + GuankaJishi);
+        //print("  关卡 进行时间  " + GuankaJishi);
 
         _jiguan.FasheHoufangDaodan();
 

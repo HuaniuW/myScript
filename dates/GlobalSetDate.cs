@@ -301,14 +301,16 @@ public class GlobalSetDate : MonoBehaviour {
             {
                 roleDirection = "r";
                 //playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.transform.position.y - 1f);
-                playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
+                //playerInScreenPosition = new Vector2(door.transform.position.x - 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
+                playerInScreenPosition = new Vector2(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.x, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
 
             }
             else
             {
                 roleDirection = "l";
                 //playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.transform.position.y - 1f);
-                playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
+                //playerInScreenPosition = new Vector2(door.transform.position.x + 1, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
+                playerInScreenPosition = new Vector2(door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.x, door.GetComponent<RMapMen>().MenKuai.GetComponent<ScreenChange>().OutPosition.position.y);
             }
             doorName = "";
         }
@@ -489,6 +491,11 @@ public class GlobalSetDate : MonoBehaviour {
     {
         print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
         //GlobalTools.FindObjByName("player")
+
+
+        if (GlobalTools.FindObjByName(GlobalTag.PlayerObj) == null) return;
+
+
         if (screenChangeDate == null) return;
         string[] roleDateArr = screenChangeDate.Split(',');
         for(var i = 0; i < roleDateArr.Length; i++) {
