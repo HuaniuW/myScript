@@ -111,6 +111,12 @@ public class JN_JumpCut : MonoBehaviour, ISkill
     // Update is called once per frame
     void Update()
     {
+        if (_roleDate.isBeHiting || _roleDate.isDie)
+        {
+            _gameBody.GetZongTuili(new Vector2(0, 0));
+        }
+
+
         if (_roleDate.isBeHiting || _roleDate.isDie || (_gameBody.IsGround && _gameBody.IsGetStand()))
         {
             //_gameBody.GetPlayerRigidbody2D().gravityScale = _recordGravity;

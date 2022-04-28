@@ -48,7 +48,11 @@ public class ScreenAudios : MonoBehaviour
         foreach (string AudioName in AudioNameStrList)
         {
             GameObject _audioObj = GlobalTools.GetGameObjectByName(AudioName);
-            if(_audioObj!=null)_audioObj.GetComponent<AudioSource>().Play();
+            if (_audioObj != null) {
+                _audioObj.GetComponent<AudioSource>().Play();
+                _audioObj.GetComponent<AudioSource>().loop = true;
+            }
+            
         }
     }
 

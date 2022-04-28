@@ -37,6 +37,7 @@ public class PlayerRoleDate : RoleDate
         set
         {
             Lan = value;
+            if (Lan > maxLan) Lan = maxLan;
             if (Lan < 0) Lan = 0;
             //print("蓝 量改变  "+Lan);
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HUN, Lan), this);
@@ -264,7 +265,7 @@ public class PlayerRoleDate : RoleDate
             IsHasZZ = false;
             ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ZUZHOU, false), this);
         }
-        //print("------------------------------------------------------------气血徽章- 事件发送！！！！！"+ "  当前血量是多少????    " + live);
+        print("------------------------------------------------------------气血徽章- 事件发送！！！！！"+ "  当前血量是多少????    " + live);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE, this.maxLive+"_max"), this);
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LAN, this.maxLan), this);
         GetPlayerMsg();
@@ -278,34 +279,482 @@ public class PlayerRoleDate : RoleDate
         }
 
 
+      
+
+        print("   ********* 徽章事件 roledate 血量   怎么进的游戏"+ GlobalSetDate.instance.HowToInGame);
+
+    }
+
+
+    string playerMsg = "角色信息";
+    public string PLAYERMSG
+    {
+        get { return playerMsg; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    playerMsg = "角色信息";
+                    break;
+                case Globals.JAPAN:
+                    playerMsg = "役割情報";
+                    break;
+                case Globals.ENGLISH:
+                    playerMsg = "role information";
+                    break;
+                case Globals.Portugal:
+                    playerMsg = "información del rol";
+                    break;
+                case Globals.KOREAN:
+                    playerMsg = "역할 정보";
+                    break;
+            }
+        }
     }
 
 
 
-   
+    string liveZ = "生命值: ";
+    public string LIVEZ
+    {
+        get { return liveZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    liveZ = "生命值: ";
+                    break;
+                case Globals.JAPAN:
+                    liveZ = "生命価値: ";
+                    break;
+                case Globals.ENGLISH:
+                    liveZ = "live: ";
+                    break;
+                case Globals.Portugal:
+                    liveZ = "valor de vida: ";
+                    break;
+                case Globals.KOREAN:
+                    liveZ = "삶의 가치: ";
+                    break;
+            }
+        }
+    }
 
 
+    string lanZ = "蓝量: ";
+    public string LANZ
+    {
+        get { return lanZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    lanZ = "蓝量: ";
+                    break;
+                case Globals.JAPAN:
+                    lanZ = "エネルギー: ";
+                    break;
+                case Globals.ENGLISH:
+                    lanZ = "energy: ";
+                    break;
+                case Globals.Portugal:
+                    lanZ = "energía: ";
+                    break;
+                case Globals.KOREAN:
+                    lanZ = "에너지: ";
+                    break;
+            }
+        }
+    }
+
+
+    string atkZ = "攻击力: ";
+    public string ATKZ
+    {
+        get { return atkZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    atkZ = "攻击力: ";
+                    break;
+                case Globals.JAPAN:
+                    atkZ = "攻撃力: ";
+                    break;
+                case Globals.ENGLISH:
+                    atkZ = "atk: ";
+                    break;
+                case Globals.Portugal:
+                    atkZ = "atk: ";
+                    break;
+                case Globals.KOREAN:
+                    atkZ = "공격력: ";
+                    break;
+            }
+        }
+    }
+
+
+
+
+    string defZ = "防御力: ";
+    public string DEFZ
+    {
+        get { return defZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    defZ = "防御力: ";
+                    break;
+                case Globals.JAPAN:
+                    defZ = "防衛: ";
+                    break;
+                case Globals.ENGLISH:
+                    defZ = "def: ";
+                    break;
+                case Globals.Portugal:
+                    defZ = "Defensa: ";
+                    break;
+                case Globals.KOREAN:
+                    defZ = "방어: ";
+                    break;
+            }
+        }
+    }
+
+
+    string yzZ = "硬直: ";
+    public string YZZ
+    {
+        get { return yzZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    yzZ = "硬直: ";
+                    break;
+                case Globals.JAPAN:
+                    yzZ = "硬度: ";
+                    break;
+                case Globals.ENGLISH:
+                    yzZ = "hardness: ";
+                    break;
+                case Globals.Portugal:
+                    yzZ = "dureza: ";
+                    break;
+                case Globals.KOREAN:
+                    yzZ = "경도: ";
+                    break;
+            }
+        }
+    }
+
+
+    string baojiZ = "暴击几率: ";
+    public string BAOJIZ
+    {
+        get { return baojiZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    baojiZ = "暴击率: ";
+                    break;
+                case Globals.JAPAN:
+                    baojiZ = "クリティカ: ";
+                    break;
+                case Globals.ENGLISH:
+                    baojiZ = "crit: ";
+                    break;
+                case Globals.Portugal:
+                    baojiZ = "crit: ";
+                    break;
+                case Globals.KOREAN:
+                    baojiZ = "중요한 기회: ";
+                    break;
+            }
+        }
+    }
+
+
+
+    string baojiZBL = "暴击倍率: ";
+    public string BAOJIZBL
+    {
+        get { return baojiZ; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    baojiZBL = "暴击倍率: ";
+                    break;
+                case Globals.JAPAN:
+                    baojiZBL = "クリティカル乗数: ";
+                    break;
+                case Globals.ENGLISH:
+                    baojiZBL = "Crit multiplier: ";
+                    break;
+                case Globals.Portugal:
+                    baojiZBL = "Crit multiplier: ";
+                    break;
+                case Globals.KOREAN:
+                    baojiZBL = "치명타 배율: ";
+                    break;
+            }
+        }
+    }
+
+
+
+    string shanghaiJML = "伤害减免率: ";
+    public string SHANGHAIJML
+    {
+        get { return shanghaiJML; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    shanghaiJML = "伤害减免率: ";
+                    break;
+                case Globals.JAPAN:
+                    shanghaiJML = "ダメージ軽減率: ";
+                    break;
+                case Globals.ENGLISH:
+                    shanghaiJML = "Damage Reduction Rate: ";
+                    break;
+                case Globals.Portugal:
+                    shanghaiJML = "Tasa de reducción de daños: ";
+                    break;
+                case Globals.KOREAN:
+                    shanghaiJML = "데미지 감소율: ";
+                    break;
+            }
+        }
+    }
+
+    string kangduJL = "抗毒几率: ";
+    public string KANGDUJL
+    {
+        get { return kangduJL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kangduJL = "抗毒几率: ";
+                    break;
+                case Globals.JAPAN:
+                    kangduJL = "アンチウイルス: ";
+                    break;
+                case Globals.ENGLISH:
+                    kangduJL = "Antivirus: ";
+                    break;
+                case Globals.Portugal:
+                    kangduJL = "antivirus: ";
+                    break;
+                case Globals.KOREAN:
+                    kangduJL = "바이러스 백신: ";
+                    break;
+            }
+        }
+    }
+
+
+    string kangduSHBL = "抗毒伤害比率: ";
+    public string KANGDUSHBL
+    {
+        get { return kangduSHBL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kangduSHBL = "抗毒伤害比率: ";
+                    break;
+                case Globals.JAPAN:
+                    kangduSHBL = "毒ダメージ: ";
+                    break;
+                case Globals.ENGLISH:
+                    kangduSHBL = "Poison Damage: ";
+                    break;
+                case Globals.Portugal:
+                    kangduSHBL = "Daño por veneno: ";
+                    break;
+                case Globals.KOREAN:
+                    kangduSHBL = "독 피해: ";
+                    break;
+            }
+        }
+    }
+
+    string kanghuoJL = "抗火点燃几率: ";
+    public string KANGHUJL
+    {
+        get { return kanghuoJL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kanghuoJL = "抗火点燃几率: ";
+                    break;
+                case Globals.JAPAN:
+                    kanghuoJL = "難燃性: ";
+                    break;
+                case Globals.ENGLISH:
+                    kanghuoJL = "fire resistant: ";
+                    break;
+                case Globals.Portugal:
+                    kanghuoJL = "resistente al fuego: ";
+                    break;
+                case Globals.KOREAN:
+                    kanghuoJL = "내화성: ";
+                    break;
+            }
+        }
+    }
+
+    string kanghuoSHBL = "抗火伤害比率: ";
+    public string KANGHUSHBL
+    {
+        get { return kanghuoSHBL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kanghuoSHBL = "抗火伤害: ";
+                    break;
+                case Globals.JAPAN:
+                    kanghuoSHBL = "火災によるダメージ: ";
+                    break;
+                case Globals.ENGLISH:
+                    kanghuoSHBL = "Fire damage: ";
+                    break;
+                case Globals.Portugal:
+                    kanghuoSHBL = "Daño por fuego: ";
+                    break;
+                case Globals.KOREAN:
+                    kanghuoSHBL = "화재 피해: ";
+                    break;
+            }
+        }
+    }
+
+    string kangdianJL = "抗电几率: ";
+    public string KANGDIANJL
+    {
+        get { return kangdianJL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kangdianJL = "抗电几率: ";
+                    break;
+                case Globals.JAPAN:
+                    kangdianJL = "反電気: ";
+                    break;
+                case Globals.ENGLISH:
+                    kangdianJL = "Anti-electric: ";
+                    break;
+                case Globals.Portugal:
+                    kangdianJL = "Anti-eléctrico: ";
+                    break;
+                case Globals.KOREAN:
+                    kangdianJL = "정전기 방지: ";
+                    break;
+            }
+        }
+    }
+
+    string kangdianMBJL = "抗电麻痹几率: ";
+    public string KANGDIANMBJL
+    {
+        get { return kangdianMBJL; }
+        set
+        {
+            switch (Globals.language)
+            {
+                case Globals.CHINESE:
+                    kangdianMBJL = "抗电伤害: ";
+                    break;
+                case Globals.JAPAN:
+                    kangdianMBJL = "反電気的損傷: ";
+                    break;
+                case Globals.ENGLISH:
+                    kangdianMBJL = "nti-electrical damage: ";
+                    break;
+                case Globals.Portugal:
+                    kangdianMBJL = "Daño anti-eléctrico: ";
+                    break;
+                case Globals.KOREAN:
+                    kangdianMBJL = "정전기 방지 손상: ";
+                    break;
+            }
+        }
+    }
 
     //获取玩家数据信息
     public string GetPlayerMsg()
     {
-        string str =Globals.language == Globals.CHINESE ? "<color=#FDFEFE>角色信息</color>\n\n" : "<color=#FDFEFE>Player information</color>\n\n";
-        string _liveStr = Globals.language == Globals.CHINESE ? "<color=#76D7C4>生命值：+" + this.live+"/"+this.maxLive + "</color>\n" : "<color=#76D7C4>live：+" + this.live + "/" + this.maxLive + "</color>\n";
-        string _lanStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>蓝量：+" + this.lan + "/" + this.maxLan + "</color>\n" : "<color=#5DADE2>lan：+" + this.lan + "/" + this.maxLan + "</color>\n";
-        string _atkStr = Globals.language == Globals.CHINESE ? "<color=#E74C3C>攻击力：+" + this.atk + "</color>\n" : "<color=#E74C3C>atk：+" + this.atk + "</color>\n";
-        string _defStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>防御力：+" + this.def + "</color>\n" : "<color=#5DADE2>def：+" + this.def + "</color>\n";
-        string _yingzhiStr = Globals.language == Globals.CHINESE ? "<color=#5DADE2>硬直：+" + this.yingzhi + "</color>\n" : "<color=#5DADE2>yz：+" + this.yingzhi + "</color>\n";
-        string _baojijilv = Globals.language == Globals.CHINESE ? "<color=#5D0DE2>暴击几率：+" + this.BaoJiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiLv + "</color>\n";
-        string _baojishanghaibeilv = Globals.language == Globals.CHINESE ? "<color=#0DADE2>暴击伤害倍数：+" + this.BaoJiShangHaiBeiLv + "</color>\n" : "<color=#5DADE2>yz：+" + this.BaoJiShangHaiBeiLv + "</color>\n";
-        string _shanghaijianmianlv= Globals.language == Globals.CHINESE ? "<color=#E74C3C>伤害减免率：+" + this.shanghaijianmianLv + "</color>\n" : "<color=#E74C3C>shjmlv：+" + this.shanghaijianmianLv + "</color>\n";
-        string _kangdujilv = Globals.language == Globals.CHINESE ? "<color=#E74C3C>抗毒几率：+" + this.KangDuJilv + "</color>\n" : "<color=#E74C3C>kangdu：+" + this.KangDuJilv + "</color>\n";
-        string _kangduShanghaiJilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>毒伤害抵抗率：+" + this.KangDuShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangDuShanghaijilv + "</color>\n";
+        PLAYERMSG = "";
+        string str ="<color=#FF3399>"+ PLAYERMSG + "</color>\n\n";
 
-        string _kanghuojilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗火点燃几率：+" + this.KangHuoJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangHuoJilv + "</color>\n";
-        string _kanghuoshanghaijilv = Globals.language == Globals.CHINESE ? "<color=#E00CfC>火伤害抵抗率：+" + this.KangHuoShanghaijilv + "</color>\n" : "<color=#E00CfC>kangdushanghai：+" + this.KangHuoShanghaijilv + "</color>\n";
+        LIVEZ = "";
+        string _liveStr = "<color=#76D7C4>"+ LIVEZ + this.live+"/"+this.maxLive + "</color>\n" ;
 
-        string _kangdianjilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗电几率：+" + this.KangDianJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangDianJilv + "</color>\n";
-        string _kangdianmabijilv = Globals.language == Globals.CHINESE ? "<color=#5DADE2>抗电麻痹几率：+" + this.KangDianMabiJilv + "</color>\n" : "<color=#5DADE2>kanghuodianranjilv：+" + this.KangDianMabiJilv + "</color>\n";
+        LANZ = "";
+        string _lanStr = "<color=#5DADE2>"+ LANZ + this.lan + "/" + this.maxLan + "</color>\n";
+
+        ATKZ = "";
+        //print("显示 攻击力：     "+ATKZ);
+        string _atkStr = "<color=#E74C3C>"+ ATKZ + this.atk + "</color>\n";
+        //print("攻击力 字符  _atkStr    "+ _atkStr);
+
+        DEFZ = "";
+        string _defStr = "<color=#5DADE2>"+ DEFZ + this.def + "</color>\n";
+
+        YZZ = "";
+        string _yingzhiStr = "<color=#5DADE2>"+ YZZ + this.yingzhi + "</color>\n";
+
+        BAOJIZ = "";
+        string _baojijilv = "<color=#5D0DE2>"+ BAOJIZ + this.BaoJiLv + "</color>\n";
+
+        BAOJIZBL = "";
+        string _baojishanghaibeilv ="<color=#0DADE2>"+ BAOJIZBL + this.BaoJiShangHaiBeiLv + "</color>\n";
+
+        SHANGHAIJML = "";
+        string _shanghaijianmianlv= "<color=#E74C3C>"+ SHANGHAIJML + this.shanghaijianmianLv + "</color>\n";
+        //抗毒几率
+        KANGDUJL = "";
+        string _kangdujilv = "<color=#E74C3C>"+ KANGDUJL + this.KangDuJilv + "</color>\n";
+
+        KANGDUSHBL = "";
+        string _kangduShanghaiJilv ="<color=#E00CfC>"+ KANGDUSHBL + this.KangDuShanghaijilv + "</color>\n";
+        //抗火点燃几率
+        KANGHUJL = "";
+        
+        string _kanghuojilv = "<color=#5DADE2>"+ KANGHUJL + this.KangHuoJilv + "</color>\n";
+        //抗火伤害比率
+        KANGHUSHBL = "";
+        string _kanghuoshanghaijilv ="<color=#E00CfC>"+ KANGHUSHBL + this.KangHuoShanghaijilv + "</color>\n";
+        //抗电几率
+        KANGDIANJL = "";
+        string _kangdianjilv = "<color=#5DADE2>"+ KANGDIANJL + this.KangDianJilv + "</color>\n";
+        //抗电麻痹几率
+        KANGDIANMBJL = "";
+        string _kangdianmabijilv = "<color=#5DADE2>"+ KANGDIANMBJL + this.KangDianMabiJilv + "</color>\n";
 
         
         str += _liveStr+ _lanStr + _atkStr + _defStr+ _yingzhiStr+_baojijilv+_baojishanghaibeilv+ _shanghaijianmianlv + _kangdujilv+ _kangduShanghaiJilv+ _kanghuojilv+ _kanghuoshanghaijilv+ _kangdianjilv+ _kangdianmabijilv;

@@ -136,7 +136,7 @@ public class SaveUI : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            //print("enter");
+            print("enter");
             GetChoseObj();
         }
     }

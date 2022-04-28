@@ -163,29 +163,24 @@ public class AIYidongZidan : MonoBehaviour
         IsAtking = false;
         IsAtked = false;
         ToziDan();
-        return;
+        //return;
+        //print(gameBody.GetDB().animation.lastAnimationName + "   p  " + gameBody.GetDB().animation.isCompleted+"  p111  "+gameBody.GetDB().animation.GetStates());
+        //if(gameBody.GetDB().animation.lastAnimationName == ATK_1AC&& gameBody.GetDB().animation.isCompleted)
+        //{
+        //    print("------------->吐子弹！！！");
+        //    IsAtking = false;
+        //    IsAtked = false;
+        //    gameBody.isAcing = false;
+        //    ToziDan();
+        //    return;
+        //}
 
-
-
-
-        print(gameBody.GetDB().animation.lastAnimationName + "   p  " + gameBody.GetDB().animation.isCompleted+"  p111  "+gameBody.GetDB().animation.GetStates());
-        if(gameBody.GetDB().animation.lastAnimationName == ATK_1AC&& gameBody.GetDB().animation.isCompleted)
-        {
-            print("------------->吐子弹！！！");
-            IsAtking = false;
-            IsAtked = false;
-            gameBody.isAcing = false;
-            ToziDan();
-            return;
-        }
-
-
-        if(!IsAtked &&gameBody.GetDB().animation.lastAnimationName != ATK_1AC)
-        {
-            IsAtked = true;
-            gameBody.isAcing = true;
-            gameBody.GetDB().animation.GotoAndPlayByFrame(ATK_1AC);
-        }
+        //if(!IsAtked &&gameBody.GetDB().animation.lastAnimationName != ATK_1AC)
+        //{
+        //    IsAtked = true;
+        //    gameBody.isAcing = true;
+        //    gameBody.GetDB().animation.GotoAndPlayByFrame(ATK_1AC);
+        //}
     }
 
     [Header("超出的 子弹数")]

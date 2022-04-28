@@ -84,10 +84,6 @@ public class Diaoluowu : MonoBehaviour {
                 GameObject HZ_obj = Resources.Load(objName) as GameObject;
                 string HZ_Msg = HZ_obj.GetComponent<HZDate>().GetHZ_information_str();
                 ui_huizhangMsg.GetComponent<UI_HZMsg>().StartShowBar("img_"+objName, HZ_Msg);
-
-               
-
-
             }
             else if (type == 2) {
                 //消耗的掉落物 吃了 直接加血

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using Pathfinding;
 using Pathfinding;
 
 public class AIAirRunNear : MonoBehaviour
@@ -13,10 +14,13 @@ public class AIAirRunNear : MonoBehaviour
     {
         runAway = GetComponent<AIAirRunAway>();
         _airGameBody = GetComponent<AirGameBody>();
-        setter = GetComponent<AIDestinationSetter>();
+        //setter = GetComponent<AIDestinationSetter>();
+
         
+
         _aiPath = GetComponent<AIPath>();
         _aiPath.canMove = false;
+        setter = GetComponent<AIDestinationSetter>();
         _obj = GlobalTools.FindObjByName("player");
         if(_obj == null)_obj = GlobalTools.FindObjByName("player_jijia");
         setter.target = _obj.transform;
@@ -65,6 +69,7 @@ public class AIAirRunNear : MonoBehaviour
         if (_csSpeed!=0) _aiPath.maxSpeed = _csSpeed;
         _csSpeed = 0;
         IsQuXianToPoint = false;
+        HitWallJishi = 0;
     }
 
     public void TurnToPlayer()
@@ -312,7 +317,7 @@ public class AIAirRunNear : MonoBehaviour
     //inDistance 进入 范围直径
     public bool ZhijieMoveToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true,float MaxSpeedX = 18)
     {
-
+        //print("   >>?????? sudu????    " + this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
         //print("111***lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
         if (inDistance != 0) zuijiPosDisWC = inDistance;
         zhuijiRun(IsCanTurnFace);
@@ -321,15 +326,15 @@ public class AIAirRunNear : MonoBehaviour
         //print("  v2-》  "+this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
         Vector2 v2 = (point - thisV2) * TempSpeed;// GlobalTools.GetVector2ByPostion(point, thisV2, TempSpeed);
 
-        //print("直接移动速度 v2 >>>>>>>>>>>>>>>>>>  " + v2);
+        //print("直接移动速度 v2 >>>>>>>>>>>>>>>>>>  " + v2+"   我的 位置  "+ thisV2+"   直接飞行去的目标点位置  "+ point);
         if (MaxSpeedX!=0&&Mathf.Abs(v2.x) > MaxSpeedX)
         {
             v2.x =v2.x>0? MaxSpeedX:-MaxSpeedX;
             v2.y *= MaxSpeedX / Mathf.Abs(v2.x);
         }
 
-        //print("直接移动速度 v2   "+v2);
-        
+        //print("22 直接移动速度 v2   " + v2);
+
 
         //if (v2.sqrMagnitude > (thisV2 - point).sqrMagnitude)
         //{
@@ -343,6 +348,8 @@ public class AIAirRunNear : MonoBehaviour
         this.GetComponent<GameBody>().IsJiasu = true;
         //如果 行动中撞墙  直接返回true
 
+
+        //print("  -----目前速度是多少   "+ this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
 
         //判断 点 是否 在自己上方  左边 右边  下边  如果是上边 则 下边 不做撞击判断
 
@@ -378,6 +385,263 @@ public class AIAirRunNear : MonoBehaviour
         }
         return false;
     }
+
+
+    float HitWallJishi = 0;
+
+
+    //直接 飞过去 X靠近 就行 不减速
+    public bool ZhijieMoveToPointX(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true, float MaxSpeedX = 18)
+    {
+        if (inDistance != 0) zuijiPosDisWC = inDistance;
+        zhuijiRun(IsCanTurnFace);
+        Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+        Vector2 v2 = (point - thisV2)*TempSpeed;
+
+        //print("** v2 "+v2);
+
+        //float __x = v2.x>0? TempSpeed : -TempSpeed;
+        float __x = v2.x;
+        if (__x > 0 && __x > TempSpeed) __x = TempSpeed;
+        if (__x < 0 && __x < -TempSpeed) __x = -TempSpeed;
+
+        //if (__x > 0 && __x < 3)
+        //{
+        //    __x = 3;
+        //}else if (__x < 0 && __x > -3)
+        //{
+        //    __x = -3;
+        //}
+
+
+
+
+        float __y = v2.y / v2.x * __x;
+        if (__y > TempSpeed) __y = TempSpeed*0.3f;
+        if (__y >= 5) __y = 5;
+        if (__y <= -5) __y = -5;
+        v2 = new Vector2(__x, __y);
+        //print("******* v2 " + v2);
+
+        if (MaxSpeedX != 0 && Mathf.Abs(v2.x) > MaxSpeedX)
+        {
+            v2.x = v2.x > 0 ? MaxSpeedX : -MaxSpeedX;
+            v2.y *= MaxSpeedX / Mathf.Abs(v2.x);
+        }
+        this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = v2;
+        this.GetComponent<GameBody>().IsJiasu = true;
+
+        if (IsTestHitWall && IsHitWallShiZhi(v2, zhijieZhuijiTanCeDistance))
+        {
+            //print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall+ "    HitWallJishi  "+ HitWallJishi);
+            HitWallJishi += Time.deltaTime;
+            if (HitWallJishi >= 1)
+            {
+                this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+                ResetAll();
+                return true;
+            }
+        }
+
+        //if (IsTestHitWall && IsHitWallByFXStr(v2, zhijieZhuijiTanCeDistance, thisV2) == "xl"|| IsHitWallByFXStr(v2, zhijieZhuijiTanCeDistance, thisV2) == "xr")
+        //{
+        //    print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
+
+
+        //    HitWallJishi += Time.deltaTime;
+        //    if (HitWallJishi >= 2)
+        //    {
+        //        this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+        //        ResetAll();
+        //        return true;
+        //    }
+        //}
+
+
+
+        //这里要做预判
+        float _jinruDis = (thisV2 - point).sqrMagnitude;
+
+        //print("两点间距离 " + _jinruDis+"   ------进入距离的 误差 内  "+ zuijiPosDisWC+ "  inDistance   " + inDistance+"    我的位置  "+thisV2+"    目标点 "+ point);
+        //距离小于 误差内 直接结束
+        if (_jinruDis < zuijiPosDisWC)
+        {
+            //print(thisV2+ "  --point  "+ point);
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+    public bool ZhijieMoveXYToPoint(Vector2 point, float inDistance = 0, float TempSpeed = 0, bool IsCanTurnFace = true, bool IsTestHitWall = true, float MaxSpeedX = 18)
+    {
+
+        //print("111***lastAnimationName>? " + _airGameBody.GetDB().animation.lastAnimationName);
+        if (inDistance != 0) zuijiPosDisWC = inDistance;
+        zhuijiRun(IsCanTurnFace);
+
+        Vector2 thisV2 = new Vector2(transform.position.x, transform.position.y);
+
+        float __x = 0;
+        float __y = 0;
+
+        __x = (point.x - thisV2.x) * 0.2f;
+        __y = (point.y - thisV2.y) * 0.2f;
+        this.transform.position = new Vector2(__x,__y);
+
+        //判断 点 是否 在自己上方  左边 右边  下边  如果是上边 则 下边 不做撞击判断
+
+        if (point.y > thisV2.y)
+        {
+            //目标点 在我上方
+            print("目标点 在我上方！！！！ ");
+
+        }
+
+        if (IsTestHitWall && IsHitWallByFX(v2, zhijieZhuijiTanCeDistance, thisV2))
+        {
+            print("   撞墙了！！！！！！！！！！！！！！！！！！  " + IsTestHitWall);
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+
+        //这里要做预判
+
+        float _jinruDis = (thisV2 - point).sqrMagnitude;
+
+        //print("两点间距离 " + _jinruDis+"   ------进入距离的 误差 内  "+ zuijiPosDisWC+ "  inDistance   " + inDistance+"    我的位置  "+thisV2+"    目标点 "+ point);
+        //距离小于 误差内 直接结束
+        if (_jinruDis < zuijiPosDisWC)
+        {
+            //print(thisV2+ "  --point  "+ point);
+            this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity = Vector2.zero;
+            ResetAll();
+            return true;
+        }
+        return false;
+    }
+
+    public string IsHitWallByFXStr(Vector2 speed, float TCDistance, Vector2 pos)
+    {
+        Vector2 tcPoint = Vector2.zero;
+        Vector2 endPoint1 = Vector2.zero;
+        Vector2 endPoint2 = Vector2.zero;
+
+
+        //print("speed   "+speed);
+
+
+        float tcUp = speed.y < 0 ? 0 : TCDistance;
+        float tcDown = speed.y > 0 ? 0 : TCDistance;
+
+        float tcLeft = speed.x > 0 ? 0 : TCDistance;
+        float tcRight = speed.x < 0 ? 0 : TCDistance;
+
+
+        float _posYXiuzheng = speed.y > 0 ? 1.8f : 0;
+
+
+        if (speed.x < 0)
+        {
+            tcPoint = new Vector2(pos.x - TCDistance, pos.y + _posYXiuzheng);
+
+            endPoint1 = new Vector2(tcPoint.x, tcPoint.y + tcUp);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - tcDown);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print( "  hit   x <0 ");
+                //Time.timeScale = 0;
+                return "xl";
+            }
+
+        }
+        else if (speed.x > 0)
+        {
+            tcPoint = new Vector2(pos.x + TCDistance, pos.y + _posYXiuzheng);
+            endPoint1 = new Vector2(tcPoint.x, tcPoint.y + tcDown);
+            endPoint2 = new Vector2(tcPoint.x, tcPoint.y - tcUp);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print("  hit   x >>>>0 ");
+                return "xr";
+            }
+
+        }
+
+        //print("  speed ??????     "+speed);
+        if (speed.y > 0)
+        {
+            tcPoint = new Vector2(pos.x, pos.y + TCDistance);
+            endPoint1 = new Vector2(tcPoint.x + tcRight, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - tcLeft, tcPoint.y);
+            //print("    上面 碰撞  ");
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print("  hit   y*** >>>>0 ");
+                return "yt";
+            }
+
+        }
+        else if (speed.y < 0)
+        {
+            tcPoint = new Vector2(pos.x, pos.y - TCDistance);
+            endPoint1 = new Vector2(tcPoint.x + tcRight, tcPoint.y);
+            endPoint2 = new Vector2(tcPoint.x - tcLeft, tcPoint.y);
+            //print("    下面  碰撞----  ");
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print("  hit   y*** <<<<<<<<<<<0 ");
+                return "yd";
+            }
+        }
+
+        return "";
+    }
+
+
+
+    //十字判断 撞墙
+    public bool IsHitWallShiZhi(Vector2 speed, float TCDistance)
+    {
+        Vector2 tcPoint = this.transform.position;
+        Vector2 endPoint1 = Vector2.zero;
+        Vector2 endPoint2 = Vector2.zero;
+        if (speed.x < 0)
+        {
+            endPoint1 = new Vector2(tcPoint.x- TCDistance, tcPoint.y + TCDistance);
+            endPoint2 = new Vector2(tcPoint.x- TCDistance, tcPoint.y - TCDistance);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print( "  hit   x <0 ");
+                //Time.timeScale = 0;
+                return true;
+            }
+        }
+        else if (speed.x > 0)
+        {
+            endPoint1 = new Vector2(tcPoint.x + TCDistance, tcPoint.y + TCDistance);
+            endPoint2 = new Vector2(tcPoint.x + TCDistance, tcPoint.y - TCDistance);
+            if (IsHitDiBanByFX(tcPoint, endPoint1) || IsHitDiBanByFX(tcPoint, endPoint2))
+            {
+                //print( "  hit   x <0 ");
+                //Time.timeScale = 0;
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
 
 
     //通过方向 判断是否在 方向上撞墙
@@ -725,12 +989,12 @@ public class AIAirRunNear : MonoBehaviour
 
     //靠XY来追击 不是寻路
     public bool ZhuijiXY(float atkdistance = 0,int type = 1,float atkDistanceY = 0) {
-        //print("????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
+        print("   xy  zhuiji !!!!! ????? patk atkdistance     " + atkdistance + " isZhuijiY  "+ isZhuijiY+ "   --------------isStartXY  "+ isStartXY);
         if (_zjDistance ==0) _zjDistance = atkdistance;
         //_zjDistanceY = 0;
         _zjDistanceY = atkDistanceY;
 
-        //print(" _zjDistanceY >    " + _zjDistanceY);
+        print(" _zjDistanceY >    " + _zjDistanceY);
 
         if (!isStartXY)
         {
@@ -742,7 +1006,7 @@ public class AIAirRunNear : MonoBehaviour
         //纯寻路的 追击
         //1.找到位置点  判断位置点和位置点周围 是否 碰到墙壁  找不到直接返回去   触发无法到达 取消 AI动作
 
-
+        print(3);
 
         //类型4
         if (zuijiType == 4)
@@ -817,9 +1081,10 @@ public class AIAirRunNear : MonoBehaviour
             return false;
         }
 
+        print(4);
 
         //找点 追击
-        if(zuijiType == 2)
+        if (zuijiType == 2)
         {
             //if (!IsZhuijiPosing)
             //{
@@ -840,25 +1105,44 @@ public class AIAirRunNear : MonoBehaviour
             }
             else
             {
-                
-
                 bool _isToPos = ZhuijiPointZuoBiao(v2);
 
-                //print("  找到追击点    " + v2+ "  _isToPos    "+ _isToPos);
-
-                //if (_isToPos)
-                //{
-                //    if(Mathf.Abs(this.transform.position.x - _obj.transform.position.x)> _zjDistance)
-                //    {
-                //        _isToPos = false;
-                //        IsZhuijiPosing = false;
-                //    }
-                //}
-
+                //bool _isToPos = ZhijieMoveToPoint(v2,1.4f,2);
                 return _isToPos;
-                //_aiPath.canMove = true;
-                //setter.SetV2(v2);
+            }
 
+        }
+
+
+        //直接 飞过去 只比较 X  Y判断范围大   给时间限制 不会无限 追击  不会减速
+        if (zuijiType == 6)
+        {
+            //if (!IsZhuijiPosing)
+            //{
+            //    IsZhuijiPosing = true;
+            //    v2 = FindAtkToPos(atkdistance, _zjDistanceY);
+            //}
+            v2 = FindAtkToPos2(atkdistance, _zjDistanceY);
+
+            if (v2 == new Vector2(1000, 1000))
+            {
+                print(" 取消动作！！！！！！ ");
+                IsZhuijiPosing = false;
+                //找不到 目标点 直接 取消动作
+                ResetAll();
+                GetComponent<AIAirBase>().QuXiaoAC();
+                GetComponent<AIAirBase>().ReSetAll2();
+                return false;
+            }
+            else
+            {
+                //bool _isToPos = ZhuijiPointZuoBiao(v2);
+                print("  ***  "+GetComponent<Rigidbody2D>().velocity);
+
+                bool _isToPos = ZhijieMoveToPointX(v2,2.4f,12);
+
+                print("  *** 22222 " + GetComponent<Rigidbody2D>().velocity);
+                return _isToPos;
             }
 
         }
@@ -867,7 +1151,7 @@ public class AIAirRunNear : MonoBehaviour
 
         //2.寻路 
 
-        
+        print(5);
 
         //-------各个方向 碰壁后 使用寻路-------------
         if (!isZhuijiY && (runAway.IsHitTop || runAway.IsHitDown || runAway.IsHitQianmain)) {
@@ -884,6 +1168,7 @@ public class AIAirRunNear : MonoBehaviour
 
         isZhuijiY = false;
 
+        print(6);
         //普通移动 （非寻路）
         if (nums < 30)
         {
@@ -897,6 +1182,9 @@ public class AIAirRunNear : MonoBehaviour
         {
             return Tongshi();
         }
+
+
+       
     }
 
     Vector2 v2;

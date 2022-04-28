@@ -77,6 +77,7 @@ public class RoleDate : MonoBehaviour {
         set
         {
             Lan = value;
+            if (Lan > maxLan) Lan = maxLan;
             if (Lan < 0) Lan = 0;
         }
     }

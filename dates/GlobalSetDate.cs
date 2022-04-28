@@ -72,7 +72,7 @@ public class GlobalSetDate : MonoBehaviour {
             OtherDate = new OtherSaveDate();
         }
         OtherDate = GameSaveDate.GetInstance().GetOtherSaveDateByName();
-        print("  获取了 otherdate!!   "+OtherDate.GlobalOtherDate);
+        //print("  获取了 otherdate!!   "+OtherDate.GlobalOtherDate);
         return OtherDate;
     }
 
@@ -104,7 +104,7 @@ public class GlobalSetDate : MonoBehaviour {
         string value = str.Split('*')[1];
 
 
-        print(" 传入数据是什么吗 str "+str+"  ---键值Key  "+key);
+        print("数据 传入数据是什么吗 str " + str+"  ---键值Key  "+key);
         if (key == "") {
             print("键值为空 ！！！！");
             return;
@@ -132,7 +132,7 @@ public class GlobalSetDate : MonoBehaviour {
         {
             OtherDate.GlobalOtherDate += "|" + str;
         }
-        print("ot  其他数据内容OtherDate   "+ OtherDate);
+        print("数据 ot  其他数据内容OtherDate   "+ OtherDate.GlobalOtherDate);
         GameSaveDate.GetInstance().SaveOtherDateByURLName(OtherDate);
     }
 
@@ -174,6 +174,9 @@ public class GlobalSetDate : MonoBehaviour {
     {
         //Debug.Log("Start");
         if (Globals.isDebug) print("全局数据GlobalSetDate 启动");
+
+        PeiZhi();
+
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
         if (OtherDate == null) OtherDate = new OtherSaveDate();
@@ -185,7 +188,14 @@ public class GlobalSetDate : MonoBehaviour {
             //Application.targetFrameRate = 60;
             //Time.fixedDeltaTime = 0.033f;
     }
-    
+
+    void PeiZhi()
+    {
+        print("1.提取配置信息。");
+        print("  配置文件路劲  " + Application.dataPath);
+    }
+
+    //isSYS 是游戏实验室 
     public void GetGameDateStart(bool isSYS = false)
     {
         //获取角色的信息 位置 摄像机位置 背包数据 小地图数据 收集物数据 角色状态
@@ -239,10 +249,10 @@ public class GlobalSetDate : MonoBehaviour {
 
     public string doorName = "";
     //存档的名字
-    public string saveDateName = "myGame";
+    public string saveDateName = "myGame2";
     //public GameObject player;
 
-    void InNewGame(string pos = "-90.47_-4.46", string scrName = "nga0_1")
+    void InNewGame(string pos = "-120.47_-3.14", string scrName = "ng1_o-1")
     {
         if (CurrentUserDate == null) CurrentUserDate = new UserDate();
         if (CurrentMapMsgDate == null) CurrentMapMsgDate = new UserDate();
@@ -481,7 +491,7 @@ public class GlobalSetDate : MonoBehaviour {
         }
 
         RoleDate _roleDate = _player.GetComponent<RoleDate>();
-        screenChangeDate = "cLive=" +_roleDate.live+","+"cLan="+_roleDate.lan+",cYingzhi="+_roleDate.yingzhi+",cFangyu="+_roleDate.def;
+        screenChangeDate = "cLive=" +_roleDate.live+","+"cLan="+_roleDate.lan;
         print("  角色转场前 存储的 角色状态信息  》》》》》》   "+ screenChangeDate);
         //Time.timeScale = 0;
 
@@ -492,21 +502,28 @@ public class GlobalSetDate : MonoBehaviour {
         print("获取角色 转场信息  ******************************************************************************************     " + screenChangeDate);
         //GlobalTools.FindObjByName("player")
 
-
-        if (GlobalTools.FindObjByName(GlobalTag.PlayerObj) == null) return;
+        GameObject __player = GlobalTools.FindObjByName(GlobalTag.PlayerObj);
+        if (__player == null) return;
 
 
         if (screenChangeDate == null) return;
         string[] roleDateArr = screenChangeDate.Split(',');
         for(var i = 0; i < roleDateArr.Length; i++) {
             string _date = roleDateArr[i];
-            //print(i+"  ------  "+ roleDateArr[i]);
-            if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().live = float.Parse(_date.Split('=')[1]);
+            print(i + "  ------  " + roleDateArr[i]);
+            if (_date.Split('=')[0] == "cLive") {
+                __player.GetComponent<PlayerRoleDate>().live = float.Parse(_date.Split('=')[1]);
+                if(__player.GetComponent<PlayerRoleDate>().maxLive< __player.GetComponent<PlayerRoleDate>().live)
+                {
+                    __player.GetComponent<PlayerRoleDate>().maxLive = __player.GetComponent<PlayerRoleDate>().live;
+                }
+            }
+            
             //if (_date.Split('=')[0] == "cLive") GlobalTools.FindObjByName("player").GetComponent<RoleDate>().live = float.Parse(_date.Split('=')[1]);
-            if (_date.Split('=')[0] == "cLan") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().Lan = float.Parse(_date.Split('=')[1]);
+            if (_date.Split('=')[0] == "cLan"&& GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN) __player.GetComponent<PlayerRoleDate>().Lan = float.Parse(_date.Split('=')[1]);
             //print(_date.Split('=')[0]+"   --->   "+ _date.Split('=')[1]);
-            if(_date.Split('=')[0] == "cYingzhi") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().yingzhi = float.Parse(_date.Split('=')[1]);
-            if (_date.Split('=')[0] == "cFangyu") GlobalTools.FindObjByName("player").GetComponent<PlayerRoleDate>().def = float.Parse(_date.Split('=')[1]);
+            //if(_date.Split('=')[0] == "cYingzhi") __player.GetComponent<PlayerRoleDate>().yingzhi = float.Parse(_date.Split('=')[1]);
+            //if (_date.Split('=')[0] == "cFangyu") __player.GetComponent<PlayerRoleDate>().def = float.Parse(_date.Split('=')[1]);
         }
 
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.XUETIAO_ZHIJIEGENSUI, this.GenSuiXuetiaoW2ToPos);
@@ -542,32 +559,33 @@ public class GlobalSetDate : MonoBehaviour {
     int SpaceNums = 0;
     // Update is called once per frame
     void Update () {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            //音量+
-            GetUpSoundEffectValue();
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);//   addEventListener(EventTypeName.AUDIO_VALUE, audioValue);
-        }
+        if (!Globals.isDebug) return;
+        //if (Input.GetKeyDown(KeyCode.B))
+        //{
+        //    //音量+
+        //    GetUpSoundEffectValue();
+        //    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);//   addEventListener(EventTypeName.AUDIO_VALUE, audioValue);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            //音量-
-            GetDownSoundEffectValue();
-            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);
-        }
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    //音量-
+        //    GetDownSoundEffectValue();
+        //    ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.AUDIO_VALUE, null), this);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"3"),this);
-        }
+        //if (Input.GetKeyDown(KeyCode.V))
+        //{
+        //    //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR,"3"),this);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Globals.isDebug && Input.GetKeyDown(KeyCode.C))
         {
             //存档测试
             GetSave();
         }
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Globals.isDebug && Input.GetKeyDown(KeyCode.Z))
         {
             //消除存档数据
             print("---> 清除 存档 数据！");
@@ -577,25 +595,25 @@ public class GlobalSetDate : MonoBehaviour {
 
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            //消除存档数据
-            //InNewGame();
-            //新游戏的选项
-            //GetSave();
-            print("储存所有地图数据！！！！");
-            if (GlobalTools.FindObjByName("maps"))
-            {
-                GlobalTools.FindObjByName("maps").GetComponent<GetReMap>().SetMapMsgDateInStr(true);
-            }
+        //if (Input.GetKeyDown(KeyCode.O))
+        //{
+        //    //消除存档数据
+        //    //InNewGame();
+        //    //新游戏的选项
+        //    //GetSave();
+        //    print("储存所有地图数据！！！！");
+        //    if (GlobalTools.FindObjByName("maps"))
+        //    {
+        //        GlobalTools.FindObjByName("maps").GetComponent<GetReMap>().SetMapMsgDateInStr(true);
+        //    }
 
-        }
+        //}
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            print("清除所有地图数据");
-            GameMapDate.ClearMapSaveDate();
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    print("清除所有地图数据");
+        //    GameMapDate.ClearMapSaveDate();
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.Space))

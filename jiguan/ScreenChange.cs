@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
+//using System.Runtime.CompilerServices;
+//using Object = UnityEngine.Object;
+
 
 public class ScreenChange : MonoBehaviour {
     [Header("去的场景名字")]
@@ -40,14 +44,15 @@ public class ScreenChange : MonoBehaviour {
 
     //查找全局 数据 中是否 有 地图 数据     没有的 话 要生成  并且 保存入 全局数据
 
-
+    //public bool IsYuJiazai = false;
     //当前 是 map1  还是map2  都不是的话 就转map1
 
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        //StartCoroutine(IEStartLoading(GoScreenName));
+        //if(IsYuJiazai)LoadScreen(GoScreenName);
+    }
 
 
     public void SetMenMsg(string fx,string _GoScreenName)
@@ -111,7 +116,7 @@ public class ScreenChange : MonoBehaviour {
     {
         print(" 场景 变化   screenChange ");
         playerUI = GlobalTools.FindObjByName("PlayerUI");
-        playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().SaveAllHZDate();
+        if(playerUI) playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().SaveAllHZDate();
 
         //用来判断 地图地形 是否生成 过 如果生成过 就不用再生成了 直接根据数据生成就可以（控制 地图块内的 自动生成 粒子 草之类的）
         GlobalSetDate.instance.IsCMapHasCreated = false;
@@ -135,7 +140,20 @@ public class ScreenChange : MonoBehaviour {
         SetPlayerPositionAndScreen();
         //SceneManager.LoadScene("loads");
         //print("***  GlobalSetDate.instance.screenName   "+ GlobalSetDate.instance.screenName);
+        //StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
+        //StartCoroutine(IEStartLoading(GoScreenName));
+        //if (IsYuJiazai)
+        //{
+        //    op.allowSceneActivation = true;
+        //}
+        //else
+        //{
+            
+        //}
+
         StartCoroutine(IEStartLoading(GlobalSetDate.instance.screenName));
+
+        //启动遮罩
         playerUI.GetComponent<PlayerUI>().GetScreenZZChange(1);
 
         //GlobalSetDate.instance.Show_UIZZ();
@@ -154,6 +172,7 @@ public class ScreenChange : MonoBehaviour {
         //print(Coll.tag + "  --  " + Coll.transform.tag);
         if(Coll.tag == "Player")
         {
+            GetGC();
             //这里判断 是否要进随机的大地图  小地图
 
             //这里判断 地图类型 如果 特殊地图类型是 Boss  CD  或者JY   就改为 自动地图（自动地图的，特殊地图） 
@@ -240,13 +259,17 @@ public class ScreenChange : MonoBehaviour {
 
 
 
-
+    AsyncOperation op;
     private IEnumerator IEStartLoading(string scene)
     {
         int displayProgress = 0;
         int toProgress = 0;
         //if (Globals.isDebug) print("*** screen>  " + scene);
-        AsyncOperation op = SceneManager.LoadSceneAsync(scene);
+        //op = null;
+
+        //Scene scene = SceneManager.GetSceneByName(sceneName);
+        //SceneManager.UnloadSceneAsync(0);
+        op = SceneManager.LoadSceneAsync(scene);
         //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
         op.allowSceneActivation = false;
         //print("hi!!!");
@@ -278,4 +301,37 @@ public class ScreenChange : MonoBehaviour {
         op.allowSceneActivation = true;
 
     }
+
+
+    void LoadScreen(string scene)
+    {
+        //int displayProgress = 0;
+        //int toProgress = 0;
+        //if (Globals.isDebug) print("*** screen>  " + scene);
+        op = SceneManager.LoadSceneAsync(scene);
+        //是否允许自动跳场景 （如果设为false 只会加载到90 不会继续加载）
+        op.allowSceneActivation = false;
+
+       
+    }
+
+    public bool IsNeedGC = false;
+    bool IsHasGC = false;
+    void GetGC()
+    {
+        if (IsNeedGC&&!IsHasGC)
+        {
+            IsHasGC = true;
+            ObjectPools.GetInstance().delAll();
+            //卸载没有被引用的资源  不要用  会卡住
+            //Resources.UnloadUnusedAssets();
+
+            //立即进行垃圾回收
+            GC.Collect();
+            GC.WaitForPendingFinalizers();//挂起当前线程，直到处理终结器队列的线程清空该队列为止
+            //GC.Collect();
+        }
+    }
+
+
 }

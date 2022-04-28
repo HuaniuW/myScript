@@ -17,7 +17,22 @@ public class AIAirBase : AIBase
     }
     AIAirRunNear air_aiNear;
 
-    
+    bool IsHasGetPlayer = false;
+    float LongNotMoveJishi = 0;
+    float DieTimes = 120;
+    void GetPlayerLongNotMoveDie()
+    {
+        if (_roleDate && _roleDate.enemyType == "boss") return;
+        if (isFindEnemy) IsHasGetPlayer = true;
+        if (IsHasGetPlayer)
+        {
+            LongNotMoveJishi += Time.deltaTime;
+            if(LongNotMoveJishi>= DieTimes)
+            {
+                _roleDate.live = 0;
+            }
+        }
+    }
 
     [Header("巡逻停顿休息 时间长度 -1为默认")]
     public float PatrolRestTimes = 0.1f;
@@ -162,6 +177,7 @@ public class AIAirBase : AIBase
     // Update is called once per frame
     void Update()
     {
+        GetPlayerLongNotMoveDie();
         GetUpdate2();
     }
 
@@ -228,6 +244,7 @@ public class AIAirBase : AIBase
         isAction = true;
         acName = atkFSName;
         print(" ********************************************************** acName  "+acName);
+        
         string[] strArr = atkFSName.Split('_');
         if (strArr.Length >= 2)
         {
@@ -493,15 +510,19 @@ public class AIAirBase : AIBase
          {
              if (!Tongshi()) return;
          }*/
-        //print("???????????????????????????????????????????????????????????????????????普通攻击  isActioning    " + isActioning + "  atkDistance   " + atkDistance + "  atkDistanceY  " + atkDistanceY);
+        //print(this.name+"???????????????????????????????????????????????????????????????????????普通攻击  isActioning    "   + isActioning + "  atkDistance   " + atkDistance + "  atkDistanceY  " + atkDistanceY+ " DontNear    "+ DontNear);
+     
+
+
 
         if (!isActioning && !(air_aiNear.ZhuijiXY(atkDistance,1,atkDistanceY)||DontNear)) return;
 
-        //print(" ?? >>");
+        print(" ?? >>  普通攻击 ！！！ ");
         if (!isActioning)
         {
             isActioning = true;
             isNearing = false;
+            print("   >>#3 "+ DontNear);
             if (!DontNear) ZhuanXiang();
             GetAtk();
         }
@@ -524,10 +545,15 @@ public class AIAirBase : AIBase
         {
             if (IsAtkOver())
             {
-                isActioning = false;
-                isAction = false;
+                print("   普通 攻击 结束！！！！！！！ ");
+                //isActioning = false;
+                //isAction = false;
+                ReSetAll2();
             }
+            return;
         }
+
+
     }
 
     protected override void GetAtkFS()
@@ -559,7 +585,7 @@ public class AIAirBase : AIBase
 
             print(" atkNum:  " + atkNum + " ----------------------------------------------------------------------------------------->   name " + acName + "  isACing " + isActioning);
             string[] strArr = acName.Split('_');
-
+            LongNotMoveJishi = 0;
 
             CurrentAIName = strArr[0];
 

@@ -18,8 +18,8 @@ public class Boss_LiveBar : MonoBehaviour {
     //接受到出现boss缓动显示 并且获取boss信息 与其关联
     void ShowSelf(UEvent e)
     {
-        //print("show bar!!!");
-        //this.gameObject.SetActive(true);
+        print("show bar!!!");
+        this.gameObject.SetActive(true);
         string bossName = e.eventParams.ToString();
         isShowSelf = true;
         this.GetComponent<EnemyXueTiao>().gameObj = GlobalTools.FindObjByName(bossName);

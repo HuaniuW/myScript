@@ -24,13 +24,50 @@ public class StartScreen : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        print("-----------> " + FileControl.GetInstance().GetValueByKey("yuyan"));
+        string str = FileControl.GetInstance().GetValueByKey("yuyan");
+        string isDebug = FileControl.GetInstance().GetValueByKey("debug");
+
+        string isQuanping = FileControl.GetInstance().GetValueByKey("quanping");
+
+        string isDebug2 = FileControl.GetInstance().GetValueByKey("debug2");
+        Globals.isDebug2 = isDebug2 == "201710" ? true : false;
+
+        Globals.isDebug = isDebug == "1999201710" ? true : false;
+        print("  是否是 debug "+isDebug +"   ??? "+Globals.isDebug);
+        
+
+        if (str!="")
+        {
+            Globals.language = str;
+            print("Globals.language    "+ Globals.language);
+            GetLuanguage();
+        }
+
+        
         FindSaveDate();
         GetButton();
+
+        if (isQuanping == "q")
+        {
+            Resolution[] resolutions = Screen.resolutions;
+            //设置当前分辨率 
+            Screen.SetResolution(resolutions[resolutions.Length - 1].width, resolutions[resolutions.Length - 1].height, true);
+            //设置成全屏
+            Screen.fullScreen = true;
+        }
+
+      
 
         //iTween.FadeTo(btn1.transform.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
         //iTween.MoveFrom(this.gameObject, iTween.Hash("x", -10f, "time", 3f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fds"));
         //btn1.Component.CrossFadeAlpha
         //(btn1.GetComponentsInChildren<Component>()[0] as Graphic).CrossFadeAlpha(0, 1, true);
+        //FileControl.GetInstance().CreateTxt();
+        //FileControl.GetInstance().ReWriteTxt();
+        //FileControl.GetInstance().AddTxtTextByFileInfo();
+        //FileControl.GetInstance().ReadTxtSecond();
+
 
     }
 
@@ -65,7 +102,7 @@ public class StartScreen : MonoBehaviour {
     GameObject setUI;
     void GetSetUI()
     {
-        if (GlobalSetDate.instance.IsChangeScreening) return;
+        if (GlobalSetDate.instance.IsChangeScreening|| IsChoseInGame) return;
         kuang.transform.position = btn3.transform.position;
         getRQ = btn3;
         KuangMoveStartSet();
@@ -79,6 +116,7 @@ public class StartScreen : MonoBehaviour {
             GlobalSetDate.instance.IsChangeScreening = false;
             DestroyImmediate(setUI, true);
         }
+        GlobalTools.PlayAudio("xd", this);
     }
 
     List<Button> btns = new List<Button>();
@@ -86,7 +124,8 @@ public class StartScreen : MonoBehaviour {
     void GetButton()
     {
         //btn3.interactable = false;
-        Button[] b = {btn1,btn2,btn3,btn4,btn5,btnX};
+        //Button[] b = { btn1, btn2, btn3, btn4, btn5, btnX };
+        Button[] b = {btn1,btn2,btn3,btn4};
         btns.AddRange(b);
 
         //获取存档 如果有存档 显示继续游戏  新游戏放到最下
@@ -101,13 +140,15 @@ public class StartScreen : MonoBehaviour {
         else
         {
             btn2.gameObject.SetActive(false);
+            //这里要显示 第一次进游戏 设置面板
+            GetSetUI();
         }
 
         //如果没有存档  显示新游戏  继续游戏按钮隐藏
         //如果有存档 点新游戏给提示
 
         btn1.onClick.AddListener(GameStart);
-        btn2.onClick.AddListener(GetSaveDateUI);
+        btn2.onClick.AddListener(ContinueGame);
         btn3.onClick.AddListener(GetSetUI);
         btn4.onClick.AddListener(OutGame);
         btn5.onClick.AddListener(InSYS);
@@ -146,6 +187,62 @@ public class StartScreen : MonoBehaviour {
             btn4.GetComponentInChildren<Text>().text = "out";
             btn5.GetComponentInChildren<Text>().text = "战斗实验室";
         }
+        else if (Globals.language == Globals.JAPAN)
+        {
+            btn1.GetComponentInChildren<Text>().text = "新しいゲーム";
+            btn2.GetComponentInChildren<Text>().text = "ゲームを続ける";
+            btn3.GetComponentInChildren<Text>().text = "設定";
+            btn4.GetComponentInChildren<Text>().text = "ゲームを終了する";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        else if (Globals.language == Globals.KOREAN)
+        {
+            btn1.GetComponentInChildren<Text>().text = "새로운 게임";
+            btn2.GetComponentInChildren<Text>().text = "게임 계속하기";
+            btn3.GetComponentInChildren<Text>().text = "설정";
+            btn4.GetComponentInChildren<Text>().text = "게임을 종료";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        else if (Globals.language == Globals.Portugal)
+        {
+            btn1.GetComponentInChildren<Text>().text = "novo jogo";
+            btn2.GetComponentInChildren<Text>().text = "Continuar o jogo";
+            btn3.GetComponentInChildren<Text>().text = "configuração";
+            btn4.GetComponentInChildren<Text>().text = "sair do jogo";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        else if (Globals.language == Globals.CHINESEF)
+        {
+            btn1.GetComponentInChildren<Text>().text = "新遊戲";
+            btn2.GetComponentInChildren<Text>().text = "繼續遊戲";
+            btn3.GetComponentInChildren<Text>().text = "遊戲設置";
+            btn4.GetComponentInChildren<Text>().text = "退出遊戲";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        if (Globals.language == Globals.German)
+        {
+            btn1.GetComponentInChildren<Text>().text = "neues Spiel";
+            btn2.GetComponentInChildren<Text>().text = "Setzen Sie das Spiel fort";
+            btn3.GetComponentInChildren<Text>().text = "Spieleinstellungen";
+            btn4.GetComponentInChildren<Text>().text = "Beenden Sie das Spiel";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        if (Globals.language == Globals.French)
+        {
+            btn1.GetComponentInChildren<Text>().text = "nouveau jeu";
+            btn2.GetComponentInChildren<Text>().text = "Continuer le jeu";
+            btn3.GetComponentInChildren<Text>().text = "Paramètres de jeu";
+            btn4.GetComponentInChildren<Text>().text = "quitter le jeu";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
+        if (Globals.language == Globals.Italy)
+        {
+            btn1.GetComponentInChildren<Text>().text = "nuovo gioco";
+            btn2.GetComponentInChildren<Text>().text = "Continua il gioco";
+            btn3.GetComponentInChildren<Text>().text = "Impostazioni di gioco";
+            btn4.GetComponentInChildren<Text>().text = "uscire dal gioco";
+            btn5.GetComponentInChildren<Text>().text = "战斗实验室";
+        }
     }
 
 
@@ -154,6 +251,7 @@ public class StartScreen : MonoBehaviour {
     {
         if (GameSaveDate.GetInstance().IsHasSaveDate())
         {
+            print("有存档！！！！！！");
             btn2.interactable = true;
             kuang.transform.position = btn2.transform.position;
             getRQ = btn2;
@@ -163,6 +261,7 @@ public class StartScreen : MonoBehaviour {
             btn2.interactable = false;
             kuang.transform.position = btn1.transform.position;
             getRQ = btn1;
+            //btn2.gameObject.SetActive(false);
         }
     }
 
@@ -197,17 +296,42 @@ public class StartScreen : MonoBehaviour {
 
     private void GameStart()
     {
-        if (GlobalSetDate.instance.IsChangeScreening) return;
+        if (GlobalSetDate.instance.IsChangeScreening|| IsChoseInGame) return;
         if (UI_Save) return;
         //SceneManager.LoadScene("loads");
         //如果有存档在这给提示 会删除之前的所有存档
         kuang.transform.position = btn1.transform.position;
         getRQ = btn1;
         KuangMoveStartSet();
-        GlobalSetDate.instance.GetGameDateStart();
-        
-       
+        IsChoseInGame = true;
+        GlobalTools.PlayAudio("xd", this);
+        StartCoroutine(IStartByTime());
     }
+
+
+    private void GameStartNoAduio()
+    {
+        if (GlobalSetDate.instance.IsChangeScreening) return;
+        if (UI_Save) return;
+        //SceneManager.LoadScene("loads");
+        //如果有存档在这给提示 会删除之前的所有存档
+        //kuang.transform.position = btn1.transform.position;
+        //getRQ = btn1;
+        //KuangMoveStartSet();
+        //StartCoroutine(IStartByTime());
+        GlobalSetDate.instance.GetGameDateStart();
+    }
+
+
+    public IEnumerator IStartByTime()
+    {
+        yield return new WaitForSeconds(1);
+        GlobalSetDate.instance.GetGameDateStart();
+    }
+
+
+
+
 
     private void InSYS()
     {
@@ -227,39 +351,61 @@ public class StartScreen : MonoBehaviour {
 
     private void OutGame()
     {
-        if (GlobalSetDate.instance.IsChangeScreening) return;
+        if (GlobalSetDate.instance.IsChangeScreening|| IsChoseInGame) return;
         //print("退出游戏");
         if (UI_Save) return;
         kuang.transform.position = btn4.transform.position;
         getRQ = btn4;
         KuangMoveStartSet();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 
-   
+    void OnGUI()
+    {
+        Event e = Event.current;
+        if (e.isKey)
+        {
+            //Debug.Log("key:" + e.keyCode);
+        }
+    }
 
-
+    const string VERTICAL = "Vertical";
+    float verticalDirection;
+    bool IsFX = false;
 
     // Update is called once per frame
     void Update () {
 
-        DPiaoDpnr();
+        //DPiaoDpnr();
 
-        if (UI_Save) return;
-        if (GlobalSetDate.instance.IsChangeScreening) return;
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (UI_Save|| IsInGame) return;
+        if (GlobalSetDate.instance.IsChangeScreening||IsChoseInGame) return;
+
+
+        verticalDirection = Input.GetAxis(VERTICAL);
+
+        if (verticalDirection>=-0.6f&& verticalDirection <= 0.6f)
         {
-            FindNearestQR("up");
-            GlobalTools.PlayAudio("xz", this);
+            IsFX = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W)|| (!IsFX && verticalDirection>0.6f))
         {
+            IsFX = true;
+            FindNearestQR("up");
+            GlobalTools.PlayAudio("xz", this);
+        }else  if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || (!IsFX && verticalDirection < -0.6f))
+        {
+            IsFX = true;
             FindNearestQR("down");
             //print("in------>");
             GlobalTools.PlayAudio("xz", this);
-        }
-
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        }else if (Input.GetKeyDown(KeyCode.KeypadEnter)|| Input.GetKeyDown(KeyCode.Return)|| Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             GetChoseObj();
         }
@@ -272,28 +418,63 @@ public class StartScreen : MonoBehaviour {
         GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgAlphaStartSet(0, 0.2f);
     }
 
-
+    bool IsInGame = false;
 
     void GetChoseObj()
     {
-        print(getRQ.name+"  - "+getRQ.GetComponentInChildren<Text>().text);
+        if (IsChoseInGame) return;
 
-        print(kuang.color+"   ---    "+kuang.rectTransform.rect.width);
+
+        //print(getRQ.name+"  - "+getRQ.GetComponentInChildren<Text>().text);
+
+        //print(kuang.color+"   ---    "+kuang.rectTransform.rect.width);
 
         GlobalTools.PlayAudio("xd", this);
         if (getRQ.name == "Button1")
         {
-           /* GameStart();*/
-           //新游戏
+            //GameStart();
+            //新游戏
+            StartCoroutine(IStart2ByTime());
+            IsInGame = true;
         }
         else if (getRQ.name == "Button2")
         {
             //GetSaveDateUI();
+            //GetSaveDateUI();
+            GlobalTools.PlayAudio("xd", this);
+            StartCoroutine(IStart2ByTime());
+            IsInGame = true;
             //继续游戏
-        }else if (getRQ.name == "Button3")
+        }
+        else if (getRQ.name == "Button3")
         {
+            //GlobalTools.PlayAudio("xd", this);
             //设置
             GetSetUI();
+
+            
+        }else if (getRQ.name == "Button4")
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+    }
+
+    public IEnumerator IStart2ByTime()
+    {
+        yield return new WaitForSeconds(1);
+        if (getRQ.name == "Button1")
+        {
+            GameStartNoAduio();
+            //新游戏
+        }
+        else if (getRQ.name == "Button2")
+        {
+            //继续游戏
+            ContinueGameNoAudio();
         }
     }
 
@@ -306,27 +487,49 @@ public class StartScreen : MonoBehaviour {
     GameObject UI_Save;
 
     //存取档界面
-    void GetSaveDateUI()
+    void ContinueGame()
     {
-        if (GlobalSetDate.instance.IsChangeScreening) return;
+        if (GlobalSetDate.instance.IsChangeScreening|| IsChoseInGame) return;
 
         //if (UI_Save) return;
         kuang.transform.position = btn2.transform.position;
         getRQ = btn2;
-
+        GlobalTools.PlayAudio("xd", this);
         //GlobalSetDate.instance.CurrentUserDate = GameSaveDate.GetInstance().GetSaveDateByName(GlobalSetDate.instance.saveDateName);
         //UserDate t = GlobalSetDate.instance.CurrentUserDate;
         //GlobalSetDate.instance.isInFromSave = true;
         GlobalSetDate.instance.isInFromSave = true;
+        IsChoseInGame = true;
         //调用进入游戏
-        GlobalSetDate.instance.GetGameDateStart();
-
-
-
-        
+        //GlobalSetDate.instance.GetGameDateStart();
         //GlobalSetDate.instance.GetGameDateStart();
         //if (!UI_Save) UI_Save = GlobalTools.GetGameObjectByName("UI_Save");
+
+
+        StartCoroutine(IStartContineByTime());
+
     }
+
+    bool IsChoseInGame = false;
+
+    public IEnumerator IStartContineByTime()
+    {
+        yield return new WaitForSeconds(1);
+        GlobalSetDate.instance.GetGameDateStart();
+    }
+
+
+
+
+    void ContinueGameNoAudio()
+    {
+        if (GlobalSetDate.instance.IsChangeScreening) return;
+        GlobalSetDate.instance.isInFromSave = true;
+        GlobalSetDate.instance.GetGameDateStart();
+    }
+
+
+
 
     void OnDisable()
     {
@@ -349,8 +552,10 @@ public class StartScreen : MonoBehaviour {
             //获取在我上方的容器list
             foreach (var rq in btns)
             {
-                if (rq.interactable == true && (int)rq.transform.position.y > (int)kuang.transform.position.y)
+                print(rq.name+"   rq.y    "+rq.transform.position.y+"  -------  "+kuang.transform.position.y+ "  interactable   "+rq.interactable);
+                if (rq.interactable == true && (int)rq.transform.position.y > (int)kuang.transform.position.y+1)
                 {
+                    print("在我上面    "+rq.name);
                     tempList.Add(rq);
                 }
             }
@@ -359,7 +564,7 @@ public class StartScreen : MonoBehaviour {
         {
             foreach (var rq in btns)
             {
-                if (rq.interactable == true && (int)rq.transform.position.y < (int)kuang.transform.position.y)
+                if (rq.interactable == true && (int)rq.transform.position.y < (int)kuang.transform.position.y-1)
                 {
                     tempList.Add(rq);
                 }
@@ -412,7 +617,8 @@ public class StartScreen : MonoBehaviour {
         }
 
 
-        if (getRQ != null) {
+        if (getRQ != null&& getRQ.gameObject.activeSelf) {
+            print("????????????????:   "+getRQ.name);
             //这里面额外给个缓动动画
             kuang.transform.position = getRQ.transform.position;
             KuangMoveStartSet();

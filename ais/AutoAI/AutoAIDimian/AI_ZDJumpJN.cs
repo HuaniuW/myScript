@@ -127,7 +127,10 @@ public class AI_ZDJumpJN : AI_SkillBase
 
     }
 
-    string SkillSFACName = "atk_1";
+    [Header("地面释放技能动作")]
+    public string SkillSFACName = "atk_1";
+    [Header("空中***释放技能动作")]
+    public string SkillSFACNameInAir = "atk_1";
 
     bool IsACOver(string ACName)
     {

@@ -71,8 +71,6 @@ public class AIChongJiHX : AIChongji
         //    print("被攻击了 ！！！！！！！！！！！！   ");
         //}
 
-        
-
         if (_roleDate.isDie || _roleDate.isBeHiting || _targetObj == null || _targetObj.GetComponent<RoleDate>().isDie|| IsOutChongjiDistance())
         {
             //print(" over!!! ");
@@ -223,7 +221,7 @@ public class AIChongJiHX : AIChongji
                     }
                     else
                     {
-                        if (ChoseYPosType == 1)
+                        if (ChoseYPosType == 1|| ChoseYPosType == 5)
                         {
                             //有一定的 Y偏移
                             if (_targetObj.position.y > this.transform.position.y)
@@ -331,7 +329,7 @@ public class AIChongJiHX : AIChongji
     }
 
 
-    [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置  3是固定点位置 4原地开始冲击")]
+    [Header("冲击Y的选定 1是有上下波动 2是自身的Y位置  3是固定点位置 4原地开始冲击  5是直接到 目标点")]
     public int ChoseYPosType = 1;
 
 
@@ -363,6 +361,13 @@ public class AIChongJiHX : AIChongji
             }
             
         }
+
+
+        //直接飞刀目标点 这个 防止 A*在混淆后不能使用的 状态
+        if (ChoseYPosType == 5)
+        {
+            return runNear.ZhijieMoveToPoint(_targetPos, _atkDistance,2);
+        }
         
 
         //print("  _atkDistance@@@@@@@@@   "+ _atkDistance+ "    ChoseYPosType "+ ChoseYPosType+"  ------------>  "+ GetComponent<AirGameBody>().GetDB().animation.lastAnimationName+"    isAcing "+ GetComponent<AirGameBody>().isAcing);
@@ -392,7 +397,7 @@ public class AIChongJiHX : AIChongji
 
       
 
-        if (ChoseYPosType == 1)
+        if (ChoseYPosType == 1|| ChoseYPosType == 5)
         {
             __y = _targetObj.position.y + 0.4f;
 

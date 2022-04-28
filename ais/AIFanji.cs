@@ -82,6 +82,8 @@ public class AIFanji : MonoBehaviour {
         }
     }
 
+    GameObject thePlayer;
+
 
     int beHitNum = 0;
     public void GetFanji()
@@ -130,6 +132,32 @@ public class AIFanji : MonoBehaviour {
             //清0速度
             _gameBody.SpeedXStop();
             //print("fj >>>>>>   "+ HouShanValue);
+
+
+            if (!thePlayer) thePlayer = GlobalTools.FindObjByName(GlobalTag.PlayerObj);
+
+            if (thePlayer)
+            {
+                //print("-----------------------------------------------------------------------后闪 ");
+                //print("----thisname   " + this.name);
+                //print("   ----  " + this.transform.localScale.x);
+
+                if (thePlayer.transform.position.x > this.transform.position.x)
+                {
+
+                    GetComponent<GameBody>().TurnRight();
+                    //print(" ----  右转身！！！！ ");
+                }
+                else
+                {
+                    GetComponent<GameBody>().TurnLeft();
+                    //print(" ----  左转身！！！！ ");
+                }
+
+                //print("   ----！！！！  " + this.transform.localScale.x);
+
+            }
+
             _gameBody.GetBackUp(HouShanValue);
         }
         

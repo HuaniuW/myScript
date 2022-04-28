@@ -19,7 +19,7 @@ public class Map_JijiaControl : MonoBehaviour
         GetKuang();
         OpenCamera();
         CreateMaps();
-        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DAOJISHI, "239"), this);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.DAOJISHI, "239"), this);//239
         CX = player_jijia.transform.position.x;
 
         print("  --------cundang!!!  ");

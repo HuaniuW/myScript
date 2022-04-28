@@ -162,6 +162,15 @@ public class AI_ZiDans : MonoBehaviour,ISkill
         {
             //火爆弹
             ZiDanName = "TX_huoyanDan";
+        }else if (ZiDanTypeNum == 3)
+        {
+            //大号子弹1
+            ZiDanName = "TX_zidan1da";
+        }
+        else if (ZiDanTypeNum == 4)
+        {
+            //大号子弹1
+            ZiDanName = "TX_zidan1da";
         }
 
 
@@ -259,7 +268,7 @@ public class AI_ZiDans : MonoBehaviour,ISkill
 
     protected GameObject GetZiDan()
     {
-        //print("************************************************ZiDanName   " + ZiDanName);
+        print("************************************************ZiDanName   " + ZiDanName);
         GameObject zidan = ObjectPools.GetInstance().SwpanObject2(Resources.Load(ZiDanName) as GameObject);
         //print("  zidan "+zidan);
         if (zidan == null || ZiDanPos == null) return null;

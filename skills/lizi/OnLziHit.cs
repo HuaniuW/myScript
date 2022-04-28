@@ -65,7 +65,7 @@ public class OnLziHit : MonoBehaviour
         atkObj = GetComponent<JN_base>().atkObj;
         if (atkObj == null && ParentLizi != null)
         {
-            print("atkObj  "+atkObj+ "  ParentLizi "+ ParentLizi);
+            //print("atkObj  "+atkObj+ "  ParentLizi "+ ParentLizi);
             atkObj = ParentLizi.GetComponent<JN_base>().atkObj;
             GetComponent<JN_base>().atkObj = atkObj;
         }
@@ -95,8 +95,12 @@ public class OnLziHit : MonoBehaviour
 
     float DisSelfJishi = 0;
 
+
+    //bool IsCanHit = true;
+
     void JishiDisSelf()
     {
+        print(" ------------ DisSelfJishi     "+ DisSelfJishi+ " ******DisSelfByTimes**   " + DisSelfByTimes);
         if (DisSelfByTimes == 0) return;
         
 
@@ -108,9 +112,18 @@ public class OnLziHit : MonoBehaviour
         }
 
         DisSelfJishi += Time.deltaTime;
+        if (IsCanHit && DisSelfJishi >= DisSelfByTimes-0.3f)
+        {
+            IsCanHit = false;
+            if (GetComponent<HitKuai>())
+            {
+                GetComponent<HitKuai>().IsCanHitObj = false;
+            }
+        }
         if (DisSelfJishi>= DisSelfByTimes)
         {
             DisSelfJishi = 0;
+            
             print("removeSelf!!!!");
             //if (GetComponent<ParticleSystem>())
             //{
@@ -169,15 +182,21 @@ public class OnLziHit : MonoBehaviour
     //发生粒子碰撞的回调函数
     private void OnParticleCollision(GameObject other)
     {
-        print("  碰到什么没？？？？？？  ");
+        //print("  碰到什么没？？？？？？  ");
         //if (other.tag == "zidanDun")
         //{
         //    print("   粒子击中 防御盾  ");
         //}
         //print(this.name + "  IsCanHit  " + IsCanHit+"   $$$$$  "+other.tag);
 
+       
 
-        print(" this  "+this.tag+"    -----   "+ other.tag+ "  other  "+ other.name);
+        print(" this  "+this.tag+"    -----   "+ other.tag+ "  other  "+ other.name+"    ====  "+IsCanHit);
+        //return;
+
+       
+
+
         if (this.tag == GlobalTag.HUOYAN)
         {
             if (other.tag == GlobalTag.ENEMY || other.tag == GlobalTag.BOSS || other.tag == GlobalTag.Diren)
@@ -206,7 +225,7 @@ public class OnLziHit : MonoBehaviour
 
 
         if (!IsCanHit) return;
-        print("  粒子击中敌人！！！！！ "+other.tag);
+        //print("  粒子击中敌人！！！！！ "+other.tag);
         if (other.tag == GlobalTag.Player|| other.tag == GlobalTag.JINGYING|| other.tag == GlobalTag.ENEMY|| other.tag == GlobalTag.AirEmeny|| other.tag == GlobalTag.BOSS|| other.tag == GlobalTag.Diren)
         {
            
@@ -219,17 +238,12 @@ public class OnLziHit : MonoBehaviour
                     return;
                 }
             }
-            print("  粒子击中敌人！！！！！ " + other.name);
+            //print("  粒子击中敌人！！！！！ " + other.name);
             string o = other.GetInstanceID() + "_" + LiziJishi;
             HitObjList.Add(o);
+            //print("  yyyyyyyy  other "+ other.name);
             GetComponent<HitKuai>().LiziHit(other);
-
-
-
-
             //火焰燃烧 的 攻击 持续时间  特效里面 做 持续燃烧特效
-
-
             //还有解决方案 1.是 让 被攻击者 自己判断 ---- *****
             //2.是 这里  用list 记录 被攻击对象 名字 和 持续时间  *****改为被攻击对象的 id 取id
         }
@@ -290,7 +304,12 @@ public class OnLziHit : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D Coll)
     {
-        //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
+
+        print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
+
+        //if (!IsCanHit) return;
+        return;
+
         if (Coll.tag == GlobalTag.Diren || Coll.tag == GlobalTag.DIBAN || Coll.tag == "zidan")
         {
             if (Coll.tag == GlobalTag.Diren&& Coll.GetComponent<G_Feixingqi>())

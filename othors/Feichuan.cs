@@ -125,7 +125,7 @@ public class Feichuan : MonoBehaviour {
                 IsStandUp = true;
                 Globals.isInPlot = false;
                 player.GetComponent<GameBody>().GetStand();
-                GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetUIShow();
+                //GlobalTools.FindObjByName("PlayerUI").GetComponent<PlayerUI>().GetUIShow();
                 GlobalTools.FindObjByName("MainCamera").GetComponent<CameraController>().ReSetNewAddXPos();
                 return;
             }

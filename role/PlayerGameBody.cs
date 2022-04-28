@@ -141,7 +141,7 @@ public class PlayerGameBody : GameBody {
     protected bool IsChiXueRunAC = false;
     protected void ChangeRunAC2(UEvent e)
     {
-        print("  进入boss战  改变跑步姿势。 ");
+        //print("  进入boss战  改变跑步姿势。 ");
         IsChiXueRunAC = true;
         Globals.IsInFighting = true;
         ChangeACNum(4);
@@ -1209,6 +1209,11 @@ public class PlayerGameBody : GameBody {
         //取消闪进
         ShanjinStop();
 
+
+
+
+
+
         print("bdjn " + bdjn.HZZBTXName);
         //徽章被动技能 发动  都给在 同时发生  有动作直接播放动作的同时 显示节能特效
         if (bdjn.HZZBTXName == GlobalTag.HUAFANG)
@@ -1230,6 +1235,10 @@ public class PlayerGameBody : GameBody {
             GetComponent<TempAddValues>().TempAddYZ(bdjn.TempAddYingZhi, bdjn.TempAddYingZhiTimes);
             GetComponent<TempAddValues>().TempJianShangBL(bdjn.TempShanghaiJianmianBili, bdjn.tempJSTimes);
             ShowShenyou();
+            return;
+        }else if (bdjn.HZZBTXName == GlobalTag.CHIBANG)
+        {
+            ShowChibang(bdjn.TXName);
             return;
         }
 
@@ -1274,9 +1283,7 @@ public class PlayerGameBody : GameBody {
         GetComponent<ShowOutSkill>().ShowOutSkillByName(bdjn.TXName, true);
     }
 
-
-
-
+   
 
     bool IsBianhei = false;
     override public void GetDie()
@@ -1500,7 +1507,20 @@ public class PlayerGameBody : GameBody {
             //isJump2 = false;
             isJumping2 = false;
             isDowning = false;
+            if (this.transform.localScale.x == 1&&isRunLefting|| this.transform.localScale.x == -1 && isRunRighting)
+            {
+                playerRigidbody2D.gravityScale = 1;
+            }
+            else
+            {
+                playerRigidbody2D.gravityScale = gravityScaleNums;
+            }
+            
             return;
+        }
+        else
+        {
+            if (DBBody.animation.lastAnimationName != JUMPHITWALL) playerRigidbody2D.gravityScale = gravityScaleNums;
         }
 
 
@@ -1564,13 +1584,73 @@ public class PlayerGameBody : GameBody {
         Jump();
     }
 
-    
+
+    List<GameObject> skill_list = new List<GameObject> { };
+
+    //发动 翅膀 技能
+    protected bool GetSkillChibang()
+    {
+        skill_list = _playerUI.GetComponent<PlayerUI>().skill_bar.GetComponent<UI_ShowPanel>().GetHZList();
+        foreach (GameObject defSkill in skill_list)
+        {
+            //获取技能信息
+            //GameObject obj = Resources.Load(defSkill) as GameObject;
+
+            if (defSkill.GetComponent<UI_Skill>().GetHZDate().type == "zd") continue;
+            if (defSkill.GetComponent<UI_Skill>().GetHZDate().HZZBTXName == GlobalTag.CHIBANG)
+            {
+                //是否有蓝
+                if (roleDate.lan < defSkill.GetComponent<UI_Skill>().GetHZDate().xyLan) return false;
+                //是否冷却  还是只能找 玩家装备的技能
+                if (!defSkill.GetComponent<UI_Skill>().IsCDSkillCanBeUse()) return false;
+
+                ShowPassiveSkill(defSkill);
+
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
+    private void ShowChibang(string TheTXName)
+    {
+        //throw new System.NotImplementedException();
+
+        GameObject yumao = GlobalTools.GetGameObjectInObjPoolByName(TheTXName);
+        yumao.transform.position = this.transform.position;
+
+    }
+
+    [Header("回蓝 特效")]
+    public ParticleSystem HuilanTX;
+    public void HuiLan()
+    {
+        if (roleDate.lan >= roleDate.maxLan) return;
+        if(HuilanTX) HuilanTX.Play();
+        roleDate.lan += 30;
+    }
+
+
+
     public override void Jump()
     {
         if (DBBody.animation.lastAnimationName == DownOnGroundACNameGao) return;
         if (isDodgeing || isAtk || roleDate.isBeHiting) return;
+
+        if (jumpNums < 1) {
+            if (GetSkillChibang())
+            {
+                jumpNums = 2;
+            }
+            else
+            {
+                return;
+            }
+            
+        }
         
-        if (jumpNums < 1) return;
         jumpNums--;
         //print("jump num "+jumpNums+ "  isjump "+isJumping+ "  IsGround?  " + IsGround);
         isGetJump = true;

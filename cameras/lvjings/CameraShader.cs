@@ -32,12 +32,12 @@ public class CameraShader : MonoBehaviour
         shader = Shader.Find("CameraFilterPack/TV_Old_Movie");
         print("启动 摄像机 滤镜！！！！！"+(shader == null));
         //判断显卡是否支持图像后期处理效果
-        if (!SystemInfo.supportsImageEffects)
-        {
-            print("显卡 不支持！！！");
-            enabled = false; //此为代码的enable
-            return;
-        }
+        //if (!SystemInfo.supportsImageEffects)
+        //{
+        //    print("显卡 不支持！！！");
+        //    enabled = false; //此为代码的enable
+        //    return;
+        //}
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)

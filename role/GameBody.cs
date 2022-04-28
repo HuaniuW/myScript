@@ -252,7 +252,12 @@ public class GameBody : MonoBehaviour, IRole {
     public float gravityScaleNums = 4.5f;
     protected float _recordGravity = 4.5f;
     public string RUN = "run_3";
-    protected string STAND = "stand_1";
+    [Header("****默认 站立 姿势")]
+    public string STAND = "stand_1";
+    public void SetStandACName(string ACName)
+    {
+        STAND = ACName;
+    }
     protected const string RUNBEGIN = "runBegin_1";
     protected const string RUNSTOP = "runStop_1";
     protected const string JUMPUP = "jumpUp_1";
@@ -956,7 +961,7 @@ public class GameBody : MonoBehaviour, IRole {
     {
         speedX = playerRigidbody2D.velocity.x;
         speedY = playerRigidbody2D.velocity.y;
-        //print("进入 速度限制！！！！！！  speedX  " + speedX+ "       maxSpeedX ---    " + maxSpeedX);
+        //print(this.name+"进入 速度限制！！！！！！  speedX  " + speedX+ "       maxSpeedX ---    " + maxSpeedX);
         //钳制 speedX 被限制在 -maxSpeedX  maxSpeedX 之间
         float newSpeedX;
         if (vx == 0) {
@@ -972,6 +977,8 @@ public class GameBody : MonoBehaviour, IRole {
         newSpeed.y = speedY;
         //获取向量速度
         playerRigidbody2D.velocity = newSpeed;
+
+        //print("加速中 速度是多少   "+ playerRigidbody2D.velocity);
     }
 
     /// <summary>
@@ -1301,7 +1308,7 @@ public class GameBody : MonoBehaviour, IRole {
 
         Vector2 v2 = Vector2.zero;
 
-        if (bodyScale.x < 0)
+        if (this.transform.localScale.x < 0)
         {
             //playerRigidbody2D.AddForce(Vector2.left * _vx);
             //GetZongTuili(Vector2.left * _vx,true);
@@ -1312,7 +1319,7 @@ public class GameBody : MonoBehaviour, IRole {
             //playerRigidbody2D.velocity = new Vector2(-6, 2);
             //newSpeed = new Vector2(-_vx, 0);
         }
-        else if (bodyScale.x > 0)
+        else if (this.transform.localScale.x > 0)
         {
             //playerRigidbody2D.velocity = new Vector2(6, 2);
             //newSpeed = new Vector2(_vx, 0);
@@ -1453,7 +1460,7 @@ public class GameBody : MonoBehaviour, IRole {
 
 
     //防止AI卡在 边角
-    void LuodiXiuZheng()
+    protected void LuodiXiuZheng()
     {
         if (this.tag == "Player") return;
         //落地修正  如果速度 很小 并且动作是下落动作 卡在 边路就 推下去
@@ -1533,6 +1540,7 @@ public class GameBody : MonoBehaviour, IRole {
                 {
                     roleAudio.PlayAudioYS("downOnGround");
                 }
+                print("  >>????????? 我靠  是不是 卡这里在！！！！！！！ ");
                 MoveVX(0);
             }
         }
@@ -1560,8 +1568,13 @@ public class GameBody : MonoBehaviour, IRole {
             //isJump2 = false;
             isJumping2 = false;
             isDowning = false;
+            //playerRigidbody2D.gravityScale = 0;
             return;
         }
+        //else
+        //{
+        //    if(DBBody.animation.lastAnimationName != JUMPHITWALL) playerRigidbody2D.gravityScale = gravityScaleNums;
+        //}
 
 
         
@@ -1654,6 +1667,8 @@ public class GameBody : MonoBehaviour, IRole {
         }
 
         playerRigidbody2D.velocity = newSpeed;
+
+        //print("  stande newspeed "+ newSpeed+"   sudushi duoshao "+ playerRigidbody2D.velocity);
 
     }
 
@@ -2219,7 +2234,7 @@ public class GameBody : MonoBehaviour, IRole {
     protected virtual void GetUpdate()
     {
         //print(this.name+ "  isDowning:"+isDowning+ "  roleDate.isBeHiting:"+ roleDate.isBeHiting+ "  isAcing:"+ isAcing+ "  isDodgeing:"+ isDodgeing+"   acName:"+ DBBody.animation.lastAnimationName+" isInAiring:"+isInAiring+" isJumping:"+isJumping);
-
+        //print(this.name +" ----->>>??  "+GetPlayerRigidbody2D().velocity);
         if (TSACControl) return;
         CurrentAcName = DBBody.animation.lastAnimationName;
         //脚下的烟幕
@@ -2708,11 +2723,15 @@ public class GameBody : MonoBehaviour, IRole {
     
     public virtual void GetAtk(string atkName = null)
     {
+        print("zs 1");
         if (roleDate.isBeHiting) return;
+        print("zs 2");
         if (isDodgeing||isAcing) return;
+        print("zs 3");
         //阻止了快落地攻击时候的bug
         //这里会导致AI回跳 进入落地动作而不能进入atk动作 所以回跳的跳起在动画里面做 不在程序里面给Y方向推力
         if (DBBody.animation.lastAnimationName == DOWNONGROUND) return;
+        print("zs 4");
         if (!isAtk)
         {
             isAtk = true;
@@ -2721,7 +2740,7 @@ public class GameBody : MonoBehaviour, IRole {
             isAtkYc = true;
             yanchi = 0;
             jisuqi = 0;
-
+            print("zs 5");
             if (isInAiring)
             {
                 atkZS = DataZS.jumpAtkZS;
@@ -2740,7 +2759,7 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 //GetPause(0.5f,0.5f);
                 string _atkName = atkName;
-                //print("ZS----------------------------------atkname  "+atkName+"    是否在空中   "+isInAiring);
+                print("ZS----------------------------------atkname  "+atkName+"    是否在空中   "+isInAiring);
                 //if (isInAiring|| atkName == "jumpCut") return;
                 //atk_1201|0.1-0.1        延迟时间-减速的速度
                 if (atkName.Split('|').Length > 1)
@@ -2751,10 +2770,10 @@ public class GameBody : MonoBehaviour, IRole {
                     if (atkName.Split('|')[1].Split('-').Length!=1) scales = float.Parse(atkName.Split('|')[1].Split('-')[1]);
                     GetPause(times, scales);
                 }
-                //print(" ZS   ----->_atkName   " + _atkName+ "    atkName "+ atkName);
+                print(" ZS   ----->_atkName   " + _atkName+ "    atkName "+ atkName);
                 vOAtk.GetVO(GetDateByName.GetInstance().GetDicSSByName(_atkName, DataZS.GetInstance()));
                 DBBody.animation.GotoAndPlayByFrame(vOAtk.atkName, 0, 1);
-                //print("ZS--->>> "+ vOAtk.atkName+"    tx  "+ vOAtk.txName+ "  --- vOAtk.xF " + vOAtk.xF);
+                print("ZS--->>> "+ vOAtk.atkName+"    tx  "+ vOAtk.txName+ "  --- vOAtk.xF " + vOAtk.xF);
 
                 if (vOAtk.AudioName != "")
                 {
@@ -2789,7 +2808,7 @@ public class GameBody : MonoBehaviour, IRole {
             MoveVX(vOAtk.xF,true);
             if (newSpeed.y < 0)
             {
-                //print(" newSpeed   "+ newSpeed);
+                print(" newSpeed   "+ newSpeed);
                 newSpeed.y = 1;
                 playerRigidbody2D.velocity = newSpeed;
                 MoveVY(vOAtk.yF);
@@ -2799,7 +2818,7 @@ public class GameBody : MonoBehaviour, IRole {
             {
                 MoveVY(vOAtk.yF);
             }
-            //print(newSpeed.y);
+            print("speedYYYYYYYYYYYY"+newSpeed.y);
             //获取XY方向的推力 
             //print(DBBody.animation.animations);
 
@@ -2997,7 +3016,7 @@ public class GameBody : MonoBehaviour, IRole {
 
                             if (isInAiring)
                             {
-                                ___fy = -9;
+                                ___fy = -14;
                                 float fy = GetPlayerRigidbody2D().velocity.y + 8;
                                 GetPlayerRigidbody2D().velocity = new Vector2(GetPlayerRigidbody2D().velocity.x, fy);
                             }
@@ -3138,6 +3157,7 @@ public class GameBody : MonoBehaviour, IRole {
 
     public void IsAtkKuaijiReSet()
     {
+        if (atkZS == null) return;
         kuaisujishuNums = 0;
         if (!IsKuaisuAtkReset&& atkNums < atkZS.Length-1) IsKuaisuAtkReset = true;
     }

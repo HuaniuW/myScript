@@ -52,7 +52,7 @@ public class ClearSceneData : MonoBehaviour
     public static void LoadLevel(string _nextSceneName)
     {
         nextSceneName = _nextSceneName;
-        Application.LoadLevel("ClearScene");
+        //Application.LoadLevel("ClearScene");
     }
 
     /// 
@@ -62,7 +62,7 @@ public class ClearSceneData : MonoBehaviour
     /// 
     IEnumerator AsyncLoadScene(string sceneName)
     {
-        async = Application.LoadLevelAsync(sceneName);
+        //async = Application.LoadLevelAsync(sceneName);
         yield return async;
     }
 

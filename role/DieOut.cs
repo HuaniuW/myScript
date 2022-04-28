@@ -14,6 +14,10 @@ public class DieOut : MonoBehaviour {
     [Header("精英怪自带的 音乐")]
     public AudioSource JYAudio;
 
+
+    [Header("***** die后 掉下去 不能落在地板上  去掉碰撞块  *")]
+    public bool IsCanDieDown = false;
+
 	// Use this for initialization
 	void Start () {
         //ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, this.DieOutDo);
@@ -55,13 +59,19 @@ public class DieOut : MonoBehaviour {
     {
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
-            if (IsOrter1) DieBeBlack();
+            //if (IsOrter1) DieBeBlack();
 
             if (HitKuai) HitKuai.SetActive(false);
             if (HitKuai2) HitKuai2.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
 
-            DieBeBlack();
+
+            if (IsCanDieDown)
+            {
+                GetComponent<CapsuleCollider2D>().isTrigger = true;
+            }
+
+            //DieBeBlack();
             DiePlayACJiasu();
 
 

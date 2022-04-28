@@ -25,6 +25,9 @@ public class GlobalTag : MonoBehaviour
     public static string HUOYAN = "Huoyan";
     public static string DIAN = "Dian";
     public static string HUAFANG = "huafang";
+    //技能翅膀
+    public static string CHIBANG = "chibang";
+
     public static string WATER = "Water";
     //减免盾
     public static string JIANMIANDUN = "jianmiandun";

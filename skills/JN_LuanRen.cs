@@ -212,7 +212,7 @@ public class JN_LuanRen : MonoBehaviour
 
 
 
-            if (hitkuai1.activeSelf)
+            if (hitkuai1 && hitkuai1.activeSelf)
             {
                 if (!IsHitKuai1)
                 {
@@ -248,7 +248,7 @@ public class JN_LuanRen : MonoBehaviour
                 
             //}
 
-            if (hitkuai2.activeSelf)
+            if (hitkuai2 && hitkuai2.activeSelf)
             {
                 if (!IsHitKuai2)
                 {
@@ -281,7 +281,7 @@ public class JN_LuanRen : MonoBehaviour
                 
             //}
 
-            if (hitkuai3.activeSelf)
+            if (hitkuai3 && hitkuai3.activeSelf)
             {
                 if (!IsHitKuai3)
                 {
@@ -304,7 +304,7 @@ public class JN_LuanRen : MonoBehaviour
             //    tx4.GetComponent<JN_Date>().team = atkObj.GetComponent<RoleDate>().team;
              
             //}
-            if (hitkuai4.activeSelf)
+            if (hitkuai4 && hitkuai4.activeSelf)
             {
                 if (!IsHitKuai4)
                 {
@@ -327,7 +327,7 @@ public class JN_LuanRen : MonoBehaviour
             //    tx5.GetComponent<JN_Date>().team = atkObj.GetComponent<RoleDate>().team;
                 
             //}
-            if (hitkuai5.activeSelf)
+            if (hitkuai5 && hitkuai5.activeSelf)
             {
                 if (!IsHitKuai5)
                 {
@@ -349,7 +349,7 @@ public class JN_LuanRen : MonoBehaviour
             //    tx6.GetComponent<JN_Date>().team = atkObj.GetComponent<RoleDate>().team;
                 
             //}
-            if (hitkuai6.activeSelf)
+            if (hitkuai6 && hitkuai6.activeSelf)
             {
                 if (!IsHitKuai6)
                 {

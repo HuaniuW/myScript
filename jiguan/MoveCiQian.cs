@@ -34,10 +34,23 @@ public class MoveCiQian : MonoBehaviour
     [Header("y移动速度")]
     public float SpeedY = 0.2f;
 
+
+    //float jishi = 0;
+
+
     bool IsMoveStart = false;
     void MoveStart() {
         if (!IsMoveStart) return;
-        this.transform.position = new Vector2(this.transform.position.x,this.transform.position.y-SpeedY);
+        //jishi += Time.deltaTime;
+        //if (jishi>=0.1f)
+        //{
+        //    jishi = 0;
+            
+        //}
+
+        this.transform.position = new Vector2(this.transform.position.x, this.transform.position.y - SpeedY);
+
+
     }
 
     public void StopMove()

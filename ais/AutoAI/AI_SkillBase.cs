@@ -192,11 +192,11 @@ public class AI_SkillBase : MonoBehaviour,ISkill,ISkillBuchong
     public virtual void GetStart(GameObject gameObj)
     {
         ReSetAll();
-        
+        GetTheStart();
         if (StartAudio) StartAudio.Play();
         //print("zd getStart *****************************************************************自动技能开始");
         _isGetStart = true;
-        GetTheStart();
+        
     }
 
 

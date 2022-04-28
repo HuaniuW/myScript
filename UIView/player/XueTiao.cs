@@ -82,18 +82,23 @@ public class XueTiao : MonoBehaviour {
     //角色那边怎么做 如果加生命最大值 
     //基础长度 和判断  血条是否能被拉伸
 
+    float OldMaxLive = 0;
+    float NewMaxW = 0;
+    float OldMaxW = 0;
+
     /// <summary>
     /// 增加最大生命上限
     /// </summary>
     /// <param name="AddLivesNum">增加的生命上限值</param>
     public virtual void AddMaxLiveBar(float AddLivesNum)
     {
-        
-        float OldMaxLive = _maxLive;
+
+        OldMaxLive = _maxLive;
+        OldMaxW = _maxW;
         _maxLive += AddLivesNum;
         if (!isCanAddMaxLiveNum) return;
-        float NewMaxW = 0;
-        NewMaxW = _maxW * _maxLive / OldMaxLive;
+        
+        NewMaxW = OldMaxW * _maxLive / OldMaxLive;
         _maxW = NewMaxW;
         Wh(XueTiaoDi, _maxW+50, XueTiaoDi.GetComponent<RectTransform>().rect.height);
         Wh(MaskImg, _maxW, MaskImg.GetComponent<RectTransform>().rect.height);
@@ -197,8 +202,18 @@ public class XueTiao : MonoBehaviour {
         }
     }
 
+
+    //void OnGUI()
+    //{
+    //    if (Globals.isDebug)
+    //    {
+    //        if(roleDate!=null) GUI.TextArea(new Rect(0, 160, 450, 40), "liveBar   : " + "  _maxLive  " + _maxLive + "  IsInJijiaGK?   " + Globals.IsInJijiaGK+"   roledateMax   "+ roleDate.maxLive+ " _maxW "+ _maxW+ " NewMaxW  "+ NewMaxW+ "  OldMaxLive   " + OldMaxLive+ " _maxLive  " + _maxLive);
+    //    }
+    //}
+
     protected virtual void LiveChange(UEvent e)
     {
+        
         if (gameObj &&gameObj.tag != GlobalTag.Player) return;
         if (gameObj == null)
         {
@@ -237,8 +252,10 @@ public class XueTiao : MonoBehaviour {
 
         roleDate.live = _cLive;
         print("2222222roledetelive   " + roleDate.live);
-        if(isHZChange) GlobalSetDate.instance.ScreenChangeDateRecord();
+        //**********下面 两行交换了 顺序  上次 也是这里 出了其他问题 但是 这次换回来了 注意一下**********  如果先记录 就会导致 带徽章时候 当前血量变回1000的 初始值
         GlobalSetDate.instance.GetScreenChangeDate();
+        if (isHZChange) GlobalSetDate.instance.ScreenChangeDateRecord();
+        
         if (gameObj == null) return;
         if (gameObj.tag == GlobalTag.Player && roleDate)
         {
@@ -263,6 +280,10 @@ public class XueTiao : MonoBehaviour {
         if (nums >= 0) _w2 = _w;
         Wh(xue1, _w, _h);
     }
+
+
+
+
 
     //protected float testNums = 1000;
 
@@ -336,6 +357,11 @@ public class XueTiao : MonoBehaviour {
         if (!gameObj)
         {
             gameObj = GlobalTools.FindObjByName("player");
+            if (gameObj == null)
+            {
+                gameObj = GlobalTools.FindObjByName("player_jijia");
+                AddMaxLiveBar(2000 - _maxLive);
+            }
             GetGameObj();
             return;
         }

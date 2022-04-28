@@ -125,8 +125,586 @@ public class JG_BossIn : MonoBehaviour {
     //遇见boss显示的字幕
     void ShowSeeBossTxt()
     {
-
+        TheBossName = "";
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_NAME, TheBossName), this);
     }
+
+
+    //G1
+    //boss1 小恶魔
+    //Boss2 恐惧之王
+    //G2
+    //boss3 巨像
+    //G3
+    //boss4 花妖
+    //boss5 毒精灵
+    //G4
+    //boss6 电水母
+    //boss7 行刑者
+    //G5
+    //boss8 幽灵法师
+    //boss9 小七
+    //boss10 巨像 
+    //G6
+    //boss11神之手
+    //G7
+    //boss12 灵魂立方
+    //boss13 大锤怪
+    //boss14 雷精灵
+    //boss15 暗影
+    //boss16 龙王
+
+
+    string theBossName = "";
+    public string BossID = "1";
+
+    public string TheBossName
+    {
+        //GET访问器，可以理解成另类的方法，返回已经被赋了值的私有变量a
+        get { return theBossName; }
+        //SET访问器，将我们打入的值赋给私有变量money
+        set
+        {
+            if (BossID == "1")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "小恶魔";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "小悪魔";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "little devil";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "pequeño diablo";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "작은 악마";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "小惡魔";
+                        break;
+                    case Globals.German:
+                        theBossName = "kleiner Teufel";
+                        break;
+                    case Globals.French:
+                        theBossName = "petit diable";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "piccolo diavolo";
+                        break;
+
+                }
+            }
+            else if (BossID == "2")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "恐惧之王";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "恐怖の王";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "king of fear";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "rey del miedo";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "공포의 왕";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "恐懼之王";
+                        break;
+                    case Globals.German:
+                        theBossName = "König der Angst";
+                        break;
+                    case Globals.French:
+                        theBossName = "roi de la peur";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "re della paura";
+                        break;
+                }
+            }
+            else if (BossID == "3")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "巨像";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "コロッサス";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "colossus";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "coloso";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "거상";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "巨像";
+                        break;
+                    case Globals.German:
+                        theBossName = "Koloss";
+                        break;
+                    case Globals.French:
+                        theBossName = "colosse";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "colosso";
+                        break;
+                }
+            }
+            else if (BossID == "4")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "花妖";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "花の悪魔";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "flower demon";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "demonio de flores";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "꽃 악마";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "花妖";
+                        break;
+                    case Globals.German:
+                        theBossName = "Blumendämon";
+                        break;
+                    case Globals.French:
+                        theBossName = "démon fleur";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "demone dei fiori";
+                        break;
+                }
+            }
+            else if (BossID == "5")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "腥毒恶魔";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "毒な悪魔";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "poisonous devil";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "diablo venenoso";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "유독 한 악마";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "腥毒惡魔";
+                        break;
+                    case Globals.German:
+                        theBossName = "giftiger Teufel";
+                        break;
+                    case Globals.French:
+                        theBossName = "diable venimeux";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "diavolo velenoso";
+                        break;
+                }
+            }
+            else if (BossID == "6")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "电水母";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "電気クラゲ";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Electric Jellyfish";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Medusa eléctrica";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "전기해파리";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "電水母";
+                        break;
+                    case Globals.German:
+                        theBossName = "Elektrische Qualle";
+                        break;
+                    case Globals.French:
+                        theBossName = "Méduse électrique";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Medusa elettrica";
+                        break;
+                }
+            }
+            else if (BossID == "7")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "行刑者";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "死刑執行人";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Executioner";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Verdugo";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "실행자";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "行刑者";
+                        break;
+                    case Globals.German:
+                        theBossName = "Henker";
+                        break;
+                    case Globals.French:
+                        theBossName = "Bourreau";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Boia";
+                        break;
+                }
+            }
+            else if (BossID == "8")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "幽灵法师";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "ゴーストメイジ";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Ghost Mage";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Mago fantasma";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "유령 마법사";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "幽靈法師";
+                        break;
+                    case Globals.German:
+                        theBossName = "Geistermagier";
+                        break;
+                    case Globals.French:
+                        theBossName = "Mage fantôme";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Mago Fantasma";
+                        break;
+                }
+            }
+            else if (BossID == "9")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "小七";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "Xiaoqi";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Xiaoqi";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Xiaoqi";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "小七";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "小七";
+                        break;
+                    case Globals.German:
+                        theBossName = "Xiaoqi";
+                        break;
+                    case Globals.French:
+                        theBossName = "Xiaoqi";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Xiaoqi";
+                        break;
+                }
+            }
+            else if (BossID == "10")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "巨像";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "コロッサス";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "colossus";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "coloso";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "거상";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "巨像";
+                        break;
+                    case Globals.German:
+                        theBossName = "Koloss";
+                        break;
+                    case Globals.French:
+                        theBossName = "colosse";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "colosso";
+                        break;
+                }
+            }
+            else if (BossID == "11")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "神之手";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "神の手";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "hand of God";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "mano de Dios";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "신의 손";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "神之手";
+                        break;
+                    case Globals.French:
+                        theBossName = "la main de Dieu";
+                        break;
+                    case Globals.German:
+                        theBossName = "Hand Gottes";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "mano di Dio";
+                        break;
+                }
+            }
+            else if (BossID == "12")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "灵魂立方";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "ソウルキューブ";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Soul Cube";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Cubo del alma";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "소울 큐브";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "靈魂立方";
+                        break;
+                    case Globals.German:
+                        theBossName = "Seelenwürfel";
+                        break;
+                    case Globals.French:
+                        theBossName = "Cube d'âme";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Cubo dell'anima";
+                        break;
+                }
+            }
+            else if (BossID == "13")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "血腥大锤";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "血まみれのハンマー";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "bloody sledgehammer";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "mazo sangriento";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "피 묻은 망치";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "血腥大錘";
+                        break;
+                    case Globals.German:
+                        theBossName = "verdammter Vorschlaghammer";
+                        break;
+                    case Globals.French:
+                        theBossName = "marteau sanglant";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "mazza insanguinata";
+                        break;
+                }
+            }
+            else if (BossID == "14")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "雷灵";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "レイリング";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Rayling";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Rayling";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "레일링";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "雷靈";
+                        break;
+                    case Globals.German:
+                        theBossName = "Rayling";
+                        break;
+                    case Globals.French:
+                        theBossName = "Rayling";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "Rayling";
+                        break;
+                }
+            }
+            else if (BossID == "15")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "暗影";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "風邪";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "shadow";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "sombra";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "그림자";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "暗影";
+                        break;
+                    case Globals.German:
+                        theBossName = "Schatten";
+                        break;
+                    case Globals.French:
+                        theBossName = "ombre";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "ombra";
+                        break;
+                }
+            }
+            else if (BossID == "16")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        theBossName = "龙王";
+                        break;
+                    case Globals.JAPAN:
+                        theBossName = "ドラゴンキング";
+                        break;
+                    case Globals.ENGLISH:
+                        theBossName = "Dragon King";
+                        break;
+                    case Globals.Portugal:
+                        theBossName = "Rey Dragon";
+                        break;
+                    case Globals.KOREAN:
+                        theBossName = "드래곤 킹";
+                        break;
+                    case Globals.CHINESEF:
+                        theBossName = "龍王";
+                        break;
+                    case Globals.German:
+                        theBossName = "Drachenkönig";
+                        break;
+                    case Globals.French:
+                        theBossName = "Roi Dragon";
+                        break;
+                    case Globals.Italy:
+                        theBossName = "re Drago";
+                        break;
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     //播放遇到Boss的音效
     void SeeBossAudioPlay()
@@ -192,7 +770,8 @@ public class JG_BossIn : MonoBehaviour {
         if(BossOutPos && Boss && !IsBossInPos)
         {
             IsBossInPos = true;
-            TX_ShowBossTX.Play();
+            if(TX_ShowBossTX) TX_ShowBossTX.Play();
+            
             Boss.transform.position = BossOutPos.position;
 
         }
@@ -220,12 +799,8 @@ public class JG_BossIn : MonoBehaviour {
                 //显示Boss血条
                 ShowBossLiveBar();
 
-               
-
                 if(!IsSatrtYC)DistorySelf();
             }
-            
-
         }
     }
 

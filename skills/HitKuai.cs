@@ -14,8 +14,11 @@ public class HitKuai : MonoBehaviour {
 
     //GameObject的位置  攻击属性  相对位置x y  尺寸   是否立即消失
 
+
+    public bool IsCanHitObj = true;
     private void OnEnable()
     {
+        IsCanHitObj = true;
         //print("???");
         //_isCanHit = true;
         //IsHasChixuHit = false;
@@ -84,18 +87,18 @@ public class HitKuai : MonoBehaviour {
         Vector2 p2 = Vector2.zero;
         if (this.GetComponent<BoxCollider2D>())
         {
-            print(" 55555 ???????1  ");
+            //print(" 55555 ???????1  ");
             p1 = this.GetComponent<BoxCollider2D>().bounds.center;
             s1 = this.GetComponent<BoxCollider2D>().bounds.extents;
         }else if (this.GetComponent<CircleCollider2D>())
         {
-            print(" 55555 ???????12222  ");
+            //print(" 55555 ???????12222  ");
             p1 = this.GetComponent<CircleCollider2D>().bounds.center;
             s1 = this.GetComponent<CircleCollider2D>().bounds.extents;
         }
         else if(this.GetComponent<CapsuleCollider2D>())
         {
-            print("  556666s ");
+            //print("  556666s ");
             p1 = this.GetComponent<CapsuleCollider2D>().bounds.center;
             s1 = this.GetComponent<CapsuleCollider2D>().bounds.extents;
         }
@@ -161,7 +164,7 @@ public class HitKuai : MonoBehaviour {
         HitPos = new Vector2(_x,_y);
         if (!IsHasbody && BehitGameObject.GetComponent<CircleCollider2D>())
         {
-            print("  ??????????????????????? ");
+            //print("  ??????????????????????? ");
             HitPos = beHitObj.position;
         }
 
@@ -174,7 +177,7 @@ public class HitKuai : MonoBehaviour {
             }
         }
 
-        print("  -----------jizhong weizhi "+HitPos);
+        //print("  -----------jizhong weizhi "+HitPos);
         return HitPos;
     }
 
@@ -498,12 +501,32 @@ public class HitKuai : MonoBehaviour {
 
     public void LiziHit(GameObject o)
     {
+        print("  --------------------------lizi---------------------------  ");
         print("粒子 击中对象名字   "+o.name);
         //if (o.GetComponent<BoxCollider2D>())
         //{
         //    GetHit(o.GetComponent<BoxCollider2D>());
         //    return;
         //}
+       
+        print(" name "+this.name);
+        if (jn_date == null) {
+
+            print("  jn_date 为空 "+ this.name);
+
+            return;
+        }
+        
+        if (jn_date) {
+            print("team  " + jn_date.team);
+            print("HitInSpecialEffectsType  " + jn_date.HitInSpecialEffectsType);
+            print("team  " + o.GetComponent<RoleDate>().team);
+
+            if (jn_date.team == o.GetComponent<RoleDate>().team) return;
+        }
+        
+
+
         GetHit(o.GetComponent<Collider2D>());
     }
 
@@ -578,7 +601,7 @@ public class HitKuai : MonoBehaviour {
             if (BeHitRoleDate.isDie) return;
             if(!BeHitRoleDate.isCanBeHit) return;
 
-            print("555555HitPos-----------------zhuanji jinlaimei ???>>------?   " + HitPos);
+            //print("555555HitPos-----------------zhuanji jinlaimei ???>>------?   " + HitPos);
 
 
             //if (!IsHasChixuHit && !BeHitRoleDate.isCanBeHit) return;
@@ -605,7 +628,7 @@ public class HitKuai : MonoBehaviour {
                 {
 
                     HitPos = GetHitPos();
-                    print("555555HitPos-----------------------?   "+ HitPos);
+                    //print("555555HitPos-----------------------?   "+ HitPos);
                 }
                 else
                 {
@@ -633,7 +656,7 @@ public class HitKuai : MonoBehaviour {
             //被击中 变色
             if (atkObj &&atkObj.tag == "Player") {
                 //print("变色 ！！！！  -------------------------》  BeHitColorChange  ");
-                if(BeHitGameBody) BeHitGameBody.BeHitColorChange();
+                //if(BeHitGameBody) BeHitGameBody.BeHitColorChange();
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_RUN_AC, null), this);
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CAMERA_SHOCK, this.GetShock);
                 //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.1-2"), this);
@@ -665,7 +688,7 @@ public class HitKuai : MonoBehaviour {
 
 
                 if (BeHitGameBody.IsGedanging&&!BeHitGameBody.IsGeDangAC&&
-                    jn_date.HitInSpecialEffectsType != 5&& jn_date.HitInSpecialEffectsType != 11 && jn_date.HitInSpecialEffectsType != 12
+                    jn_date.HitInSpecialEffectsType != 5&& jn_date.HitInSpecialEffectsType != 11 && jn_date.HitInSpecialEffectsType != 12 && jn_date.HitInSpecialEffectsType != 14
                     && (
                     (atkObj.transform.position.x>beHitObj.transform.position.x&& beHitObj.transform.localScale.x<0)||
                     (atkObj.transform.position.x <= beHitObj.transform.position.x && beHitObj.transform.localScale.x > 0)
@@ -684,13 +707,8 @@ public class HitKuai : MonoBehaviour {
                 if (BeHitGameBody.tag == "Player" && skill_list.Count != 0)
                 {
                     if (IsGetHuafang()) return;
-
-
-
                     ShanghaiJianmianHD();
-
                 }
-
 
                 //身体碰撞类型 检查 是否有碰撞保护
                 if (jn_date.HitInSpecialEffectsType == 5)
@@ -856,7 +874,7 @@ public class HitKuai : MonoBehaviour {
                             {
                                 if (BeHitGameBody)
                                 {
-                                    print(" chongjili ------------------------> jinlaimei  "+ jn_date.chongjili);
+                                    //print(" chongjili ------------------------> jinlaimei  "+ jn_date.chongjili);
                                     if (_BeHitRigidbody2D) {
                                         //print("/////////>>>>>>>>>>>>>@!  ?????????   ");
                                         //_BeHitRigidbody2D.velocity = new Vector2(20 * -_fx, _BeHitRigidbody2D.velocity.y);
@@ -1101,7 +1119,8 @@ public class HitKuai : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
-        if(Coll) GetHit(Coll);
+        if (!IsCanHitObj) return;
+        if (Coll) GetHit(Coll);
     }
 
     //X方向速度清0
@@ -1116,7 +1135,24 @@ public class HitKuai : MonoBehaviour {
 
     public void GetBeHit(JN_Date jn_date, float sx)
     {
-        print(" 55555555555 被击中 特效 类型   --------    "+ jn_date.HitInSpecialEffectsType);
+        //if(atkObj == null)
+        //{
+        //    print(" 55555555555 被击中 特效 类型   --------    " + jn_date.HitInSpecialEffectsType + "       beihitObj  " + beHitObj.name);
+        //}
+        //else
+        //{
+        //    print(" 7777777777 被击中 特效 类型   --------    " + jn_date.HitInSpecialEffectsType + "    atkObj.tag  " + atkObj.tag + "   beihitObj  " + beHitObj.name);
+        //}
+
+        //if (jn_date&& atkObj)
+        //{
+        //    print(" 55555555555 被击中 特效 类型   --------    " + jn_date.HitInSpecialEffectsType + "    atkObj.tag  " + atkObj.tag + "   beihitObj  " + beHitObj.name);
+        //}
+        //else
+        //{
+        //    print(" 77777777777 被击中 特效 类型   --------        atkObj.name  " + atkObj.name + "   beihitObj  " + beHitObj.name);
+        //}
+       
         //print("被击中 !! "+this.transform.name+"   攻击力 "+ jn_date.atkPower+"  被攻击对象防御力 "+ BeHitRoleDate.def);
         if (BeHitRoleDate.isDie||BeHitRoleDate.team == jn_date.team) return;
         //print(" isCanBeHit>2:  "+ BeHitRoleDate.isCanBeHit);
@@ -1132,6 +1168,13 @@ public class HitKuai : MonoBehaviour {
             } 
             addxue = _atkPower - BeHitRoleDate.def;
         }
+
+        if (atkObj&& atkObj.tag == GlobalTag.Player&& jn_date.HitInSpecialEffectsType == 1)
+        {
+            //print(" 555555555555 atkObjRoleDate.lan   " + atkObjRoleDate.lan);
+            atkObj.GetComponent<PlayerGameBody>().HuiLan();
+        }
+
         
         addxue = addxue > 0 ? addxue : 1;
         //if (jn_date.HitInSpecialEffectsType == 5) addxue = 50;
@@ -1162,6 +1205,14 @@ public class HitKuai : MonoBehaviour {
             _playerUI.GetSlowByTimes(0.12f, 0.4f);
         }
 
+
+        if (jn_date.HitInSpecialEffectsType == 12)
+        {
+            //火刃 直接返回
+            return;
+        }
+
+
         //击退 判断方向
         float _psScaleX = sx;
 
@@ -1185,7 +1236,7 @@ public class HitKuai : MonoBehaviour {
 
         string tx_1 = "";
         if (BeHitGameBody) tx_1 = BeHitGameBody.GetComponent<RoleDate>().BeHitTX_1;
-        print("55555555 ----   tx_1 "+ tx_1);
+        //print("55555555 ----   tx_1 "+ tx_1);
         if (!IsBaoji && tx_1 != "")
         {
             //print("  >>tx_1 " + tx_1);
@@ -1200,7 +1251,7 @@ public class HitKuai : MonoBehaviour {
         if (jn_date.HitInSpecialEffectsType == 8 || jn_date.HitInSpecialEffectsType == 9)
         {
 
-            print("555555  碰到 毒 火？？？ "+ jn_date.HitInSpecialEffectsType);
+            //print("555555  碰到 毒 火？？？ "+ jn_date.HitInSpecialEffectsType);
 
             //print(BeHitGameBody+"  5555555    " + BeHitGameBody.GetComponent<GameBody>().IsNeedHitPos+"     ");
 
@@ -1294,7 +1345,7 @@ public class HitKuai : MonoBehaviour {
                 }
             }
 
-            print("  方向是什么 多少 正反 "+_psScaleX);
+            //print("  方向是什么 多少 正反 "+_psScaleX);
             if(jn_date.HitInSpecialEffectsType == 7) HitTX(_psScaleX, "BloodSplatCritical3", "", 2, false, false, -txPos);
 
             return;
@@ -1370,8 +1421,14 @@ public class HitKuai : MonoBehaviour {
             }
 
             PianyiHitPos = new Vector2(HitPos.x + pyX, HitPos.y + pyY);
-            print("5555555 偏移坐标PianyiHitPos-----  " + PianyiHitPos);
+            //print("5555555 偏移坐标PianyiHitPos-----  " + PianyiHitPos);
         }
+
+
+        //if (beHitObj.name == "player")
+        //{
+        //    print("  tttttttt txName   " + hitTx.name);
+        //}
 
         //if (BeHitGameBody) {
         //    if (BeHitGameBody.GetComponent<GameBody>().IsNeedHitPos)
@@ -1405,14 +1462,18 @@ public class HitKuai : MonoBehaviour {
 
         if (BeHitGameBody && !BeHitGameBody.GetComponent<GameBody>().IsNeedHitPos){
             //大块头怪 击中点位置计算
-            print(" 555555  --------->>>>    被击中 hitpos ");
+            //print(" tttttttt  --------->>>>    被击中 hitpos ");
             hitTx.transform.position = new Vector3(BeHitGameBody.transform.position.x - hy * -_atkObjScaleX, BeHitGameBody.transform.position.y, BeHitGameBody.transform.position.z);
         }
         else
         {
-            print("555555 HitPos-- >>>  "+ HitPos);
+            //print("tttttttt HitPos-- >>>  " + HitPos);
             hitTx.transform.position = HitPos;
         }
+
+        //print("   tttttttt    beHitObj.name   " + beHitObj.name);
+        //print(" tttttttt  pos " + hitTx.name + "   hitTx.transform.position   " + hitTx.transform.position+ "   beHitObjPos  " +beHitObj.transform.position+ "  localScale  " + hitTx.transform.localScale);
+       
     
     }
 
@@ -1434,6 +1495,17 @@ public class HitKuai : MonoBehaviour {
         GameObject hitTx = Resources.Load(txName) as GameObject;
         hitTx = ObjectPools.GetInstance().SwpanObject2(hitTx);
         hitTx.name = txName;
+
+        if (beHitObj.name == "player")
+        {
+            print("  tttttttt  txName   " + txName);
+        }
+
+        //if (txName == "jizhong")
+        //{
+        //    print("   behitobj "+beHitObj.name);
+        //}
+
         HitTXPos(hitTx,hy);
 
         //print(hitTx.name + "  1---------------------->>   " + hitTx.transform.localEulerAngles);
@@ -1509,7 +1581,7 @@ public class HitKuai : MonoBehaviour {
        
         if (hitVudio != "")
         {
-            hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio);
+            hitTx.GetComponent<JZ_audio>().PlayAudio(hitVudio,beHitObj.name);
         }
         //特效方向 
         if (!isZX) return;

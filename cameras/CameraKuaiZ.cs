@@ -45,10 +45,10 @@ public class CameraKuaiZ : MonoBehaviour {
     GameObject _player;
     void OnTriggerEnter2D(Collider2D Coll)
     {
-        if (Globals.IsInCameraKuai) {
-            //说明之前有碰撞到 碰撞快
-            return;
-        }
+        //if (Globals.IsInCameraKuai) {
+        //    //说明之前有碰撞到 碰撞快
+        //    return;
+        //}
         
         if (!cm) return;
         if (Coll.tag == "Player")
@@ -72,7 +72,7 @@ public class CameraKuaiZ : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D Coll)
     {
-        if (Globals.IsInCameraKuai) return;
+        //if (Globals.IsInCameraKuai) return;
         if (Coll.tag == "Player")
         {
             //print("out");

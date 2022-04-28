@@ -304,7 +304,10 @@ public class AIChongji : MonoBehaviour, ISkill
             //print("目标在---右侧！！！");
             _airGameBody.TurnRight();
         }
-        return runNear.Zhuiji(_atkDistance,false);
+
+        return runNear.ZhijieMoveToPoint(_targetObj.transform.position, _atkDistance*4,1);
+
+        //return runNear.Zhuiji(_atkDistance,false);
     }
 
     bool ISkill.IsGetOver()

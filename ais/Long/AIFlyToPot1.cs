@@ -87,7 +87,7 @@ public class AIFlyToPot1 : MonoBehaviour,ISkill
         float __y = ChosePos.y = GlobalTools.GetRandomNum() > 50 ? ChosePos.y - GlobalTools.GetRandomDistanceNums(ChosePointMoreDistance) : ChosePos.y + GlobalTools.GetRandomDistanceNums(ChosePointMoreDistance);
 
         ChosePos = new Vector2(__x, __y);
-        print("  选择 点位置  "+ ChosePos);
+        //print("  选择 点位置  "+ ChosePos);
     }
 
     bool IsStartFlying = false;
@@ -101,16 +101,17 @@ public class AIFlyToPot1 : MonoBehaviour,ISkill
 
 
         if (!IsStartFlying) return;
+        //print(" ZhijieMoveToPoint    ChosePos:  "+ ChosePos+ "  FlySpeed "+ FlySpeed+ "  FlyMaxSpeed   "+ FlyMaxSpeed);
         if (_aiAirRunNear.ZhijieMoveToPoint(ChosePos, 1, FlySpeed, false,true,FlyMaxSpeed))
         {
             ReSetAll();
-            print(" 到达目标地点！！！！ ");
+            //print(" 到达目标地点！！！！ ");
         }
     }
 
     void TurnToPlayer()
     {
-        print("  PotType "+ PotType+"   dianname  "+ Pot_1);
+        //print("  PotType "+ PotType+"   dianname  "+ Pot_1);
         if(this.transform.position.x<Pot_1.x|| this.transform.position.x > Pot_2.x)
         {
             GetComponent<AIAirRunNear>().TurnToPlayer();

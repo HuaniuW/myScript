@@ -13,7 +13,7 @@ public class JijiaGamebody : GameBody
     {
         base.GetStart();
         roleDate = GetComponent<PlayerRoleDate>();
-        //print("  xueliang------   "+roleDate.live);
+        print("jijia  xueliang------   "+roleDate.live);
         //roleDate.live = 2000;
         Globals.IsInJijia = true;
         if (IsInOnGroundSrop) {
@@ -37,13 +37,25 @@ public class JijiaGamebody : GameBody
             //2个喷火长短不一 保证循环不断
             A_Penhuo.Play();
             A_Penhuo2.Play();
+            Globals.IsInJijiaGK = true;
+
+            //GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<XueTiao>().GetGameObj(GetComponent<RoleDate>());
+            GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<XueTiao>().GetXueNum(0);
+            print("   jijia--------   GetComponent<RoleDate>()   " + GetComponent<RoleDate>().live);
         }
-        
         //print("jiajia  "+ this.transform.localScale.x);
         ACReset();
         //if (this.transform.localScale.x == -1) GetComponent<GameBody>().TurnRight();
     }
 
+
+    void OnGUI()
+    {
+        if (Globals.isDebug)
+        {
+            //GUI.TextArea(new Rect(0, 120, 250, 40), "jijia live333   : " + GetComponent<RoleDate>().live);
+        }
+    }
 
     int daodanNums = 20;
 
@@ -52,12 +64,15 @@ public class JijiaGamebody : GameBody
     {
         _playerUI = GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<PlayerUI>();
         _playerUI.Txt_ganraodan.gameObject.SetActive(true);
+        _playerUI.img_ganraodan.gameObject.SetActive(true);
         _playerUI.Txt_ganraodan.text = GanraodanNums.ToString();
 
         _playerUI.Txt_jipao.gameObject.SetActive(true);
+        _playerUI.img_zidan.gameObject.SetActive(true);
         _playerUI.Txt_jipao.text = JipaoNums.ToString();
 
         _playerUI.Txt_daodan.gameObject.SetActive(true);
+        _playerUI.img_daodan.gameObject.SetActive(true);
         _playerUI.Txt_daodan.text = daodanNums.ToString();
 
 
@@ -65,6 +80,8 @@ public class JijiaGamebody : GameBody
         //GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<UI_Nengliangtiao>().ShowSelf();
         _nengliangtiao = GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<UI_Nengliangtiao>();
         _nengliangtiao.ShowSelf();
+
+        _playerUI.HideFeiJijiaUI();
     }
 
 
@@ -245,6 +262,7 @@ public class JijiaGamebody : GameBody
         GlobalTools.FindObjByName(GlobalTag.MAINCAMERA).GetComponent<CameraController>().GetTargetObj(this.transform);
         OnJiajia();
         GlobalTools.FindObjByName(GlobalTag.PLAYERUI).GetComponent<XueTiao>().GetGameObj(GetComponent<RoleDate>());
+        //print(    "   jijia--------   GetComponent<RoleDate>()   "+ GetComponent<RoleDate>().live);
     }
 
 
@@ -586,7 +604,7 @@ public class JijiaGamebody : GameBody
         if (IsQianfei && (IsUp || IsDown))
         {
             print("前斜");
-            xF = xForce * 0.6f;
+            xF = xForce * 0.7f;
         }
 
 
@@ -613,12 +631,12 @@ public class JijiaGamebody : GameBody
 
         if (IsUp)
         {
-            xF = xForce * 0.6f;
+            xF = xForce * 0.8f;
             GetZongTuili(new Vector2(0, xF * tuili));
         }
         else if (IsDown)
         {
-            xF = xForce * 0.6f;
+            xF = xForce * 0.8f;
             GetZongTuili(new Vector2(0, -xF * tuili));
         }
         else
@@ -790,7 +808,7 @@ public class JijiaGamebody : GameBody
         if (IsQianfei && (IsUp || IsDown))
         {
             print("前斜");
-            xF = xForce*2 * 0.5f;
+            xF = xForce*1.2F * 0.5f;
         }
 
 
@@ -816,13 +834,13 @@ public class JijiaGamebody : GameBody
 
         if (IsUp)
         {
-            xF = xForce * 0.6f*2;
+            xF = xForce * 0.6f*1.4F;
             GetZongTuili(new Vector2(0, xF * tuili));
             GaosuUpDownFly();
         }
         else if (IsDown)
         {
-            xF = xForce * 0.6f*2;
+            xF = xForce * 0.6f*1.4F;
             GetZongTuili(new Vector2(0, -xF * tuili));
             GaosuUpDownFly();
         }

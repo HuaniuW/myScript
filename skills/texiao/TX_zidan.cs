@@ -25,6 +25,40 @@ public class TX_zidan : MonoBehaviour
     }
 
 
+    [Header("延迟 碰撞时间")]
+    public float YanchiHitTimes = 0;
+
+    bool IsYanchiJishiOver = false;
+    float yanchiJishi = 0;
+    protected bool YanchiHit()
+    {
+        if (IsYanchiJishiOver) return false;
+        print("  yanchi pengzhuang  YanchiHitTimes  "+this.name+ "      YanchiHitTimes?  " + YanchiHitTimes);
+        if (YanchiHitTimes!=0)
+        {
+            yanchiJishi += Time.deltaTime;
+            print("  yanchi pengzhuang  panduan  " + yanchiJishi);
+            if (yanchiJishi>= YanchiHitTimes)
+            {
+                print("yanchi  可以碰撞了------？？？YanchiHitTimes   " + YanchiHitTimes);
+                yanchiJishi = 0;
+                IsYanchiJishiOver = true;
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
+    void YanchiHitReset()
+    {
+        IsYanchiJishiOver = false;
+        yanchiJishi = 0;
+    }
+
+
     protected GameObject _player;
     protected bool isFaShe = false;
     public float speeds = 20;
@@ -57,7 +91,7 @@ public class TX_zidan : MonoBehaviour
 
         //isFire = false;
         //isShangshen = false;
-
+        YanchiHitReset();
         OtherOnEnable();
     }
 
@@ -189,6 +223,11 @@ public class TX_zidan : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D Coll)
     {
+        if (YanchiHitTimes != 0 && !IsYanchiJishiOver) {
+            print("  yanchi--------ooooooooo-------------!!! "+this.name+ "  YanchiHitTimes??  "+ YanchiHitTimes);
+            return;
+        }
+        
         //print("   Coll.tag  碰到什么鬼！！！：    " + Coll.tag);
         if (Coll.tag == "Player"||(IsCanHitDiban && Coll.tag == "diban")|| Coll.tag == "zidanDun"||Coll.tag == GlobalTag.JIGUANG)
         {
@@ -243,6 +282,7 @@ public class TX_zidan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        YanchiHit();
         OtherUpdate();
         if (IsAtkAuto) {
             fire();

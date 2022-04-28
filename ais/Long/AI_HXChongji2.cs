@@ -53,6 +53,7 @@ public class AI_HXChongji2 : MonoBehaviour,ISkill
         if (MoRenRunACName == "") MoRenRunACName = _gameBody.GetRunName();
         YSShanghai = GetComponent<JN_Date>().atkPower;
         ReSetAll();
+        GetComponent<AIAirRunNear>().ResetAll();
         GetComponent<AIAirRunNear>().TurnToPlayer();
         print(" MoRenRunACName "+ MoRenRunACName+ "    ?????????? _gameBody.GetRunName "+ _gameBody.GetRunName());
 
@@ -110,16 +111,18 @@ public class AI_HXChongji2 : MonoBehaviour,ISkill
                 //伤害变动
                 GetComponent<JN_Date>().atkPower = ChongjiShanghai;
             }
-            if (GetComponent<AIAirRunNear>().ZhijieMoveToPoint(TargetPos, 1, MinSpeed, false, true, MaxSpeed))
+
+            if (!IsToEnd&&GetComponent<AIAirRunNear>().ZhijieMoveToPoint(TargetPos, 1, MinSpeed, false, true, MaxSpeed))
             {
+                IsToEnd = true;
                 //还原到 站立动作
                 _gameBody.RunACChange(MoRenRunACName);
                 print(" 还原的 跑动动作是啥？？？？？？？？？MoRenRunACName    " + MoRenRunACName);
                 _gameBody.isAcing = false;
                 
-                _gameBody.GetAcMsg(_gameBody.GetStandACName(), 2);
-                //ReSetAll();
-                //IsChongjiOver = true;
+                _gameBody.GetAcMsg(_gameBody.GetStandACName());
+                ReSetAll();
+                IsChongjiOver = true;
             }
 
             if (!_gameBody.isAcing)
@@ -137,7 +140,7 @@ public class AI_HXChongji2 : MonoBehaviour,ISkill
         }
     }
 
-    
+    bool IsToEnd = false;
 
     public void GetStart(GameObject gameObj)
     {
@@ -162,6 +165,8 @@ public class AI_HXChongji2 : MonoBehaviour,ISkill
         _gameBody.isAcing = false;
         GetComponent<JN_Date>().atkPower = YSShanghai;
         _gameBody.RunACChange(MoRenRunACName);
+
+        IsToEnd = false;
     }
 
     // Start is called before the first frame update

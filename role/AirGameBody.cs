@@ -79,8 +79,10 @@ public class AirGameBody : GameBody {
     // Update is called once per frame
     void Update () {
         //if (this.tag != "Player") print("   ??IsHitWall     " + IsHitWall);
+        //print(this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity+"   ?? ---? "+GetComponent<Rigidbody2D>().velocity);
         this.GetUpdate();
-	}
+        //print("   速度是多少？？ "+ this.GetComponent<GameBody>().GetPlayerRigidbody2D().velocity);
+    }
 
     public override void Testss()
     {
@@ -125,7 +127,8 @@ public class AirGameBody : GameBody {
         if (roleDate) roleDate.isBeHiting = false;
     }
 
-    
+
+   
 
     protected override void Stand()
     {

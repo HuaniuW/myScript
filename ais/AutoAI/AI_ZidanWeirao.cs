@@ -6,16 +6,12 @@ using UnityEngine;
 public class AI_ZidanWeirao : AI_SkillBase
 {
 
-    
-
-
-
     protected override void ACSkillShowOut()
     {
         print(" dongzuo name shijian **********************ac    " + TXName);
         if(!roleDate) roleDate = GetComponent<RoleDate>();
 
-        GetTheStart();
+        GetTheStart2();
     }
 
 
@@ -90,12 +86,12 @@ public class AI_ZidanWeirao : AI_SkillBase
         {
             IsShowBullet = true;
             //GetStart();
-            GetTheStart();
+            GetTheStart2();
         }
     }
 
 
-    private void GetTheStart()
+    private void GetTheStart2()
     {
         BulletsList.Clear();
 

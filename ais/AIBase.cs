@@ -150,7 +150,7 @@ public class AIBase : MonoBehaviour {
         {
             if (!gameBody.IsGround)
             {
-                print(" 我被卡住了啊   ！！！！！！！！  "+this.gameObject.transform.localScale);
+                //print(" 我被卡住了啊   ！！！！！！！！  "+this.gameObject.transform.localScale);
                 if (this.gameObject.transform.localScale.x>0)
                 {
                     //左推
@@ -227,7 +227,7 @@ public class AIBase : MonoBehaviour {
 
     public void BossFight(UEvent e)
     {
-        print("  boss fight!!!!!!!!!!!!!!!!!!!!!!!!!!!!!boss战 ");
+        //print("  boss fight!!!!!!!!!!!!!!!!!!!!!!!!!!!!!boss战 ");
         IsBossStop = false;
         GetComponent<RoleDate>().isCanBeHit = true;
     }
@@ -391,7 +391,11 @@ public class AIBase : MonoBehaviour {
         if (Mathf.Abs(thePlayer.transform.position.x - transform.position.x)< findEnemyDistance&& Mathf.Abs(thePlayer.transform.position.y - transform.position.y) < findEnemyDistance)
         {
             //print("发现敌人！！！");
-            string _msg = GetComponent<RoleDate>().DuBai;
+            string _msg = "";
+            if (GetComponent<GuaiDubai>())
+            {
+                _msg = GetComponent<GuaiDubai>().GetDubai();
+            }
             if (!IsShowDubai&&(GetComponent<RoleDate>().enemyType == GlobalTag.BOSS|| GetComponent<RoleDate>().enemyType == GlobalTag.JINGYING) && _msg!="")
             {
                 IsShowDubai = true;
@@ -1137,7 +1141,7 @@ public class AIBase : MonoBehaviour {
             isAction = false;
             return;
         }
-        //print("  zs "+zs);
+        print("  zs " + zs);
         gameBody.GetAtk(zs);
     }
     //5判断攻击是否完成
@@ -1328,7 +1332,7 @@ public class AIBase : MonoBehaviour {
             else if (strArr[0] == "backUp")
             {
                 acName = "backUp";
-
+              
                 gameBody.GetBackUp(float.Parse(strArr[1]));
                 return;
             }
@@ -1630,6 +1634,7 @@ public class AIBase : MonoBehaviour {
                 gameBody.GetDB().animation.FadeIn(gameBody.GetStandACName(), 0.15f);
             }
             if (GetComponent<AIRest>().isZhuanXiang) ZhuanXiang();
+            print("    rest  进入 站立 状态！！！！！ ");
             gameBody.GetStand();
             atkNum++;
             GetAtkNumReSet();

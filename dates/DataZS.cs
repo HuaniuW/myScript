@@ -140,14 +140,14 @@ public class DataZS : MonoBehaviour
 
 
     //火龙
-    static public Dictionary<string, string> atk_1401 = new Dictionary<string, string> { { "atkName", "shuaiwei_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1401" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "5" }, { "atkDistance", "36" }, { "atkDistanceY", "36" }, { "chongjili", "3000" }};
+    static public Dictionary<string, string> atk_1401 = new Dictionary<string, string> { { "atkName", "shuaiwei_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1401" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "5" }, { "atkDistance", "8" }, { "atkDistanceY", "6" }, { "chongjili", "3000" }};
 
 
 
     //忍者
-    static public Dictionary<string, string> atk_1501 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "4" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1501" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" } };
-    static public Dictionary<string, string> atk_1502 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "15" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1501" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "qishouYC", "1.5" } };
-    static public Dictionary<string, string> atk_1503 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "5" }, { "yF", "1400" }, { "showTXFrame", "9" }, { "txName", "dg_1503" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
+    static public Dictionary<string, string> atk_1501 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "xF", "4" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1501" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "15" }, { "atkDistance", "4" } };
+    static public Dictionary<string, string> atk_1502 = new Dictionary<string, string> { { "atkName", "atk_5" }, { "xF", "15" }, { "yF", "1" }, { "showTXFrame", "8" }, { "txName", "dg_1501" }, { "ox", "10" }, { "oy", "10" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "qishouYC", "1.5" } };
+    static public Dictionary<string, string> atk_1503 = new Dictionary<string, string> { { "atkName", "atk_21" }, { "xF", "5" }, { "yF", "1400" }, { "showTXFrame", "9" }, { "txName", "dg_1503" }, { "ox", "10" }, { "oy", "8" }, { "yanchi", "20" }, { "atkDistance", "6" } };
     //public string Tt
     //{
     //    get { return Tt; }

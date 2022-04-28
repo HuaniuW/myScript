@@ -72,6 +72,12 @@ public class JG_gunshi : MonoBehaviour {
             {
                 yshitou.GetComponent<Rigidbody2D>().AddForce(new Vector2(2000, 0));
             }
+            print(yshitou.GetComponent<Rigidbody2D>().velocity.x);
+
+            if (yshitou.GetComponent<Rigidbody2D>().velocity.x > 20)
+            {
+                yshitou.GetComponent<Rigidbody2D>().velocity = new Vector2(20, yshitou.GetComponent<Rigidbody2D>().velocity.y);
+            }
 
 
             

@@ -33,14 +33,17 @@ public class JG_NewDoor : MonoBehaviour
     }
 
     GameObject _MainCamera;
+    //自动 生成地图 的 门检测
     private void ZDDTScreenGuaiCheck()
     {
         if (BossOrJY!=null) return;
+        //print(" oo  自动 工具生成 地图 检测 门 ");
         //throw new NotImplementedException();
         if (!_MainCamera) _MainCamera = GlobalTools.FindObjByName("MainCamera");
         if (_MainCamera.GetComponent<ScreenDoorGuaiControl>().TheMaxGuaiNums == -1) return;
         if (_MainCamera.GetComponent<ScreenDoorGuaiControl>().IsManGuai())
         {
+            //print("oo 是否可以 关门  "+ IsCanDoorClose);
             IsCanDoorClose = true;
         }
         else
@@ -122,7 +125,7 @@ public class JG_NewDoor : MonoBehaviour
         //print("****************************!!!!");
         IsNoBossNeedCloseDoor = false;
         //print(" >>>   "+(BossOrJY == null));
-        if (!BossOrJY.activeSelf)
+        if (BossOrJY&&!BossOrJY.activeSelf)
         {
             IsCanDoorClose = false;
             IsDoorClosed = false;
@@ -236,16 +239,16 @@ public class JG_NewDoor : MonoBehaviour
         
         if (!IsGuaiListAllDieOpenDoor) return;
         GameObject o = e.eventParams as GameObject;
-        print(" guaidie------------   "+o.name);
+        //print(" guaidie------------   "+o.name);
         print(e.eventParams);
 
-        print("guaidie  GuaiList.Count    " + GuaiList.Count);
+        //print("guaidie  GuaiList.Count    " + GuaiList.Count);
         for(int i= GuaiList.Count - 1; i >= 0; i--)
         {
             print(GuaiList[i]);
             if(GuaiList[i] == o|| GuaiList[i] == null)
             {
-                print("guaidie   " + o.name);
+                //print("guaidie   " + o.name);
                 GuaiList.RemoveAt(i);
             }
         }
@@ -271,6 +274,7 @@ public class JG_NewDoor : MonoBehaviour
         print("检查 怪物数量   " + GuaiList.Count);
 
         if (GuaiList.Count == 0) {
+            //print(" oo   没有 怪 不许关门！！！ ");
             IsCanDoorClose = false;
             OpenTheDoor();
         }

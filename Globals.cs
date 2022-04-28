@@ -16,7 +16,8 @@ public class Globals : MonoBehaviour {
     /// </summary>
     public const string USE_XP = "z";
 
-    public static bool isDebug = true;
+    public static bool isDebug = false;
+    public static bool isDebug2 = true;
 
     public static bool isPC = true;
 
@@ -31,8 +32,22 @@ public class Globals : MonoBehaviour {
     public static string language = "chinese";
 
     public const string CHINESE = "chinese";
+    public const string CHINESEF = "chineseF";
     public const string ENGLISH = "english";
+    public const string JAPAN = "japan";
+    public const string KOREAN = "korean";
+    public const string Portugal = "portugal";
+
+    public const string German = "German";
+    public const string French = "French";
+
+    public const string Italy = "Italy";
+
+
     // Use this for initialization
+
+    public static string languageType = "";
+
 
     public static bool isKeyUp = false;
     public static bool isKeyDown = false;
@@ -48,7 +63,7 @@ public class Globals : MonoBehaviour {
 
     public static bool IsHitPlotKuai = false;
 
-
+    public static bool IsCanControl = true;
 
     public static bool IsNeedSetJingInMaps = true;
 
@@ -74,6 +89,13 @@ public class Globals : MonoBehaviour {
     //是否在 摄像机 碰撞块内
     public static bool IsInCameraKuai = false;
     public static bool IsInJijia = false;
+    public static bool IsInJijiaGK = false;
+
+    public static bool IsInSetBar = false;
+
+    //是否是 取档进入游戏 在神树旁边出现
+    public static bool ISLOADINGAME = false;
+
 
     void Start () {
 		

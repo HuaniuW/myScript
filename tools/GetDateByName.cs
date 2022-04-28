@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class GetDateByName : MonoBehaviour {
+public class GetDateByName{
 
 
     static GetDateByName instance;
@@ -20,10 +20,6 @@ public class GetDateByName : MonoBehaviour {
         return instance;
     }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	
 
@@ -67,5 +63,13 @@ public class GetDateByName : MonoBehaviour {
         FieldInfo fieldInfo = type.GetField(_name);
         if (fieldInfo == null) return null;
         return fieldInfo.GetValue(obj) as Transform;
+    }
+
+    public string GetStrinByName(string _name, System.Object obj)
+    {
+        Type type = obj.GetType();
+        FieldInfo fieldInfo = type.GetField(_name);
+        if (fieldInfo == null) return null;
+        return fieldInfo.GetValue(obj) as string;
     }
 }

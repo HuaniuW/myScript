@@ -149,4 +149,6 @@ public class EventTypeName
     public const string DAOJISHI = "daojishi";
 
     public const string STOP_DAOJISHI = "stop_daojishi";
+
+    public const string BOSS_NAME= "boss_name";
 }

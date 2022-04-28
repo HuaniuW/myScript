@@ -14,35 +14,34 @@ public class Tests : MonoBehaviour {
         //iTween.FadeTo(this.gameObject, iTween.Hash("alpha", 0f, "time", 2f, "easeType", iTween.EaseType.easeInOutExpo, "oncomplete", "Fd"));
 
 
-        return;
-        MyClass m = new MyClass();
-        Type type1 = m.GetType();
-        Type type2 = typeof(MyClass);
-        string s = type1.BaseType.ToString();//获得父类名
-        FieldInfo[] fields = type1.GetFields();//获得所有非私有字段信息
-       // print("???   "+ fields.Length+"  i  "+fields[0]);
-        foreach (FieldInfo item in fields)
-        {
-            //print("?>>>>>>>  "+item.Name+"    "+item.FieldType);
-            //Console.WriteLine(item.Name);
-        }
+       // MyClass m = new MyClass();
+       // Type type1 = m.GetType();
+       // Type type2 = typeof(MyClass);
+       // string s = type1.BaseType.ToString();//获得父类名
+       // FieldInfo[] fields = type1.GetFields();//获得所有非私有字段信息
+       //// print("???   "+ fields.Length+"  i  "+fields[0]);
+       // foreach (FieldInfo item in fields)
+       // {
+       //     //print("?>>>>>>>  "+item.Name+"    "+item.FieldType);
+       //     //Console.WriteLine(item.Name);
+       // }
 
-        PropertyInfo[] propertys = type1.GetProperties();//获得所有非私有属性信息
-        foreach (PropertyInfo item in propertys)
-        {
-            //print(item.Name+"   length  "+propertys.Length+"    "+item.GetType());
-        }
+       // PropertyInfo[] propertys = type1.GetProperties();//获得所有非私有属性信息
+       // foreach (PropertyInfo item in propertys)
+       // {
+       //     //print(item.Name+"   length  "+propertys.Length+"    "+item.GetType());
+       // }
 
-        FieldInfo fieldInfo = type1.GetField("arr1");
-        dict = fieldInfo.GetValue(m) as string[];
+       // FieldInfo fieldInfo = type1.GetField("arr1");
+       // dict = fieldInfo.GetValue(m) as string[];
 
-        //DataZS sss = DataZS.GetInstance();
-        DataZS sss = new DataZS();
-        print("------------------>   "+ dict.Length+"   m   "+sss);
+       // //DataZS sss = DataZS.GetInstance();
+       // DataZS sss = new DataZS();
+       // print("------------------>   "+ dict.Length+"   m   "+sss);
 
 
-        string[] arrt = GetArr("arr1", m );
-        print("xx  "+ arrt[1]);
+       // string[] arrt = GetArr("arr1", m );
+       // print("xx  "+ arrt[1]);
 
        
         //this["Tests1"]();

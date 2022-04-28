@@ -236,7 +236,7 @@ public class UI_Skill : MonoBehaviour {
 
 
 
-    GameObject _player;
+    protected GameObject _player;
     PlayerGameBody _playerGameBody;
     // Use this for initialization
     void Start () {

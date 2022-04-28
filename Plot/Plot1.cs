@@ -142,7 +142,7 @@ public class Plot1 : MonoBehaviour
 
 
 
-    List<string> txtList = new List<string> {_str1};
+    List<string> txtList = new List<string> {"str1"};
     int listI = 0;
 
 
@@ -168,7 +168,7 @@ public class Plot1 : MonoBehaviour
 
             isTxtStart = true;
             IsChuXian = true;
-            ShowTxt(txtList[listI]);
+            ShowTxt( Duibai.GetInstance().GetTxtById(txtList[listI]));
             listI++;
             //_text.transform.position = new Vector3(_text.transform.position.x, txtCSPos.y - 30, _text.transform.position.z);
             _y = _text.transform.position.y;
@@ -250,7 +250,8 @@ public class Plot1 : MonoBehaviour
     void CameraControl()
     {
         if (!mainCamera) {
-            mainCamera = GlobalTools.FindObjByName("MainCamera");            
+            mainCamera = GlobalTools.FindObjByName("MainCamera");
+            //mainCamera.transform.position = new Vector3(mainCamera.transform.position.x,-1, mainCamera.transform.position.z);
         }
         mainCamera.GetComponent<CameraController>().SetNewAddXPos(3);
         //Vector3 newPos = new Vector3(player.transform.position.x+8,);

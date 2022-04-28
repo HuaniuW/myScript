@@ -33,10 +33,10 @@ public class AIPlot : MonoBehaviour
     float maxints = 8;
     float n = 0;
     bool IsZhuanbian = false;
-    int bian = 1;
-    string tempstr = "";
+    //int bian = 1;
+    //string tempstr = "";
 
-    Vector2 v = new Vector2(2,4);
+    //Vector2 v = new Vector2(2,4);
 
 
     void YanmuStop2()
@@ -138,48 +138,6 @@ public class AIPlot : MonoBehaviour
         }
 
 
-        //v = new Vector2(4, 4);
-        //GetComponent<AirGameBody>().RunRight(4f);
-        //GetComponent<AirGameBody>().RunY(4f);
-
-
-        //print(" v22222    "+GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity+"  -----0000    "+v);
-        //GetComponent<AirGameBody>().GetPlayerRigidbody2D().velocity = v;
-        //print("  v "+v);
-        return;
-
-        if (GetComponent<AirGameBody>().isAcing)
-        {
-            if (GetComponent<GameBody>().GetDB().animation.lastAnimationName == "fly_1")
-            {
-                tempstr = "fly_1";
-            }
-            else
-            {
-                tempstr = "run_3";
-            }
-        }
-        else
-        {
-            if (n >= maxints)
-            {
-                n = 0;
-                if (GetComponent<GameBody>().GetDB().animation.lastAnimationName == "fly_1")
-                {
-                    GetComponent<AirGameBody>().GetAcMsg("run_3");
-                    bian = 1;
-                    //GetComponent<AirGameBody>().RunACChange("run_3");
-                }
-                else
-                {
-                    GetComponent<AirGameBody>().GetAcMsg("fly_1");
-                    //GetComponent<AirGameBody>().RunACChange("fly_1");
-                }
-            }
-        }
-
-        GetComponent<AirGameBody>().RunRight(1f);
-        //GetComponent<AirGameBody>().RunACChange("fly_1");
     }
     //飞到哪
     //烟幕

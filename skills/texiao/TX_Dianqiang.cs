@@ -15,6 +15,47 @@ public class TX_Dianqiang : MonoBehaviour
 
     ParticleSystem.MainModule _liziMain;
 
+    [Header("是否探测边缘电位置")]
+    public bool IsTCPosStop = false;
+
+    float LeftPosX = 1000;
+    float RightPosX = 1000;
+    bool IsGetTCPos = false;
+
+    void IsTCBianyuanPotStop()
+    {
+        if (!IsTCPosStop) return;
+        if (!IsGetTCPos)
+        {
+            IsGetTCPos = true;
+            if (GlobalTools.FindObjByName("LPos"))
+            {
+                LeftPosX = GlobalTools.FindObjByName("LPos").transform.position.x;
+            }
+            if (GlobalTools.FindObjByName("RPos"))
+            {
+                RightPosX = GlobalTools.FindObjByName("RPos").transform.position.x;
+            }
+        }
+
+        if (LeftPosX == 1000) return;
+
+        if(MoveSpeed<0 &&this.transform.position.x<= LeftPosX)
+        {
+            IsCanMove = false;
+            this.transform.position = new Vector2(LeftPosX, this.transform.position.y);
+        }else if (MoveSpeed > 0 && this.transform.position.x >= RightPosX)
+        {
+            IsCanMove = false;
+            this.transform.position = new Vector2(RightPosX, this.transform.position.y);
+        }
+    }
+
+
+
+
+
+
     // Update is called once per frame
     void Update()
     {
@@ -57,6 +98,7 @@ public class TX_Dianqiang : MonoBehaviour
     {
         _thisY = this.transform.position.y;
         _thisX = this.transform.position.x;
+        
         //print("_thisY   "+ _thisY);
         ResetAll();
         IsStarting = true;
@@ -97,7 +139,7 @@ public class TX_Dianqiang : MonoBehaviour
     public float DisSelfTimes = 2;
     void DieSelfByTimes()
     {
-
+        print("DisTimes   " + DisTimes+ "  DisSelfTimes  "+ DisSelfTimes);
         if (IsMoveEnd) {
             RemoveSelfInEnd();
             return;
@@ -112,10 +154,6 @@ public class TX_Dianqiang : MonoBehaviour
             //RemoveSelf();
         }
 
-       
-
-
-
         return;
     }
 
@@ -128,9 +166,17 @@ public class TX_Dianqiang : MonoBehaviour
             //停止碰撞快 碰撞
             _liziMain.loop = false;
         }
+
+
+        //print("   lizishifou  haizai  bofang!! "+Lizi_DianQiang.isPlaying);
+
         if (Lizi_DianQiang && Lizi_DianQiang.isStopped)
         {
-            print("  移除。。。。。。。。。。。。。。。。。。。。 ");
+            //print("  移除。。。。。。。。。。。。。。。。。。。。 ");
+            RemoveSelf();
+        }
+        else
+        {
             RemoveSelf();
         }
     }
@@ -188,6 +234,8 @@ public class TX_Dianqiang : MonoBehaviour
             this.transform.position = new Vector2(this.transform.position.x + MoveSpeed, this.transform.position.y);
         }
 
+
+        IsTCBianyuanPotStop();
         print("ysX " + _thisX + "  ----   " + this.transform.position.x + "    --  MoveSpeed  " + MoveSpeed);
     }
 
@@ -200,8 +248,12 @@ public class TX_Dianqiang : MonoBehaviour
 
     void ResetAll()
     {
+        IsGetTCPos = false;
         DisTimes = 0;
         IsStarting = false;
+
+        LeftPosX = 1000;
+        RightPosX = 1000;
         //MoveSpeed = 0.2f;
 
         //_liziMain = Lizi_DianQiang.main;
@@ -214,9 +266,9 @@ public class TX_Dianqiang : MonoBehaviour
     {
 
         IsStarting = false;
-        //print("////*********************************************************************************dianqiang");
-        //print("////*********************************************************************************dianqiang");
-        //print("////*********************************************************************************dianqiang 移除");
+        print("////*********************************************************************************dianqiang");
+        print("////*********************************************************************************dianqiang");
+        print("////*********************************************************************************dianqiang 移除");
         //gameObject.SetActive(false);
         ObjectPools.GetInstance().DestoryObject2(this.gameObject);
     }

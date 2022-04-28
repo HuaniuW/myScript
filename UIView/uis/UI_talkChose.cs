@@ -167,20 +167,31 @@ public class UI_talkChose : MonoBehaviour
         if(MaxLength == 3)bar3.GetComponent<UI_txtBar>().NotBeChose();
     }
 
+
+    const string VERTICAL = "Vertical";
+    float verticalDirection;
+
+    bool IsXZ = false;
+
     int hasChoseNums = 1;
     void CanChose()
     {
-        
 
-        if (Input.GetKeyDown(KeyCode.W))
+        verticalDirection = Input.GetAxis(VERTICAL);
+        if (verticalDirection > -0.6f && verticalDirection < 0.6f) IsXZ = false;
+
+
+        if (Input.GetKeyDown(KeyCode.W)||(!IsXZ&& verticalDirection>0.6f))
         {
+            IsXZ = true;
             if (hasChoseNums > 1)
             {
                 hasChoseNums--;
                 GetChoseBar();
             }
-        }else if (Input.GetKeyDown(KeyCode.S))
+        }else if (Input.GetKeyDown(KeyCode.S) || (!IsXZ && verticalDirection < -0.6f))
         {
+            IsXZ = true;
             if (hasChoseNums < MaxLength)
             {
                 hasChoseNums++;
@@ -192,7 +203,7 @@ public class UI_talkChose : MonoBehaviour
 
         if (!IsStartACOver) return;
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.J)|| Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
             //print("  J 确定    Id  ");
             GetChose();

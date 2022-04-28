@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour
         IsFollowing = true;//默认为跟随
         cameraZ = transform.position.z;
         yuanCameraZ = cameraZ - 5;
-        Application.targetFrameRate = 60;
+        //Application.targetFrameRate = 60;
         oldPosition = transform.position;
         //print(obj.transform.position);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CAMERA_KUAI_REDUCTION, this.KiaoReduction);
@@ -214,7 +214,9 @@ public class CameraController : MonoBehaviour
         if (!player) return;
         var x = transform.position.x;
         var y = transform.position.y;
-        
+
+        //print("摄像机  22222houlai------ zuobiao  " + this.transform.position);
+
         float orthographicSize = GetComponent<Camera>().orthographicSize;//orthographicSize代表相机(或者称为游戏视窗)竖直方向一半的范围大小,且不随屏幕分辨率变化(水平方向会变)
         //print("   orthographicSize   "+ orthographicSize+"   s摄像机位置  "+ transform.position+"  角色的位置 "+ player.position);
         cameraHalfWidth = orthographicSize * ((float)Screen.width / Screen.height);//的到视窗水平方向一半的大小
@@ -241,7 +243,7 @@ public class CameraController : MonoBehaviour
             float yNew = transform.position.y;
             if (IsHitCameraKuai)
             {
-                //print("hit cameraKuai!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CameraKuaiY   " + CameraKuaiY);
+                print("hit cameraKuai!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CameraKuaiY   " + CameraKuaiY);
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
             }
             else

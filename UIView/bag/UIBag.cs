@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIBag : MonoBehaviour {
+public class UIBag : MonoBehaviour
+{
     public Button btn1;
     public Button btn2;
     public Button btn3;
@@ -14,7 +15,8 @@ public class UIBag : MonoBehaviour {
     public RectTransform mianban2;
     public RectTransform mianban3;
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         btn1.onClick.AddListener(Click1);
         btn2.onClick.AddListener(Click2);
         btn3.onClick.AddListener(Click3);
@@ -76,7 +78,7 @@ public class UIBag : MonoBehaviour {
     public void OnPointerDown(PointerEventData eventData)
     {
         Vector2 mouseDown = eventData.position;    //记录鼠标按下时的屏幕坐标
-       // Vector2 mouseUguiPos = new Vector2();   //定义一个接收返回的ugui坐标
+                                                   // Vector2 mouseUguiPos = new Vector2();   //定义一个接收返回的ugui坐标
         print(mouseDown);
         //RectTransformUtility.ScreenPointToLocalPointInRectangle()：把屏幕坐标转化成ugui坐标
         //canvas：坐标要转换到哪一个物体上，这里img父类是Canvas，我们就用Canvas
@@ -84,27 +86,98 @@ public class UIBag : MonoBehaviour {
         //out mouseUguiPos：返回转换后的ugui坐标
         //isRect：方法返回一个bool值，判断鼠标按下的点是否在要转换的物体上
         //bool isRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, mouseDown, eventData.enterEventCamera, out mouseUguiPos);
-       // if (isRect)   //如果在
+        // if (isRect)   //如果在
         //{
-            //计算图片中心和鼠标点的差值
-            //offset = imgRect.anchoredPosition - mouseUguiPos;
+        //计算图片中心和鼠标点的差值
+        //offset = imgRect.anchoredPosition - mouseUguiPos;
         //}
     }
 
     bool IsOpen = false;
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyDown(Globals.OPEN_ZTCD))
+    // Update is called once per frame
+    void Update()
+    {
+        if (Globals.IsInSetBar) return;
+        if (IsOpen && Globals.IsInJijiaGK)
         {
+            IsOpen = false;
+            GlobalSetDate.instance.IsChangeScreening = false;
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+            mianbanHide(this.GetComponent<RectTransform>());
+        }
+
+        BtnControl2();
+    }
+
+
+    void BtnControl1()
+    {
+        if (IsOpen && (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.K)))
+        {
+            IsOpen = false;
+            GlobalSetDate.instance.IsChangeScreening = false;
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+            mianbanHide(this.GetComponent<RectTransform>());
+        }
+
+
+
+        if (Input.GetKeyDown(Globals.OPEN_ZTCD) || Input.GetKeyDown(KeyCode.Joystick1Button9) || Input.GetKeyDown(KeyCode.B))
+        {
+            if (Globals.IsInJijiaGK) return;
             if (!IsOpen)
             {
-               //print("KeyCode.P>  " + KeyCode.P);
+                //print("KeyCode.P>  " + KeyCode.P);
                 IsOpen = true;
 
                 //临时用IsChangeScreening 来控制
                 GlobalSetDate.instance.IsChangeScreening = true;
                 mianbanShow(this.GetComponent<RectTransform>());
-                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BAG_OPEN,null), this);
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BAG_OPEN, null), this);
+                print("开启背包！！！！！");
+                
+            }
+            else
+            {
+                HideMianban();
+            }
+        }
+    }
+
+
+    public void HideMianban()
+    {
+        IsOpen = false;
+        GlobalSetDate.instance.IsChangeScreening = false;
+        //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+        mianbanHide(this.GetComponent<RectTransform>());
+    }
+
+
+    void BtnControl2()
+    {
+        if (IsOpen && (Input.GetKeyUp(KeyCode.Joystick1Button0) || Input.GetKeyUp(KeyCode.K)))
+        {
+            IsOpen = false;
+            GlobalSetDate.instance.IsChangeScreening = false;
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
+            mianbanHide(this.GetComponent<RectTransform>());
+        }
+
+
+
+        if (Input.GetKeyDown(Globals.OPEN_ZTCD) || Input.GetKeyDown(KeyCode.Joystick1Button7) || Input.GetKeyDown(KeyCode.B))
+        {
+            if (Globals.IsInJijiaGK) return;
+            if (!IsOpen)
+            {
+                //print("KeyCode.P>  " + KeyCode.P);
+                IsOpen = true;
+
+                //临时用IsChangeScreening 来控制
+                GlobalSetDate.instance.IsChangeScreening = true;
+                mianbanShow(this.GetComponent<RectTransform>());
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BAG_OPEN, null), this);
                 //print("开启背包！！！！！");
             }
             else
@@ -116,4 +189,5 @@ public class UIBag : MonoBehaviour {
             }
         }
     }
+
 }

@@ -98,9 +98,6 @@ public class JN_SFBase : MonoBehaviour, ISkill
         if (GetComponent<RoleDate>().isBeHiting|| GetComponent<RoleDate>().isDie)
         {
             print("释放技能 被攻击取消动作  ！！！！！！！！！！");
-            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
-            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
-            print("释放技能 被攻击取消动作  ！！！！！！！！！！");
             ReSetAll();
             return;
         }
@@ -181,7 +178,6 @@ public class JN_SFBase : MonoBehaviour, ISkill
 
     protected virtual void GetAC()
     {
-
         //判断有没有 攻击动作 没有直接退出
         if (!_gameBody.GetDB().animation.HasAnimation(ACName))
         {

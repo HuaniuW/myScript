@@ -5,7 +5,7 @@ using UnityEngine;
 public class TX_zidanGZ : TX_zidan
 {
 
-    float testN = 0;
+    float testNums = 0;
     [Header("跟踪时间")]
     public float GenZongTime = 1;
 
@@ -15,14 +15,14 @@ public class TX_zidanGZ : TX_zidan
     {
         if (!_player) return;
         //print("??? ------------   testN    " + testN);
-        if (testN < GenZongTime)
+        if (testNums < GenZongTime)
         {
-            testN += Time.deltaTime;
+            testNums += Time.deltaTime;
             GetComponent<Rigidbody2D>().velocity = GlobalTools.GetVector2ByPostion(_player.transform.position, this.transform.position, speeds);
 
         }
 
-        if(testN>= CunzaiSJ)
+        if(testNums >= CunzaiSJ)
         {
             RemoveSelf();
             ResetAll();
@@ -34,7 +34,9 @@ public class TX_zidanGZ : TX_zidan
 
     private void Update()
     {
+        YanchiHit();
         if (!IsGZ) return;
+        
         GenZong();
     }
 
@@ -42,6 +44,7 @@ public class TX_zidanGZ : TX_zidan
     public override void ResetAll()
     {
         base.ResetAll();
+        testNums = 0;
         testN = 0;
     }
 }

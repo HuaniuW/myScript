@@ -329,7 +329,8 @@ public class UI_ShowPanel : MonoBehaviour {
         //print("hz ---------------> "+ hz);
         //print("img-------------->  " + img);
         hz.transform.position = img.transform.position;
-        hz.transform.parent = this.transform; //GlobalTools.FindObjByName("PlayerUI").transform;
+        //hz.transform.parent = this.transform; //GlobalTools.FindObjByName("PlayerUI").transform;
+        hz.transform.SetParent(this.transform);
         hz.GetComponent<UI_Skill>().SetHZDate(hzDate);
         hz.GetComponent<UI_Skill>().SetSkillPos(hzPos);
         //print("hz   "+ hz+"   hz pos  "+hz.transform.position);

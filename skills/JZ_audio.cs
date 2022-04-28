@@ -9,15 +9,16 @@ public class JZ_audio : MonoBehaviour {
     public AudioSource hit3;
     // Use this for initialization
     void Start () {
-		
+        
 	}
     
-    public void PlayAudio(string AudioName)
+    public void PlayAudio(string AudioName,string name = "")
     {
         //(this[AudioName] as AudioSource)
         //AudioName = "hit1";
         AudioSource cAudio = GetDicSSByName(AudioName, this);
         //print(AudioName + "       " + cAudio);
+        print(" yyyyyyyyy thisposition " + this.transform.position+"   behit name "+ name);
         if (cAudio)
         {
 			cAudio.volume = 0.8f * GlobalSetDate.instance.GetSoundEffectValue();

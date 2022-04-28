@@ -74,36 +74,36 @@ public class AI_ZhongChui : AI_SkillBase
 
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CAMERA_SHOCK, "z2-0.6"), this);
 
-        return;
+        //return;
         //GameObject skillObj = Resources.Load(TXName) as GameObject;
 
 
-        if (skillObj == null)
-        {
-            print("  skillObj = null  ");
-            //Time.timeScale = 0;
-            return;
-        }
-        //GameObject skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
-        if (skill.GetComponent<LiziJNControl>())
-        {
-            skill.GetComponent<LiziJNControl>().GetLiziObj().GetComponent<JN_base>().atkObj = this.gameObject;
-        }
+        //if (skillObj == null)
+        //{
+        //    print("  skillObj = null  ");
+        //    //Time.timeScale = 0;
+        //    return;
+        //}
+        ////GameObject skill = ObjectPools.GetInstance().SwpanObject2(skillObj);
+        //if (skill.GetComponent<LiziJNControl>())
+        //{
+        //    skill.GetComponent<LiziJNControl>().GetLiziObj().GetComponent<JN_base>().atkObj = this.gameObject;
+        //}
 
-        if (FasheiPointNum == 1)
-        {
-            skill.transform.position = zidanDian1.position;
-        }
-        else if (FasheiPointNum == 2)
-        {
-            skill.transform.position = zidanDian2.position;
-        }
-        if (IsNeedSetScaleX)
-        {
-            skill.transform.localScale = this.gameObject.transform.localScale;
-        }
+        //if (FasheiPointNum == 1)
+        //{
+        //    skill.transform.position = zidanDian1.position;
+        //}
+        //else if (FasheiPointNum == 2)
+        //{
+        //    skill.transform.position = zidanDian2.position;
+        //}
+        //if (IsNeedSetScaleX)
+        //{
+        //    skill.transform.localScale = this.gameObject.transform.localScale;
+        //}
 
-        skill.transform.parent = this.gameObject.transform.parent;
+        //skill.transform.parent = this.gameObject.transform.parent;
 
 
         //_gameBody.GetDB().animation.lastAnimationState.timeScale = 0.1f;

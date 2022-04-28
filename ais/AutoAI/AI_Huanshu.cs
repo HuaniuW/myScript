@@ -14,7 +14,7 @@ public class AI_Huanshu : AI_SkillBase
     // 生成怪 打机组   小怪 还是精英
 
     //记录 角色位置
-    GameObject _player;
+    //GameObject _player;
     Vector2 PlayerPos;
     void RecordPlayerPos()
     {

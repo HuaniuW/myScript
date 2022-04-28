@@ -24,6 +24,10 @@ public class PlayerUI : MonoBehaviour {
     public RectTransform saveing;
 
 
+    [Header("----boss名字 数量")]
+    public Text Txt_BossName;
+
+
     public GameObject player;
     public GameBody playerObj;
 
@@ -38,11 +42,31 @@ public class PlayerUI : MonoBehaviour {
     [Header("导弹 数量")]
     public Text Txt_daodan;
 
+    [Header("***子弹")]
+    public Image img_zidan;
+
+    [Header("***导弹")]
+    public Image img_daodan;
+
+    [Header("***干扰弹")]
+    public Image img_ganraodan;
+
+
 
     public GameObject skill_bar;
     public GameObject ui_hun;
     public GameObject ui_feidao;
     public GameObject ui_shanbi;
+
+
+
+    public void HideFeiJijiaUI()
+    {
+        ui_shanbi.gameObject.SetActive(false);
+        skill_bar.gameObject.SetActive(false);
+    }
+
+
 
     // Use this for initialization
     void Start () {
@@ -66,11 +90,12 @@ public class PlayerUI : MonoBehaviour {
         }
 
         btn_zt.onClick.AddListener(GetSetUI);
-
+        Txt_BossName.GetComponent<CanvasGroup>().alpha = 0;
         saveing.GetComponent<CanvasGroup>().alpha = 0;
         
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.BOSS_NAME, this.ShowBossNameTxt);
         GetMainCamera();
 
         //screenChangeZZ.gameObject.SetActive(false);
@@ -86,8 +111,8 @@ public class PlayerUI : MonoBehaviour {
         {
             HideUIZZ();
         }
-        
 
+        print("   playerUI***************************************** ");
         //GlobalSetDate.instance.Hide_UIZZ();
 
     }
@@ -171,6 +196,22 @@ public class PlayerUI : MonoBehaviour {
     //    }
     //}
 
+    public GameObject UI_PlayerLive;
+    public GameObject UI_BossLive;
+
+
+    //隐藏掉 除了 ZZ之外的UI
+    public void HideUIs()
+    {
+        skill_bar.SetActive(false);
+        ui_shanbi.SetActive(false);
+        UI_PlayerLive.SetActive(false);
+        UI_BossLive.SetActive(false);
+
+    }
+
+  
+
 
     void GetScreenChange()
     {
@@ -199,6 +240,7 @@ public class PlayerUI : MonoBehaviour {
         IsScreenChangeing = true;
     }
 
+
     public void ShowLoadProgressNums(float nums, bool isHasChangeScreen = false)
     {
         if(nums == 100)
@@ -226,6 +268,7 @@ public class PlayerUI : MonoBehaviour {
         
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_SAVEING, this.GetSaveing);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_RESTART, this.RemoveSelfAndRestart);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.BOSS_NAME, this.ShowBossNameTxt);
     }
 
     void RemoveSelfAndRestart(UEvent e)
@@ -281,16 +324,23 @@ public class PlayerUI : MonoBehaviour {
     
 
     GameObject setUI;
-    void GetSetUI()
+    public void GetSetUI()
     {
+        print("   shezhi!!!! ");
         if(setUI == null)
         {
             setUI = GlobalTools.GetGameObjectByName("UI_set");
             GlobalSetDate.instance.IsChangeScreening = true;
+            Globals.IsInSetBar = true;
+            print("开启 设置");
+            if(GlobalTools.FindObjByName("UI_Bag")) GlobalTools.FindObjByName("UI_Bag").GetComponent<UIBag>().HideMianban();
+            player.GetComponent<GameBody>().GetStand();
         }
         else
         {
+            print("关闭 ^^^^^^ 设置");
             GlobalSetDate.instance.IsChangeScreening = false;
+            Globals.IsInSetBar = false;
             DestroyImmediate(setUI, true);
         }
     }
@@ -304,8 +354,46 @@ public class PlayerUI : MonoBehaviour {
         ShowSelf();
         GetScreenChange();
         JianZheng();
+        ShowBossName();
 
     }
+
+
+
+
+
+    void ShowBossNameTxt(UEvent e)
+    {
+        string s = e.eventParams.ToString();
+        Txt_BossName.text = s;
+        IsShowBossName = true;
+    }
+
+
+
+    bool IsShowBossName = false;
+    float BossNameJishi = 0;
+    float BossNameNums = 2;
+    void ShowBossName()
+    {
+        if (IsShowBossName)
+        {
+            BossNameJishi += Time.deltaTime;
+            if (BossNameJishi>= BossNameNums)
+            {
+                Txt_BossName.GetComponent<CanvasGroup>().alpha += (0 - Txt_BossName.GetComponent<CanvasGroup>().alpha) * 0.2f;
+                if (Txt_BossName.GetComponent<CanvasGroup>().alpha <= 0.1f)
+                {
+                    Txt_BossName.GetComponent<CanvasGroup>().alpha = 0;
+                    IsShowBossName = false;
+                }
+                return;
+            }
+            Txt_BossName.GetComponent<CanvasGroup>().alpha += (1 - Txt_BossName.GetComponent<CanvasGroup>().alpha) * 0.2f;
+            
+        }
+    }
+
     
     void GetTypePC()
     {

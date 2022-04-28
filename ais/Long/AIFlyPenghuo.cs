@@ -14,13 +14,16 @@ public class AIFlyPenghuo : MonoBehaviour,ISkill
         float _times = float.Parse(_timeAndMoveSpeed.Split('@')[0]);
         if (_times < 0.8f) _times = 0.8f;
         float _moveSpeed = float.Parse(_timeAndMoveSpeed.Split('@')[1]);
-        if (_moveSpeed > 0.1f) _moveSpeed = 0.1f;
+        if (IsXianzhiSpeed && _moveSpeed > 0.1f) _moveSpeed = 0.1f;
 
 
         penhuoCXTimes = _times;
         moveSpeedX = _moveSpeed;
 
     }
+
+    [Header("是否限制 喷火 时候 飞行 速度")]
+    public bool IsXianzhiSpeed = true;
 
 
     public void GetStart(GameObject gameObj)
@@ -58,7 +61,8 @@ public class AIFlyPenghuo : MonoBehaviour,ISkill
 
 
     //起始动作
-    string StartACName = "run_penhuoQS";
+    [Header("龙喷火起始 动作")]
+    public string StartACName = "run_penhuoQS";
     protected bool IsGetStartAC = false; 
     protected void GetStartAC()
     {
@@ -70,7 +74,8 @@ public class AIFlyPenghuo : MonoBehaviour,ISkill
 
 
     //喷火动作 移动
-    string PenHuoACName = "run_penhuo";
+    [Header("龙喷火 移动动作")]
+    public string PenHuoACName = "run_penhuo";
     protected bool IsStartPenhuo = false;
 
 
@@ -88,7 +93,7 @@ public class AIFlyPenghuo : MonoBehaviour,ISkill
     // Update is called once per frame
     void Update()
     {
-        if (_roleDate.isDie || _roleDate.isBeHiting|| (_player && _player.GetComponent<RoleDate>().isDie))
+        if (_roleDate.isDie || _roleDate.isBeHiting|| (IsXianzhiSpeed&&_player && _player.GetComponent<RoleDate>().isDie))
         {
             ReSetAll();
             _isGetOver = true;
@@ -134,6 +139,7 @@ public class AIFlyPenghuo : MonoBehaviour,ISkill
                 IsInPenhuoing = true;
                 penhuoJishi = 0;
                 _gameBody.GetDB().animation.FadeIn(PenHuoACName);
+                if(!IsXianzhiSpeed) GetComponent<GameBody>().isAcing = true;
                 TX_Huoyan.gameObject.SetActive(true);
                 TX_Huoyan.Play();
 

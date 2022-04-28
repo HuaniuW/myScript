@@ -51,7 +51,7 @@ public class GameControl : MonoBehaviour {
 
         //GameSaveDate.GetInstance().GetTestSave();
         if (Globals.isDebug) print("游戏关卡控制类 启动 当前场景名字   "+ SceneManager.GetActiveScene().name);
-
+        Globals.IsInJijiaGK = false;
         Globals.IsInCameraKuai = false;
         //GlobalSetDate.instance.GetGuanKaStr();
         //GlobalSetDate.instance;
@@ -73,8 +73,8 @@ public class GameControl : MonoBehaviour {
         InitGuanKaDate();
         GetPlayerStatus();
         GetPlayerPosByFX();
-        //print("游戏 控制完成");
-        
+        print("游戏 控制完成");
+
     }
 
     private void OnEnable()
@@ -108,10 +108,10 @@ public class GameControl : MonoBehaviour {
     //通过方向 来判断 门 和放置玩家的位置
     public void GetPlayerPosByFX()
     {
-        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame+ "  IsJijisGK  "+ IsJijisGK);
+        print(" 玩家位置 和方向！！   "+ GlobalSetDate.instance.HowToInGame+ "  IsJijisGK  "+ IsJijiaGK);
         player.GetComponent<GameBody>().IsNeedDieOutDownY = true;
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME) return;
-        if (IsJijisGK) return;
+        if (IsJijiaGK) return;
         SetPlayerPos();
 
         //print("---------------------  在 GameControl 中控制 玩家位置！！！ ");
@@ -167,7 +167,7 @@ public class GameControl : MonoBehaviour {
             //print(" ----》左转！！！！ ");
             player.GetComponent<PlayerGameBody>().TrunFXStrLeft();
         }
-        this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+2.6f, this.transform.position.z);
+        //this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y+2.6f, this.transform.position.z);
         
         //print("------222222》  " + player.transform.localScale);
     }
@@ -237,6 +237,29 @@ public class GameControl : MonoBehaviour {
         }
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.PLAYER_ZT, PlayerZT);
+    }
+
+    private void PlayerZT(UEvent evt)
+    {
+        //throw new System.NotImplementedException();
+        if (Globals.ISLOADINGAME)
+        {
+            Globals.ISLOADINGAME = false;
+            //this.live += 2000;
+            //this.lan += 2000;
+            print("  游戏生成 最后 更新角色状态  如果是取档 进入 保证角色满血 ");
+            if (player)
+            {
+                if (player.GetComponent<PlayerRoleDate>())
+                {
+                    player.GetComponent<PlayerRoleDate>().live += 2000;
+                    player.GetComponent<PlayerRoleDate>().lan += 2000;
+                }
+                
+            }
+
+        }
     }
 
 
@@ -273,6 +296,7 @@ public class GameControl : MonoBehaviour {
         //print("OnDestroy!!!!!!");
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHANGE_SCREEN, SetChangeThisGKInZGKTempDate);
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.RECORDOBJ_CHANGE, GKDateChange);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.PLAYER_ZT, PlayerZT);
     }
 
     //是否包含查找的数据
@@ -564,16 +588,12 @@ public class GameControl : MonoBehaviour {
     //找到主角
     void GetPlayer()
     {
-
-       
-
-        
         if (GlobalTools.FindObjByName("player") == null)
         {
             if (GlobalTools.FindObjByName("player_jijia") != null)
             {
                 player = GlobalTools.FindObjByName("player_jijia");
-                IsJijisGK = true;
+                IsJijiaGK = true;
             }
             else
             {
@@ -592,12 +612,12 @@ public class GameControl : MonoBehaviour {
     }
 
     //是否是 机甲 关卡
-    bool IsJijisGK = false;
+    bool IsJijiaGK = false;
 
     void GetPlayerStatus()
     {
         //print("玩家状态******************************************************************************************************************************》》》》》》》》       ");
-        if(!IsJijisGK && GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
+        if(GlobalSetDate.instance.HowToInGame != GlobalSetDate.NEW_GAME&&!IsJijiaGK && GlobalSetDate.instance.HowToInGame != GlobalSetDate.TEMP_SCREEN) player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
        
         // 是怎么进入游戏的 1.新游戏 2.取档 3.过场 4.传送（待定）5.临时场景直接进入游戏
         if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.NEW_GAME)
@@ -608,9 +628,11 @@ public class GameControl : MonoBehaviour {
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.LOAD_GAME)
         {
-            if (Globals.isDebug) print("取档进入游戏！");
+            if (Globals.isDebug) print("*******************************取档进入游戏！");
+            Globals.ISLOADINGAME = true;
             //player.transform.position = GlobalSetDate.instance.GetPlayerInScreenPosition();
             if(GlobalSetDate.instance.CurrentUserDate.curLive!=null) player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLive);
+            if (GlobalSetDate.instance.CurrentUserDate.curLan != null) player.GetComponent<RoleDate>().live = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLan);
         }
         else if (GlobalSetDate.instance.HowToInGame == GlobalSetDate.CHANGE_SCREEN)
         {
@@ -629,6 +651,7 @@ public class GameControl : MonoBehaviour {
         //摄像机位置跟随
         GameObject mainCamera = GlobalTools.FindObjByName("MainCamera");
         if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 3.5f, mainCamera.transform.position.z);
+        //if (mainCamera) mainCamera.transform.position = new Vector3(player.transform.position.x, mainCamera.transform.position.y, mainCamera.transform.position.z);
         //玩家站立
         player.GetComponent<GameBody>().SetV0();
         //当前是什么状态 新进游戏（不管是取档 还是新游戏）
@@ -676,14 +699,27 @@ public class GameControl : MonoBehaviour {
             playerUI = GlobalTools.FindObjByName("PlayerUI");
         }
         //playerUI.GetComponent<DontDistoryObj>().ShowSelf();
-        playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
-        playerUI.GetComponent<UI_lantiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
+       
+        if (Globals.IsInJijiaGK)
+        {
+            playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName(GlobalTag.PlayerJijiaObj));
+            //playerUI.GetComponent<UI_lantiao>().GetTargetObj(GlobalTools.FindObjByName(GlobalTag.PlayerJijiaObj));
+            //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANEG_LIVE, GlobalTools.FindObjByName("player").GetComponent<RoleDate>().maxLive + "_max"), this);
+        }
+        else
+        {
+            playerUI.GetComponent<XueTiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
+            playerUI.GetComponent<UI_lantiao>().GetTargetObj(GlobalTools.FindObjByName("player"));
+        }
+
+
         //GlobalTools.FindObjByName("player").GetComponent<RoleDate>().Lan = float.Parse(GlobalSetDate.instance.CurrentUserDate.curLan);
         //playerUI.GetComponent<PlayerUI>().ui_hun.GetComponent<UI_Hun>().SetHun();
         //print("*******************************************************************************************************************************************************徽章更新***");
         //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_HZ, ""), this);
     }
 
+  
 
     //摄像头定焦 和找到敌人
     public void GetCamersTargetToPlayer()
@@ -697,10 +733,10 @@ public class GameControl : MonoBehaviour {
         {
             this.GetComponent<CameraController>().GetTargetObj(GlobalTools.FindObjByName("player").transform);
         }
-        
+
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.GET_ENEMY), null);
-        //print("摄像机  kaishi zuobiao  "+ this.transform.position);
-        //this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 15.6f, this.transform.position.z);
+        //print("摄像机  kaishi zuobiao  " + this.transform.position);
+        //this.transform.position = new Vector3(this.transform.position.x, player.transform.position.y + 25.6f, this.transform.position.z);
         //print(" 控制 摄像机 位置！！！！！！！！ ");
         //print("摄像机  houlai------ zuobiao  " + this.transform.position);
     }

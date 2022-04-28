@@ -63,9 +63,9 @@ public class JN_Diu : MonoBehaviour
                 Removeself();
             }
         }
-       
-
     }
+
+
 
     [Header("主动计时爆炸 是0的话就不计时")]
     public float JishiBaozhaNums = 0;

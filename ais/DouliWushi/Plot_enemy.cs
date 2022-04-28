@@ -18,6 +18,12 @@ public class Plot_enemy : MonoBehaviour
     [Header("战斗音乐音效")]
     public AudioSource Audio_Zhandou;
 
+    [Header("碰撞块")]
+    public GameObject HitKuai;
+
+
+    public string BossName = "";
+
 
 
     [Header("被攻击时候 需要 移除的 物体")]
@@ -30,10 +36,19 @@ public class Plot_enemy : MonoBehaviour
             if (BeHitDisObj) Destroy(BeHitDisObj);
             IsStart = false;
             CloseDoor();
-            //播放战斗音乐
-            //Audio_Zhandou.Play();
-        }
+            ShowHitKuai();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.BOSS_IS_OUT, BossName), this);
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_RUN_AC_2, ""), this);
 
+        }
+    }
+
+    public void ShowHitKuai()
+    {
+        HitKuai.SetActive(true);
+        //播放战斗音乐
+        Audio_Zhandou.Play();
+        //print("  播放 战斗音乐！！！！");
     }
 
 
@@ -64,8 +79,8 @@ public class Plot_enemy : MonoBehaviour
             PLAYER_STAND = player.GetComponent<GameBody>().GetStandACName();
             IsGetStand = true;
             //player.GetComponent<GameBody>().GetAcMsg(GetComponent<GameBody>().GetStandACName());
-          
 
+            IsHalfLiveStart = true;
             //相互朝向？
             Dubais();
             IsStartDisSelfByTime = true;
@@ -104,7 +119,8 @@ public class Plot_enemy : MonoBehaviour
 
     void Dubais()
     {
-        string _msg ="很好！你表现令人惊喜";
+        PLOTMSG = "";
+        string _msg = PLOTMSG;
         GameObject _cBar = ObjectPools.GetInstance().SwpanObject2(Resources.Load("TalkBar2") as GameObject);
         Vector2 _talkPos = GetComponent<GameBody>().GetTalkPos();
         //_cBar.GetComponent<UI_talkBar>().
@@ -112,6 +128,68 @@ public class Plot_enemy : MonoBehaviour
         _cBar.GetComponent<UI_talkBar>().ShowTalkText(_msg, _talkPos, 4);
        
     }
+
+
+    string plotMsg = "";
+
+    public string PLOTMSG
+    {
+        //GET访问器，可以理解成另类的方法，返回已经被赋了值的私有变量a
+        get { return plotMsg; }
+        //SET访问器，将我们打入的值赋给私有变量money
+        set
+        {
+            if (BossName == "B_dlws")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        plotMsg = "很好！你表现令人惊喜";
+                        break;
+                    case Globals.JAPAN:
+                        plotMsg = "とても良い！ あなたは素晴らしいです";
+                        break;
+                    case Globals.ENGLISH:
+                        plotMsg = "very good! you are amazing";
+                        break;
+                    case Globals.Portugal:
+                        plotMsg = "¡muy bien! Eres fabuloso";
+                        break;
+                    case Globals.KOREAN:
+                        plotMsg = "매우 좋은! 진짜 대단한데";
+                        break;
+                }
+            }
+            else if (BossName == "B_yg")
+            {
+                switch (Globals.language)
+                {
+                    case Globals.CHINESE:
+                        plotMsg = "又一个倒下的亡魂。";
+                        break;
+                    case Globals.JAPAN:
+                        plotMsg = "もう一つの堕落した魂。";
+                        break;
+                    case Globals.ENGLISH:
+                        plotMsg = "Another fallen soul.";
+                        break;
+                    case Globals.Portugal:
+                        plotMsg = "Otra alma caída.";
+                        break;
+                    case Globals.KOREAN:
+                        plotMsg = "또 다른 타락한 영혼.";
+                        break;
+                }
+            }
+
+
+
+        }
+    }
+
+
+
+
 
 
 
@@ -129,6 +207,7 @@ public class Plot_enemy : MonoBehaviour
         {
             DisTimesNun = 0;
             Lizi_Yinshen.transform.parent = this.gameObject.transform.parent;
+            Lizi_Yinshen.transform.position = this.transform.position;
             Lizi_Yinshen.Play();
             Lizi_Yinshen.GetComponent<AudioSource>().Play();
             Globals.isInPlot = false;
@@ -165,14 +244,15 @@ public class Plot_enemy : MonoBehaviour
     }
 
 
+    bool IsHalfLiveStart = false;
 
     //记录 门 和 自身 移除 都在  对话剧情类里面
 
     // Update is called once per frame
     void Update()
     {
-        if (IsStart) {
-            HalfLiveInpLOT();
+        HalfLiveInpLOT();
+        if (IsHalfLiveStart) {
             DisSelfByTimes();
             GetStands();
         }

@@ -24,6 +24,7 @@ public class AI_ZidanDingxiang : AI_ZiDans
 
     void RemoveEvent()
     {
+        if (!_gameBody) return;
         _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.FRAME_EVENT, this.ShowACTX);
         _gameBody.GetDB().RemoveDBEventListener(DragonBones.EventObject.SOUND_EVENT, this.ShowACTX);
     }

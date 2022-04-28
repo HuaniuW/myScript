@@ -5,7 +5,7 @@ using UnityEngine;
 public class UI_Shanbi : UI_Skill
 {
     // Start is called before the first frame update
-    GameObject _player;
+    //GameObject _player;
 
     void Start()
     {

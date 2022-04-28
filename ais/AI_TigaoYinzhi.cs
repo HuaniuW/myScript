@@ -9,6 +9,8 @@ public class AI_TigaoYinzhi : MonoBehaviour
 
     [Header("当生命降低到多少比例的时候 开始 增加硬直(0-100)")]
     public float LiveBili = 50;
+    [Header("提高多少 硬直")]
+    public float AddYZ = 1000;
 
     RoleDate _roleDate;
     void Start()
@@ -24,7 +26,7 @@ public class AI_TigaoYinzhi : MonoBehaviour
         if (_roleDate.live <= _roleDate.maxLive* LiveBili*0.01f)
         {
             IsHasChangeYZ = true;
-            _roleDate.yingzhi += 1000;
+            _roleDate.yingzhi += AddYZ;
         }
     }
 }

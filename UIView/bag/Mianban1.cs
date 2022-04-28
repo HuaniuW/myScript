@@ -40,10 +40,14 @@ public class Mianban1 : MonoBehaviour {
 
     public AudioSource cuowu;
     public AudioSource chose;
+    public AudioSource XuanZhong;
 
     public Text HZ_information;
 
     public Text Player_information;
+
+    [Header("显示 徽章的 图片")]
+    public Image HZ_img;
 
     //被选中的物品
     RectTransform beChoseWP = null;
@@ -80,6 +84,7 @@ public class Mianban1 : MonoBehaviour {
         //print("  ------------------------------------------------------>面板1    "+ HZSaveDate());
         //发送 事件重新 写角色数据
         ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.PLAYER_ZT), this.gameObject);
+        print(" ************背包 事件 发送");
     }
 
     private void OnDestroy()
@@ -118,6 +123,7 @@ public class Mianban1 : MonoBehaviour {
     {
         GetHZInformation();
         ShowPlayerInformation();
+        GlobalTools.FindObjByName(GlobalTag.PlayerObj).GetComponent<GameBody>().GetStand();
     }
 
    //将背包数据 物品放入背包格子
@@ -189,6 +195,7 @@ public class Mianban1 : MonoBehaviour {
             {
                 xuanzhong.GetComponent<CanvasGroup>().alpha = 1;
                 xuanzhong.position = kuang.position;
+                XuanZhong.Play();
             }
         }
         else
@@ -204,6 +211,7 @@ public class Mianban1 : MonoBehaviour {
                 {
                     //空格子 放上去
                     getRQ.GetComponent<Gezi>().GetInObj(choseObj);
+                    XuanZhong.Play();
                 }
                
             }
@@ -216,6 +224,7 @@ public class Mianban1 : MonoBehaviour {
                 }
                 //有物品的格子 交换物品
                 getRQ.GetComponent<Gezi>().GetInObj(choseObj,true);
+                XuanZhong.Play();
             }
             choseObj = null;
             xuanzhong.GetComponent<CanvasGroup>().alpha = 0;
@@ -349,7 +358,8 @@ public class Mianban1 : MonoBehaviour {
         {
             foreach (var rq in geziArr)
             {
-                if (Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl && (int)rq.transform.position.x > (int)kuang.transform.position.x)
+                //Mathf.Abs(rq.transform.position.y - kuang.transform.position.y) < wcjl &&
+                if ((int)rq.transform.position.x > (int)kuang.transform.position.x)
                 {
                     tempList.Add(rq);
                 }
@@ -405,6 +415,8 @@ public class Mianban1 : MonoBehaviour {
             print("徽章名字： " + getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().HZName);
 
             HZ_information.text = getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().GetHZ_information_str();
+            //HZ_img.overrideSprite = getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().GetComponent<SpriteRenderer>().sprite;
+            StartShowBar("img_"+getRQ.GetComponent<Gezi>().IsHasObj().GetComponent<HZDate>().objName);
         }
         else
         {
@@ -412,10 +424,19 @@ public class Mianban1 : MonoBehaviour {
         }
     }
 
+    void StartShowBar(string ImgName)
+    {
+        //Sprite sp = Resources.Load("i_huizhang12", typeof(Sprite)) as Sprite;  这个用不了 无法被加载 只能用 GameObject来加载
+
+        GameObject sp = Resources.Load(ImgName) as GameObject;
+        HZ_img.overrideSprite = sp.GetComponent<SpriteRenderer>().sprite;
+    }
+
     public void ClickGetHZInformation(UEvent e)
     {
         HZDate _hzDate = e.eventParams as HZDate;
         HZ_information.text = _hzDate.GetHZ_information_str();
+
     }
 
     void ShowPlayerInformation(UEvent e = null)
@@ -430,30 +451,55 @@ public class Mianban1 : MonoBehaviour {
         GlobalTools.PlayAudio(sName, this);
     }
 
+    const string HORIZONTAL = "Horizontal";
+    const string VERTICAL = "Vertical";
+    float horizontalDirection;
+    float verticalDirection;
+
+    bool IsYD = false;
+
+
     void Update()
     {
+
         if (this.transform.parent.GetComponent<CanvasGroup>().alpha == 0) return;
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        //左右
+        horizontalDirection = Input.GetAxis(HORIZONTAL);
+        //上下
+        verticalDirection = Input.GetAxis(VERTICAL);
+
+        if ((horizontalDirection>-0.6f&& horizontalDirection<0.6f)&& (verticalDirection > -0.6f && verticalDirection < 0.6f))
         {
+            IsYD = false;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W)||(!IsYD&& verticalDirection>0.6f))
+        {
+            IsYD = true;
             FindNearestQR("up");
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        }else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || (!IsYD && verticalDirection < -0.6f))
         {
+            IsYD = true;
             FindNearestQR("down");
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        }else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || (!IsYD && horizontalDirection < - 0.6f))
         {
+            IsYD = true;
             FindNearestQR("left");
 
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        }else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || (!IsYD && horizontalDirection > 0.6f))
         {
+            IsYD = true;
             FindNearestQR("right");
 
+        }else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Joystick1Button2))
+        {
+            //print("enter");
+            GetChoseObj();
         }
+
+
         //if (Input.anyKey)
         //{//得到按下什么键
         //    print("anyKey  " + Input.inputString);
@@ -461,10 +507,6 @@ public class Mianban1 : MonoBehaviour {
 
 
 
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            //print("enter");
-            GetChoseObj();
-        }
+
     }
 }

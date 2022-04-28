@@ -18,13 +18,15 @@ public class JG_ChufaBase : MonoBehaviour
     // Update is called once per frame
     bool IsHitChufa = false;
 
+    protected GameObject HitObj;
+
     void OnTriggerEnter2D(Collider2D Coll)
     {
         //return;
         if (!IsHitChufa && Coll.tag == GlobalTag.Player&&Coll.GetComponent<JijiaGamebody>() == null)
         {
             IsHitChufa = true;
-
+            HitObj = Coll.gameObject;
             Chufa();
             if(IsHitRemoveSelf) RemoveSelf();
         }
@@ -34,7 +36,8 @@ public class JG_ChufaBase : MonoBehaviour
 
     protected virtual void Chufa()
     {
-
+        print("g怪组over！");
+        RemoveSelf();
     }
 
     protected virtual void ResetAll()

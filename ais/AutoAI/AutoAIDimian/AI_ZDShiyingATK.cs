@@ -48,7 +48,11 @@ public class AI_ZDShiyingATK : AI_SkillBase
 
     protected override void ChixuSkillStarting()
     {
-        
+        if (_roleDate.isBeHiting|| _roleDate.isDie)
+        {
+            TheSkillOver();
+            return;
+        }
 
 
         if (!IsAtk)
