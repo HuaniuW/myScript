@@ -182,6 +182,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_name = "이름: ";
                     break;
+                case Globals.German:
+                    hz_name = "Name";
+                    break;
+                case Globals.Italy:
+                    hz_name = "nome";
+                    break;
+                case Globals.French:
+                    hz_name = "Nom";
+                    break;
+                case Globals.CHINESEF:
+                    hz_name = "名字";
+                    break;
 
             }
 
@@ -232,19 +244,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "宝珠周围大量能量附体，佩戴后增加防御力,可以释放防御子弹的护盾";
+                        hz_information = "主动技能: 宝珠周围大量能量附体，佩戴后增加防御力,可以释放防御子弹的护盾";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "オーブの周りには多くのエネルギーが付着しているため、着用後の防御力が高まり、弾丸から防御するシールドを解放することができます";
+                        hz_information = "アクティブスキル: オーブの周りには多くのエネルギーが付着しているため、着用後の防御力が高まり、弾丸から防御するシールドを解放することができます";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "A lot of energy is attached around the orb, which increases defense after wearing it, and can release a shield that defends against bullets";
+                        hz_information = "Active skills: A lot of energy is attached around the orb, which increases defense after wearing it, and can release a shield that defends against bullets";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Se adjunta mucha energía alrededor del orbe, lo que aumenta la defensa después de usarlo y puede liberar un escudo que defiende contra las balas.";
+                        hz_information = "habilidades activas: Se adjunta mucha energía alrededor del orbe, lo que aumenta la defensa después de usarlo y puede liberar un escudo que defiende contra las balas.";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "오브 주변에 많은 에너지가 부착되어 있어 착용 후 방어력이 증가하고, 총알을 방어하는 방패를 해제할 수 있습니다.";
+                        hz_information = "액티브 스킬: 오브 주변에 많은 에너지가 부착되어 있어 착용 후 방어력이 증가하고, 총알을 방어하는 방패를 해제할 수 있습니다.";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeiten: An der Kugel hängt eine große Menge Energie, die die Verteidigung nach dem Tragen erhöht und einen Schild freisetzen kann, der sich gegen Kugeln verteidigt";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attive: una grande quantità di energia è attaccata al globo, che aumenta la difesa dopo averlo indossato e può rilasciare uno scudo che si difende dai proiettili";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétences actives : une grande quantité d'énergie est attachée à l'orbe, ce qui augmente la défense après l'avoir porté et peut libérer un bouclier qui se défend contre les balles";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 寶珠周圍大量能量附體，佩戴後增加防禦力,可以釋放防禦子彈的護盾";
                         break;
                 }
             }
@@ -253,19 +277,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "能够释放出一道剑气";
+                        hz_information = "主动技能: 能够释放出一道剑气";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "刀を抜くことができます";
+                        hz_information = "アクティブスキル: 刀を抜くことができます";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Can release a sword";
+                        hz_information = "Active skills: Can release a sword";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Puede soltar una espada";
+                        hz_information = "habilidades activas: Puede soltar una espada";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "검을 놓을 수 있다";
+                        hz_information = "액티브 스킬: 검을 놓을 수 있다";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeit: Kann Schwertenergie freisetzen";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attiva: può rilasciare l'energia di una spada";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétence active: Peut libérer une énergie d'épée";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 能夠釋放出一道劍氣";
                         break;
                 }
             }
@@ -278,19 +314,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "具有疗伤功能的神奇叶子，使用可以恢复一定量生命";
+                        hz_information = "主动技能: 具有疗伤功能的神奇叶子，使用可以恢复一定量生命";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "癒しの性質を持つ魔法の葉、一定量の生命を回復するために使用";
+                        hz_information = "アクティブスキル: 癒しの性質を持つ魔法の葉、一定量の生命を回復するために使用";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Magical leaves with healing properties, use to restore a certain amount of life";
+                        hz_information = "Active skills: Magical leaves with healing properties, use to restore a certain amount of life";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Hojas mágicas con propiedades curativas, utilízalas para restaurar cierta cantidad de vida.";
+                        hz_information = "habilidades activas: Hojas mágicas con propiedades curativas, utilízalas para restaurar cierta cantidad de vida.";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "치유력이 있는 마법의 잎, 일정량의 생명력을 회복하는 데 사용";
+                        hz_information = "액티브 스킬: 치유력이 있는 마법의 잎, 일정량의 생명력을 회복하는 데 사용";
+                        break;
+                    case Globals.German:
+                        hz_information = "Active Skill: Magische Blätter mit Heilfunktion, die bei Anwendung eine gewisse Menge an Leben wiederherstellen können";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attiva: foglie magiche con funzione curativa, che possono ripristinare una certa quantità di vita quando vengono utilizzate";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétence active : Feuilles magiques avec fonction de guérison, qui peuvent restaurer une certaine quantité de vie lorsqu'elles sont utilisées";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能:具有療傷功能的神奇葉子，使用可以恢復一定量生命";
                         break;
                 }
             }
@@ -313,6 +361,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "특정 공격력 증가";
                         break;
+                    case Globals.German:
+                        hz_information = "Erhöhen Sie bestimmte Angriffskraft";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Aumenta una certa potenza d'attacco";
+                        break;
+                    case Globals.French:
+                        hz_information = "Augmente certaines puissances d'attaque";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "提高一定的攻擊力";
+                        break;
                 }
             }
             else if (id == "10008")
@@ -320,19 +380,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "剑气乱舞，强大的攻击力";
+                        hz_information = "主动技能: 剑气乱舞，强大的攻击力";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "剣舞、強力な攻撃";
+                        hz_information = "アクティブスキル: 剣舞、強力な攻撃";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Sword dance, powerful attack";
+                        hz_information = "Active skills: Sword dance, powerful attack";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Danza de la espada, ataque poderoso";
+                        hz_information = "habilidades activas: Danza de la espada, ataque poderoso";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "검춤, 강력한 공격";
+                        hz_information = "액티브 스킬: 검춤, 강력한 공격";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeiten: Schwerttanz, kraftvoller Angriff";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attive: danza della spada, attacco potente";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétences actives : danse de l'épée, attaque puissante";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 劍氣亂舞，強大的攻擊力";
                         break;
                 }
             }
@@ -355,6 +427,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "흩어진 꽃잎은 하나의 피해에 저항합니다.";
                         break;
+                    case Globals.German:
+                        hz_information = "Zerstreute Blütenblätter widerstehen einem Schaden";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "I petali dissipati resistono a un danno";
+                        break;
+                    case Globals.French:
+                        hz_information = "Les pétales dissipés résistent à un dommage";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "消散的花瓣抵擋一次傷害";
+                        break;
                 }
             }
             else if (id == "10013")
@@ -376,6 +460,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "마비 확률 및 전기 마비 지속 시간 감소";
                         break;
+                    case Globals.German:
+                        hz_information = "Reduzierte Lähmungswahrscheinlichkeit und elektrische Lähmungsdauer";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Ridotta possibilità di paralisi e durata della paralisi elettrica";
+                        break;
+                    case Globals.French:
+                        hz_information = "Réduction des risques de paralysie et de la durée de la paralysie électrique";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "減少麻痺的機率和電麻痺時間";
+                        break;
                 }
             }
             else if (id == "10015")
@@ -396,6 +492,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         hz_information = "최대 체력 증가";
+                        break;
+                    case Globals.German:
+                        hz_information = "Erhöhen Sie die maximale Gesundheit";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Aumenta la salute massima";
+                        break;
+                    case Globals.French:
+                        hz_information = "Augmenter la santé maximale";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "增加最大生命值";
                         break;
                 }
             }
@@ -425,19 +533,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "丢出3枚毒气炸弹";
+                        hz_information = "主动技能: 丢出3枚毒气炸弹";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "ガス爆弾を3発投げる";
+                        hz_information = "アクティブスキル: ガス爆弾を3発投げる";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Throw 3 gas bombs";
+                        hz_information = "Active skills: Throw 3 gas bombs";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Lanza 3 bombas de gas";
+                        hz_information = "habilidades activas: Lanza 3 bombas de gas";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "가스 폭탄 3개 던지기";
+                        hz_information = "액티브 스킬: 가스 폭탄 3개 던지기";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeit: Wirf 3 Gasbomben";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attiva: lancia 3 bombe a gas";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétence active : lancer 3 bombes à gaz";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 丟出3枚毒氣炸彈";
                         break;
                 }
             }
@@ -446,19 +566,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "放出一道移动电墙";
+                        hz_information = "主动技能: 放出一道移动电墙";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "モバイル電気壁を解放します";
+                        hz_information = "アクティブスキル: モバイル電気壁を解放します";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Release a mobile electric wall";
+                        hz_information = "Active skills: Release a mobile electric wall";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Liberar una pared eléctrica móvil";
+                        hz_information = "habilidades activas: Liberar una pared eléctrica móvil";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "이동식 전기벽 해제";
+                        hz_information = "액티브 스킬: 이동식 전기벽 해제";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeit: Entfessle eine sich bewegende elektrische Wand";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attiva: Scatena un muro elettrico mobile";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétence active : Libérez un mur électrique en mouvement";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 放出一道移動電牆";
                         break;
                 }
             }
@@ -481,6 +613,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "칠 기회가 있다";
                         break;
+                    case Globals.German:
+                        hz_information = "Hat eine Chance zu treffen";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Ha la possibilità di colpire";
+                        break;
+                    case Globals.French:
+                        hz_information = "A une chance de frapper";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "有一定機率暴擊";
+                        break;
                 }
             }
             else if (id == "10022")
@@ -488,19 +632,31 @@ public class HZDate : MonoBehaviour {
                 switch (Globals.language)
                 {
                     case Globals.CHINESE:
-                        hz_information = "发动一次强大攻击力的攻击";
+                        hz_information = "主动技能: 发动一次强大攻击力的攻击";
                         break;
                     case Globals.JAPAN:
-                        hz_information = "強力な攻撃を解き放つ";
+                        hz_information = "アクティブスキル: 強力な攻撃を解き放つ";
                         break;
                     case Globals.ENGLISH:
-                        hz_information = "Unleash a powerful attack";
+                        hz_information = "Active skills: Unleash a powerful attack";
                         break;
                     case Globals.Portugal:
-                        hz_information = "Desata un poderoso ataque";
+                        hz_information = "habilidades activas: Desata un poderoso ataque";
                         break;
                     case Globals.KOREAN:
-                        hz_information = "강력한 공격을 펼친다";
+                        hz_information = "액티브 스킬: 강력한 공격을 펼친다";
+                        break;
+                    case Globals.German:
+                        hz_information = "Aktive Fähigkeit: Entfessle einen mächtigen Angriff";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Abilità attiva: scatena un potente attacco";
+                        break;
+                    case Globals.French:
+                        hz_information = "Compétence active : Déclenchez une attaque puissante";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "主動技能: 發動一次強大攻擊力的攻擊";
                         break;
                 }
             }
@@ -523,6 +679,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "공격 시 보호막이 발동되어 3초 내 데미지 80% 감소, 경도 800 증가";
                         break;
+                    case Globals.German:
+                        hz_information = "Bei einem Angriff wird der Schild ausgelöst, der den Schaden innerhalb von 3 Sekunden um 80 % verringert und die Härte um 800 erhöht";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Quando viene attaccato, lo scudo si attiva, riducendo i danni dell'80% entro 3 secondi e aumentando la durezza di 800";
+                        break;
+                    case Globals.French:
+                        hz_information = "Lorsqu'il est attaqué, le bouclier se déclenche, réduisant les dégâts de 80 % en 3 secondes et augmentant la dureté de 800";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "被攻擊時候觸發護盾，在3秒內減少傷害的80%,並且提高800的硬直";
+                        break;
                 }
             }
             else if (id == "10024")
@@ -543,6 +711,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         hz_information = "사망 시 30% 확률로 4초 동안 50%의 혈액을 회복하고 80%의 피해를 감소시킵니다.";
+                        break;
+                    case Globals.German:
+                        hz_information = "Beim Sterben besteht eine Chance von 30 %, 50 % des Blutes wiederherzustellen und 80 % des Schadens für 4 Sekunden zu reduzieren";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Quando si muore, c'è una probabilità del 30% di ripristinare il 50% del sangue e ridurre l'80% dei danni per 4 secondi";
+                        break;
+                    case Globals.French:
+                        hz_information = "En mourant, il y a 30 % de chances de restaurer 50 % du sang et de réduire 80 % des dégâts pendant 4 secondes";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "在瀕臨死亡時有30%機率恢復50%的血,並且持續4秒減免80%傷害";
                         break;
                 }
             }
@@ -586,6 +766,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "중독 확률 및 피해 감소";
                         break;
+                    case Globals.German:
+                        hz_information = "Reduzierte Chance und Schaden einer Vergiftung";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Possibilità e danni ridotti di avvelenamento";
+                        break;
+                    case Globals.French:
+                        hz_information = "Réduction des risques et des dégâts d'empoisonnement";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "減少中毒的機率和傷害";
+                        break;
                 }
             }
             else if (id == "10017")
@@ -606,6 +798,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         hz_information = "불의 축복, 화염 효과로 공격";
+                        break;
+                    case Globals.German:
+                        hz_information = "Segen des Feuers, Angriff mit Feuereffekt";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Benedizione del fuoco, attacco con effetto fuoco";
+                        break;
+                    case Globals.French:
+                        hz_information = "Bénédiction du feu, attaque avec effet de feu";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "火的庇佑，攻擊附帶火焰效果";
                         break;
                 }
             }
@@ -628,6 +832,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         hz_information = "화재 및 화재 피해 감소";
                         break;
+                    case Globals.German:
+                        hz_information = "Verringert die Chance, durch Feuer entzündet zu werden, und Schaden durch Feuer";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Riduce la possibilità di essere incendiati e i danni causati dal fuoco";
+                        break;
+                    case Globals.French:
+                        hz_information = "Réduit les risques d'être enflammé par le feu et les dommages causés par le feu";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "減少被火焰點燃機率和火焰帶來的傷害";
+                        break;
                 }
             }
             else if (id == "10027")
@@ -648,6 +864,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         hz_information = "공중에서 추가로 2회 점프할 수 있으며 전방 추력을 재설정합니다.";
+                        break;
+                    case Globals.German:
+                        hz_information = "Kann zusätzlich zweimal in die Luft springen und setzt den Vorwärtsschub zurück";
+                        break;
+                    case Globals.Italy:
+                        hz_information = "Può saltare altre due volte in aria e ripristina la spinta in avanti";
+                        break;
+                    case Globals.French:
+                        hz_information = "Peut sauter deux fois de plus dans les airs et réinitialise la poussée vers l'avant";
+                        break;
+                    case Globals.CHINESEF:
+                        hz_information = "能再空中額外跳躍兩次，並且重置前衝";
                         break;
                 }
             }
@@ -719,6 +947,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "쉴드 오브";
                         break;
+                    case Globals.German:
+                        HZName = "Schildkugel";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Scudo Orb";
+                        break;
+                    case Globals.French:
+                        HZName = "Orbe de bouclier";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "護盾寶珠";
+                        break;
                 }
             }
             else if (id == "10004")
@@ -739,6 +979,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         hz_information = "월광";
+                        break;
+                    case Globals.German:
+                        HZName = "Mondlicht";
+                        break;
+                    case Globals.Italy:
+                        HZName = "chiaro di luna";
+                        break;
+                    case Globals.French:
+                        HZName = "clair de lune";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "月光";
                         break;
                 }
             }
@@ -765,6 +1017,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "생명의 잎";
                         break;
+                    case Globals.German:
+                        HZName = "Blatt des Lebens";
+                        break;
+                    case Globals.Italy:
+                        HZName = "foglia di vita";
+                        break;
+                    case Globals.French:
+                        HZName = "feuille de vie";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "生命葉";
+                        break;
                 }
             }
             else if (id == "10007")
@@ -785,6 +1049,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "헤비 블레이드";
+                        break;
+                    case Globals.German:
+                        HZName = "Schwere Klinge";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Lama pesante";
+                        break;
+                    case Globals.French:
+                        HZName = "Lame lourde";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "重鋒之刃";
                         break;
                 }
             }
@@ -807,6 +1083,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "하인 좌석";
                         break;
+                    case Globals.German:
+                        HZName = "Rumpeln";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Rombo";
+                        break;
+                    case Globals.French:
+                        HZName = "Gronder";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "亂刃";
+                        break;
                 }
             }
             else if (id == "10012")
@@ -828,6 +1116,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "꽃의 방패";
                         break;
+                    case Globals.German:
+                        HZName = "Schild aus Blumen";
+                        break;
+                    case Globals.Italy:
+                        HZName = "scudo di fiori";
+                        break;
+                    case Globals.French:
+                        HZName = "bouclier de fleurs";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "花之盾";
+                        break;
                 }
             }
             else if (id == "10013")
@@ -841,13 +1141,25 @@ public class HZDate : MonoBehaviour {
                         HZName = "反電気バッジ";
                         break;
                     case Globals.ENGLISH:
-                        HZName = "Anti-electric badge";
+                        HZName = "Anti electric badge";
                         break;
                     case Globals.Portugal:
-                        HZName = "Insignia anti-eléctrica";
+                        HZName = "Insignia anti eléctrica";
                         break;
                     case Globals.KOREAN:
                         HZName = "정전기 방지 배지";
+                        break;
+                    case Globals.German:
+                        HZName = "Anti Elektro Abzeichen";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Distintivo antielettrico";
+                        break;
+                    case Globals.French:
+                        HZName = "Badge anti électrique";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "抗電徽章";
                         break;
                 }
             }
@@ -869,6 +1181,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "생활 배지";
+                        break;
+                    case Globals.German:
+                        HZName = "Lebensabzeichen";
+                        break;
+                    case Globals.Italy:
+                        HZName = "distintivo di vita";
+                        break;
+                    case Globals.French:
+                        HZName = "insigne de la vie";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "生命徽章";
                         break;
                 }
             }
@@ -912,6 +1236,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "독구름 폭탄";
                         break;
+                    case Globals.German:
+                        HZName = "Giftwolkenbombe";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Bomba nuvola velenosa";
+                        break;
+                    case Globals.French:
+                        HZName = "Bombe nuage empoisonnée";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "毒雲炸彈";
+                        break;
                 }
             }
             else if (id == "10019")
@@ -932,6 +1268,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "번개";
+                        break;
+                    case Globals.German:
+                        HZName = "Blitz";
+                        break;
+                    case Globals.Italy:
+                        HZName = "fulmine";
+                        break;
+                    case Globals.French:
+                        HZName = "éclair";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "電閃";
                         break;
                 }
             }
@@ -954,6 +1302,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "치명타";
                         break;
+                    case Globals.German:
+                        HZName = "krit";
+                        break;
+                    case Globals.Italy:
+                        HZName = "critico";
+                        break;
+                    case Globals.French:
+                        HZName = "critique";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "暴擊";
+                        break;
                 }
             }
             else if (id == "10022")
@@ -974,6 +1334,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "굵은 슬래시";
+                        break;
+                    case Globals.German:
+                        HZName = "umschneiden";
+                        break;
+                    case Globals.Italy:
+                        HZName = "ripassare";
+                        break;
+                    case Globals.French:
+                        HZName = "recouper";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "重切";
                         break;
                 }
             }
@@ -996,6 +1368,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "신의 아이기스";
                         break;
+                    case Globals.German:
+                        HZName = "Ägide Gottes";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Egida di Dio";
+                        break;
+                    case Globals.French:
+                        HZName = "Egide de Dieu";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "神之盾";
+                        break;
                 }
             }
             else if (id == "10024")
@@ -1016,6 +1400,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "신의 축복";
+                        break;
+                    case Globals.German:
+                        HZName = "Gottes Segen";
+                        break;
+                    case Globals.Italy:
+                        HZName = "la benedizione di Dio";
+                        break;
+                    case Globals.French:
+                        HZName = "la bénédiction de Dieu";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "神之祐";
                         break;
                 }
             }
@@ -1059,6 +1455,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "독 저항 배지";
                         break;
+                    case Globals.German:
+                        HZName = "Giftresistenz Abzeichen";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Distintivo di resistenza al veleno";
+                        break;
+                    case Globals.French:
+                        HZName = "Insigne de résistance au poison";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "毒抗徽章";
+                        break;
                 }
             }
             else if (id == "10017")
@@ -1079,6 +1487,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "불처럼 흐르다";
+                        break;
+                    case Globals.German:
+                        HZName = "fließen wie Feuer";
+                        break;
+                    case Globals.Italy:
+                        HZName = "scorre come il fuoco";
+                        break;
+                    case Globals.French:
+                        HZName = "couler comme le feu";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "流刃若火";
                         break;
                 }
             }
@@ -1101,6 +1521,18 @@ public class HZDate : MonoBehaviour {
                     case Globals.KOREAN:
                         HZName = "파이어 쉴드";
                         break;
+                    case Globals.German:
+                        HZName = "Feuerschild";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Scudo antincendio";
+                        break;
+                    case Globals.French:
+                        HZName = "Bouclier de feu";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "火之盾";
+                        break;
                 }
             }
             else if (id == "10027")
@@ -1121,6 +1553,18 @@ public class HZDate : MonoBehaviour {
                         break;
                     case Globals.KOREAN:
                         HZName = "깃털";
+                        break;
+                    case Globals.German:
+                        HZName = "Feder";
+                        break;
+                    case Globals.Italy:
+                        HZName = "Piuma";
+                        break;
+                    case Globals.French:
+                        HZName = "La plume";
+                        break;
+                    case Globals.CHINESEF:
+                        HZName = "化羽";
                         break;
                 }
             }
@@ -1157,6 +1601,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_atk = "공격력: ";
                     break;
+                case Globals.German:
+                    hz_atk = "atk: ";
+                    break;
+                case Globals.Italy:
+                    hz_atk = "atk: ";
+                    break;
+                case Globals.French:
+                    hz_atk = "atk: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_atk = "攻撃力: ";
+                    break;
             }
         }
     }
@@ -1178,13 +1634,25 @@ public class HZDate : MonoBehaviour {
                     hz_atkP = "攻撃力乗数: ";
                     break;
                 case Globals.ENGLISH:
-                    hz_atkP = "atk: ";
+                    hz_atkP = "atkP: ";
                     break;
                 case Globals.Portugal:
-                    hz_atkP = "atk: ";
+                    hz_atkP = "atkP: ";
                     break;
                 case Globals.KOREAN:
                     hz_atkP = "공격력: ";
+                    break;
+                case Globals.German:
+                    hz_atkP = "atkP: ";
+                    break;
+                case Globals.Italy:
+                    hz_atkP = "atkP: ";
+                    break;
+                case Globals.French:
+                    hz_atkP = "atkP: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_atkP = "攻撃力乗数: ";
                     break;
             }
         }
@@ -1214,6 +1682,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_def = "방어: ";
                     break;
+                case Globals.German:
+                    hz_def = "def: ";
+                    break;
+                case Globals.Italy:
+                    hz_def = "def: ";
+                    break;
+                case Globals.French:
+                    hz_def = "def: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_def = "防衛: ";
+                    break;
             }
         }
     }
@@ -1240,6 +1720,18 @@ public class HZDate : MonoBehaviour {
                     break;
                 case Globals.KOREAN:
                     hz_defP = "방어 승수: ";
+                    break;
+                case Globals.German:
+                    hz_defP = "defP: ";
+                    break;
+                case Globals.Italy:
+                    hz_defP = "defP: ";
+                    break;
+                case Globals.French:
+                    hz_defP = "defP: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_defP = "防衛乗数: ";
                     break;
             }
         }
@@ -1270,6 +1762,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_live = "삶의 가치: ";
                     break;
+                case Globals.German:
+                    hz_live = "live: ";
+                    break;
+                case Globals.Italy:
+                    hz_live = "live: ";
+                    break;
+                case Globals.French:
+                    hz_live = "live: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_live = "生命価値: ";
+                    break;
             }
         }
     }
@@ -1296,6 +1800,18 @@ public class HZDate : MonoBehaviour {
                     break;
                 case Globals.KOREAN:
                     hz_liveP = "생명 승수: ";
+                    break;
+                case Globals.German:
+                    hz_liveP = "liveP: ";
+                    break;
+                case Globals.Italy:
+                    hz_liveP = "liveP: ";
+                    break;
+                case Globals.French:
+                    hz_liveP = "liveP: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_liveP = "生命乗数: ";
                     break;
             }
         }
@@ -1324,6 +1840,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_baojilv = "중요한 기회: ";
                     break;
+                case Globals.German:
+                    hz_baojilv = "crit chance: ";
+                    break;
+                case Globals.Italy:
+                    hz_baojilv = "crit chance: ";
+                    break;
+                case Globals.French:
+                    hz_baojilv = "crit chance: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_baojilv = "暴击率: ";
+                    break;
             }
         }
     }
@@ -1350,6 +1878,18 @@ public class HZDate : MonoBehaviour {
                     break;
                 case Globals.KOREAN:
                     hz_baojishanghaibeishu = "치명타 피해 배율: ";
+                    break;
+                case Globals.German:
+                    hz_baojishanghaibeishu = "Crit Damage Multiplier: ";
+                    break;
+                case Globals.Italy:
+                    hz_baojishanghaibeishu = "Crit Damage Multiplier: ";
+                    break;
+                case Globals.French:
+                    hz_baojishanghaibeishu = "Crit Damage Multiplier: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_baojishanghaibeishu = "暴击伤害倍数: ";
                     break;
             }
         }
@@ -1379,6 +1919,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_kangdujilv = "독극물 기회: ";
                     break;
+                case Globals.German:
+                    hz_kangdujilv = "Antivirus: ";
+                    break;
+                case Globals.Italy:
+                    hz_kangdujilv = "Antivirus: ";
+                    break;
+                case Globals.French:
+                    hz_kangdujilv = "Antivirus: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kangdujilv = "抗毒几率: ";
+                    break;
             }
         }
     }
@@ -1405,6 +1957,18 @@ public class HZDate : MonoBehaviour {
                     break;
                 case Globals.KOREAN:
                     hz_kangdushanghaijilv = "독 피해: ";
+                    break;
+                case Globals.German:
+                    hz_kangdushanghaijilv = "Poison Damage: ";
+                    break;
+                case Globals.Italy:
+                    hz_kangdushanghaijilv = "Poison Damage: ";
+                    break;
+                case Globals.French:
+                    hz_kangdushanghaijilv = "Poison Damage: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kangdushanghaijilv = "毒伤害抵抗率: ";
                     break;
             }
         }
@@ -1434,6 +1998,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_kanghuojilv = "내화성: ";
                     break;
+                case Globals.German:
+                    hz_kanghuojilv = "fire resistant: ";
+                    break;
+                case Globals.Italy:
+                    hz_kanghuojilv = "fire resistant: ";
+                    break;
+                case Globals.French:
+                    hz_kanghuojilv = "fire resistant: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kanghuojilv = "抗火几率: ";
+                    break;
             }
         }
     }
@@ -1461,6 +2037,18 @@ public class HZDate : MonoBehaviour {
                 case Globals.KOREAN:
                     hz_kanghuoshanghaijilv = "화재 피해: ";
                     break;
+                case Globals.German:
+                    hz_kanghuoshanghaijilv = "Fire damage: ";
+                    break;
+                case Globals.Italy:
+                    hz_kanghuoshanghaijilv = "Fire damage: ";
+                    break;
+                case Globals.French:
+                    hz_kanghuoshanghaijilv = "Fire damage: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kanghuoshanghaijilv = "火伤害抵抗率: ";
+                    break;
             }
         }
     }
@@ -1484,13 +2072,25 @@ public class HZDate : MonoBehaviour {
                     hz_kangdianjilv = "反電気: ";
                     break;
                 case Globals.ENGLISH:
-                    hz_kangdianjilv = "Anti-electric: ";
+                    hz_kangdianjilv = "Anti electric: ";
                     break;
                 case Globals.Portugal:
-                    hz_kangdianjilv = "Anti-eléctrico: ";
+                    hz_kangdianjilv = "Anti eléctrico: ";
                     break;
                 case Globals.KOREAN:
                     hz_kangdianjilv = "정전기 방지: ";
+                    break;
+                case Globals.German:
+                    hz_kangdianjilv = "nti electric: ";
+                    break;
+                case Globals.Italy:
+                    hz_kangdianjilv = "nti electric: ";
+                    break;
+                case Globals.French:
+                    hz_kangdianjilv = "nti electric: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kangdianjilv = "抗電几率: ";
                     break;
             }
         }
@@ -1511,13 +2111,25 @@ public class HZDate : MonoBehaviour {
                     hz_kangdianmabijilv = "麻痺防止: ";
                     break;
                 case Globals.ENGLISH:
-                    hz_kangdianmabijilv = "Anti-paralysis: ";
+                    hz_kangdianmabijilv = "Anti paralysis: ";
                     break;
                 case Globals.Portugal:
-                    hz_kangdianmabijilv = "Anti-parálisis: ";
+                    hz_kangdianmabijilv = "Anti parálisis: ";
                     break;
                 case Globals.KOREAN:
                     hz_kangdianmabijilv = "항마비: ";
+                    break;
+                case Globals.German:
+                    hz_kangdianmabijilv = "Anti paralysis: ";
+                    break;
+                case Globals.Italy:
+                    hz_kangdianmabijilv = "Anti paralysis: ";
+                    break;
+                case Globals.French:
+                    hz_kangdianmabijilv = "Anti paralysis: ";
+                    break;
+                case Globals.CHINESEF:
+                    hz_kangdianmabijilv = "抗电麻痹几率: ";
                     break;
             }
         }

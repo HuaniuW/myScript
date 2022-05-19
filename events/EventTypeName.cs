@@ -103,6 +103,10 @@ public class EventTypeName
     //音量变化
     public const string AUDIO_VALUE = "audio_value";
 
+    //临时 变化临时背景音乐 并且停掉默认背景音乐
+    public const string CHANGE_TEMP_AUDIO = "change_temp_audio";
+    public const string CHANGE_AUDIO = "change_audio";
+
 
     public const string GUAI_DIE = "guai_die";
 
@@ -151,4 +155,10 @@ public class EventTypeName
     public const string STOP_DAOJISHI = "stop_daojishi";
 
     public const string BOSS_NAME= "boss_name";
+
+
+    //**********************成就事件***************************
+  
+
+    public const string CHENGJIU = "chengjiu";
 }

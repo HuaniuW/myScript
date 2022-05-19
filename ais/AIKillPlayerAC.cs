@@ -125,6 +125,18 @@ public class AIKillPlayerAC : MonoBehaviour
                     case Globals.KOREAN:
                         ChaofengMsg = "너무 약하다";
                         break;
+                    case Globals.CHINESEF:
+                        ChaofengMsg = "太弱";
+                        break;
+                    case Globals.German:
+                        ChaofengMsg = "zu schwach";
+                        break;
+                    case Globals.French:
+                        ChaofengMsg = "trop faible";
+                        break;
+                    case Globals.Italy:
+                        ChaofengMsg = "troppo debole";
+                        break;
                 }
             }
             else if (GuaiName == "B_yg")
@@ -145,6 +157,18 @@ public class AIKillPlayerAC : MonoBehaviour
                         break;
                     case Globals.KOREAN:
                         ChaofengMsg = "또 다른 타락한 영혼.";
+                        break;
+                    case Globals.CHINESEF:
+                        ChaofengMsg = "又一個倒下的亡魂。";
+                        break;
+                    case Globals.German:
+                        ChaofengMsg = "Eine weitere gefallene Seele.";
+                        break;
+                    case Globals.French:
+                        ChaofengMsg = "Une autre âme déchue.";
+                        break;
+                    case Globals.Italy:
+                        ChaofengMsg = "Un'altra anima caduta.";
                         break;
                 }
             }

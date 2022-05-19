@@ -41,8 +41,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-       
-        if(!Bounds) Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
+        Application.targetFrameRate = 50;
+        if (!Bounds) Bounds = GlobalTools.FindObjByName("kuang").GetComponent<BoxCollider2D>();
         getBoundsMinMax();
 
         IsFollowing = true;//默认为跟随
@@ -200,11 +200,34 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    float deltaTime = 0.0f;
+    float fps = 60;
 
-    //private void LateUpdate()
-    //{
-        
-    //}
+    private void Update()
+    {
+        //deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        //fps = 1.0f / deltaTime;
+        //print("  当前帧率  " + fps);
+        //if (fps > 60)
+        //{
+        //    Time.timeScale = 60 / fps;
+        //}
+        //else
+        //{
+        //    Time.timeScale = 1;
+        //}
+
+    }
+
+    void OnGUI()
+    {
+        if (Globals.isDebug)
+        {
+            GUI.TextArea(new Rect(0, 50, 250, 40), "Current Button : " + fps);//使用GUI在屏幕上面实时打印当前按下的按键
+            //Zhenshu();
+        }
+
+    }
 
 
     public bool DontSetX = false;
@@ -243,7 +266,7 @@ public class CameraController : MonoBehaviour
             float yNew = transform.position.y;
             if (IsHitCameraKuai)
             {
-                print("hit cameraKuai!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CameraKuaiY   " + CameraKuaiY);
+                //print("hit cameraKuai!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CameraKuaiY   " + CameraKuaiY);
                 yNew = Mathf.Lerp(transform.position.y, CameraKuaiY, Time.deltaTime * smoothing.y);
             }
             else

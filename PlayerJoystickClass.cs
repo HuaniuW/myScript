@@ -35,7 +35,7 @@ public class PlayerJoystickClass : MonoBehaviour
         if (Globals.isDebug)
         {
             //GUI.TextArea(new Rect(0, 0, 250, 40), "Current Button : " + currentButton);//使用GUI在屏幕上面实时打印当前按下的按键
-            //Zhenshu();
+            Zhenshu();
         }
        
     }

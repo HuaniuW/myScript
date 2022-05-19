@@ -20,13 +20,67 @@ public class StartScreen : MonoBehaviour {
     public AudioSource xd;
 
 
+    [Header("从新游戏开始 删档提示")]
+    public GameObject NewGameStartAlert;
+    [Header("从新游戏开始 删档提示 文本")]
+    public Text NewGameStartAlertTxt;
+
+    string NewGameStartAlertTxts = "您的游戏已经含有存档，如果开启新游戏会删除存档，如果确定重新开始请再次点击 开始新游戏!!!";
+
+    string GetNewGameStartAlertTxts()
+    {
+        if (Globals.language == Globals.CHINESE)
+        {
+            NewGameStartAlertTxts = "您的游戏已经含有存档，如果开启新游戏会删除存档，如果确定重新开始请再次点击 开始新游戏!!!";
+        }
+        else if (Globals.language == Globals.ENGLISH)
+        {
+            NewGameStartAlertTxts = "Your game already contains an archive, if you start a new game, the archive will be deleted, if you are sure to restart, please click again to start a new game!!!";
+        }
+        else if (Globals.language == Globals.JAPAN)
+        {
+            NewGameStartAlertTxts = "ゲームにはすでにアーカイブが含まれています。新しいゲームを開始するとアーカイブは削除されます。必ず再起動する場合は、もう一度クリックして新しいゲームを開始してください。";
+        }
+        else if (Globals.language == Globals.KOREAN)
+        {
+            NewGameStartAlertTxts = "게임에 이미 아카이브가 포함되어 있습니다. 새 게임을 시작하면 아카이브가 삭제됩니다. 다시 시작하려면 다시 클릭하여 새 게임을 시작하세요!!!";
+        }
+        else if (Globals.language == Globals.Portugal)
+        {
+            NewGameStartAlertTxts = "Su juego ya contiene un archivo, si inicia un nuevo juego, el archivo se eliminará, si está seguro de reiniciar, ¡haga clic nuevamente para comenzar un nuevo juego!";
+        }
+        else if (Globals.language == Globals.CHINESEF)
+        {
+            NewGameStartAlertTxts = "您的遊戲已經含有存檔，如果開啟新遊戲會刪除存檔，如果確定重新開始請再次點擊 開始新遊戲!!!";
+        }
+        if (Globals.language == Globals.German)
+        {
+            NewGameStartAlertTxts = "Ihr Spiel enthält bereits ein Archiv, wenn Sie ein neues Spiel starten, wird das Archiv gelöscht, wenn Sie wirklich neu starten möchten, klicken Sie bitte erneut, um ein neues Spiel zu starten!!!";
+        }
+        if (Globals.language == Globals.French)
+        {
+            NewGameStartAlertTxts = "Votre jeu contient déjà une archive, si vous démarrez une nouvelle partie, l'archive sera supprimée, si vous êtes sûr de redémarrer, merci de cliquer à nouveau pour démarrer une nouvelle partie !!!";
+        }
+        if (Globals.language == Globals.Italy)
+        {
+            NewGameStartAlertTxts = "Il tuo gioco contiene già un archivio, se avvii un nuovo gioco, l'archivio verrà eliminato, se sei sicuro di riavviare, fai di nuovo clic per iniziare un nuovo gioco!!!";
+        }
+        return NewGameStartAlertTxts;
+    }
+
+
+
     public Image TxtD;
 
     // Use this for initialization
     void Start () {
+        //隐藏鼠标
+        Cursor.visible = false;
+
         print("-----------> " + FileControl.GetInstance().GetValueByKey("yuyan"));
         string str = FileControl.GetInstance().GetValueByKey("yuyan");
         string isDebug = FileControl.GetInstance().GetValueByKey("debug");
+        print("  isDebug  "+ isDebug);
 
         string isQuanping = FileControl.GetInstance().GetValueByKey("quanping");
 
@@ -294,18 +348,32 @@ public class StartScreen : MonoBehaviour {
         getRQ = btn3;
     }
 
+    bool IsAlertNewGame = true;
     private void GameStart()
     {
         if (GlobalSetDate.instance.IsChangeScreening|| IsChoseInGame) return;
         if (UI_Save) return;
         //SceneManager.LoadScene("loads");
-        //如果有存档在这给提示 会删除之前的所有存档
-        kuang.transform.position = btn1.transform.position;
-        getRQ = btn1;
-        KuangMoveStartSet();
-        IsChoseInGame = true;
-        GlobalTools.PlayAudio("xd", this);
-        StartCoroutine(IStartByTime());
+        
+
+        if (btn2.gameObject.activeSelf&& IsAlertNewGame)
+        {
+            KuangMoveStartSet();
+            //如果有存档在这给提示 会删除之前的所有存档
+            NewGameStartAlert.SetActive(true);
+            NewGameStartAlertTxt.text = GetNewGameStartAlertTxts();
+            IsAlertNewGame = false;
+        }
+        else
+        {
+            GlobalSetDate.instance.isInFromSave = false;
+            kuang.transform.position = btn1.transform.position;
+            getRQ = btn1;
+            KuangMoveStartSet();
+            IsChoseInGame = true;
+            GlobalTools.PlayAudio("xd", this);
+            StartCoroutine(IStartByTime());
+        }
     }
 
 
@@ -416,6 +484,13 @@ public class StartScreen : MonoBehaviour {
     {
         GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(150, 20, 164, 34,0.3f);
         GameObject.Find("/UI_Start").GetComponent<UITween>().GetUIImage(kuang).ImgAlphaStartSet(0, 0.2f);
+
+        if (NewGameStartAlert.activeSelf && !IsAlertNewGame)
+        {
+            NewGameStartAlert.SetActive(false);
+            IsAlertNewGame = true;
+        }
+
     }
 
     bool IsInGame = false;
@@ -434,8 +509,22 @@ public class StartScreen : MonoBehaviour {
         {
             //GameStart();
             //新游戏
-            StartCoroutine(IStart2ByTime());
-            IsInGame = true;
+
+            if (btn2.gameObject.activeSelf && IsAlertNewGame)
+            {
+                KuangMoveStartSet();
+                //如果有存档在这给提示 会删除之前的所有存档
+                NewGameStartAlert.SetActive(true);
+                NewGameStartAlertTxt.text = GetNewGameStartAlertTxts();
+                IsAlertNewGame = false;
+            }
+            else
+            {
+                StartCoroutine(IStart2ByTime());
+                IsInGame = true;
+            }
+
+          
         }
         else if (getRQ.name == "Button2")
         {

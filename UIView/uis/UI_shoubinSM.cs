@@ -195,7 +195,7 @@ public class UI_shoubinSM : MonoBehaviour
             switch (Globals.language)
             {
                 case Globals.CHINESE:
-                    TxtY = "攻击/机甲机炮";
+                    TxtY = "技能释放/机甲机炮";
                     break;
                 case Globals.JAPAN:
                     TxtY = "スキルリリース/メカミサイル";

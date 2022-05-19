@@ -134,13 +134,13 @@ public class DataZS : MonoBehaviour
 
 
     //重甲精英斧头怪
-    static public Dictionary<string, string> atk_1201 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" } ,{ "chongjili","3000"} ,{"hitKuaiOX","1.5"},{"hitKuaiOY","0" },{"hitKuaiSX","5"},{"hitKuaiSY","0"},{"atkPower","400"},{"TXSX","0"},{"TXOX","-1.4" },{"TXOY","0" } };
-    static public Dictionary<string, string> atk_1202 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" }, { "chongjili", "3000" }, { "hitKuaiOX", "1.5" }, { "hitKuaiOY", "0" }, { "hitKuaiSX", "5" }, { "hitKuaiSY", "0" }, { "atkPower", "400" }, { "TXSX", "0" }, { "TXOX", "-1.4" }, { "TXOY", "0" } };
+    static public Dictionary<string, string> atk_1201 = new Dictionary<string, string> { { "atkName", "atk_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" } ,{ "chongjili","1000"} ,{"hitKuaiOX","1.5"},{"hitKuaiOY","0" },{"hitKuaiSX","5"},{"hitKuaiSY","0"},{"atkPower","400"},{"TXSX","0"},{"TXOX","-1.4" },{"TXOY","0" } };
+    static public Dictionary<string, string> atk_1202 = new Dictionary<string, string> { { "atkName", "atk_2" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "35" }, { "atkDistance", "6" }, { "atkDistanceY", "0" }, { "chongjili", "1000" }, { "hitKuaiOX", "1.5" }, { "hitKuaiOY", "0" }, { "hitKuaiSX", "5" }, { "hitKuaiSY", "0" }, { "atkPower", "400" }, { "TXSX", "0" }, { "TXOX", "-1.4" }, { "TXOY", "0" } };
     static public Dictionary<string, string> atk_1203 = new Dictionary<string, string> { { "atkName", "atk_3" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1011" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "15" }, { "atkDistance", "8" }, { "atkDistanceY", "0" }, { "chongjili", "500" } };
 
 
     //火龙
-    static public Dictionary<string, string> atk_1401 = new Dictionary<string, string> { { "atkName", "shuaiwei_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1401" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "5" }, { "atkDistance", "8" }, { "atkDistanceY", "6" }, { "chongjili", "3000" }};
+    static public Dictionary<string, string> atk_1401 = new Dictionary<string, string> { { "atkName", "shuaiwei_1" }, { "xF", "0" }, { "yF", "0" }, { "showTXFrame", "8" }, { "txName", "dg_1401" }, { "ox", "0" }, { "oy", "0" }, { "yanchi", "5" }, { "atkDistance", "8" }, { "atkDistanceY", "6" }, { "chongjili", "1000" }};
 
 
 

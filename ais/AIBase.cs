@@ -213,7 +213,7 @@ public class AIBase : MonoBehaviour {
         if (EStr == EventTypeName.STATR_FIGHT)
         {
             //可以做延迟 几秒 开始
-            StartCoroutine(IPoltPlay(0.8f));
+            StartCoroutine(IPoltPlay(0.2f));
         }
     }
 

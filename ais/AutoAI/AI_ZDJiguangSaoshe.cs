@@ -13,6 +13,7 @@ public class AI_ZDJiguangSaoshe : AI_SkillBase
         this.ZSName = "ZDJiguangSaoshe";
         if (_player == null) _player = GlobalTools.FindObjByName("player");
         this.IsSpeAISkill = true;
+        CQJishiNums = 0;
         print("***************************************激光管开始*********************************************");
     }
 
@@ -44,7 +45,11 @@ public class AI_ZDJiguangSaoshe : AI_SkillBase
     void TheOver()
     {
         //关闭激光
-
+        print("***************************************************关闭激光");
+        print("***************************************************关闭激光");
+        print("***************************************************关闭激光");
+        print("***************************************************关闭激光");
+        print("***************************************************关闭激光");
         Jiguang.GetComponent<Skill_JiguangSaoshe>().JiguangStop();
         Jiguang.gameObject.SetActive(false);
         TheResetAll();
@@ -98,9 +103,15 @@ public class AI_ZDJiguangSaoshe : AI_SkillBase
 
         if (IsStartSaoshe)
         {
+            //if (Jiguang == null)
+            //{
+            //    TheOver();
+            //    return;
+            //}
+            Jiguang.transform.localEulerAngles = new Vector3(0, 0, _QishiJiaodu);
             if (IsStartFromRight)
             {
-                print("从右边开始！！！！！！");
+                print("从右边开始！！！！！！    _QishiJiaodu  " + _QishiJiaodu+ "   ****OverSaosheJD   "+ OverSaosheJD);
                 _QishiJiaodu -= JiaoduSpeed;
                 if (_QishiJiaodu <= OverSaosheJD)
                 {
@@ -109,13 +120,14 @@ public class AI_ZDJiguangSaoshe : AI_SkillBase
             }
             else
             {
+                print("**************从左边开始！！！！！_QishiJiaodu！     " + _QishiJiaodu + "   ****OverSaosheJD   " + OverSaosheJD);
                 _QishiJiaodu += JiaoduSpeed;
                 if (_QishiJiaodu >= OverSaosheJD)
                 {
                     TheOver();
                 }
             }
-            Jiguang.transform.localEulerAngles = new Vector3(0, 0, _QishiJiaodu);
+            
 
         }
 

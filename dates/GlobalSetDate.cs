@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 //using XLua;
+using Steamworks;
 
 public class GlobalSetDate : MonoBehaviour {
     public static GlobalSetDate instance;
@@ -48,6 +49,7 @@ public class GlobalSetDate : MonoBehaviour {
     private void OnDestroy()
     {
         ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.GAME_OVER, this.GameOver);
+        ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CHENGJIU, this.ChengjiuE);
     }
 
 
@@ -62,7 +64,44 @@ public class GlobalSetDate : MonoBehaviour {
         OtherDate = GetOtherDate();
         Application.targetFrameRate = 60;
         print("OtherDate    "+ OtherDate);
+        PlayBGAudio();
+        Chengjiu();
     }
+
+
+    void Chengjiu()
+    {
+        if (SteamManager.Initialized)
+        {
+            string name = SteamFriends.GetPersonaName();
+            Debug.Log("steam connect...." + name);
+        }
+        ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHENGJIU, this.ChengjiuE);
+    }
+
+    private void ChengjiuE(UEvent evt)
+    {
+        if (SteamManager.Initialized)
+        {
+            //string name = SteamFriends.GetPersonaName();
+            string cj = evt.eventParams.ToString();
+            Debug.Log("steam connect....  cj name  " + cj);
+            SteamUserStats.SetAchievement(cj);
+        }
+    }
+
+    GameObject BGAudio;
+    void PlayBGAudio()
+    {
+        BGAudio = GlobalTools.GetGameObjectByName("AudioManager");
+        DontDestroyOnLoad(BGAudio);
+
+        //if (BGAudio)
+        //{
+        //    BGAudio.GetComponent<AudioSource>().Play();
+        //}
+    }
+
 
     //***********************************************other数据获取区*************************************************************
     public OtherSaveDate GetOtherDate()
@@ -304,6 +343,7 @@ public class GlobalSetDate : MonoBehaviour {
         if (doorName != "")
         {
             GameObject door = GlobalTools.FindObjByName(doorName);
+            
             print(" ----------->>>   "+door.name);
             playerInScreenPosition = door.transform.position;
             //door.GetComponent<ScreenChange>().OutPosition;

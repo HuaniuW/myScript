@@ -455,73 +455,86 @@ public class Plot_Str : MonoBehaviour
 
 
     string plot_id_1 = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:你喜欢花吗？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜欢#4@不喜欢#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜欢#4@不喜欢#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:我以前也不喜欢 后来发现只是因为花太少。|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:是吧 谁会不喜欢花呢。|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:不过我已经种满漫山遍野的鲜花了。|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:后面的 花之盾 送你了。";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:后面的 花之盾 送你了。|" +
+       "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:注意，前闪和翻滚是不能躲避敌人攻击的，甚至不能穿过敌人。要绕过敌人多从空中闪进。闪进如果用完次数，可以强行使用，但会掉生命值。|";
 
     string plot_id_1r = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:花が好きですか？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:お気に入り#4@嫌い#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:お気に入り#4@嫌い#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:以前は気に入らなかったのですが、花が少なすぎたからだとわかりました。|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:ええ、花が嫌いな人。|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:しかし、私はすでに山や畑のいたるところに花を植えました。|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:後ろのフラワーシールドはあなたのためです。";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:後ろのフラワーシールドはあなたのためです。|"+
+       "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:前方回避とロールオーバーは敵の攻撃を回避することはできず、敵の攻撃を通過することさえできないことに注意してください。 敵を迂回して空中からかわすため。 フラッシュが足りなくなった場合は強制的に使用できますが、体力が低下します。|";
 
     string plot_id_1y = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:Do you like flowers?|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Like #4@dislike#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Like #4@dislike#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:I didn't like it before and found out that it was just because there were too few flowers.|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Yeah, who doesn't like flowers.|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:But I have already planted flowers all over the mountains and fields.|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:The flower shield at the back is for you.";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:The flower shield at the back is for you.|"+
+       "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:Note that forward dodge and rollover cannot avoid enemy attacks or even pass through them. To bypass the enemy and dodge in from the air. If you run out of flashes, you can use it forcibly, but it will lose health.|";
 
     string plot_id_1p = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:¿Te gustan las flores?|" +
-      "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Me gusta #4@no me gusta#3|" +
+      "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Me gusta #4@no me gusta#3^event$buxihuanhua|" +
       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:No me gustaba antes y descubrí que era solo porque había muy pocas flores.|" +
       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Sí, a quién no le gustan las flores.|" +
       "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:Pero ya he plantado flores por todas las montañas y campos.|" +
-      "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-      "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:El escudo de flores en la parte posterior es para ti.";
+      "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+      "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:El escudo de flores en la parte posterior es para ti.|"+
+      "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:Tenga en cuenta que esquivar hacia adelante y volcarse no pueden evitar los ataques enemigos o incluso atravesarlos. Para eludir al enemigo y esquivar desde el aire. Si te quedas sin flashes, puedes usarlo a la fuerza, pero perderá salud.|";
 
     string plot_id_1h = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:꽃을 좋아하세요?|" +
-      "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:좋아요 #4@싫어요#3|" +
+      "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:좋아요 #4@싫어요#3^event$buxihuanhua|" +
       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:나는 전에 그것을 좋아하지 않았고 그것이 단지 꽃이 너무 적기 때문이라는 것을 알았습니다.|" +
       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:예, 꽃을 좋아하지 않는 사람.|" +
       "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:그러나 나는 이미 산과 들에 꽃을 심었습니다.|" +
-      "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-      "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:뒤에 있는 꽃 방패는 당신을 위한 것입니다.";
+      "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+      "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:뒤에 있는 꽃 방패는 당신을 위한 것입니다.|"+
+    "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:전방 회피 및 롤오버는 적의 공격을 피하거나 통과할 수 없습니다. 적을 우회하여 공중에서 회피합니다. 플래시가 떨어지면 강제로 사용할 수 있지만 체력을 잃게 됩니다.|";
 
     string plot_id_1zf = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:你喜歡花嗎？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜歡#4@不喜歡#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:喜歡#4@不喜歡#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:我以前也不喜歡 後來發現只是因為花太少。|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:是吧 誰會不喜歡花呢。|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:不過我已經種滿漫山遍野的鮮花了。|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:後面的 花之盾 送你了。";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:後面的 花之盾 送你了。|"+
+    "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:注意，前閃和翻滾是不能躲避敵人攻擊的，甚至不能穿過敵人。要繞過敵人多從空中閃進。閃進如果用完次數，可以強行使用，但會掉生命值。|";
+
     string plot_id_1d = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:magst du Blumen？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:wie#4@nicht mögen#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:wie#4@nicht mögen#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Ich mochte es vorher nicht und fand heraus, dass es nur daran lag, dass es zu wenige Blumen gab.|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Ja, wer mag keine Blumen.|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:Aber ich habe schon überall auf den Bergen und Feldern Blumen gepflanzt.|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:Das Blumenschild auf der Rückseite ist für Sie.";
-    string plot_id_1f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:aimes-tu les fleurs？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:aimer#4@Ne pas aimer#3|" +
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:Das Blumenschild auf der Rückseite ist für Sie.|"+
+    "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:Beachten Sie, dass das Ausweichen und Überrollen nach vorne feindliche Angriffe nicht vermeiden oder sogar passieren kann. Um den Feind zu umgehen und aus der Luft auszuweichen. Wenn Ihnen die Blitze ausgehen, können Sie sie gewaltsam einsetzen, aber sie verlieren Gesundheit.|";
+
+
+    string plot_id_1f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:aimes tu les fleurs？|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:aimer#4@Ne pas aimer#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Je n'aimais pas ça avant et j'ai découvert que c'était juste parce qu'il y avait trop peu de fleurs.|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Ouais, qui n'aime pas les fleurs.|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:Mais j'ai déjà planté des fleurs partout dans les montagnes et les champs.|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:Le bouclier de fleurs à l'arrière est fait pour vous.";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:Le bouclier de fleurs à l'arrière est fait pour vous.|"+
+    "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:Notez que l'esquive avant et le retournement ne peuvent pas éviter les attaques ennemies ni même les traverser. Pour contourner l'ennemi et esquiver depuis les airs. Si vous manquez de flashs, vous pouvez l'utiliser de force, mais il perdra de la santé.|";
+
     string plot_id_1i = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:Hun_npc-msg:ti piacciono i fiori？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:come#4@antipatia#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:come#4@antipatia#3^event$buxihuanhua|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Non mi piaceva prima e ho scoperto che era solo perché c'erano troppo pochi fiori.|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:Hun_npc-msg:Sì, a chi non piacciono i fiori.|" +
        "id:5-choseType:dan-nextId:6-acType:talk-talkObjName:Hun_npc-msg:Ma ho già piantato fiori in tutte le montagne e nei campi.|" +
-       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。" +
-       "id:7-choseType:dan-nextId:8-acType:talk-talkObjName:Hun_npc-msg:Lo scudo floreale sul retro è per te.";
+       "id:6-choseType:dan-nextId:7-acType:talk-talkObjName:player-msg:。。。。。。。。。。|" +
+       "id:7-choseType:dan-nextId:9-acType:talk-talkObjName:Hun_npc-msg:Lo scudo floreale sul retro è per te.|"+
+    "id:9-choseType:dan-nextId:10-acType:talk-talkObjName:Hun_npc-msg:Nota che la schivata in avanti e il rollover non possono evitare gli attacchi nemici o addirittura attraversarli. Per aggirare il nemico e schivare dall'alto. Se esaurisci i flash, puoi usarlo con la forza, ma perderà salute.|";
 
 
 
@@ -610,10 +623,10 @@ public class Plot_Str : MonoBehaviour
        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Abzeichen#4^event$jianding*1@Erleuchte den heiligen Baum#3^event$jianding*0|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:In Ordnung. Zu dieser Zeit werde ich dir helfen, den göttlichen Baum zu erleuchten|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Dann werde ich dem göttlichen Baum keine Energie geben. Du musst auf dem Weg auf dich selbst achten. Ohne den göttlichen Baum hängt es von deinem Willen ab. Sei vorsichtig auf dem Weg.";
-    string plot_id_2f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Mon pouvoir ne peut être choisi qu'entre l'insigne et l'arbre divin. Voulez-vous l'insigne ou allumer l'arbre divin ?|" +
+    string plot_id_2f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Mon pouvoir ne peut être choisi qu'entre l'insigne et l'arbre divin. Voulez vous l'insigne ou allumer l'arbre divin ?|" +
        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:badge#4^event$jianding*1@Allume l'arbre sacré#3^event$jianding*0|" +
-       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:D'accord. À ce moment-là, je t'aiderai à allumer l'arbre divin|" +
-       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Alors je ne donnerai pas d'énergie à l'arbre divin. Vous devez faire attention à vous-même sur la route. Sans l'arbre divin, cela dépend de votre volonté. Soyez prudent sur la route.";
+       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:D'accord. À ce moment là, je t'aiderai à allumer l'arbre divin|" +
+       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Alors je ne donnerai pas d'énergie à l'arbre divin. Vous devez faire attention à vous même sur la route. Sans l'arbre divin, cela dépend de votre volonté. Soyez prudent sur la route.";
     string plot_id_2i = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Il mio potere può essere scelto solo tra il distintivo e l'albero di Dio. Vuoi il distintivo o accendi l'albero di Dio?|" +
        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:distintivo#4^event$jianding*1@Illumina l'albero sacro#3^event$jianding*0|" +
        "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Ok. In quel momento, ti aiuterò ad illuminare l'albero divino|" +
@@ -672,44 +685,44 @@ public class Plot_Str : MonoBehaviour
     //id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:我等你好久了，你准备好挑战我了吗？|id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:来吧！#4@不想做无谓的战斗。#3|id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:哼！等你变强再来找我吧 。^event$openDoor|id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:哈哈！正合我意，我上了。^event$startfight|
 
     string plot_id_2a = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:我等你好久了，你准备好挑战我了吗？|" +
-        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:不要挡我的路！#4@不想做无谓的战斗。#3|" +
+        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:不要挡我的路！#4^event$ganyingzhan@不想做无谓的战斗。#3|" +
         "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:等你变强再来找我吧 。^event$openDoor|" +
         "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:正合我意，我上了。^event$startfight|";
 
     string plot_id_2ar = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:私は長い間あなたを待っていました、あなたは私に挑戦する準備ができていますか？|" +
-        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:邪魔しないで！#4@無意味な戦いはしたくない。#3|" +
+        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:邪魔しないで！#4^event$ganyingzhan@無意味な戦いはしたくない。#3|" +
         "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:あなたが強くなったときに私に戻ってきてください。^event$openDoor|" +
         "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:まさに私が欲しいもの、私は上にいます。^event$startfight|";
 
     string plot_id_2ay = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:I've been waiting for you for a long time, are you ready to challenge me?|" +
-        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Don't get in my way!#4@I don't want to do pointless battles.#3|" +
+        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Don't get in my way!#4^event$ganyingzhan@I don't want to do pointless battles.#3|" +
         "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:Come back to me when you get stronger.^event$openDoor|" +
         "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Exactly what I want, I'm on.^event$startfight|";
 
     string plot_id_2ax = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Te he estado esperando durante mucho tiempo, ¿estás listo para desafiarme?|" +
-        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:¡No te interpongas en mi camino!#4@No quiero hacer batallas sin sentido.#3|" +
+        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:¡No te interpongas en mi camino!#4^event$ganyingzhan@No quiero hacer batallas sin sentido.#3|" +
         "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:Vuelve a mí cuando seas más fuerte.^event$openDoor|" +
         "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Exactamente lo que quiero, estoy en.^event$startfight|";
 
     string plot_id_2ah = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:나는 오랫동안 당신을 기다리고 있었는데, 당신은 나에게 도전 할 준비가 되셨습니까?|" +
-        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:방해하지마!#4@무의미한 싸움은 하고 싶지 않습니다.#3|" +
+        "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:방해하지마!#4^event$ganyingzhan@무의미한 싸움은 하고 싶지 않습니다.#3|" +
         "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:더 강해지면 내게 돌아와.^event$openDoor|" +
         "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:내가 원하는 바로 그거야.^event$startfight|";
 
     string plot_id_2azf = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:我等你好久了，你準備好挑戰我了嗎？|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:不要擋我的路！#4@不想做無謂的戰鬥。#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:不要擋我的路！#4^event$ganyingzhan@不想做無謂的戰鬥。#3|" +
        "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:等你變強再來找我吧 。^event$openDoor|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:正合我意，我上了。^event$startfight|";
     string plot_id_2ad = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Ich habe lange auf dich gewartet, bist du bereit, mich herauszufordern?|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:komm mir nicht in die Quere！#4@Ich will keinen sinnlosen Kampf führen。#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:komm mir nicht in die Quere！#4^event$ganyingzhan@Ich will keinen sinnlosen Kampf führen。#3|" +
        "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:Komm zu mir, wenn du stärker wirst 。^event$openDoor|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Genau das, was ich will, ich bin oben。^event$startfight|";
     string plot_id_2af = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Je t'attendais depuis longtemps, es tu prêt à me défier ?|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:ne te mets pas en travers de mon chemin！#4@Je ne veux pas faire un combat inutile。#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:ne te mets pas en travers de mon chemin！#4^event$ganyingzhan@Je ne veux pas faire un combat inutile。#3|" +
        "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:Viens à moi quand tu deviens plus fort 。^event$openDoor|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Exactement ce que je veux, je suis debout。^event$startfight|";
     string plot_id_2ai = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:B_dlws-msg:Ti aspetto da tanto tempo, sei pronto a sfidarmi?|" +
-       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:non intralciarmi！#4@Non voglio fare una lotta inutile。#3|" +
+       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:non intralciarmi！#4^event$ganyingzhan@Non voglio fare una lotta inutile。#3|" +
        "id:3-choseType:dan-nextId:6-acType:talk-talkObjName:B_dlws-msg:Vieni da me quando diventerai più forte 。^event$openDoor|" +
        "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:B_dlws-msg:Esattamente quello che voglio, sono sveglio。^event$startfight|";
 
@@ -833,7 +846,7 @@ public class Plot_Str : MonoBehaviour
       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:H_np-msg:Bist du immer so zuversichtlich|" +
       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:H_np-msg:Nicht wie du. . .|" +
       "id:5-choseType:dan-nextId:8-acType:talk-talkObjName:H_np-msg:Dieses Abzeichen ist für Sie, ich hoffe, es kann Ihnen helfen|";
-    string plot_id_6f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:H_np-msg:Errant ici est la main de Dieu, avez-vous la confiance nécessaire pour vaincre la main de Dieu ?|" +
+    string plot_id_6f = "id:1-choseType:dan-nextId:2-acType:talk-talkObjName:H_np-msg:Errant ici est la main de Dieu, avez vous la confiance nécessaire pour vaincre la main de Dieu ?|" +
       "id:2-choseType:duo-nextId:3-acType:talk-talkObjName:player-msg:Avoir#3@Non#4|" +
       "id:3-choseType:dan-nextId:5-acType:talk-talkObjName:H_np-msg:es tu toujours aussi confiant|" +
       "id:4-choseType:dan-nextId:5-acType:talk-talkObjName:H_np-msg:Pas comme vous. . .|" +
@@ -977,6 +990,41 @@ public class Plot_Str : MonoBehaviour
 
         //加一个 不删除 自身的 事件
         string eventName = ChoseEventStr.Split('*')[0];
+
+
+
+        if (eventName == "buxihuanhua")
+        {
+            print("  成就事件   不喜欢花  ");
+            //不喜欢花
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, GlobalTag.BUXIHUANHUA), this);
+        }else if (eventName == "ganyingzhan")
+        {
+            print("  成就事件   -----迎战  ");
+            //敢应战
+            if (FileControl.GetInstance().GetValueByKey(GlobalTag.GSNYINGZHAN)=="1")
+            {
+                //本地已经领取成就了
+                print("  本地 已经领取过成就了 ");
+                return;
+            }
+            else
+            {
+                print("    敢应战 写入本地 ");
+                FileControl.GetInstance().AddNewKeyAndValue(GlobalTag.GSNYINGZHAN, "1");
+                ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, GlobalTag.GSNYINGZHAN), this);
+            }
+
+        }else if (eventName == "heping")
+        {
+            //爱好和平
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, GlobalTag.AIHAOHEPING), this);
+        }else if (eventName == "jijia")
+        {
+            //机甲爱好者
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, GlobalTag.AIHAOJIJIA), this);
+        }
+
 
 
         if (eventName == "openDoor")

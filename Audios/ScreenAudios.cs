@@ -29,13 +29,13 @@ public class ScreenAudios : MonoBehaviour
 
     }
 
-
-    string AudioNameArrStr = "";
+    //public string TheScreenAudioName = "Audio_BgFengsheng_1-Audio_BgGangqing_1";
+    string AudioNameArrStr = "Audio_BgFengsheng_1";
     void GetAudioNameArrStr()
     {
         //做一个 关卡 音乐数据 的对照表
 
-        AudioNameArrStr = "Audio_BgFengsheng_1-Audio_BgGangqing_1";
+        //AudioNameArrStr = TheScreenAudioName;
     }
 
 

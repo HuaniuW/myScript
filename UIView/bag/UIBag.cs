@@ -156,6 +156,10 @@ public class UIBag : MonoBehaviour
 
     void BtnControl2()
     {
+        //print(" Globals.isInPlot   "+ Globals.isInPlot);
+        if (Globals.isInPlot) return;
+
+
         if (IsOpen && (Input.GetKeyUp(KeyCode.Joystick1Button0) || Input.GetKeyUp(KeyCode.K)))
         {
             IsOpen = false;
@@ -163,6 +167,8 @@ public class UIBag : MonoBehaviour
             //ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.ROLECANCONTROL, true), this);
             mianbanHide(this.GetComponent<RectTransform>());
         }
+
+        
 
 
 

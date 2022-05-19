@@ -60,7 +60,7 @@ public class DieOut : MonoBehaviour {
         if (!IsDie && this.GetComponent<RoleDate>().isDie) {
             IsDie = true;
             //if (IsOrter1) DieBeBlack();
-
+            GetCJ();
             if (HitKuai) HitKuai.SetActive(false);
             if (HitKuai2) HitKuai2.SetActive(false);
             if (IsNeedDieSlowAC) DieSlowAC();
@@ -389,6 +389,16 @@ public class DieOut : MonoBehaviour {
     }
 
 
+    //--------------------成就---------------------
+    [Header("击败怪物后 获得成就 ")]
+    public string CJNAME = "";
 
+    void GetCJ()
+    {
+        if (CJNAME == "") return;
+        print("  获取成就  " + CJNAME);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, CJNAME), this);
+      
+    }
 
 }

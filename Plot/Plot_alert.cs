@@ -477,7 +477,7 @@ public class Plot_alert : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Jishi();
     }
 
 
@@ -506,6 +506,9 @@ public class Plot_alert : MonoBehaviour
         if (Coll.tag == "Player")
         {
             GetTalkBar();
+            
+            CJJishi = 0;
+            IsStartJishi = true;
             //ShowPlotStr();
         }
     }
@@ -527,7 +530,45 @@ public class Plot_alert : MonoBehaviour
         if (Coll.tag == "Player")
         {
             if (_cBar) _cBar.GetComponent<UI_talkBar>().RemoveSelf();
+            if (CJNAME !="" &&IsGetCJ())
+            {
+                GetCJ();
+            }
         }
     }
+
+
+    bool IsStartJishi = false;
+    void Jishi()
+    {
+        if(CJNAME!=""&& IsStartJishi)
+        {
+            CJJishi += Time.deltaTime;
+        }
+    }
+    float CJJishi = 0;
+    bool IsGetCJ()
+    {
+        if (CJJishi >= 5) return true;
+        return false;
+    }
+
+
+
+
+    //--------------------成就---------------------
+    [Header("获得成就")]
+    public string CJNAME = "";
+
+    void GetCJ()
+    {
+        if (FileControl.GetInstance().GetValueByKey("CJ9") == "1") return;
+        if (CJNAME == "") return;
+        print("  获取成就  " + CJNAME);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, CJNAME), this);
+        FileControl.GetInstance().AddNewKeyAndValue("CJ9", "1");
+    }
+
+
 
 }

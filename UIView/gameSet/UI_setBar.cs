@@ -30,6 +30,10 @@ public class UI_setBar : MonoBehaviour
     public Button textCZ2;
 
 
+    [Header("*********技能说明")]
+    public Button textSKILL;
+
+
     [Header("*********窗口模式")]
     public Button Chuangkou;
     [Header("*********全屏")]
@@ -58,6 +62,8 @@ public class UI_setBar : MonoBehaviour
     public Image Img_shoubing;
     [Header("****键盘操作说明")]
     public Image Img_jianpan;
+    [Header("****技能 ** 操作说明")]
+    public Image Img_Skill;
 
 
 
@@ -76,7 +82,7 @@ public class UI_setBar : MonoBehaviour
         kuangX = kuang.transform.position.x;
         GlobalSetDate.instance.IsChangeScreening = true;
         GameObject[] b = { textYY1.gameObject, textYY2.gameObject, textYY3.gameObject, textYY4.gameObject, textYY5.gameObject,textYY6.gameObject,textYY7.gameObject,textYY8.gameObject,textYY9.gameObject,
-            textCZ1.gameObject, textCZ2.gameObject,Chuangkou.gameObject,Quanpin.gameObject, btn_close.gameObject, btn_inStartScreen.gameObject, btn_outGame.gameObject };
+            textCZ1.gameObject, textCZ2.gameObject,textSKILL.gameObject,Chuangkou.gameObject,Quanpin.gameObject, btn_close.gameObject, btn_inStartScreen.gameObject, btn_outGame.gameObject };
         labels.AddRange(b);
 
         GetLuanguage();
@@ -103,6 +109,7 @@ public class UI_setBar : MonoBehaviour
 
     void GetLuanguage()
     {
+        if (text1 == null) return;
         if (Globals.language == Globals.CHINESE)
         {
             text1.text = "音量";
@@ -110,6 +117,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "操作说明";
             textCZ1.GetComponentInChildren<Text>().text = "手柄";
             textCZ2.GetComponentInChildren<Text>().text = "键盘";
+            textSKILL.GetComponentInChildren<Text>().text = "技能说明";
 
             Chuangkou.GetComponentInChildren<Text>().text = "窗口模式";
             Quanpin.GetComponentInChildren<Text>().text = "全屏";
@@ -131,6 +139,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "Instructions";
             textCZ1.GetComponentInChildren<Text>().text = "handle";
             textCZ2.GetComponentInChildren<Text>().text = "keyboard";
+            textSKILL.GetComponentInChildren<Text>().text = "keyboard";
 
             Chuangkou.GetComponentInChildren<Text>().text = "windowed";
             Quanpin.GetComponentInChildren<Text>().text = "full screen";
@@ -152,6 +161,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "手順";
             textCZ1.GetComponentInChildren<Text>().text = "取り持つ";
             textCZ2.GetComponentInChildren<Text>().text = "キーボード";
+            textSKILL.GetComponentInChildren<Text>().text = "スキルの説明";
 
             Chuangkou.GetComponentInChildren<Text>().text = "窓";
             Quanpin.GetComponentInChildren<Text>().text = "全画面表示";
@@ -172,6 +182,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "Instrucciones";
             textCZ1.GetComponentInChildren<Text>().text = "encargarse de";
             textCZ2.GetComponentInChildren<Text>().text = "teclado";
+            textSKILL.GetComponentInChildren<Text>().text = "Descripción de la habilidad";
 
             Chuangkou.GetComponentInChildren<Text>().text = "ventana";
             Quanpin.GetComponentInChildren<Text>().text = "pantalla completa";
@@ -192,6 +203,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "지침";
             textCZ1.GetComponentInChildren<Text>().text = "핸들";
             textCZ2.GetComponentInChildren<Text>().text = "건반";
+            textSKILL.GetComponentInChildren<Text>().text = "스킬 설명";
 
             Chuangkou.GetComponentInChildren<Text>().text = "창문";
             Quanpin.GetComponentInChildren<Text>().text = "전체 화면";
@@ -212,6 +224,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "操作說明";
             textCZ1.GetComponentInChildren<Text>().text = "手柄";
             textCZ2.GetComponentInChildren<Text>().text = "鍵盤";
+            textSKILL.GetComponentInChildren<Text>().text = "技能說明";
 
             Chuangkou.GetComponentInChildren<Text>().text = "窗口模式";
             Quanpin.GetComponentInChildren<Text>().text = "全屏";
@@ -232,6 +245,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "Anweisungen";
             textCZ1.GetComponentInChildren<Text>().text = "handhaben";
             textCZ2.GetComponentInChildren<Text>().text = "Klaviatur";
+            textSKILL.GetComponentInChildren<Text>().text = "Fähigkeitsbeschreibung";
 
             Chuangkou.GetComponentInChildren<Text>().text = "Fenstermodus";
             Quanpin.GetComponentInChildren<Text>().text = "ganzer Bildschirm";
@@ -252,6 +266,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "Des instructions";
             textCZ1.GetComponentInChildren<Text>().text = "manipuler";
             textCZ2.GetComponentInChildren<Text>().text = "clavier";
+            textSKILL.GetComponentInChildren<Text>().text = "Description de la compétence";
 
             Chuangkou.GetComponentInChildren<Text>().text = "mode fenêtré";
             Quanpin.GetComponentInChildren<Text>().text = "plein écran";
@@ -272,6 +287,7 @@ public class UI_setBar : MonoBehaviour
             TextCZ.text = "Istruzioni";
             textCZ1.GetComponentInChildren<Text>().text = "maniglia";
             textCZ2.GetComponentInChildren<Text>().text = "tastiera";
+            textSKILL.GetComponentInChildren<Text>().text = "Descrizione abilità";
 
             Chuangkou.GetComponentInChildren<Text>().text = "modalità finestra";
             Quanpin.GetComponentInChildren<Text>().text = "a schermo intero";
@@ -310,6 +326,7 @@ public class UI_setBar : MonoBehaviour
 
         textCZ1.onClick.AddListener(Shoubing);
         textCZ2.onClick.AddListener(Jianpan);
+        textSKILL.onClick.AddListener(SkillSM);
 
         btn_close.onClick.AddListener(RemoveSelf);
         btn_inStartScreen.onClick.AddListener(ToStartScreen);
@@ -332,7 +349,7 @@ public class UI_setBar : MonoBehaviour
         getRQ = Chuangkou.gameObject;
         GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
         kuang.transform.position = getRQ.transform.position;
-
+        HideShuoming();
     }
 
     void TheQuanpin()
@@ -344,7 +361,7 @@ public class UI_setBar : MonoBehaviour
         //设置成全屏
         Screen.fullScreen = true;
 
-
+        HideShuoming();
         getRQ = Quanpin.gameObject;
         GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
         kuang.transform.position = getRQ.transform.position;
@@ -374,6 +391,19 @@ public class UI_setBar : MonoBehaviour
         GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
         kuang.transform.position = getRQ.transform.position;
         HideShuoming("k");
+    }
+
+    string SKILLSM = "skillsm";
+    void SkillSM()
+    {
+        print(" 技能说明 ");
+        //PlayVadioByName("xd");
+        Img_Skill.GetComponent<UI_SkillSM>().GetStart();
+
+        getRQ = textSKILL.gameObject;
+        GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
+        kuang.transform.position = getRQ.transform.position;
+        HideShuoming("j");
     }
 
 
@@ -563,6 +593,10 @@ public class UI_setBar : MonoBehaviour
         else if (xzUI == JIANPAN)
         {
             Jianpan();
+        }
+        else if (xzUI == "skillsm")
+        {
+            SkillSM();
         }
         else if (xzUI == "close")
         {
@@ -858,6 +892,7 @@ public class UI_setBar : MonoBehaviour
     {
         Img_shoubing.gameObject.SetActive(false);
         Img_jianpan.gameObject.SetActive(false);
+        Img_Skill.gameObject.SetActive(false);
         if (type == "s")
         {
             Img_shoubing.gameObject.SetActive(true);
@@ -866,8 +901,10 @@ public class UI_setBar : MonoBehaviour
         {
             Img_jianpan.gameObject.SetActive(true);
            
+        }else if (type == "j")
+        {
+            Img_Skill.gameObject.SetActive(true);
         }
-
     }
 
 
@@ -970,6 +1007,15 @@ public class UI_setBar : MonoBehaviour
             HideShuoming("k");
             Jianpan();
         }
+        else if (_txtName == "BtnSkillSM")
+        {
+            //键盘操作
+            xzUI = SKILLSM;
+            GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
+            kuang.transform.position = getRQ.transform.position;
+            HideShuoming("j");
+            SkillSM();
+        }
         else if (_txtName == "BtnQuanpin")
         {
             //全屏
@@ -977,6 +1023,7 @@ public class UI_setBar : MonoBehaviour
             GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
             kuang.transform.position = getRQ.transform.position;
             //HideShuoming("s");
+            HideShuoming();
         }
         else if (_txtName == "BtnChuangkou")
         {
@@ -985,6 +1032,7 @@ public class UI_setBar : MonoBehaviour
             GetComponent<UITween>().GetUIImage(kuang).ImgChangeStartSet(186, 24, 190, 29, 0.3f);
             kuang.transform.position = getRQ.transform.position;
             //HideShuoming("s");
+            HideShuoming();
         }
         else if (_txtName == "Text2")
         {

@@ -10,7 +10,7 @@ public class GameControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //TimeTest();
-
+        ScreenAudio();
     }
 
     void TimeTest()
@@ -74,7 +74,7 @@ public class GameControl : MonoBehaviour {
         GetPlayerStatus();
         GetPlayerPosByFX();
         print("游戏 控制完成");
-
+        
     }
 
     private void OnEnable()
@@ -88,6 +88,56 @@ public class GameControl : MonoBehaviour {
     {
         return player;
     }
+
+    [Header("是否是boss 关卡")]
+    public bool IsBossScreen = false;
+    [Header("是否需要 关闭 场景背景音乐")]
+    public bool IsNeedStopBGAudio = false;
+
+    [Header("是否需要 直接*** 关闭 场景背景音乐")]
+    public bool IsNeedZJStopScreenAudio = false;
+
+    [Header("按名字 播放临时场景 音乐")]
+    public string ScreenTempAudioName = "";
+
+    [Header("按名字 播放场景 音乐")]
+    public string ChangeScreenAudioName = "";
+
+    void ScreenAudio()
+    {
+        if (IsNeedZJStopScreenAudio)
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_TEMP_AUDIO, "ZJStop"), this);
+            return;
+        }
+
+        if (ChangeScreenAudioName != "")
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_AUDIO, ChangeScreenAudioName), this);
+            return;
+        }
+
+
+        print("yy  "+ ScreenTempAudioName);
+        if (ScreenTempAudioName != "")
+        {
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_TEMP_AUDIO, ScreenTempAudioName), this);   //addEventListener(EventTypeName.CHANGE_TEMP_AUDIO, ChangeTempAudio);
+            return;
+        }
+        if (!IsNeedStopBGAudio &&!IsBossScreen)
+        {
+            //GlobalTools.FindObjByName("AudioManager").GetComponent<AudioManager>().PlayAudio();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_TEMP_AUDIO, ""), this);
+        }
+
+        if (IsNeedStopBGAudio)
+        {
+            //GlobalTools.FindObjByName("AudioManager").GetComponent<AudioManager>().AudioStop();
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_TEMP_AUDIO, "stop"), this);
+        }
+
+    }
+
 
 
 

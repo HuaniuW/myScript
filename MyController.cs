@@ -516,7 +516,7 @@ public class MyController : MonoBehaviour
 
     void Update()
     {
-
+        if (Globals.isInPlot) return;
         //ShouBing();
         if (_body.IsInJijia)
         {
@@ -525,7 +525,7 @@ public class MyController : MonoBehaviour
             JijiaControl();
             //JijiaControlShoubing();
             JijiaControlShoubing2();
-            DebugControl();
+            //DebugControl();
         }
         else
         {
@@ -538,8 +538,9 @@ public class MyController : MonoBehaviour
             //GameControl();
             GameControl2();
 
-            DebugControl();
+            //DebugControl();
         }
+        DebugControl();
 
 
 

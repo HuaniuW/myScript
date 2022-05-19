@@ -253,7 +253,7 @@ public class HitKuai : MonoBehaviour {
             {
                 print(" atkObj.name    " + atkObj.name);
                 //print(" atkObj GamebODY   " + atkObj.GetComponent<GameBody>());
-                float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 400 + jn_date.FanTuili : -400 - jn_date.FanTuili;
+                float tuili = atkObj.transform.position.x > beHitObj.transform.position.x ? 200 + jn_date.FanTuili : -200 - jn_date.FanTuili;
                 float YinzhiCha = atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi;
                 if (Mathf.Abs(atkObj.GetComponent<RoleDate>().yingzhi - beHitObj.GetComponent<RoleDate>().yingzhi) < 100)
                 {
@@ -510,12 +510,19 @@ public class HitKuai : MonoBehaviour {
         //}
        
         print(" name "+this.name);
-        if (jn_date == null) {
 
-            print("  jn_date 为空 "+ this.name);
+        //if (this.name == "Lizi_Jiguan")
+        //{
+        //    GetHit(o.GetComponent<Collider2D>());
+        //}
 
-            return;
-        }
+
+        //if (jn_date == null) {
+
+        //    print("  jn_date 为空 "+ this.name);
+
+        //    return;
+        //}
         
         if (jn_date) {
             print("team  " + jn_date.team);

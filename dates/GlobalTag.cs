@@ -46,4 +46,15 @@ public class GlobalTag : MonoBehaviour
     public static string GUAIS = "Guais";
 
     public static string JIGUANG = "jiguang";
+
+
+    public const string BUXIHUANHUA = "CJ1";
+    public const string JIANDING = "CJ2";
+    public const string GSNYINGZHAN = "CJ3";
+    public const string HUOREN = "CJ4";
+    public const string AIHAOHEPING = "CJ5";
+    public const string AIHAOJIJIA = "CJ6";
+    public const string SHENZHISHOU = "CJ7";
+    public const string LONG = "CJ8";
+    public const string WOAINI = "CJ9";
 }

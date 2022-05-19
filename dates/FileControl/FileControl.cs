@@ -114,6 +114,31 @@ public class FileControl
         sw.Dispose();
     }
 
+
+    //在结尾 写入新键值
+    public void AddNewKeyAndValue(string Key,string value,string TxtName = "test")
+    {
+        if (GetValueByKey(Key) != "") return;
+        string str = Key + ":" + value;
+        string path = Application.dataPath + __url + TxtName + ".txt";
+        StreamWriter sw;
+        FileInfo fi = new FileInfo(path);
+
+        if (!File.Exists(path))
+        {
+            Debug.Log("没有 改文件 创建一个 新文件！！！");
+            sw = fi.CreateText();
+        }
+        else
+        {
+            sw = fi.AppendText();   //在原文件后面追加内容      
+        }
+        sw.WriteLine(str);
+        sw.Close();
+        sw.Dispose();
+
+    }
+
     //逐行读取 txt
     public void ReadTxtSecond(string TxtName = "test")
     {

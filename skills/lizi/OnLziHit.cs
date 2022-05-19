@@ -225,7 +225,7 @@ public class OnLziHit : MonoBehaviour
 
 
         if (!IsCanHit) return;
-        //print("  粒子击中敌人！！！！！ "+other.tag);
+        print("  粒子击中敌人！！！！！ "+other.tag);
         if (other.tag == GlobalTag.Player|| other.tag == GlobalTag.JINGYING|| other.tag == GlobalTag.ENEMY|| other.tag == GlobalTag.AirEmeny|| other.tag == GlobalTag.BOSS|| other.tag == GlobalTag.Diren)
         {
            
@@ -238,7 +238,7 @@ public class OnLziHit : MonoBehaviour
                     return;
                 }
             }
-            //print("  粒子击中敌人！！！！！ " + other.name);
+            print("  粒子击中敌人！！！！！ " + other.name);
             string o = other.GetInstanceID() + "_" + LiziJishi;
             HitObjList.Add(o);
             //print("  yyyyyyyy  other "+ other.name);

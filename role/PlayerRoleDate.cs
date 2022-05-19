@@ -309,6 +309,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     playerMsg = "역할 정보";
                     break;
+                case Globals.German:
+                    playerMsg = "Rolleninformationen";
+                    break;
+                case Globals.Italy:
+                    playerMsg = "informazioni sul ruolo";
+                    break;
+                case Globals.French:
+                    playerMsg = "informations sur le rôle";
+                    break;
+                case Globals.CHINESEF:
+                    playerMsg = "角色信息";
+                    break;
             }
         }
     }
@@ -338,6 +350,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     liveZ = "삶의 가치: ";
                     break;
+                case Globals.German:
+                    liveZ = "Lebenswert: ";
+                    break;
+                case Globals.Italy:
+                    liveZ = "valore della vita: ";
+                    break;
+                case Globals.French:
+                    liveZ = "valeur de la vie: ";
+                    break;
+                case Globals.CHINESEF:
+                    liveZ = "生命值: ";
+                    break;
             }
         }
     }
@@ -366,6 +390,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     lanZ = "에너지: ";
                     break;
+                case Globals.German:
+                    lanZ = "energy: ";
+                    break;
+                case Globals.Italy:
+                    lanZ = "energy: ";
+                    break;
+                case Globals.French:
+                    lanZ = "energy: ";
+                    break;
+                case Globals.CHINESEF:
+                    lanZ = "藍量: ";
+                    break;
             }
         }
     }
@@ -393,6 +429,18 @@ public class PlayerRoleDate : RoleDate
                     break;
                 case Globals.KOREAN:
                     atkZ = "공격력: ";
+                    break;
+                case Globals.German:
+                    atkZ = "atk: ";
+                    break;
+                case Globals.Italy:
+                    atkZ = "atk: ";
+                    break;
+                case Globals.French:
+                    atkZ = "atk: ";
+                    break;
+                case Globals.CHINESEF:
+                    atkZ = "攻撃力: ";
                     break;
             }
         }
@@ -424,6 +472,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     defZ = "방어: ";
                     break;
+                case Globals.German:
+                    defZ = "def: ";
+                    break;
+                case Globals.Italy:
+                    defZ = "def: ";
+                    break;
+                case Globals.French:
+                    defZ = "def: ";
+                    break;
+                case Globals.CHINESEF:
+                    defZ = "防衛力: ";
+                    break;
             }
         }
     }
@@ -452,6 +512,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     yzZ = "경도: ";
                     break;
+                case Globals.German:
+                    yzZ = "hardness: ";
+                    break;
+                case Globals.Italy:
+                    yzZ = "hardness: ";
+                    break;
+                case Globals.French:
+                    yzZ = "hardness: ";
+                    break;
+                case Globals.CHINESEF:
+                    yzZ = "硬度: ";
+                    break;
             }
         }
     }
@@ -479,6 +551,18 @@ public class PlayerRoleDate : RoleDate
                     break;
                 case Globals.KOREAN:
                     baojiZ = "중요한 기회: ";
+                    break;
+                case Globals.German:
+                    baojiZ = "crit: ";
+                    break;
+                case Globals.Italy:
+                    baojiZ = "crit: ";
+                    break;
+                case Globals.French:
+                    baojiZ = "crit: ";
+                    break;
+                case Globals.CHINESEF:
+                    baojiZ = "暴击率: ";
                     break;
             }
         }
@@ -509,6 +593,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     baojiZBL = "치명타 배율: ";
                     break;
+                case Globals.German:
+                    baojiZBL = "Crit multiplier: ";
+                    break;
+                case Globals.Italy:
+                    baojiZBL = "Crit multiplier: ";
+                    break;
+                case Globals.French:
+                    baojiZBL = "Crit multiplier: ";
+                    break;
+                case Globals.CHINESEF:
+                    baojiZBL = "暴击倍率: ";
+                    break;
             }
         }
     }
@@ -538,6 +634,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     shanghaiJML = "데미지 감소율: ";
                     break;
+                case Globals.German:
+                    shanghaiJML = "Schadensreduktionsrate: ";
+                    break;
+                case Globals.Italy:
+                    shanghaiJML = "Tasso di riduzione del danno: ";
+                    break;
+                case Globals.French:
+                    shanghaiJML = "Taux de réduction des dégâts: ";
+                    break;
+                case Globals.CHINESEF:
+                    shanghaiJML = "傷害減免率: ";
+                    break;
             }
         }
     }
@@ -564,6 +672,18 @@ public class PlayerRoleDate : RoleDate
                     break;
                 case Globals.KOREAN:
                     kangduJL = "바이러스 백신: ";
+                    break;
+                case Globals.German:
+                    kangduJL = "Anti Gift Chance: ";
+                    break;
+                case Globals.Italy:
+                    kangduJL = "Possibilità anti veleno: ";
+                    break;
+                case Globals.French:
+                    kangduJL = "Chance anti poison: ";
+                    break;
+                case Globals.CHINESEF:
+                    kangduJL = "抗毒機率: ";
                     break;
             }
         }
@@ -593,6 +713,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     kangduSHBL = "독 피해: ";
                     break;
+                case Globals.German:
+                    kangduSHBL = "Giftschadensverhältnis: ";
+                    break;
+                case Globals.Italy:
+                    kangduSHBL = "Rapporto danni da veleno: ";
+                    break;
+                case Globals.French:
+                    kangduSHBL = "Taux de dégâts de poison: ";
+                    break;
+                case Globals.CHINESEF:
+                    kangduSHBL = "抗毒傷害比率: ";
+                    break;
             }
         }
     }
@@ -619,6 +751,18 @@ public class PlayerRoleDate : RoleDate
                     break;
                 case Globals.KOREAN:
                     kanghuoJL = "내화성: ";
+                    break;
+                case Globals.German:
+                    kanghuoJL = "Feuer Beständigkeit: ";
+                    break;
+                case Globals.Italy:
+                    kanghuoJL = "resistenza al fuoco: ";
+                    break;
+                case Globals.French:
+                    kanghuoJL = "résistance au feu: ";
+                    break;
+                case Globals.CHINESEF:
+                    kanghuoJL = "抗火點燃機率: ";
                     break;
             }
         }
@@ -647,6 +791,18 @@ public class PlayerRoleDate : RoleDate
                 case Globals.KOREAN:
                     kanghuoSHBL = "화재 피해: ";
                     break;
+                case Globals.German:
+                    kanghuoSHBL = "Feuer Schaden: ";
+                    break;
+                case Globals.Italy:
+                    kanghuoSHBL = "Danni da fuoco: ";
+                    break;
+                case Globals.French:
+                    kanghuoSHBL = "Dégâts du feu: ";
+                    break;
+                case Globals.CHINESEF:
+                    kanghuoSHBL = "抗火傷害: ";
+                    break;
             }
         }
     }
@@ -666,13 +822,25 @@ public class PlayerRoleDate : RoleDate
                     kangdianJL = "反電気: ";
                     break;
                 case Globals.ENGLISH:
-                    kangdianJL = "Anti-electric: ";
+                    kangdianJL = "Anti electric: ";
                     break;
                 case Globals.Portugal:
-                    kangdianJL = "Anti-eléctrico: ";
+                    kangdianJL = "Anti eléctrico: ";
                     break;
                 case Globals.KOREAN:
                     kangdianJL = "정전기 방지: ";
+                    break;
+                case Globals.German:
+                    kangdianJL = "Anti elektrische Wahrscheinlichkeit: ";
+                    break;
+                case Globals.Italy:
+                    kangdianJL = "Probabilità antielettrica: ";
+                    break;
+                case Globals.French:
+                    kangdianJL = "Probabilité anti électrique: ";
+                    break;
+                case Globals.CHINESEF:
+                    kangdianJL = "抗電機率: ";
                     break;
             }
         }
@@ -693,13 +861,25 @@ public class PlayerRoleDate : RoleDate
                     kangdianMBJL = "反電気的損傷: ";
                     break;
                 case Globals.ENGLISH:
-                    kangdianMBJL = "nti-electrical damage: ";
+                    kangdianMBJL = "nti electrical damage: ";
                     break;
                 case Globals.Portugal:
-                    kangdianMBJL = "Daño anti-eléctrico: ";
+                    kangdianMBJL = "Daño anti eléctrico: ";
                     break;
                 case Globals.KOREAN:
                     kangdianMBJL = "정전기 방지 손상: ";
+                    break;
+                case Globals.German:
+                    kangdianMBJL = "Anti elektrische Schäden: ";
+                    break;
+                case Globals.Italy:
+                    kangdianMBJL = "Danno antielettrico: ";
+                    break;
+                case Globals.French:
+                    kangdianMBJL = "Dommages anti électriques: ";
+                    break;
+                case Globals.CHINESEF:
+                    kangdianMBJL = "抗電傷害: ";
                     break;
             }
         }

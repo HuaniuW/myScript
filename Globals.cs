@@ -16,8 +16,8 @@ public class Globals : MonoBehaviour {
     /// </summary>
     public const string USE_XP = "z";
 
-    public static bool isDebug = false;
-    public static bool isDebug2 = true;
+    public static bool isDebug = true;
+    public static bool isDebug2 = false;
 
     public static bool isPC = true;
 

@@ -86,20 +86,24 @@ public class AudioControl : MonoBehaviour {
 
     private void OnEnable()
     {
-        CVolume = GlobalSetDate.instance.GetSoundEffectValue();
-        if (GuDingValue != 0 && GlobalSetDate.instance.GetSoundEffectValue() != 0) CVolume = GuDingValue;
-        if (m_AudioSource) m_AudioSource.volume = CVolume;
-        
-        //print(GlobalSetDate.instance.GetSoundEffectValue());
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.AUDIO_VALUE,audioValue);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.CHANGE_SCREEN, ScreenChange);
         ObjectEventDispatcher.dispatcher.addEventListener(EventTypeName.DIE_OUT, DieOut);
-        if (IsGradualValue&& m_AudioSource) m_AudioSource.volume = 0;
+
+        PlayAudio();
     }
 
+
+
+
+
+
+    [Header("音乐是否 切换场景时候 停止播放")]
+    public bool IsChangeScreenStop = true;
     void ScreenChange(UEvent e)
     {
         //print("??????????? 切换场景！！！！ ");
+        if(!IsChangeScreenStop)return;
         if(m_AudioSource) m_AudioSource.Stop();
     }
 
@@ -140,9 +144,24 @@ public class AudioControl : MonoBehaviour {
         //if (!m_AudioSource.isPlaying) {
         //    return;
         //}
+        //print("  当前音量 CVolume  " + CVolume + "   GuDingValue " + GuDingValue);
+        if (IsZJStop) {
+            if (m_AudioSource && m_AudioSource.isPlaying)
+            {
+                m_AudioSource.Stop();
+            }
+            return;
+        }
         
         if (m_AudioSource.isPlaying &&IsGradualValue)
         {
+            if (GuDingValue != 0) {
+                if (GlobalSetDate.instance.GetSoundEffectValue() > GuDingValue)
+                {
+                    CVolume = GuDingValue;
+                }
+            }
+            
             m_AudioSource.volume += (CVolume - m_AudioSource.volume) * GraduaNums;
             if (m_AudioSource.volume == CVolume - 0.05f)
             {
@@ -169,6 +188,7 @@ public class AudioControl : MonoBehaviour {
                 CVolume = 0;
                 //IsPlayerDieGraduaMin = false;
                 IsPlayerDieGraduaMining = false;
+                m_AudioSource.Stop();
                 //IsBossFIGHTAudioDown = false;
             }
             m_AudioSource.volume = CVolume;
@@ -176,14 +196,50 @@ public class AudioControl : MonoBehaviour {
         }
     }
 
-
+    //渐隐关掉音乐
     public void GetIsPlayerDieGraduaMining()
     {
         IsPlayerDieGraduaMining = true;
     }
 
-
+    [Header("boss战 关闭音乐")]
     public bool IsBossFIGHTAudioDown = false;
+
+
+
+    public void PlayAudio()
+    {
+        IsZJStop = false;
+        CVolume = GlobalSetDate.instance.GetSoundEffectValue();
+        if (GuDingValue != 0 && GlobalSetDate.instance.GetSoundEffectValue() != 0) CVolume = GuDingValue;
+        if (m_AudioSource) m_AudioSource.volume = CVolume;
+        if (IsGradualValue && m_AudioSource&&!m_AudioSource.isPlaying) m_AudioSource.volume = 0;
+        if (m_AudioSource && !m_AudioSource.isPlaying) m_AudioSource.Play();
+    }
+
+    public void StopAudio()
+    {
+        IsZJStop = false;
+        IsPlayerDieGraduaMining = true;
+    }
+
+
+    bool IsZJStop = false;
+
+
+    public void ZJStopAudio()
+    {
+        IsZJStop = true;
+    }
+
+
+    public void DisAutioObj()
+    {
+        DestroyImmediate(this.gameObject);
+    }
+
+
+
 
 
     void DieOut(UEvent e)

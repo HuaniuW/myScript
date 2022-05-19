@@ -57,14 +57,15 @@ public class Skill_JiguangSaoshe : MonoBehaviour
 
     public void JiguangStop()
     {
-        
-        
+        Jiguang.Stop();
+        if (JiguangChixuSaoshe) JiguangChixuSaoshe.Stop();
+
         if (Jiguang.isPlaying)
         {
-            Jiguang.Stop();
-            if (JiguangChixuSaoshe) JiguangChixuSaoshe.Stop();
+          
         }
         Jiguang.gameObject.SetActive(false);
+        //DestroyImmediate(this.gameObject);
     }
 
 

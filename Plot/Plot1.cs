@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Plot1 : MonoBehaviour
 {
-
+    public Transform PlayerSitPos;
     public static string QISHI = "qishi";
     // Start is called before the first frame update
     void Start()
@@ -21,6 +21,7 @@ public class Plot1 : MonoBehaviour
         }
         else
         {
+            if (player) player.transform.position = PlayerSitPos.position;
             print(" @@@@  没有记录 ");
         }
 

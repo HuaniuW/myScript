@@ -57,7 +57,10 @@ public class Diaoluowu : MonoBehaviour {
             }
         }
     }
-    
+
+
+    [Header("是否 调用 徽章使用说明")]
+    public bool IsDiaoyongSkillSM = false;
 
     void OnTriggerEnter2D(Collider2D Coll)
     {
@@ -75,15 +78,33 @@ public class Diaoluowu : MonoBehaviour {
                 //ObjectEventDispatcher.dispatcher.removeEventListener(EventTypeName.CLOSE_DOOR, GKDateChange);
                 var parentName = GlobalTools.GetNewStrQuDiaoClone(this.transform.parent.name);
                 ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.RECORDOBJ_CHANGE, parentName + "-0"), this);
-                //显示 获取徽章的 提示UI
-                GameObject ui_huizhangMsg = GlobalTools.FindObjByName("Canvas_HZMsg");
-                if (!ui_huizhangMsg)
+
+                if (IsDiaoyongSkillSM)
                 {
-                    ui_huizhangMsg = GlobalTools.GetGameObjectByName("Canvas_HZMsg");
+                    GameObject game = GlobalTools.GetGameObjectByName("SkillUseSM");
+                    //game.transform.position = Vector3.zero;
+                    //return;
+                    GlobalTools.FindObjByName(GlobalTag.PlayerObj).GetComponent<GameBody>().GetStand();
                 }
-                GameObject HZ_obj = Resources.Load(objName) as GameObject;
-                string HZ_Msg = HZ_obj.GetComponent<HZDate>().GetHZ_information_str();
-                ui_huizhangMsg.GetComponent<UI_HZMsg>().StartShowBar("img_"+objName, HZ_Msg);
+                else
+                {
+                    //显示 获取徽章的 提示UI
+                    GameObject ui_huizhangMsg = GlobalTools.FindObjByName("Canvas_HZMsg");
+                    if (!ui_huizhangMsg)
+                    {
+                        ui_huizhangMsg = GlobalTools.GetGameObjectByName("Canvas_HZMsg");
+                    }
+                    GameObject HZ_obj = Resources.Load(objName) as GameObject;
+                    string HZ_Msg = HZ_obj.GetComponent<HZDate>().GetHZ_information_str();
+                    ui_huizhangMsg.GetComponent<UI_HZMsg>().StartShowBar("img_" + objName, HZ_Msg);
+                }
+
+
+                GetCJ();
+
+
+
+
             }
             else if (type == 2) {
                 //消耗的掉落物 吃了 直接加血
@@ -165,6 +186,26 @@ public class Diaoluowu : MonoBehaviour {
         this.gameObject.SetActive(false);
     }
 
+
+
+
+    //--------------------成就---------------------
+    [Header("获取徽章后 获得成就 徽章")]
+    public string CJNAME = "";
+
+    void GetCJ()
+    {
+        if (CJNAME == "") return;
+        print("  获取成就  "+ CJNAME);
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, CJNAME), this);
+        if (CJNAME == "CJ4")
+        {
+            //if (FileControl.GetInstance().GetValueByKey("CJ4") == "1") return;
+            //坚定的心
+            ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHENGJIU, "CJ2"), this);
+            //FileControl.GetInstance().AddNewKeyAndValue("CJ4", "1");
+        }
+    }
 
 }
 

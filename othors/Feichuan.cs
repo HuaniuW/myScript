@@ -91,7 +91,8 @@ public class Feichuan : MonoBehaviour {
     //播放下船后的 钢琴音
     void XiachuanGangqing()
     {
-        if(Audio_Gangqing) Audio_Gangqing.Play();
+        //if(Audio_Gangqing) Audio_Gangqing.Play();
+        ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.CHANGE_TEMP_AUDIO, ""), this);
     }
 
 

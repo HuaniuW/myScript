@@ -33,6 +33,7 @@ public class PlayerUI : MonoBehaviour {
 
     public RectTransform screenChangeZZ;
     public Text screenLoadTxt;
+    public Image LoadImgBar;
 
     [Header("干扰弹 数量")]
     public Text Txt_ganraodan;
@@ -240,9 +241,10 @@ public class PlayerUI : MonoBehaviour {
         IsScreenChangeing = true;
     }
 
-
+    //RectTransform rt = LoadImgBar.GetComponent<RectTransform>();
     public void ShowLoadProgressNums(float nums, bool isHasChangeScreen = false)
     {
+        
         if(nums == 100)
         {
             //IsScreenChangeing = false;
@@ -250,7 +252,8 @@ public class PlayerUI : MonoBehaviour {
             //ZZAlphaNums = 0;
             
         }
-        if (screenLoadTxt != null) screenLoadTxt.text = nums + "%";
+        if(LoadImgBar) LoadImgBar.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, nums * 1.5f);
+        if (screenLoadTxt != null) screenLoadTxt.text = "LOADING... "+nums + "%";
     }
 
 

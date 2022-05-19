@@ -68,11 +68,10 @@ public class JG_BossIn : MonoBehaviour {
                 //IsSatrtYC = true;
             }
         }
-        
     }
 
     bool IsSatrtYC = false;
-    public float YCTimes = 2.5f;
+    float YCTimes = 0.5f;
     float YCJiShi = 0;
     void YanChiStart()
     {
@@ -113,7 +112,6 @@ public class JG_BossIn : MonoBehaviour {
     {
         if (Door1Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door1Name + "-"+ OpenOrClose), this);
         if (Door2Name != null) ObjectEventDispatcher.dispatcher.dispatchEvent(new UEvent(EventTypeName.OPEN_DOOR, Door2Name + "-"+ OpenOrClose), this);
-
 
         if (Door1)
         {

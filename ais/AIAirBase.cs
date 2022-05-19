@@ -237,8 +237,6 @@ public class AIAirBase : AIBase
 
     public override void GetAtkFSByName(string atkFSName)
     {
-
-
         //IsGetAtkFSByName = true;
         QuXiaoAC();
         isAction = true;
